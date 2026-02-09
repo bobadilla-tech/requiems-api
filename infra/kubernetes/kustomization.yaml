@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: requiem
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secrets.yaml
+  - database.yaml
+  - redis.yaml
+  - api.yaml
+  - dashboard.yaml
+  - ingress.yaml
+
+# Add common labels to all resources
+labels:
+  - pairs:
+      app.kubernetes.io/name: requiem-api
+      app.kubernetes.io/part-of: requiem-platform
+
+# Add common annotations
+commonAnnotations:
+  documentation: https://github.com/bobadilla-tech/requiems-api

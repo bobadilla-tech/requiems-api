@@ -2,6 +2,11 @@
 
 This directory contains Kubernetes manifests for deploying Requiem API on a Kubernetes cluster.
 
+## 📚 Documentation
+
+- **[SERVICE_DESIGN.md](SERVICE_DESIGN.md)** - Detailed explanation of service type decisions and networking architecture
+- **This file** - Deployment instructions and operations guide
+
 ## Architecture
 
 All services run in the `requiem` namespace on the same cluster:
@@ -84,14 +89,16 @@ Apply all manifests in order:
 ```bash
 cd infra/kubernetes
 
-# Create namespace
-kubectl apply -f namespace.yaml
+# Option 1: Deploy using the automated script (recommended)
+./deploy.sh
 
-# Create configuration
+# Option 2: Deploy using kubectl with kustomize
+kubectl apply -k .
+
+# Option 3: Deploy manually (if you need more control)
+kubectl apply -f namespace.yaml
 kubectl apply -f configmap.yaml
 kubectl apply -f secrets.yaml
-
-# Deploy database and Redis
 kubectl apply -f database.yaml
 kubectl apply -f redis.yaml
 
