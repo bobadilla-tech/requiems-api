@@ -7,10 +7,12 @@ data:
   # Database configuration
   POSTGRES_USER: requiem
   POSTGRES_DB: requiem
-  DATABASE_URL: postgres://requiem:requiem@db:5432/requiem?sslmode=disable
+  POSTGRES_HOST: db
+  POSTGRES_PORT: "5432"
   
   # Redis configuration
-  REDIS_URL: redis://redis:6379
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
   
   # API configuration
   PORT: "8080"

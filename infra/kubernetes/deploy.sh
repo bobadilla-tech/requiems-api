@@ -25,6 +25,35 @@ fi
 echo "✅ Connected to Kubernetes cluster"
 echo ""
 
+# Validate secrets before deployment
+echo "🔐 Validating secrets configuration..."
+if grep -q "changeme_in_production\|generate_new_secret_key_base\|generate_new_rails_master_key\|generate_new_backend_secret" secrets.yaml; then
+    echo "❌ ERROR: Default secrets detected in secrets.yaml!"
+    echo ""
+    echo "Please update the following secrets before deploying:"
+    echo "  - POSTGRES_PASSWORD: Use 'openssl rand -base64 32' to generate"
+    echo "  - SECRET_KEY_BASE: Use 'openssl rand -hex 64' to generate"
+    echo "  - RAILS_MASTER_KEY: Use 'openssl rand -hex 32' to generate"
+    echo "  - BACKEND_SECRET: Use 'openssl rand -hex 32' to generate"
+    echo ""
+    echo "Example:"
+    echo "  POSTGRES_PASSWORD: \$(openssl rand -base64 32)"
+    echo "  SECRET_KEY_BASE: \$(openssl rand -hex 64)"
+    echo "  RAILS_MASTER_KEY: \$(openssl rand -hex 32)"
+    echo "  BACKEND_SECRET: \$(openssl rand -hex 32)"
+    echo ""
+    read -p "Do you want to continue anyway? (NOT RECOMMENDED for production) [y/N]: " CONTINUE
+    if [ "$CONTINUE" != "y" ] && [ "$CONTINUE" != "Y" ]; then
+        echo "Deployment aborted. Please update secrets.yaml and try again."
+        exit 1
+    fi
+    echo "⚠️  WARNING: Proceeding with default secrets. This is INSECURE!"
+    echo ""
+fi
+
+echo "✅ Secrets validation complete"
+echo ""
+
 # Create namespace
 echo "📦 Creating namespace..."
 $KUBECTL apply -f namespace.yaml

@@ -70,16 +70,26 @@ External access is managed through the Ingress controller.
 
 ### 1. Update Configuration
 
-Edit `secrets.yaml` to set your production values:
-```bash
-# Generate a secure secret key base
-SECRET_KEY_BASE=$(openssl rand -hex 64)
+**IMPORTANT:** Edit `secrets.yaml` to set your production values. The deployment script will validate that you've changed the default secrets.
 
-# Edit secrets.yaml and update:
-# - SECRET_KEY_BASE
-# - POSTGRES_PASSWORD (if changing from default)
-# - CLOUDFLARE_* variables for production
-# - BACKEND_SECRET for internal API authentication
+```bash
+cd infra/kubernetes
+
+# Generate secure secrets
+POSTGRES_PASSWORD=$(openssl rand -base64 32)
+SECRET_KEY_BASE=$(openssl rand -hex 64)
+RAILS_MASTER_KEY=$(openssl rand -hex 32)
+BACKEND_SECRET=$(openssl rand -hex 32)
+
+# Edit secrets.yaml and replace the placeholder values with the generated secrets above
+vi secrets.yaml
+
+# Update these values:
+# - POSTGRES_PASSWORD: (use the value from $POSTGRES_PASSWORD above)
+# - SECRET_KEY_BASE: (use the value from $SECRET_KEY_BASE above)
+# - RAILS_MASTER_KEY: (use the value from $RAILS_MASTER_KEY above)
+# - BACKEND_SECRET: (use the value from $BACKEND_SECRET above)
+# - CLOUDFLARE_* variables for production (if using Cloudflare integration)
 ```
 
 ### 2. Deploy to Kubernetes
@@ -208,13 +218,33 @@ kubectl exec -it deployment/postgres -n requiem -- psql -U requiem
 
 ## Production Considerations
 
-1. **Secrets Management**: Use Kubernetes Secrets or external secret management (Vault, AWS Secrets Manager, etc.)
-2. **Resource Limits**: Adjust resource requests/limits based on your workload
-3. **High Availability**: Run multiple replicas and use PodDisruptionBudgets
-4. **Monitoring**: Set up Prometheus/Grafana for metrics and alerts
-5. **Backups**: Regular PostgreSQL backups using pg_dump or volume snapshots
-6. **SSL/TLS**: Use cert-manager for automatic certificate management
-7. **Network Policies**: Restrict traffic between pods for security
+1. **Secrets Management**: 
+   - **CRITICAL**: Always generate new secrets before production deployment
+   - The deployment script validates that default secrets have been changed
+   - Use Kubernetes Secrets with RBAC to limit access
+   - Consider external secret management (Vault, AWS Secrets Manager, etc.) for enhanced security
+   
+2. **Database Credentials**:
+   - Database URLs are constructed dynamically from environment variables
+   - Passwords are never stored in ConfigMaps (only in Secrets)
+   - Use strong, randomly generated passwords
+   
+3. **Rails Secrets**:
+   - `SECRET_KEY_BASE`: Used for session security (64-byte hex)
+   - `RAILS_MASTER_KEY`: Used to decrypt credentials.yml.enc (32-byte hex)
+   - These are separate values with different purposes
+   
+4. **Resource Limits**: Adjust resource requests/limits based on your workload
+
+5. **High Availability**: Run multiple replicas and use PodDisruptionBudgets
+
+6. **Monitoring**: Set up Prometheus/Grafana for metrics and alerts
+
+7. **Backups**: Regular PostgreSQL backups using pg_dump or volume snapshots
+
+8. **SSL/TLS**: Use cert-manager for automatic certificate management
+
+9. **Network Policies**: Restrict traffic between pods for security
 
 ## Single-Server Deployment with k3s
 
