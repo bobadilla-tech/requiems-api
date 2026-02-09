@@ -1,0 +1,178 @@
+---
+# Rails Dashboard Service - ClusterIP for access via ingress
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: requiem
+  labels:
+    app: dashboard
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: dashboard
+
+---
+# Rails Dashboard Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: requiem
+  labels:
+    app: dashboard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      initContainers:
+      - name: db-migrate
+        image: requiem-dashboard:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "./bin/rails db:migrate"]
+        env:
+        - name: RAILS_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: RAILS_ENV
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: REDIS_URL
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: requiem-secrets
+              key: SECRET_KEY_BASE
+        envFrom:
+        - secretRef:
+            name: requiem-secrets
+      containers:
+      - name: dashboard
+        image: requiem-dashboard:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: RAILS_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: RAILS_ENV
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: REDIS_URL
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: requiem-secrets
+              key: SECRET_KEY_BASE
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: requiem-secrets
+              key: SECRET_KEY_BASE
+        envFrom:
+        - secretRef:
+            name: requiem-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 5
+
+---
+# Sidekiq Deployment (no service needed - background jobs)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidekiq
+  namespace: requiem
+  labels:
+    app: sidekiq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidekiq
+  template:
+    metadata:
+      labels:
+        app: sidekiq
+    spec:
+      containers:
+      - name: sidekiq
+        image: requiem-dashboard:latest
+        imagePullPolicy: IfNotPresent
+        command: ["bundle", "exec", "sidekiq"]
+        env:
+        - name: RAILS_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: RAILS_ENV
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: requiem-config
+              key: REDIS_URL
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: requiem-secrets
+              key: SECRET_KEY_BASE
+        envFrom:
+        - secretRef:
+            name: requiem-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: requiem-config
+  namespace: requiem
+data:
+  # Database configuration
+  POSTGRES_USER: requiem
+  POSTGRES_DB: requiem
+  DATABASE_URL: postgres://requiem:requiem@db:5432/requiem?sslmode=disable
+  
+  # Redis configuration
+  REDIS_URL: redis://redis:6379
+  
+  # API configuration
+  PORT: "8080"
+  
+  # Rails configuration
+  RAILS_ENV: production

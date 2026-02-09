@@ -1,7 +1,22 @@
 ## Infrastructure Guide
 
 This document explains how to run Requiem API locally for development and how to
-deploy it to a single VPS.
+deploy it to production using either Docker Compose (simple VPS) or Kubernetes 
+(scalable cluster).
+
+---
+
+## Deployment Options
+
+### Option 1: Docker Compose (Recommended for Simple Deployments)
+- Best for: Single server, development, small-scale production
+- Location: `infra/docker/`
+- See sections 1 and 2 below
+
+### Option 2: Kubernetes (Recommended for Production at Scale)
+- Best for: Multi-server clusters, scalable production deployments
+- Location: `infra/kubernetes/`
+- See `infra/kubernetes/README.md` for detailed Kubernetes guide
 
 ---
 
@@ -193,3 +208,113 @@ Request flow in production:
 - **Cloudflare Worker**
   - `BACKEND_ORIGIN` – Base URL of the API behind Caddy.
   - `BACKEND_SECRET` – Shared secret checked against `x-api-key`.
+
+---
+
+## 4. Kubernetes Deployment (Alternative to Docker Compose)
+
+For production deployments requiring scalability, high availability, and advanced 
+orchestration features, you can deploy to Kubernetes instead of using Docker Compose.
+
+### 4.1 When to Use Kubernetes
+
+Use Kubernetes when you need:
+- **Horizontal scaling**: Automatically scale services based on load
+- **High availability**: Run multiple replicas with automatic failover
+- **Rolling updates**: Zero-downtime deployments
+- **Advanced networking**: Service mesh, network policies, ingress controllers
+- **Multi-node clusters**: Distribute workload across multiple servers
+- **Production-grade orchestration**: Self-healing, automated restarts, health checks
+
+### 4.2 Kubernetes Setup
+
+All Kubernetes manifests are located in `infra/kubernetes/`:
+
+```
+infra/kubernetes/
+├── namespace.yaml      # Kubernetes namespace
+├── configmap.yaml      # Configuration data
+├── secrets.yaml        # Sensitive data (passwords, API keys)
+├── database.yaml       # PostgreSQL service and deployment
+├── redis.yaml          # Redis service and deployment
+├── api.yaml            # Go API service and deployment
+├── dashboard.yaml      # Rails dashboard, sidekiq deployments
+├── ingress.yaml        # Ingress for external access
+├── deploy.sh           # Automated deployment script
+├── cleanup.sh          # Cleanup script
+└── README.md           # Detailed Kubernetes guide
+```
+
+### 4.3 Service Architecture in Kubernetes
+
+All services use **ClusterIP** for internal cluster communication:
+
+- `db:5432` - PostgreSQL (internal only)
+- `redis:6379` - Redis (internal only)  
+- `api:8080` - Go API (internal, exposed via Ingress to internal.requiems.xyz)
+- `dashboard:80` - Rails app (exposed via Ingress to requiems.xyz)
+- `sidekiq` - Background jobs (no service, deployment only)
+
+External access is managed through an Ingress controller.
+
+### 4.4 Quick Deploy
+
+```bash
+cd infra/kubernetes
+
+# Review and update secrets
+vi secrets.yaml
+
+# Deploy everything
+./deploy.sh
+
+# Check status
+kubectl get pods -n requiem
+kubectl get svc -n requiem
+kubectl get ingress -n requiem
+```
+
+### 4.5 Single-Server Kubernetes with k3s
+
+For a single-server deployment with Kubernetes benefits:
+
+```bash
+# On your server, install k3s (lightweight Kubernetes)
+curl -sfL https://get.k3s.io | sh -
+
+# Deploy Requiem API
+cd infra/kubernetes
+./deploy.sh
+```
+
+### 4.6 Scaling Services
+
+```bash
+# Scale API instances
+kubectl scale deployment api -n requiem --replicas=3
+
+# Scale dashboard instances  
+kubectl scale deployment dashboard -n requiem --replicas=3
+```
+
+For complete Kubernetes deployment instructions, troubleshooting, and production 
+considerations, see **[infra/kubernetes/README.md](kubernetes/README.md)**.
+
+---
+
+## 5. Choosing Between Docker Compose and Kubernetes
+
+| Feature | Docker Compose | Kubernetes |
+|---------|---------------|------------|
+| **Complexity** | Simple | More complex |
+| **Best For** | Single server, dev | Production at scale |
+| **Scaling** | Manual | Automatic |
+| **High Availability** | Limited | Built-in |
+| **Updates** | Manual restart | Rolling updates |
+| **Learning Curve** | Easy | Moderate |
+| **Resource Overhead** | Low | Higher |
+| **Use Case** | Simple deployments | Enterprise production |
+
+**Recommendation:**
+- Use **Docker Compose** for simple VPS deployments and development
+- Use **Kubernetes** for production deployments requiring scale and resilience
