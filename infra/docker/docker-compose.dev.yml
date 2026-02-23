@@ -65,9 +65,12 @@ services:
       sh -c "
         apk update &&
         apk add --no-cache build-base postgresql-dev nodejs npm tzdata git yaml-dev &&
+        npm install -g bun &&
         bundle install &&
+        bun install &&
         bundle exec rails db:create db:migrate &&
         bundle exec rails tailwindcss:build &&
+        bun run build &&
         bundle exec rails server -b 0.0.0.0 -p 3000
       "
     environment:

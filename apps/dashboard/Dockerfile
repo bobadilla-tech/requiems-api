@@ -30,9 +30,10 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-# Install packages needed to build gems
+# Install packages needed to build gems and JS assets
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev nodejs npm pkg-config && \
+    npm install -g bun && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -47,11 +48,15 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Install JS dependencies (vite build runs automatically via assets:precompile)
+RUN bun install --frozen-lockfile
+
 # Precompile bootsnap code for faster boot times.
 # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+# vite_rails runs `vite build` automatically as part of this step
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
