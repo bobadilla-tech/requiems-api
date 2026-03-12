@@ -49,7 +49,7 @@ gem "nanoid", "~> 2.0"
 
 # Charts and pagination
 gem "chartkick", "~> 5.0"
-gem "pagy", "~> 6.0"
+gem "pagy", "~> 43.3"
 
 # Groupdate for time-series queries
 gem "groupdate", "~> 6.0"
