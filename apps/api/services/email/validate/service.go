@@ -48,13 +48,19 @@ func (s *Service) ValidateEmail(ctx context.Context, email string) EmailValidati
 		}
 	}
 
-	// syntax is valid, so @ is guaranteed to be present
-	_, domain, _ := strings.Cut(strings.ToLower(email), "@")
-
 	// Normalize; fall back to the original address on error.
 	normalized := email
 	if res, err := s.n.Normalize2(email); err == nil {
 		normalized = res.Normalized
+	}
+
+	// Derive domain from the normalized address so alias-domain resolution
+	// (e.g. googlemail.com → gmail.com) is reflected consistently.
+	// isValidSyntax guarantees "@" is present in email, so the fallback is
+	// only a safety net for unexpected normalizer output.
+	_, domain, _ := strings.Cut(strings.ToLower(normalized), "@")
+	if domain == "" {
+		_, domain, _ = strings.Cut(strings.ToLower(email), "@")
 	}
 
 	mxValid := checkMX(ctx, domain)
