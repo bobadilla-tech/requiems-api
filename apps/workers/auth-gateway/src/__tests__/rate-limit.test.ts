@@ -4,31 +4,43 @@ import { PLANS } from "@requiem/workers-shared";
 import type { WorkerBindings } from "../env";
 
 describe("Rate Limiting", () => {
-  // Mock KV store
-  let mockKV: Map<string, { value: string; expirationTtl?: number }>;
+  // In-memory store that mirrors what the real DO stores per instance key
+  let doStore: Map<string, number>;
   let bindings: WorkerBindings;
 
   beforeEach(() => {
-    // Reset mock KV store before each test
-    mockKV = new Map();
+    doStore = new Map();
 
     bindings = {
       KV: {
-        get: async (key: string) => {
-          const entry = mockKV.get(key);
-          return entry ? entry.value : null;
-        },
-        put: async (key: string, value: string, options?: { expirationTtl?: number }) => {
-          mockKV.set(key, { value, expirationTtl: options?.expirationTtl });
-        },
+        get: async (_key: string) => null,
+        put: async (_key: string, _value: string) => {},
       } as any,
       DB: {} as any,
       BACKEND_URL: "http://test",
       BACKEND_SECRET: "test-secret",
       ENVIRONMENT: "development",
+      RATE_LIMITER: {
+        idFromName: (key: string) => key as unknown as DurableObjectId,
+        get: (id: DurableObjectId) => {
+          const key = id as unknown as string;
+          return {
+            fetch: async (_url: string, init: RequestInit) => {
+              const { limit, resetAt } = JSON.parse(init.body as string);
+              const count = doStore.get(key) ?? 0;
+              if (count >= limit) {
+                return new Response(JSON.stringify({ allowed: false, remaining: 0, resetAt }));
+              }
+              doStore.set(key, count + 1);
+              return new Response(
+                JSON.stringify({ allowed: true, remaining: limit - count - 1, resetAt }),
+              );
+            },
+          } as unknown as DurableObjectStub;
+        },
+      } as unknown as DurableObjectNamespace,
     };
 
-    // Mock Date.now to control time in tests
     vi.useFakeTimers();
   });
 
@@ -46,10 +58,10 @@ describe("Rate Limiting", () => {
     it("denies request when rate limit exceeded", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      // Simulate rate limit already hit
+      // Pre-populate the DO store so the counter is already at the limit
       const currentMinute = Math.floor(Date.now() / 60_000);
       const minuteKey = `rl:m:test-key:${currentMinute}`;
-      await bindings.KV.put(minuteKey, "30", { expirationTtl: 60 });
+      doStore.set(minuteKey, PLANS.free.ratePerMinute);
 
       const result = await checkRateLimit(bindings, "test-key", PLANS.free);
 
@@ -60,32 +72,24 @@ describe("Rate Limiting", () => {
     it("increments counter for each request", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      const currentMinute = Math.floor(Date.now() / 60_000);
-      const minuteKey = `rl:m:test-key:${currentMinute}`;
+      const result1 = await checkRateLimit(bindings, "test-key", PLANS.free);
+      const result2 = await checkRateLimit(bindings, "test-key", PLANS.free);
+      const result3 = await checkRateLimit(bindings, "test-key", PLANS.free);
 
-      // First request
-      await checkRateLimit(bindings, "test-key", PLANS.free);
-      expect(mockKV.get(minuteKey)?.value).toBe("1");
-
-      // Second request
-      await checkRateLimit(bindings, "test-key", PLANS.free);
-      expect(mockKV.get(minuteKey)?.value).toBe("2");
-
-      // Third request
-      await checkRateLimit(bindings, "test-key", PLANS.free);
-      expect(mockKV.get(minuteKey)?.value).toBe("3");
+      expect(result1.remaining).toBe(PLANS.free.ratePerMinute - 1);
+      expect(result2.remaining).toBe(PLANS.free.ratePerMinute - 2);
+      expect(result3.remaining).toBe(PLANS.free.ratePerMinute - 3);
     });
 
-    it("sets correct TTL on rate limit key", async () => {
+    it("uses a per-minute window (resetAt is end of current minute)", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      await checkRateLimit(bindings, "test-key", PLANS.developer);
+      const result = await checkRateLimit(bindings, "test-key", PLANS.developer);
 
       const currentMinute = Math.floor(Date.now() / 60_000);
-      const minuteKey = `rl:m:test-key:${currentMinute}`;
+      const expectedResetAt = (currentMinute + 1) * 60_000;
 
-      const entry = mockKV.get(minuteKey);
-      expect(entry?.expirationTtl).toBe(60); // 60 seconds TTL
+      expect(result.resetAt).toBe(expectedResetAt);
     });
 
     it("resets counter after minute boundary", async () => {
@@ -101,23 +105,20 @@ describe("Rate Limiting", () => {
       const secondMinute = Math.floor(Date.now() / 60_000);
       expect(secondMinute).not.toBe(firstMinute);
 
-      // Counter should be reset (new minute = new key)
+      // Counter should be reset (new minute = new DO instance)
       const result = await checkRateLimit(bindings, "test-key", PLANS.free);
       expect(result.remaining).toBe(PLANS.free.ratePerMinute - 1);
     });
 
-    it("uses different keys for different API keys", async () => {
+    it("uses different instances for different API keys", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      await checkRateLimit(bindings, "key-1", PLANS.free);
-      await checkRateLimit(bindings, "key-2", PLANS.free);
+      const result1 = await checkRateLimit(bindings, "key-1", PLANS.free);
+      const result2 = await checkRateLimit(bindings, "key-2", PLANS.free);
 
-      const currentMinute = Math.floor(Date.now() / 60_000);
-      const key1Counter = mockKV.get(`rl:m:key-1:${currentMinute}`)?.value;
-      const key2Counter = mockKV.get(`rl:m:key-2:${currentMinute}`)?.value;
-
-      expect(key1Counter).toBe("1");
-      expect(key2Counter).toBe("1");
+      // Each key tracks independently — both should have full remaining
+      expect(result1.remaining).toBe(PLANS.free.ratePerMinute - 1);
+      expect(result2.remaining).toBe(PLANS.free.ratePerMinute - 1);
     });
 
     it("calculates correct reset time", async () => {
@@ -135,11 +136,7 @@ describe("Rate Limiting", () => {
     it("handles enterprise plan with infinite rate limit", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      // Even with high existing count, enterprise should pass
-      const currentMinute = Math.floor(Date.now() / 60_000);
-      const minuteKey = `rl:m:enterprise-key:${currentMinute}`;
-      await bindings.KV.put(minuteKey, "999999", { expirationTtl: 60 });
-
+      // Enterprise short-circuits before hitting the DO — no counter involved
       const result = await checkRateLimit(bindings, "enterprise-key", PLANS.enterprise);
 
       expect(result.allowed).toBe(true);
@@ -166,10 +163,10 @@ describe("Rate Limiting", () => {
       expect(exceededResult.remaining).toBe(0);
     });
 
-    it("handles missing KV entry (first request)", async () => {
+    it("handles missing DO state (first request)", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      // KV returns null for non-existent key
+      // No pre-existing state — first request should be allowed
       const result = await checkRateLimit(bindings, "new-key", PLANS.developer);
 
       expect(result.allowed).toBe(true);

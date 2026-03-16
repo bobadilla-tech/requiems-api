@@ -30,3 +30,5 @@ app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
 export default createWorkerFetch(app, validateEnv);
+
+export { RateLimiterDO } from "./rate-limiter-do";

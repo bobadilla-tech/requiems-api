@@ -5,6 +5,7 @@ import type { BaseWorkerBindings } from "@requiem/workers-shared";
 export interface WorkerBindings extends BaseWorkerBindings {
   BACKEND_URL: string;
   BACKEND_SECRET: string;
+  RATE_LIMITER: DurableObjectNamespace;
 }
 
 const envSchema = z.object({
