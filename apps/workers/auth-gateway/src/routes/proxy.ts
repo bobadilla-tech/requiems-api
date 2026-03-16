@@ -66,27 +66,15 @@ app.all("/*", async (c) => {
 
   const backendResponse = result.response;
 
-  // If backend returned an error, don't record usage
   if (!backendResponse.ok) {
     log.warn("Backend error response", {
       status: backendResponse.status,
       path: url.pathname,
     });
-
-    const response = addUsageHeaders(backendResponse, {
-      requestsUsed: 0,
-      requestsRemaining: requestUsage.remaining,
-      requestsReset: requestUsage.resetAt,
-      plan: keyData.plan,
-      rateLimitLimit: plan.ratePerMinute,
-      rateLimitRemaining: rateLimit.remaining,
-    });
-
-    return response;
   }
 
-  // Record usage after response is sent — waitUntil keeps the worker alive for the write.
-  // recordRequestUsage retries up to 3 times internally; log if all attempts fail.
+  // Record usage for every request that reaches the backend, matching rate-limit
+  // behavior (which ticks eagerly in auth middleware regardless of backend outcome).
   c.executionCtx.waitUntil(
     recordRequestUsage(
       c.env,
@@ -105,7 +93,6 @@ app.all("/*", async (c) => {
     }),
   );
 
-  // Add usage headers to successful response
   const response = addUsageHeaders(backendResponse, {
     requestsUsed: requestMultiplier,
     requestsRemaining: Math.max(0, requestUsage.remaining - requestMultiplier),
