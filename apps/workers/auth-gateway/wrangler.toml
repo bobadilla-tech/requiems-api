@@ -25,6 +25,7 @@ local_protocol = "http"
 
 [vars]
 ENVIRONMENT = "development"
+CORS_ALLOWED_ORIGINS = "*"
 
 [env.production]
 name = "requiem-auth-gateway-production"
@@ -33,6 +34,7 @@ preview_urls = false
 
 [env.production.vars]
 ENVIRONMENT = "production"
+# CORS_ALLOWED_ORIGINS must be set via wrangler secret or vars for production
 
 [[env.production.routes]]
 pattern = "api.requiems.xyz"
