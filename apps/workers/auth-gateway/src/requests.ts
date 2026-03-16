@@ -23,11 +23,19 @@ export async function getRequestUsage(
   const startDate = period === "daily" ? getTodayStart() : billingCycleStart || getMonthStart();
   const cacheKey = `quota:${userId}:${startDate}`;
 
-  // KV cache hit — avoids a D1 aggregate query on every request
-  const cached = await bindings.KV.get(cacheKey);
-
-  if (cached !== null) {
-    return Number(cached);
+  // KV cache hit — avoids a D1 aggregate query on every request.
+  // One retry before falling through so a single transient KV error doesn't
+  // immediately fan out to D1.
+  try {
+    const cached = await withRetry(() => bindings.KV.get(cacheKey), 2, 50);
+    if (cached !== null) {
+      return Number(cached);
+    }
+  } catch (err) {
+    logger?.warn("KV cache read failed in getRequestUsage, falling back to D1", {
+      error: err,
+      cacheKey,
+    });
   }
 
   // Cache miss — query D1 and populate cache
