@@ -53,11 +53,16 @@ app.all("/*", async (c) => {
   const body = hasBody ? await c.req.arrayBuffer() : null;
 
   // Fetch from backend
-  const result = await fetchBackend(backendUrl, {
-    method: c.req.method,
-    headers: backendHeaders,
-    body,
-  });
+  const result = await fetchBackend(
+    backendUrl,
+    {
+      method: c.req.method,
+      headers: backendHeaders,
+      body,
+    },
+    undefined,
+    log,
+  );
 
   if (!result.ok) {
     log.error("Backend fetch failed", { error: result.error });

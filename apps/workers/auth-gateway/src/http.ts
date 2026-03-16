@@ -2,6 +2,7 @@
  * Auth gateway specific HTTP utilities
  * Base utilities (jsonResponse, jsonError, corsResponse) are in @requiem/workers-shared
  */
+import type { Logger } from "@requiem/workers-shared";
 
 /**
  * Filter headers before forwarding to backend
@@ -71,6 +72,7 @@ export async function fetchBackend(
   url: string | URL,
   init: RequestInit,
   timeoutMs = BACKEND_TIMEOUT_MS,
+  logger?: Logger,
 ): Promise<BackendResult> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -80,10 +82,10 @@ export async function fetchBackend(
     return { ok: true, response };
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
-      console.error("Backend timeout:", error);
+      logger?.error("Backend timeout", { error });
       return { ok: false, error: "Backend timeout", status: 504 };
     }
-    console.error("Backend error:", error);
+    logger?.error("Backend error", { error });
     return { ok: false, error: "Backend unavailable", status: 502 };
   } finally {
     clearTimeout(timer);

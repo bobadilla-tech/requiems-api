@@ -1,5 +1,6 @@
 import type { Context, Next } from "hono";
 import { jsonResponse } from "../http";
+import { createLogger } from "../logger";
 
 // Generic bindings interface for basic auth
 interface BasicAuthBindings {
@@ -48,7 +49,8 @@ export const basicAuthMiddleware = async (c: Context, next: Next) => {
     const validPassword = env.SWAGGER_PASSWORD;
 
     if (!validUsername || !validPassword) {
-      console.error("SWAGGER credentials not configured");
+      const log = createLogger(c.req.raw);
+      log.error("SWAGGER credentials not configured");
       return jsonResponse({ error: "Service unavailable" }, 503);
     }
 
@@ -64,7 +66,8 @@ export const basicAuthMiddleware = async (c: Context, next: Next) => {
       },
     });
   } catch (error) {
-    console.error("Basic auth error:", error);
+    const log = createLogger(c.req.raw);
+    log.error("Basic auth error", { error });
     return new Response("Unauthorized", {
       status: 401,
       headers: {

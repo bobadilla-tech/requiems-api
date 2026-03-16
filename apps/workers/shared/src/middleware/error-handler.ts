@@ -1,5 +1,6 @@
 import type { Context, ErrorHandler } from "hono";
 import { jsonResponse } from "../http";
+import { createLogger } from "../logger";
 
 /**
  * Global Error Handler for Hono Application
@@ -8,10 +9,9 @@ import { jsonResponse } from "../http";
  * Logs errors for debugging and returns appropriate error responses.
  */
 export const errorHandler: ErrorHandler = (err, c: Context) => {
-  console.error("Unhandled error:", {
-    message: err.message,
-    name: err.name,
-    stack: err.stack,
+  const log = createLogger(c.req.raw);
+  log.error("Unhandled error", {
+    error: err,
   });
 
   if (c.env?.ENVIRONMENT === "development") {
