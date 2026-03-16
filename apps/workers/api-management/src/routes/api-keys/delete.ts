@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import { createLogger, internalError, jsonError, jsonResponse } from "@requiem/workers-shared";
-import type { WorkerBindings } from "../../env";
+import { internalError, jsonError, jsonResponse } from "@requiem/workers-shared";
+import type { WorkerEnv } from "../../env";
 
-const app = new Hono<{ Bindings: WorkerBindings }>();
+const app = new Hono<WorkerEnv>();
 
 /**
  * DELETE /api-keys/:keyPrefix
@@ -10,7 +10,7 @@ const app = new Hono<{ Bindings: WorkerBindings }>();
  * Auth: X-API-Management-Key header (only Rails dashboard has this)
  */
 app.delete("/:keyPrefix", async (c) => {
-  const log = createLogger(c.req.raw);
+  const log = c.var.log;
   const keyPrefix = c.req.param("keyPrefix");
 
   if (!keyPrefix) {

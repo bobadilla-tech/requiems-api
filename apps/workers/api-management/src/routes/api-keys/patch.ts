@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { sValidator } from "@hono/standard-validator";
 import * as z from "zod";
-import { type ApiKeyData, createLogger, internalError, jsonError, jsonResponse } from "@requiem/workers-shared";
-import type { WorkerBindings } from "../../env";
+import { type ApiKeyData, internalError, jsonError, jsonResponse } from "@requiem/workers-shared";
+import type { WorkerEnv } from "../../env";
 import { planSchema } from "./schemas";
 
-const app = new Hono<{ Bindings: WorkerBindings }>();
+const app = new Hono<WorkerEnv>();
 
 const patchApiKeySchema = z
   .object({
@@ -29,7 +29,7 @@ app.patch(
     }
   }),
   async (c) => {
-    const log = createLogger(c.req.raw);
+    const log = c.var.log;
     const keyPrefix = c.req.param("keyPrefix");
     const body = c.req.valid("json");
 

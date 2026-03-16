@@ -1,11 +1,17 @@
 import { z } from "zod";
-import type { BaseWorkerBindings } from "@requiem/workers-shared";
+import type { BaseWorkerBindings, Logger } from "@requiem/workers-shared";
 
 export interface WorkerBindings extends BaseWorkerBindings {
   API_MANAGEMENT_API_KEY: string;
   SWAGGER_USERNAME?: string;
   SWAGGER_PASSWORD?: string;
 }
+
+export interface WorkerVariables {
+  log: Logger;
+}
+
+export type WorkerEnv = { Bindings: WorkerBindings; Variables: WorkerVariables };
 
 const envSchema = z.object({
   API_MANAGEMENT_API_KEY: z.string().min(32),

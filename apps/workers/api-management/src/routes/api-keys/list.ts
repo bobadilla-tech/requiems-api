@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import { sValidator } from "@hono/standard-validator";
 import * as z from "zod";
-import { createLogger, jsonError, jsonResponse, internalError } from "@requiem/workers-shared";
-import type { WorkerBindings } from "../../env";
+import { jsonError, jsonResponse, internalError } from "@requiem/workers-shared";
+import type { WorkerEnv } from "../../env";
 
-const app = new Hono<{ Bindings: WorkerBindings }>();
+const app = new Hono<WorkerEnv>();
 
 const listQuerySchema = z.object({
   userId: z.string().optional(),
@@ -36,7 +36,7 @@ app.get(
     }
   }),
   async (c) => {
-    const log = createLogger(c.req.raw);
+    const log = c.var.log;
     const { userId, active } = c.req.valid("query");
     const activeOnly = active !== "false";
 

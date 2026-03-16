@@ -3,17 +3,16 @@ import { sValidator } from "@hono/standard-validator";
 import * as z from "zod";
 import {
   type ApiKeyData,
-  createLogger,
   extractKeyPrefix,
   generateApiKey,
   internalError,
   jsonError,
   jsonResponse,
 } from "@requiem/workers-shared";
-import type { WorkerBindings } from "../../env";
+import type { WorkerEnv } from "../../env";
 import { planSchema } from "./schemas";
 
-const app = new Hono<{ Bindings: WorkerBindings }>();
+const app = new Hono<WorkerEnv>();
 
 const createApiKeySchema = z.object({
   userId: z.string().min(1),
@@ -43,7 +42,7 @@ app.post(
     }
   }),
   async (c) => {
-    const log = createLogger(c.req.raw);
+    const log = c.var.log;
     const body = c.req.valid("json");
 
     try {

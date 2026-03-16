@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { sValidator } from "@hono/standard-validator";
 import * as z from "zod";
-import { jsonError, jsonResponse, createLogger, internalError } from "@requiem/workers-shared";
-import type { WorkerBindings } from "../../env";
+import { jsonError, jsonResponse, internalError } from "@requiem/workers-shared";
+import type { WorkerEnv } from "../../env";
 import type { EndpointStats, UsageSummary } from "./types";
 
-const app = new Hono<{ Bindings: WorkerBindings }>();
+const app = new Hono<WorkerEnv>();
 
 const summaryQuerySchema = z.object({
   userId: z.string().min(1, "Missing required parameter: userId"),
@@ -30,7 +30,7 @@ app.get(
     }
   }),
   async (c) => {
-    const log = createLogger(c.req.raw);
+    const log = c.var.log;
     const { userId, since, until } = c.req.valid("query");
 
     try {
