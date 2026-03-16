@@ -2,6 +2,7 @@ package quotes
 
 import (
 	"context"
+	"math/rand/v2"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -23,14 +24,20 @@ func NewService(db *pgxpool.Pool) *Service {
 }
 
 func (s *Service) Random(ctx context.Context) (Quote, error) {
+	var count int
+	if err := s.db.QueryRow(ctx, `SELECT count(*) FROM quotes`).Scan(&count); err != nil {
+		return Quote{}, err
+	}
+
+	offset := rand.IntN(count)
+
+	var q Quote
 	row := s.db.QueryRow(ctx, `
 SELECT id, text, author
 FROM quotes
-ORDER BY random()
-LIMIT 1;
-`)
-
-	var q Quote
+LIMIT 1
+OFFSET $1;
+`, offset)
 
 	if err := row.Scan(&q.ID, &q.Text, &q.Author); err != nil {
 		return Quote{}, err
