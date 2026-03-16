@@ -63,8 +63,8 @@ class D1SyncService
     # Using instance variables here would persist stale IDs across pages if a key is
     # revoked mid-sync, so we preload per bulk_insert call instead.
     prefixes = records.map { |r| r[:api_key][0...12] }.uniq
-    key_rows = ApiKey.where(key_prefix: prefixes).pluck(:key_prefix, :id, :user_id)
-    key_cache = key_rows.each_with_object({}) { |(prefix, id, uid), h| h[prefix] = { id: id, user_id: uid } }
+    key_rows = ApiKey.where(key_prefix: prefixes).pluck(:key_prefix, :id, :user_id, :name)
+    key_cache = key_rows.each_with_object({}) { |(prefix, id, uid, name), h| h[prefix] = { id: id, user_id: uid, name: name } }
 
     values = records.filter_map do |record|
       key_info = key_cache[record[:api_key][0...12]]
@@ -72,6 +72,7 @@ class D1SyncService
 
       {
         api_key_id: key_info[:id],
+        api_key_name: key_info[:name],
         user_id: key_info[:user_id],
         endpoint: record[:endpoint],
         credits_used: record[:credits_used],

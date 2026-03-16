@@ -14,6 +14,8 @@ class UsageLog < ApplicationRecord
   validates :user_id, :used_at, :endpoint, presence: true
   validates :user_id, :used_at, :endpoint, presence: true
 
+  before_create { self.api_key_name ||= api_key&.name }
+
   def self.error_rate_for(scope)
     total = scope.count
     return 0 if total.zero?

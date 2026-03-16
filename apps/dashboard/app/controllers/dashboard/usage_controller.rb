@@ -59,7 +59,6 @@ class Dashboard::UsageController < ApplicationController
 
     # Fetch all usage logs for the date range
     usage_logs = current_user.usage_logs
-      .includes(:api_key)
       .where(used_at: @start_date..@end_date)
       .order(used_at: :desc)
 
@@ -157,7 +156,7 @@ class Dashboard::UsageController < ApplicationController
           log.status_code,
           log.response_time_ms,
           log.credits_used || 1,
-          log.api_key&.name || "Unknown",
+          log.api_key_name || "Unknown",
           log.user_agent
         ]
       end
