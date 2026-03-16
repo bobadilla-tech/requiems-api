@@ -7,63 +7,15 @@ class Admin::AnalyticsController < ApplicationController
 
   def usage
     @date_range = params[:date_range] || "30"
-    @start_date = @date_range.to_i.days.ago.beginning_of_day
-    @end_date = Time.current.end_of_day
 
-    # Total requests in period
-    @total_requests = UsageLog.where(used_at: @start_date..@end_date).count
+    data = AnalyticsUsageService.new(date_range: @date_range).call
 
-    # Requests per day (for chart)
-    @requests_by_day = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .group("DATE(used_at)")
-      .count
-      .transform_keys { |date| date.to_s }
-
-    # Requests by endpoint (top 10)
-    @requests_by_endpoint = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .group(:endpoint)
-      .count
-      .sort_by { |_, count| -count }
-      .first(10)
-      .to_h
-
-    # Requests by plan
-    @requests_by_plan = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .joins(user: :subscription)
-      .group("subscriptions.plan_name")
-      .count
-
-    # Add free plan users
-    free_requests = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .joins(:user)
-      .joins("LEFT OUTER JOIN subscriptions ON subscriptions.user_id = users.id")
-      .where("subscriptions.id IS NULL OR subscriptions.plan_name = 'free'")
-      .count
-    @requests_by_plan["free"] = free_requests if free_requests > 0
-
-    # Average response times by endpoint (top 10)
-    @avg_response_by_endpoint = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .where.not(response_time_ms: nil)
-      .group(:endpoint)
-      .average(:response_time_ms)
-      .sort_by { |_, avg| -avg }
-      .first(10)
-      .to_h
-      .transform_values { |v| v.round(2) }
-
-    # Top users by usage
-    @top_users_by_usage = UsageLog
-      .where(used_at: @start_date..@end_date)
-      .joins(:user)
-      .group("users.id", "users.email")
-      .select("users.id, users.email, COUNT(*) as request_count, SUM(credits_used) as total_requests")
-      .order("request_count DESC")
-      .limit(10)
+    @total_requests           = data.total_requests
+    @requests_by_day          = data.requests_by_day
+    @requests_by_endpoint     = data.requests_by_endpoint
+    @requests_by_plan         = data.requests_by_plan
+    @avg_response_by_endpoint = data.avg_response_by_endpoint
+    @top_users_by_usage       = data.top_users_by_usage
   end
 
   def revenue
