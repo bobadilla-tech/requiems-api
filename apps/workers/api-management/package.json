@@ -30,7 +30,7 @@
   "devDependencies": {
     "@standard-schema/spec": "^1.1.0",
     "@biomejs/biome": "^2.4.6",
-    "@cloudflare/workers-types": "^4.20260312.1",
+    "@cloudflare/workers-types": "^4.20260317.1",
     "@edge-runtime/vm": "^5.0.0",
     "@types/node": "^25.4.0",
     "@vitest/coverage-v8": "^1.2.0",
