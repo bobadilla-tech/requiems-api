@@ -14,8 +14,8 @@ github.com/bobadilla-tech/business-days-calculator v1.1.0 h1:l0m28ko/oItgjjBlB+J
 github.com/bobadilla-tech/business-days-calculator v1.1.0/go.mod h1:Xayj9noAcTPZjwqDEwWRu96uDraHfObnj7TdZylXi9A=
 github.com/bobadilla-tech/go-email-normalizer v1.2.0 h1:aCsGRY0Yt0L+22l+g3xTNf4bTt7x5b2Vn1Dzdku+XCY=
 github.com/bobadilla-tech/go-email-normalizer v1.2.0/go.mod h1:iHGTIZ9nc2tSPLssbRmwKsum84dm8oXGt8lAceKnDdk=
-github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.0 h1:tya/s/e40v1LDzI+A8LtT2GsT2uo+olewowwmFrc7D4=
-github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.0/go.mod h1:ljKlD9nwuqNRb5gsh25yQ+a6zzB+2g9kqkKRE0/BmZU=
+github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1 h1:/6dvLEGDe04xlFbeOEWvLHCYUfKLko/JvV1qeSlOylQ=
+github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1/go.mod h1:ljKlD9nwuqNRb5gsh25yQ+a6zzB+2g9kqkKRE0/BmZU=
 github.com/bobadilla-tech/holidays-per-country v1.0.1 h1:AFH9uxSkyMCLcZ/F2fbzmwdoix5Pbq+q3Vfye8uYoQw=
 github.com/bobadilla-tech/holidays-per-country v1.0.1/go.mod h1:uZq0qDg1zJ1bccuGOOAkaGsnwCDs6iQyAeAeT94ige4=
 github.com/bobadilla-tech/is-email-disposable v1.0.2 h1:pZ06AF4IOmyWemsJmxcy6A+fZTQ8t41ObMutkBlJayE=
