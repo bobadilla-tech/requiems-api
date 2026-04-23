@@ -23,7 +23,7 @@
   "dependencies": {
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
-    "@sentry/cloudflare": "^10.48.0",
+    "@sentry/cloudflare": "^10.50.0",
     "hono": "4.12.14",
     "nanoid": "^5.1.9",
     "zod": "^4.0.0"
