@@ -32,7 +32,7 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260416.2",
+    "@cloudflare/workers-types": "^4.20260423.1",
     "@biomejs/biome": "^2.4.12",
     "@edge-runtime/vm": "^5.0.0",
     "@types/js-yaml": "^4.0.9",
