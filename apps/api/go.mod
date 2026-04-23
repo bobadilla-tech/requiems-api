@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/golang-migrate/migrate/v4 v4.19.1
-	github.com/jackc/pgx/v5 v5.9.1
+	github.com/jackc/pgx/v5 v5.9.2
 	github.com/redis/go-redis/v9 v9.18.0
 )
 
@@ -15,7 +15,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
-	github.com/getsentry/sentry-go v0.45.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -49,9 +48,10 @@ require (
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/bobadilla-tech/business-days-calculator v1.1.0
 	github.com/bobadilla-tech/go-email-normalizer v1.2.0
-	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.0
+	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
 	github.com/boombuler/barcode v1.1.0
+	github.com/getsentry/sentry-go v0.45.1
 	github.com/jaswdr/faker/v2 v2.9.1
 	github.com/likexian/whois v1.15.7
 	github.com/likexian/whois-parser v1.24.21
@@ -67,7 +67,7 @@ require (
 )
 
 require (
-	github.com/bobadilla-tech/is-email-disposable v1.0.1
+	github.com/bobadilla-tech/is-email-disposable v1.0.2
 	github.com/bobadilla-tech/lorelai v1.3.3
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
