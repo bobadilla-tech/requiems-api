@@ -37,7 +37,7 @@ func TestTransport_HappyPath(t *testing.T) {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 
-	req := httptest.NewRequest("GET", "/quotes/random", nil)
+	req := httptest.NewRequest("GET", "/quotes/random", http.NoBody)
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -61,7 +61,7 @@ func TestTransport_Error(t *testing.T) {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 
-	req := httptest.NewRequest("GET", "/quotes/random", nil)
+	req := httptest.NewRequest("GET", "/quotes/random", http.NoBody)
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
@@ -77,7 +77,7 @@ func TestTransport_MethodNotAllowed(t *testing.T) {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 
-	req := httptest.NewRequest("POST", "/quotes/random", nil)
+	req := httptest.NewRequest("GET", "/quotes/random", http.NoBody)
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
