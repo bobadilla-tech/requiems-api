@@ -7,8 +7,11 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+	"requiems-api/platform/httpx"
+)
+
 type Generator interface {
-    Generate(paragraphs, sentences int) Lorem
+	Generate(paragraphs, sentences int) Lorem
 }
 
 func RegisterRoutes(r chi.Router, svc Generator) {
