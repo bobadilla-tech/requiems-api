@@ -6,7 +6,7 @@ Commands for maintaining code quality across the monorepo.
 
 ```bash
 # Format and lint (auto-fix)
-docker exec requiem-dev-api-1 sh -lc 'cd /app; go fmt ./... && /app/bin/golangci-lint run --fix'
+docker exec requiem-dev-api-1 sh -lc 'go fmt ./... && golangci-lint run --fix'
 
 # Run tests
 docker exec requiem-dev-api-1 go test ./...

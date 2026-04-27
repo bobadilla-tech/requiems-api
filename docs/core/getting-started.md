@@ -115,5 +115,5 @@ docker compose -f docker-compose.dev.yml up --build
 ### Go API lint in Docker
 
 ```bash
-docker exec requiem-dev-api-1 sh -lc 'cd /app; /app/bin/golangci-lint run'
+docker exec requiem-dev-api-1 golangci-lint run
 ```
