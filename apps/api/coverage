@@ -1,0 +1,16 @@
+mode: set
+requiems-api/services/technology/base64/service.go:14.28,14.49 1 1
+requiems-api/services/technology/base64/service.go:18.56,19.22 1 1
+requiems-api/services/technology/base64/service.go:19.22,21.3 1 1
+requiems-api/services/technology/base64/service.go:22.2,22.73 1 1
+requiems-api/services/technology/base64/service.go:28.65,34.22 2 1
+requiems-api/services/technology/base64/service.go:34.22,36.3 1 1
+requiems-api/services/technology/base64/service.go:36.8,38.3 1 1
+requiems-api/services/technology/base64/service.go:40.2,40.16 1 1
+requiems-api/services/technology/base64/service.go:40.16,46.3 1 1
+requiems-api/services/technology/base64/service.go:48.2,48.45 1 1
+requiems-api/services/technology/base64/transport_http.go:13.49,15.62 1 1
+requiems-api/services/technology/base64/transport_http.go:15.62,17.4 1 1
+requiems-api/services/technology/base64/transport_http.go:20.2,21.62 1 1
+requiems-api/services/technology/base64/transport_http.go:21.62,23.4 1 1
+requiems-api/services/technology/base64/type.go:20.25,20.26 0 0
