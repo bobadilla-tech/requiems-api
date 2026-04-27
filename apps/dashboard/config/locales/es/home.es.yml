@@ -1,37 +1,37 @@
 es:
   home:
     index:
-      title: "Requiems API - Reemplaza meses de infraestructura con una sola llamada API"
+      title: "Requiems API - Lanza más rápido con una clave: validación, utilidades y más"
       hero:
-        title_line1: "Reemplaza meses de infraestructura"
-        title_line2: "con una sola llamada API."
-        description: "125 APIs empresariales que eliminan meses de obtención de datos, validación y dolores de cabeza de infraestructura."
+        title_line1: "Lanza más rápido."
+        title_line2: "Una clave API. Todo el catálogo."
+        description: "Más de cincuenta APIs listas para usar: validación, texto, finanzas, lugares y más. Integra una vez en lugar de sumar un proveedor distinto por cada función, ya sea en un MVP o en un proyecto para cliente."
         cta_primary: "Obtener clave API gratis"
         cta_secondary: "Ver documentación de APIs"
         try_badge: "✨ Pruébalo ahora • Sin tarjeta de crédito"
         api_request: "Solicitud API"
       trusted_by:
-        label: "Usado por equipos que construyen productos en produccion"
+        label: "Equipos que llevan productos reales a producción"
       social_proof:
         label: "Impulsando productos en empresas como"
       features:
         heading: "Diseñado para la experiencia del desarrollador"
-        subheading: "Integraciones nativas para IA, documentacion precisa y playgrounds en vivo. Lanza en minutos, no en semanas."
+        subheading: "Desde fundadores en solitario hasta agencias: documentación precisa, playgrounds en vivo y ejemplos listos para pegar. Integra en minutos, no en días."
         playground_title: "Playground de APIs en vivo"
-        playground_desc: "Prueba cada endpoint directamente en la documentacion. Ve respuestas reales al instante, sin escribir codigo."
-        examples_title: "Ejemplos de codigo"
-        examples_desc: "Ejemplos listos para copiar en cURL, Python, JavaScript, Go y mas. Cada ejemplo incluye version en Markdown lista para herramientas de IA y agentes."
-        docs_title: "Documentacion precisa"
-        docs_desc: "Cada parametro, campo de respuesta y codigo de error documentado. Sin adivinar."
+        playground_desc: "Prueba cada endpoint directamente en la documentación. Ve respuestas reales al instante, sin escribir código."
+        examples_title: "Ejemplos de código"
+        examples_desc: "Ejemplos listos para copiar en cURL, Python, JavaScript, Go y más. Cada ejemplo incluye versión en Markdown lista para herramientas de IA y agentes."
+        docs_title: "Documentación precisa"
+        docs_desc: "Cada parámetro, campo de respuesta y código de error documentado. Sin adivinar."
         ai_title: "Construido para agentes de IA"
-        ai_desc: "Cada API incluye llms.txt, documentacion completa en Markdown y ejemplos en formato AI-paste. Abre cualquier endpoint directamente en Claude o ChatGPT con un clic. Ideal para agentes, copilots y productos con LLMs."
+        ai_desc: "Cada API incluye llms.txt, documentación completa en Markdown y ejemplos en formato listo para IA. Abre cualquier endpoint directamente en Claude o ChatGPT con un clic. Ideal para agentes, copilotos y productos con LLM."
       categories:
         heading: "Categorías de APIs"
-        description: "Explora nuestra colección completa de APIs organizadas por categoría para encontrar exactamente lo que necesitas."
+        description: "Validación, moderación, QR y códigos de barras, sentimiento, geolocalización, comprobaciones financieras y más, por categorías. Todo comparte la misma suscripción y la misma clave."
         browse_all: "Ver todas las APIs"
       metrics:
         heading: "Rendimiento en el que puedes confiar"
-        subheading: "Infraestructura de nivel empresarial sin la complejidad empresarial"
+        subheading: "Edge de producción y backend en la UE, sin tener que operarlo tú"
         latency_title: "Latencia mediana"
         latency_subtitle: "Tiempo de respuesta P50"
         uptime_title: "Disponibilidad"
@@ -72,12 +72,12 @@ es:
         q3: "¿Dónde están ubicados sus servidores?"
         a3: "Todos nuestros centros de datos están ubicados en la Unión Europea, respaldados por la red global edge de Cloudflare para el cumplimiento del GDPR."
         q4: "¿Qué métodos de pago aceptan?"
-        a4: "Aceptamos todas las tarjetas de crédito principales (Visa, Mastercard, American Express) y tarjetas de débito a través de Stripe."
+        a4: "Aceptamos las principales tarjetas de crédito y débito a través de nuestro checkout, LemonSqueezy (incluidas Visa, Mastercard y American Express donde estén soportadas)."
         still_questions: "¿Aún tienes preguntas?"
         contact_link: "Contacta a nuestro equipo de soporte"
       cta:
-        heading: "¿Listo para desarrollar más rápido?"
-        subheading: "Únete a miles de desarrolladores que construyen con APIs listas para producción"
+        heading: "¿Listo para lanzar más rápido?"
+        subheading: "Startups, agencias y equipos técnicos usan una sola clave para validación, utilidades y más, con plan gratuito incluido."
         primary: "Comenzar gratis"
         secondary: "Ver precios"
         footer: "Sin tarjeta de crédito • Comienza gratis • Cancela en cualquier momento"
@@ -210,7 +210,7 @@ es:
           example: "Ejemplo: <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_live_1234567890abcdef</code>"
         - name: "Limitación de tasa"
           definition: "Una técnica para controlar el número de solicitudes que un usuario puede hacer a una API dentro de un período de tiempo dado. Esto ayuda a prevenir abusos y garantiza un uso justo."
-          example: "Ejemplo: El plan gratuito permite 100 solicitudes por minuto"
+          example: "Ejemplo: El plan gratuito permite 30 solicitudes por minuto"
         - name: "Solicitudes"
           definition: "La unidad de uso de la API. Cada llamada a la API cuenta como 1 solicitud contra tu cuota mensual del plan. Algunos endpoints pueden contar como más de 1 solicitud, lo cual siempre se indica explícitamente en la documentación de ese endpoint."
           example: "Ejemplo: Llamar al endpoint de validación de correo una vez usa 1 solicitud de tu cuota mensual."
@@ -314,7 +314,7 @@ es:
       title: "Precios - Requiems API"
       header:
         heading: "Precios simples y transparentes"
-        description: "Comienza gratis, escala a medida que creces. Todos los planes incluyen acceso a nuestro catálogo completo de APIs."
+        description: "Comienza gratis y escala cuando lo necesites. Cada plan incluye el catálogo completo: una clave, sin elegir funciones a la carta."
       toggle:
         monthly: "Mensual"
         yearly: "Anual"
@@ -629,19 +629,20 @@ es:
     about:
       title: "Acerca de nosotros - Requiems API"
       heading: "Acerca de Requiems API"
-      intro: "Construyendo APIs listas para producción para desarrolladores de todo el mundo."
+      intro: "APIs de utilidad detrás de una sola clave, para que construyas el producto principal y no mantengas un mosaico de proveedores."
       company_info_html: "Requiems API es un producto de <a href=\"https://bobadilla.tech\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold\">Bobadilla Technologies</a>, un equipo dedicado a crear herramientas e infraestructura orientadas al desarrollador."
       mission:
         heading: "Nuestra misión"
-        text: "Requiems API proporciona a los desarrolladores infraestructura de API de nivel empresarial sin la complejidad empresarial. Creemos en hacer las APIs potentes accesibles para desarrolladores de todos los tamaños, desde desarrolladores independientes hasta grandes empresas."
+        text: "Dar a equipos pequeños el mismo tipo de APIs de validación, contenido y datos que usan las plataformas grandes, sin compras empresariales ni docenas de contratos. De MVPs y agencias a fintech y operaciones exigentes, integrar debe ser rápido y predecible."
       offerings:
         heading: "Lo que ofrecemos"
         items:
-          - "APIs de validación y verificación de correo electrónico"
-          - "APIs de utilidades de texto (Lorem Ipsum, consejos, citas, palabras aleatorias)"
-          - "Infraestructura de nivel empresarial alojada en la UE"
-          - "Precios transparentes sin costos ocultos"
-          - "Documentación y soporte orientados al desarrollador"
+          - "Validación de correo y teléfono, detección de desechables y comprobaciones de red relacionadas"
+          - "APIs de texto y contenido: filtro de profanidad, sentimiento, lorem ipsum, diccionario y más"
+          - "Generación de QR y códigos de barras, más utilidades financieras (IBAN, SWIFT, BIN y más)"
+          - "Lugares y planificación: zonas horarias, días hábiles, festivos, geocodificación"
+          - "Infraestructura alojada en la UE con precios transparentes"
+          - "Documentación y ejemplos pensados para producción, incluidos formatos amigables para IA"
       values:
         heading: "Nuestros valores"
         dx_title: "Experiencia del desarrollador"
@@ -661,7 +662,7 @@ es:
     faq:
       title: "Preguntas frecuentes - Requiems API"
       heading: "Preguntas frecuentes"
-      intro: "Encuentra respuestas a preguntas comunes sobre Requiems API"
+      intro: "Facturación, autenticación, límites de tasa y cómo pasar del registro a producción con rapidez."
       getting_started:
         heading: "Primeros pasos"
         q1: "¿Cómo empiezo con Requiems API?"
@@ -682,7 +683,7 @@ es:
       billing:
         heading: "Facturación y uso"
         q1: "¿Cómo se calcula la facturación?"
-        a1: "Cada llamada a la API cuesta 1 solicitud. Tu plan incluye una asignación mensual de solicitudes que se restablece al inicio de cada período de facturación. Algunos endpoints pueden contar como más de 1 solicitud — esto siempre se indica explícitamente en la documentación de ese endpoint."
+        a1: "Cada llamada a la API cuesta 1 solicitud. Tu plan incluye una asignación mensual de solicitudes que se restablece al inicio de cada período de facturación. Algunos endpoints pueden contar como más de 1 solicitud; esto siempre se indica explícitamente en la documentación de ese endpoint."
         q2: "¿Qué pasa si supero mi límite de solicitudes?"
         a2: "Cuando alcances el 75% de tu cuota, te enviaremos una alerta. Al 90%, recibirás otra advertencia. Si alcanzas el 100%, las solicitudes a la API devolverán un error 429 hasta que actualices tu plan o esperes tu próximo ciclo de facturación."
         q3: "¿Puedo actualizar o reducir mi plan?"
@@ -758,10 +759,10 @@ es:
       heading: "Para LLMs y Herramientas de IA"
       intro: "Requiems API ofrece endpoints de documentación legibles por máquina siguiendo el estándar llms.txt, facilitando que las herramientas y agentes de IA descubran y usen nuestras APIs."
       llms_txt:
-        heading: "llms.txt — Índice de APIs"
-        description: "Un directorio de todas las APIs disponibles con enlaces a sus páginas de documentación individuales. Sigue el estándar llms.txt para la descubribilidad por IA."
+        heading: "llms.txt - Índice de APIs"
+        description: "Un directorio de todas las APIs disponibles con enlaces a sus páginas de documentación individuales. Sigue el estándar llms.txt para que la IA pueda descubrirlas con facilidad."
       llms_full:
-        heading: "llms-full.txt — Documentación Completa"
+        heading: "llms-full.txt - Documentación Completa"
         description: "La documentación completa de todas las APIs en un único archivo de texto plano. Ideal para ingesta masiva, indexación offline o carga en modelos de contexto largo."
       api_md:
         heading: "Markdown por API"
