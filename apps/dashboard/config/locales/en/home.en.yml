@@ -1,22 +1,22 @@
 en:
   home:
     index:
-      title: "Requiems API - Replace Months of Infrastructure with a Single API Call"
+      title: "Requiems API: Ship faster with one key for validation, utilities, and more"
       hero:
-        title_line1: "Replace Months of Infrastructure"
-        title_line2: "with a Single API."
-        description: "100+ enterprise APIs that eliminate months of data sourcing, validation, and infrastructure headaches."
+        title_line1: "Ship faster."
+        title_line2: "One API key. The whole catalog."
+        description: "Fifty-plus ready-to-use APIs: validation, text, finance, places, and more. Integrate once instead of stitching together a new vendor for every feature, whether you are on an MVP or shipping client work."
         cta_primary: "Get Free API Key"
         cta_secondary: "Browse API Docs"
         try_badge: "✨ Try it now • No credit card required"
         api_request: "API Request"
       trusted_by:
-        label: "Trusted by teams building production products"
+        label: "Trusted by teams shipping real products"
       social_proof:
         label: "Powering products at companies like"
       features:
         heading: "Built for Developer Experience"
-        subheading: "AI-native integrations, precise docs, and live playgrounds. Ship in minutes, not weeks."
+        subheading: "From solo founders to agencies: precise docs, live playgrounds, and copy-paste examples. Ship integrations in minutes, not days."
         playground_title: "Live API Playground"
         playground_desc: "Test every endpoint directly in the docs. See real responses instantly, no code required."
         examples_title: "Code Examples"
@@ -27,11 +27,11 @@ en:
         ai_desc: "Every API ships with llms.txt, a full Markdown doc, and code examples in AI-paste format. Open any endpoint directly in Claude or ChatGPT with one click. Built for agents, copilots, and LLM-powered products."
       categories:
         heading: "API Categories"
-        description: "Explore our comprehensive collection of APIs organized by category to find exactly what you need."
+        description: "Validation, moderation, QR and barcodes, sentiment, geolocation, finance checks, and more, organized by category. Everything shares one subscription and one key."
         browse_all: "Browse All APIs"
       metrics:
         heading: "Performance You Can Count On"
-        subheading: "Enterprise-grade infrastructure without the enterprise complexity"
+        subheading: "Production-grade edge and EU backend, without running it yourself"
         latency_title: "Median Latency"
         latency_subtitle: "P50 response time"
         uptime_title: "Uptime"
@@ -54,8 +54,8 @@ en:
         eu_badge: "EU"
         eu_desc: "All data centers located in the European Union. GDPR compliant."
         payments_title: "Secure Payments"
-        payments_badge: "Stripe"
-        payments_desc: "All payments processed through Stripe. We never see or store your payment details."
+        payments_badge: "LemonSqueezy"
+        payments_desc: "Subscriptions and checkout are processed through LemonSqueezy. We never see or store your full payment details."
         gdpr_title: "GDPR / CCPA Compliant"
         gdpr_badge: "Compliant"
         gdpr_desc: "Full compliance with GDPR, CCPA, and international privacy regulations."
@@ -72,12 +72,12 @@ en:
         q3: "Where are your servers located?"
         a3: "All our data centers are located in the European Union, powered by Cloudflare's global edge network for GDPR compliance."
         q4: "What payment methods do you accept?"
-        a4: "We accept all major credit cards (Visa, Mastercard, American Express) and debit cards through Stripe."
+        a4: "We accept major credit and debit cards through our checkout provider, LemonSqueezy (including Visa, Mastercard, and American Express where supported)."
         still_questions: "Still have questions?"
         contact_link: "Contact our support team"
       cta:
         heading: "Ready to ship faster?"
-        subheading: "Join thousands of developers building with production-ready APIs"
+        subheading: "Startups, agencies, and builders use one key for validation, utilities, and more, with the free tier included."
         primary: "Get Started Free"
         secondary: "View Pricing"
         footer: "No credit card required • Get started free • Cancel anytime"
@@ -210,9 +210,9 @@ en:
           example: 'Example: <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">req_live_1234567890abcdef</code>'
         - name: "Rate Limiting"
           definition: "A technique used to control the number of requests a user can make to an API within a given time period. This helps prevent abuse and ensures fair usage."
-          example: "Example: Free plan allows 100 requests per minute"
+          example: "Example: Free plan allows 30 requests per minute"
         - name: "Requests"
-          definition: "The unit of API usage. Each API call counts as 1 request against your monthly plan allowance. Some endpoints may count as more than 1 request — this is always stated explicitly in that endpoint's documentation."
+          definition: "The unit of API usage. Each API call counts as 1 request against your monthly plan allowance. Some endpoints may count as more than 1 request; this is always stated explicitly in that endpoint's documentation."
           example: "Example: Calling the email validation endpoint once uses 1 request from your monthly allowance."
         - name: "REST (Representational State Transfer)"
           definition: "An architectural style for designing networked applications. REST APIs use HTTP requests to perform CRUD (Create, Read, Update, Delete) operations on resources."
@@ -314,7 +314,7 @@ en:
       title: "Pricing - Requiems API"
       header:
         heading: "Simple, Transparent Pricing"
-        description: "Start free, scale as you grow. All plans include access to our full API catalog."
+        description: "Start free, scale as you grow. Every plan includes the full catalog on one key, with no picking features à la carte."
       toggle:
         monthly: "Monthly"
         yearly: "Yearly"
@@ -629,19 +629,20 @@ en:
     about:
       title: "About Us - Requiems API"
       heading: "About Requiems API"
-      intro: "Building production-ready APIs for developers worldwide."
+      intro: "Utility APIs behind one key, so you ship core product instead of maintaining a patchwork of providers."
       company_info_html: 'Requiems API is a product by <a href="https://bobadilla.tech" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold">Bobadilla Technologies</a>, a team dedicated to building developer-first tools and infrastructure.'
       mission:
         heading: "Our Mission"
-        text: "Requiems API provides developers with enterprise-grade API infrastructure without the enterprise complexity. We believe in making powerful APIs accessible to developers of all sizes, from indie hackers to large enterprises."
+        text: "Give small teams the same kind of validation, content, and data APIs larger platforms rely on, without enterprise procurement or a dozen vendor relationships. From MVPs and agencies to fintech and ops-heavy apps, integration should be fast and boring (in a good way)."
       offerings:
         heading: "What We Offer"
         items:
-          - "Email validation and verification APIs"
-          - "Text utility APIs (Lorem Ipsum, advice, quotes, random words)"
-          - "Enterprise-grade infrastructure hosted in the EU"
-          - "Transparent pricing with no hidden fees"
-          - "Developer-first documentation and support"
+          - "Email and phone validation, disposable detection, and related networking checks"
+          - "Text and content APIs: profanity filter, sentiment, lorem ipsum, dictionary, and more"
+          - "QR and barcode generation, plus finance helpers (IBAN, SWIFT, BIN, and more)"
+          - "Places and scheduling: timezones, working days, holidays, geocoding"
+          - "EU-hosted infrastructure with transparent pricing"
+          - "Documentation and examples built for real shipping, including AI-friendly formats"
       values:
         heading: "Our Values"
         dx_title: "Developer Experience"
@@ -661,7 +662,7 @@ en:
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"
-      intro: "Find answers to common questions about Requiems API"
+      intro: "Billing, auth, rate limits, and how to get from signup to production quickly."
       getting_started:
         heading: "Getting Started"
         q1: "How do I get started with Requiems API?"
@@ -682,7 +683,7 @@ en:
       billing:
         heading: "Billing & Usage"
         q1: "How is billing calculated?"
-        a1: "Each API call costs 1 request. Your plan includes a monthly request allowance that resets at the start of each billing period. Some endpoints may count as more than 1 request — this is always stated explicitly in that endpoint's documentation."
+        a1: "Each API call costs 1 request. Your plan includes a monthly request allowance that resets at the start of each billing period. Some endpoints may count as more than 1 request; this is always stated explicitly in that endpoint's documentation."
         q2: "What happens if I exceed my request limit?"
         a2: "When you hit 75% of your quota, we'll send you an alert. At 90%, you'll get another warning. If you hit 100%, API requests will return a 429 error until you upgrade your plan or wait for your next billing cycle."
         q3: "Can I upgrade or downgrade my plan?"
@@ -758,10 +759,10 @@ en:
       heading: "For LLMs & AI Tools"
       intro: "Requiems API provides machine-readable documentation endpoints following the llms.txt standard, making it easy for AI tools and agents to discover and use our APIs."
       llms_txt:
-        heading: "llms.txt — API Index"
+        heading: "llms.txt - API Index"
         description: "A directory of all available APIs with links to individual documentation pages. Follows the llms.txt standard for AI discoverability."
       llms_full:
-        heading: "llms-full.txt — Complete Documentation"
+        heading: "llms-full.txt - Complete Documentation"
         description: "The full documentation for every API in a single plain-text file. Ideal for bulk ingestion, offline indexing, or loading into a large-context model."
       api_md:
         heading: "Per-API Markdown"

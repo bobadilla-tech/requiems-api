@@ -20,7 +20,7 @@ en:
       search_try_different: "Try different keywords"
       language: "Language"
     footer:
-      tagline: "Production-ready APIs for modern developers"
+      tagline: "One API key for validation, utilities, and more, without the integration sprawl"
       copyright: "© %{year} Bobadilla Tech. All rights reserved."
       sections:
         get_started: "Get Started"
