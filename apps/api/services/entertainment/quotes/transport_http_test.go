@@ -10,8 +10,6 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// reuse mockRow from service_test.go
-
 type httpMockQuerier struct {
 	row pgx.Row
 }
@@ -77,12 +75,14 @@ func TestTransport_MethodNotAllowed(t *testing.T) {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 
-	req := httptest.NewRequest("GET", "/quotes/random", http.NoBody)
+	// POST is not registered; chi must return 405 without calling the GET handler
+	// (which would panic: Service has no db in this test).
+	req := httptest.NewRequest(http.MethodPost, "/quotes/random", http.NoBody)
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
 	if w.Result().StatusCode != http.StatusMethodNotAllowed {
-		t.Errorf("expected 405")
+		t.Errorf("expected 405, got %d", w.Result().StatusCode)
 	}
 }

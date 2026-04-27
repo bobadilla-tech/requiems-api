@@ -94,6 +94,8 @@ jobs:
         env:
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
           BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
+          # .env.example uses host "redis" (Docker Compose). Override so integration tests fail fast on localhost instead of DNS timeouts.
+          REDIS_URL: redis://127.0.0.1:6379/0
         run: go test -v -race -coverprofile=coverage.out ./...
 
       - name: Upload coverage to Codecov
