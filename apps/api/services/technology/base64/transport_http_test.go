@@ -1,4 +1,5 @@
-package base64 //nolint:revive
+// Package base64 tests the HTTP transport for the base64 service.
+package base64 //nolint:revive // name matches feature dir; stdlib stays encoding/base64 with import aliases in app code
 
 import (
 	"encoding/json"
@@ -8,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+
 	"requiems-api/platform/httpx"
 )
 
@@ -38,8 +40,11 @@ func assertJSON(t *testing.T, w *httptest.ResponseRecorder) {
 // ── /base64/encode ────────────────────────────────────────────────────────────
 
 func TestEncode_HappyPath(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/base64/encode",
-		strings.NewReader(`{"value":"` + decodedHello + `"}`))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/base64/encode",
+		strings.NewReader(`{"value":"`+decodedHello+`"}`),
+	)
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 
@@ -79,7 +84,7 @@ func TestEncode_MissingValue(t *testing.T) {
 // when "variant" contains a value other than "standard" or "url".
 func TestEncode_InvalidVariant(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/base64/encode",
-		strings.NewReader(`{"value":"` + decodedHello + `","variant":"invalid"}`))
+		strings.NewReader(`{"value":"`+decodedHello+`","variant":"invalid"}`))
 
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
@@ -96,7 +101,7 @@ func TestEncode_InvalidVariant(t *testing.T) {
 
 func TestDecode_HappyPath(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/base64/decode",
-		strings.NewReader(`{"value":"` + encodedHello + `"}`))
+		strings.NewReader(`{"value":"`+encodedHello+`"}`))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 
@@ -136,7 +141,7 @@ func TestDecode_MissingValue(t *testing.T) {
 // when "variant" contains a value other than "standard" or "url".
 func TestDecode_InvalidVariant(t *testing.T) {
 	req := httptest.NewRequest(http.MethodPost, "/base64/decode",
-		strings.NewReader(`{"value":"` + encodedHello + `","variant":"invalid"}`))
+		strings.NewReader(`{"value":"`+encodedHello+`","variant":"invalid"}`))
 
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
