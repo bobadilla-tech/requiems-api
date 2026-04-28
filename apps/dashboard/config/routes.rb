@@ -24,8 +24,9 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
-  # All user-facing routes scoped under optional locale prefix (/en/... or /es/...)
-  scope "(:locale)", locale: /en|es/ do
+  locale_route_pattern = Regexp.union(*Rails.application.config.i18n.available_locales.map(&:to_s))
+  # All user-facing routes scoped under optional locale prefix (/en/, /es/, /fr/, ...)
+  scope "(:locale)", locale: locale_route_pattern do
     devise_for :users, controllers: {
       registrations: "users/registrations",
       sessions: "users/sessions",

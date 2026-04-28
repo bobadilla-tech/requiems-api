@@ -1,0 +1,13 @@
+<%# locals: (compact: false, select_id: "language-switcher-select") %>
+<% select_id = local_assigns.fetch(:select_id, "language-switcher-select") %>
+<% compact = local_assigns.fetch(:compact, false) %>
+<% select_classes = compact ? "text-xs rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 py-1 pl-2 pr-7 focus:ring-blue-500 focus:border-blue-500 max-w-[11rem]" : "block w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 py-2 px-3 focus:ring-blue-500 focus:border-blue-500" %>
+<%= form_with url: switch_locale_path, method: :post, data: { turbo: false }, html: { class: compact ? "inline-block min-w-0" : "w-full" } do %>
+  <label for="<%= select_id %>" class="<%= compact ? 'sr-only' : 'block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2' %>"><%= t("shared.nav.language") %></label>
+  <%= select_tag :locale,
+        options_for_select(I18n.available_locales.map { |l| [locale_name(l), l.to_s] }, I18n.locale.to_s),
+        id: select_id,
+        class: select_classes,
+        aria: { label: t("shared.nav.language") },
+        onchange: "this.form.requestSubmit()" %>
+<% end %>

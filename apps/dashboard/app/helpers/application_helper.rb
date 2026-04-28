@@ -5,7 +5,8 @@ module ApplicationHelper
 
   LOCALE_NAMES = {
     en: "English",
-    es: "Español"
+    es: "Español",
+    fr: "Français"
   }.freeze
 
   def locale_name(locale)

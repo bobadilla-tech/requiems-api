@@ -207,14 +207,8 @@
               </div>
 
               <!-- Locale Switcher (Mobile) -->
-              <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2"><%= t("shared.nav.language") %></p>
-                <div class="flex space-x-2 px-3">
-                  <%= button_to "English", switch_locale_path, method: :post, params: { locale: "en" },
-                      class: "flex-1 text-center px-3 py-2 rounded-lg text-sm font-medium transition-colors #{I18n.locale == :en ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}" %>
-                  <%= button_to "Español", switch_locale_path, method: :post, params: { locale: "es" },
-                      class: "flex-1 text-center px-3 py-2 rounded-lg text-sm font-medium transition-colors #{I18n.locale == :es ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}" %>
-                </div>
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-3 px-3">
+                <%= render "partials/shared/language_switcher", compact: false, select_id: "mobile-nav-language-select" %>
               </div>
 
               <% if user_signed_in? %>

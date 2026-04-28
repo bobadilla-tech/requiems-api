@@ -1,0 +1,217 @@
+fr:
+  home:
+    team:
+      title: "Notre équipe — Requiems API"
+      heading: "Rencontrez l'équipe"
+      subheading: "Les personnes qui construisent des APIs prêtes pour la production pour les développeurs du monde entier."
+      company_prefix: "Tous les membres de l'équipe font partie de"
+      company_sentence: "Tous les membres de l'équipe font partie de %{company_link}"
+      linkedin_cta: "Se connecter sur LinkedIn"
+      members:
+        eliaz:
+          role: "Ingénieur backend, ingénieur fondateur"
+          bio: "Architecture backend et infrastructure cœur de Requiems API."
+        leonardo:
+          role: "Ingénieur backend, ingénieur fondateur"
+          bio: "Systèmes backend scalables et optimisation des performances API pour notre base d'utilisateurs."
+        alexandra:
+          role: "Fondatrice, go-to-market"
+          bio: "Stratégie go-to-market et relations avec développeurs et entreprises."
+      join:
+        heading: "Rejoignez-nous"
+        text: "Nous cherchons toujours des ingénieurs passionnés par les produits orientés développeur. Intéressé·e ?"
+        cta: "Nous contacter"
+
+    status:
+      title: "État des APIs — Requiems API"
+      all_operational: "Tous les systèmes sont opérationnels"
+      all_operational_desc: "Tous les services Requiems API fonctionnent normalement"
+      operational: "Opérationnel"
+      services:
+        gateway:
+          name: "Passerelle API"
+          desc: "Authentification et routage en périphérie"
+        backend:
+          name: "Services backend"
+          desc: "Traitement API et logique métier"
+        database:
+          name: "Base de données"
+          desc: "Stockage et lecture des données"
+        auth:
+          name: "Authentification"
+          desc: "Validation des clés API et sécurité"
+      metrics:
+        heading: "Indicateurs de performance"
+        uptime: "Disponibilité"
+        latency: "Latence moyenne"
+        requests: "Requêtes mensuelles"
+        data_centers: "Centres de données"
+      last_updated: "Dernière mise à jour : %{datetime}"
+      having_issues: "Un problème ?"
+      contact_support: "Contacter le support"
+
+    terms:
+      title: "Conditions d'utilisation — Requiems API"
+      heading: "Conditions d'utilisation"
+      last_updated: "Dernière mise à jour : %{date}"
+      acceptance:
+        heading: "1. Acceptation des conditions"
+        text: "En accédant ou en utilisant Requiems API, vous acceptez les présentes conditions d'utilisation et toutes les lois applicables. Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser le service."
+      api_access:
+        heading: "2. Accès et utilisation de l'API"
+        keys:
+          heading: "2.1 Clés API"
+          text: "Vous êtes responsable de la confidentialité de vos clés API. Ne les partagez pas publiquement et ne les intégrez pas dans du code client. Vous êtes responsable de toute activité effectuée avec vos clés."
+        rate_limits:
+          heading: "2.2 Limites de débit"
+          text: "L'usage est soumis à des limites de débit selon votre formule. Les dépasser peut entraîner une suspension temporaire ou des frais supplémentaires."
+        acceptable_use:
+          heading: "2.3 Usage acceptable"
+          intro: "Vous vous engagez à ne pas utiliser l'API pour :"
+          items:
+            - "Des activités illégaires ou contraires aux lois"
+            - "Tenter d'accéder sans autorisation à nos systèmes"
+            - "Transmettre malware, virus ou code nuisible"
+            - "Harcèlement, spam ou comportement abusif"
+            - "Revendre ou redistribuer l'accès sans autorisation"
+            - "Rétro-ingénierie ou extraction du code source"
+      billing:
+        heading: "3. Facturation et paiements"
+        plans:
+          heading: "3.1 Formules d'abonnement"
+          text: "Les formules payantes sont facturées mensuellement ou annuellement à l'avance. Les sommes ne sont pas remboursables sauf obligation légale ou mention expresse dans les présentes conditions."
+        trials:
+          heading: "3.2 Essais gratuits"
+          text: "Les formules mensuelles payantes incluent 7 jours d'essai. Aucun prélèvement avant la fin de l'essai. Annulation possible à tout moment pendant l'essai."
+        overages:
+          heading: "3.3 Dépassements"
+          text: "Si vous dépassez le quota mensuel, les requêtes sont bloquées avec une erreur 429. Changez de formule pour rétablir l'accès."
+      sla:
+        heading: "4. Niveau de service et disponibilité"
+        intro: "Nous visons 99,99 % de disponibilité mais ne garantissons pas un service ininterrompu. Nous déclinons toute responsabilité pour :"
+        items:
+          - "Les fenêtres de maintenance planifiées"
+          - "Les cas de force majeure"
+          - "Les pannes de services tiers"
+          - "Les problèmes causés par un mauvais usage de l'API"
+      data_privacy:
+        heading: "5. Données et confidentialité"
+        text: "Nous ne journalisons pas le contenu des requêtes ou réponses API. Les métadonnées d'usage (horodatages, points de terminaison, codes de statut) sont conservées pour la facturation et l'analyse. Consultez notre"
+        policy_link: "politique de confidentialité"
+        policy_suffix: "pour plus de détails."
+        full: "Nous ne journalisons pas le contenu des requêtes ou réponses API. Les métadonnées d'usage (horodatages, points de terminaison, codes de statut) sont conservées pour la facturation et l'analyse. Consultez notre %{link} pour plus de détails."
+      ip:
+        heading: "6. Propriété intellectuelle"
+        text: "L'API, la documentation et les matériaux associés appartiennent à Bobadilla Tech et sont protégés par le droit d'auteur et autres droits de propriété intellectuelle. Copie, modification ou œuvres dérivées interdites sans autorisation."
+      termination:
+        heading: "7. Résiliation"
+        intro: "Nous pouvons suspendre ou résilier votre accès à tout moment en cas de :"
+        items:
+          - "Violation des présentes conditions"
+          - "Non-paiement"
+          - "Activité frauduleuse ou illégale"
+          - "Décision de notre part avec préavis de 30 jours"
+        self_cancel: "Vous pouvez supprimer votre compte à tout moment depuis les paramètres du tableau de bord."
+      liability:
+        heading: "8. Limitation de responsabilité"
+        text: "DANS LA LIMITE AUTORISÉE PAR LA LOI, BOBADILLA TECH DÉCLINE TOUTE RESPONSABILITÉ POUR DOMMAGES INDIRECTS, ACCESSOIRES, SPÉCIAUX, CONSÉCUTIFS OU PUNITIFS, PERTE DE PROFITS OU DE REVENUS, PERTE DE DONNÉES, D'USAGE, DE CLIENTÈLE OU AUTRES PERTES INTANGIBLES."
+      changes:
+        heading: "9. Modifications des conditions"
+        text: "Nous pouvons modifier les présentes conditions à tout moment. Les changements importants seront notifiés par e-mail. L'usage continu de l'API après modification vaut acceptation."
+      governing_law:
+        heading: "10. Droit applicable"
+        text: "Les présentes conditions sont régies par le droit de l'Union européenne. Les litiges relèvent des tribunaux de l'UE."
+      contact:
+        heading: "Contact"
+        text: "Questions sur ces conditions ? Écrivez-nous à"
+
+    privacy:
+      title: "Politique de confidentialité — Requiems API"
+      heading: "Politique de confidentialité"
+      last_updated: "Dernière mise à jour : %{date}"
+      overview:
+        heading: "Vue d'ensemble"
+        text: "Requiems API (« nous », « notre ») s'engage à protéger votre vie privée. Cette politique explique comment nous collectons, utilisons, divulguons et protégeons vos informations lorsque vous utilisez notre plateforme et nos services API."
+      information_we_collect:
+        heading: "Informations collectées"
+        account:
+          heading: "Compte"
+          text: "Lors de l'inscription, nous collectons votre adresse e-mail, votre nom et les informations de facturation."
+        api_usage:
+          heading: "Données d'usage API"
+          text: "Nous collectons des métadonnées sur vos requêtes : horodatages, point de terminaison appelé, codes de réponse. Nous ne journalisons PAS le contenu réel des requêtes ou réponses."
+        technical:
+          heading: "Informations techniques"
+          text: "Nous collectons automatiquement les adresses IP, les user-agents et d'autres données techniques pour la sécurité et l'exploitation."
+      how_we_use:
+        heading: "Utilisation de vos informations"
+        items:
+          - "Fournir, maintenir et améliorer nos services"
+          - "Traiter vos transactions et envoyer les informations associées"
+          - "Vous envoyer des avis techniques, mises à jour et messages de support"
+          - "Surveiller et analyser les tendances d'usage"
+          - "Détecter, prévenir et traiter les problèmes techniques et la fraude"
+          - "Respecter nos obligations légales"
+      data_storage:
+        heading: "Stockage et sécurité des données"
+        text: "Toutes les données sont stockées sur des serveurs situés dans l'Union européenne. Nous mettons en œuvre des mesures de sécurité conformes aux usages du secteur, notamment :"
+        items:
+          - "Chiffrement TLS 1.3 pour les données en transit"
+          - "Chiffrement AES-256 pour les données au repos"
+          - "Audits et surveillance de sécurité réguliers"
+          - "Contrôles d'accès et mécanismes d'authentification"
+      data_retention:
+        heading: "Conservation des données"
+        text: "Nous conservons les informations de compte tant que le compte est actif. Les journaux d'usage sont conservés 90 jours. Vous pouvez demander la suppression de votre compte et des données associées à tout moment."
+      gdpr:
+        heading: "Vos droits (RGPD)"
+        intro: "Si vous êtes dans l'Espace économique européen, vous disposez des droits suivants :"
+        items:
+          - "Droit d'accès à vos données personnelles"
+          - "Droit de rectification des données inexactes"
+          - "Droit à l'effacement (« droit à l'oubli »)"
+          - "Droit à la limitation du traitement"
+          - "Droit à la portabilité des données"
+          - "Droit d'opposition au traitement"
+      third_party:
+        heading: "Services tiers"
+        text: "Nous utilisons les services tiers suivants :"
+        items:
+          - "<strong>LemonSqueezy :</strong> traitement des paiements (voir leur politique de confidentialité)"
+          - "<strong>Cloudflare :</strong> infrastructure et protection DDoS"
+      contact:
+        heading: "Nous contacter"
+        text: "Pour toute question relative à la confidentialité ou pour exercer vos droits, contactez-nous à :"
+
+    about:
+      title: "À propos — Requiems API"
+      heading: "À propos de Requiems API"
+      intro: "Des APIs utilitaires derrière une seule clé, pour que vous livriez le produit cœur au lieu de maintenir une mosaïque de fournisseurs."
+      company_info_html: "Requiems API est un produit de <a href=\"https://bobadilla.tech\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold\">Bobadilla Technologies</a>, une équipe dédiée aux outils et à l'infrastructure orientés développeur."
+      mission:
+        heading: "Notre mission"
+        text: "Offrir aux petites équipes le même type d'APIs de validation, de contenu et de données que les grandes plateformes, sans achats « entreprise » ni dizaines de contrats. Des MVP et agences à la fintech et aux opérations exigeantes, l'intégration doit être rapide et prévisible."
+      offerings:
+        heading: "Ce que nous proposons"
+        items:
+          - "Validation e-mail et téléphone, détection des jetables et contrôles réseau associés"
+          - "APIs texte et contenu : filtre grossièreté, sentiment, lorem ipsum, dictionnaire, etc."
+          - "Génération QR et codes-barres, plus utilitaires financiers (IBAN, SWIFT, BIN, etc.)"
+          - "Lieux et planification : fuseaux, jours ouvrés, jours fériés, géocodage"
+          - "Infrastructure hébergée dans l'UE avec tarification transparente"
+          - "Documentation et exemples pensés pour la mise en production, formats adaptés à l'IA"
+      values:
+        heading: "Nos valeurs"
+        dx_title: "Expérience développeur"
+        dx_text: "Nous voulons que nos APIs soient simples à intégrer et agréables à utiliser."
+        reliability_title: "Fiabilité"
+        reliability_text: "SLA de disponibilité 99,99 % avec infrastructure et supervision de niveau entreprise."
+        transparency_title: "Transparence"
+        transparency_text: "Tarifs clairs, documentation détaillée et communication honnête."
+        privacy_title: "Confidentialité"
+        privacy_text: "Infrastructure dans l'UE avec conformité RGPD dès le premier jour."
+      contact:
+        heading: "Nous contacter"
+        intro: "Des questions ou envie d'en savoir plus ?"
+        get_in_touch: "Écrivez-nous"
+        or_email: "ou par e-mail à"

@@ -1,0 +1,120 @@
+fr:
+  home:
+    faq:
+      title: "FAQ — Requiems API"
+      heading: "Questions fréquentes"
+      intro: "Facturation, authentification, limites de débit et passage de l'inscription à la production rapidement."
+      getting_started:
+        heading: "Pour commencer"
+        q1: "Comment démarrer avec Requiems API ?"
+        a1_html: "C'est simple ! Créez un compte gratuit, générez votre clé API depuis le tableau de bord et lancez vos requêtes. Consultez notre %{docs_link} pour des guides d'intégration détaillés."
+        docs_link: "documentation"
+        q2: "Ai-je besoin d'une carte bancaire pour commencer ?"
+        a2: "Non ! La formule gratuite inclut 500 requêtes mensuelles sans carte bancaire. Idéal pour tester et les petits projets. Vous pouvez changer de formule quand vous voulez."
+        q3: "Quels langages de programmation sont pris en charge ?"
+        a3: "Notre API REST fonctionne avec tout langage capable d'effectuer des requêtes HTTP. Nous fournissons des exemples pour JavaScript/Node.js, Python, PHP, Ruby, Go, Java, etc."
+      authentication:
+        heading: "Authentification"
+        q1: "Comment authentifier mes requêtes ?"
+        a1: "Incluez votre clé API dans l'en-tête Authorization en tant que jeton Bearer :"
+        q2: "Quelle est la différence entre les clés de test et de production ?"
+        a2_html: "Les clés de test (préfixe <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_test_</code>) servent au développement et aux tests. Elles fonctionnent sur tous les points de terminaison mais ne comptent pas dans le quota. Les clés de production (<code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_live_</code>) sont pour la production et comptent dans le quota mensuel."
+        q3: "Puis-je régénérer ma clé API ?"
+        a3: "Oui ! Dans le tableau de bord, ouvrez la clé concernée et choisissez « Régénérer ». L'ancienne cesse de fonctionner immédiatement : mettez à jour toutes vos applications."
+      billing:
+        heading: "Facturation et usage"
+        q1: "Comment est calculée la facturation ?"
+        a1: "Chaque appel API coûte 1 requête. Votre formule inclut un quota mensuel réinitialisé au début de chaque période. Certains points de terminaison peuvent compter plus d'une requête ; c'est indiqué dans leur documentation."
+        q2: "Que se passe-t-il si je dépasse ma limite de requêtes ?"
+        a2: "À 75 % du quota, nous vous envoyons une alerte. À 90 %, un second avertissement. À 100 %, les requêtes renvoient 429 jusqu'à changement de formule ou prochain cycle de facturation."
+        q3: "Puis-je monter ou descendre de formule ?"
+        a3: "Oui ! Vous pouvez changer de formule à tout moment depuis la facturation. Les montées sont immédiates ; les descentes s'appliquent au début de la période suivante."
+        q4: "Les requêtes non utilisées sont-elles reportées ?"
+        a4: "Non. Le quota se réinitialise à chaque période. Choisissez une formule adaptée à votre usage mensuel type."
+      rate_limits:
+        heading: "Limites de débit"
+        q1: "Quelles sont les limites de débit ?"
+        a1: "Elles varient selon la formule :"
+        free: "Gratuit : 30 requêtes/minute"
+        developer: "Développeur : 5 000 requêtes/minute"
+        business: "Business : 10 000 requêtes/minute"
+        professional: "Professionnel : 50 000 requêtes/minute"
+        q2: "Comment gérer les erreurs de limite de débit ?"
+        a2_html: "En cas d'erreur 429, implémentez un backoff exponentiel. Attendez quelques secondes avant de réessayer. Consultez l'en-tête <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">Retry-After</code> pour le délai recommandé. Envisagez une formule supérieure si vous atteignez souvent la limite."
+      support:
+        heading: "Support"
+        q1: "Comment obtenir de l'aide ?"
+        a1: "Plusieurs canaux :"
+        docs_channel:
+          label: "Documentation"
+          description: "Guides complets et référence API"
+        contact_channel:
+          label: "Formulaire de contact"
+          description: "Support e-mail (réponse sous 24–48 h)"
+        github_channel:
+          label: "Issues GitHub"
+          description: "Signaler des bogues ou demander des fonctionnalités"
+        q2: "Quels sont vos délais de réponse ?"
+        a2: "Ils varient selon la formule :"
+        free_dev: "Gratuit et Développeur : 48 h"
+        business_time: "Business : 24 h"
+        professional_time: "Professionnel : 12 h (support prioritaire)"
+        q3: "Proposez-vous un support entreprise ?"
+        a3_html: "Oui ! Les clients entreprise bénéficient d'un support dédié avec délais garantis, accès direct à l'équipe d'ingénierie et assistance prioritaire. %{sales_link} pour en savoir plus."
+        contact_sales: "Contacter les ventes"
+      still_questions:
+        heading: "Encore des questions ?"
+        text: "Nous sommes là pour vous aider ! Contactez le support ou consultez la documentation."
+        contact: "Contacter le support"
+        docs: "Voir la documentation"
+
+    contact:
+      title: "Nous contacter — Requiems API"
+      heading: "Nous contacter"
+      intro: "Une question sur Requiems API ? Écrivez-nous par e-mail ou utilisez le formulaire. Nous serons ravis de vous lire !"
+      general_questions:
+        heading: "Questions générales"
+        text: "Pour l'activité, les formules d'abonnement, les politiques ou les partenariats, écrivez-nous à"
+      technical_support:
+        heading: "Support technique"
+        badge: "Utilisateurs premium uniquement"
+        text: "Pour le support technique (débogage, clés API, validation de données), utilisez l'onglet « Support Desk » de votre profil."
+      form:
+        heading: "Prenons contact"
+        paid_notice: "Si vous êtes déjà abonné payant, ouvrez une demande depuis l'onglet Support Desk de votre profil pour une réponse plus rapide."
+        name: "Nom"
+        email: "E-mail"
+        inquiry_type: "Type de demande"
+        inquiry_existing_api: "API ou fonctionnalité existante"
+        inquiry_technical: "Problème technique"
+        inquiry_pricing: "Formules premium ou tarifs"
+        inquiry_partnership: "Partenariat / collaboration"
+        inquiry_other: "Autre"
+        message: "Comment pouvons-nous vous aider ?"
+        submit: "Envoyer le message"
+      additional:
+        talk_to_sales: "Parler aux ventes"
+        suggest_api: "Suggérer une nouvelle API"
+    for_llms:
+      title: "Pour les LLM et outils d'IA — Requiems API"
+      heading: "Pour les LLM et outils d'IA"
+      intro: "Requiems API expose des points de terminaison de documentation lisibles par machine selon le standard llms.txt, pour que les outils et agents d'IA découvrent et utilisent facilement nos APIs."
+      llms_txt:
+        heading: "llms.txt — index des APIs"
+        description: "Un répertoire de toutes les APIs avec liens vers leurs pages de documentation. Conforme au standard llms.txt pour la découvrabilité par l'IA."
+      llms_full:
+        heading: "llms-full.txt — documentation complète"
+        description: "La documentation complète de toutes les APIs dans un seul fichier texte. Idéal pour ingestion massive, index hors ligne ou chargement dans un modèle à grand contexte."
+      api_md:
+        heading: "Markdown par API"
+        description: "Obtenez la documentation complète d'une API en Markdown en ajoutant /index.md à son URL."
+        pattern: "Modèle : /apis/{api-id}/index.md"
+      open_in_ai:
+        heading: "Ouvrir dans Claude / ChatGPT"
+        description: "Chaque page de documentation d'API propose des boutons « Ouvrir dans Claude » et « Ouvrir dans ChatGPT » qui préchargent la référence complète comme invite pour une aide à l'intégration immédiate."
+        note: "Ces boutons se trouvent sur chaque page API, dans la section documentation."
+      cta:
+        heading: "Prêt à intégrer ?"
+        text: "Parcourez le catalogue complet ou téléchargez la documentation complète pour commencer."
+        browse_apis: "Parcourir les APIs"
+        full_docs: "Télécharger llms-full.txt"
