@@ -13,6 +13,13 @@ module ApplicationHelper
     LOCALE_NAMES[locale.to_sym] || locale.to_s.upcase
   end
 
+  # POST /locale is declared outside the optional `(:locale)` scope. `default_url_options`
+  # still merges `locale: I18n.locale`, so `switch_locale_path` becomes "/locale?locale=fr".
+  # That duplicates the `locale` param with the select field and breaks language switching.
+  def locale_switch_path
+    "#{request.script_name}/locale".gsub(%r{/+}, "/")
+  end
+
   def global_search_data
     {
       apis: searchable_apis,
