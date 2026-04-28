@@ -7,8 +7,6 @@ import (
 
 	"requiems-api/platform/httpx"
 )
-	"requiems-api/platform/httpx"
-)
 
 type Generator interface {
 	Generate(paragraphs, sentences int) Lorem
