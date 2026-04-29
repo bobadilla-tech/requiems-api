@@ -97,7 +97,8 @@ Rebuild the dev images after changing dependency manifests:
 
 - Go API: `apps/api/go.mod` or `apps/api/go.sum`
 - Rails Dashboard: `apps/dashboard/Gemfile` or `apps/dashboard/Gemfile.lock`
-- Workers: `apps/workers/*/wrangler.toml` or `infra/docker/*worker*.dev.Dockerfile`
+- Workers: `apps/workers/*/wrangler.toml` or
+  `infra/docker/*worker*.dev.Dockerfile`
 
 ```bash
 cd infra/docker
