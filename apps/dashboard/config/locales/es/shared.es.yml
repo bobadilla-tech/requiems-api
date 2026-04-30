@@ -1,6 +1,9 @@
 es:
   shared:
     nav:
+      divisions: "Divisiones de API"
+      divisions_hub: "Resumen"
+      divisions_all: "Todas las divisiones"
       apis: "APIs"
       examples: "Ejemplos"
       pricing: "Precios"

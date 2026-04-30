@@ -1,0 +1,23 @@
+<%# locals: (i18n_scope:) %>
+<section class="py-14 bg-gray-50 dark:bg-gray-950" aria-labelledby="division-how-heading">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <h2 id="division-how-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-10 text-center">
+      <%= t("divisions.common.how_heading") %>
+    </h2>
+    <ol class="space-y-8">
+      <% [
+           [ "01", "#{i18n_scope}.how_it_works.step1_title", "#{i18n_scope}.how_it_works.step1_body" ],
+           [ "02", "#{i18n_scope}.how_it_works.step2_title", "#{i18n_scope}.how_it_works.step2_body" ],
+           [ "03", "#{i18n_scope}.how_it_works.step3_title", "#{i18n_scope}.how_it_works.step3_body" ]
+         ].each do |num, title_key, body_key| %>
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm"><%= num %></span>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"><%= t(title_key) %></h3>
+            <p class="text-gray-600 dark:text-gray-300 leading-relaxed"><%= t(body_key) %></p>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>

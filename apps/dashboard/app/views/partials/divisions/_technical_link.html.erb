@@ -1,0 +1,8 @@
+<%# locals: (slug:, i18n_scope:) %>
+<section class="py-6 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+    <%= link_to category_path(slug), class: "text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 underline-offset-2 hover:underline" do %>
+      <%= t("#{i18n_scope}.technical_link") %>
+    <% end %>
+  </div>
+</section>

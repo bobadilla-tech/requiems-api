@@ -1,0 +1,26 @@
+<%# locals: (i18n_scope:) %>
+<% steps = [
+     [ "#{i18n_scope}.ux_flow.step1_label", "#{i18n_scope}.ux_flow.step1_hint" ],
+     [ "#{i18n_scope}.ux_flow.step2_label", "#{i18n_scope}.ux_flow.step2_hint" ],
+     [ "#{i18n_scope}.ux_flow.step3_label", "#{i18n_scope}.ux_flow.step3_hint" ],
+     [ "#{i18n_scope}.ux_flow.step4_label", "#{i18n_scope}.ux_flow.step4_hint" ]
+   ] %>
+<section class="py-14 bg-white dark:bg-gray-900" aria-labelledby="division-ux-heading">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 id="division-ux-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-10 text-center">
+      <%= t("divisions.common.ux_flow_heading") %>
+    </h2>
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6 md:gap-2">
+      <% steps.each_with_index do |(lk, hk), i| %>
+        <div class="flex-1 text-center md:text-left min-w-0">
+          <p class="text-sm font-semibold text-gray-900 dark:text-gray-100"><%= t(lk) %></p>
+          <% hint = t(hk) %>
+          <p class="text-xs mt-1 <%= hint.include?('You are here') ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-500 dark:text-gray-400' %>"><%= hint %></p>
+        </div>
+        <% if i < steps.length - 1 %>
+          <div class="hidden md:flex items-start pt-1 text-gray-300 dark:text-gray-600 font-light text-xl select-none" aria-hidden="true">→</div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

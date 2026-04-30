@@ -35,53 +35,61 @@ type ErrorResponse struct {
 
 // Writes a 200-class success response wrapped in {"data": ..., "metadata": ...}.
 func JSON[T Data](w http.ResponseWriter, status int, v T) {
-	w.Header().Set("Content-Type", "application/json")
-
-	w.WriteHeader(status)
-
-	if err := json.NewEncoder(w).Encode(Response[T]{
-		Data:     v,
-		Metadata: Metadata{Timestamp: time.Now().UTC().Format(time.RFC3339)},
-	}); err != nil {
-		log.Printf("httpx: failed to encode JSON response: %v", err)
-	}
+	write(w, status, Response[T]{
+		Data: v,
+		Metadata: Metadata{
+			Timestamp: time.Now().UTC().Format(time.RFC3339),
+		},
+	})
 }
 
 // Writes a JSON error response with a machine-readable code and a human-readable message.
 func Error(w http.ResponseWriter, status int, code, message string) {
-	w.Header().Set("Content-Type", "application/json")
+	write(w, status, ErrorResponse{
+		Error:   code,
+		Message: message,
+		Metadata: Metadata{
+			Timestamp: time.Now().UTC().Format(time.RFC3339),
+		},
+	})
 
-	w.WriteHeader(status)
-
-	if err := json.NewEncoder(w).Encode(ErrorResponse{
-		Error:    code,
-		Message:  message,
-		Metadata: Metadata{Timestamp: time.Now().UTC().Format(time.RFC3339)},
-	}); err != nil {
-		log.Printf("httpx: failed to encode error response: %v", err)
-	}
 }
 
-// Writes 422 with the same validation_failed envelope as httpx.Handle when BindAndValidate or BindQuery returns *ValidationFailure.
+// ValidationError writes 422 for a BindAndValidate / BindQuery validation failure.
+// Handlers that only have field slices should call writeValidationError instead.
 func ValidationError(w http.ResponseWriter, vf *ValidationFailure) {
 	if vf == nil {
 		Error(w, http.StatusUnprocessableEntity, "validation_failed", "Validation failed.")
 		return
 	}
-
 	writeValidationError(w, vf.Fields)
 }
 
-// writeValidationError writes a 422 Unprocessable Entity with a structured
-// list of field-level constraint violations.
+// writeValidationError writes the same 422 envelope as httpx.Handle for validation_failed.
 func writeValidationError(w http.ResponseWriter, fields []FieldError) {
+	if len(fields) == 0 {
+		write(w, http.StatusUnprocessableEntity, ErrorResponse{
+			Error: "validation_failed",
+			Metadata: Metadata{
+				Timestamp: time.Now().UTC().Format(time.RFC3339),
+			},
+		})
+		return
+	}
+	write(w, http.StatusUnprocessableEntity, ErrorResponse{
+		Error:  "validation_failed",
+		Fields: fields,
+		Metadata: Metadata{
+			Timestamp: time.Now().UTC().Format(time.RFC3339),
+		},
+	})
+}
+
+func write(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusUnprocessableEntity)
-	if err := json.NewEncoder(w).Encode(ErrorResponse{
-		Error:    "validation_failed",
-		Fields:   fields,
-		Metadata: Metadata{Timestamp: time.Now().UTC().Format(time.RFC3339)},
-	}); err != nil {
-		log.Printf("httpx: failed to encode validation error response: %v", err)
+	w.WriteHeader(status)
+
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		log.Printf("httpx: failed to encode JSON response: %v", err)
 	}
 }

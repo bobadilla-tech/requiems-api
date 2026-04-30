@@ -11,6 +11,7 @@ en:
       ux_flow_heading: "Where you are on the site"
     index:
       meta_title: "API divisions — Requiems API"
+      tagline: "One API key for the full catalog. Pick the division that matches your problem—then open the technical API list when you are ready to integrate."
       hero:
         headline: "Ship faster without building everything from scratch"
         subheadline: "Explore how each division solves real business problems—then open the technical API list when you are ready to integrate."
@@ -18,6 +19,8 @@ en:
         secondary_cta: "View pricing"
       strategy_call:
         label: "Book a strategy call"
+      view_division: "View division"
+      apis_catalog_link: "Browse the full API catalog"
       cards:
         finance:
           title: "Finance"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "yaml"
+require_relative "../lib/division_slugs.rb"
 
 SitemapGenerator::Sitemap.default_host = "https://requiems.xyz"
 SitemapGenerator::Sitemap.compress      = false # write sitemap.xml, not sitemap.xml.gz
@@ -32,8 +33,28 @@ STATIC_PAGES = [
   { path: "/talk-to-sales",  changefreq: "monthly", priority: 0.4 }
 ].freeze
 
+DIVISION_MARKETING_PAGES = [
+  { path: "/divisions", changefreq: "weekly", priority: 0.75 }
+].concat(
+  DivisionSlugs::ALL.map do |slug|
+    { path: "/#{slug}", changefreq: "weekly", priority: 0.72 }
+  end
+).freeze
+
 SitemapGenerator::Sitemap.create! do
   STATIC_PAGES.each do |page|
+    %w[en es].each do |locale|
+      add "/#{locale}#{page[:path]}",
+        changefreq: page[:changefreq],
+        priority:   page[:priority],
+        alternates: [
+          { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
+          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" }
+        ]
+    end
+  end
+
+  DIVISION_MARKETING_PAGES.each do |page|
     %w[en es].each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],

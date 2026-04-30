@@ -72,6 +72,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
       api-management:
         condition: service_started
     stdin_open: true
@@ -107,6 +109,18 @@ services:
     depends_on:
       api:
         condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://127.0.0.1:4455/healthz',(r)=>{r.resume();r.on('end',()=>process.exit(r.statusCode===200?0:1));}).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 180s
 
   api-management:
     build:
@@ -117,8 +131,6 @@ services:
       sh -c "
         pnpm install --frozen-lockfile &&
         pnpm install --frozen-lockfile --dir /workers/shared &&
-        pnpm exec wrangler d1 execute requiem-usage --local --yes --persist-to=$$WRANGLER_PERSIST_TO --command=\"DROP TABLE IF EXISTS credit_usage; DROP TABLE IF EXISTS api_keys;\" &&
-          pnpm exec wrangler d1 execute requiem-usage --local --yes --persist-to=$$WRANGLER_PERSIST_TO --file=./schema.sql &&
         echo API_MANAGEMENT_API_KEY=$$API_MANAGEMENT_API_KEY > .dev.vars &&
         echo SWAGGER_USERNAME=$$SWAGGER_USERNAME >> .dev.vars &&
         echo SWAGGER_PASSWORD=$$SWAGGER_PASSWORD >> .dev.vars &&
@@ -141,7 +153,7 @@ services:
       - "5544:5544"
     depends_on:
       auth-gateway:
-        condition: service_started
+        condition: service_healthy
 
   # Sidekiq for background jobs
   sidekiq:
@@ -160,10 +172,14 @@ services:
     volumes:
       - ../../apps/dashboard:/app
     depends_on:
-      - db
-      - redis
-      - dashboard
-      - api-management
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dashboard:
+        condition: service_started
+      api-management:
+        condition: service_started
 
 volumes:
   db_data:

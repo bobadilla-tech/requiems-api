@@ -6,7 +6,7 @@
       <%= t("divisions.common.filters_heading") %>
     </h2>
     <div class="flex flex-wrap gap-2">
-      <% filters.each_with_index do |f, i| %>
+      <% filters.each do |f| %>
         <% key = f["key"] %>
         <% active = key == "all" %>
         <button type="button"
