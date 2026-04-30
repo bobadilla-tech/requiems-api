@@ -7,15 +7,18 @@ module DivisionsHelper
     ENV.fetch("CAL_COM_STRATEGY_URL", "").presence || DEFAULT_CAL_COM_STRATEGY_URL
   end
 
-  # I18n may return hashes with symbol or string keys; normalize for ERB.
+  # I18n may return arrays of hashes (string keys) or plain strings (e.g. industries list).
   def division_locale_array(scope, key)
     value = I18n.t("#{scope}.#{key}", default: [])
     return [] unless value.is_a?(Array)
 
     value.filter_map do |entry|
-      next unless entry.is_a?(Hash)
-
-      entry.transform_keys(&:to_s)
+      case entry
+      when Hash
+        entry.transform_keys(&:to_s)
+      when String, Symbol
+        entry.to_s
+      end
     end
   end
 end

@@ -1,15 +1,52 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Carousel + filter tabs for division marketing pages
+// Carousel + use-case grid for division marketing pages
 export default class extends Controller {
-  static targets = ["slide", "dot", "filterBtn", "gridCard"];
+  static targets = ["slide", "dot", "gridCard", "slideViewport"];
   static values = { index: { type: Number, default: 0 } };
 
   connect() {
     this.indexValue = 0;
-    this.activeFilter = "all";
     this.renderSlide();
-    this.applyFilter();
+    this.gridCardTargets.forEach((card) => card.classList.remove("hidden"));
+    this._onResize = () => this.scheduleSyncSlideHeights();
+    window.addEventListener("resize", this._onResize);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.syncSlideHeights());
+    });
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(() => this.syncSlideHeights());
+    }
+  }
+
+  disconnect() {
+    window.removeEventListener("resize", this._onResize);
+    clearTimeout(this._resizeTimer);
+  }
+
+  scheduleSyncSlideHeights() {
+    clearTimeout(this._resizeTimer);
+    this._resizeTimer = setTimeout(() => this.syncSlideHeights(), 120);
+  }
+
+  /** Keep carousel panel height stable when switching slides (max of all slides). */
+  syncSlideHeights() {
+    if (!this.hasSlideViewportTarget) return;
+    const slides = this.slideTargets;
+    if (slides.length <= 1) {
+      this.slideViewportTarget.style.minHeight = "";
+      return;
+    }
+
+    let max = 0;
+    slides.forEach((el) => {
+      slides.forEach((s) => s.classList.add("hidden"));
+      el.classList.remove("hidden");
+      max = Math.max(max, el.offsetHeight);
+    });
+
+    this.renderSlide();
+    this.slideViewportTarget.style.minHeight = `${Math.ceil(max)}px`;
   }
 
   next(event) {
@@ -36,25 +73,6 @@ export default class extends Controller {
     this.renderSlide();
   }
 
-  setFilter(event) {
-    event.preventDefault();
-    const key = event.currentTarget.dataset.filterKey;
-    if (!key) return;
-    this.activeFilter = key;
-    this.applyFilter();
-    this.filterBtnTargets.forEach((btn) => {
-      const active = btn.dataset.filterKey === key;
-      btn.classList.toggle("bg-blue-600", active);
-      btn.classList.toggle("text-white", active);
-      btn.classList.toggle("dark:bg-blue-500", active);
-      btn.classList.toggle("border-blue-600", active);
-      btn.classList.toggle("border-gray-300", !active);
-      btn.classList.toggle("text-gray-700", !active);
-      btn.classList.toggle("dark:border-gray-600", !active);
-      btn.classList.toggle("dark:text-gray-200", !active);
-    });
-  }
-
   renderSlide() {
     this.slideTargets.forEach((el, i) => {
       const on = i === this.indexValue;
@@ -71,11 +89,4 @@ export default class extends Controller {
     });
   }
 
-  applyFilter() {
-    this.gridCardTargets.forEach((card) => {
-      const fk = card.dataset.filterKey || "";
-      const show = this.activeFilter === "all" || fk === this.activeFilter;
-      card.classList.toggle("hidden", !show);
-    });
-  }
 }
