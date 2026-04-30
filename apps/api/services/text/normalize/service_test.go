@@ -243,3 +243,24 @@ func TestService_Normalize_InvalidEmail_ReturnsZeroValue(t *testing.T) {
 		t.Errorf("expected zero-value EmailNormalization on error, got %+v", result)
 	}
 }
+
+func TestService_NormalizeBatch_OrderAndValidity(t *testing.T) {
+	svc := NewService()
+
+	got := svc.NormalizeBatch([]string{"user@example.com", "not-an-email", "te.st@gmail.com"})
+	if got.Total != 3 {
+		t.Fatalf("total: want 3, got %d", got.Total)
+	}
+	if len(got.Results) != 3 {
+		t.Fatalf("results len: want 3, got %d", len(got.Results))
+	}
+	if !got.Results[0].Valid || got.Results[0].Normalized != "user@example.com" {
+		t.Errorf("result[0]: want valid normalized user@example.com, got %+v", got.Results[0])
+	}
+	if got.Results[1].Valid || got.Results[1].Message == "" {
+		t.Errorf("result[1]: want invalid with message, got %+v", got.Results[1])
+	}
+	if !got.Results[2].Valid || got.Results[2].Normalized != "test@gmail.com" {
+		t.Errorf("result[2]: want gmail normalized, got %+v", got.Results[2])
+	}
+}

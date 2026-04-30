@@ -186,3 +186,70 @@ func TestNormalize_UnknownFieldsRejected(t *testing.T) {
 		t.Errorf("expected 400 for unknown fields, got %d: %s", w.Code, w.Body.String())
 	}
 }
+
+func TestNormalizeBatch_HappyPathSetsUsageCount(t *testing.T) {
+	r := setupRouter()
+
+	body := `{"emails":["a@b.co","user@example.com"]}`
+	req := httptest.NewRequest(http.MethodPost, "/normalize/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
+	}
+	if got := w.Header().Get("X-Usage-Count"); got != "2" {
+		t.Errorf("X-Usage-Count: want 2, got %q", got)
+	}
+
+	var resp httpx.Response[EmailNormalizationBatchResponse]
+	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if resp.Data.Total != 2 || len(resp.Data.Results) != 2 {
+		t.Fatalf("total/results: %+v", resp.Data)
+	}
+	if !resp.Data.Results[0].Valid || !resp.Data.Results[1].Valid {
+		t.Fatalf("expected both valid, got %+v", resp.Data.Results)
+	}
+}
+
+func TestNormalizeBatch_InvalidItemInBand(t *testing.T) {
+	r := setupRouter()
+
+	body := `{"emails":["user@example.com","not-an-email"]}`
+	req := httptest.NewRequest(http.MethodPost, "/normalize/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var resp httpx.Response[EmailNormalizationBatchResponse]
+	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if !resp.Data.Results[0].Valid || resp.Data.Results[1].Valid {
+		t.Fatalf("want first valid second invalid, got %+v", resp.Data.Results)
+	}
+}
+
+func TestNormalizeBatch_EmptyArrayValidation(t *testing.T) {
+	r := setupRouter()
+
+	body := `{"emails":[]}`
+	req := httptest.NewRequest(http.MethodPost, "/normalize/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
+	}
+}

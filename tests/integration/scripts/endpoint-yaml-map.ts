@@ -10,7 +10,8 @@
 export const endpointYamlMap: Record<string, string> = {
   // ── Validation ─────────────────────────────────────────────────────────────
   "/v1/validation/email": "email-validate",
-  "/v1/text/normalize": "email-validate",
+  "/v1/text/normalize": "email-normalize",
+  "/v1/text/normalize/batch": "email-normalize",
   "/v1/validation/phone": "phone-validation",
   "/v1/validation/profanity": "profanity",
 

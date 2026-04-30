@@ -2461,6 +2461,129 @@ export const openApiSpec = {
         }
       }
     },
+    "/v1/text/normalize/batch": {
+      "post": {
+        "summary": "Normalize Email Batch",
+        "tags": [
+          "email-normalize"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Normalizes up to 100 email addresses in one request. Results are in the same order as the input. Each item includes valid (boolean); when false, only original and message are set. Usage is billed per email processed (see gateway usage headers).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "emails": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of addresses to normalize (min 1, max 100; each entry non-empty)",
+                    "example": [
+                      "user@example.com",
+                      "not-an-email",
+                      "te.st@gmail.com"
+                    ]
+                  }
+                },
+                "required": [
+                  "emails"
+                ],
+                "example": {
+                  "emails": [
+                    "user@example.com",
+                    "not-an-email",
+                    "te.st@gmail.com"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "One normalization result per input email, in order"
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Number of emails in the batch (same as results length)"
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "original": "user@example.com",
+                        "normalized": "user@example.com",
+                        "local": "user",
+                        "domain": "example.com",
+                        "changes": [],
+                        "valid": true
+                      },
+                      {
+                        "original": "not-an-email",
+                        "valid": false,
+                        "message": "invalid email address"
+                      },
+                      {
+                        "original": "te.st@gmail.com",
+                        "normalized": "test@gmail.com",
+                        "local": "test",
+                        "domain": "gmail.com",
+                        "changes": [
+                          "lowercased",
+                          "removed_dots"
+                        ],
+                        "valid": true
+                      }
+                    ],
+                    "total": 3
+                  },
+                  "metadata": {
+                    "timestamp": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON or unknown fields in the body"
+          },
+          "422": {
+            "description": "Missing emails, empty array, too many items, or empty string in the array"
+          }
+        }
+      }
+    },
     "/v1/validation/email": {
       "post": {
         "summary": "Validate Email",

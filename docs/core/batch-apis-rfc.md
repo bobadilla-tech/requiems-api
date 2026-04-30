@@ -28,6 +28,13 @@ returns `(response, itemCount, error)`; the platform sets response header
 count is **`len(emails)`** after validation (1–100), matching one billable unit
 per email checked. Public details: disposable email API docs.
 
+**3. Email normalizer batch** — `POST /v1/text/normalize/batch`
+
+**Go wiring:** `httpx.HandleBatch` in the text `normalize` router. Item count
+is **`len(emails)`** (1–100). Per-item failures use **`valid: false`** and
+`message` (same response model as phone batch). Public details:
+[`docs/apis/email/normalize.md`](../apis/email/normalize.md).
+
 **Request (illustrative):**
 
 - JSON object with an array field (here `numbers`).
