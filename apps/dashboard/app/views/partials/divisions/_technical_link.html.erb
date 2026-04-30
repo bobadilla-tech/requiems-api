@@ -1,8 +1,25 @@
-<%# locals: (slug:, i18n_scope:) %>
-<section class="py-6 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-    <%= link_to category_path(slug), class: "text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 underline-offset-2 hover:underline" do %>
-      <%= t("#{i18n_scope}.technical_link") %>
+<%# locals: (slug:) %>
+<section class="py-10 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <%= link_to category_path(slug),
+                class: "group flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 sm:p-6 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all" do %>
+      <div class="text-left min-w-0">
+        <p class="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400 mb-1">
+          <%= t("divisions.common.technical_api_kicker") %>
+        </p>
+        <p class="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+          <%= t("divisions.common.technical_api_title") %>
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1 leading-snug">
+          <%= t("divisions.common.technical_api_subtitle") %>
+        </p>
+      </div>
+      <span class="inline-flex items-center justify-center self-start sm:self-center flex-shrink-0 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-blue-600 group-hover:bg-blue-700 dark:bg-blue-500 dark:group-hover:bg-blue-600 transition-colors">
+        <%= t("divisions.common.technical_api_action") %>
+        <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </span>
     <% end %>
   </div>
 </section>

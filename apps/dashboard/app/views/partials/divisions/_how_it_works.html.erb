@@ -1,23 +1,25 @@
 <%# locals: (i18n_scope:) %>
-<section class="py-14 bg-gray-50 dark:bg-gray-950" aria-labelledby="division-how-heading">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6">
-    <h2 id="division-how-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-10 text-center">
+<section class="py-14 bg-white dark:bg-gray-900" aria-labelledby="division-how-heading">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 id="division-how-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 text-center">
       <%= t("divisions.common.how_heading") %>
     </h2>
-    <ol class="space-y-8">
+    <p class="text-sm text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-12">
+      <%= t("divisions.common.how_intro") %>
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
       <% [
-           [ "01", "#{i18n_scope}.how_it_works.step1_title", "#{i18n_scope}.how_it_works.step1_body" ],
-           [ "02", "#{i18n_scope}.how_it_works.step2_title", "#{i18n_scope}.how_it_works.step2_body" ],
-           [ "03", "#{i18n_scope}.how_it_works.step3_title", "#{i18n_scope}.how_it_works.step3_body" ]
+           [ "1", "#{i18n_scope}.how_it_works.step1_title", "#{i18n_scope}.how_it_works.step1_body" ],
+           [ "2", "#{i18n_scope}.how_it_works.step2_title", "#{i18n_scope}.how_it_works.step2_body" ],
+           [ "3", "#{i18n_scope}.how_it_works.step3_title", "#{i18n_scope}.how_it_works.step3_body" ]
          ].each do |num, title_key, body_key| %>
-        <li class="flex gap-4">
-          <span class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm"><%= num %></span>
-          <div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"><%= t(title_key) %></h3>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed"><%= t(body_key) %></p>
-          </div>
-        </li>
+        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/40 p-6 flex flex-col h-full">
+          <span class="text-3xl font-extrabold text-blue-600/90 dark:text-blue-400/90 tabular-nums leading-none mb-4"><%= num %></span>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t(title_key) %></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed flex-1"><%= t(body_key) %></p>
+        </div>
       <% end %>
-    </ol>
+    </div>
   </div>
 </section>

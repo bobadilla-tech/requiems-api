@@ -3,9 +3,13 @@
 <% seen_anchors = {} %>
 <section class="py-14 bg-gray-50 dark:bg-gray-950" aria-labelledby="division-use-cases-heading">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <h2 id="division-use-cases-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+    <h2 id="division-use-cases-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
       <%= t("divisions.common.use_cases_heading") %>
     </h2>
+    <div class="rounded-xl border border-amber-200/80 dark:border-amber-900/50 bg-amber-50/90 dark:bg-amber-950/25 px-4 py-3 mb-8 text-sm text-amber-950 dark:text-amber-100/90 leading-relaxed">
+      <span class="font-semibold text-amber-900 dark:text-amber-200"><%= t("divisions.common.use_cases_roadmap_label") %></span>
+      <%= t("divisions.common.use_cases_roadmap_note") %>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% cases.each_with_index do |uc, i| %>
         <% anchor = uc["case_anchor"].presence %>
