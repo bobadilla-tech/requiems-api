@@ -2,7 +2,8 @@ en:
   shared:
     nav:
       divisions: "API divisions"
-      divisions_hub: "Overview"
+      divisions_hub: "Overview of all divisions"
+      divisions_panel_heading: "Jump to a division"
       divisions_all: "All divisions"
       apis: "APIs"
       examples: "Examples"
