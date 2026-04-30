@@ -6,7 +6,9 @@
      data-action="mouseenter->navbar-divisions-megamenu#onEnter mouseleave->navbar-divisions-megamenu#onLeave focusin->navbar-divisions-megamenu#onEnter focusout->navbar-divisions-megamenu#onLeave">
   <%= link_to divisions_path,
               class: "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors",
-              "aria-haspopup": "true" do %>
+              "aria-haspopup": "true",
+              "aria-expanded": "false",
+              data: { navbar_divisions_megamenu_target: "trigger" } do %>
     <%= t("shared.nav.divisions") %>
   <% end %>
 

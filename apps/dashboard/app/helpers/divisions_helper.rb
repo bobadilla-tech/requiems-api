@@ -12,8 +12,8 @@ module DivisionsHelper
     value = I18n.t("#{scope}.#{key}", default: [])
     return [] unless value.is_a?(Array)
 
-    value.map do |entry|
-      next entry unless entry.is_a?(Hash)
+    value.filter_map do |entry|
+      next unless entry.is_a?(Hash)
 
       entry.transform_keys(&:to_s)
     end

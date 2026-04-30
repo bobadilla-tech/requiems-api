@@ -2,7 +2,7 @@
 <% slides = division_locale_array(i18n_scope, "featured_cases") %>
 <section class="py-14 bg-white dark:bg-gray-900" aria-labelledby="division-carousel-heading">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <h2 id="division-carousel-heading" class="sr-only">Featured cases</h2>
+    <h2 id="division-carousel-heading" class="sr-only"><%= t('divisions.carousel.heading') %></h2>
     <div class="relative">
       <% slides.each_with_index do |slide, i| %>
         <article data-division-hub-target="slide"
@@ -48,10 +48,10 @@
       <% end %>
       <% if slides.size > 1 %>
         <div class="flex items-center justify-between mt-8 gap-4">
-          <button type="button" class="p-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800" data-action="click->division-hub#prev" aria-label="Previous slide">
+          <button type="button" class="p-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800" data-action="click->division-hub#prev" aria-label="<%= t('divisions.carousel.previous') %>">
             <svg class="h-5 w-5 text-gray-700 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           </button>
-          <div class="flex gap-2" role="tablist" aria-label="Carousel pagination">
+          <div class="flex gap-2" role="tablist" aria-label="<%= t('divisions.carousel.pagination_label') %>">
             <% slides.each_with_index do |_slide, i| %>
               <button type="button"
                       role="tab"
@@ -60,10 +60,10 @@
                       data-action="click->division-hub#goTo"
                       class="h-2.5 w-2.5 rounded-full <%= i.zero? ? 'bg-blue-600 dark:bg-blue-500' : 'bg-gray-300 dark:bg-gray-600' %>"
                       aria-selected="<%= i.zero? %>"
-                      aria-label="Slide <%= i + 1 %>"></button>
+                      aria-label="<%= t('divisions.carousel.slide', number: i + 1) %>"></button>
             <% end %>
           </div>
-          <button type="button" class="p-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800" data-action="click->division-hub#next" aria-label="Next slide">
+          <button type="button" class="p-2 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800" data-action="click->division-hub#next" aria-label="<%= t('divisions.carousel.next') %>">
             <svg class="h-5 w-5 text-gray-700 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>

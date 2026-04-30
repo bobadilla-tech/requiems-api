@@ -16,5 +16,6 @@ class DivisionsController < ApplicationController
     end
 
     @category = find_category(@slug)
+    raise ActiveRecord::RecordNotFound if @category.blank?
   end
 end

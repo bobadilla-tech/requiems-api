@@ -1,6 +1,12 @@
 ---
 en:
   divisions:
+    carousel:
+      heading: "Featured cases"
+      pagination_label: "Carousel slides"
+      previous: "Previous slide"
+      next: "Next slide"
+      slide: "Slide %{number}"
     common:
       industries_heading: "Industries we serve"
       testimonials_heading: "What customers say"

@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 
 // Hover/focus flyout: keeps panel open while moving from hub link into the panel (relatedTarget + delay).
 export default class extends Controller {
-  static targets = ["panel"];
+  static targets = ["panel", "trigger"];
 
   connect() {
     this._hideTimer = null;
@@ -27,12 +27,18 @@ export default class extends Controller {
     const p = this.panelTarget;
     p.classList.remove("invisible", "opacity-0", "pointer-events-none");
     p.classList.add("opacity-100");
+    if (this.hasTriggerTarget) {
+      this.triggerTarget.setAttribute("aria-expanded", "true");
+    }
   }
 
   _hidePanel() {
     const p = this.panelTarget;
     p.classList.add("invisible", "opacity-0", "pointer-events-none");
     p.classList.remove("opacity-100");
+    if (this.hasTriggerTarget) {
+      this.triggerTarget.setAttribute("aria-expanded", "false");
+    }
   }
 
   _scheduleHide() {
