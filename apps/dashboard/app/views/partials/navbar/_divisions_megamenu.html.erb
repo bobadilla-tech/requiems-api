@@ -1,15 +1,12 @@
-<%# Desktop: hub link + flyout; Stimulus keeps panel open across the gap (navbar_divisions_megamenu). %>
+<%# Desktop: click label → hub; hover/focus opens panel. Panel is fixed + centered so it is never clipped off the left edge of the viewport. %>
 <% slugs = DivisionSlugs::ALL %>
-<% col_left = slugs[0, 4] || [] %>
-<% col_right = slugs[4, 4] || [] %>
 
-<div class="relative z-[100] inline-block"
+<div class="relative z-[90] inline-block"
      data-controller="navbar-divisions-megamenu"
      data-action="mouseenter->navbar-divisions-megamenu#onEnter mouseleave->navbar-divisions-megamenu#onLeave focusin->navbar-divisions-megamenu#onEnter focusout->navbar-divisions-megamenu#onLeave">
   <%= link_to divisions_path,
-              class: "relative z-10 inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors",
-              "aria-haspopup": "true",
-              "aria-expanded": "false" do %>
+              class: "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors",
+              "aria-haspopup": "true" do %>
     <span><%= t("shared.nav.divisions") %></span>
     <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -18,34 +15,18 @@
 
   <div data-navbar-divisions-megamenu-target="panel"
        data-action="mouseenter->navbar-divisions-megamenu#onEnter mouseleave->navbar-divisions-megamenu#onLeave"
-       class="invisible absolute left-0 top-full z-[200] -mt-2 pt-2 opacity-0 pointer-events-none transition-opacity duration-150 ease-out">
-    <div class="relative z-20 w-[min(calc(100vw-2rem),36rem)] rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-800 dark:ring-white/10 sm:w-[36rem]">
-      <p class="mb-4 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-        <%= t("shared.nav.divisions_panel_heading") %>
-      </p>
-      <div class="grid grid-cols-2 gap-x-8 gap-y-1">
-        <div class="flex flex-col gap-1">
-          <% col_left.each do |slug| %>
-            <%= link_to division_path(slug),
-                        class: "group flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm text-gray-800 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700/80" do %>
-              <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl <%= category_color_classes(slug, hover: true) %>">
-                <%= category_icon_svg(slug, size: "w-5 h-5") %>
-              </span>
-              <span class="min-w-0 font-medium leading-snug"><%= t("divisions.index.cards.#{slug}.title") %></span>
-            <% end %>
+       class="invisible fixed left-1/2 top-16 z-[110] mt-2 w-[min(120rem,calc(100vw-2rem))] max-w-[calc(100vw-1.5rem)] -translate-x-1/2 px-4 pt-1 opacity-0 transition-opacity duration-150 ease-out pointer-events-none">
+    <div class="w-full max-w-full rounded-2xl border border-gray-200 bg-white px-16 py-12 shadow-2xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-800 dark:ring-white/10">
+      <div class="divisions-megamenu-grid w-full">
+        <% slugs.each do |slug| %>
+          <%= link_to division_path(slug),
+                      class: "flex min-h-[3rem] min-w-0 items-center gap-4 rounded-xl px-4 py-2.5 text-left text-base text-gray-800 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700/80" do %>
+            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg <%= category_color_classes(slug, hover: true) %>">
+              <%= category_icon_svg(slug, size: "w-4 h-4") %>
+            </span>
+            <span class="min-w-0 font-medium leading-snug"><%= t("divisions.index.cards.#{slug}.title") %></span>
           <% end %>
-        </div>
-        <div class="flex flex-col gap-1">
-          <% col_right.each do |slug| %>
-            <%= link_to division_path(slug),
-                        class: "group flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm text-gray-800 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700/80" do %>
-              <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl <%= category_color_classes(slug, hover: true) %>">
-                <%= category_icon_svg(slug, size: "w-5 h-5") %>
-              </span>
-              <span class="min-w-0 font-medium leading-snug"><%= t("divisions.index.cards.#{slug}.title") %></span>
-            <% end %>
-          <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>

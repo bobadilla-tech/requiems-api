@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Keeps the divisions flyout open while moving from the trigger link into the panel
-// (avoids mouseleave when the pointer crosses the visual gap).
+// Hover/focus flyout: keeps panel open while moving from hub link into the panel (relatedTarget + delay).
 export default class extends Controller {
   static targets = ["panel"];
 
@@ -41,7 +40,7 @@ export default class extends Controller {
     this._hideTimer = window.setTimeout(() => {
       this._hidePanel();
       this._hideTimer = null;
-    }, 120);
+    }, 280);
   }
 
   _clearHideTimer() {

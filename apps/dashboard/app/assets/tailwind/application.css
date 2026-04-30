@@ -29,5 +29,18 @@
 
 /* APIs index main content padding */
 .apis-content {
-  padding: 2rem 3.5rem;
+    padding: 2rem 3.5rem;
+}
+
+/* Navbar divisions flyout: explicit 4×2 grid (avoids missing utility / shrink-wrap issues). */
+.divisions-megamenu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem 2.75rem;
+}
+
+@media (min-width: 1280px) {
+    .divisions-megamenu-grid {
+        gap: 1.25rem 3.5rem;
+    }
 }
