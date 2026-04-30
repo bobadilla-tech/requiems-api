@@ -14,7 +14,7 @@
     "format:check": "biome format ./src"
   },
   "dependencies": {
-    "zod": "^4.0.0"
+    "zod": "^4.4.1"
   },
   "peerDependencies": {
     "hono": "^4.12.14",
