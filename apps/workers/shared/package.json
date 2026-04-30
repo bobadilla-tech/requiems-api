@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260430.1",
-    "@biomejs/biome": "^2.4.12",
+    "@biomejs/biome": "^2.4.13",
     "hono": "^4.12.16",
     "nanoid": "^5.1.9",
     "typescript": "^6.0.3"
