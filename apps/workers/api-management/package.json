@@ -24,19 +24,19 @@
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.1",
     "@sentry/cloudflare": "^10.51.0",
-    "hono": "4.12.14",
+    "hono": "4.12.16",
     "nanoid": "^5.1.9",
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.12",
-    "@cloudflare/workers-types": "^4.20260423.1",
+    "@biomejs/biome": "^2.4.13",
+    "@cloudflare/workers-types": "^4.20260430.1",
     "@edge-runtime/vm": "^5.0.0",
     "@standard-schema/spec": "^1.1.0",
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^1.2.0",
     "typescript": "^6.0.3",
     "vitest": "^1.2.0",
-    "wrangler": "^4.83.0"
+    "wrangler": "^4.84.1"
   }
 }
