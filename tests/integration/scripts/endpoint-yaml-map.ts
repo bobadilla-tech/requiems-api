@@ -16,6 +16,7 @@ export const endpointYamlMap: Record<string, string> = {
 
   // ── Networking ─────────────────────────────────────────────────────────────
   "/v1/networking/disposable/check": "disposable-email",
+  "/v1/networking/disposable/batch": "disposable-email",
   "/v1/networking/disposable/stats": "disposable-email",
   "/v1/networking/ip": "ip-info",
   "/v1/networking/ip/8.8.8.8": "ip-info",

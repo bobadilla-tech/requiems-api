@@ -18,10 +18,10 @@ func RegisterRoutes(router chi.Router, svc *Service) {
 		},
 	))
 
-	// POST /disposable/check-batch — batch email check (max 100)
-	router.Post("/disposable/check-batch", httpx.Handle(
-		func(_ context.Context, req BatchCheckRequest) (BatchCheckResponse, error) {
-			return svc.CheckBatch(req.Emails), nil
+	// POST /disposable/batch — batch email check (max 100); X-Usage-Count = len(emails)
+	router.Post("/disposable/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchCheckRequest) (BatchCheckResponse, int, error) {
+			return svc.CheckBatch(req.Emails), len(req.Emails), nil
 		},
 	))
 
