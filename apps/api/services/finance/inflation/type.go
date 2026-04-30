@@ -27,4 +27,28 @@ type Request struct {
 // tests to inject a stub without requiring a database connection.
 type Getter interface {
 	GetInflation(ctx context.Context, countryCode string) (Response, error)
+	GetInflationBatch(ctx context.Context, countries []string) BatchResponse
 }
+
+// BatchRequest is the body for fetching inflation data for multiple countries at once.
+type BatchRequest struct {
+	Countries []string `json:"countries" validate:"required,min=1,max=50,dive,iso3166_1_alpha2"`
+}
+
+// BatchItem holds the result for a single country in a batch request.
+// Found is false when no data exists for that country code.
+type BatchItem struct {
+	Country    string           `json:"country"`
+	Found      bool             `json:"found"`
+	Rate       float64          `json:"rate,omitempty"`
+	Period     string           `json:"period,omitempty"`
+	Historical []HistoricalRate `json:"historical,omitempty"`
+}
+
+// BatchResponse is the response payload for POST /v1/finance/inflation/batch.
+type BatchResponse struct {
+	Results []BatchItem `json:"results"`
+	Total   int         `json:"total"`
+}
+
+func (BatchResponse) IsData() {}

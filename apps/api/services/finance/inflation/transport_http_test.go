@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -28,6 +29,26 @@ func (s *stubGetter) GetInflation(_ context.Context, countryCode string) (Respon
 	return r, nil
 }
 
+// GetInflationBatch delegates to GetInflation per item, matching real service behaviour.
+func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) BatchResponse {
+	results := make([]BatchItem, len(countries))
+	for i, c := range countries {
+		resp, err := s.GetInflation(ctx, c)
+		if err != nil {
+			results[i] = BatchItem{Country: strings.ToUpper(c), Found: false}
+		} else {
+			results[i] = BatchItem{
+				Country:    resp.Country,
+				Found:      true,
+				Rate:       resp.Rate,
+				Period:     resp.Period,
+				Historical: resp.Historical,
+			}
+		}
+	}
+	return BatchResponse{Results: results, Total: len(results)}
+}
+
 // setupRouter wires up a stub getter into a chi router for handler testing.
 func setupRouter(g Getter) chi.Router {
 	r := chi.NewRouter()
@@ -35,7 +56,7 @@ func setupRouter(g Getter) chi.Router {
 	return r
 }
 
-// ---- helper ----
+// ---- helpers ----
 
 func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[Response] {
 	t.Helper()
@@ -46,7 +67,24 @@ func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[R
 	return resp
 }
 
-// ---- tests ----
+func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[BatchResponse] {
+	t.Helper()
+	var resp httpx.Response[BatchResponse]
+	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+		t.Fatalf("failed to decode batch response: %v", err)
+	}
+	return resp
+}
+
+func postBatch(r chi.Router, body string) *httptest.ResponseRecorder {
+	req := httptest.NewRequest(http.MethodPost, "/inflation/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	return w
+}
+
+// ---- single endpoint tests (unchanged) ----
 
 func TestInflation_KnownCountry_Returns200(t *testing.T) {
 	svc := &stubGetter{result: Response{
@@ -177,5 +215,127 @@ func TestInflation_HistoricalFieldPresent(t *testing.T) {
 	resp := decodeResponse(t, w)
 	if len(resp.Data.Historical) != 2 {
 		t.Errorf("expected 2 historical entries, got %d", len(resp.Data.Historical))
+	}
+}
+
+// ---- batch endpoint tests ----
+
+func TestBatch_HappyPath_Returns200(t *testing.T) {
+	// All three countries exist — expect 200 and three found: true items.
+	svc := &stubGetter{result: Response{Rate: 3.2, Period: "2024"}}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": ["US", "AR", "DE"]}`)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
+	}
+
+	resp := decodeBatchResponse(t, w)
+	if resp.Data.Total != 3 {
+		t.Errorf("expected total 3, got %d", resp.Data.Total)
+	}
+	for _, item := range resp.Data.Results {
+		if !item.Found {
+			t.Errorf("expected found: true for %s, got false", item.Country)
+		}
+	}
+}
+
+func TestBatch_PartialFailure_NotFoundItemIsInBand(t *testing.T) {
+	// Stub returns error for every call — all items should be found: false, but status is still 200.
+	svc := &stubGetter{err: &httpx.AppError{
+		Status:  http.StatusNotFound,
+		Code:    "not_found",
+		Message: "no inflation data found for country",
+	}}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": ["US", "AR"]}`)
+
+	// Batch never returns 404 — not_found is handled per item.
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 even when countries are not found, got %d: %s", w.Code, w.Body.String())
+	}
+
+	resp := decodeBatchResponse(t, w)
+	for _, item := range resp.Data.Results {
+		if item.Found {
+			t.Errorf("expected found: false for %s, got true", item.Country)
+		}
+	}
+}
+
+func TestBatch_OrderPreserved(t *testing.T) {
+	// Results must come back in the same order as the input array.
+	svc := &stubGetter{result: Response{Rate: 1.0, Period: "2024"}}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": ["DE", "AR", "US"]}`)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", w.Code)
+	}
+
+	resp := decodeBatchResponse(t, w)
+	expected := []string{"DE", "AR", "US"}
+	for i, item := range resp.Data.Results {
+		if item.Country != expected[i] {
+			t.Errorf("position %d: expected %s, got %s", i, expected[i], item.Country)
+		}
+	}
+}
+
+func TestBatch_EmptyArray_Returns422(t *testing.T) {
+	// An empty countries array must be rejected before hitting the service.
+	svc := &stubGetter{}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": []}`)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422, got %d: %s", w.Code, w.Body.String())
+	}
+}
+
+func TestBatch_OverLimit_Returns422(t *testing.T) {
+	// 51 countries exceeds the max of 50 — must be rejected.
+	countries := make([]string, 51)
+	for i := range countries {
+		countries[i] = `"US"`
+	}
+	body := `{"countries": [` + strings.Join(countries, ",") + `]}`
+	svc := &stubGetter{}
+	r := setupRouter(svc)
+
+	w := postBatch(r, body)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for 51 countries, got %d: %s", w.Code, w.Body.String())
+	}
+}
+
+func TestBatch_InvalidCountryCode_Returns422(t *testing.T) {
+	// ZZZ is not a valid iso3166_1_alpha2 code — must be rejected.
+	svc := &stubGetter{}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": ["US", "ZZZ"]}`)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Fatalf("expected 422 for invalid country code, got %d: %s", w.Code, w.Body.String())
+	}
+}
+
+func TestBatch_TotalMatchesInput(t *testing.T) {
+	// total in the response must always equal the number of countries sent.
+	svc := &stubGetter{result: Response{Rate: 2.0, Period: "2024"}}
+	r := setupRouter(svc)
+
+	w := postBatch(r, `{"countries": ["US", "DE"]}`)
+
+	resp := decodeBatchResponse(t, w)
+	if resp.Data.Total != 2 {
+		t.Errorf("expected total 2, got %d", resp.Data.Total)
 	}
 }

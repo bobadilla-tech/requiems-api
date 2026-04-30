@@ -1,6 +1,7 @@
 package inflation
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -46,4 +47,13 @@ func registerInflationRoutes(r chi.Router, g Getter) {
 
 		httpx.JSON(w, http.StatusOK, resp)
 	})
+
+	// POST /inflation/batch — return inflation data for up to 50 countries at once.
+	// Uses HandleBatch so the gateway charges one credit per country (X-Usage-Count).
+	r.Post("/inflation/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (BatchResponse, int, error) {
+			resp := g.GetInflationBatch(ctx, req.Countries)
+			return resp, len(req.Countries), nil
+		},
+	))
 }

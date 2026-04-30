@@ -161,7 +161,7 @@ apis:
     categories:
       - finance
     description: Historical and current CPI inflation rates for 241 countries, sourced from the World Bank. Includes up to 30 years of annual data.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/inflation

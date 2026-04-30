@@ -2,17 +2,15 @@
 
 Annual CPI inflation rates for 241 countries, sourced from the World Bank.
 
-## Endpoint
+## Endpoints
+
+### Single country
 
 `GET /v1/finance/inflation?country=US`
-
-## Parameters
 
 | Name      | Type   | Required | Description                                                      |
 | --------- | ------ | -------- | ---------------------------------------------------------------- |
 | `country` | string | yes      | ISO 3166-1 alpha-2 country code (e.g. US, GB). Case-insensitive. |
-
-## Response
 
 ```json
 {
@@ -31,9 +29,60 @@ Annual CPI inflation rates for 241 countries, sourced from the World Bank.
 }
 ```
 
-- `rate` — latest annual CPI % change (e.g. `2.9495` = 2.9495%)
-- `period` — year of the latest data point
-- `historical` — up to 10 previous years, newest first
+### Batch (multiple countries)
+
+`POST /v1/finance/inflation/batch`
+
+Accepts up to **50 countries** per request. Results are returned in the same
+order as the input array. Countries with no data are included with `found: false`
+instead of failing the entire request.
+
+Each country in the request counts as **1 credit** (`X-Usage-Count` is set to
+the number of countries in the request).
+
+**Request body:**
+
+```json
+{ "countries": ["US", "AR", "DE"] }
+```
+
+**Response:**
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "country": "US",
+        "found": true,
+        "rate": 2.9495,
+        "period": "2024",
+        "historical": [
+          { "period": "2023", "rate": 4.1163 }
+        ]
+      },
+      {
+        "country": "AR",
+        "found": true,
+        "rate": 211.4,
+        "period": "2024",
+        "historical": []
+      },
+      {
+        "country": "XX",
+        "found": false
+      }
+    ],
+    "total": 3
+  },
+  "metadata": {
+    "timestamp": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+- `found: false` — the country code is valid but has no data in the World Bank set.
+- `total` — total number of items returned (always equals the number of countries sent).
 
 ## Data Source
 
@@ -42,8 +91,9 @@ World Bank indicator `FP.CPI.TOTL.ZG`. Updated annually; re-run
 
 ## Error Codes
 
-| Code             | Status | When                                           |
-| ---------------- | ------ | ---------------------------------------------- |
-| `bad_request`    | 400    | Missing or invalid country code                |
-| `not_found`      | 404    | No data for that country in the World Bank set |
-| `internal_error` | 500    | Unexpected failure                             |
+| Code                | Status | When                                                       |
+| ------------------- | ------ | ---------------------------------------------------------- |
+| `bad_request`       | 400    | Missing or invalid country code (single endpoint)          |
+| `not_found`         | 404    | No data for that country (single endpoint)                 |
+| `validation_failed` | 422    | Invalid batch body — empty array, over 50 items, bad codes |
+| `internal_error`    | 500    | Unexpected failure                                         |
