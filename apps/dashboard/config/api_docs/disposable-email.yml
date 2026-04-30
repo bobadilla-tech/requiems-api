@@ -107,7 +107,7 @@ endpoints:
         puts JSON.parse(response.body)
   - name: Check Batch Emails
     method: POST
-    path: /v1/networking/disposable/check-batch
+    path: /v1/networking/disposable/batch
     description: Validate multiple email addresses in a single request (max 100 emails)
     parameters:
       - name: emails
@@ -171,7 +171,7 @@ endpoints:
         description: Too many emails in the request
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/networking/disposable/check-batch \
+        curl -X POST https://api.requiems.xyz/v1/networking/disposable/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -180,7 +180,7 @@ endpoints:
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/disposable/check-batch"
+        url = "https://api.requiems.xyz/v1/networking/disposable/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -192,7 +192,7 @@ endpoints:
         response = requests.post(url, headers=headers, json=data)
         print(response.json())
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/disposable/check-batch', {
+        const response = await fetch('https://api.requiems.xyz/v1/networking/disposable/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',

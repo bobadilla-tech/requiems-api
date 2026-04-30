@@ -62,6 +62,16 @@ func Error(w http.ResponseWriter, status int, code, message string) {
 	}
 }
 
+// ValidationError writes 422 with the same validation_failed envelope as
+// httpx.Handle when BindAndValidate or BindQuery returns *ValidationFailure.
+func ValidationError(w http.ResponseWriter, vf *ValidationFailure) {
+	if vf == nil {
+		Error(w, http.StatusUnprocessableEntity, "validation_failed", "validation_failed")
+		return
+	}
+	writeValidationError(w, vf.Fields)
+}
+
 // writeValidationError writes a 422 Unprocessable Entity with a structured
 // list of field-level constraint violations.
 func writeValidationError(w http.ResponseWriter, fields []FieldError) {

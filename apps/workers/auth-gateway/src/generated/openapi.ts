@@ -1895,7 +1895,7 @@ export const openApiSpec = {
         }
       }
     },
-    "/v1/networking/disposable/check-batch": {
+    "/v1/networking/disposable/batch": {
       "post": {
         "summary": "Check Batch Emails",
         "tags": [
@@ -4395,6 +4395,138 @@ export const openApiSpec = {
           },
           "404": {
             "description": "No inflation data found for the given country code."
+          },
+          "500": {
+            "description": "Unexpected server error."
+          }
+        }
+      }
+    },
+    "/v1/finance/inflation/batch": {
+      "post": {
+        "summary": "Batch Inflation Rates",
+        "tags": [
+          "inflation"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Returns inflation data for up to 50 countries in a single request. Results are in the same order as the input. Countries with no data return found: false instead of failing the whole request. Billing: 1 credit per country (not per HTTP request).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "countries": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of ISO 3166-1 alpha-2 country codes. Min: 1, Max: 50.",
+                    "example": "[\"US\", \"AR\", \"DE\"]"
+                  }
+                },
+                "required": [
+                  "countries"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "One entry per country, in the same order as the input array"
+                        },
+                        "results[].country": {
+                          "type": "string",
+                          "description": "ISO 3166-1 alpha-2 country code, uppercased"
+                        },
+                        "results[].found": {
+                          "type": "boolean",
+                          "description": "false when the country has no data in the World Bank set"
+                        },
+                        "results[].rate": {
+                          "type": "number",
+                          "description": "Latest CPI inflation rate. Omitted when found: false"
+                        },
+                        "results[].period": {
+                          "type": "string",
+                          "description": "Year of the latest data point. Omitted when found: false"
+                        },
+                        "results[].historical": {
+                          "type": "array",
+                          "items": {},
+                          "description": "Up to 10 previous years. Omitted when found: false"
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Total number of results returned (equals number of countries sent)"
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "country": "US",
+                        "found": true,
+                        "rate": 2.9495,
+                        "period": "2024",
+                        "historical": [
+                          {
+                            "period": "2023",
+                            "rate": 4.1163
+                          }
+                        ]
+                      },
+                      {
+                        "country": "AR",
+                        "found": true,
+                        "rate": 211.4,
+                        "period": "2024",
+                        "historical": []
+                      },
+                      {
+                        "country": "XX",
+                        "found": false
+                      }
+                    ],
+                    "total": 3
+                  },
+                  "metadata": {
+                    "timestamp": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Body is invalid: empty array, more than 50 items, or a bad country code."
           },
           "500": {
             "description": "Unexpected server error."

@@ -18,7 +18,7 @@ func NewService() *Service {
 func (s *Service) CheckEmail(email string) CheckEmailResponse {
 	isDisposable := disposable.IsDisposable(email)
 
-	domain := extractDomain(email)
+	domain := ExtractDomainFromEmail(email)
 
 	return CheckEmailResponse{
 		Email:        email,
@@ -98,8 +98,7 @@ func (s *Service) GetStats() StatsResponse {
 	}
 }
 
-// extractDomain extracts the domain from an email address
-func extractDomain(email string) string {
+func ExtractDomainFromEmail(email string) string {
 	parts := strings.Split(email, "@")
 
 	if len(parts) != 2 {
