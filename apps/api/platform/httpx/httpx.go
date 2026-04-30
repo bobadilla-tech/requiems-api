@@ -56,7 +56,6 @@ func Error(w http.ResponseWriter, status int, code, message string) {
 }
 
 // ValidationError writes 422 for a BindAndValidate / BindQuery validation failure.
-// Handlers that only have field slices should call writeValidationError instead.
 func ValidationError(w http.ResponseWriter, vf *ValidationFailure) {
 	if vf == nil {
 		Error(w, http.StatusUnprocessableEntity, "validation_failed", "Validation failed.")

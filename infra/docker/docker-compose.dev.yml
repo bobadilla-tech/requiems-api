@@ -1,8 +1,16 @@
 name: requiem-dev
 
+# Explicit bridge so every app resolves service names (db, redis, api, …).
+# Relying on the implicit default alone can intermittently fail on some Docker Desktop setups.
+networks:
+  stack:
+    driver: bridge
+
 services:
   db:
     image: postgres:16-alpine
+    networks:
+      - stack
     env_file:
       - .env.example
       - path: .env.local
@@ -19,6 +27,8 @@ services:
 
   redis:
     image: redis:7-alpine
+    networks:
+      - stack
     volumes:
       - redis_data:/data
     ports:
@@ -33,6 +43,8 @@ services:
     build:
       context: ../../apps/api
       dockerfile: ../../infra/docker/api.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     env_file:
       - .env.example
@@ -52,6 +64,8 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     command: >
       sh -c "
@@ -83,6 +97,8 @@ services:
     build:
       context: ../../apps/workers/auth-gateway
       dockerfile: ../../../infra/docker/auth-gateway.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /workers/auth-gateway
     command: >
       sh -c "
@@ -126,6 +142,8 @@ services:
     build:
       context: ../../apps/workers/api-management
       dockerfile: ../../../infra/docker/api-management.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /workers/api-management
     command: >
       sh -c "
@@ -160,6 +178,8 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     command: >
       sh -c "
