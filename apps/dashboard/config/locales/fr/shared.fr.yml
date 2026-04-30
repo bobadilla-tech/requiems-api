@@ -1,7 +1,7 @@
 fr:
   shared:
     nav:
-      divisions: "Divisions d'API"
+      divisions: "Divisions"
       divisions_hub: "Vue d'ensemble de toutes les divisions"
       divisions_panel_heading: "Aller à une division"
       divisions_all: "Toutes les divisions"
