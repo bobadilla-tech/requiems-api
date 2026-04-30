@@ -1,4 +1,4 @@
-<%# locals: (i18n_scope:, view_case_label:) %>
+<%# locals: (i18n_scope:) %>
 <% cases = division_locale_array(i18n_scope, "use_cases") %>
 <% seen_anchors = {} %>
 <section class="py-14 bg-gray-50 dark:bg-gray-950" aria-labelledby="division-use-cases-heading">
@@ -25,15 +25,17 @@
           <p class="text-sm font-bold text-blue-600 dark:text-blue-400 mb-2"><%= uc["metric"] %></p>
           <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= uc["title"] %></h3>
           <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed"><%= uc["description"] %></p>
-          <div class="flex flex-wrap gap-2 mb-4">
+          <div class="flex flex-wrap gap-2">
             <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"><%= uc["tag_problem"] %></span>
             <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"><%= uc["tag_industry"] %></span>
           </div>
-          <% if anchor %>
-            <%= link_to "##{anchor}", class: "text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center" do %>
-              <%= view_case_label %>
-              <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <% end %>
+          <% if uc["example"].present? %>
+            <div class="mt-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/90 dark:bg-gray-800/50 px-4 py-3">
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
+                <%= t("divisions.common.use_case_example_label") %>
+              </p>
+              <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed"><%= uc["example"] %></p>
+            </div>
           <% end %>
         </div>
       <% end %>
