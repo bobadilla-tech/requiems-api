@@ -88,9 +88,9 @@ export default class extends Controller {
     const apiCount = results.filter((r) => r.type === "api").length;
     const footer = apiCount > 0
       ? `
-      <div class="border-t border-gray-200 px-4 py-3 bg-gray-50">
+      <div class="border-t border-gray-200 dark:border-gray-600 px-4 py-3 bg-gray-50 dark:bg-gray-900/80">
         <a href="/apis?q=${encodeURIComponent(query)}"
-           class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+           class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
           View all ${apiCount} API result${apiCount !== 1 ? "s" : ""} →
         </a>
       </div>
@@ -108,19 +108,19 @@ export default class extends Controller {
 
     return `
       <a href="${item.url}"
-         class="navbar-search-result flex items-start px-4 py-3 hover:bg-gray-50 transition-colors border-l-4 border-transparent hover:border-blue-500"
+         class="navbar-search-result flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/80 transition-colors border-l-4 border-transparent hover:border-blue-500 dark:hover:border-blue-400"
          data-index="${index}">
         <div class="flex-shrink-0 mr-3 text-2xl">
           ${icon}
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between mb-1">
-            <h4 class="text-sm font-semibold text-gray-900 truncate">
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
               ${this.highlightQuery(item.title, query)}
             </h4>
             ${badge}
           </div>
-          <p class="text-xs text-gray-600 line-clamp-2 mb-1">
+          <p class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 mb-1">
             ${this.highlightQuery(item.description, query)}
           </p>
           ${subtitle}
@@ -133,11 +133,11 @@ export default class extends Controller {
   getTypeBadge(type) {
     const badges = {
       api:
-        '<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">API</span>',
+        '<span class="ml-2 inline-flex shrink-0 items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-200">API</span>',
       example:
-        '<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">Example</span>',
+        '<span class="ml-2 inline-flex shrink-0 items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-950/80 dark:text-purple-200">Example</span>',
       page:
-        '<span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">Page</span>',
+        '<span class="ml-2 inline-flex shrink-0 items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-100">Page</span>',
     };
     return badges[type] || "";
   }
@@ -158,7 +158,7 @@ export default class extends Controller {
   getSubtitle(item) {
     if (item.type === "api") {
       return `
-        <div class="flex items-center text-xs text-gray-500 space-x-2">
+        <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 space-x-2">
           <span>${item.category}</span>
           <span>•</span>
           <span>${item.endpoints_count} ${
@@ -168,7 +168,7 @@ export default class extends Controller {
       `;
     } else if (item.type === "example") {
       const techBadges = item.technologies.slice(0, 3).map((tech) =>
-        `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-700">${tech}</span>`
+        `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-700 dark:bg-gray-600 dark:text-gray-200">${tech}</span>`
       ).join(" ");
       return `
         <div class="flex items-center space-x-1 mt-1">
@@ -176,7 +176,7 @@ export default class extends Controller {
         </div>
       `;
     } else if (item.type === "page") {
-      return `<span class="text-xs text-gray-500">${
+      return `<span class="text-xs text-gray-500 dark:text-gray-400">${
         item.category || "Resource"
       }</span>`;
     }
@@ -189,7 +189,7 @@ export default class extends Controller {
     const regex = new RegExp(`(${this.escapeRegex(query)})`, "gi");
     return text.replace(
       regex,
-      '<mark class="bg-yellow-200 text-gray-900 font-medium">$1</mark>',
+      '<mark class="bg-yellow-200 text-gray-900 dark:bg-yellow-500/40 dark:text-gray-100 font-medium rounded px-0.5">$1</mark>',
     );
   }
 
@@ -277,11 +277,21 @@ export default class extends Controller {
   updateSelection(results) {
     results.forEach((result, index) => {
       if (index === this.selectedIndex) {
-        result.classList.add("bg-gray-100", "border-blue-500");
+        result.classList.add(
+          "bg-gray-100",
+          "dark:bg-gray-700",
+          "border-blue-500",
+          "dark:border-blue-400",
+        );
         result.classList.remove("border-transparent");
         result.scrollIntoView({ block: "nearest", behavior: "smooth" });
       } else {
-        result.classList.remove("bg-gray-100", "border-blue-500");
+        result.classList.remove(
+          "bg-gray-100",
+          "dark:bg-gray-700",
+          "border-blue-500",
+          "dark:border-blue-400",
+        );
         result.classList.add("border-transparent");
       }
     });
