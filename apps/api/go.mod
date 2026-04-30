@@ -18,21 +18,19 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/ip2location/ip2proxy-go/v4 v4.1.0 // indirect
+	github.com/kr/text v0.1.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/likexian/gokit v0.25.16 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
-	github.com/paulmach/orb v0.12.0 // indirect
-	github.com/ringsaturn/tzf-rel-lite v0.0.2026-a // indirect
+	github.com/paulmach/orb v0.13.0 // indirect
+	github.com/ringsaturn/tzf-dist v0.0.2026-b // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tidwall/geoindex v1.7.0 // indirect
-	github.com/tidwall/geojson v1.4.6 // indirect
 	github.com/tidwall/rtree v1.10.0 // indirect
-	github.com/twpayne/go-polyline v1.1.1 // indirect
-	go.mongodb.org/mongo-driver v1.11.4 // indirect
+	go.mongodb.org/mongo-driver/v2 v2.5.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.51.0 // indirect
@@ -57,7 +55,7 @@ require (
 	github.com/medama-io/go-useragent v1.2.3
 	github.com/nyaruka/phonenumbers v1.7.2
 	github.com/pemistahl/lingua-go v1.4.0
-	github.com/ringsaturn/tzf v1.0.4
+	github.com/ringsaturn/tzf v1.1.1
 	github.com/sajari/fuzzy v1.0.0
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.10.2
