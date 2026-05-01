@@ -13,19 +13,19 @@ type mockService struct {
 	result Lorem
 }
 
-//Implementa interfaz, y devuelve m.result
+// Implementa interfaz, y devuelve m.result
 func (m *mockService) Generate(paragraphs, sentences int) Lorem {
 	return m.result
 }
 
-//aux, arma el router
+// aux, arma el router
 func newRouter(svc Generator) chi.Router {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 	return r
 }
 
-//slice de casos del tests
+// slice de casos del tests
 func TestGetLorem(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -57,7 +57,7 @@ func TestGetLorem(t *testing.T) {
 		},
 	}
 
-	//recorre cada caso y ejecuta una req falsa y captura con rec
+	// recorre cada caso y ejecuta una req falsa y captura con rec
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			svc := &mockService{result: tt.mockResult}
@@ -65,9 +65,9 @@ func TestGetLorem(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, tt.url, http.NoBody)
 			rec := httptest.NewRecorder()
 
-			//simula llamada http
+			// simula llamada http
 			newRouter(svc).ServeHTTP(rec, req)
-			//validacion
+			// validacion
 			if rec.Code != tt.wantStatus {
 				t.Errorf("esperado %d, obtuve %d", tt.wantStatus, rec.Code)
 			}
