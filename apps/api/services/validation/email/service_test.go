@@ -3,6 +3,7 @@ package email
 import (
 	"context"
 	"testing"
+	"requiems-api/platform/httpx"
 )
 
 func newTestService() *Service {
@@ -167,5 +168,53 @@ func TestValidateEmail_GmailPlusNormalized(t *testing.T) {
 	}
 	if *result.Normalized == "User.Name+tag@gmail.com" {
 		t.Error("expected email to be normalized (Gmail strips dots and plus-tags)")
+	}
+}
+
+// ---Batch
+
+
+
+// ---- ValidateEmailBatch -----------------------------------------------------
+
+func TestBatchRequest_Valid_OneEmail(t *testing.T) {
+	req := BatchRequest{Emails: []string{"user@gmail.com"}}
+
+	if err := httpx.Validate.Struct(&req); err != nil {
+		t.Errorf("expected no error for single valid email, got %v", err)
+	}
+}
+
+func TestBatchRequest_Valid_MaxEmails(t *testing.T) {
+	emails := make([]string, 50)
+	for i := range emails {
+		emails[i] = "user@gmail.com"
+	}
+
+	req := BatchRequest{Emails: emails}
+
+	if err := httpx.Validate.Struct(&req); err != nil {
+		t.Errorf("expected no error for 50 emails, got %v", err)
+	}
+}
+
+func TestBatchRequest_Empty_Fails(t *testing.T) {
+	req := BatchRequest{Emails: []string{}}
+
+	if err := httpx.Validate.Struct(&req); err == nil {
+		t.Error("expected error for empty emails array")
+	}
+}
+
+func TestBatchRequest_OverLimit_Fails(t *testing.T) {
+	emails := make([]string, 51)
+	for i := range emails {
+		emails[i] = "user@gmail.com"
+	}
+
+	req := BatchRequest{Emails: emails}
+
+	if err := httpx.Validate.Struct(&req); err == nil {
+		t.Error("expected error for >50 emails")
 	}
 }

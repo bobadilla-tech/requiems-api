@@ -107,6 +107,32 @@ func (s *Service) ValidateEmail(ctx context.Context, email string) Validation {
 	}
 }
 
+// ValidateEmailBatch processes multiple emails using the same validation logic.
+// Each item is processed independently.
+func (s *Service) ValidateEmailBatch(ctx context.Context, emails []string) BatchResponse {
+	results := make([]BatchItem, 0, len(emails))
+
+	for _, email := range emails {
+		res := s.ValidateEmail(ctx, email)
+
+		results = append(results, BatchItem{
+			Email:       res.Email,
+			Valid:       res.Valid,
+			SyntaxValid: res.SyntaxValid,
+			MXValid:     res.MxValid,
+			Disposable:  res.Disposable,
+			Normalized:  res.Normalized,
+			Domain:      res.Domain,
+			Suggestion:  res.Suggestion,
+		})
+	}
+
+	return BatchResponse{
+		Results: results,
+		Total:   len(results),
+	}
+}
+
 // isValidSyntax reports whether email is a syntactically valid RFC 5322 plain
 // addr-spec. Display-name formats such as "Name <user@example.com>" and
 // angle-addr forms such as "<user@example.com>" are rejected.
