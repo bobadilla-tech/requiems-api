@@ -57,7 +57,7 @@ func TestGetLorem(t *testing.T) {
 		},
 	}
 
-	// recorre cada caso y ejecuta una req falsa y captura con rec
+	// Run each test case
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			svc := &mockService{result: tt.mockResult}
