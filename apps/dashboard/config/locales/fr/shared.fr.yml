@@ -1,6 +1,10 @@
 fr:
   shared:
     nav:
+      divisions: "Divisions"
+      divisions_hub: "Vue d'ensemble de toutes les divisions"
+      divisions_panel_heading: "Aller à une division"
+      divisions_all: "Toutes les divisions"
       apis: "APIs"
       examples: "Exemples"
       pricing: "Tarifs"
@@ -15,6 +19,9 @@ fr:
       dark_mode: "Mode sombre"
       light_mode: "Mode clair"
       open_menu: "Ouvrir le menu principal"
+      close_menu: "Fermer le menu principal"
+      mobile_menu_title: "Menu"
+      mobile_menu_close: "Fermer"
       search_placeholder: "APIs, exemples, docs..."
       search_no_results: "Aucun résultat"
       search_try_different: "Essayez d'autres mots-clés"

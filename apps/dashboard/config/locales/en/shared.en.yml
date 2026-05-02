@@ -1,6 +1,10 @@
 en:
   shared:
     nav:
+      divisions: "Divisions"
+      divisions_hub: "Overview of all divisions"
+      divisions_panel_heading: "Jump to a division"
+      divisions_all: "All divisions"
       apis: "APIs"
       examples: "Examples"
       pricing: "Pricing"
@@ -15,6 +19,9 @@ en:
       dark_mode: "Dark Mode"
       light_mode: "Light Mode"
       open_menu: "Open main menu"
+      close_menu: "Close main menu"
+      mobile_menu_title: "Menu"
+      mobile_menu_close: "Close"
       search_placeholder: "APIs, examples, docs..."
       search_no_results: "No results found"
       search_try_different: "Try different keywords"

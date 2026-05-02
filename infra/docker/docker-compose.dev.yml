@@ -1,8 +1,16 @@
 name: requiem-dev
 
+# Explicit bridge so every app resolves service names (db, redis, api, …).
+# Relying on the implicit default alone can intermittently fail on some Docker Desktop setups.
+networks:
+  stack:
+    driver: bridge
+
 services:
   db:
     image: postgres:16-alpine
+    networks:
+      - stack
     env_file:
       - .env.example
       - path: .env.local
@@ -19,6 +27,8 @@ services:
 
   redis:
     image: redis:7-alpine
+    networks:
+      - stack
     volumes:
       - redis_data:/data
     ports:
@@ -33,6 +43,8 @@ services:
     build:
       context: ../../apps/api
       dockerfile: ../../infra/docker/api.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     env_file:
       - .env.example
@@ -52,6 +64,8 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     command: >
       sh -c "
@@ -72,6 +86,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
       api-management:
         condition: service_started
     stdin_open: true
@@ -81,6 +97,8 @@ services:
     build:
       context: ../../apps/workers/auth-gateway
       dockerfile: ../../../infra/docker/auth-gateway.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /workers/auth-gateway
     command: >
       sh -c "
@@ -107,18 +125,30 @@ services:
     depends_on:
       api:
         condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://127.0.0.1:4455/healthz',(r)=>{r.resume();r.on('end',()=>process.exit(r.statusCode===200?0:1));}).on('error',()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 180s
 
   api-management:
     build:
       context: ../../apps/workers/api-management
       dockerfile: ../../../infra/docker/api-management.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /workers/api-management
     command: >
       sh -c "
         pnpm install --frozen-lockfile &&
         pnpm install --frozen-lockfile --dir /workers/shared &&
-        pnpm exec wrangler d1 execute requiem-usage --local --yes --persist-to=$$WRANGLER_PERSIST_TO --command=\"DROP TABLE IF EXISTS credit_usage; DROP TABLE IF EXISTS api_keys;\" &&
-          pnpm exec wrangler d1 execute requiem-usage --local --yes --persist-to=$$WRANGLER_PERSIST_TO --file=./schema.sql &&
         echo API_MANAGEMENT_API_KEY=$$API_MANAGEMENT_API_KEY > .dev.vars &&
         echo SWAGGER_USERNAME=$$SWAGGER_USERNAME >> .dev.vars &&
         echo SWAGGER_PASSWORD=$$SWAGGER_PASSWORD >> .dev.vars &&
@@ -141,13 +171,15 @@ services:
       - "5544:5544"
     depends_on:
       auth-gateway:
-        condition: service_started
+        condition: service_healthy
 
   # Sidekiq for background jobs
   sidekiq:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.dev.Dockerfile
+    networks:
+      - stack
     working_dir: /app
     command: >
       sh -c "
@@ -160,10 +192,14 @@ services:
     volumes:
       - ../../apps/dashboard:/app
     depends_on:
-      - db
-      - redis
-      - dashboard
-      - api-management
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      dashboard:
+        condition: service_started
+      api-management:
+        condition: service_started
 
 volumes:
   db_data:

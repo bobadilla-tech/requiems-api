@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../lib/division_slugs.rb"
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
@@ -146,5 +147,10 @@ Rails.application.routes.draw do
     resources :apis, only: [ :index, :show ]
     resources :categories, only: [ :show ]
     resources :examples, only: [ :show ]
+
+    get "divisions", to: "divisions#index", as: :divisions
+    get ":division_slug", to: "divisions#show",
+                         constraints: { division_slug: Regexp.union(*DivisionSlugs::ALL) },
+                         as: :division
   end
 end
