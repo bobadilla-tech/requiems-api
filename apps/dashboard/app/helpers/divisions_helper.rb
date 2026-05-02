@@ -15,7 +15,7 @@ module DivisionsHelper
     value.filter_map do |entry|
       case entry
       when Hash
-        entry.transform_keys(&:to_s)
+        entry.transform_keys(&:to_sym)
       when String, Symbol
         entry.to_s
       end

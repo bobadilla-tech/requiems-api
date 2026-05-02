@@ -252,6 +252,17 @@ module ApisHelper
     "health"         => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>'
   }.freeze
 
+  DIVISION_HERO_GRADIENTS = {
+    "finance"       => "bg-gradient-to-br from-gray-950 via-amber-900 to-gray-900",
+    "validation"    => "bg-gradient-to-br from-gray-950 via-green-900 to-gray-900",
+    "networking"    => "bg-gradient-to-br from-gray-950 via-blue-900 to-slate-900",
+    "places"        => "bg-gradient-to-br from-gray-950 via-emerald-900 to-gray-900",
+    "text"          => "bg-gradient-to-br from-gray-950 via-purple-900 to-gray-900",
+    "technology"    => "bg-gradient-to-br from-gray-950 via-cyan-900 to-slate-900",
+    "entertainment" => "bg-gradient-to-br from-gray-950 via-orange-900 to-gray-900",
+    "health"        => "bg-gradient-to-br from-gray-950 via-rose-900 to-gray-900",
+  }.freeze
+
   CATEGORY_COLORS = {
     "finance"        => "bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300",
     "validation"     => "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300",
@@ -283,6 +294,10 @@ module ApisHelper
       "health"         => "group-hover:bg-rose-200 dark:group-hover:bg-rose-800"
     }
     "#{base} #{hover_map[category_id] || hover_map["technology"]}"
+  end
+
+  def division_hero_gradient(slug)
+    DIVISION_HERO_GRADIENTS[slug] || "bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900"
   end
 
   def open_in_claude_url(documentation)

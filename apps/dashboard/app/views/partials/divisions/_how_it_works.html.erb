@@ -1,23 +1,23 @@
 <%# locals: (i18n_scope:) %>
-<section class="py-14 bg-white dark:bg-gray-900" aria-labelledby="division-how-heading">
+<section class="py-14 bg-gray-950" aria-labelledby="division-how-heading">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <h2 id="division-how-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 text-center">
+    <h2 id="division-how-heading" class="text-2xl sm:text-3xl font-bold text-white mb-3 text-center">
       <%= t("divisions.common.how_heading") %>
     </h2>
-    <p class="text-sm text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-12">
+    <p class="text-sm text-gray-400 text-center max-w-2xl mx-auto mb-12">
       <%= t("divisions.common.how_intro") %>
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
       <% [
-           [ "1", "#{i18n_scope}.how_it_works.step1_title", "#{i18n_scope}.how_it_works.step1_body" ],
-           [ "2", "#{i18n_scope}.how_it_works.step2_title", "#{i18n_scope}.how_it_works.step2_body" ],
-           [ "3", "#{i18n_scope}.how_it_works.step3_title", "#{i18n_scope}.how_it_works.step3_body" ]
+           [ "01", "#{i18n_scope}.how_it_works.step1_title", "#{i18n_scope}.how_it_works.step1_body" ],
+           [ "02", "#{i18n_scope}.how_it_works.step2_title", "#{i18n_scope}.how_it_works.step2_body" ],
+           [ "03", "#{i18n_scope}.how_it_works.step3_title", "#{i18n_scope}.how_it_works.step3_body" ]
          ].each do |num, title_key, body_key| %>
-        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/40 p-6 flex flex-col h-full">
-          <span class="text-3xl font-extrabold text-blue-600/90 dark:text-blue-400/90 tabular-nums leading-none mb-4"><%= num %></span>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t(title_key) %></h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed flex-1"><%= t(body_key) %></p>
+        <div class="border-l-2 border-blue-500 pl-6 flex flex-col">
+          <span class="font-mono text-xs font-bold text-blue-400 uppercase tracking-widest mb-3"><%= num %></span>
+          <h3 class="text-lg font-semibold text-white mb-2"><%= t(title_key) %></h3>
+          <p class="text-sm text-gray-400 leading-relaxed flex-1"><%= t(body_key) %></p>
         </div>
       <% end %>
     </div>

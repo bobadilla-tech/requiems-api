@@ -1,11 +1,9 @@
 <% i18n_scope = "divisions.#{@slug}" %>
 <% content_for :title, t("#{i18n_scope}.meta_title") %>
-<% vc = t("#{i18n_scope}.view_case") %>
-
+<% testimonials = division_locale_array(i18n_scope, "testimonials") %>
 <div data-controller="division-hub">
-  <%= render "partials/divisions/hero", i18n_scope: i18n_scope %>
-  <%= render "partials/divisions/tagline", i18n_scope: i18n_scope, hub_page: true %>
-  <%= render "partials/divisions/carousel", i18n_scope: i18n_scope, view_case_label: vc %>
+  <%= render "partials/divisions/hero", i18n_scope: i18n_scope, hero_bg_classes: division_hero_gradient(@slug) %>
+<%= render "partials/divisions/carousel", i18n_scope: i18n_scope %>
   <%= render "partials/divisions/use_case_grid", i18n_scope: i18n_scope %>
 </div>
 
@@ -13,6 +11,28 @@
 <%= render "partials/divisions/how_it_works", i18n_scope: i18n_scope %>
 <%= render "partials/divisions/ux_flow", slug: @slug %>
 <%= render "partials/divisions/industries", i18n_scope: i18n_scope %>
-<%= render "partials/divisions/testimonials", i18n_scope: i18n_scope %>
+<% if testimonials.any? %>
+  <section class="py-14 bg-white dark:bg-gray-900" aria-labelledby="division-testimonials-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 id="division-testimonials-heading" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-10 text-center">
+        <%= t("divisions.common.testimonials_heading") %>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <% testimonials.each do |item| %>
+          <figure class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6 text-left">
+            <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+              "<%= item[:quote] %>"
+            </blockquote>
+            <figcaption class="text-xs text-gray-500 dark:text-gray-400">
+              <span class="font-semibold text-gray-700 dark:text-gray-200"><%= item[:name] %></span>
+              <% if item[:role].present? %>
+                <span class="block mt-0.5"><%= item[:role] %></span>
+              <% end %>
+            </figcaption>
+          </figure>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
 <%= render "partials/divisions/final_cta", i18n_scope: i18n_scope %>
-<%= render "partials/divisions/technical_link", slug: @slug %>
