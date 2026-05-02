@@ -260,7 +260,7 @@ module ApisHelper
     "text"          => "bg-gradient-to-br from-gray-950 via-purple-900 to-gray-900",
     "technology"    => "bg-gradient-to-br from-gray-950 via-cyan-900 to-slate-900",
     "entertainment" => "bg-gradient-to-br from-gray-950 via-orange-900 to-gray-900",
-    "health"        => "bg-gradient-to-br from-gray-950 via-rose-900 to-gray-900",
+    "health"        => "bg-gradient-to-br from-gray-950 via-rose-900 to-gray-900"
   }.freeze
 
   CATEGORY_COLORS = {
