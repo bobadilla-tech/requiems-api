@@ -25,7 +25,7 @@ type BatchParseRequest struct {
 	Numbers []string `json:"numbers" validate:"required,min=1,max=50,dive,required"`
 }
 
-//BatchParseResponse is the response for a batch IBAN parse request.
+// BatchParseResponse is the response for a batch IBAN parse request.
 type BatchParseResponse struct {
 	Results []ParseResponse `json:"results"`
 	Total   int             `json:"total"`
