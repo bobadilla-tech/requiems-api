@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -16,8 +17,9 @@ import (
 // stubValidator implements Validator for transport tests. It returns a fixed
 // result or a fixed error on every call, keeping tests DB-free and fast.
 type stubValidator struct {
-	result ParseResponse
-	err    error
+	result  ParseResponse
+	results BatchParseResponse
+	err     error
 }
 
 func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, error) {
@@ -26,6 +28,14 @@ func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, err
 	}
 	r := s.result
 	r.IBAN = raw
+	return r, nil
+}
+
+func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) (BatchParseResponse, error) {
+	if s.err != nil {
+		return BatchParseResponse{}, s.err
+	}
+	r := s.results
 	return r, nil
 }
 
@@ -206,5 +216,105 @@ func TestIBAN_GBParsing_Returns200(t *testing.T) {
 	}
 	if resp.Data.Account != "98765432" {
 		t.Errorf("expected account 98765432, got %q", resp.Data.Account)
+	}
+}
+
+func TestIBAN_BatchParse(t *testing.T) {
+	svc := &stubValidator{results: BatchParseResponse{
+		Results: []ParseResponse{
+			{IBAN: "GB29NWBK60161331926819", Valid: true, Country: "United Kingdom", BankCode: "NWBK", Account: "31926819"},
+			{IBAN: "DE89370400440532013000", Valid: true, Country: "Germany", BankCode: "37040044", Account: "0532013000"},
+			{IBAN: "XX89370400440532013000", Valid: false},
+		},
+		Total: 3,
+	}}
+
+	r := setupRouter(svc)
+
+	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var resp httpx.Response[BatchParseResponse]
+	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if resp.Data.Total != 3 {
+		t.Errorf("Expected total=3 , got %d", resp.Data.Total)
+	}
+
+	if len(resp.Data.Results) != 3 {
+		t.Fatalf("expected 3 results, got %d", len(resp.Data.Results))
+	}
+
+	// valid UK IBAN
+	if !resp.Data.Results[0].Valid {
+		t.Error("Expected result[0] valid=true")
+	}
+
+	if resp.Data.Results[0].Country != "United Kingdom" {
+		t.Errorf("Expected country United Kingdom, got %q", resp.Data.Results[0].Country)
+	}
+
+	if resp.Data.Results[0].BankCode != "NWBK" {
+		t.Errorf("expected bank_code NWBK, got %q", resp.Data.Results[0].BankCode)
+	}
+
+	// valid DE IBAN
+	if !resp.Data.Results[1].Valid {
+		t.Error("expected result[1] valid=true")
+	}
+	if resp.Data.Results[1].Country != "Germany" {
+		t.Errorf("expected country Germany, got %q", resp.Data.Results[1].Country)
+	}
+	if resp.Data.Results[1].BankCode != "37040044" {
+		t.Errorf("expected bank_code 37040044, got %q", resp.Data.Results[1].BankCode)
+	}
+
+	// invalid IBAN
+	if resp.Data.Results[2].Valid {
+		t.Error("expected result[2] valid=false")
+	}
+}
+
+func TestIBAN_BatchParse_EmptyBody(t *testing.T) {
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(`{"numbers": []}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
+	}
+}
+
+func TestIBAN_BatchParse_ExceedsLimmit(t *testing.T) {
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	numbers := make([]string, 51)
+
+	for i := range numbers {
+		numbers[i] = `"GB29NWBK60161331926819"`
+	}
+
+	body := `{"numbers":[` + strings.Join(numbers, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
 	}
 }
