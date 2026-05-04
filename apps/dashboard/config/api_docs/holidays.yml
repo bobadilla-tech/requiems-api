@@ -17,6 +17,7 @@ overview:
     - National and public holidays
     - Yearly calendar data
     - Fast response times
+    - Batch endpoint for up to 50 (country, year) pairs per request
 
 endpoints:
   - name: Get Holidays
@@ -88,6 +89,133 @@ endpoints:
         status: 404
         description: No holidays found for the specified country and year
 
+  - name: Batch Get Holidays
+    method: POST
+    path: /v1/places/holidays/batch
+    description: Returns holidays for up to 50 (country, year) pairs in a single request. Each pair is processed independently — if one combination has no data, it returns found:false without failing the entire batch.
+
+    parameters:
+      - name: queries
+        type: array
+        required: true
+        location: body
+        description: "Array of (country, year) pairs. Min: 1, Max: 50."
+        example: '[{"country":"US","year":2025},{"country":"AR","year":2024}]'
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "country": "US",
+              "year": 2025,
+              "found": true,
+              "holidays": [
+                { "date": "2025-01-01", "name": "New Year's Day" },
+                { "date": "2025-07-04", "name": "Independence Day" }
+              ],
+              "total": 11
+            },
+            {
+              "country": "AR",
+              "year": 2024,
+              "found": true,
+              "holidays": [
+                { "date": "2024-01-01", "name": "Año Nuevo" }
+              ],
+              "total": 19
+            },
+            {
+              "country": "ZZ",
+              "year": 2025,
+              "found": false
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2025-01-15T10:30:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: One result per query, in the same order as the request
+      - name: results[].country
+        type: string
+        description: ISO 3166-1 alpha-2 country code
+      - name: results[].year
+        type: integer
+        description: Year queried
+      - name: results[].found
+        type: boolean
+        description: false when no holidays exist for that country/year combination
+      - name: results[].holidays
+        type: array
+        description: List of holidays. Omitted when found is false.
+      - name: results[].total
+        type: integer
+        description: Number of holidays. Omitted when found is false.
+      - name: total
+        type: integer
+        description: Total number of results (equals the number of queries sent)
+
+    errors:
+      - code: bad_request
+        status: 400
+        description: Malformed request body
+      - code: validation_failed
+        status: 422
+        description: queries is missing, empty, exceeds 50 items, or contains invalid country codes or years
+
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/places/holidays/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"queries":[{"country":"US","year":2025},{"country":"AR","year":2024}]}'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/places/holidays/batch"
+        headers = {"requiems-api-key": "YOUR_API_KEY"}
+        body = {
+            "queries": [
+                {"country": "US", "year": 2025},
+                {"country": "AR", "year": 2024},
+            ]
+        }
+
+        response = requests.post(url, headers=headers, json=body)
+        for result in response.json()["data"]["results"]:
+            if result["found"]:
+                print(f"{result['country']} {result['year']}: {result['total']} holidays")
+            else:
+                print(f"{result['country']} {result['year']}: not found")
+
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/places/holidays/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            queries: [
+              { country: 'US', year: 2025 },
+              { country: 'AR', year: 2024 }
+            ]
+          })
+        });
+
+        const { data } = await response.json();
+        data.results.forEach(r => {
+          if (r.found) console.log(`${r.country} ${r.year}: ${r.total} holidays`);
+          else console.log(`${r.country} ${r.year}: not found`);
+        });
+
     code_examples:
       curl: |
         curl "https://api.requiems.xyz/v1/places/holidays?country=US&year=2025" \
@@ -136,5 +264,5 @@ faq:
   - question: What types of holidays are included?
     answer: The API returns national and public holidays for each country, including federal holidays, bank holidays, and widely observed holidays. Religious and regional holidays may vary by country.
 
-  - question: Can I get holidays for multiple years?
-    answer: Currently, holidays are returned for a single year per request. To get holidays across multiple years, make separate requests for each year.
+  - question: Can I get holidays for multiple countries or years at once?
+    answer: Yes. Use the batch endpoint (POST /v1/places/holidays/batch) to query up to 50 (country, year) combinations in a single request. Each pair is resolved independently, so a missing combination returns found:false without affecting the rest of the results.
