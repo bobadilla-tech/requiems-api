@@ -89,6 +89,47 @@ endpoints:
         status: 404
         description: No holidays found for the specified country and year
 
+    code_examples:
+      curl: |
+        curl "https://api.requiems.xyz/v1/places/holidays?country=US&year=2025" \
+          -H "requiems-api-key: YOUR_API_KEY"
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/places/holidays"
+        params = {"country": "US", "year": 2025}
+        headers = {"requiems-api-key": "YOUR_API_KEY"}
+
+        response = requests.get(url, headers=headers, params=params)
+        print(response.json())
+
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/places/holidays?country=US&year=2025', {
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY'
+          }
+        });
+
+        const data = await response.json();
+        console.log(data.data.holidays);
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/places/holidays')
+        uri.query = URI.encode_www_form(country: 'US', year: 2025)
+        request = Net::HTTP::Get.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)
+        puts data['data']['holidays']
+
   - name: Batch Get Holidays
     method: POST
     path: /v1/places/holidays/batch
@@ -126,7 +167,7 @@ endpoints:
               "total": 19
             },
             {
-              "country": "ZZ",
+              "country": "AQ",
               "year": 2025,
               "found": false
             }
@@ -215,47 +256,6 @@ endpoints:
           if (r.found) console.log(`${r.country} ${r.year}: ${r.total} holidays`);
           else console.log(`${r.country} ${r.year}: not found`);
         });
-
-    code_examples:
-      curl: |
-        curl "https://api.requiems.xyz/v1/places/holidays?country=US&year=2025" \
-          -H "requiems-api-key: YOUR_API_KEY"
-
-      python: |
-        import requests
-
-        url = "https://api.requiems.xyz/v1/places/holidays"
-        params = {"country": "US", "year": 2025}
-        headers = {"requiems-api-key": "YOUR_API_KEY"}
-
-        response = requests.get(url, headers=headers, params=params)
-        print(response.json())
-
-      javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/places/holidays?country=US&year=2025', {
-          headers: {
-            'requiems-api-key': 'YOUR_API_KEY'
-          }
-        });
-
-        const data = await response.json();
-        console.log(data.data.holidays);
-
-      ruby: |
-        require 'net/http'
-        require 'json'
-
-        uri = URI('https://api.requiems.xyz/v1/places/holidays')
-        uri.query = URI.encode_www_form(country: 'US', year: 2025)
-        request = Net::HTTP::Get.new(uri)
-        request['requiems-api-key'] = 'YOUR_API_KEY'
-
-        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          http.request(request)
-        end
-
-        data = JSON.parse(response.body)
-        puts data['data']['holidays']
 
 faq:
   - question: Which countries are supported?
