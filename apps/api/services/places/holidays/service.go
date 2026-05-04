@@ -34,3 +34,35 @@ func (s *Service) GetHolidays(country string, year int) (HolidayList, error) {
 		Total:    len(holidayList),
 	}, nil
 }
+
+// GetHolidaysBatch returns holidays for each (country, year) pair in the given
+// slice. Pairs with no data are returned with Found: false instead of failing
+// the entire request (partial failure pattern).
+func (s *Service) GetHolidaysBatch(queries []BatchQuery) BatchResponse {
+	results := make([]BatchItem, len(queries))
+
+	for i, q := range queries {
+		list, err := s.GetHolidays(q.Country, q.Year)
+		if err != nil {
+			results[i] = BatchItem{
+				Country: q.Country,
+				Year:    q.Year,
+				Found:   false,
+			}
+			continue
+		}
+
+		results[i] = BatchItem{
+			Country:  list.Country,
+			Year:     list.Year,
+			Found:    true,
+			Holidays: list.Holidays,
+			Total:    list.Total,
+		}
+	}
+
+	return BatchResponse{
+		Results: results,
+		Total:   len(results),
+	}
+}

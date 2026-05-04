@@ -372,7 +372,7 @@ apis:
     categories:
       - places
     description: Get a list of holidays for a specific country and year
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/holidays
