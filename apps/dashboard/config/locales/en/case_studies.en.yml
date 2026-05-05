@@ -1,0 +1,106 @@
+---
+en:
+  case_studies:
+    hub:
+      meta_title: "Customer case studies | Requiems API"
+      meta_description: "See how teams like Verigeo and CompileStrength ship faster with Requiems APIs. Explore partner stories and learn how your business can be the next success story."
+      hero_headline: "Built with teams who ship in production"
+      hero_subheadline: "Real partners using Requiems for geomarketing, fitness products, and more. Read how they combine our APIs with their own IP, and let your business be the next success story."
+      cards_heading: "Featured partners"
+      card_cta: "Read case study"
+      verigeo_blurb: "Peru's geomarketing leader uses Places, validation, and finance APIs to georeference at scale, keep signups clean, and power customer-facing widgets."
+      compilestrength_blurb: "Science-based training software uses our fitness exercise catalog so coaches can focus on programming UX, not maintaining exercise databases."
+      partnership_heading: "Using Requiems in production?"
+      partnership_body: "Contact us for consultation, partner pricing, or testimonial placement on this site. We'd love to feature your story."
+      partnership_primary_cta: "Book a strategy call"
+      partnership_secondary_cta: "Browse API docs"
+      hub_divisions_hint: "Explore by problem area"
+
+    common:
+      apis_heading: "APIs in this story"
+      apis_intro: "Live endpoints from our catalog: same API key, full documentation at each link."
+      table_api: "API"
+      table_benefit: "What it unlocks"
+      related_heading: "Related directories"
+      outcome_note_heading: "Impact metrics"
+      outcome_note_body: "Requiems-specific usage and ROI metrics for this partner are TBD pending confirmation. Ask us on a strategy call if you need detail for your evaluation."
+      final_cta:
+        headline: "Ready to wire the same endpoints?"
+        subheadline: "One API key unlocks the full catalog. Browse docs, ship a spike this week, or talk with us about enterprise fit."
+        primary_cta: "Get API key"
+        secondary_apis: "Browse APIs"
+        strategy_cta: "Book a strategy call"
+      back_to_hub: "All case studies"
+
+    verigeo:
+      meta_title: "Verigeo case study | Requiems API"
+      meta_description: "How Verigeo (verigeo.pe) uses Requiems Places, validation, and finance APIs for geomarketing, georeferencing workflows, and trustworthy widgets."
+      hero_headline: "Verigeo scales geomarketing with location-ready APIs"
+      hero_subheadline: "Verigeo delivers GIS, georeferencing, and geomarketing solutions across Peru. Requiems backs reference data and guardrails so their team can focus on customer workflows, not reinventing global postal, timezone, and validation infrastructure."
+      quote_text: "We use Requiems for financial data in our widgets and to block fake signups at registration. The recognition layer helped us personalize marketing without building anything from scratch."
+      quote_name: "Verigeo"
+      quote_role: "verigeo.pe · Geomarketing & GIS"
+      sections:
+        - heading: "Location intelligence at national scale"
+          paragraphs:
+            - "Geomarketing depends on turning real-world addresses and administrative divisions into coordinates and structured attributes customers can trust."
+            - "Geocoding, postal lookup, and city metadata from Requiems help normalize inputs before they reach Verigeo's GIS pipelines, reducing manual cleanup when provinces and collaborators submit updates from the field."
+        - heading: "Calendars that respect how Peru works"
+          paragraphs:
+            - "Scheduling studies, support windows, and delivery promises breaks when weekends and holidays differ by region."
+            - "Timezone, world time, working-days, and holidays endpoints carry the regional nuance product teams need without maintaining calendar spreadsheets."
+        - heading: "Trust at registration"
+          paragraphs:
+            - "High-value geomarketing workflows attract automated signups and disposable inboxes."
+            - "Email validation and disposable-domain checks align with Verigeo's goal of blocking fake signups while keeping legitimate Peruvian businesses moving."
+        - heading: "Reference data in customer-facing widgets"
+          paragraphs:
+            - "Dashboards and widgets often need credible FX or crypto reference points, not scraped quotes."
+            - "Exchange-rate and crypto endpoints support lightweight financial context alongside Verigeo's proprietary geomarketing insights (per partner feedback; confirm scope with our team if you need integration specifics)."
+      api_rows:
+        - id: geocode
+          benefit: "Turn addresses into coordinates for maps, routing, and GIS ingestion."
+        - id: postal-code
+          benefit: "Validate and enrich postal inputs before printing labels or locking CRM records."
+        - id: cities
+          benefit: "City metadata (population, timezone, coordinates) for analytics and regional reporting."
+        - id: timezone
+          benefit: "Resolve timezone context for properties, branches, and dispersed teams."
+        - id: world-time
+          benefit: "DST-safe clocks keyed by IANA zones for ops dashboards."
+        - id: working-days
+          benefit: "SLA math that skips weekends and optionally honors country holidays."
+        - id: holidays
+          benefit: "Know when markets pause so launches and field work stay realistic."
+        - id: email-validate
+          benefit: "Catch malformed addresses before campaigns and CRM sync."
+        - id: disposable-email
+          benefit: "Stop throwaway inboxes from polluting trials and nurture flows."
+        - id: exchange-rate
+          benefit: "Authoritative FX snapshots for widgets that quote multi-currency context."
+        - id: crypto
+          benefit: "Spot crypto context alongside traditional FX when dashboards demand both."
+
+    compilestrength:
+      meta_title: "CompileStrength case study | Requiems API"
+      meta_description: "CompileStrength builds science-based lifting software. See how the Fitness Exercises API supports programmatic training flows without owning the entire exercise catalog."
+      hero_headline: "CompileStrength trains smarter with evidence-backed exercise data"
+      hero_subheadline: "CompileStrength pairs progressive overload and periodization philosophy with product velocity. Requiems delivers structured fitness exercise data so the team can ship AI programming, filters, and analytics without rebuilding health datasets from scratch."
+      quote_text: "The fitness data from Requiems powers our core features. We didn't have to build or maintain any of that infrastructure."
+      quote_name: "CompileStrength"
+      quote_role: "compilestrength.com · Science-based training"
+      sections:
+        - heading: "Exercise science belongs in the product, not only in spreadsheets"
+          paragraphs:
+            - "Lifters expect movements, equipment tags, and progression cues that reflect real coaching, not placeholder JSON."
+            - "The Fitness Exercises API supplies curated exercise metadata so CompileStrength can emphasise programming intelligence, UX, and retention loops unique to their brand."
+        - heading: "Ship programming features faster"
+          paragraphs:
+            - "Generating sessions by equipment, duration, or goal requires a trustworthy catalog behind the scenes."
+            - "Calling Requiems keeps CompileStrength aligned with the same documented schemas shown in our API reference, reducing surprises when they expand to new locales or modalities."
+        - heading: "Measured outcomes"
+          paragraphs:
+            - "CompileStrength-specific usage volumes and conversion lifts attributed to Requiems are TBD. Talk to us if you need benchmarking for sales or procurement."
+      api_rows:
+        - id: fitness-exercises
+          benefit: "Exercise names, targets, equipment, and instructions for programmatic workouts and filters."
