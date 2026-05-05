@@ -10,9 +10,6 @@ class CaseStudiesController < ApplicationController
 
   def show
     @slug = params[:slug].to_s
-    unless SLUGS.include?(@slug)
-      head :not_found
-      return
-    end
+    head :not_found unless SLUGS.include?(@slug)
   end
 end

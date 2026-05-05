@@ -39,14 +39,10 @@ module CaseStudiesHelper
     headline = I18n.t("#{scope}.meta_title")
     description = I18n.t("#{scope}.meta_description")
 
-    org = case slug.to_s
-          when "verigeo"
-            { "@type" => "Organization", "name" => "Verigeo", "url" => "https://verigeo.pe" }
-          when "compilestrength"
-            { "@type" => "Organization", "name" => "CompileStrength", "url" => "https://compilestrength.com" }
-          else
-            {}
-          end
+    org = {
+      "verigeo" => { "@type" => "Organization", "name" => "Verigeo", "url" => "https://verigeo.pe" },
+      "compilestrength" => { "@type" => "Organization", "name" => "CompileStrength", "url" => "https://compilestrength.com" }
+    }[slug.to_s] || {}
 
     data = {
       "@context" => "https://schema.org",
