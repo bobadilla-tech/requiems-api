@@ -86,6 +86,9 @@ endpoints:
         type: integer
         description: Number of puzzles returned. Matches the length of the input array.
     errors:
+      - code: bad_request
+        status: 400
+        description: The request body is missing or contains malformed JSON.
       - code: validation_failed
         status: 422
         description: "The puzzles array is missing, empty, exceeds 20 items, or contains a value other than easy, medium, or hard."
