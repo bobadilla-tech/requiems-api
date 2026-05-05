@@ -17,6 +17,7 @@ overview:
     - Disposable domain detection (90,000+ domains)
     - Email normalization (lowercase, plus-tag removal, alias resolution)
     - Typo suggestion for common provider domains (gmail.com, yahoo.com, outlook.com, and more)
+    - Batch endpoint for validating up to 50 emails per request
 endpoints:
   - name: Validate Email
     method: POST
@@ -144,6 +145,176 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts data['valid']       # false
         puts data['suggestion']  # gmail.com
+
+  - name: Validate Emails (Batch)
+    method: POST
+    path: /v1/validation/email/batch
+    description: >-
+      Validates up to 50 email addresses in a single request. Each email is processed independently and returns a full
+      validation breakdown (syntax, MX record, disposable check, normalization, and typo suggestion).
+      Invalid emails do not fail the request. Billing: 1 credit per email.
+
+    parameters:
+      - name: emails
+        type: array
+        required: true
+        location: body
+        description: Array of email addresses to validate. Min: 1, Max: 50.
+        example: '["user@gmail.com", "user@gmial.com"]'
+
+    request_example: |
+      {
+        "emails": ["user@gmail.com", "user@gmial.com"]
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "email": "user@gmail.com",
+              "valid": true,
+              "syntax_valid": true,
+              "mx_valid": true,
+              "disposable": false,
+              "normalized": "user@gmail.com",
+              "domain": "gmail.com",
+              "suggestion": null
+            },
+            {
+              "email": "user@gmial.com",
+              "valid": false,
+              "syntax_valid": true,
+              "mx_valid": false,
+              "disposable": false,
+              "normalized": "user@gmial.com",
+              "domain": "gmial.com",
+              "suggestion": "gmail.com"
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: List of validation results for each email, preserving input order
+
+      - name: results[].email
+        type: string|null
+        description: Original email input (null if invalid syntax)
+
+      - name: results[].valid
+        type: boolean
+        description: Overall validity (syntax + MX record)
+
+      - name: results[].syntax_valid
+        type: boolean
+        description: Whether the email is syntactically valid (RFC 5322)
+
+      - name: results[].mx_valid
+        type: boolean
+        description: Whether the domain has valid MX records
+
+      - name: results[].disposable
+        type: boolean
+        description: Whether the email comes from a disposable domain
+
+      - name: results[].normalized
+        type: string|null
+        description: Canonical normalized email (lowercase, alias handling, etc.)
+
+      - name: results[].domain
+        type: string|null
+        description: Extracted domain from email address
+
+      - name: results[].suggestion
+        type: string|null
+        description: Suggested correction for common domain typos
+
+      - name: total
+        type: integer
+        description: Number of emails processed in the batch
+
+    errors:
+      - code: validation_failed
+        status: 422
+        description: Valid JSON body that fails field validation (empty array or more than 50 emails).
+
+      - code: bad_request
+        status: 400
+        description: Invalid JSON, malformed request body, or unexpected field types.
+
+      - code: internal_error
+        status: 500
+        description: Unexpected server error
+
+    
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/validation/email/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"emails": ["user@gmail.com", "user@gmial.com"]}'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/validation/email/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"emails": ["user@gmail.com", "user@gmial.com"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        data = response.json()["data"]
+
+        for r in data["results"]:
+            print(r["email"], r["valid"])
+
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/validation/email/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            emails: ['user@gmail.com', 'user@gmial.com']
+          })
+        });
+
+        const { data } = await response.json();
+
+        data.results.forEach(r => {
+          console.log(r.email, r.valid);
+        });
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/validation/email/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { emails: ['user@gmail.com', 'user@gmial.com'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+
+        data['results'].each do |r|
+          puts "#{r['email']} #{r['valid']}"
+        end
+        
 faq:
   - question: What does valid mean exactly?
     answer: >-
