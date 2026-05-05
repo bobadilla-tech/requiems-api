@@ -149,6 +149,10 @@ Rails.application.routes.draw do
     resources :examples, only: [ :show ]
 
     get "divisions", to: "divisions#index", as: :divisions
+
+    get "case-studies", to: "case_studies#index", as: :case_studies
+    get "case-studies/:slug", to: "case_studies#show", as: :case_study
+
     get ":division_slug", to: "divisions#show",
                          constraints: { division_slug: Regexp.union(*DivisionSlugs::ALL) },
                          as: :division
