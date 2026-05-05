@@ -2,8 +2,9 @@ package email
 
 import (
 	"context"
-	"requiems-api/platform/httpx"
 	"testing"
+
+	"requiems-api/platform/httpx"
 )
 
 func newTestService() *Service {

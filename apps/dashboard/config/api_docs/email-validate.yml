@@ -159,7 +159,7 @@ endpoints:
         type: array
         required: true
         location: body
-        description: Array of email addresses to validate. Min: 1, Max: 50.
+        description: "Array of email addresses to validate. Min: 1, Max: 50."
         example: '["user@gmail.com", "user@gmial.com"]'
 
     request_example: |
