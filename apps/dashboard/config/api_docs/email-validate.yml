@@ -243,16 +243,17 @@ endpoints:
     errors:
       - code: validation_failed
         status: 422
-        description: Invalid request body (empty array, more than 50 emails, or invalid format)
+        description: Valid JSON body that fails field validation (empty array or more than 50 emails).
 
       - code: bad_request
         status: 400
-        description: Invalid JSON or malformed request body
+        description: Invalid JSON, malformed request body, or unexpected field types.
 
       - code: internal_error
         status: 500
         description: Unexpected server error
 
+    
     code_examples:
       curl: |
         curl -X POST https://api.requiems.xyz/v1/validation/email/batch \

@@ -2,8 +2,8 @@ package email
 
 import (
 	"context"
-	"testing"
 	"requiems-api/platform/httpx"
+	"testing"
 )
 
 func newTestService() *Service {
@@ -172,8 +172,6 @@ func TestValidateEmail_GmailPlusNormalized(t *testing.T) {
 }
 
 // ---Batch
-
-
 
 // ---- ValidateEmailBatch -----------------------------------------------------
 

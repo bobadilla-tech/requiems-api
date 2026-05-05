@@ -44,5 +44,3 @@ type BatchResponse struct {
 }
 
 func (BatchResponse) IsData() {}
-
-

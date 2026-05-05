@@ -45,7 +45,6 @@ func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Respo
 	return resp
 }
 
-
 // ---- single endpoint tests (unchanged) ----
 func TestValidate_MissingEmail(t *testing.T) {
 	w := postValidate(`{}`)

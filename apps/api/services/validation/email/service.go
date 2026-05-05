@@ -5,6 +5,8 @@ import (
 	"net"
 	"regexp"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/agnivade/levenshtein"
 	normalizer "github.com/bobadilla-tech/go-email-normalizer"
@@ -110,22 +112,38 @@ func (s *Service) ValidateEmail(ctx context.Context, email string) Validation {
 // ValidateEmailBatch processes multiple emails using the same validation logic.
 // Each item is processed independently.
 func (s *Service) ValidateEmailBatch(ctx context.Context, emails []string) BatchResponse {
-	results := make([]BatchItem, 0, len(emails))
 
-	for _, email := range emails {
-		res := s.ValidateEmail(ctx, email)
+	const maxWorkers = 8
+	const perItemTimeout = 2 * time.Second
 
-		results = append(results, BatchItem{
-			Email:       res.Email,
-			Valid:       res.Valid,
-			SyntaxValid: res.SyntaxValid,
-			MXValid:     res.MxValid,
-			Disposable:  res.Disposable,
-			Normalized:  res.Normalized,
-			Domain:      res.Domain,
-			Suggestion:  res.Suggestion,
-		})
+	results := make([]BatchItem, len(emails))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
+
+	for i, email := range emails {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, email string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			itemCtx, cancel := context.WithTimeout(ctx, perItemTimeout)
+			defer cancel()
+
+			res := s.ValidateEmail(itemCtx, email)
+			results[i] = BatchItem{
+				Email:       res.Email,
+				Valid:       res.Valid,
+				SyntaxValid: res.SyntaxValid,
+				MXValid:     res.MxValid,
+				Disposable:  res.Disposable,
+				Normalized:  res.Normalized,
+				Domain:      res.Domain,
+				Suggestion:  res.Suggestion,
+			}
+		}(i, email)
 	}
+	wg.Wait()
 
 	return BatchResponse{
 		Results: results,
