@@ -1,0 +1,106 @@
+---
+es:
+  case_studies:
+    hub:
+      meta_title: "Casos de clientes | Requiems API"
+      meta_description: "Descubre cómo equipos como Verigeo y CompileStrength lanzan más rápido con las APIs de Requiems. Explora historias de socios y haz que tu negocio sea el próximo caso de éxito."
+      hero_headline: "Hecho junto a equipos en producción"
+      hero_subheadline: "Socios reales usando Requiems para geomarketing, productos de fitness y más. Lee cómo combinan nuestras APIs con su propia propuesta de valor, y haz que tu negocio sea el próximo caso de éxito."
+      cards_heading: "Socios destacados"
+      card_cta: "Leer caso de estudio"
+      verigeo_blurb: "El líder peruano en geomarketing usa APIs de Places, validación y finanzas para georreferenciar a escala, mantener registros limpios y alimentar widgets orientados al cliente."
+      compilestrength_blurb: "El software de entrenamiento basado en ciencia usa nuestro catálogo de ejercicios para que los coaches se centren en la UX de programación, no en mantener bases de ejercicios."
+      partnership_heading: "¿Usas Requiems en producción?"
+      partnership_body: "Contáctanos para consultoría, precios para socios o colocación de testimonios en este sitio. Nos encantaría destacar tu historia."
+      partnership_primary_cta: "Agenda una llamada estratégica"
+      partnership_secondary_cta: "Explorar documentación de APIs"
+      hub_divisions_hint: "Explorar por área de problema"
+
+    common:
+      apis_heading: "APIs en esta historia"
+      apis_intro: "Endpoints activos de nuestro catálogo: la misma clave API y documentación completa en cada enlace."
+      table_api: "API"
+      table_benefit: "Qué aporta"
+      related_heading: "Directorios relacionados"
+      outcome_note_heading: "Métricas de impacto"
+      outcome_note_body: "Los volúmenes de uso y el ROI atribuibles a Requiems para este socio están pendientes de confirmación (TBD). Pregunta en una llamada estratégica si necesitas detalle para tu evaluación."
+      final_cta:
+        headline: "¿Listo para conectar los mismos endpoints?"
+        subheadline: "Una clave API desbloquea todo el catálogo. Explora docs, lanza una prueba esta semana o habla con nosotros sobre alcance enterprise."
+        primary_cta: "Obtener clave API"
+        secondary_apis: "Explorar APIs"
+        strategy_cta: "Agenda una llamada estratégica"
+      back_to_hub: "Todos los casos de estudio"
+
+    verigeo:
+      meta_title: "Caso Verigeo | Requiems API"
+      meta_description: "Cómo Verigeo (verigeo.pe) usa APIs de Requiems Places, validación y finanzas para geomarketing, flujos de georreferenciación y widgets confiables."
+      hero_headline: "Verigeo escala geomarketing con APIs listas para ubicación"
+      hero_subheadline: "Verigeo ofrece GIS, georreferenciación y geomarketing en todo Perú. Requiems respalda datos de referencia y salvaguardas para que el equipo se centre en los flujos del cliente, sin reinventar infraestructura global de códigos postales, zonas horarias y validación."
+      quote_text: "Usamos Requiems para datos financieros en nuestros widgets y para bloquear registros falsos al registrarse. La capa de reconocimiento nos ayudó a personalizar marketing sin construir todo desde cero."
+      quote_name: "Verigeo"
+      quote_role: "verigeo.pe · Geomarketing y GIS"
+      sections:
+        - heading: "Inteligencia de ubicación a escala nacional"
+          paragraphs:
+            - "El geomarketing depende de convertir direcciones del mundo real y divisiones administrativas en coordenadas y atributos en los que los clientes confían."
+            - "Geocodificación, búsqueda postal y metadatos de ciudad ayudan a normalizar entradas antes de llegar a los pipelines GIS de Verigeo, reduciendo limpieza manual cuando provincias y colaboradores envían actualizaciones desde el campo."
+        - heading: "Calendarios que respetan cómo funciona Perú"
+          paragraphs:
+            - "Programar estudios, ventanas de soporte y promesas de entrega falla cuando fines de semana y feriados cambian por región."
+            - "Zona horaria, hora mundial, días laborables y feriados llevan el matiz regional que los equipos de producto necesitan sin mantener hojas de calendario."
+        - heading: "Confianza en el registro"
+          paragraphs:
+            - "Los flujos de geomarketing de alto valor atraen registros automatizados y correos desechables."
+            - "La validación de correo y los dominios desechables se alinean con el objetivo de Verigeo de bloquear registros falsos manteniendo en marcha a empresas legítimas."
+        - heading: "Datos de referencia en widgets orientados al cliente"
+          paragraphs:
+            - "Los paneles y widgets suelen necesitar puntos de referencia creíbles de FX o cripto, no cotizaciones raspadas."
+            - "Los endpoints de tipo de cambio y cripto apoyan contexto financiero ligero junto a los conocimientos propietarios de geomarketing de Verigeo (según retroalimentación del socio; confirma el alcance con nuestro equipo si necesitas detalle de integración)."
+      api_rows:
+        - id: geocode
+          benefit: "Convierte direcciones en coordenadas para mapas, rutas e ingesta GIS."
+        - id: postal-code
+          benefit: "Valida y enriquece códigos postales antes de imprimir etiquetas o fijar registros CRM."
+        - id: cities
+          benefit: "Metadatos de ciudad (población, zona horaria, coordenadas) para analítica regional."
+        - id: timezone
+          benefit: "Contexto de zona horaria para sedes, sucursales y equipos distribuidos."
+        - id: world-time
+          benefit: "Relojes seguros ante DST por zonas IANA para paneles operativos."
+        - id: working-days
+          benefit: "SLAs que omiten fines de semana y pueden respetar feriados por país."
+        - id: holidays
+          benefit: "Saber cuándo paran los mercados para lanzamientos y trabajo de campo realistas."
+        - id: email-validate
+          benefit: "Detecta correos mal formados antes de campañas y sincronización CRM."
+        - id: disposable-email
+          benefit: "Evita buzones desechables que contaminan pruebas y nurturing."
+        - id: exchange-rate
+          benefit: "Instantáneas FX autoritativas para widgets con contexto multimoneda."
+        - id: crypto
+          benefit: "Contexto spot de cripto junto a FX cuando los paneles lo requieren."
+
+    compilestrength:
+      meta_title: "Caso CompileStrength | Requiems API"
+      meta_description: "CompileStrength construye software de entrenamiento basado en ciencia. Descubre cómo la API Fitness Exercises respalda flujos programáticos sin poseer todo el catálogo."
+      hero_headline: "CompileStrength entrena con datos de ejercicio respaldados por evidencia"
+      hero_subheadline: "CompileStrength une filosofía de sobrecarga progresiva y periodización con velocidad de producto. Requiems entrega datos estructurados de ejercicios para que el equipo pueda lanzar IA de programación, filtros y analítica sin reconstruir datasets de salud desde cero."
+      quote_text: "Los datos de fitness de Requiems impulsan nuestras funciones principales. No tuvimos que construir ni mantener esa infraestructura."
+      quote_name: "CompileStrength"
+      quote_role: "compilestrength.com · Entrenamiento basado en ciencia"
+      sections:
+        - heading: "La ciencia del ejercicio vive en el producto, no solo en hojas de cálculo"
+          paragraphs:
+            - "Los levantadores esperan movimientos, etiquetas de equipo y señales de progresión que reflejen coaching real, no JSON de relleno."
+            - "La API Fitness Exercises aporta metadatos curados para que CompileStrength pueda enfatizar inteligencia de programación, UX y retención propias de su marca."
+        - heading: "Lanza funciones de programación más rápido"
+          paragraphs:
+            - "Generar sesiones por equipo, duración u objetivo requiere un catálogo confiable detrás de escena."
+            - "Llamar a Requiems mantiene a CompileStrength alineado con los mismos esquemas documentados en nuestra referencia API, reduciendo sorpresas al expandir locales o modalidades."
+        - heading: "Resultados medidos"
+          paragraphs:
+            - "Los volúmenes de uso específicos de CompileStrength y mejoras de conversión atribuibles a Requiems están TBD. Habla con nosotros si necesitas benchmarking para ventas o compras."
+      api_rows:
+        - id: fitness-exercises
+          benefit: "Nombres de ejercicios, objetivos, equipo e instrucciones para rutinas programáticas y filtros."

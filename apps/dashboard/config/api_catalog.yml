@@ -178,7 +178,7 @@ apis:
     categories:
       - validation
     description: Full email validation in one call. Syntax check, MX record lookup, disposable domain detection, normalization, and typo suggestions. Includes everything from the Disposable Domain Checker and Email Normalizer in a single request.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
     documentation_url: /apis/email-validate
@@ -372,7 +372,7 @@ apis:
     categories:
       - places
     description: Get a list of holidays for a specific country and year
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/holidays
@@ -804,7 +804,7 @@ apis:
     categories:
       - entertainment
     description: Generate Sudoku puzzles with solutions across multiple difficulty levels
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/sudoku

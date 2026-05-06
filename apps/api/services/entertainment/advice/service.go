@@ -26,11 +26,11 @@ func (s *Service) Random(ctx context.Context) (Advice, error) {
 	defer cancel()
 
 	row := s.db.QueryRow(ctx, `
-SELECT id, text
-FROM advice
-ORDER BY random()
-LIMIT 1;
-`)
+	SELECT id, text
+	FROM advice
+	ORDER BY random()
+	LIMIT 1;
+	`)
 
 	var a Advice
 	if err := row.Scan(&a.ID, &a.Text); err != nil {

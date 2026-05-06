@@ -6,10 +6,10 @@ provider-specific rules (Gmail dots and plus tags, `googlemail.com` →
 
 ## Endpoints
 
-| Method | Path                            | Description                    |
-| ------ | ------------------------------- | ------------------------------ |
-| POST   | `/v1/text/normalize`            | Normalize a single address     |
-| POST   | `/v1/text/normalize/batch`      | Normalize up to 100 addresses |
+| Method | Path                       | Description                   |
+| ------ | -------------------------- | ----------------------------- |
+| POST   | `/v1/text/normalize`       | Normalize a single address    |
+| POST   | `/v1/text/normalize/batch` | Normalize up to 100 addresses |
 
 Usage is billed **per email** on the batch route (see `X-Usage-Count` / gateway
 docs).
@@ -26,8 +26,8 @@ docs).
 }
 ```
 
-| Field   | Type   | Required | Description           |
-| ------- | ------ | -------- | --------------------- |
+| Field   | Type   | Required | Description          |
+| ------- | ------ | -------- | -------------------- |
 | `email` | string | Yes      | Address to normalize |
 
 ### Responses
@@ -99,8 +99,8 @@ for that row.
 
 ### Errors
 
-- **422** — Body validation (empty `emails`, too many items, empty string in
-  the array).
+- **422** — Body validation (empty `emails`, too many items, empty string in the
+  array).
 - **400** — Malformed JSON or unknown fields.
 
 Dashboard catalog and examples: `email-normalize` API doc in the dashboard

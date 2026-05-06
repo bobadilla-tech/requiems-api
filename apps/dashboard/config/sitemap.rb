@@ -33,6 +33,12 @@ STATIC_PAGES = [
   { path: "/talk-to-sales",  changefreq: "monthly", priority: 0.4 }
 ].freeze
 
+CASE_STUDY_PAGES = [
+  { path: "/case-studies", changefreq: "monthly", priority: 0.72 },
+  { path: "/case-studies/verigeo", changefreq: "monthly", priority: 0.7 },
+  { path: "/case-studies/compilestrength", changefreq: "monthly", priority: 0.7 }
+].freeze
+
 DIVISION_MARKETING_PAGES = [
   { path: "/divisions", changefreq: "weekly", priority: 0.75 }
 ].concat(
@@ -55,6 +61,18 @@ SitemapGenerator::Sitemap.create! do
   end
 
   DIVISION_MARKETING_PAGES.each do |page|
+    %w[en es].each do |locale|
+      add "/#{locale}#{page[:path]}",
+        changefreq: page[:changefreq],
+        priority:   page[:priority],
+        alternates: [
+          { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
+          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" }
+        ]
+    end
+  end
+
+  CASE_STUDY_PAGES.each do |page|
     %w[en es].each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],

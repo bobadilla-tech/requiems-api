@@ -89,3 +89,74 @@ func TestService_GetHolidays_InvalidCountry(t *testing.T) {
 		t.Errorf("expected error message to contain 'no holidays found', got %q", err.Error())
 	}
 }
+
+// ---- batch service tests ----
+
+func TestService_GetHolidaysBatch_AllFound(t *testing.T) {
+	svc := NewService()
+
+	queries := []BatchQuery{
+		{Country: "US", Year: 2025},
+		{Country: "GB", Year: 2025},
+	}
+
+	resp := svc.GetHolidaysBatch(queries)
+
+	if resp.Total != 2 {
+		t.Errorf("expected total 2, got %d", resp.Total)
+	}
+	for _, item := range resp.Results {
+		if !item.Found {
+			t.Errorf("expected found=true for %s %d", item.Country, item.Year)
+		}
+		if len(item.Holidays) == 0 {
+			t.Errorf("expected non-empty holidays for %s %d", item.Country, item.Year)
+		}
+	}
+}
+
+func TestService_GetHolidaysBatch_PartialFailure(t *testing.T) {
+	svc := NewService()
+
+	queries := []BatchQuery{
+		{Country: "US", Year: 2025},
+		{Country: "AQ", Year: 2025}, // valid ISO code (Antarctica) but no holiday data — triggers found:false
+	}
+
+	resp := svc.GetHolidaysBatch(queries)
+
+	if resp.Total != 2 {
+		t.Errorf("expected total 2, got %d", resp.Total)
+	}
+	if !resp.Results[0].Found {
+		t.Error("expected Results[0] (US) to be found")
+	}
+	if resp.Results[1].Found {
+		t.Error("expected Results[1] (ZZ) to be not found")
+	}
+	if len(resp.Results[1].Holidays) != 0 {
+		t.Error("expected empty holidays slice for not-found item")
+	}
+}
+
+func TestService_GetHolidaysBatch_PreservesOrder(t *testing.T) {
+	svc := NewService()
+
+	queries := []BatchQuery{
+		{Country: "DE", Year: 2025},
+		{Country: "AR", Year: 2024},
+		{Country: "JP", Year: 2025},
+	}
+
+	resp := svc.GetHolidaysBatch(queries)
+
+	if resp.Results[0].Country != "DE" {
+		t.Errorf("expected Results[0] country DE, got %s", resp.Results[0].Country)
+	}
+	if resp.Results[1].Country != "AR" {
+		t.Errorf("expected Results[1] country AR, got %s", resp.Results[1].Country)
+	}
+	if resp.Results[2].Country != "JP" {
+		t.Errorf("expected Results[2] country JP, got %s", resp.Results[2].Country)
+	}
+}
