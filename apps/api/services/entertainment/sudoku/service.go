@@ -55,6 +55,16 @@ func (s *Service) Generate(difficulty string) Puzzle {
 	}
 }
 
+// GenerateBatch generates multiple Sudoku puzzles from the given difficulty list.
+// Results are returned in the same order as the input slice.
+func (s *Service) GenerateBatch(difficulties []string) []Puzzle {
+	results := make([]Puzzle, len(difficulties))
+	for i, d := range difficulties {
+		results[i] = s.Generate(d)
+	}
+	return results
+}
+
 // shuffle produces a new valid solution by permuting the base grid.
 //
 // The transformations applied are:
