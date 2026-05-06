@@ -154,7 +154,7 @@ generated using `Rails.application.message_verifier("referral")`.
 Migration: `add_referral_fields_to_users`
 
 - `referral_code` string, unique index, null: false after migration (backfilled)
-- `referred_by_id` bigint nullable, FK → users (self-referencing)
+- `referred_by_id` bigint nullable, FK → users (self-referencing) with CHECK constraint: `referred_by_id IS NULL OR referred_by_id <> id`
 - `referred_at` datetime nullable
 
 Migration: `add_first_paid_referrer_to_subscriptions`
@@ -243,7 +243,8 @@ context so the webhook can detect conversion:
 Then in `Webhooks::LemonsqueezyController#handle_subscription_created`:
 
 ```ruby
-if user.referred_by_id.present? && user.subscriptions.paid.none?
+prior_paid_exists = user.subscriptions.paid.where.not(id: subscription.id).exists?
+if user.referred_by_id.present? && !prior_paid_exists
   subscription.first_paid_referrer_id = user.referred_by_id
 end
 ```
