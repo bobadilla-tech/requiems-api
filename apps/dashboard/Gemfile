@@ -75,6 +75,8 @@ gem "csv"
 gem "sentry-ruby"
 gem "sentry-rails"
 
+gem "sorbet-runtime"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -87,6 +89,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "tapioca", require: false, group: [ :development, :test ]
 end
 
 group :test do
@@ -98,4 +102,5 @@ group :development do
   gem "web-console"
   gem "letter_opener_web", "~> 3.0"
   gem "ruby-lsp", require: false
+  gem "sorbet"
 end
