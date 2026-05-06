@@ -85,37 +85,47 @@ for passing referral context into the paid conversion event.
 
 ## Design Decisions
 
-### Option A — Extend `users` table with referral columns ✅ (chosen)
+x### Option A — Extend `users` table with referral columns (rejected)
 
 Add three columns to `users`:
 
-| Column              | Type                | Purpose                                                |
-| ------------------- | ------------------- | ------------------------------------------------------ |
-| `referral_code`     | `string` (uniq idx) | Public token users share (e.g. `A3F9B2C8`)            |
-| `referred_by_id`    | `bigint FK → users` | Who referred this user (null if organic)               |
-| `referred_at`       | `datetime`          | When the referral relationship was established           |
+| Column           | Type                | Purpose                                        |
+| ---------------- | ------------------- | ---------------------------------------------- |
+| `referral_code`  | `string` (uniq idx) | Public token users share (e.g. `A3F9B2C8`)    |
+| `referred_by_id` | `bigint FK->users`  | Who referred this user (null if organic)       |
+| `referred_at`    | `datetime`          | When the referral relationship was established |
 
 Add one column to `subscriptions`:
 
-| Column                    | Type      | Purpose                                                     |
-| ------------------------- | --------- | ----------------------------------------------------------- |
-| `first_paid_referrer_id`  | `bigint FK → users` | FK to referrer if this subscription is the referred user's first paid plan |
+| Column                   | Type                | Purpose                                                                    |
+| ------------------------ | ------------------- | -------------------------------------------------------------------------- |
+| `first_paid_referrer_id` | `bigint FK → users` | FK to referrer if this subscription is the referred user's first paid plan |
 
-**Why this over a separate `referrals` table:**
+**Why rejected:** spreads the referral relationship across two tables
+(`users.referred_by_id` for attribution, `subscriptions.first_paid_referrer_id`
+for conversion) — more fragmented than a dedicated table, not less. Phase 2
+rewards will require per-referral audit rows anyway, forcing a painful migration
+out of `users` at that point.
 
-- MVP only cares about "who referred you" (single attribution), not multi-touch
-- The `users` table is already the source of truth for identity; keeping
-  attribution there avoids joins for the most common read path (dashboard stats)
-- A separate table adds complexity with no benefit until we support
-  rewards/payouts that require detailed audit rows
-- `first_paid_referrer_id` on `subscriptions` captures the conversion event
-  atomically at the moment the paid subscription is created
+### Option B — Separate `referrals` table ✅ (chosen)
 
-### Option B — Separate `referrals` table (rejected)
+Attribution lives in a dedicated `referrals` table. One column is added to `users`:
 
-Would require a join or second query every time we need to know "who referred
-this user?" — unnecessary for MVP's single-attribution model. Adds a model,
-controller concerns, and migration for no current benefit.
+| Column          | Type                | Purpose                                     |
+| --------------- | ------------------- | ------------------------------------------- |
+| `referral_code` | `string` (uniq idx) | Public token users share (e.g. `A3F9B2C8`) |
+
+The `referrals` table:
+
+| Column                       | Type                                  | Purpose                                              |
+| ---------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| `id`                         | `bigint PK`                           |                                                      |
+| `referrer_id`                | `bigint FK → users`                   | The user who shared the referral link                |
+| `referred_user_id`           | `bigint FK → users`                   | The user who signed up via the link (unique index)   |
+| `status`                     | `string` (enum)                       | `pending` or `converted`                             |
+| `converted_at`               | `datetime nullable`                   | When the referred user made their first paid upgrade |
+| `converting_subscription_id` | `bigint FK → subscriptions nullable`  | The subscription that triggered conversion           |
+| `created_at`                 | `datetime`                            | When the referral relationship was established       |
 
 ### Referral link format
 
@@ -142,8 +152,8 @@ generated using `Rails.application.message_verifier("referral")`.
 - **No hard-block**: we do not prevent the signup; we simply do not attribute
   it. This avoids a confusing error message and lets legitimate users with
   multiple email addresses still sign up.
-- **One referral per user**: `referred_by_id` is set only on creation and
-  never updated. A user cannot be "re-referred."
+- **One referral per user**: a unique index on `referrals.referred_user_id`
+  enforces this at the database level. A user cannot be "re-referred."
 
 ---
 
@@ -151,16 +161,19 @@ generated using `Rails.application.message_verifier("referral")`.
 
 ### Database
 
-Migration: `add_referral_fields_to_users`
+Migration: `add_referral_code_to_users`
 
-- `referral_code` string, unique index, null: false after migration (backfilled)
-- `referred_by_id` bigint nullable, FK → users (self-referencing) with CHECK constraint: `referred_by_id IS NULL OR referred_by_id <> id`
-- `referred_at` datetime nullable
+- `referral_code` string, unique index, null: false after backfill
 
-Migration: `add_first_paid_referrer_to_subscriptions`
+Migration: `create_referrals`
 
-- `first_paid_referrer_id` bigint nullable, FK → users
-- Index on `first_paid_referrer_id`
+- `referrer_id` bigint, FK → users, not null
+- `referred_user_id` bigint, FK → users, not null, unique index
+- `status` string, not null, default: `"pending"`
+- `converted_at` datetime nullable
+- `converting_subscription_id` bigint nullable, FK → subscriptions
+- `created_at` datetime, not null
+- Index on `referrer_id`
 
 #### Backfilling `referral_code`
 
@@ -177,17 +190,17 @@ with a data-fix step) sets it to `null: false` after backfill.
 
 ### Model changes
 
-| File                  | Change                                                                 |
-| --------------------- | ---------------------------------------------------------------------- |
-| `app/models/user.rb`  | `has_many :referrals, class_name: "User", foreign_key: "referred_by_id"` |
-|                       | `belongs_to :referrer, class_name: "User", optional: true`              |
-|                       | `before_create :ensure_referral_code`                                   |
-|                       | `before_create :assign_referrer_from_token`                             |
-|                       | `scope :referred_users`                                                 |
-|                       | `scope :with_referrer`                                                  |
-|                       | `referral_url` helper method                                            |
-| `app/models/subscription.rb` | `belongs_to :first_paid_referrer, class_name: "User", optional: true`   |
-|                       | Track `first_paid_referrer_id` on creation when user was referred       |
+| File                        | Change                                                                    |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `app/models/referral.rb` (new) | `belongs_to :referrer, class_name: "User"`                             |
+|                             | `belongs_to :referred_user, class_name: "User"`                          |
+|                             | `belongs_to :converting_subscription, class_name: "Subscription", optional: true` |
+|                             | `enum status: { pending: "pending", converted: "converted" }`            |
+| `app/models/user.rb`        | `has_many :referrals_given, class_name: "Referral", foreign_key: "referrer_id"` |
+|                             | `has_one :referral_received, class_name: "Referral", foreign_key: "referred_user_id"` |
+|                             | `before_create :ensure_referral_code`                                    |
+|                             | `referral_url` helper method                                             |
+| `app/models/subscription.rb` | `has_one :referral, foreign_key: "converting_subscription_id"`          |
 
 ### Controller changes
 
