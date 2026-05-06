@@ -17,6 +17,23 @@
     },
   ],
   "settings": {
-    "sorbet.enabled": true,
+    "[ruby]": {
+      "editor.defaultFormatter": "Shopify.ruby-lsp",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+      }
+    },
+    "ruby.lsp.enableExperimentalFeatures": true,
+    "ruby.useBundler": true,
+    "ruby.useLanguageServer": true,
+    "ruby.lsp.launch_type": "bundler",
+    "ruby.lint": {
+      "rubocop": {
+        "useBundler": true
+      }
+    },
+    "sorbet.enabled": false,
+    "editor.defaultFormatter": "Shopify.ruby-lsp"
   },
 }
