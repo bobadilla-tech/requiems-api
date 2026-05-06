@@ -100,7 +100,7 @@ apis:
     categories:
       - finance
     description: Validate IBAN numbers and extract the bank code and account number. Supports all countries in the official SWIFT IBAN Registry (~80 countries).
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/iban

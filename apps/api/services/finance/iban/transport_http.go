@@ -39,7 +39,7 @@ func registerIBANRoutes(r chi.Router, v Validator) {
 			if err != nil {
 				return BatchParseResponse{}, 0, err
 			}
-			return result, result.Total, nil
+			return result, len(req.Numbers), nil
 		},
 	))
 }
