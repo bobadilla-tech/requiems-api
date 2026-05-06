@@ -4,6 +4,11 @@
 
 > Prerequisites: Docker & Docker Compose
 
+> Editor note: If you're developing the Rails dashboard (`apps/dashboard/`),
+> install a Ruby LSP editor/IDE extension and configure it to use the project's
+> `ruby-lsp` gem (added to `apps/dashboard/Gemfile`). This enables code
+> navigation, in-editor diagnostics, and other language-server features.
+
 ### 1. Start the stack
 
 ```bash
