@@ -231,11 +231,11 @@ func TestService_Parse(t *testing.T) {
 	resp, err := svc.Parse(context.Background(), "GB29NWBK60161331926819")
 
 	if err != nil {
-		t.Errorf("Expeted no error, got %v", err)
+		t.Errorf("Expected no error, got %v", err)
 	}
 
 	if !resp.Valid {
-		t.Errorf("Expeted valid=true")
+		t.Errorf("Expected valid=true")
 	}
 
 	if resp.Country != "United Kingdom" {
@@ -266,7 +266,7 @@ func TestService_ParseBatch_MixedResults(t *testing.T) {
 	resp, err := svc.ParseBatch(context.Background(), numbers)
 
 	if err != nil {
-		t.Fatalf("expeted no error, got %v", err)
+		t.Fatalf("expected no error, got %v", err)
 	}
 
 	if resp.Total != 3 {
