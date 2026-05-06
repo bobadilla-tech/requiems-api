@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "path": "apps/dashboard",
+    },
+    {
+      "path": "apps/api",
+    },
+    {
+      "path": "apps/workers/api-management",
+    },
+    {
+      "path": "apps/workers/auth-gateway",
+    },
+    {
+      "path": "apps/workers/shared",
+    },
+  ],
+  "settings": {
+    "sorbet.enabled": true,
+  },
+}
