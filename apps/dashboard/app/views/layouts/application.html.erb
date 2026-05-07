@@ -9,11 +9,16 @@
         }
       })();
     </script>
-    <title><%= content_for(:title) || "Dashboard" %></title>
+    <title><%= content_for(:title) || "Requiems API" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Dashboard">
+    <meta name="application-name" content="Requiems API">
     <meta name="mobile-web-app-capable" content="yes">
+    <% if content_for?(:description) %>
+      <meta name="description" content="<%= content_for(:description) %>">
+    <% else %>
+      <meta name="description" content="Authentication, validation, fraud detection, payments intelligence, and global data — one API key for your entire SaaS stack.">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
