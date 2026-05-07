@@ -49,19 +49,32 @@ glow.addColorStop(1, "rgba(99,102,241,0)");
 ctx.fillStyle = glow;
 ctx.fillRect(0, 0, W, H);
 
-// Logo
+// Logo inside white circle so eyes are visible on dark bg
+const LOGO_SIZE = 72;
+const CIRCLE_R = 50;
+const CIRCLE_X = 80 + CIRCLE_R;
+const CIRCLE_Y = 72 + CIRCLE_R;
+
+ctx.save();
+ctx.fillStyle = "#ffffff";
+ctx.beginPath();
+ctx.arc(CIRCLE_X, CIRCLE_Y, CIRCLE_R, 0, Math.PI * 2);
+ctx.fill();
+ctx.restore();
+
 try {
   const logo = await loadImage(LOGO);
-  ctx.drawImage(logo, 80, 72, 80, 80);
+  const offset = (CIRCLE_R * 2 - LOGO_SIZE) / 2;
+  ctx.drawImage(logo, 80 + offset, 72 + offset, LOGO_SIZE, LOGO_SIZE);
 } catch {
   ctx.fillStyle = "#6366f1";
-  ctx.beginPath(); ctx.arc(120, 112, 40, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(CIRCLE_X, CIRCLE_Y, 36, 0, Math.PI * 2); ctx.fill();
 }
 
-// Brand name
+// Brand name — vertically centred next to logo circle
 ctx.fillStyle = "#f8fafc";
 ctx.font = "bold 28px sans-serif";
-ctx.fillText("Requiems API", 180, 122);
+ctx.fillText("Requiems API", 196, 127);
 
 // Headline
 ctx.font = "bold 68px sans-serif";
