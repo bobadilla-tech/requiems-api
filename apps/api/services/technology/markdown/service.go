@@ -37,6 +37,11 @@ func (s *Service) Convert(markdown string, sanitize bool) (Response, error) {
 	return Response{HTML: strings.TrimRight(buf.String(), "\n")}, nil
 }
 
+// no paralelo pq no hace I/O
+// no hace HTTP
+// no consulta DB
+// todo ocurre en memoria
+
 func (s *Service) ConvertBatch(markdowns []string, sanitize bool) (BatchResponse, error) {
 	results := make([]Response, 0, len(markdowns))
 	
