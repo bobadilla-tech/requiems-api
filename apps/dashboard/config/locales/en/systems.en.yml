@@ -310,19 +310,18 @@ en:
         name: "Utilities"
         headline: "Common developer tools, available on the same key as your production systems."
         endpoint_method: "GET"
-        endpoint_path: "/v1/qr/generate"
+        endpoint_path: "/v1/qr/base64"
         input: |
           {
-            "content": "https://requiems.xyz",
-            "format": "png",
-            "size": 256
+            "data": "https://requiems.xyz",
+            "size": 256,
+            "recovery": "medium"
           }
         output: |
           {
-            "format": "png",
-            "url": "https://cdn.requiems.xyz/qr/abc123.png",
-            "size": 256,
-            "expires_at": "2026-05-14T00:00:00Z"
+            "image": "iVBORw0KGgoAAAANSUhEUgAA...",
+            "width": 256,
+            "height": 256
           }
       use_cases:
         - title: "QR codes"

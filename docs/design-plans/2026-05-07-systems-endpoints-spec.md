@@ -446,20 +446,21 @@ Clean and standardize a string: trim whitespace, fix encoding, normalize case.
 These endpoints are existing primitives promoted to cleaner, stable paths under
 the `/v1/` namespace. No composition logic, just cleaner DX.
 
-### Engine: `GET /v1/qr/generate`
+### Engine: `GET /v1/qr/base64`
 
-Generate a QR code for any URL or string.
+Generate a QR code and return it as a base64-encoded PNG in a JSON envelope.
+Use this for API workflows, inline embedding, or storing the image as a data URI.
 
-**Query params:** `content` (required), `format` (`png`|`svg`, default `png`),
-`size` (pixels, default `256`)
+**Query params:** `data` (required), `size` (pixels, default `256`, range `50–1000`),
+`recovery` (`low` | `medium` | `high` | `highest`, default `medium`)
 
 **Request** (query params)
 
 ```json
 {
-  "content": "https://requiems.xyz",
-  "format": "png",
-  "size": 256
+  "data": "https://requiems.xyz",
+  "size": 256,
+  "recovery": "medium"
 }
 ```
 
@@ -467,14 +468,24 @@ Generate a QR code for any URL or string.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 34,
-  "format": "png",
-  "url": "https://cdn.requiems.xyz/qr/abc123.png",
-  "size": 256,
-  "expires_at": "2026-05-14T00:00:00Z"
+  "image": "iVBORw0KGgoAAAANSUhEUgAA...",
+  "width": 256,
+  "height": 256
 }
 ```
+
+Use the `image` value directly as a data URI: `data:image/png;base64,{image}`
+
+---
+
+### `GET /v1/qr/generate`
+
+Returns the QR code as a raw binary PNG blob (`Content-Type: image/png`).
+Use when you want to serve the image directly or stream it to a browser.
+
+**Query params:** same as `/v1/qr/base64`
+
+**Response:** Raw PNG bytes. No JSON wrapper.
 
 ---
 
