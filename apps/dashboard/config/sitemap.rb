@@ -49,37 +49,40 @@ DIVISION_MARKETING_PAGES = [
 
 SitemapGenerator::Sitemap.create! do
   STATIC_PAGES.each do |page|
-    %w[en es].each do |locale|
+    %w[en es fr].each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
         alternates: [
           { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" }
+          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
+          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
         ]
     end
   end
 
   DIVISION_MARKETING_PAGES.each do |page|
-    %w[en es].each do |locale|
+    %w[en es fr].each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
         alternates: [
           { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" }
+          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
+          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
         ]
     end
   end
 
   CASE_STUDY_PAGES.each do |page|
-    %w[en es].each do |locale|
+    %w[en es fr].each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
         alternates: [
           { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" }
+          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
+          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
         ]
     end
   end
@@ -87,14 +90,15 @@ SitemapGenerator::Sitemap.create! do
   last_modified = Date.today
 
   live_apis.each do |api|
-    %w[en es].each do |locale|
+    %w[en es fr].each do |locale|
       add "/#{locale}/apis/#{api["id"]}",
         changefreq: "monthly",
         priority:   0.8,
         lastmod:    last_modified,
         alternates: [
           { href: "https://requiems.xyz/en/apis/#{api["id"]}", lang: "en" },
-          { href: "https://requiems.xyz/es/apis/#{api["id"]}", lang: "es" }
+          { href: "https://requiems.xyz/es/apis/#{api["id"]}", lang: "es" },
+          { href: "https://requiems.xyz/fr/apis/#{api["id"]}", lang: "fr" }
         ]
     end
   end
