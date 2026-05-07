@@ -10,9 +10,13 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+type querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
 // Service provides IBAN validation and parsing against the iban_countries table.
 type Service struct {
-	db *pgxpool.Pool
+	db querier
 }
 
 // NewService creates a new Service backed by the given connection pool.

@@ -1,6 +1,56 @@
 package iban
 
-import "testing"
+import (
+	"context"
+	"errors"
+	"testing"
+
+	"github.com/jackc/pgx/v5"
+)
+
+// mockRow implementa pgx.Row
+type mockRow struct {
+	row countryRow
+	err error
+}
+
+func (r *mockRow) Scan(dest ...any) error {
+	// If an error occurs, return the error
+	if r.err != nil {
+		return r.err
+	}
+
+	// Fill the destinations in the same order as the SELECT
+	*dest[0].(*string) = r.row.name
+	*dest[1].(*int16) = r.row.ibanLength
+	*dest[2].(*int16) = r.row.bankOffset
+	*dest[3].(*int16) = r.row.bankLength
+	*dest[4].(*int16) = r.row.accountOffset
+	*dest[5].(*int16) = r.row.accountLength
+
+	return nil
+}
+
+// mockQuerier implements querier
+type mockQuerier struct {
+	rows map[string]countryRow // country code -> data
+	err  error                 // error to return
+}
+
+func (m *mockQuerier) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
+	if m.err != nil {
+		return &mockRow{err: m.err}
+	}
+
+	code := args[0].(string)
+	row, ok := m.rows[code]
+
+	if !ok {
+		return &mockRow{err: pgx.ErrNoRows}
+	}
+
+	return &mockRow{row: row}
+}
 
 // ---- normalizeIBAN ----
 
@@ -166,5 +216,118 @@ func TestExtract_OutOfBounds(t *testing.T) {
 func TestExtract_NegativeOffset(t *testing.T) {
 	if got := extract("ABC", -1, 2); got != "" {
 		t.Errorf("negative offset extract should be empty, got %q", got)
+	}
+}
+
+// --- Parse ---
+
+func TestService_Parse(t *testing.T) {
+	svc := &Service{db: &mockQuerier{rows: map[string]countryRow{
+		"GB": {name: "United Kingdom", ibanLength: 22, bankOffset: 0, bankLength: 4, accountOffset: 4, accountLength: 14},
+		"DE": {name: "Germany", ibanLength: 22, bankOffset: 0, bankLength: 8, accountOffset: 8, accountLength: 10},
+		"ES": {name: "Spain", ibanLength: 24, bankOffset: 0, bankLength: 4, accountOffset: 4, accountLength: 10},
+	}}}
+
+	resp, err := svc.Parse(context.Background(), "GB29NWBK60161331926819")
+
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+
+	if !resp.Valid {
+		t.Errorf("Expected valid=true")
+	}
+
+	if resp.Country != "United Kingdom" {
+		t.Errorf("expected country United Kingdom, got %q", resp.Country)
+	}
+
+	if resp.BankCode != "NWBK" {
+		t.Errorf("expected bank_code NWBK, got %q", resp.BankCode)
+	}
+}
+
+// ---- ParseBatch ----
+
+func TestService_ParseBatch_MixedResults(t *testing.T) {
+	svc := &Service{db: &mockQuerier{
+		rows: map[string]countryRow{
+			"GB": {name: "United Kingdom", ibanLength: 22, bankOffset: 0, bankLength: 4, accountOffset: 4, accountLength: 14},
+			"DE": {name: "Germany", ibanLength: 22, bankOffset: 0, bankLength: 8, accountOffset: 8, accountLength: 10},
+		},
+	}}
+
+	numbers := []string{
+		"GB29NWBK60161331926819", // valid
+		"DE89370400440532013000", // valid
+		"XX89370400440532013000", // invalid — unknown country
+	}
+
+	resp, err := svc.ParseBatch(context.Background(), numbers)
+
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if resp.Total != 3 {
+		t.Errorf("expected total=3, got %d", resp.Total)
+	}
+	if !resp.Results[0].Valid {
+		t.Error("expected result[0] valid=true")
+	}
+	if !resp.Results[1].Valid {
+		t.Error("expected result[1] valid=true")
+	}
+	if resp.Results[2].Valid {
+		t.Error("expected result[2] valid=false")
+	}
+
+}
+
+func TestService_ParseBatch_DBError(t *testing.T) {
+	svc := &Service{db: &mockQuerier{err: errors.New("database unreachable")}}
+
+	numbers := []string{"GB29NWBK60161331926819"}
+
+	resp, err := svc.ParseBatch(context.Background(), numbers)
+
+	if err == nil {
+		t.Fatalf("Expected error, got nil")
+	}
+
+	if resp.Total != 0 {
+		t.Errorf("Expected empty response, got %+v", resp)
+	}
+}
+
+func TestService_ParseBatch_OrderPreserved(t *testing.T) {
+	svc := &Service{db: &mockQuerier{rows: map[string]countryRow{
+		"GB": {name: "United Kingdom", ibanLength: 22},
+		"DE": {name: "Germany", ibanLength: 22},
+		"ES": {name: "Spain", ibanLength: 24},
+	}}}
+
+	numbers := []string{
+		"GB29NWBK60161331926819",
+		"DE89370400440532013000",
+		"ES9121000418450200051332",
+	}
+
+	resp, err := svc.ParseBatch(context.Background(), numbers)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if resp.Results[0].IBAN != "GB29NWBK60161331926819" {
+		t.Errorf("Expected GB29N... at position 0, got %s", resp.Results[0].IBAN)
+	}
+
+	if resp.Results[1].IBAN != "DE89370400440532013000" {
+		t.Errorf("Expected DE893... at position 1, got %s", resp.Results[1].IBAN)
+	}
+
+	if resp.Results[2].IBAN != "ES9121000418450200051332" {
+		t.Errorf("Expected ES912... at position 2, got %s", resp.Results[2].IBAN)
 	}
 }

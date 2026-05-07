@@ -318,3 +318,34 @@ func TestIBAN_BatchParse_ExceedsLimmit(t *testing.T) {
 		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
 	}
 }
+
+func TestIBAN_BatchParse_MissingBody(t *testing.T) {
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(`{}`))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Errorf("expected status 422, got %d", w.Code)
+	}
+}
+
+func TestIBAN_BatchParse_SetsUsageCountHeader(t *testing.T) {
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("expected status 200, got %d", w.Code)
+	}
+
+	if got := w.Header().Get("X-Usage-Count"); got != "3" {
+		t.Errorf("Expected X-Usage-Count: 3, got %q", got)
+	}
+}
