@@ -19,7 +19,7 @@ en:
       social_proof:
         label: "Powering products at companies like"
       systems:
-        heading: "Five systems. One API key."
+        heading: "Production-grade systems"
         subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
         explore_cta: "Explore system →"
         utilities_label: "Extras"
