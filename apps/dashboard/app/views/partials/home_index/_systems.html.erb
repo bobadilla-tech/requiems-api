@@ -1,0 +1,69 @@
+<div class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("home.index.systems.heading") %>
+      </h2>
+      <p class="mt-4 text-xl text-gray-600 dark:text-gray-400">
+        <%= t("home.index.systems.subheading") %>
+      </p>
+    </div>
+
+    <%# 4 core system cards in a 2×2 grid %>
+    <div class="grid sm:grid-cols-2 gap-6 mb-6">
+      <% [
+        { key: "identity_risk",         slug: "identity-risk",          division: "validation" },
+        { key: "payments_intelligence",  slug: "payments-intelligence",  division: "finance" },
+        { key: "global_data",            slug: "global-data",            division: "places" },
+        { key: "data_integrity",         slug: "data-integrity",         division: "validation" }
+      ].each do |system| %>
+        <% scope = "home.index.systems.cards.#{system[:key]}" %>
+        <div class="group rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <%= t("#{scope}.title") %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
+            <%= t("#{scope}.blurb") %>
+          </p>
+          <ul class="space-y-2 mb-6">
+            <% t("#{scope}.signals").each do |signal| %>
+              <li class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <svg class="h-4 w-4 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <%= signal %>
+              </li>
+            <% end %>
+          </ul>
+          <%= link_to division_path(system[:division]), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+            <%= t("home.index.systems.explore_cta") %>
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Developer Utilities — lower-emphasis, full-width card %>
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/30 px-8 py-6 flex flex-col sm:flex-row sm:items-center gap-6">
+      <div class="flex-1">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
+          <%= t("home.index.systems.utilities_label") %>
+        </p>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <%= t("home.index.systems.cards.developer_utilities.title") %>
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          <%= t("home.index.systems.cards.developer_utilities.blurb") %>
+        </p>
+      </div>
+      <%= link_to division_path("technology"), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" do %>
+        <%= t("home.index.systems.utilities_cta") %>
+        <svg class="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      <% end %>
+    </div>
+  </div>
+</div>

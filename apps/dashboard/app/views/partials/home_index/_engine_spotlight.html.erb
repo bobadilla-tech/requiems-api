@@ -1,0 +1,39 @@
+<div class="bg-slate-900 py-20 border-t border-slate-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left: copy -->
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-4">
+          <%= t("home.index.engine_spotlight.kicker") %>
+        </p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">
+          <%= t("home.index.engine_spotlight.heading") %>
+        </h2>
+        <p class="text-lg text-slate-300 mb-8">
+          <%= t("home.index.engine_spotlight.subheading") %>
+        </p>
+        <%= link_to systems_path, class: "inline-flex items-center text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors" do %>
+          <%= t("home.index.engine_spotlight.cta") %>
+        <% end %>
+      </div>
+
+      <!-- Right: code block -->
+      <div class="rounded-2xl overflow-hidden" style="background-color: #0d1117; border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <!-- Titlebar -->
+        <div class="px-4 py-3 flex items-center gap-2" style="background-color: #161b22; border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <div class="flex gap-1.5">
+            <div class="w-3 h-3 rounded-full" style="background-color: #ff5f57;"></div>
+            <div class="w-3 h-3 rounded-full" style="background-color: #febc2e;"></div>
+            <div class="w-3 h-3 rounded-full" style="background-color: #28c840;"></div>
+          </div>
+          <span class="ml-2 text-xs font-mono text-slate-400"><%= t("home.index.engine_spotlight.endpoint") %></span>
+        </div>
+        <!-- Response body -->
+        <div class="px-5 py-5">
+          <pre class="text-sm font-mono leading-relaxed overflow-x-auto" style="color: #e2e8f0;"><code><span style="color:#6ee7b7;">// Response</span>
+<%= t("home.index.engine_spotlight.response") %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
