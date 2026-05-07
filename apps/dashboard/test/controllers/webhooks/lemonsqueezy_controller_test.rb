@@ -53,7 +53,62 @@ class Webhooks::LemonsqueezyControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test "subscription_created marks referred user's referral as converted" do
+    referrer = create_user(email: "referrer@example.com")
+    referred = create_user(email: "referred@example.com")
+    referral = Referral.create!(referrer: referrer, referred_user: referred)
+
+    payload = subscription_created_payload(user_id: referred.id)
+    post webhooks_lemonsqueezy_path, params: payload.to_json, headers: signed_headers(payload)
+
+    assert_response :ok
+    referral.reload
+    assert referral.converted?
+    assert_not_nil referral.converted_at
+  end
+
+  test "subscription_created is idempotent — repeated webhook does not alter converted_at" do
+    referrer = create_user(email: "ref2@example.com")
+    referred = create_user(email: "ref2user@example.com")
+    Referral.create!(referrer: referrer, referred_user: referred)
+
+    payload = subscription_created_payload(user_id: referred.id)
+    post webhooks_lemonsqueezy_path, params: payload.to_json, headers: signed_headers(payload)
+    first_converted_at = referred.referral_received.reload.converted_at
+
+    # Second delivery — subscription update is idempotent; referral stays converted
+    post webhooks_lemonsqueezy_path, params: payload.to_json, headers: signed_headers(payload)
+    assert_equal first_converted_at, referred.referral_received.reload.converted_at
+  end
+
+  test "subscription_created for non-referred user does not create referral" do
+    payload = subscription_created_payload(user_id: @user.id)
+    post webhooks_lemonsqueezy_path, params: payload.to_json, headers: signed_headers(payload)
+
+    assert_response :ok
+    assert_nil @user.referral_received
+  end
+
   private
+
+  def subscription_created_payload(user_id:)
+    {
+      meta: {
+        event_name: "subscription_created",
+        custom_data: {
+          user_id: user_id.to_s
+        }
+      },
+      data: {
+        id: "sub_#{SecureRandom.hex(4)}",
+        attributes: {
+          customer_id: "cust_#{SecureRandom.hex(4)}",
+          status: "active",
+          variant_id: AppConfig.lemonsqueezy_developer_monthly_variant_id
+        }
+      }
+    }
+  end
 
   def webhook_payload(private_deployment_request_id: @pdr.id.to_s)
     {
