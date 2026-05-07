@@ -47,59 +47,49 @@ DIVISION_MARKETING_PAGES = [
   end
 ).freeze
 
+locales = Rails.application.config.i18n.available_locales.map(&:to_s)
+
 SitemapGenerator::Sitemap.create! do
   STATIC_PAGES.each do |page|
-    %w[en es fr].each do |locale|
+    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
+    locales.each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
-        alternates: [
-          { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
-          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
-        ]
+        alternates: alts
     end
   end
 
   DIVISION_MARKETING_PAGES.each do |page|
-    %w[en es fr].each do |locale|
+    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
+    locales.each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
-        alternates: [
-          { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
-          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
-        ]
+        alternates: alts
     end
   end
 
   CASE_STUDY_PAGES.each do |page|
-    %w[en es fr].each do |locale|
+    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
+    locales.each do |locale|
       add "/#{locale}#{page[:path]}",
         changefreq: page[:changefreq],
         priority:   page[:priority],
-        alternates: [
-          { href: "https://requiems.xyz/en#{page[:path]}", lang: "en" },
-          { href: "https://requiems.xyz/es#{page[:path]}", lang: "es" },
-          { href: "https://requiems.xyz/fr#{page[:path]}", lang: "fr" }
-        ]
+        alternates: alts
     end
   end
 
   last_modified = Date.today
 
   live_apis.each do |api|
-    %w[en es fr].each do |locale|
+    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/apis/#{api["id"]}", lang: l } }
+    locales.each do |locale|
       add "/#{locale}/apis/#{api["id"]}",
         changefreq: "monthly",
         priority:   0.8,
         lastmod:    last_modified,
-        alternates: [
-          { href: "https://requiems.xyz/en/apis/#{api["id"]}", lang: "en" },
-          { href: "https://requiems.xyz/es/apis/#{api["id"]}", lang: "es" },
-          { href: "https://requiems.xyz/fr/apis/#{api["id"]}", lang: "fr" }
-        ]
+        alternates: alts
     end
   end
 end
