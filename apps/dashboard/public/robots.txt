@@ -7,5 +7,8 @@ Disallow: /en/users/
 Disallow: /es/dashboard/
 Disallow: /es/admin/
 Disallow: /es/users/
+Disallow: /fr/dashboard/
+Disallow: /fr/admin/
+Disallow: /fr/users/
 
 Sitemap: https://requiems.xyz/sitemap.xml
