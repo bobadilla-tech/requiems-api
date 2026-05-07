@@ -36,3 +36,57 @@ func (s *Service) Convert(markdown string, sanitize bool) (Response, error) {
 
 	return Response{HTML: strings.TrimRight(buf.String(), "\n")}, nil
 }
+
+func (s *Service) ConvertBatch(markdowns []string, sanitize bool) (BatchResponse, error) {
+	results := make([]Response, 0, len(markdowns))
+	
+	for _, md := range markdowns {
+		resp, err := s.Convert(md, sanitize)
+		if err != nil {
+			return BatchResponse{}, err
+		}
+
+		results = append(results, resp)
+	}
+
+	return BatchResponse{
+		Results: results,
+	}, nil
+}
+
+
+//version concurrente
+// func (s *Service) ConvertBatch(req BatchRequest) (BatchResponse, error) {
+// 	results := make([]Response, len(req.Markdowns))
+
+// 	errCh := make(chan error, len(req.Markdowns))
+
+// 	var wg sync.WaitGroup
+
+// 	for i, md := range req.Markdowns {
+// 		wg.Add(1)
+
+// 		go func(i int, md string) {
+// 			defer wg.Done()
+
+// 			resp, err := s.Convert(md, req.Sanitize)
+// 			if err != nil {
+// 				errCh <- err
+// 				return
+// 			}
+
+// 			results[i] = resp
+// 		}(i, md)
+// 	}
+
+// 	wg.Wait()
+// 	close(errCh)
+
+// 	if err := <-errCh; err != nil {
+// 		return BatchResponse{}, err
+// 	}
+
+// 	return BatchResponse{
+// 		Results: results,
+// 	}, nil
+// }

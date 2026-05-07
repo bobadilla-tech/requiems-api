@@ -12,3 +12,16 @@ type Response struct {
 }
 
 func (Response) IsData() {}
+
+
+
+type BatchRequest struct {
+	Markdowns []string `json:"markdowns"`
+	Sanitize  bool     `json:"sanitize"`
+}
+
+type BatchResponse struct {
+	Results []Response `json:"results"`
+}
+
+func (BatchResponse) IsData() {}
