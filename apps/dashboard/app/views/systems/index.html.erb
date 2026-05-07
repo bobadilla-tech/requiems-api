@@ -61,7 +61,7 @@
               </li>
             <% end %>
           </ul>
-          <%= link_to division_path(system[:division_slugs].first), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+          <%= link_to system_path(system_slug: slug), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
             <%= t("systems.index.explore_cta") %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           <% end %>
@@ -82,7 +82,7 @@
           <%= t("systems.index.cards.developer_utilities.blurb") %>
         </p>
       </div>
-      <%= link_to division_path(dev[:division_slugs].first), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" do %>
+      <%= link_to system_path(system_slug: slug), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" do %>
         <%= t("systems.index.utilities_cta") %>
         <svg class="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       <% end %>

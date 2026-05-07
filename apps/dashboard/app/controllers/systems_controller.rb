@@ -4,37 +4,40 @@ class SystemsController < ApplicationController
   SYSTEMS = [
     {
       slug: "identity-risk",
-      icon: "shield",
       color: "blue",
       division_slugs: %w[validation networking text]
     },
     {
       slug: "payments-intelligence",
-      icon: "credit-card",
       color: "green",
       division_slugs: %w[finance networking]
     },
     {
       slug: "global-data",
-      icon: "globe",
       color: "purple",
       division_slugs: %w[places]
     },
     {
       slug: "data-integrity",
-      icon: "check-circle",
       color: "indigo",
       division_slugs: %w[validation text]
     },
     {
       slug: "developer-utilities",
-      icon: "wrench",
       color: "gray",
       division_slugs: %w[technology entertainment health]
     }
   ].freeze
 
+  SYSTEM_SLUGS = SYSTEMS.map { |s| s[:slug] }.freeze
+
   def index
     @systems = SYSTEMS
+  end
+
+  def show
+    @slug = params[:system_slug]
+    @system = SYSTEMS.find { |s| s[:slug] == @slug }
+    head :not_found unless @system
   end
 end

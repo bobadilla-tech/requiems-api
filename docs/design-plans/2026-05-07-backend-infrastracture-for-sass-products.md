@@ -332,7 +332,6 @@ Pricing
 - [ ] Implement first Engine: `POST /v1/engines/signup/protect`
 - [ ] `/engines` marketing hub page
 - [ ] Individual Engine detail pages
-- [ ] Pricing integration (Engines as premium tier or add-on)
 - [ ] Add "Engines" to navbar
 
 ### Phase 4 — Positioning Hardening

@@ -12,10 +12,10 @@
     <%# 4 core system cards in a 2×2 grid %>
     <div class="grid sm:grid-cols-2 gap-6 mb-6">
       <% [
-        { key: "identity_risk",         slug: "identity-risk",          division: "validation" },
-        { key: "payments_intelligence",  slug: "payments-intelligence",  division: "finance" },
-        { key: "global_data",            slug: "global-data",            division: "places" },
-        { key: "data_integrity",         slug: "data-integrity",         division: "validation" }
+        { key: "identity_risk",        slug: "identity-risk" },
+        { key: "payments_intelligence", slug: "payments-intelligence" },
+        { key: "global_data",           slug: "global-data" },
+        { key: "data_integrity",        slug: "data-integrity" }
       ].each do |system| %>
         <% scope = "home.index.systems.cards.#{system[:key]}" %>
         <div class="group rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-8 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all">
@@ -35,7 +35,7 @@
               </li>
             <% end %>
           </ul>
-          <%= link_to division_path(system[:division]), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+          <%= link_to system_path(system_slug: system[:slug]), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
             <%= t("home.index.systems.explore_cta") %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -58,7 +58,7 @@
           <%= t("home.index.systems.cards.developer_utilities.blurb") %>
         </p>
       </div>
-      <%= link_to division_path("technology"), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" do %>
+      <%= link_to system_path(system_slug: "developer-utilities"), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" do %>
         <%= t("home.index.systems.utilities_cta") %>
         <svg class="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

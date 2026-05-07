@@ -20,8 +20,8 @@ en:
       social_proof:
         label: "Powering products at companies like"
       systems:
-        heading: "What you get"
-        subheading: "Four systems that cover the infrastructure every SaaS needs."
+        heading: "Five systems. One API key."
+        subheading: "Each system composes proprietary signals into a single structured decision—delivered in one API call."
         explore_cta: "Explore system →"
         utilities_label: "Extras"
         utilities_cta: "Browse utilities →"
@@ -70,20 +70,30 @@ en:
         step3_title: "Get decisions, not raw data"
         step3_body: "Receive risk scores, validation results, and enriched insights—ready to use in your product."
       engine_spotlight:
-        kicker: "Coming soon: Engines"
-        heading: "Stop bad users before they sign up"
-        subheading: "Combine multiple signals into a single decision—without building the pipeline yourself."
-        endpoint: "POST /v1/engines/signup/protect"
+        kicker: "Engines"
+        heading: "Multiple signals. One structured decision."
+        subheading: "Each Engine fans out across validation, networking, and intelligence APIs in parallel—then returns a single structured decision. No scoring logic to build. No pipeline to maintain."
+        endpoint: "POST /v1/signup/protect"
+        request: |
+          {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }
         response: |
           {
             "risk_score": 0.87,
             "is_safe": false,
-            "reasons": [
-              "disposable_email",
-              "vpn_detected"
-            ]
+            "confidence": 0.94,
+            "flags": ["disposable_email", "vpn_detected"],
+            "signals": {
+              "email_valid": true,
+              "phone_valid": false,
+              "vpn_detected": true,
+              "disposable_email": true
+            }
           }
-        cta: "Learn more about Engines →"
+        cta: "Explore systems →"
       why_different:
         heading: "Infrastructure, not integration glue"
         subheading: "Most API aggregators resell third-party calls. We build proprietary pipelines."

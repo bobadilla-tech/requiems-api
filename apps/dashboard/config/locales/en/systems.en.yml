@@ -9,8 +9,8 @@ en:
         subheadline: "Authentication, validation, fraud detection, payments intelligence, and global data—delivered through one unified API."
         primary_cta: "Get API key"
         secondary_cta: "Browse divisions"
-      grid_heading: "What you get"
-      grid_subheading: "Four systems that cover the infrastructure every SaaS needs."
+      grid_heading: "Five systems. One API key."
+      grid_subheading: "Each system composes proprietary signals into a single structured decision—delivered in one API call."
       explore_cta: "Explore system →"
       utilities_kicker: "Extras"
       utilities_cta: "Browse utilities →"
@@ -53,3 +53,297 @@ en:
             - "QR codes"
             - "Encoding & conversions"
             - "Misc utilities"
+
+    show:
+      back: "← All systems"
+      engine_label: "Engine"
+      engine_subheading: "One endpoint. Multiple signals. One decision."
+      request_label: "Request"
+      response_label: "Response"
+      powered_by: "Powered by"
+      other_endpoints_heading: "Additional endpoints"
+      signals_heading: "Signals composed"
+      use_cases_heading: "Use cases"
+      get_started: "Get API key"
+      explore_divisions: "Browse underlying APIs"
+
+    identity-risk:
+      meta_title: "Identity & Risk System | Requiems API"
+      kicker: "Identity & Risk System"
+      hero:
+        headline: "Determine if a user is real, safe, and trustworthy"
+        subheadline: "Combine email, phone, IP, and behavioral signals into a single risk decision—before bad actors reach your product."
+        primary_cta: "Get API key"
+      purpose: "Protect your product from fake signups, bots, fraud, and account abuse. Instead of calling validation, networking, and text APIs separately and building the scoring logic yourself, the Identity & Risk Engine returns a single structured decision."
+      engine:
+        name: "Identity & Risk Engine"
+        headline: "One call returns a complete risk picture—email, IP, phone, and behavioral signals composed into a single decision."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/signup/protect"
+        input: |
+          {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }
+        output: |
+          {
+            "risk_score": 0.87,
+            "is_safe": false,
+            "confidence": 0.94,
+            "flags": [
+              "disposable_email",
+              "vpn_detected"
+            ],
+            "signals": {
+              "email_valid": true,
+              "phone_valid": false,
+              "vpn_detected": true,
+              "disposable_email": true
+            }
+          }
+      use_cases:
+        - title: "Signup protection"
+          body: "Block disposable emails, VPN signups, and high-risk IPs at registration."
+        - title: "Fraud detection"
+          body: "Score users before they transact or access sensitive features."
+        - title: "Bot detection"
+          body: "Identify automated traffic using behavioral and network signals."
+        - title: "Account risk scoring"
+          body: "Re-evaluate existing accounts when anomalous activity is detected."
+      endpoints:
+        - method: "POST"
+          path: "/v1/risk/score"
+          description: "Score a user based on email, phone, and IP. Returns risk_score and confidence without the full decision envelope."
+        - method: "POST"
+          path: "/v1/user/verify"
+          description: "Verify identity signals and return a confidence score. Lower latency—suitable for background re-scoring."
+      signals:
+        - "Email validation & disposable detection"
+        - "Phone number validation & carrier lookup"
+        - "IP geolocation & VPN/proxy detection"
+        - "ASN & threat intelligence"
+        - "Domain age & reputation signals"
+        - "Text content risk scoring"
+
+    payments-intelligence:
+      meta_title: "Payments Intelligence System | Requiems API"
+      kicker: "Payments Intelligence System"
+      hero:
+        headline: "Reduce failed payments and detect risky transactions"
+        subheadline: "Validate BINs, IBANs, and SWIFT codes while cross-checking IP and billing country—before the payment hits your processor."
+        primary_cta: "Get API key"
+      purpose: "Failed payments cost SaaS and fintech products revenue and user trust. The Payments Intelligence Engine validates financial data and assesses transaction risk in a single call, combining finance and networking signals without requiring you to orchestrate them."
+      engine:
+        name: "Payments Intelligence Engine"
+        headline: "Validate financial data and assess transaction risk in one call—BIN, IBAN, SWIFT, and IP signals composed automatically."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/payment/validate"
+        input: |
+          {
+            "card_bin": "424242",
+            "iban": "DE89370400440532013000",
+            "ip_address": "92.168.1.1",
+            "billing_country": "DE"
+          }
+        output: |
+          {
+            "valid": true,
+            "risk_score": 0.14,
+            "country_mismatch": false,
+            "bank": {
+              "name": "Deutsche Bank",
+              "country": "DE",
+              "brand": "Visa"
+            },
+            "signals": {
+              "bin_valid": true,
+              "iban_valid": true,
+              "ip_country": "DE",
+              "billing_country": "DE"
+            }
+          }
+      use_cases:
+        - title: "Checkout validation"
+          body: "Verify card BIN, IBAN, and SWIFT data before submitting to your payment processor."
+        - title: "Fraud detection"
+          body: "Flag transactions where billing country mismatches IP location."
+        - title: "Fintech onboarding"
+          body: "Validate financial identifiers during user onboarding flows."
+        - title: "Payment success optimization"
+          body: "Reduce decline rates by pre-validating payment data before submission."
+      endpoints:
+        - method: "POST"
+          path: "/v1/transaction/risk"
+          description: "Score a transaction for fraud risk and country mismatch. Use before authorizing high-value actions."
+      signals:
+        - "BIN lookup & card brand detection"
+        - "IBAN format & checksum validation"
+        - "SWIFT/BIC code verification"
+        - "IP geolocation & country matching"
+        - "VPN detection for billing anomalies"
+
+    global-data:
+      meta_title: "Global Data System | Requiems API"
+      kicker: "Global Data System"
+      hero:
+        headline: "Build global-ready products without the data infrastructure"
+        subheadline: "Accurate geocoding, timezone resolution, holiday calendars, and address intelligence—one endpoint, every country."
+        primary_cta: "Get API key"
+      purpose: "International products need reliable location and scheduling data. The Global Data Engine combines geocoding, timezone, and calendar signals so you can localize experiences, schedule tasks correctly, and handle compliance requirements across every region—without stitching together multiple calls."
+      engine:
+        name: "Global Data Engine"
+        headline: "Resolve any address or coordinates into a complete location profile—timezone, working days, and holiday status included."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/location/resolve"
+        input: |
+          {
+            "address": "Alexanderplatz 1, Berlin",
+            "country_code": "DE"
+          }
+        output: |
+          {
+            "country": "DE",
+            "city": "Berlin",
+            "timezone": "Europe/Berlin",
+            "utc_offset": "+02:00",
+            "working_days_this_month": 21,
+            "is_holiday": false,
+            "coordinates": {
+              "lat": 52.52,
+              "lng": 13.405
+            }
+          }
+      use_cases:
+        - title: "User localization"
+          body: "Detect timezone and locale from IP or address for personalized experiences."
+        - title: "Scheduling & reminders"
+          body: "Know exactly which days are working days and which are holidays in any country."
+        - title: "Address validation"
+          body: "Standardize and validate shipping or billing addresses globally."
+        - title: "Compliance targeting"
+          body: "Identify user jurisdiction for GDPR, tax, and regulatory requirements."
+      endpoints:
+        - method: "GET"
+          path: "/v1/timezone/resolve"
+          description: "Resolve timezone and UTC offset for any location or IP address."
+        - method: "GET"
+          path: "/v1/holidays"
+          description: "List public holidays for any country and year (100+ countries)."
+      signals:
+        - "Geocoding & reverse geocoding"
+        - "Timezone resolution by coordinates or address"
+        - "Public holiday calendars (100+ countries)"
+        - "Postal code lookup & validation"
+        - "Working day calculation"
+
+    data-integrity:
+      meta_title: "Data Integrity System | Requiems API"
+      kicker: "Data Integrity System"
+      hero:
+        headline: "Clean, validate, and standardize user input at the source"
+        subheadline: "Stop bad data before it enters your database. Normalize text, validate inputs, and moderate content in a single API call."
+        primary_cta: "Get API key"
+      purpose: "Bad data compounds silently—bad emails bounce, invalid phones fail, toxic content slips through. The Data Integrity Engine catches and normalizes bad input at the boundary of your product, before it reaches your database or downstream services, without requiring separate calls for each field type."
+      engine:
+        name: "Data Integrity Engine"
+        headline: "Validate, normalize, and safety-check a full set of user inputs in one call—no separate endpoints for each field type."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/input/validate"
+        input: |
+          {
+            "email": "  User@EXAMPLE.COM  ",
+            "phone": "004915123456789",
+            "text": "This is some user-generated content"
+          }
+        output: |
+          {
+            "email": {
+              "valid": true,
+              "normalized": "user@example.com",
+              "disposable": false
+            },
+            "phone": {
+              "valid": true,
+              "normalized": "+4915123456789",
+              "country": "DE"
+            },
+            "text": {
+              "is_safe": true,
+              "toxicity_score": 0.01,
+              "sentiment": "neutral"
+            }
+          }
+      use_cases:
+        - title: "Form validation"
+          body: "Validate and normalize email, phone, and text fields on submission."
+        - title: "Content moderation"
+          body: "Filter profanity, toxic content, and off-policy text in user-generated content."
+        - title: "Data pipeline cleaning"
+          body: "Normalize and validate records in bulk import or migration flows."
+        - title: "AI input sanitization"
+          body: "Pre-process and validate user input before passing to LLM workflows."
+      endpoints:
+        - method: "POST"
+          path: "/v1/content/moderate"
+          description: "Check text for toxicity, profanity, sentiment, and policy violations."
+        - method: "POST"
+          path: "/v1/text/normalize"
+          description: "Clean and standardize a string—trim, fix encoding, normalize case and unicode."
+      signals:
+        - "Email format & deliverability validation"
+        - "Phone number normalization & carrier check"
+        - "Profanity & toxicity detection"
+        - "Sentiment analysis"
+        - "Language detection"
+        - "Spell check & text normalization"
+
+    developer-utilities:
+      meta_title: "Developer Utilities | Requiems API"
+      kicker: "Developer Utilities"
+      hero:
+        headline: "Useful tools you shouldn't have to rebuild"
+        subheadline: "QR codes, encoding, conversions, and content APIs—extras that save time without becoming core infrastructure."
+        primary_cta: "Get API key"
+      purpose: "Not every API needs to be a system. These are the utility endpoints you'd otherwise rebuild from scratch or pull in a one-off package for—QR generation, encoding, random content, and more. Same API key, same auth, zero extra setup."
+      engine:
+        name: "Utilities"
+        headline: "Common developer tools, available on the same key as your production systems."
+        endpoint_method: "GET"
+        endpoint_path: "/v1/qr/generate?content=https://requiems.xyz"
+        input: |
+          # GET request — no body required
+          # Query params: content, format (png|svg), size
+          GET /v1/qr/generate
+            ?content=https://requiems.xyz
+            &format=png
+            &size=256
+        output: |
+          {
+            "format": "png",
+            "url": "https://cdn.requiems.xyz/qr/abc123.png",
+            "size": 256,
+            "expires_at": "2026-05-14T00:00:00Z"
+          }
+      use_cases:
+        - title: "QR codes"
+          body: "Generate QR codes for URLs, payment links, or product identifiers."
+        - title: "Encoding & decoding"
+          body: "Base64, URL encoding, and format conversion in one call."
+        - title: "Random content"
+          body: "Placeholder text, random words, and trivia for demos and testing."
+        - title: "Entertainment APIs"
+          body: "Quotes, jokes, and trivia to make apps feel alive without a content team."
+      endpoints:
+        - method: "POST"
+          path: "/v1/encoding/base64"
+          description: "Encode or decode a string in Base64."
+        - method: "GET"
+          path: "/v1/words/random"
+          description: "Get random words with configurable length and count."
+      signals:
+        - "QR code generation (PNG, SVG)"
+        - "Base64 & URL encoding / decoding"
+        - "Random word & lorem ipsum generation"
+        - "Trivia, quotes, and joke APIs"
+        - "Unit conversion utilities"
