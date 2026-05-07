@@ -1,5 +1,6 @@
 <% i18n_scope = "divisions.#{@slug}" %>
 <% content_for :title, t("#{i18n_scope}.meta_title") %>
+<% content_for :description, t("#{i18n_scope}.hero.subheadline") %>
 <% testimonials = division_locale_array(i18n_scope, "testimonials") %>
 <div data-controller="division-hub">
   <%= render "partials/divisions/hero", i18n_scope: i18n_scope, hero_bg_classes: division_hero_gradient(@slug) %>

@@ -1,6 +1,7 @@
 <% slug = @system[:slug] %>
 <% i18n = "systems.#{slug}" %>
 <% content_for :title, t("#{i18n}.meta_title") %>
+<% content_for :description, t("#{i18n}.hero.subheadline") %>
 
 <%# Hero %>
 <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
