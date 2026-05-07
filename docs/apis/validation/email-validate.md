@@ -25,6 +25,7 @@ provider domains.
 ## Request
 
 ### Single Email
+
 ```json
 {
   "email": "user@gmial.com"
@@ -36,20 +37,19 @@ provider domains.
 Entity`. Syntax errors do not return a 4xx — they return
 `200 OK` with `syntax_valid: false` and `valid: false`.
 
-
 ### Batch (multiple emails)
 
-Accepts up to **50 emails** per request. Results are returned in the same
-order as the input array. All emails are processed, and validation results
-are returned for each item regardless of validity.
+Accepts up to **50 emails** per request. Results are returned in the same order
+as the input array. All emails are processed, and validation results are
+returned for each item regardless of validity.
 
-Each email in the request counts as **1 credit** (`X-Usage-Count` is set to
-the number of emails in the request).
+Each email in the request counts as **1 credit** (`X-Usage-Count` is set to the
+number of emails in the request).
 
 `POST /v1/validation/email/batch`
 
 ```json
-  { "emails": [ "user@gmail.com", "user@gmial.com", "bad-email" ] }
+{ "emails": ["user@gmail.com", "user@gmial.com", "bad-email"] }
 ```
 
 **Validation:** `emails` is required. A missing or empty array returns
@@ -57,7 +57,6 @@ the number of emails in the request).
 `422 Unprocessable Entity`. Each item must be a string. Syntax errors are
 handled per item and do not return a 4xx — the API returns `200 OK` with
 `syntax_valid: false` and `valid: false` for each invalid email.
-
 
 ## Response Envelope
 

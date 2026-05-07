@@ -2,6 +2,7 @@ en:
   shared:
     nav:
       divisions: "Divisions"
+      systems: "Systems"
       divisions_hub: "Overview of all divisions"
       divisions_panel_heading: "Jump to a division"
       divisions_all: "All divisions"
@@ -28,7 +29,7 @@ en:
       search_try_different: "Try different keywords"
       language: "Language"
     footer:
-      tagline: "One API key for validation, utilities, and more, without the integration sprawl"
+      tagline: "Backend infrastructure for SaaS products — delivered through one unified API"
       copyright: "© %{year} Bobadilla Tech. All rights reserved."
       sections:
         get_started: "Get Started"

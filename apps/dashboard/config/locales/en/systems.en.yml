@@ -1,0 +1,55 @@
+---
+en:
+  systems:
+    index:
+      meta_title: "Backend Systems | Requiems API"
+      kicker: "Backend infrastructure for SaaS"
+      hero:
+        headline: "All-in-one backend for SaaS products"
+        subheadline: "Authentication, validation, fraud detection, payments intelligence, and global data—delivered through one unified API."
+        primary_cta: "Get API key"
+        secondary_cta: "Browse divisions"
+      grid_heading: "What you get"
+      grid_subheading: "Four systems that cover the infrastructure every SaaS needs."
+      explore_cta: "Explore system →"
+      utilities_kicker: "Extras"
+      utilities_cta: "Browse utilities →"
+      apis_catalog_title: "Explore the full API directory"
+      apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog—same API key, consistent docs, copy-ready examples."
+      apis_catalog_cta: "Browse APIs"
+      cards:
+        identity_risk:
+          title: "Identity & Risk System"
+          blurb: "Protect your product from fake users, fraud, and bad data—before it reaches your database."
+          signals:
+            - "Risk scoring"
+            - "Email, phone, and IP intelligence"
+            - "Domain and behavioral signals"
+        payments_intelligence:
+          title: "Payments Intelligence System"
+          blurb: "Validate and enrich financial data to reduce failed payments and detect risky transactions."
+          signals:
+            - "BIN & card validation"
+            - "IBAN / SWIFT checks"
+            - "Transaction risk signals"
+        global_data:
+          title: "Global Data System"
+          blurb: "Power international products with accurate, real-time location and compliance-ready data."
+          signals:
+            - "Geocoding"
+            - "Timezones & holidays"
+            - "Address intelligence"
+        data_integrity:
+          title: "Data Integrity System"
+          blurb: "Clean, validate, and standardize user input across your entire platform."
+          signals:
+            - "Input validation"
+            - "Text normalization"
+            - "Content moderation"
+        developer_utilities:
+          title: "Developer Utilities"
+          blurb: "Useful tools you shouldn't have to rebuild—QR codes, encoding, conversions, and more."
+          signals:
+            - "QR codes"
+            - "Encoding & conversions"
+            - "Misc utilities"

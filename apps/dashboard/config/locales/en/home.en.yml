@@ -1,19 +1,110 @@
 en:
   home:
     index:
-      title: "Requiems API: Ship faster with one key for validation, utilities, and more"
+      title: "Requiems API: All-in-one backend for SaaS products"
       hero:
-        title_line1: "Ship faster."
-        title_line2: "One API key. The whole catalog."
-        description: "Fifty-plus ready-to-use APIs: validation, text, finance, places, and more. Integrate once instead of stitching together a new vendor for every feature, whether you are on an MVP or shipping client work."
-        cta_primary: "Get Free API Key"
-        cta_secondary: "Browse API Docs"
+        title_line1: "All-in-one backend"
+        title_line2: "for SaaS products."
+        description: "Authentication, validation, fraud detection, payments intelligence, and global data—delivered through one unified API."
+        proof_badges:
+          - "Proprietary data pipelines"
+          - "Real-time processing"
+          - "Consistent API design"
+          - "Built for production"
+        cta_primary: "Get API key"
+        cta_secondary: "Explore systems"
         try_badge: "✨ Try it now • No credit card required"
         api_request: "API Request"
       trusted_by:
         label: "Trusted by teams shipping real products"
       social_proof:
         label: "Powering products at companies like"
+      systems:
+        heading: "What you get"
+        subheading: "Four systems that cover the infrastructure every SaaS needs."
+        explore_cta: "Explore system →"
+        utilities_label: "Extras"
+        utilities_cta: "Browse utilities →"
+        cards:
+          identity_risk:
+            title: "Identity & Risk System"
+            blurb: "Protect your product from fake users, fraud, and bad data—before it reaches your database."
+            signals:
+              - "Risk scoring"
+              - "Email, phone, and IP intelligence"
+              - "Domain and behavioral signals"
+          payments_intelligence:
+            title: "Payments Intelligence System"
+            blurb: "Validate and enrich financial data to reduce failed payments and detect risky transactions."
+            signals:
+              - "BIN & card validation"
+              - "IBAN / SWIFT checks"
+              - "Transaction risk signals"
+          global_data:
+            title: "Global Data System"
+            blurb: "Power international products with accurate, real-time location and compliance-ready data."
+            signals:
+              - "Geocoding"
+              - "Timezones & holidays"
+              - "Address intelligence"
+          data_integrity:
+            title: "Data Integrity System"
+            blurb: "Clean, validate, and standardize user input across your entire platform."
+            signals:
+              - "Input validation"
+              - "Text normalization"
+              - "Content moderation"
+          developer_utilities:
+            title: "Developer Utilities"
+            blurb: "Useful tools you shouldn't have to rebuild."
+            signals:
+              - "QR codes"
+              - "Encoding & conversions"
+              - "Misc utilities"
+      how_it_works:
+        heading: "How it works"
+        step1_title: "Choose a system"
+        step1_body: "Pick the problem you want to solve—identity, payments, global data, or data integrity."
+        step2_title: "Call a single endpoint"
+        step2_body: "Use high-level endpoints or compose workflows based on your needs."
+        step3_title: "Get decisions, not raw data"
+        step3_body: "Receive risk scores, validation results, and enriched insights—ready to use in your product."
+      engine_spotlight:
+        kicker: "Coming soon: Engines"
+        heading: "Stop bad users before they sign up"
+        subheading: "Combine multiple signals into a single decision—without building the pipeline yourself."
+        endpoint: "POST /v1/engines/signup/protect"
+        response: |
+          {
+            "risk_score": 0.87,
+            "is_safe": false,
+            "reasons": [
+              "disposable_email",
+              "vpn_detected"
+            ]
+          }
+        cta: "Learn more about Engines →"
+      why_different:
+        heading: "Infrastructure, not integration glue"
+        subheading: "Most API aggregators resell third-party calls. We build proprietary pipelines."
+        points:
+          - "No reliance on third-party APIs"
+          - "Proprietary scoring and validation systems"
+          - "Unified schema across all endpoints"
+          - "Low-latency, high-throughput design"
+          - "Built for developers shipping real products"
+      use_cases:
+        heading: "Built for real products"
+        subheading: "Concrete problems, solved."
+        items:
+          - title: "SaaS signup protection"
+            body: "Prevent fake accounts, bots, and abuse from day one."
+          - title: "Fintech onboarding"
+            body: "Validate financial data and reduce onboarding friction."
+          - title: "Marketplace fraud prevention"
+            body: "Detect risky users and transactions in real time."
+          - title: "Global product support"
+            body: "Handle international users with accurate data everywhere."
       features:
         heading: "Built for Developer Experience"
         subheading: "From solo founders to agencies: precise docs, live playgrounds, and copy-paste examples. Ship integrations in minutes, not days."
@@ -76,11 +167,11 @@ en:
         still_questions: "Still have questions?"
         contact_link: "Contact our support team"
       cta:
-        heading: "Ready to ship faster?"
-        subheading: "Startups, agencies, and builders use one key for validation, utilities, and more, with the free tier included."
-        primary: "Get Started Free"
-        secondary: "View Pricing"
-        footer: "No credit card required • Get started free • Cancel anytime"
+        heading: "Stop rebuilding backend infrastructure. Start shipping product."
+        subheading: "One subscription unlocks all four systems. No vendor patchwork, no integration sprawl."
+        primary: "Get API key"
+        secondary: "Talk to Sales"
+        footer: "No credit card required • Cancel anytime"
 
     blog:
       title: "Blog - Requiems API"

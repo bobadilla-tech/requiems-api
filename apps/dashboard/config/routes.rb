@@ -149,6 +149,7 @@ Rails.application.routes.draw do
     resources :examples, only: [ :show ]
 
     get "divisions", to: "divisions#index", as: :divisions
+    get "systems", to: "systems#index", as: :systems
 
     get "case-studies", to: "case_studies#index", as: :case_studies
     get "case-studies/:slug", to: "case_studies#show", as: :case_study

@@ -2,6 +2,7 @@ fr:
   shared:
     nav:
       divisions: "Divisions"
+      systems: "Systems"
       divisions_hub: "Vue d'ensemble de toutes les divisions"
       divisions_panel_heading: "Aller à une division"
       divisions_all: "Toutes les divisions"

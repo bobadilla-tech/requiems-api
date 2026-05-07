@@ -47,6 +47,7 @@
         <%= link_to t("shared.nav.pricing"), pricing_path, class: "text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
 
         <%= render "partials/navbar/divisions_megamenu" %>
+        <%= link_to t("shared.nav.systems"), systems_path, class: "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
 
         <!-- Auth Buttons -->
         <% if user_signed_in? %>
@@ -208,6 +209,7 @@
               <%= link_to t("shared.nav.case_studies"), case_studies_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
               <%= link_to t("shared.nav.pricing"), pricing_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
               <%= link_to t("shared.nav.divisions"), divisions_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+              <%= link_to t("shared.nav.systems"), systems_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
 
               <details class="mt-2 border-t border-gray-200 pt-2 dark:border-gray-700">
                 <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 [&::-webkit-details-marker]:hidden">
