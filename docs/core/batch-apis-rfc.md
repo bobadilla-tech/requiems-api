@@ -16,24 +16,11 @@
 **This document** and live **`httpx.HandleBatch`** handlers are the normative
 reference. Public request/response details live next to each API’s docs.
 
-**1. Phone validation** — `POST /v1/validation/phone/batch`
+Example: **Phone validation** — `POST /v1/validation/phone/batch`
 
 **Go wiring:** `httpx.HandleBatch` in the validation phone router. The handler
 returns `(response, itemCount, error)`; the platform sets response header
 **`X-Usage-Count`** to `itemCount` (stringified integer).
-
-**2. Disposable email batch** — `POST /v1/networking/disposable/batch`
-
-**Go wiring:** `httpx.HandleBatch` in the networking disposable router. Item
-count is **`len(emails)`** after validation (1–100), matching one billable unit
-per email checked. Public details: disposable email API docs.
-
-**3. Email normalizer batch** — `POST /v1/text/normalize/batch`
-
-**Go wiring:** `httpx.HandleBatch` in the text `normalize` router. Item count is
-**`len(emails)`** (1–100). Per-item failures use **`valid: false`** and
-`message` (same response model as phone batch). Public details:
-[`docs/apis/email/normalize.md`](../apis/email/normalize.md).
 
 **Request (illustrative):**
 

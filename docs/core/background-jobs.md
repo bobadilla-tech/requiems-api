@@ -1,19 +1,22 @@
 # Background Jobs
 
-The Rails dashboard runs background jobs via **Sidekiq 8** with **Sidekiq-Cron**
+The Rails dashboard runs background jobs via **Sidekiq** with **Sidekiq-Cron**
 for scheduled tasks. Redis is the job queue backend (the same Redis instance
 used for caching).
 
 ## Jobs
 
-| Job                                 | Schedule           | Purpose                                              |
-| ----------------------------------- | ------------------ | ---------------------------------------------------- |
-| `SyncD1UsageJob`                    | Every 5 minutes    | Syncs usage records from Cloudflare D1 to PostgreSQL |
-| `AggregateDailyUsageJob`            | Daily at 00:05 UTC | Aggregates `usage_logs` into `daily_usage_summaries` |
-| `ExpirePromotionalSubscriptionsJob` | Hourly at :30      | Downgrades expired promo subscriptions back to free  |
+Cron entries (schedule, queue, descriptions) live in
+**[`config/sidekiq_schedule.yml`](../../apps/dashboard/config/sidekiq_schedule.yml)**.
 
-Job files: `apps/dashboard/app/jobs/`\
-Cron schedule: `apps/dashboard/config/sidekiq_schedule.yml`
+Implementations (behavior, logging, `retry_on`, and idempotency notes):
+
+- [`app/jobs/sync_d1_usage_job.rb`](../../apps/dashboard/app/jobs/sync_d1_usage_job.rb)
+- [`app/jobs/aggregate_daily_usage_job.rb`](../../apps/dashboard/app/jobs/aggregate_daily_usage_job.rb)
+- [`app/jobs/expire_promotional_subscriptions_job.rb`](../../apps/dashboard/app/jobs/expire_promotional_subscriptions_job.rb)
+
+Base class:
+[`app/jobs/application_job.rb`](../../apps/dashboard/app/jobs/application_job.rb)
 
 ## Checking Status in Production
 
@@ -92,13 +95,11 @@ worker:
 Sidekiq connects to Redis via the `REDIS_URL` environment variable (configured
 in `.env`).
 
-## Retry Behavior
+## Retry behavior
 
-| Job                                 | Max Retries          | Retries On                             |
-| ----------------------------------- | -------------------- | -------------------------------------- |
-| `SyncD1UsageJob`                    | 5                    | `D1SyncService::Error`                 |
-| `AggregateDailyUsageJob`            | 3                    | Any error                              |
-| `ExpirePromotionalSubscriptionsJob` | Sidekiq default (25) | Any error (per-subscription isolation) |
+`retry_on` and attempt counts are defined in each job file above (not duplicated
+here). `ExpirePromotionalSubscriptionsJob` uses Sidekiq defaults unless
+overridden in that class.
 
 Jobs are idempotent — re-running them on the same data is safe. If a cron job
 misses a tick (e.g., worker restart), it fires again on the next scheduled tick.

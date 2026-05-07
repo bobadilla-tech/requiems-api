@@ -20,7 +20,7 @@ cd infra/docker
 docker compose -f docker-compose.dev.yml up
 ```
 
-`infra/docker/.env.example` is committed with safe dev defaults — no
+`infra/docker/.env.example` is committed with safe dev defaults, no
 configuration needed on a fresh clone.
 
 This starts all services:
@@ -70,7 +70,7 @@ Caddy. Cloudflare Worker sits in front and forwards authorized traffic.
 
 #### Recommended Hetzner Configuration
 
-- **Server Type:** CPX21 or better (3 vCPU, 4GB RAM, 80GB SSD) - ~€7.95/month
+- **Server Type:** CPX21 or better (3 vCPU, 4GB RAM, 80GB SSD)
 - **Location:** Choose based on target audience
   - Nuremberg (nbg1) - Europe/Germany
   - Helsinki (hel1) - Northern Europe
@@ -192,8 +192,8 @@ What this does:
 3. **Verify DNS propagation:**
 
 ```bash
-dig api.yourdomain.com
-dig internal.yourdomain.com
+dig api.requiems.xyz
+dig internal.requiems.xyz
 ```
 
 4. **Wait for DNS** to propagate (5-30 minutes)
@@ -201,8 +201,8 @@ dig internal.yourdomain.com
 5. **Cloudflare Worker routing** (for public API):
    - In Cloudflare dashboard, go to Workers & Pages
    - Deploy your edge-auth worker
-   - Add a route: `api.yourdomain.com/*` → your worker
-   - Set `BACKEND_URL` environment variable to `https://internal.yourdomain.com`
+   - Add a route: `api.requiems.xyz/*` → your worker
+   - Set `BACKEND_URL` environment variable to `https://internal.requiems.xyz`
 
 #### Domain Architecture
 
@@ -227,14 +227,14 @@ With DNS + Caddy running:
 
 1. Deploy `apps/edge-auth/index.ts` as a Worker in your Cloudflare account.
 2. Configure environment variables/secrets:
-   - `BACKEND_ORIGIN` – `https://api.yourdomain.com`
-   - `BACKEND_SECRET` – a strong secret, used by clients in `requiems-api-key`.
+   - `BACKEND_ORIGIN` – `https://api.requiems.xyz.com`
+   - `BACKEND_SECRET` – a strong secret, used by clients in `X-Backend-Secret`.
 3. Route your public API endpoint to the Worker (e.g.
-   `https://v1.yourdomain.com/*` → Worker).
+   `https://api.requiems.xyz/*` → Worker).
 
 Request flow in production:
 
-1. Client → Worker (with `requiems-api-key`).
-2. Worker validates `requiems-api-key`.
-3. Worker forwards to `https://api.yourdomain.com/...`.
+1. Client → Worker (with `X-Backend-Secret`).
+2. Worker validates `X-Backend-Secret`.
+3. Worker forwards to `https://internal.requiems.xyz/...`.
 4. Cloudflare → Caddy on VPS → Go API.

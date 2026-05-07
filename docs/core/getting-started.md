@@ -1,12 +1,13 @@
 ## Getting Started with Requiem API
 
----
-
 ## Local Development Setup
 
-### Prerequisites
+> Prerequisites: Docker & Docker Compose
 
-- Docker & Docker Compose
+> Editor note: If you're developing the Rails dashboard (`apps/dashboard/`),
+> install a Ruby LSP editor/IDE extension and configure it to use the project's
+> `ruby-lsp` gem (added to `apps/dashboard/Gemfile`). This enables code
+> navigation, in-editor diagnostics, and other language-server features.
 
 ### 1. Start the stack
 
@@ -28,7 +29,7 @@ Services available:
 
 ### 2. Environment variables
 
-All services load `infra/docker/.env.example` by default — **no extra setup
+All services load `infra/docker/.env.example` by default: **no extra setup
 required** for most development work.
 
 For features that require real credentials (payments, email sending), create
@@ -46,8 +47,6 @@ payments and email delivery just won't work end-to-end locally.
 
 > **Note:** In development, emails open in Letter Opener Web (not sent). Visit
 > `http://localhost:3000/letter_opener` to preview them.
-
----
 
 ### 1. Sign up and get an API key
 
@@ -88,8 +87,7 @@ Auth Gateway and API Management share the same local Wrangler persistence state
 in Docker, so they operate on the same local D1 and KV resources (matching
 production architecture expectations).
 
-> **Tip:** You can also hit the Go backend directly on port 8080 without auth,
-> useful for quick endpoint testing without going through the gateway.
+> **Tip:** You can also hit the Go backend directly on port 8080.
 
 ### When to rebuild
 

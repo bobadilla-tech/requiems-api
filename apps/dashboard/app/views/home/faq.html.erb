@@ -108,10 +108,9 @@
                 <%= t("home.faq.rate_limits.a1") %>
               </p>
               <ul class="text-gray-700 dark:text-gray-300 space-y-1 ml-4">
-                <li>• <%= t("home.faq.rate_limits.free") %></li>
-                <li>• <%= t("home.faq.rate_limits.developer") %></li>
-                <li>• <%= t("home.faq.rate_limits.business") %></li>
-                <li>• <%= t("home.faq.rate_limits.professional") %></li>
+                <% PlanConfig::PLAN_NAMES.each do |plan| %>
+                  <li>• <%= t("home.faq.rate_limits.#{plan}", rate_limit: number_with_delimiter(PlanConfig::PLANS[plan][:rate_limit_per_minute])) %></li>
+                <% end %>
               </ul>
             </div>
 
