@@ -16,7 +16,7 @@ fr:
           example: "Exemple : inclure votre clé API dans l'en-tête Authorization : <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">Authorization: Bearer VOTRE_CLE_API</code>"
         - name: "Clé API"
           definition: "Identifiant unique servant à authentifier les requêtes. Elle sert à la fois d'identifiant et de secret."
-          example: "Exemple : <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_live_1234567890abcdef</code>"
+          example: "Exemple : <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">rq_live_1234567890abcdef</code>"
         - name: "Limitation de débit"
           definition: "Technique pour limiter le nombre de requêtes dans une fenêtre de temps. Limite les abus et garantit un usage équitable."
           example: "Exemple : la formule gratuite autorise 30 requêtes par minute"

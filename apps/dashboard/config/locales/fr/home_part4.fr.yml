@@ -18,7 +18,7 @@ fr:
         q1: "Comment authentifier mes requêtes ?"
         a1: "Incluez votre clé API dans l'en-tête Authorization en tant que jeton Bearer :"
         q2: "Quelle est la différence entre les clés de test et de production ?"
-        a2_html: "Les clés de test (préfixe <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_test_</code>) servent au développement et aux tests. Elles fonctionnent sur tous les points de terminaison mais ne comptent pas dans le quota. Les clés de production (<code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">req_live_</code>) sont pour la production et comptent dans le quota mensuel."
+        a2_html: "Les clés de test (préfixe <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">rq_test_</code>) servent au développement et aux tests. Les clés de production (<code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">rq_live_</code>) sont pour la production. Les deux types comptent dans le quota mensuel."
         q3: "Puis-je régénérer ma clé API ?"
         a3: "Oui ! Dans le tableau de bord, ouvrez la clé concernée et choisissez « Régénérer ». L'ancienne cesse de fonctionner immédiatement : mettez à jour toutes vos applications."
       billing:
@@ -35,10 +35,10 @@ fr:
         heading: "Limites de débit"
         q1: "Quelles sont les limites de débit ?"
         a1: "Elles varient selon la formule :"
-        free: "Gratuit : 30 requêtes/minute"
-        developer: "Développeur : 5 000 requêtes/minute"
-        business: "Business : 10 000 requêtes/minute"
-        professional: "Professionnel : 50 000 requêtes/minute"
+        free: "Gratuit : %{rate_limit} requêtes/minute"
+        developer: "Développeur : %{rate_limit} requêtes/minute"
+        business: "Business : %{rate_limit} requêtes/minute"
+        professional: "Professionnel : %{rate_limit} requêtes/minute"
         q2: "Comment gérer les erreurs de limite de débit ?"
         a2_html: "En cas d'erreur 429, implémentez un backoff exponentiel. Attendez quelques secondes avant de réessayer. Consultez l'en-tête <code class=\"bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded\">Retry-After</code> pour le délai recommandé. Envisagez une formule supérieure si vous atteignez souvent la limite."
       support:

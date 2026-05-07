@@ -207,7 +207,7 @@ en:
           example: 'Example: Including your API key in the Authorization header: <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">Authorization: Bearer YOUR_API_KEY</code>'
         - name: "API Key"
           definition: "A unique identifier used to authenticate requests to an API. API keys act as both an identifier and a secret token for authentication."
-          example: 'Example: <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">req_live_1234567890abcdef</code>'
+          example: 'Example: <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">rq_live_1234567890abcdef</code>'
         - name: "Rate Limiting"
           definition: "A technique used to control the number of requests a user can make to an API within a given time period. This helps prevent abuse and ensures fair usage."
           example: "Example: Free plan allows 30 requests per minute"
@@ -677,7 +677,7 @@ en:
         q1: "How do I authenticate my requests?"
         a1: "Include your API key in the Authorization header as a Bearer token:"
         q2: "What's the difference between test and live API keys?"
-        a2_html: 'Test keys (starting with <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">req_test_</code>) are for development and testing. They work with all endpoints but don''t count against your request quota. Live keys (<code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">req_live_</code>) are for production use and count against your monthly request quota.'
+        a2_html: 'Test keys (starting with <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">rq_test_</code>) are for development and testing. Live keys (<code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">rq_live_</code>) are for production use. Both key types count against your monthly request quota.'
         q3: "Can I regenerate my API key?"
         a3: 'Yes! Go to your dashboard, click on the API key you want to regenerate, and select "Regenerate". Note that the old key will stop working immediately, so update all your applications.'
       billing:
@@ -694,10 +694,10 @@ en:
         heading: "Rate Limits"
         q1: "What are the rate limits?"
         a1: "Rate limits vary by plan:"
-        free: "Free: 30 requests/minute"
-        developer: "Developer: 5,000 requests/minute"
-        business: "Business: 10,000 requests/minute"
-        professional: "Professional: 50,000 requests/minute"
+        free: "Free: %{rate_limit} requests/minute"
+        developer: "Developer: %{rate_limit} requests/minute"
+        business: "Business: %{rate_limit} requests/minute"
+        professional: "Professional: %{rate_limit} requests/minute"
         q2: "How should I handle rate limit errors?"
         a2_html: 'When you receive a 429 error, implement exponential backoff. Wait a few seconds and retry. Check the <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">Retry-After</code> header for the recommended wait time. Consider upgrading your plan if you consistently hit rate limits.'
       support:
