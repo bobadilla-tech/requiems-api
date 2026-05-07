@@ -1,0 +1,189 @@
+<% slug = @system[:slug] %>
+<% i18n = "systems.#{slug}" %>
+<% content_for :title, t("#{i18n}.meta_title") %>
+
+<%# Hero %>
+<div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <%= link_to systems_path, class: "inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors mb-8" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      <%= t("systems.show.back") %>
+    <% end %>
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300 mb-3">
+      <%= t("#{i18n}.kicker") %>
+    </p>
+    <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight max-w-3xl">
+      <%= t("#{i18n}.hero.headline") %>
+    </h1>
+    <p class="text-xl text-slate-300 max-w-2xl mb-10">
+      <%= t("#{i18n}.hero.subheadline") %>
+    </p>
+    <% unless user_signed_in? %>
+      <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg" do %>
+        <%= t("#{i18n}.hero.primary_cta") %>
+        <svg class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%# Engine showcase — the centrepiece %>
+<section style="background-color:#0a0f1a;" class="py-20 border-b border-white/5">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="mb-10">
+      <p class="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-3">
+        <%= t("systems.show.engine_label") %>
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <%= t("#{i18n}.engine.name") %>
+      </h2>
+      <p class="text-lg text-slate-300 max-w-2xl">
+        <%= t("#{i18n}.engine.headline") %>
+      </p>
+    </div>
+
+    <%# Request / Response side by side %>
+    <div class="grid lg:grid-cols-2 gap-4" data-controller="highlight">
+      <%# Request %>
+      <div class="rounded-2xl overflow-hidden" style="background-color:#0d1117; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+        <div class="px-4 py-3 flex items-center gap-3" style="background-color:#161b22; border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div class="flex gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#ff5f57;"></div>
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#febc2e;"></div>
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#28c840;"></div>
+          </div>
+          <div class="flex items-center gap-2 ml-1">
+            <span class="text-xs font-bold font-mono px-1.5 py-0.5 rounded" style="background:rgba(96,165,250,0.15); color:#93c5fd;">
+              <%= t("#{i18n}.engine.endpoint_method") %>
+            </span>
+            <span class="text-xs font-mono" style="color:#94a3b8;"><%= t("#{i18n}.engine.endpoint_path") %></span>
+          </div>
+          <span class="ml-auto text-xs font-mono" style="color:#64748b;"><%= t("systems.show.request_label") %></span>
+        </div>
+        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto !bg-transparent m-0"><code class="language-json"><%= t("#{i18n}.engine.input") %></code></pre>
+      </div>
+
+      <%# Response %>
+      <div class="rounded-2xl overflow-hidden" style="background-color:#0d1117; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+        <div class="px-4 py-3 flex items-center gap-3" style="background-color:#161b22; border-bottom:1px solid rgba(255,255,255,0.06);">
+          <div class="flex gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#ff5f57;"></div>
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#febc2e;"></div>
+            <div class="w-2.5 h-2.5 rounded-full" style="background:#28c840;"></div>
+          </div>
+          <span class="ml-auto text-xs font-mono" style="color:#64748b;"><%= t("systems.show.response_label") %></span>
+        </div>
+        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto !bg-transparent m-0"><code class="language-json"><%= t("#{i18n}.engine.output") %></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# Purpose %>
+<section class="bg-white dark:bg-gray-900 py-16 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl">
+      <%= t("#{i18n}.purpose") %>
+    </p>
+  </div>
+</section>
+
+<%# Signals + Additional endpoints — two columns %>
+<section class="bg-gray-50 dark:bg-gray-950 py-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-2 gap-12">
+
+      <%# Signals %>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-5">
+          <%= t("systems.show.signals_heading") %>
+        </h2>
+        <ul class="space-y-3">
+          <% t("#{i18n}.signals").each do |sig| %>
+            <li class="flex items-start gap-2.5 text-sm text-gray-700 dark:text-gray-300">
+              <svg class="h-4 w-4 mt-0.5 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <%= sig %>
+            </li>
+          <% end %>
+        </ul>
+
+        <div class="mt-10">
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-3">
+            <%= t("systems.show.powered_by") %>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <% @system[:division_slugs].each do |div_slug| %>
+              <%= link_to division_path(div_slug), class: "inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-blue-300 dark:hover:border-blue-600 transition-colors" do %>
+                <%= t("divisions.index.cards.#{div_slug}.title") %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Additional endpoints %>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-5">
+          <%= t("systems.show.other_endpoints_heading") %>
+        </h2>
+        <div class="space-y-4">
+          <% t("#{i18n}.endpoints").each do |ep| %>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-4">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="inline-block text-xs font-bold font-mono px-2 py-0.5 rounded <%= ep[:method] == 'POST' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' %>">
+                  <%= ep[:method] %>
+                </span>
+                <code class="text-sm font-mono text-gray-800 dark:text-gray-200"><%= ep[:path] %></code>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400"><%= ep[:description] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%# Use Cases %>
+<section class="bg-white dark:bg-gray-900 py-16 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+      <%= t("systems.show.use_cases_heading") %>
+    </h2>
+    <div class="grid sm:grid-cols-2 gap-5">
+      <% t("#{i18n}.use_cases").each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 px-6 py-5">
+          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-1.5"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400"><%= uc[:body] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# Final CTA %>
+<section class="bg-slate-900 py-16">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl font-bold text-white mb-4">
+      <%= t("systems.index.hero.headline") %>
+    </h2>
+    <p class="text-slate-300 mb-8"><%= t("systems.index.hero.subheadline") %></p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <% unless user_signed_in? %>
+        <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg" do %>
+          <%= t("systems.show.get_started") %>
+        <% end %>
+      <% end %>
+      <%= link_to divisions_path, class: "inline-flex items-center justify-center px-8 py-4 border-2 border-white/40 text-base font-medium rounded-lg text-white hover:bg-white/10 transition-colors" do %>
+        <%= t("systems.show.explore_divisions") %>
+      <% end %>
+    </div>
+  </div>
+</section>

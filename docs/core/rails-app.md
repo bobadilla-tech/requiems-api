@@ -145,11 +145,11 @@ The Rails app runs on http://localhost:3000 with:
 
 ### Editor support
 
-For the best development experience when working on the Rails dashboard,
-install a Ruby LSP editor/IDE extension and point it at the repository. The
-project includes the `ruby-lsp` gem in `apps/dashboard/Gemfile`; configuring
-your editor to use this language server enables code navigation, in-editor
-diagnostics, and formatting features.
+For the best development experience when working on the Rails dashboard, install
+a Ruby LSP editor/IDE extension and point it at the repository. The project
+includes the `ruby-lsp` gem in `apps/dashboard/Gemfile`; configuring your editor
+to use this language server enables code navigation, in-editor diagnostics, and
+formatting features.
 
 ### Running Commands
 
