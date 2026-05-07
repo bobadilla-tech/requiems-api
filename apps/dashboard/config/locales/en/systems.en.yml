@@ -6,21 +6,21 @@ en:
       kicker: "Backend infrastructure for SaaS"
       hero:
         headline: "All-in-one backend for SaaS products"
-        subheadline: "Authentication, validation, fraud detection, payments intelligence, and global data—delivered through one unified API."
+        subheadline: "Authentication, validation, fraud detection, payments intelligence, and global data, delivered through one unified API."
         primary_cta: "Get API key"
         secondary_cta: "Browse divisions"
       grid_heading: "Five systems. One API key."
-      grid_subheading: "Each system composes proprietary signals into a single structured decision—delivered in one API call."
+      grid_subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
       explore_cta: "Explore system →"
       utilities_kicker: "Extras"
       utilities_cta: "Browse utilities →"
       apis_catalog_title: "Explore the full API directory"
-      apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog—same API key, consistent docs, copy-ready examples."
+      apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog. Same API key, consistent docs, copy-ready examples."
       apis_catalog_cta: "Browse APIs"
       cards:
         identity_risk:
           title: "Identity & Risk System"
-          blurb: "Protect your product from fake users, fraud, and bad data—before it reaches your database."
+          blurb: "Protect your product from fake users, fraud, and bad data before it reaches your database."
           signals:
             - "Risk scoring"
             - "Email, phone, and IP intelligence"
@@ -48,7 +48,7 @@ en:
             - "Content moderation"
         developer_utilities:
           title: "Developer Utilities"
-          blurb: "Useful tools you shouldn't have to rebuild—QR codes, encoding, conversions, and more."
+          blurb: "Useful tools you shouldn't have to rebuild: QR codes, encoding, conversions, and more."
           signals:
             - "QR codes"
             - "Encoding & conversions"
@@ -72,12 +72,12 @@ en:
       kicker: "Identity & Risk System"
       hero:
         headline: "Determine if a user is real, safe, and trustworthy"
-        subheadline: "Combine email, phone, IP, and behavioral signals into a single risk decision—before bad actors reach your product."
+        subheadline: "Combine email, phone, IP, and behavioral signals into a single risk decision before bad actors reach your product."
         primary_cta: "Get API key"
       purpose: "Protect your product from fake signups, bots, fraud, and account abuse. Instead of calling validation, networking, and text APIs separately and building the scoring logic yourself, the Identity & Risk Engine returns a single structured decision."
       engine:
         name: "Identity & Risk Engine"
-        headline: "One call returns a complete risk picture—email, IP, phone, and behavioral signals composed into a single decision."
+        headline: "One call returns a complete risk picture: email, IP, phone, and behavioral signals composed into a single decision."
         endpoint_method: "POST"
         endpoint_path: "/v1/signup/protect"
         input: |
@@ -117,7 +117,7 @@ en:
           description: "Score a user based on email, phone, and IP. Returns risk_score and confidence without the full decision envelope."
         - method: "POST"
           path: "/v1/user/verify"
-          description: "Verify identity signals and return a confidence score. Lower latency—suitable for background re-scoring."
+          description: "Verify identity signals and return a confidence score. Lower latency, suitable for background re-scoring."
       signals:
         - "Email validation & disposable detection"
         - "Phone number validation & carrier lookup"
@@ -131,12 +131,12 @@ en:
       kicker: "Payments Intelligence System"
       hero:
         headline: "Reduce failed payments and detect risky transactions"
-        subheadline: "Validate BINs, IBANs, and SWIFT codes while cross-checking IP and billing country—before the payment hits your processor."
+        subheadline: "Validate BINs, IBANs, and SWIFT codes while cross-checking IP and billing country before the payment hits your processor."
         primary_cta: "Get API key"
       purpose: "Failed payments cost SaaS and fintech products revenue and user trust. The Payments Intelligence Engine validates financial data and assesses transaction risk in a single call, combining finance and networking signals without requiring you to orchestrate them."
       engine:
         name: "Payments Intelligence Engine"
-        headline: "Validate financial data and assess transaction risk in one call—BIN, IBAN, SWIFT, and IP signals composed automatically."
+        headline: "Validate financial data and assess transaction risk in one call. BIN, IBAN, SWIFT, and IP signals composed automatically."
         endpoint_method: "POST"
         endpoint_path: "/v1/payment/validate"
         input: |
@@ -188,12 +188,12 @@ en:
       kicker: "Global Data System"
       hero:
         headline: "Build global-ready products without the data infrastructure"
-        subheadline: "Accurate geocoding, timezone resolution, holiday calendars, and address intelligence—one endpoint, every country."
+        subheadline: "Accurate geocoding, timezone resolution, holiday calendars, and address intelligence. One endpoint, every country."
         primary_cta: "Get API key"
-      purpose: "International products need reliable location and scheduling data. The Global Data Engine combines geocoding, timezone, and calendar signals so you can localize experiences, schedule tasks correctly, and handle compliance requirements across every region—without stitching together multiple calls."
+      purpose: "International products need reliable location and scheduling data. The Global Data Engine combines geocoding, timezone, and calendar signals so you can localize experiences, schedule tasks correctly, and handle compliance requirements across every region without stitching together multiple calls."
       engine:
         name: "Global Data Engine"
-        headline: "Resolve any address or coordinates into a complete location profile—timezone, working days, and holiday status included."
+        headline: "Resolve any address or coordinates into a complete location profile. Timezone, working days, and holiday status included."
         endpoint_method: "POST"
         endpoint_path: "/v1/location/resolve"
         input: |
@@ -244,10 +244,10 @@ en:
         headline: "Clean, validate, and standardize user input at the source"
         subheadline: "Stop bad data before it enters your database. Normalize text, validate inputs, and moderate content in a single API call."
         primary_cta: "Get API key"
-      purpose: "Bad data compounds silently—bad emails bounce, invalid phones fail, toxic content slips through. The Data Integrity Engine catches and normalizes bad input at the boundary of your product, before it reaches your database or downstream services, without requiring separate calls for each field type."
+      purpose: "Bad data compounds silently: bad emails bounce, invalid phones fail, toxic content slips through. The Data Integrity Engine catches and normalizes bad input at the boundary of your product, before it reaches your database or downstream services, without requiring separate calls for each field type."
       engine:
         name: "Data Integrity Engine"
-        headline: "Validate, normalize, and safety-check a full set of user inputs in one call—no separate endpoints for each field type."
+        headline: "Validate, normalize, and safety-check a full set of user inputs in one call. No separate endpoints for each field type."
         endpoint_method: "POST"
         endpoint_path: "/v1/input/validate"
         input: |
@@ -289,7 +289,7 @@ en:
           description: "Check text for toxicity, profanity, sentiment, and policy violations."
         - method: "POST"
           path: "/v1/text/normalize"
-          description: "Clean and standardize a string—trim, fix encoding, normalize case and unicode."
+          description: "Clean and standardize a string: trim, fix encoding, normalize case and unicode."
       signals:
         - "Email format & deliverability validation"
         - "Phone number normalization & carrier check"
@@ -303,9 +303,9 @@ en:
       kicker: "Developer Utilities"
       hero:
         headline: "Useful tools you shouldn't have to rebuild"
-        subheadline: "QR codes, encoding, conversions, and content APIs—extras that save time without becoming core infrastructure."
+        subheadline: "QR codes, encoding, conversions, and content APIs. Extras that save time without becoming core infrastructure."
         primary_cta: "Get API key"
-      purpose: "Not every API needs to be a system. These are the utility endpoints you'd otherwise rebuild from scratch or pull in a one-off package for—QR generation, encoding, random content, and more. Same API key, same auth, zero extra setup."
+      purpose: "Not every API needs to be a system. These are the utility endpoints you'd otherwise rebuild from scratch or pull in a one-off package for: QR generation, encoding, random content, and more. Same API key, same auth, zero extra setup."
       engine:
         name: "Utilities"
         headline: "Common developer tools, available on the same key as your production systems."
