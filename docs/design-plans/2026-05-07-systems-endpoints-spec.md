@@ -453,13 +453,14 @@ Generate a QR code for any URL or string.
 **Query params:** `content` (required), `format` (`png`|`svg`, default `png`),
 `size` (pixels, default `256`)
 
-**Request**
+**Request** (query params)
 
-```
-GET /v1/qr/generate
-  ?content=https://requiems.xyz
-  &format=png
-  &size=256
+```json
+{
+  "content": "https://requiems.xyz",
+  "format": "png",
+  "size": 256
+}
 ```
 
 **Response**

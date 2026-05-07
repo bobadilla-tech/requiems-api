@@ -310,14 +310,13 @@ en:
         name: "Utilities"
         headline: "Common developer tools, available on the same key as your production systems."
         endpoint_method: "GET"
-        endpoint_path: "/v1/qr/generate?content=https://requiems.xyz"
+        endpoint_path: "/v1/qr/generate"
         input: |
-          # GET request — no body required
-          # Query params: content, format (png|svg), size
-          GET /v1/qr/generate
-            ?content=https://requiems.xyz
-            &format=png
-            &size=256
+          {
+            "content": "https://requiems.xyz",
+            "format": "png",
+            "size": 256
+          }
         output: |
           {
             "format": "png",
