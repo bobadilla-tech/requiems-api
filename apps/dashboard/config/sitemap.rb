@@ -49,7 +49,7 @@ DIVISION_MARKETING_PAGES = [
 
 locales = Rails.application.config.i18n.available_locales.map(&:to_s)
 
-SitemapGenerator::Sitemap.create! do
+SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
   STATIC_PAGES.each do |page|
     alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
     locales.each do |locale|
