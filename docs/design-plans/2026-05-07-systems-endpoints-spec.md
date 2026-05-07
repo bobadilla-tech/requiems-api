@@ -1,8 +1,9 @@
 # Systems Layer — New Endpoints Spec
 
-This document defines every new endpoint that needs to be built to power the five
-Requiems Systems. These endpoints are distinct from the existing low-level primitives
-(divisions). They are composed, decision-driven, and designed for production SaaS use.
+This document defines every new endpoint that needs to be built to power the
+five Requiems Systems. These endpoints are distinct from the existing low-level
+primitives (divisions). They are composed, decision-driven, and designed for
+production SaaS use.
 
 All new endpoints share the following conventions:
 
@@ -31,7 +32,8 @@ Score a user based on the combination of email, phone, and IP signals.
 }
 ```
 
-All fields optional, but at least one must be present. More signals = higher confidence.
+All fields optional, but at least one must be present. More signals = higher
+confidence.
 
 **Response**
 
@@ -53,6 +55,7 @@ All fields optional, but at least one must be present. More signals = higher con
 ```
 
 **Internal APIs composed**
+
 - Email validation (`/v1/validation/email`)
 - Disposable domain check (`/v1/networking/disposable/check`)
 - Phone validation (`/v1/validation/phone`)
@@ -63,8 +66,8 @@ All fields optional, but at least one must be present. More signals = higher con
 
 ### `POST /v1/signup/protect`
 
-Full signup gate — returns a single `is_safe` decision with reasons. Designed for
-real-time use at the registration form boundary.
+Full signup gate — returns a single `is_safe` decision with reasons. Designed
+for real-time use at the registration form boundary.
 
 **Request**
 
@@ -95,7 +98,9 @@ real-time use at the registration form boundary.
 ```
 
 **Notes**
-- `is_safe: false` means the signup should be blocked or challenged (CAPTCHA, SMS OTP)
+
+- `is_safe: false` means the signup should be blocked or challenged (CAPTCHA,
+  SMS OTP)
 - `reasons` is an array of machine-readable flag codes
 - Recommended: surface `is_safe` directly to your registration controller
 
@@ -104,7 +109,8 @@ real-time use at the registration form boundary.
 ### `POST /v1/user/verify`
 
 Verify a set of identity signals and return a structured confidence score. Lower
-latency than `/signup/protect` — suitable for background re-scoring of existing users.
+latency than `/signup/protect` — suitable for background re-scoring of existing
+users.
 
 **Request**
 
@@ -176,6 +182,7 @@ All fields optional — include whichever apply to the transaction.
 ```
 
 **Internal APIs composed**
+
 - BIN lookup (`/v1/finance/bin/lookup`)
 - IBAN validation (`/v1/finance/iban/validate`)
 - SWIFT validation (`/v1/finance/swift/validate`)
@@ -222,8 +229,8 @@ Score a transaction for fraud risk. Use before authorizing high-value actions.
 
 ### `POST /v1/location/resolve`
 
-Resolve an address or coordinates into enriched location data including timezone,
-working days, and holiday status.
+Resolve an address or coordinates into enriched location data including
+timezone, working days, and holiday status.
 
 **Request**
 
@@ -263,6 +270,7 @@ OR
 ```
 
 **Internal APIs composed**
+
 - Geocoding (`/v1/places/geocoding/forward`)
 - Timezone resolution (`/v1/places/timezone`)
 - Holiday calendar (`/v1/places/holidays`)
@@ -353,6 +361,7 @@ Validate and normalize a set of user input fields in a single call.
 ```
 
 **Internal APIs composed**
+
 - Email validation + normalization
 - Phone validation + normalization
 - Text toxicity check
@@ -423,15 +432,15 @@ Clean and standardize a string — trim whitespace, fix encoding, normalize case
 
 ## 5. Developer Utilities
 
-These endpoints are existing primitives promoted to cleaner, stable paths under the
-`/v1/` namespace. No composition logic — just cleaner DX.
+These endpoints are existing primitives promoted to cleaner, stable paths under
+the `/v1/` namespace. No composition logic — just cleaner DX.
 
 ### `GET /v1/qr/generate`
 
 Generate a QR code for any URL or string.
 
-**Query params:** `content` (required), `format` (`png`|`svg`, default `png`), `size`
-(pixels, default `256`)
+**Query params:** `content` (required), `format` (`png`|`svg`, default `png`),
+`size` (pixels, default `256`)
 
 **Response:** PNG or SVG image (Content-Type matches format)
 
@@ -496,13 +505,13 @@ All endpoints return errors in this shape:
 }
 ```
 
-| HTTP Status | Code | When |
-|-------------|------|------|
-| 400 | `INVALID_INPUT` | Missing or malformed request fields |
-| 401 | `UNAUTHORIZED` | Missing or invalid API key |
-| 422 | `VALIDATION_FAILED` | Request is valid but fails business rules |
-| 429 | `RATE_LIMITED` | Per-minute or monthly quota exceeded |
-| 500 | `INTERNAL_ERROR` | Unexpected server error |
+| HTTP Status | Code                | When                                      |
+| ----------- | ------------------- | ----------------------------------------- |
+| 400         | `INVALID_INPUT`     | Missing or malformed request fields       |
+| 401         | `UNAUTHORIZED`      | Missing or invalid API key                |
+| 422         | `VALIDATION_FAILED` | Request is valid but fails business rules |
+| 429         | `RATE_LIMITED`      | Per-minute or monthly quota exceeded      |
+| 500         | `INTERNAL_ERROR`    | Unexpected server error                   |
 
 ---
 
@@ -516,9 +525,9 @@ All endpoints return errors in this shape:
 
 ### Composition pattern
 
-Each system endpoint calls internal Go service handlers directly (not HTTP).
-The orchestration logic lives in the Go API (`apps/api/`) under a new
-`systems/` package. Each system handler:
+Each system endpoint calls internal Go service handlers directly (not HTTP). The
+orchestration logic lives in the Go API (`apps/api/`) under a new `systems/`
+package. Each system handler:
 
 1. Validates the composite request
 2. Fans out to internal service calls in parallel where possible
@@ -527,11 +536,11 @@ The orchestration logic lives in the Go API (`apps/api/`) under a new
 
 ### Latency targets
 
-| Tier | Target P50 | Target P99 |
-|------|-----------|-----------|
-| Simple (1 signal) | < 30ms | < 100ms |
-| Composite (2–3 signals) | < 60ms | < 200ms |
-| Full system (4+ signals) | < 100ms | < 350ms |
+| Tier                     | Target P50 | Target P99 |
+| ------------------------ | ---------- | ---------- |
+| Simple (1 signal)        | < 30ms     | < 100ms    |
+| Composite (2–3 signals)  | < 60ms     | < 200ms    |
+| Full system (4+ signals) | < 100ms    | < 350ms    |
 
 ### Go package structure
 
@@ -558,7 +567,7 @@ apps/api/
 
 ### Dashboard integration
 
-The API catalog (`config/api_catalog.yml`) needs new entries for each system endpoint
-so they appear in the developer docs and live playground. These should be categorized
-under a new top-level `"systems"` category in the catalog with a `composed: true` flag
-to distinguish them from primitive endpoints.
+The API catalog (`config/api_catalog.yml`) needs new entries for each system
+endpoint so they appear in the developer docs and live playground. These should
+be categorized under a new top-level `"systems"` category in the catalog with a
+`composed: true` flag to distinguish them from primitive endpoints.
