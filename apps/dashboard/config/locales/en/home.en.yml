@@ -9,7 +9,6 @@ en:
         proof_badges:
           - "Proprietary data pipelines"
           - "Real-time processing"
-          - "Consistent API design"
           - "Built for production"
         cta_primary: "Get API key"
         cta_secondary: "Explore systems"

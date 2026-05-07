@@ -1,51 +1,54 @@
 <%# Desktop: Docs dropdown (APIs · Examples · Divisions) %>
-<div class="relative group">
+<div class="relative"
+     data-controller="dropdown"
+     data-action="mouseenter->dropdown#open mouseleave->dropdown#close">
   <button type="button"
           class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
     <%= t("shared.nav.docs") %>
   </button>
 
-  <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 absolute left-0 top-full pt-1 w-52 z-[100]">
+  <div data-dropdown-target="menu"
+       class="hidden absolute left-0 top-full pt-1 w-52 z-[100]">
     <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-xl ring-1 ring-black/5 dark:ring-white/10 overflow-hidden">
-    <div class="py-1">
-      <%= link_to apis_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
-        <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-          </svg>
-        </span>
-        <span>
-          <span class="block font-medium"><%= t("shared.nav.apis") %></span>
-          <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_apis_desc") %></span>
-        </span>
-      <% end %>
+      <div class="py-1">
+        <%= link_to apis_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+          </span>
+          <span>
+            <span class="block font-medium"><%= t("shared.nav.apis") %></span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_apis_desc") %></span>
+          </span>
+        <% end %>
 
-      <%= link_to examples_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
-        <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        </span>
-        <span>
-          <span class="block font-medium"><%= t("shared.nav.examples") %></span>
-          <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_examples_desc") %></span>
-        </span>
-      <% end %>
+        <%= link_to examples_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </span>
+          <span>
+            <span class="block font-medium"><%= t("shared.nav.examples") %></span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_examples_desc") %></span>
+          </span>
+        <% end %>
 
-      <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
 
-      <%= link_to divisions_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
-        <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-        </span>
-        <span>
-          <span class="block font-medium"><%= t("shared.nav.divisions") %></span>
-          <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_divisions_desc") %></span>
-        </span>
-      <% end %>
-    </div>
+        <%= link_to divisions_path, class: "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+          <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </span>
+          <span>
+            <span class="block font-medium"><%= t("shared.nav.divisions") %></span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400"><%= t("shared.nav.docs_divisions_desc") %></span>
+          </span>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
