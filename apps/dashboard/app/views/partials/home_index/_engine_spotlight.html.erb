@@ -19,7 +19,7 @@
     </div>
 
     <%# Request / Response side by side %>
-    <div class="grid lg:grid-cols-2 gap-4">
+    <div class="grid lg:grid-cols-2 gap-4" data-controller="highlight">
       <%# Request %>
       <div class="rounded-2xl overflow-hidden" style="background-color:#0d1117; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 40px rgba(0,0,0,0.5);">
         <div class="px-4 py-3 flex items-center gap-3" style="background-color:#161b22; border-bottom:1px solid rgba(255,255,255,0.06);">
@@ -34,7 +34,7 @@
           </div>
           <span class="ml-auto text-xs font-mono" style="color:#64748b;">Request</span>
         </div>
-        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto" style="color:#e2e8f0;"><%= t("home.index.engine_spotlight.request") %></pre>
+        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto !bg-transparent m-0"><code class="language-json"><%= t("home.index.engine_spotlight.request") %></code></pre>
       </div>
 
       <%# Response %>
@@ -47,7 +47,22 @@
           </div>
           <span class="ml-auto text-xs font-mono" style="color:#64748b;">Response</span>
         </div>
-        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto" style="color:#e2e8f0;"><%= t("home.index.engine_spotlight.response") %></pre>
+        <pre class="px-5 py-5 text-sm font-mono leading-relaxed overflow-x-auto !bg-transparent m-0"><code class="language-json"><%= t("home.index.engine_spotlight.response") %></code></pre>
+      </div>
+    </div>
+
+    <%# Plain-language value table %>
+    <div class="mt-10">
+      <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+        <%= t("home.index.engine_spotlight.value_table_heading") %>
+      </p>
+      <div class="divide-y divide-white/5">
+        <% t("home.index.engine_spotlight.value_table").each do |row| %>
+          <div class="flex items-baseline gap-4 py-3">
+            <code class="shrink-0 text-xs font-mono px-2 py-0.5 rounded" style="background:rgba(96,165,250,0.12); color:#93c5fd;"><%= row[:field] %></code>
+            <span class="text-sm text-slate-300"><%= row[:plain] %></span>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

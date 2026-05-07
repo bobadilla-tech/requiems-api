@@ -93,6 +93,18 @@ en:
             }
           }
         cta: "Explore systems"
+        value_table_heading: "What each field means"
+        value_table:
+          - field: "risk_score"
+            plain: "How risky is this signup? 0 is clean, 1 is high risk."
+          - field: "is_safe"
+            plain: "Single yes/no decision. Use this to block or allow the signup."
+          - field: "confidence"
+            plain: "How sure the engine is. Higher means fewer false positives."
+          - field: "flags"
+            plain: "The specific reasons the user was flagged."
+          - field: "signals"
+            plain: "Raw results from each check run in the background."
       why_different:
         heading: "Infrastructure, not integration glue"
         subheading: "Most API aggregators resell third-party calls. We build proprietary pipelines."
