@@ -1,7 +1,7 @@
-# Systems Layer — New Endpoints Spec
+# Systems Layer — Endpoints Spec
 
-This document defines every new endpoint that needs to be built to power the
-five Requiems Systems. These endpoints are distinct from the existing low-level
+This document defines every endpoint that needs to be built to power the five
+Requiems Systems. These endpoints are distinct from the existing low-level
 primitives (divisions). They are composed, decision-driven, and designed for
 production SaaS use.
 
@@ -11,15 +11,78 @@ All new endpoints share the following conventions:
 - Authentication: `Authorization: Bearer <api_key>` (same key as existing APIs)
 - Content-Type: `application/json`
 - Standard wrapper fields on every response: `request_id`, `latency_ms`
-- Score fields always range `0 → 1` (0 = safe/low-risk, 1 = unsafe/high-risk)
+- Score fields always range `0 to 1` (0 = safe/low-risk, 1 = unsafe/high-risk)
+
+Each system section leads with its **Engine** — the primary composed endpoint
+shown in the dashboard. Supporting endpoints follow.
 
 ---
 
 ## 1. Identity & Risk System
 
+### Engine: `POST /v1/signup/protect`
+
+Full signup gate. Returns a single `is_safe` decision with risk score,
+confidence, and flags. Designed for real-time use at the registration boundary.
+
+**Request**
+
+```json
+{
+  "email": "user@tempmail.io",
+  "ip_address": "45.33.32.156",
+  "phone": "+14155552671"
+}
+```
+
+All fields optional, but at least one must be present. More signals = higher
+confidence.
+
+**Response**
+
+```json
+{
+  "request_id": "req_01HX...",
+  "latency_ms": 52,
+  "risk_score": 0.87,
+  "is_safe": false,
+  "confidence": 0.94,
+  "flags": [
+    "disposable_email",
+    "vpn_detected"
+  ],
+  "signals": {
+    "email_valid": true,
+    "phone_valid": false,
+    "vpn_detected": true,
+    "disposable_email": true
+  }
+}
+```
+
+**Notes**
+
+- `is_safe: false` means the signup should be blocked or challenged (CAPTCHA,
+  SMS OTP)
+- `flags` is an array of machine-readable flag codes
+- `is_safe` is always derived: `risk_score < 0.5 && confidence > 0.6`
+- Recommended: surface `is_safe` directly to your registration controller
+
+**Internal APIs composed**
+
+- Email validation (`/v1/validation/email`)
+- Disposable domain check (`/v1/networking/disposable/check`)
+- Phone validation (`/v1/validation/phone`)
+- IP geolocation (`/v1/networking/ip/lookup`)
+- VPN/proxy detection (`/v1/networking/ip/vpn`)
+
+---
+
 ### `POST /v1/risk/score`
 
-Score a user based on the combination of email, phone, and IP signals.
+Score a user based on the combination of email, phone, and IP signals. Returns
+`risk_score` and `confidence` without the full decision envelope. Lower latency
+than `/signup/protect`.
 
 **Request**
 
@@ -31,9 +94,6 @@ Score a user based on the combination of email, phone, and IP signals.
   "user_agent": "Mozilla/5.0 ..."
 }
 ```
-
-All fields optional, but at least one must be present. More signals = higher
-confidence.
 
 **Response**
 
@@ -54,62 +114,12 @@ confidence.
 }
 ```
 
-**Internal APIs composed**
-
-- Email validation (`/v1/validation/email`)
-- Disposable domain check (`/v1/networking/disposable/check`)
-- Phone validation (`/v1/validation/phone`)
-- IP geolocation (`/v1/networking/ip/lookup`)
-- VPN/proxy detection (`/v1/networking/ip/vpn`)
-
----
-
-### `POST /v1/signup/protect`
-
-Full signup gate — returns a single `is_safe` decision with reasons. Designed
-for real-time use at the registration form boundary.
-
-**Request**
-
-```json
-{
-  "email": "user@tempmail.io",
-  "ip_address": "45.33.32.156",
-  "phone": "+14155552671"
-}
-```
-
-**Response**
-
-```json
-{
-  "request_id": "req_01HX...",
-  "latency_ms": 52,
-  "is_safe": false,
-  "risk_score": 0.87,
-  "reasons": ["disposable_email", "vpn_detected"],
-  "signals": {
-    "email_valid": true,
-    "phone_valid": false,
-    "vpn_detected": true,
-    "disposable_email": true
-  }
-}
-```
-
-**Notes**
-
-- `is_safe: false` means the signup should be blocked or challenged (CAPTCHA,
-  SMS OTP)
-- `reasons` is an array of machine-readable flag codes
-- Recommended: surface `is_safe` directly to your registration controller
-
 ---
 
 ### `POST /v1/user/verify`
 
 Verify a set of identity signals and return a structured confidence score. Lower
-latency than `/signup/protect` — suitable for background re-scoring of existing
+latency than `/signup/protect`, suitable for background re-scoring of existing
 users.
 
 **Request**
@@ -139,9 +149,10 @@ users.
 
 ## 2. Payments Intelligence System
 
-### `POST /v1/payment/validate`
+### Engine: `POST /v1/payment/validate`
 
-Validate financial data (BIN, IBAN, SWIFT) and assess transaction risk.
+Validate financial data (BIN, IBAN, SWIFT) and assess transaction risk in a
+single call. Include whichever fields apply to the transaction.
 
 **Request**
 
@@ -149,13 +160,12 @@ Validate financial data (BIN, IBAN, SWIFT) and assess transaction risk.
 {
   "card_bin": "424242",
   "iban": "DE89370400440532013000",
-  "swift": "COBADEFFXXX",
   "ip_address": "92.168.1.1",
   "billing_country": "DE"
 }
 ```
 
-All fields optional — include whichever apply to the transaction.
+Optional additional field: `"swift": "COBADEFFXXX"`
 
 **Response**
 
@@ -174,12 +184,13 @@ All fields optional — include whichever apply to the transaction.
   "signals": {
     "bin_valid": true,
     "iban_valid": true,
-    "swift_valid": true,
     "ip_country": "DE",
     "billing_country": "DE"
   }
 }
 ```
+
+When `swift` is provided, `signals` will also include `"swift_valid": true`.
 
 **Internal APIs composed**
 
@@ -227,7 +238,7 @@ Score a transaction for fraud risk. Use before authorizing high-value actions.
 
 ## 3. Global Data System
 
-### `POST /v1/location/resolve`
+### Engine: `POST /v1/location/resolve`
 
 Resolve an address or coordinates into enriched location data including
 timezone, working days, and holiday status.
@@ -262,10 +273,9 @@ OR
   "working_days_this_month": 21,
   "is_holiday": false,
   "coordinates": {
-    "lat": 52.5200,
-    "lng": 13.4050
-  },
-  "postal_code": "10178"
+    "lat": 52.52,
+    "lng": 13.405
+  }
 }
 ```
 
@@ -323,7 +333,7 @@ List public holidays for a country and year.
 
 ## 4. Data Integrity System
 
-### `POST /v1/input/validate`
+### Engine: `POST /v1/input/validate`
 
 Validate and normalize a set of user input fields in a single call.
 
@@ -333,7 +343,7 @@ Validate and normalize a set of user input fields in a single call.
 {
   "email": "  User@EXAMPLE.COM  ",
   "phone": "004915123456789",
-  "text": "This is some user input"
+  "text": "This is some user-generated content"
 }
 ```
 
@@ -355,7 +365,8 @@ Validate and normalize a set of user input fields in a single call.
   },
   "text": {
     "is_safe": true,
-    "toxicity_score": 0.01
+    "toxicity_score": 0.01,
+    "sentiment": "neutral"
   }
 }
 ```
@@ -364,7 +375,7 @@ Validate and normalize a set of user input fields in a single call.
 
 - Email validation + normalization
 - Phone validation + normalization
-- Text toxicity check
+- Text toxicity check + sentiment
 
 ---
 
@@ -405,7 +416,7 @@ Check a block of text for toxicity, profanity, and policy violations.
 
 ### `POST /v1/text/normalize`
 
-Clean and standardize a string — trim whitespace, fix encoding, normalize case.
+Clean and standardize a string: trim whitespace, fix encoding, normalize case.
 
 **Request**
 
@@ -433,16 +444,36 @@ Clean and standardize a string — trim whitespace, fix encoding, normalize case
 ## 5. Developer Utilities
 
 These endpoints are existing primitives promoted to cleaner, stable paths under
-the `/v1/` namespace. No composition logic — just cleaner DX.
+the `/v1/` namespace. No composition logic, just cleaner DX.
 
-### `GET /v1/qr/generate`
+### Engine: `GET /v1/qr/generate`
 
 Generate a QR code for any URL or string.
 
 **Query params:** `content` (required), `format` (`png`|`svg`, default `png`),
 `size` (pixels, default `256`)
 
-**Response:** PNG or SVG image (Content-Type matches format)
+**Request**
+
+```
+GET /v1/qr/generate
+  ?content=https://requiems.xyz
+  &format=png
+  &size=256
+```
+
+**Response**
+
+```json
+{
+  "request_id": "req_01HX...",
+  "latency_ms": 34,
+  "format": "png",
+  "url": "https://cdn.requiems.xyz/qr/abc123.png",
+  "size": 256,
+  "expires_at": "2026-05-14T00:00:00Z"
+}
+```
 
 ---
 
@@ -519,9 +550,10 @@ All endpoints return errors in this shape:
 
 ### Scoring consistency
 
-- All `risk_score` values: `0.0` (no risk) → `1.0` (certain risk)
-- All `confidence` values: `0.0` (no confidence) → `1.0` (certain)
+- All `risk_score` values: `0.0` (no risk) to `1.0` (certain risk)
+- All `confidence` values: `0.0` (no confidence) to `1.0` (certain)
 - `is_safe` is always derived: `risk_score < 0.5 && confidence > 0.6`
+- `flags` is always an array of machine-readable string codes (never `reasons`)
 
 ### Composition pattern
 
@@ -539,7 +571,7 @@ package. Each system handler:
 | Tier                     | Target P50 | Target P99 |
 | ------------------------ | ---------- | ---------- |
 | Simple (1 signal)        | < 30ms     | < 100ms    |
-| Composite (2–3 signals)  | < 60ms     | < 200ms    |
+| Composite (2-3 signals)  | < 60ms     | < 200ms    |
 | Full system (4+ signals) | < 100ms    | < 350ms    |
 
 ### Go package structure
@@ -548,21 +580,21 @@ package. Each system handler:
 apps/api/
   systems/
     identity_risk/
-      handler.go       # HTTP handler for /v1/risk/score, /v1/signup/protect, /v1/user/verify
+      handler.go       # HTTP handler for /v1/signup/protect, /v1/risk/score, /v1/user/verify
       scorer.go        # Scoring logic
       signals.go       # Internal API fan-out
     payments/
-      handler.go
+      handler.go       # HTTP handler for /v1/payment/validate, /v1/transaction/risk
       scorer.go
       signals.go
     global_data/
-      handler.go
+      handler.go       # HTTP handler for /v1/location/resolve, /v1/timezone/resolve, /v1/holidays
       resolver.go
     data_integrity/
-      handler.go
+      handler.go       # HTTP handler for /v1/input/validate, /v1/content/moderate, /v1/text/normalize
       normalizer.go
     utilities/
-      handler.go
+      handler.go       # HTTP handler for /v1/qr/generate, /v1/encoding/base64, /v1/words/random
 ```
 
 ### Dashboard integration
