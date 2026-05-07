@@ -58,6 +58,33 @@ module ApplicationHelper
     )
   end
 
+  def organization_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Organization",
+      "name" => "Requiems API",
+      "url" => "https://requiems.xyz",
+      "logo" => "https://requiems.xyz/logo.png",
+      "description" => "All-in-one backend for SaaS products. Authentication, validation, fraud detection, payments intelligence, and global data through one unified API.",
+      "sameAs" => []
+    }.to_json
+  end
+
+  def api_json_ld(api)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "WebAPI",
+      "name" => api["name"],
+      "description" => api["description"],
+      "documentation" => api["documentation_url"].presence || "https://requiems.xyz/en/apis/#{api["id"]}",
+      "provider" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      }
+    }.compact_blank.to_json
+  end
+
   private
 
   def searchable_apis

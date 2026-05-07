@@ -2,6 +2,7 @@
 <% content_for :description, @documentation["description"] %>
 <% content_for :head do %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script type="application/ld+json"><%= api_json_ld(@api).html_safe %></script>
 <% end %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
