@@ -4,7 +4,8 @@ import (
 	"errors"
 	"net/http"
 	"regexp"
-
+	"context"
+	
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
@@ -31,4 +32,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 			httpx.JSON(w, http.StatusOK, result)
 		})
+
+		r.Post("/whois/batch", httpx.Handle(
+		func(ctx context.Context, req BatchLookupRequest) (BatchLookupResponse, error) {
+			return svc.LookupBatch(ctx, req.Domains)
+		},
+	))
 }

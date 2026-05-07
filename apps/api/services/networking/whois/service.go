@@ -58,3 +58,29 @@ func (s *Service) Lookup(_ context.Context, domain string) (LookupResponse, erro
 
 // ErrDomainNotFound is returned when no WHOIS record is found for the domain.
 var ErrDomainNotFound = errors.New("domain not found")
+
+
+// service.go
+func (s *Service) LookupBatch(ctx context.Context, domains []string) (BatchLookupResponse, error) {
+	results := make([]LookupResponse, 0, len(domains))
+
+	for _, domain := range domains {
+		resp, err := s.Lookup(ctx, domain)
+		if err != nil {
+			if errors.Is(err, ErrDomainNotFound) {
+				results = append(results, LookupResponse{
+					Domain: domain,
+				})
+				continue
+			}
+
+			return BatchLookupResponse{}, err
+		}
+
+		results = append(results, resp)
+	}
+
+	return BatchLookupResponse{
+		Results: results,
+	}, nil
+}
