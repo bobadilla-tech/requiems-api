@@ -71,6 +71,7 @@
 
     <%# Developer Utilities — smaller, lower-emphasis card %>
     <% dev = @systems.last %>
+    <% slug = dev[:slug] %>
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-8 py-6 flex flex-col sm:flex-row sm:items-center gap-6">
       <div class="flex-1">
         <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1"><%= t("systems.index.utilities_kicker") %></p>

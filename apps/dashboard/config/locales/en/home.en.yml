@@ -21,9 +21,9 @@ en:
       systems:
         heading: "Production-grade systems"
         subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
-        explore_cta: "Explore system →"
+        explore_cta: "Explore system"
         utilities_label: "Extras"
-        utilities_cta: "Browse utilities →"
+        utilities_cta: "Browse utilities"
         cards:
           identity_risk:
             title: "Identity & Risk System"
@@ -92,7 +92,7 @@ en:
               "disposable_email": true
             }
           }
-        cta: "Explore systems →"
+        cta: "Explore systems"
       why_different:
         heading: "Infrastructure, not integration glue"
         subheading: "Most API aggregators resell third-party calls. We build proprietary pipelines."

@@ -11,9 +11,9 @@ en:
         secondary_cta: "Browse divisions"
       grid_heading: "Production-grade systems"
       grid_subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
-      explore_cta: "Explore system →"
+      explore_cta: "Explore system"
       utilities_kicker: "Extras"
-      utilities_cta: "Browse utilities →"
+      utilities_cta: "Browse utilities"
       apis_catalog_title: "Explore the full API directory"
       apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog. Same API key, consistent docs, copy-ready examples."
       apis_catalog_cta: "Browse APIs"
@@ -55,7 +55,7 @@ en:
             - "Misc utilities"
 
     show:
-      back: "← All systems"
+      back: "All systems"
       engine_label: "Engine"
       engine_subheading: "One endpoint. Multiple signals. One decision."
       request_label: "Request"
