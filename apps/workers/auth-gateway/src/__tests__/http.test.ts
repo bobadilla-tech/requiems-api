@@ -286,12 +286,13 @@ describe("HTTP Utilities", () => {
     });
 
     it("returns 504 on timeout", async () => {
-      vi.spyOn(globalThis, "fetch").mockImplementationOnce((_url, init) =>
-        new Promise((_resolve, reject) => {
-          (init?.signal as AbortSignal | undefined)?.addEventListener("abort", () => {
-            reject(new DOMException("The operation was aborted.", "AbortError"));
-          });
-        }),
+      vi.spyOn(globalThis, "fetch").mockImplementationOnce(
+        (_url, init) =>
+          new Promise((_resolve, reject) => {
+            (init?.signal as AbortSignal | undefined)?.addEventListener("abort", () => {
+              reject(new DOMException("The operation was aborted.", "AbortError"));
+            });
+          }),
       );
 
       const result = await fetchBackend("https://api.example.com", { method: "GET" }, 1);

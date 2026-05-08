@@ -87,6 +87,7 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Load env defaults
+        working-directory: .
         run: grep -v '^#' infra/docker/.env.example | grep -v '^$' | grep -v '=\s*$' >> $GITHUB_ENV
 
       - name: Download dependencies
