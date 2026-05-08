@@ -21,7 +21,3 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		},
 	))
 }
-
-	
-
-

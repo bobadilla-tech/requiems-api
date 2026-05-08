@@ -168,21 +168,14 @@ func TestService_ConvertBatch(t *testing.T) {
 	}
 }
 
-
 // múltiples documentos markdown
-
 
 // sanitización en batch
 
-
 // batch vacío
-
 
 // elementos vacíos dentro del batch
 
-
 // validación de orden de resultados
 
-
 // validación individual de cada Response.HTML
-

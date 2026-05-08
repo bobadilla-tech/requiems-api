@@ -515,7 +515,7 @@ apis:
       - text
       - technology
     description: Convert Markdown to HTML in a single API call. Optionally sanitize the output to strip unsafe tags and prevent XSS.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/markdown

@@ -79,7 +79,7 @@ func TestMarkdown_MissingBody(t *testing.T) {
 	if w.Code != http.StatusBadRequest {
 		t.Errorf("expected 400, got %d", w.Code)
 	}
-	
+
 }
 
 func TestMarkdown_EmptyMarkdown(t *testing.T) {
@@ -296,4 +296,3 @@ func TestMarkdownBatch_TooManyMarkdowns(t *testing.T) {
 		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
 	}
 }
-
