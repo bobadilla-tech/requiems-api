@@ -8,6 +8,8 @@ import (
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -48,6 +50,7 @@ func skipIfNoService(t *testing.T) {
 }
 
 func TestInfo_HappyPath_PathParam(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -55,21 +58,17 @@ func TestInfo_HappyPath_PathParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP != "8.8.8.8" {
-		t.Errorf("expected IP 8.8.8.8, got %s", resp.Data.IP)
-	}
+	assert.Equal(t, "8.8.8.8", resp.Data.IP)
 }
 
 func TestInfo_HappyPath_NoPathParam(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -78,21 +77,17 @@ func TestInfo_HappyPath_NoPathParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected non-empty IP in response")
-	}
+	assert.NotEmpty(t, resp.Data.IP)
 }
 
 func TestInfo_InvalidIPFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/ip/not-an-ip", http.NoBody)
@@ -100,26 +95,20 @@ func TestInfo_InvalidIPFormat(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if testSvc == nil {
-		if w.Code != http.StatusServiceUnavailable {
-			t.Errorf("expected 503 without service, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 		return
 	}
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode error response: %v", err)
-	}
-	if resp.Error != "bad_request" {
-		t.Errorf("expected error code 'bad_request', got %q", resp.Error)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "bad_request", resp.Error)
 }
 
 func TestInfo_PrivateIP_ReturnsEmpty(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -127,25 +116,19 @@ func TestInfo_PrivateIP_ReturnsEmpty(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for private IP, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected IP field to be set even for private addresses")
-	}
+	assert.NotEmpty(t, resp.Data.IP)
 	// Country/city should be empty for private IPs
-	if resp.Data.Country != "" {
-		t.Errorf("expected empty country for private IP, got %s", resp.Data.Country)
-	}
+	assert.Empty(t, resp.Data.Country)
 }
 
 func TestInfo_XRealIP(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -154,20 +137,16 @@ func TestInfo_XRealIP(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
-	if resp.Data.IP != "8.8.4.4" {
-		t.Errorf("expected IP 8.8.4.4 from X-Real-IP, got %s", resp.Data.IP)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "8.8.4.4", resp.Data.IP)
 }
 
 func TestInfo_IPv6Address(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -175,21 +154,17 @@ func TestInfo_IPv6Address(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for IPv6, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected non-empty IP for IPv6")
-	}
+	assert.NotEmpty(t, resp.Data.IP)
 }
 
 func TestInfo_ResponseFields(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -197,30 +172,21 @@ func TestInfo_ResponseFields(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	body := w.Body.Bytes()
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.Unmarshal(body, &resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.Unmarshal(body, &resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP != "1.1.1.1" {
-		t.Errorf("expected IP 1.1.1.1, got %s", resp.Data.IP)
-	}
+	assert.Equal(t, "1.1.1.1", resp.Data.IP)
 
 	var raw map[string]any
-	if err := json.Unmarshal(body, &raw); err != nil {
-		t.Fatalf("failed to decode raw response: %v", err)
-	}
+	err = json.Unmarshal(body, &raw)
+	require.NoError(t, err)
 	data, ok := raw["data"].(map[string]any)
-	if !ok {
-		t.Fatalf("expected object at data")
-	}
-	if _, ok := data["is_vpn"]; !ok {
-		t.Error("expected data.is_vpn to be present in response JSON")
-	}
+	require.True(t, ok, "expected object at data")
+	_, ok = data["is_vpn"]
+	assert.True(t, ok, "expected data.is_vpn to be present in response JSON")
 }

@@ -1,7 +1,7 @@
 <% i18n_scope = "case_studies.#{@slug}" %>
 <% content_for :title, t("#{i18n_scope}.meta_title") %>
+<% content_for :description, t("#{i18n_scope}.meta_description") %>
 <% content_for :head do %>
-  <meta name="description" content="<%= t("#{i18n_scope}.meta_description") %>">
   <script type="application/ld+json"><%= case_study_json_ld(@slug).html_safe %></script>
 <% end %>
 

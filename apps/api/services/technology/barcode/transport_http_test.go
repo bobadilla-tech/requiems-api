@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -22,31 +24,23 @@ func setupRouter() chi.Router {
 // ── GET /barcode (PNG) ─────────────────────────────────────────────────────
 
 func TestBarcode_PNG_Code128(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode?data=123456789&type=code128", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
-
-	if ct := w.Header().Get("Content-Type"); ct != "image/png" {
-		t.Errorf("expected Content-Type image/png, got %q", ct)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "image/png", w.Header().Get("Content-Type"))
 
 	body := w.Body.Bytes()
-	if len(body) == 0 {
-		t.Error("expected non-empty PNG response body")
-	}
-
-	if string(body[:4]) != "\x89PNG" {
-		t.Error("expected valid PNG signature in response body")
-	}
+	assert.NotEmpty(t, body)
+	assert.Equal(t, "\x89PNG", string(body[:4]))
 }
 
 func TestBarcode_PNG_AllTypes(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	tests := []struct {
@@ -61,133 +55,108 @@ func TestBarcode_PNG_AllTypes(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		req := httptest.NewRequest(http.MethodGet, tc.query, http.NoBody)
-		w := httptest.NewRecorder()
-		r.ServeHTTP(w, req)
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			req := httptest.NewRequest(http.MethodGet, tc.query, http.NoBody)
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Errorf("type=%q: expected status 200, got %d", tc.name, w.Code)
-		}
+			assert.Equal(t, http.StatusOK, w.Code, "type=%q: expected status 200, got %d", tc.name, w.Code)
+		})
 	}
 }
 
 func TestBarcode_PNG_MissingData(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode?type=code128", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestBarcode_PNG_MissingType(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode?data=123456789", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestBarcode_PNG_InvalidType(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode?data=123456789&type=invalid", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400 for invalid type, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestBarcode_PNG_InvalidEAN8Data(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode?data=123&type=ean8", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected status 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 // ── GET /barcode/base64 (JSON) ─────────────────────────────────────────────
 
 func TestBarcode_Base64_Code128(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode/base64?data=123456789&type=code128", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
-
-	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
-		t.Errorf("expected Content-Type application/json, got %q", ct)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
 	var resp httpx.Response[Base64Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Image == "" {
-		t.Error("expected non-empty base64 image string")
-	}
-
-	if resp.Data.Type != "code128" {
-		t.Errorf("expected type code128, got %q", resp.Data.Type)
-	}
-
-	if resp.Data.Width != defaultWidth {
-		t.Errorf("expected width %d, got %d", defaultWidth, resp.Data.Width)
-	}
-
-	if resp.Data.Height != defaultHeight {
-		t.Errorf("expected height %d, got %d", defaultHeight, resp.Data.Height)
-	}
+	assert.NotEmpty(t, resp.Data.Image)
+	assert.Equal(t, "code128", resp.Data.Type)
+	assert.Equal(t, defaultWidth, resp.Data.Width)
+	assert.Equal(t, defaultHeight, resp.Data.Height)
 
 	// Verify the base64 string decodes to valid PNG bytes.
 	decoded, err := base64.StdEncoding.DecodeString(resp.Data.Image)
-	if err != nil {
-		t.Fatalf("failed to decode base64 image: %v", err)
-	}
+	require.NoError(t, err)
 
-	if string(decoded[:4]) != "\x89PNG" {
-		t.Error("expected valid PNG signature in decoded base64 data")
-	}
+	assert.Equal(t, "\x89PNG", string(decoded[:4]))
 }
 
 func TestBarcode_Base64_MissingData(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode/base64?type=code128", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestBarcode_Base64_InvalidType(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/barcode/base64?data=123456789&type=invalid", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400 for invalid type, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

@@ -149,6 +149,9 @@ Rails.application.routes.draw do
     resources :examples, only: [ :show ]
 
     get "divisions", to: "divisions#index", as: :divisions
+    get "systems", to: "systems#index", as: :systems
+    get "systems/:system_slug", to: "systems#show", as: :system,
+        constraints: { system_slug: /identity-risk|payments-intelligence|global-data|data-integrity|developer-utilities/ }
 
     get "case-studies", to: "case_studies#index", as: :case_studies
     get "case-studies/:slug", to: "case_studies#show", as: :case_study

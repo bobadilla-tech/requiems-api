@@ -4,9 +4,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBackendSecretAuth(t *testing.T) {
+	t.Parallel()
+
 	validSecret := "this_is_a_valid_secret_with_32_chars_minimum"
 
 	// Test handler that just returns 200 OK
@@ -16,6 +20,8 @@ func TestBackendSecretAuth(t *testing.T) {
 	})
 
 	t.Run("allows request with valid secret", func(t *testing.T) {
+		t.Parallel()
+
 		middleware := BackendSecretAuth(validSecret)
 		handler := middleware(testHandler)
 
@@ -25,12 +31,12 @@ func TestBackendSecretAuth(t *testing.T) {
 
 		handler.ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Errorf("expected status 200, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
 	t.Run("rejects request with missing header", func(t *testing.T) {
+		t.Parallel()
+
 		middleware := BackendSecretAuth(validSecret)
 		handler := middleware(testHandler)
 
@@ -39,12 +45,12 @@ func TestBackendSecretAuth(t *testing.T) {
 
 		handler.ServeHTTP(w, req)
 
-		if w.Code != http.StatusUnauthorized {
-			t.Errorf("expected status 401, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusUnauthorized, w.Code)
 	})
 
 	t.Run("rejects request with invalid secret", func(t *testing.T) {
+		t.Parallel()
+
 		middleware := BackendSecretAuth(validSecret)
 		handler := middleware(testHandler)
 
@@ -54,12 +60,12 @@ func TestBackendSecretAuth(t *testing.T) {
 
 		handler.ServeHTTP(w, req)
 
-		if w.Code != http.StatusForbidden {
-			t.Errorf("expected status 403, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusForbidden, w.Code)
 	})
 
 	t.Run("panics if secret is empty", func(t *testing.T) {
+		t.Parallel()
+
 		defer func() {
 			if r := recover(); r == nil {
 				t.Error("expected panic when secret is empty")
@@ -70,6 +76,8 @@ func TestBackendSecretAuth(t *testing.T) {
 	})
 
 	t.Run("panics if secret is too short", func(t *testing.T) {
+		t.Parallel()
+
 		defer func() {
 			if r := recover(); r == nil {
 				t.Error("expected panic when secret is too short")

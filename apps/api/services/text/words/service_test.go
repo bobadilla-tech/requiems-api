@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // mockRow implements pgx.Row.
@@ -29,17 +31,17 @@ func newTestService(row pgx.Row) *Service {
 }
 
 func TestRandom_EmptyTable(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, pgx.ErrNoRows) {
-		t.Errorf("expected pgx.ErrNoRows, got %v", err)
-	}
+	assert.ErrorIs(t, err, pgx.ErrNoRows)
 }
 
 func TestRandom_SingleRow(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 42
@@ -51,47 +53,36 @@ func TestRandom_SingleRow(t *testing.T) {
 	})
 
 	got, err := svc.Random(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got.ID != 42 {
-		t.Errorf("expected ID 42, got %d", got.ID)
-	}
-	if got.Word != "ephemeral" {
-		t.Errorf("unexpected word: %q", got.Word)
-	}
-	if got.Definition != "Lasting for a very short time." {
-		t.Errorf("unexpected definition: %q", got.Definition)
-	}
-	if got.PartOfSpeech != "adjective" {
-		t.Errorf("unexpected part_of_speech: %q", got.PartOfSpeech)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, 42, got.ID)
+	assert.Equal(t, "ephemeral", got.Word)
+	assert.Equal(t, "Lasting for a very short time.", got.Definition)
+	assert.Equal(t, "adjective", got.PartOfSpeech)
 }
 
 func TestRandom_ScanError(t *testing.T) {
+	t.Parallel()
 	scanErr := errors.New("scan failed")
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return scanErr },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, scanErr) {
-		t.Errorf("expected scan error, got %v", err)
-	}
+	assert.ErrorIs(t, err, scanErr)
 }
 
 func TestRandom_ReturnsZeroValueOnError(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	got, _ := svc.Random(context.Background())
-	if got.ID != 0 || got.Word != "" || got.Definition != "" || got.PartOfSpeech != "" {
-		t.Errorf("expected zero Word on error, got %+v", got)
-	}
+	assert.True(t, got.ID == 0 && got.Word == "" && got.Definition == "" && got.PartOfSpeech == "", "expected zero Word on error, got %+v", got)
 }
 
 func TestRandom_EmptyPartOfSpeechAllowed(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 1
@@ -103,10 +94,6 @@ func TestRandom_EmptyPartOfSpeechAllowed(t *testing.T) {
 	})
 
 	got, err := svc.Random(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got.PartOfSpeech != "" {
-		t.Errorf("expected empty part_of_speech, got %q", got.PartOfSpeech)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "", got.PartOfSpeech)
 }

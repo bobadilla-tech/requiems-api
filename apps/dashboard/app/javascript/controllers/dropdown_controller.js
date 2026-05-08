@@ -16,6 +16,14 @@ export default class extends Controller {
     this.menuTarget.classList.toggle("hidden");
   }
 
+  open() {
+    this.menuTarget.classList.remove("hidden");
+  }
+
+  close() {
+    this.menuTarget.classList.add("hidden");
+  }
+
   hide(event) {
     if (this.menuTarget.classList.contains("hidden")) return;
     const t = event.target;

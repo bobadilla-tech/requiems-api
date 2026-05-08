@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseFREDRow(t *testing.T) {
@@ -29,11 +32,9 @@ func TestParseFREDRow(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			val, _, ok := parseFREDRow(tt.record)
-			if ok != tt.wantOK {
-				t.Fatalf("parseFREDRow ok = %v, want %v", ok, tt.wantOK)
-			}
-			if ok && val != tt.wantVal {
-				t.Fatalf("parseFREDRow val = %v, want %v", val, tt.wantVal)
+			require.Equal(t, tt.wantOK, ok)
+			if ok {
+				assert.Equal(t, tt.wantVal, val)
 			}
 		})
 	}
@@ -68,11 +69,9 @@ func TestParseYahooClose(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			val, ok := parseYahooClose(closes, tt.idx)
-			if ok != tt.wantOK {
-				t.Fatalf("parseYahooClose ok = %v, want %v", ok, tt.wantOK)
-			}
-			if ok && val != tt.wantVal {
-				t.Fatalf("parseYahooClose val = %v, want %v", val, tt.wantVal)
+			require.Equal(t, tt.wantOK, ok)
+			if ok {
+				assert.Equal(t, tt.wantVal, val)
 			}
 		})
 	}
@@ -96,11 +95,11 @@ func TestParseYear(t *testing.T) {
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
 			got, err := parseYear(tt.input)
-			if (err != nil) != tt.wantErr {
-				t.Fatalf("parseYear(%q) error = %v, wantErr %v", tt.input, err, tt.wantErr)
-			}
-			if !tt.wantErr && got != tt.want {
-				t.Fatalf("parseYear(%q) = %d, want %d", tt.input, got, tt.want)
+			if tt.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, tt.want, got)
 			}
 		})
 	}
@@ -122,20 +121,12 @@ func TestBuildRecords(t *testing.T) {
 	}
 
 	records := buildRecords(cfg, byYear)
-	if len(records) != 1 {
-		t.Fatalf("expected 1 record, got %d", len(records))
-	}
+	require.Len(t, records, 1)
 
 	r := records[0]
-	if r.Slug != "oil" {
-		t.Errorf("Slug = %q, want %q", r.Slug, "oil")
-	}
-	if r.Year != 2020 {
-		t.Errorf("Year = %d, want 2020", r.Year)
-	}
-	if r.Price != 20.0 {
-		t.Errorf("Price = %v, want 20.0", r.Price)
-	}
+	assert.Equal(t, "oil", r.Slug)
+	assert.Equal(t, 2020, r.Year)
+	assert.Equal(t, 20.0, r.Price)
 }
 
 func TestAccumulate(t *testing.T) {
@@ -146,10 +137,8 @@ func TestAccumulate(t *testing.T) {
 	accumulate(m, 2021, 20.0)
 	accumulate(m, 2022, 5.0)
 
-	if m[2021].count != 2 || m[2021].sum != 30.0 {
-		t.Fatalf("year 2021: count=%d sum=%v, want count=2 sum=30.0", m[2021].count, m[2021].sum)
-	}
-	if m[2022].count != 1 || m[2022].sum != 5.0 {
-		t.Fatalf("year 2022: count=%d sum=%v, want count=1 sum=5.0", m[2022].count, m[2022].sum)
-	}
+	assert.Equal(t, 2, m[2021].count)
+	assert.Equal(t, 30.0, m[2021].sum)
+	assert.Equal(t, 1, m[2022].count)
+	assert.Equal(t, 5.0, m[2022].sum)
 }

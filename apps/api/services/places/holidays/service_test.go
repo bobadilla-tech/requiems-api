@@ -3,9 +3,13 @@ package holidays
 import (
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_GetHolidays_Countries(t *testing.T) {
+	t.Parallel()
 	cases := []struct {
 		name    string
 		country string
@@ -19,33 +23,25 @@ func TestService_GetHolidays_Countries(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			svc := NewService()
 
 			resp, err := svc.GetHolidays(tc.country, tc.year)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
+			require.NoError(t, err)
 
-			if resp.Country != tc.country {
-				t.Errorf("expected country %q, got %q", tc.country, resp.Country)
-			}
-			if resp.Year != tc.year {
-				t.Errorf("expected year %d, got %d", tc.year, resp.Year)
-			}
-			if len(resp.Holidays) == 0 {
-				t.Error("expected non-empty holidays list")
-			}
+			assert.Equal(t, tc.country, resp.Country)
+			assert.Equal(t, tc.year, resp.Year)
+			assert.NotEmpty(t, resp.Holidays)
 		})
 	}
 }
 
 func TestService_GetHolidays_NewYear(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	resp, err := svc.GetHolidays("US", 2025)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
 	found := false
 	for _, h := range resp.Holidays {
@@ -60,12 +56,11 @@ func TestService_GetHolidays_NewYear(t *testing.T) {
 }
 
 func TestService_GetHolidays_DateFormat(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	resp, err := svc.GetHolidays("US", 2025)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
 	for _, h := range resp.Holidays {
 		if len(h.Date) != 10 {
@@ -79,12 +74,11 @@ func TestService_GetHolidays_DateFormat(t *testing.T) {
 }
 
 func TestService_GetHolidays_InvalidCountry(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	_, err := svc.GetHolidays("XX", 2025)
-	if err == nil {
-		t.Fatal("expected error for invalid country code, got nil")
-	}
+	require.Error(t, err)
 	if !strings.Contains(err.Error(), "no holidays found") {
 		t.Errorf("expected error message to contain 'no holidays found', got %q", err.Error())
 	}
@@ -93,6 +87,7 @@ func TestService_GetHolidays_InvalidCountry(t *testing.T) {
 // ---- batch service tests ----
 
 func TestService_GetHolidaysBatch_AllFound(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	queries := []BatchQuery{
@@ -102,9 +97,7 @@ func TestService_GetHolidaysBatch_AllFound(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	if resp.Total != 2 {
-		t.Errorf("expected total 2, got %d", resp.Total)
-	}
+	assert.Equal(t, 2, resp.Total)
 	for _, item := range resp.Results {
 		if !item.Found {
 			t.Errorf("expected found=true for %s %d", item.Country, item.Year)
@@ -116,6 +109,7 @@ func TestService_GetHolidaysBatch_AllFound(t *testing.T) {
 }
 
 func TestService_GetHolidaysBatch_PartialFailure(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	queries := []BatchQuery{
@@ -125,9 +119,7 @@ func TestService_GetHolidaysBatch_PartialFailure(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	if resp.Total != 2 {
-		t.Errorf("expected total 2, got %d", resp.Total)
-	}
+	assert.Equal(t, 2, resp.Total)
 	if !resp.Results[0].Found {
 		t.Error("expected Results[0] (US) to be found")
 	}
@@ -140,6 +132,7 @@ func TestService_GetHolidaysBatch_PartialFailure(t *testing.T) {
 }
 
 func TestService_GetHolidaysBatch_PreservesOrder(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	queries := []BatchQuery{
@@ -150,13 +143,7 @@ func TestService_GetHolidaysBatch_PreservesOrder(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	if resp.Results[0].Country != "DE" {
-		t.Errorf("expected Results[0] country DE, got %s", resp.Results[0].Country)
-	}
-	if resp.Results[1].Country != "AR" {
-		t.Errorf("expected Results[1] country AR, got %s", resp.Results[1].Country)
-	}
-	if resp.Results[2].Country != "JP" {
-		t.Errorf("expected Results[2] country JP, got %s", resp.Results[2].Country)
-	}
+	assert.Equal(t, "DE", resp.Results[0].Country)
+	assert.Equal(t, "AR", resp.Results[1].Country)
+	assert.Equal(t, "JP", resp.Results[2].Country)
 }

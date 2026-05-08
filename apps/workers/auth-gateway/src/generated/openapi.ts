@@ -2705,6 +2705,155 @@ export const openApiSpec = {
         }
       }
     },
+    "/v1/validation/email/batch": {
+      "post": {
+        "summary": "Validate Emails (Batch)",
+        "tags": [
+          "email-validate"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Validates up to 50 email addresses in a single request. Each email is processed independently and returns a full validation breakdown (syntax, MX record, disposable check, normalization, and typo suggestion). Invalid emails do not fail the request. Billing: 1 credit per email.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "emails": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of email addresses to validate. Min: 1, Max: 50.",
+                    "example": "[\"user@gmail.com\", \"user@gmial.com\"]"
+                  }
+                },
+                "required": [
+                  "emails"
+                ],
+                "example": {
+                  "emails": [
+                    "user@gmail.com",
+                    "user@gmial.com"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "List of validation results for each email, preserving input order"
+                        },
+                        "results[].email": {
+                          "type": "string",
+                          "description": "Original email input (null if invalid syntax)"
+                        },
+                        "results[].valid": {
+                          "type": "boolean",
+                          "description": "Overall validity (syntax + MX record)"
+                        },
+                        "results[].syntax_valid": {
+                          "type": "boolean",
+                          "description": "Whether the email is syntactically valid (RFC 5322)"
+                        },
+                        "results[].mx_valid": {
+                          "type": "boolean",
+                          "description": "Whether the domain has valid MX records"
+                        },
+                        "results[].disposable": {
+                          "type": "boolean",
+                          "description": "Whether the email comes from a disposable domain"
+                        },
+                        "results[].normalized": {
+                          "type": "string",
+                          "description": "Canonical normalized email (lowercase, alias handling, etc.)"
+                        },
+                        "results[].domain": {
+                          "type": "string",
+                          "description": "Extracted domain from email address"
+                        },
+                        "results[].suggestion": {
+                          "type": "string",
+                          "description": "Suggested correction for common domain typos"
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Number of emails processed in the batch"
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "email": "user@gmail.com",
+                        "valid": true,
+                        "syntax_valid": true,
+                        "mx_valid": true,
+                        "disposable": false,
+                        "normalized": "user@gmail.com",
+                        "domain": "gmail.com",
+                        "suggestion": null
+                      },
+                      {
+                        "email": "user@gmial.com",
+                        "valid": false,
+                        "syntax_valid": true,
+                        "mx_valid": false,
+                        "disposable": false,
+                        "normalized": "user@gmial.com",
+                        "domain": "gmial.com",
+                        "suggestion": "gmail.com"
+                      }
+                    ],
+                    "total": 2
+                  },
+                  "metadata": {
+                    "timestamp": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON, malformed request body, or unexpected field types."
+          },
+          "422": {
+            "description": "Valid JSON body that fails field validation (empty array or more than 50 emails)."
+          },
+          "500": {
+            "description": "Unexpected server error"
+          }
+        }
+      }
+    },
     "/v1/entertainment/emoji/random": {
       "get": {
         "summary": "Get Random Emoji",
@@ -4211,6 +4360,148 @@ export const openApiSpec = {
         }
       }
     },
+    "/v1/places/holidays/batch": {
+      "post": {
+        "summary": "Batch Get Holidays",
+        "tags": [
+          "holidays"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Returns holidays for up to 50 (country, year) pairs in a single request. Each pair is processed independently — if one combination has no data, it returns found:false without failing the entire batch.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "queries": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of (country, year) pairs. Min: 1, Max: 50.",
+                    "example": "[{\"country\":\"US\",\"year\":2025},{\"country\":\"AR\",\"year\":2024}]"
+                  }
+                },
+                "required": [
+                  "queries"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "One result per query, in the same order as the request"
+                        },
+                        "results[].country": {
+                          "type": "string",
+                          "description": "ISO 3166-1 alpha-2 country code"
+                        },
+                        "results[].year": {
+                          "type": "integer",
+                          "description": "Year queried"
+                        },
+                        "results[].found": {
+                          "type": "boolean",
+                          "description": "false when no holidays exist for that country/year combination"
+                        },
+                        "results[].holidays": {
+                          "type": "array",
+                          "items": {},
+                          "description": "List of holidays. Omitted when found is false."
+                        },
+                        "results[].total": {
+                          "type": "integer",
+                          "description": "Number of holidays. Omitted when found is false."
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Total number of results (equals the number of queries sent)"
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "country": "US",
+                        "year": 2025,
+                        "found": true,
+                        "holidays": [
+                          {
+                            "date": "2025-01-01",
+                            "name": "New Year's Day"
+                          },
+                          {
+                            "date": "2025-07-04",
+                            "name": "Independence Day"
+                          }
+                        ],
+                        "total": 11
+                      },
+                      {
+                        "country": "AR",
+                        "year": 2024,
+                        "found": true,
+                        "holidays": [
+                          {
+                            "date": "2024-01-01",
+                            "name": "Año Nuevo"
+                          }
+                        ],
+                        "total": 19
+                      },
+                      {
+                        "country": "AQ",
+                        "year": 2025,
+                        "found": false
+                      }
+                    ],
+                    "total": 3
+                  },
+                  "metadata": {
+                    "timestamp": "2025-01-15T10:30:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "422": {
+            "description": "queries is missing, empty, exceeds 50 items, or contains invalid country codes or years"
+          }
+        }
+      }
+    },
     "/v1/entertainment/horoscope/{sign}": {
       "get": {
         "summary": "Get Daily Horoscope",
@@ -4381,6 +4672,119 @@ export const openApiSpec = {
           },
           "500": {
             "description": "Unexpected server error (e.g. database unreachable)."
+          }
+        }
+      }
+    },
+    "/v1/finance/iban/batch": {
+      "post": {
+        "summary": "Batch Validate IBANs",
+        "tags": [
+          "iban"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Validates up to 50 iban numbers in a single request. Results are returned in the same order as the input.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "numbers": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of iban numbers to validate (min: 1, max: 50).",
+                    "example": "[\"GB29NWBK60161331926819\", \"DE89370400440532013000\"]"
+                  }
+                },
+                "required": [
+                  "numbers"
+                ],
+                "example": {
+                  "numbers": [
+                    "GB29NWBK60161331926819",
+                    "DE89370400440532013000",
+                    "XX89370400440532013000"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "Validation result for each number in the same order as the input. Each item has the same fields as the single validate endpoint."
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Number of results returned. Matches the length of the input array."
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "iban": "GB29NWBK60161331926819",
+                        "valid": true,
+                        "country": "United Kingdom",
+                        "bank_code": "NWBK",
+                        "account": "31926819"
+                      },
+                      {
+                        "iban": "DE89370400440532013000",
+                        "valid": true,
+                        "country": "Germany",
+                        "bank_code": "37040044",
+                        "account": "0532013000"
+                      },
+                      {
+                        "iban": "XX89370400440532013000",
+                        "valid": false,
+                        "country": "",
+                        "bank_code": "",
+                        "account": ""
+                      }
+                    ],
+                    "total": 3
+                  },
+                  "metadata": {
+                    "timestamp": "2026-05-03T19:25:02Z"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The numbers array is missing, empty, or contains more than 50 items."
           }
         }
       }
@@ -6651,6 +7055,323 @@ export const openApiSpec = {
           },
           "500": {
             "description": "Unexpected server error."
+          }
+        }
+      }
+    },
+    "/v1/entertainment/sudoku/batch": {
+      "post": {
+        "summary": "Batch Generate Sudoku Puzzles",
+        "tags": [
+          "sudoku"
+        ],
+        "security": [
+          {
+            "requiems-api-key": []
+          }
+        ],
+        "description": "Generate up to 20 Sudoku puzzles in a single request. Results are returned in the same order as the input array. Each puzzle in the batch counts as one unit of API usage.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "puzzles": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of difficulty levels to generate (min: 1, max: 20). Each must be one of: easy, medium, hard.",
+                    "example": "[\"easy\", \"medium\", \"hard\"]"
+                  }
+                },
+                "required": [
+                  "puzzles"
+                ],
+                "example": {
+                  "puzzles": [
+                    "easy",
+                    "hard"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {},
+                          "description": "Generated puzzles in the same order as the input array. Each item has the same fields as the single-puzzle endpoint."
+                        },
+                        "results[].difficulty": {
+                          "type": "string",
+                          "description": "The difficulty level of the puzzle (easy, medium, or hard)"
+                        },
+                        "results[].puzzle": {
+                          "type": "string",
+                          "description": "9×9 grid representing the puzzle — 0 means an empty cell to be filled in"
+                        },
+                        "results[].solution": {
+                          "type": "string",
+                          "description": "9×9 grid containing the complete, valid solution"
+                        },
+                        "total": {
+                          "type": "integer",
+                          "description": "Number of puzzles returned. Matches the length of the input array."
+                        }
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "results": [
+                      {
+                        "difficulty": "easy",
+                        "puzzle": [
+                          [
+                            5,
+                            3,
+                            0,
+                            0,
+                            7,
+                            0,
+                            0,
+                            0,
+                            0
+                          ],
+                          [
+                            6,
+                            0,
+                            0,
+                            1,
+                            9,
+                            5,
+                            0,
+                            0,
+                            0
+                          ],
+                          [
+                            0,
+                            9,
+                            8,
+                            0,
+                            0,
+                            0,
+                            0,
+                            6,
+                            0
+                          ],
+                          [
+                            8,
+                            0,
+                            0,
+                            0,
+                            6,
+                            0,
+                            0,
+                            0,
+                            3
+                          ],
+                          [
+                            4,
+                            0,
+                            0,
+                            8,
+                            0,
+                            3,
+                            0,
+                            0,
+                            1
+                          ],
+                          [
+                            7,
+                            0,
+                            0,
+                            0,
+                            2,
+                            0,
+                            0,
+                            0,
+                            6
+                          ],
+                          [
+                            0,
+                            6,
+                            0,
+                            0,
+                            0,
+                            0,
+                            2,
+                            8,
+                            0
+                          ],
+                          [
+                            0,
+                            0,
+                            0,
+                            4,
+                            1,
+                            9,
+                            0,
+                            0,
+                            5
+                          ],
+                          [
+                            0,
+                            0,
+                            0,
+                            0,
+                            8,
+                            0,
+                            0,
+                            7,
+                            9
+                          ]
+                        ],
+                        "solution": [
+                          [
+                            5,
+                            3,
+                            4,
+                            6,
+                            7,
+                            8,
+                            9,
+                            1,
+                            2
+                          ],
+                          [
+                            6,
+                            7,
+                            2,
+                            1,
+                            9,
+                            5,
+                            3,
+                            4,
+                            8
+                          ],
+                          [
+                            1,
+                            9,
+                            8,
+                            3,
+                            4,
+                            2,
+                            5,
+                            6,
+                            7
+                          ],
+                          [
+                            8,
+                            5,
+                            9,
+                            7,
+                            6,
+                            1,
+                            4,
+                            2,
+                            3
+                          ],
+                          [
+                            4,
+                            2,
+                            6,
+                            8,
+                            5,
+                            3,
+                            7,
+                            9,
+                            1
+                          ],
+                          [
+                            7,
+                            1,
+                            3,
+                            9,
+                            2,
+                            4,
+                            8,
+                            5,
+                            6
+                          ],
+                          [
+                            9,
+                            6,
+                            1,
+                            5,
+                            3,
+                            7,
+                            2,
+                            8,
+                            4
+                          ],
+                          [
+                            2,
+                            8,
+                            7,
+                            4,
+                            1,
+                            9,
+                            6,
+                            3,
+                            5
+                          ],
+                          [
+                            3,
+                            4,
+                            5,
+                            2,
+                            8,
+                            6,
+                            1,
+                            7,
+                            9
+                          ]
+                        ]
+                      }
+                    ],
+                    "total": 1
+                  },
+                  "metadata": {
+                    "timestamp": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body is missing or contains malformed JSON."
+          },
+          "401": {
+            "description": "Missing API key"
+          },
+          "403": {
+            "description": "Invalid or revoked API key"
+          },
+          "422": {
+            "description": "The puzzles array is missing, empty, exceeds 20 items, or contains a value other than easy, medium, or hard."
           }
         }
       }

@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -36,15 +38,15 @@ func setupRouter(g Getter) chi.Router {
 func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[CommodityPrice] {
 	t.Helper()
 	var resp httpx.Response[CommodityPrice]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	return resp
 }
 
 // ---- tests ----
 
 func TestCommodity_KnownSlug_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetterHTTP{result: CommodityPrice{
 		Name:      "Gold",
 		Price:     2386.33,
@@ -61,23 +63,16 @@ func TestCommodity_KnownSlug_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d: %s", w.Code, w.Body.String())
 
 	resp := decodeResponse(t, w)
-	if resp.Data.Commodity != "gold" {
-		t.Errorf("expected commodity gold, got %q", resp.Data.Commodity)
-	}
-	if resp.Data.Price != 2386.33 {
-		t.Errorf("expected price 2386.33, got %v", resp.Data.Price)
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("expected metadata.timestamp to be set")
-	}
+	assert.Equal(t, "gold", resp.Data.Commodity)
+	assert.Equal(t, 2386.33, resp.Data.Price)
+	assert.NotEmpty(t, resp.Metadata.Timestamp, "expected metadata.timestamp to be set")
 }
 
 func TestCommodity_ResponseEnvelope(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetterHTTP{result: CommodityPrice{Price: 2386.33}}
 	r := setupRouter(svc)
 
@@ -85,23 +80,17 @@ func TestCommodity_ResponseEnvelope(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d", w.Code)
 
 	var raw map[string]json.RawMessage
-	if err := json.NewDecoder(w.Body).Decode(&raw); err != nil {
-		t.Fatalf("failed to decode: %v", err)
-	}
-	if _, ok := raw["data"]; !ok {
-		t.Error("response must have a 'data' key")
-	}
-	if _, ok := raw["metadata"]; !ok {
-		t.Error("response must have a 'metadata' key")
-	}
+	err := json.NewDecoder(w.Body).Decode(&raw)
+	require.NoError(t, err)
+	assert.Contains(t, raw, "data", "response must have a 'data' key")
+	assert.Contains(t, raw, "metadata", "response must have a 'metadata' key")
 }
 
 func TestCommodity_UnknownSlug_Returns404(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetterHTTP{err: &httpx.AppError{
 		Status:  http.StatusNotFound,
 		Code:    "not_found",
@@ -113,12 +102,11 @@ func TestCommodity_UnknownSlug_Returns404(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Fatalf("expected 404, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusNotFound, w.Code, "expected 404, got %d: %s", w.Code, w.Body.String())
 }
 
 func TestCommodity_InternalError_Returns500(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetterHTTP{err: &httpx.AppError{
 		Status:  http.StatusInternalServerError,
 		Code:    "internal_error",
@@ -130,12 +118,11 @@ func TestCommodity_InternalError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("expected 500, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusInternalServerError, w.Code, "expected 500, got %d: %s", w.Code, w.Body.String())
 }
 
 func TestCommodity_HistoricalFieldPresent(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetterHTTP{result: CommodityPrice{
 		Price: 2386.33,
 		Historical: []HistoricalPrice{
@@ -150,7 +137,5 @@ func TestCommodity_HistoricalFieldPresent(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	if len(resp.Data.Historical) != 2 {
-		t.Errorf("expected 2 historical entries, got %d", len(resp.Data.Historical))
-	}
+	assert.Len(t, resp.Data.Historical, 2)
 }

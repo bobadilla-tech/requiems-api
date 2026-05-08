@@ -15,23 +15,25 @@ solutions. Each request returns a freshly generated, unique puzzle.
 
 **Endpoint:** `POST /v1/entertainment/sudoku/batch`
 
-Generate up to 20 Sudoku puzzles in a single request. Results are returned in the same order as the input array. Each puzzle in the batch counts as one unit of API usage (billed via `X-Usage-Count`).
+Generate up to 20 Sudoku puzzles in a single request. Results are returned in
+the same order as the input array. Each puzzle in the batch counts as one unit
+of API usage (billed via `X-Usage-Count`).
 
 #### Request Body
 
-| Field      | Type            | Required | Description                                                                               |
-| ---------- | --------------- | -------- | ----------------------------------------------------------------------------------------- |
-| `puzzles`  | array of string | Yes      | List of difficulty levels to generate. Each must be `easy`, `medium`, or `hard` (min: 1, max: 20). |
+| Field     | Type            | Required | Description                                                                                        |
+| --------- | --------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `puzzles` | array of string | Yes      | List of difficulty levels to generate. Each must be `easy`, `medium`, or `hard` (min: 1, max: 20). |
 
 #### Response Fields
 
-| Field           | Type         | Description                                                 |
-| --------------- | ------------ | ----------------------------------------------------------- |
-| `results`       | array        | Generated puzzles in the same order as the input array.     |
-| `results[].difficulty` | string | The difficulty level of each puzzle.                 |
-| `results[].puzzle`     | array[array] | 9×9 grid — `0` represents an empty cell.          |
-| `results[].solution`   | array[array] | 9×9 grid containing the complete solution.        |
-| `total`         | integer      | Number of puzzles returned. Matches the length of the input. |
+| Field                  | Type         | Description                                                  |
+| ---------------------- | ------------ | ------------------------------------------------------------ |
+| `results`              | array        | Generated puzzles in the same order as the input array.      |
+| `results[].difficulty` | string       | The difficulty level of each puzzle.                         |
+| `results[].puzzle`     | array[array] | 9×9 grid — `0` represents an empty cell.                     |
+| `results[].solution`   | array[array] | 9×9 grid containing the complete solution.                   |
+| `total`                | integer      | Number of puzzles returned. Matches the length of the input. |
 
 #### Example Request
 
@@ -108,13 +110,15 @@ Generate up to 20 Sudoku puzzles in a single request. Results are returned in th
 
 #### Billing
 
-Each puzzle in the batch is billed as one request unit. Sending 10 puzzles consumes 10 units of quota. The gateway receives the item count via the internal `X-Usage-Count` response header (stripped before reaching the client).
+Each puzzle in the batch is billed as one request unit. Sending 10 puzzles
+consumes 10 units of quota. The gateway receives the item count via the internal
+`X-Usage-Count` response header (stripped before reaching the client).
 
 #### Errors
 
-| Code                | Status | When                                                              |
-| ------------------- | ------ | ----------------------------------------------------------------- |
-| `bad_request`       | 400    | The request body is missing or contains malformed JSON.           |
+| Code                | Status | When                                                                                    |
+| ------------------- | ------ | --------------------------------------------------------------------------------------- |
+| `bad_request`       | 400    | The request body is missing or contains malformed JSON.                                 |
 | `validation_failed` | 422    | `puzzles` is missing, empty, exceeds 20 items, or contains an invalid difficulty value. |
 
 ---

@@ -8,6 +8,8 @@ import (
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -44,6 +46,7 @@ func skipIfNoService(t *testing.T) {
 }
 
 func TestVPN_HappyPath(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -52,25 +55,18 @@ func TestVPN_HappyPath(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPCheckResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected non-empty IP in response")
-	}
-
-	if resp.Data.Score < 0 {
-		t.Errorf("expected non-negative score, got %d", resp.Data.Score)
-	}
+	assert.NotEmpty(t, resp.Data.IP)
+	assert.True(t, resp.Data.Score >= 0, "expected non-negative score, got %d", resp.Data.Score)
 }
 
 func TestVPN_ValidIPFields(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -79,18 +75,13 @@ func TestVPN_ValidIPFields(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPCheckResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP != "1.1.1.1" {
-		t.Errorf("expected IP 1.1.1.1, got %s", resp.Data.IP)
-	}
+	assert.Equal(t, "1.1.1.1", resp.Data.IP)
 
 	validThreats := map[string]bool{
 		"none":     true,
@@ -99,16 +90,12 @@ func TestVPN_ValidIPFields(t *testing.T) {
 		"high":     true,
 		"critical": true,
 	}
-	if !validThreats[resp.Data.Threat.String()] {
-		t.Errorf("invalid threat level: %s", resp.Data.Threat)
-	}
-
-	if resp.Data.FraudScore < 0 || resp.Data.FraudScore > 100 {
-		t.Errorf("fraud_score out of range: %d", resp.Data.FraudScore)
-	}
+	assert.True(t, validThreats[resp.Data.Threat.String()], "invalid threat level: %s", resp.Data.Threat)
+	assert.True(t, resp.Data.FraudScore >= 0 && resp.Data.FraudScore <= 100, "fraud_score out of range: %d", resp.Data.FraudScore)
 }
 
 func TestVPN_InvalidIPFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/ip/vpn/not-an-ip", http.NoBody)
@@ -117,27 +104,21 @@ func TestVPN_InvalidIPFormat(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if testSvc == nil {
-		if w.Code != http.StatusServiceUnavailable {
-			t.Errorf("expected 503 without service, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusServiceUnavailable, w.Code, "expected 503 without service, got %d", w.Code)
 		return
 	}
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode error response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Error != "bad_request" {
-		t.Errorf("expected error code 'bad_request', got %q", resp.Error)
-	}
+	assert.Equal(t, "bad_request", resp.Error)
 }
 
 func TestVPN_IPv6Address(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -146,21 +127,17 @@ func TestVPN_IPv6Address(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for IPv6, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPCheckResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected non-empty IP for IPv6")
-	}
+	assert.NotEmpty(t, resp.Data.IP)
 }
 
 func TestVPN_AllBooleansReturned(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -169,25 +146,14 @@ func TestVPN_AllBooleansReturned(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPCheckResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IsVPN != false && resp.Data.IsVPN != true {
-		t.Error("is_vpn should be a boolean")
-	}
-	if resp.Data.IsProxy != false && resp.Data.IsProxy != true {
-		t.Error("is_proxy should be a boolean")
-	}
-	if resp.Data.IsTor != false && resp.Data.IsTor != true {
-		t.Error("is_tor should be a boolean")
-	}
-	if resp.Data.IsHosting != false && resp.Data.IsHosting != true {
-		t.Error("is_hosting should be a boolean")
-	}
+	assert.True(t, resp.Data.IsVPN == false || resp.Data.IsVPN == true, "is_vpn should be a boolean")
+	assert.True(t, resp.Data.IsProxy == false || resp.Data.IsProxy == true, "is_proxy should be a boolean")
+	assert.True(t, resp.Data.IsTor == false || resp.Data.IsTor == true, "is_tor should be a boolean")
+	assert.True(t, resp.Data.IsHosting == false || resp.Data.IsHosting == true, "is_hosting should be a boolean")
 }

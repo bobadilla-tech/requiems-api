@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -18,60 +20,45 @@ func setupRouter() chi.Router {
 }
 
 func TestThesaurus_KnownWord(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/thesaurus/happy", http.NoBody)
 	w := httptest.NewRecorder()
 
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Word != "happy" {
-		t.Errorf("expected word %q, got %q", "happy", resp.Data.Word)
-	}
-
-	if len(resp.Data.Synonyms) == 0 {
-		t.Error("expected at least one synonym")
-	}
-
-	if len(resp.Data.Antonyms) == 0 {
-		t.Error("expected at least one antonym")
-	}
+	assert.Equal(t, "happy", resp.Data.Word)
+	assert.NotEmpty(t, resp.Data.Synonyms)
+	assert.NotEmpty(t, resp.Data.Antonyms)
 }
 
 func TestThesaurus_CaseInsensitive(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/thesaurus/HAPPY", http.NoBody)
 	w := httptest.NewRecorder()
 
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Word != "happy" {
-		t.Errorf("expected normalized word %q, got %q", "happy", resp.Data.Word)
-	}
+	assert.Equal(t, "happy", resp.Data.Word)
 }
 
 func TestThesaurus_UnknownWord(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/thesaurus/zzyzx", http.NoBody)
 	w := httptest.NewRecorder()
 
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }

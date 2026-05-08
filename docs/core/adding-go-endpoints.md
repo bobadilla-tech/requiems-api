@@ -423,9 +423,13 @@ package riddle
 
 import (
     "testing"
+
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
 )
 
 func TestService_Random(t *testing.T) {
+    t.Parallel()
     // For services with no DB: svc := NewService()
     // For DB-backed services: use a test DB or interface/mock.
 
@@ -440,7 +444,16 @@ func TestService_Random(t *testing.T) {
 
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
-            // assertion logic here
+            t.Parallel()
+
+            svc := NewService()
+            result, err := svc.Random(tt.category)
+            if tt.wantErr {
+                require.Error(t, err)
+            } else {
+                require.NoError(t, err)
+                assert.NotEmpty(t, result.Question)
+            }
         })
     }
 }
@@ -461,52 +474,47 @@ import (
     "testing"
 
     "github.com/go-chi/chi/v5"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+
     "requiems-api/platform/httpx"
 )
 
-func setupRouter() chi.Router {
+func setupRouter(svc *Service) chi.Router {
     r := chi.NewRouter()
-    svc := NewService() // inject test deps here if needed
     RegisterRoutes(r, svc)
     return r
 }
 
 func TestRiddle_Generate_HappyPath(t *testing.T) {
-    r := setupRouter()
+    t.Parallel()
+
+    r := setupRouter(NewService())
 
     body := `{"category":"general"}`
     req := httptest.NewRequest(http.MethodPost, "/riddle/generate", strings.NewReader(body))
     req.Header.Set("Content-Type", "application/json")
     w := httptest.NewRecorder()
-
     r.ServeHTTP(w, req)
 
-    if w.Code != http.StatusOK {
-        t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-    }
+    require.Equal(t, http.StatusOK, w.Code)
 
     var resp httpx.Response[Riddle]
-    if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-        t.Fatalf("failed to decode: %v", err)
-    }
-
-    if resp.Data.Question == "" {
-        t.Error("expected a non-empty question")
-    }
+    err := json.NewDecoder(w.Body).Decode(&resp)
+    require.NoError(t, err)
+    assert.NotEmpty(t, resp.Data.Question)
 }
 
 func TestRiddle_Generate_MissingCategory(t *testing.T) {
-    r := setupRouter()
+    t.Parallel()
 
+    r := setupRouter(NewService())
     req := httptest.NewRequest(http.MethodPost, "/riddle/generate", strings.NewReader(`{}`))
     req.Header.Set("Content-Type", "application/json")
     w := httptest.NewRecorder()
-
     r.ServeHTTP(w, req)
 
-    if w.Code != http.StatusUnprocessableEntity {
-        t.Errorf("expected 422, got %d", w.Code)
-    }
+    assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 ```
 
@@ -1080,35 +1088,32 @@ import (
     "testing"
 
     "github.com/go-chi/chi/v5"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+
     "requiems-api/platform/httpx"
 )
 
-func setupRouter() chi.Router {
+func newRouter() chi.Router {
     r := chi.NewRouter()
     RegisterRoutes(r, NewService())
     return r
 }
 
 func TestRiddle_Random(t *testing.T) {
+    t.Parallel()
+
     req := httptest.NewRequest(http.MethodGet, "/riddle/random", http.NoBody)
     w := httptest.NewRecorder()
-    setupRouter().ServeHTTP(w, req)
+    newRouter().ServeHTTP(w, req)
 
-    if w.Code != http.StatusOK {
-        t.Fatalf("expected 200, got %d", w.Code)
-    }
+    require.Equal(t, http.StatusOK, w.Code)
 
     var resp httpx.Response[Riddle]
-    if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-        t.Fatalf("decode error: %v", err)
-    }
-
-    if resp.Data.Question == "" {
-        t.Error("expected non-empty question")
-    }
-    if resp.Data.Answer == "" {
-        t.Error("expected non-empty answer")
-    }
+    err := json.NewDecoder(w.Body).Decode(&resp)
+    require.NoError(t, err)
+    assert.NotEmpty(t, resp.Data.Question)
+    assert.NotEmpty(t, resp.Data.Answer)
 }
 ```
 
