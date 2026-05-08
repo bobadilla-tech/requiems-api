@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -44,38 +46,27 @@ func setupRouter(f Fetcher) chi.Router {
 // — /exchange-rate tests —
 
 func TestExchangeRate_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?from=USD&to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d: %s", w.Code, w.Body.String())
 
 	var resp httpx.Response[RateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Data.From != "USD" {
-		t.Errorf("from: want USD, got %s", resp.Data.From)
-	}
-	if resp.Data.To != "EUR" {
-		t.Errorf("to: want EUR, got %s", resp.Data.To)
-	}
-	if resp.Data.Rate != 0.92 {
-		t.Errorf("rate: want 0.92, got %v", resp.Data.Rate)
-	}
-	if resp.Data.Timestamp == "" {
-		t.Error("timestamp must not be empty")
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("metadata.timestamp must not be empty")
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "USD", resp.Data.From)
+	assert.Equal(t, "EUR", resp.Data.To)
+	assert.Equal(t, 0.92, resp.Data.Rate)
+	assert.NotEmpty(t, resp.Data.Timestamp, "timestamp must not be empty")
+	assert.NotEmpty(t, resp.Metadata.Timestamp, "metadata.timestamp must not be empty")
 }
 
 func TestExchangeRate_LowercaseCodes_Normalized(t *testing.T) {
+	t.Parallel()
 	var gotFrom, gotTo string
 	f := &stubFetcher{fn: func(_ context.Context, from, to string) (float64, time.Time, error) {
 		gotFrom, gotTo = from, to
@@ -87,51 +78,46 @@ func TestExchangeRate_LowercaseCodes_Normalized(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
-	if gotFrom != "USD" || gotTo != "EUR" {
-		t.Errorf("expected uppercase codes, got from=%s to=%s", gotFrom, gotTo)
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d", w.Code)
+	assert.Equal(t, "USD", gotFrom)
+	assert.Equal(t, "EUR", gotTo)
 }
 
 func TestExchangeRate_MissingFrom_Returns400(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestExchangeRate_MissingTo_Returns400(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?from=USD", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestExchangeRate_InvalidCurrencyCode_Returns400(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?from=US&to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400 for 2-char code, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for 2-char code, got %d", w.Code)
 }
 
 func TestExchangeRate_UnknownCurrency_Returns422(t *testing.T) {
+	t.Parallel()
 	appErr := &httpx.AppError{Status: http.StatusUnprocessableEntity, Code: "invalid_currency", Message: "unknown currency code: XYZ"}
 	r := setupRouter(errFetcher(appErr))
 
@@ -139,84 +125,69 @@ func TestExchangeRate_UnknownCurrency_Returns422(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 
 	var errResp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&errResp); err != nil {
-		t.Fatalf("decode error response: %v", err)
-	}
-	if errResp.Error != "invalid_currency" {
-		t.Errorf("expected error code invalid_currency, got %s", errResp.Error)
-	}
+	err := json.NewDecoder(w.Body).Decode(&errResp)
+	require.NoError(t, err)
+	assert.Equal(t, "invalid_currency", errResp.Error)
 }
 
 func TestExchangeRate_UpstreamError_Returns503(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(errFetcher(errors.New("connection refused")))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?from=USD&to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }
 
 // — /convert tests —
 
 func TestConvert_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=USD&to=EUR&amount=100", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d: %s", w.Code, w.Body.String())
 
 	var resp httpx.Response[ConvertResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Data.Amount != 100 {
-		t.Errorf("amount: want 100, got %v", resp.Data.Amount)
-	}
-	if resp.Data.Converted != 92.00 {
-		t.Errorf("converted: want 92.00, got %v", resp.Data.Converted)
-	}
-	if resp.Data.Rate != 0.92 {
-		t.Errorf("rate: want 0.92, got %v", resp.Data.Rate)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, float64(100), resp.Data.Amount)
+	assert.Equal(t, 92.00, resp.Data.Converted)
+	assert.Equal(t, 0.92, resp.Data.Rate)
 }
 
 func TestConvert_MissingAmount_Returns400(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=USD&to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestConvert_ZeroAmount_Returns400(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=USD&to=EUR&amount=0", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400 for amount=0, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for amount=0, got %d", w.Code)
 }
 
 func TestConvert_UnknownCurrency_Returns422(t *testing.T) {
+	t.Parallel()
 	appErr := &httpx.AppError{Status: http.StatusUnprocessableEntity, Code: "invalid_currency", Message: "unknown currency code: XYZ"}
 	r := setupRouter(errFetcher(appErr))
 
@@ -224,39 +195,32 @@ func TestConvert_UnknownCurrency_Returns422(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestConvert_UpstreamError_Returns503(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(errFetcher(errors.New("timeout")))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=USD&to=EUR&amount=100", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }
 
 func TestConvert_ConversionRounding(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(fixedRate(0.9205))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=USD&to=EUR&amount=100", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d", w.Code)
 
 	var resp httpx.Response[ConvertResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Data.Converted != 92.05 {
-		t.Errorf("converted: want 92.05, got %v", resp.Data.Converted)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, 92.05, resp.Data.Converted)
 }

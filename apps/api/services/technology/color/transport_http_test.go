@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 	"requiems-api/services/technology/color"
@@ -20,6 +22,7 @@ func setupRouter() chi.Router {
 }
 
 func TestColor_HappyPath_HexToRGB(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(
@@ -31,29 +34,19 @@ func TestColor_HappyPath_HexToRGB(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected status 200, got %d: %s", w.Code, w.Body.String())
-	}
-
-	if ct := w.Header().Get("Content-Type"); !strings.Contains(ct, "application/json") {
-		t.Fatalf("expected application/json, got %s", ct)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
+	assert.True(t, strings.Contains(w.Header().Get("Content-Type"), "application/json"), "expected application/json, got %s", w.Header().Get("Content-Type"))
 
 	var res httpx.Response[color.Response]
-	if err := json.NewDecoder(w.Body).Decode(&res); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&res)
+	require.NoError(t, err)
 
-	if res.Data.Input != "#ffffff" {
-		t.Errorf("expected input #ffffff, got %s", res.Data.Input)
-	}
-
-	if !strings.Contains(res.Data.Result, "rgb") {
-		t.Errorf("expected RGB result, got %s", res.Data.Result)
-	}
+	assert.Equal(t, "#ffffff", res.Data.Input)
+	assert.True(t, strings.Contains(res.Data.Result, "rgb"), "expected RGB result, got %s", res.Data.Result)
 }
 
 func TestColor_MissingParam(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(
@@ -65,12 +58,11 @@ func TestColor_MissingParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestColor_InvalidValue(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(
@@ -82,12 +74,11 @@ func TestColor_InvalidValue(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Fatalf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestColor_ServiceError(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(
@@ -99,21 +90,12 @@ func TestColor_ServiceError(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Fatalf("expected error status, got %d: %s", w.Code, w.Body.String())
-	}
-
-	ct := w.Header().Get("Content-Type")
-	if !strings.Contains(ct, "application/json") {
-		t.Fatalf("expected application/json, got %s", ct)
-	}
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	assert.True(t, strings.Contains(w.Header().Get("Content-Type"), "application/json"), "expected application/json, got %s", w.Header().Get("Content-Type"))
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode error response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Error != "invalid_color" {
-		t.Fatalf("expected error code invalid_color, got %q", resp.Error)
-	}
+	assert.Equal(t, "invalid_color", resp.Error)
 }

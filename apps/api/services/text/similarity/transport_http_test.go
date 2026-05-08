@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestSimilarity_IdenticalTexts(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text1":"The cat sat on the mat","text2":"The cat sat on the mat"}`
@@ -28,24 +31,18 @@ func TestSimilarity_IdenticalTexts(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Similarity != 1.0 {
-		t.Errorf("identical texts should have similarity 1.0, got %f", resp.Data.Similarity)
-	}
-	if resp.Data.Method != "cosine" {
-		t.Errorf("expected method 'cosine', got %q", resp.Data.Method)
-	}
+	assert.Equal(t, 1.0, resp.Data.Similarity)
+	assert.Equal(t, "cosine", resp.Data.Method)
 }
 
 func TestSimilarity_UnrelatedTexts(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text1":"The cat sat on the mat","text2":"quantum physics nuclear reactor"}`
@@ -55,21 +52,17 @@ func TestSimilarity_UnrelatedTexts(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Similarity != 0.0 {
-		t.Errorf("unrelated texts should have similarity 0.0, got %f", resp.Data.Similarity)
-	}
+	assert.Equal(t, 0.0, resp.Data.Similarity)
 }
 
 func TestSimilarity_SimilarTexts(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text1":"The cat sat on the mat","text2":"A cat was sitting on a mat"}`
@@ -79,22 +72,18 @@ func TestSimilarity_SimilarTexts(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
 	// Texts share words (cat, on, mat), expect non-zero similarity.
-	if resp.Data.Similarity <= 0 || resp.Data.Similarity >= 1 {
-		t.Errorf("expected similarity between 0 and 1 (exclusive), got %f", resp.Data.Similarity)
-	}
+	assert.True(t, resp.Data.Similarity > 0 && resp.Data.Similarity < 1, "expected similarity between 0 and 1 (exclusive), got %f", resp.Data.Similarity)
 }
 
 func TestSimilarity_MissingText1(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/similarity", strings.NewReader(`{"text2":"hello"}`))
@@ -103,12 +92,11 @@ func TestSimilarity_MissingText1(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestSimilarity_MissingText2(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/similarity", strings.NewReader(`{"text1":"hello"}`))
@@ -117,12 +105,11 @@ func TestSimilarity_MissingText2(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestSimilarity_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/similarity", http.NoBody)
@@ -131,7 +118,5 @@ func TestSimilarity_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

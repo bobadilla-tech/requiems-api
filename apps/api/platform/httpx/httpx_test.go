@@ -6,6 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
@@ -16,50 +19,34 @@ type testData struct {
 func (testData) IsData() {}
 
 func TestJSON_WritesSuccessEnvelope(t *testing.T) {
+	t.Parallel()
+
 	w := httptest.NewRecorder()
 	httpx.JSON(w, http.StatusCreated, testData{Value: "hello"})
 
-	if w.Code != http.StatusCreated {
-		t.Errorf("status: want 201, got %d", w.Code)
-	}
-	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
-		t.Errorf("Content-Type: want application/json, got %q", ct)
-	}
+	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
 	var resp httpx.Response[testData]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode response: %v", err)
-	}
-	if resp.Data.Value != "hello" {
-		t.Errorf("data.value: want %q, got %q", "hello", resp.Data.Value)
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("metadata.timestamp must not be empty")
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "hello", resp.Data.Value)
+	assert.NotEmpty(t, resp.Metadata.Timestamp)
 }
 
 func TestError_WritesErrorEnvelope(t *testing.T) {
+	t.Parallel()
+
 	w := httptest.NewRecorder()
 	httpx.Error(w, http.StatusNotFound, "not_found", "resource not found")
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("status: want 404, got %d", w.Code)
-	}
-	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
-		t.Errorf("Content-Type: want application/json, got %q", ct)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode response: %v", err)
-	}
-	if resp.Error != "not_found" {
-		t.Errorf("error: want %q, got %q", "not_found", resp.Error)
-	}
-	if resp.Message != "resource not found" {
-		t.Errorf("message: want %q, got %q", "resource not found", resp.Message)
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("metadata.timestamp must not be empty")
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "not_found", resp.Error)
+	assert.Equal(t, "resource not found", resp.Message)
+	assert.NotEmpty(t, resp.Metadata.Timestamp)
 }

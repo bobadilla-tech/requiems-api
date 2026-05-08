@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseOptInt(t *testing.T) {
@@ -25,9 +28,7 @@ func TestParseOptInt(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
-			if got := parseOptInt(tt.input); got != tt.want {
-				t.Fatalf("parseOptInt(%q) = %d, want %d", tt.input, got, tt.want)
-			}
+			assert.Equal(t, tt.want, parseOptInt(tt.input))
 		})
 	}
 }
@@ -46,18 +47,10 @@ func TestRawIBANCountry_BankAndAccountOffsets(t *testing.T) {
 		BranchIDEnd:   12,
 	}
 
-	if de.BankOffset() != 0 {
-		t.Errorf("BankOffset = %d, want 0", de.BankOffset())
-	}
-	if de.BankLength() != 8 { // 7-0+1
-		t.Errorf("BankLength = %d, want 8", de.BankLength())
-	}
-	if de.AccountOffset() != 13 { // BranchIDEnd(12)+1
-		t.Errorf("AccountOffset = %d, want 13", de.AccountOffset())
-	}
-	if de.AccountLength() != 5 { // BBANLength(18) - 1 - AccountOffset(13) + 1
-		t.Errorf("AccountLength = %d, want 5", de.AccountLength())
-	}
+	assert.Equal(t, 0, de.BankOffset())
+	assert.Equal(t, 8, de.BankLength()) // 7-0+1
+	assert.Equal(t, 13, de.AccountOffset()) // BranchIDEnd(12)+1
+	assert.Equal(t, 5, de.AccountLength())  // BBANLength(18) - 1 - AccountOffset(13) + 1
 }
 
 func TestRawIBANCountry_NoBranchCode(t *testing.T) {
@@ -72,12 +65,8 @@ func TestRawIBANCountry_NoBranchCode(t *testing.T) {
 		BranchIDEnd:   0, // no distinct branch (start == end, not > BankIDEnd)
 	}
 
-	if r.AccountOffset() != 4 { // BankIDEnd(3)+1
-		t.Errorf("AccountOffset = %d, want 4", r.AccountOffset())
-	}
-	if r.AccountLength() != 10 { // BBANLength(14) - 1 - AccountOffset(4) + 1
-		t.Errorf("AccountLength = %d, want 10", r.AccountLength())
-	}
+	assert.Equal(t, 4, r.AccountOffset())  // BankIDEnd(3)+1
+	assert.Equal(t, 10, r.AccountLength()) // BBANLength(14) - 1 - AccountOffset(4) + 1
 }
 
 func TestFetchAndParse_LocalMockServer(t *testing.T) {
@@ -97,31 +86,17 @@ func TestFetchAndParse_LocalMockServer(t *testing.T) {
 	defer srv.Close()
 
 	countries, err := fetchAndParse(srv.URL)
-	if err != nil {
-		t.Fatalf("fetchAndParse: %v", err)
-	}
-	if len(countries) != 2 {
-		t.Fatalf("expected 2 countries, got %d", len(countries))
-	}
+	require.NoError(t, err)
+	require.Len(t, countries, 2)
 
 	de := countries[0]
-	if de.CountryCode != "DE" {
-		t.Errorf("CountryCode = %q, want DE", de.CountryCode)
-	}
-	if de.IBANLength != 22 {
-		t.Errorf("IBANLength = %d, want 22", de.IBANLength)
-	}
-	if de.BBANLength != 18 {
-		t.Errorf("BBANLength = %d, want 18", de.BBANLength)
-	}
-	if !de.SEPAMember {
-		t.Error("expected DE to be a SEPA member")
-	}
+	assert.Equal(t, "DE", de.CountryCode)
+	assert.Equal(t, 22, de.IBANLength)
+	assert.Equal(t, 18, de.BBANLength)
+	assert.True(t, de.SEPAMember, "expected DE to be a SEPA member")
 
 	us := countries[1]
-	if us.SEPAMember {
-		t.Error("expected US not to be a SEPA member")
-	}
+	assert.False(t, us.SEPAMember, "expected US not to be a SEPA member")
 }
 
 func TestFetchAndParse_NoValidRows(t *testing.T) {
@@ -138,9 +113,7 @@ func TestFetchAndParse_NoValidRows(t *testing.T) {
 	defer srv.Close()
 
 	_, err := fetchAndParse(srv.URL)
-	if err == nil {
-		t.Fatal("expected error for registry with no valid rows, got nil")
-	}
+	require.Error(t, err)
 }
 
 func TestFetchAndParse_HTTPError(t *testing.T) {
@@ -152,7 +125,5 @@ func TestFetchAndParse_HTTPError(t *testing.T) {
 	defer srv.Close()
 
 	_, err := fetchAndParse(srv.URL)
-	if err == nil {
-		t.Fatal("expected error for HTTP 500, got nil")
-	}
+	require.Error(t, err)
 }

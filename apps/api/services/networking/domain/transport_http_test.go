@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestDomain_InvalidFormat(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name   string
 		domain string
@@ -34,104 +37,80 @@ func TestDomain_InvalidFormat(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			req := httptest.NewRequest(http.MethodGet, "/domain/"+tt.domain, http.NoBody)
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-			}
+			assert.Equal(t, http.StatusBadRequest, w.Code)
 		})
 	}
 }
 
 func TestDomain_KnownDomain(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/domain/example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[InfoResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Domain != "example.com" {
-		t.Errorf("expected domain example.com, got %q", resp.Data.Domain)
-	}
-	if resp.Data.DNS.A == nil {
-		t.Error("expected non-nil A records slice")
-	}
-	if resp.Data.DNS.AAAA == nil {
-		t.Error("expected non-nil AAAA records slice")
-	}
-	if resp.Data.DNS.MX == nil {
-		t.Error("expected non-nil MX records slice")
-	}
-	if resp.Data.DNS.NS == nil {
-		t.Error("expected non-nil NS records slice")
-	}
-	if resp.Data.DNS.TXT == nil {
-		t.Error("expected non-nil TXT records slice")
-	}
+	assert.Equal(t, "example.com", resp.Data.Domain)
+	assert.NotNil(t, resp.Data.DNS.A)
+	assert.NotNil(t, resp.Data.DNS.AAAA)
+	assert.NotNil(t, resp.Data.DNS.MX)
+	assert.NotNil(t, resp.Data.DNS.NS)
+	assert.NotNil(t, resp.Data.DNS.TXT)
 
 	// DNS record content is only asserted when network resolution is available.
 	if len(resp.Data.DNS.NS) > 0 && resp.Data.Available {
-		t.Error("expected available=false when NS records are present")
+		assert.False(t, resp.Data.Available, "expected available=false when NS records are present")
 	}
 }
 
 func TestDomain_ResponseShape(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/domain/example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	// Verify the raw JSON shape has the expected keys.
 	var raw map[string]any
-	if err := json.NewDecoder(w.Body).Decode(&raw); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&raw)
+	require.NoError(t, err)
 
 	data, ok := raw["data"].(map[string]any)
-	if !ok {
-		t.Fatal("expected 'data' key in response")
-	}
+	require.True(t, ok, "expected 'data' key in response")
 	for _, key := range []string{"domain", "available", "dns"} {
-		if _, exists := data[key]; !exists {
-			t.Errorf("expected key %q in data", key)
-		}
+		_, exists := data[key]
+		assert.True(t, exists, "expected key %q in data", key)
 	}
 
 	dns, ok := data["dns"].(map[string]any)
-	if !ok {
-		t.Fatal("expected 'dns' key in data")
-	}
+	require.True(t, ok, "expected 'dns' key in data")
 	for _, key := range []string{"a", "aaaa", "mx", "ns", "txt"} {
-		if _, exists := dns[key]; !exists {
-			t.Errorf("expected key %q in dns", key)
-		}
+		_, exists := dns[key]
+		assert.True(t, exists, "expected key %q in dns", key)
 	}
 }
 
 func TestService_IsNXDomain(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	// A clearly invented domain should either be unavailable (registered) or
 	// available (NXDOMAIN). Either way the service should return 200 with the
 	// domain name echoed back, without panicking.
 	resp := svc.GetInfo(context.Background(), "example.com")
-	if resp.Domain != "example.com" {
-		t.Errorf("expected domain echoed back, got %q", resp.Domain)
-	}
+	assert.Equal(t, "example.com", resp.Domain)
 }

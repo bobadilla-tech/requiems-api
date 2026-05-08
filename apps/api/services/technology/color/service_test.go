@@ -5,10 +5,14 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -193,47 +197,28 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.from, tt.to, tt.value)
 
 			if tt.wantErr {
-				if err == nil {
-					t.Fatal("expected error, got nil")
-				}
+				require.Error(t, err)
 				var appErr *httpx.AppError
-				if !errors.As(err, &appErr) {
-					t.Fatalf("expected *httpx.AppError, got %T", err)
-				}
-				if appErr.Status != http.StatusUnprocessableEntity {
-					t.Errorf("expected status %d, got %d", http.StatusUnprocessableEntity, appErr.Status)
-				}
-				if tt.wantErrCode != "" && appErr.Code != tt.wantErrCode {
-					t.Errorf("expected code %q, got %q", tt.wantErrCode, appErr.Code)
+				require.True(t, errors.As(err, &appErr), "expected *httpx.AppError, got %T", err)
+				assert.Equal(t, http.StatusUnprocessableEntity, appErr.Status)
+				if tt.wantErrCode != "" {
+					assert.Equal(t, tt.wantErrCode, appErr.Code)
 				}
 				return
 			}
 
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
+			require.NoError(t, err)
 
-			if got.Input != tt.wantInput {
-				t.Errorf("Input = %q, want %q", got.Input, tt.wantInput)
-			}
-			if got.Result != tt.wantResult {
-				t.Errorf("Result = %q, want %q", got.Result, tt.wantResult)
-			}
-			if got.Formats.Hex != tt.wantHex {
-				t.Errorf("Formats.Hex = %q, want %q", got.Formats.Hex, tt.wantHex)
-			}
-			if got.Formats.RGB != tt.wantRGB {
-				t.Errorf("Formats.RGB = %q, want %q", got.Formats.RGB, tt.wantRGB)
-			}
-			if got.Formats.HSL != tt.wantHSL {
-				t.Errorf("Formats.HSL = %q, want %q", got.Formats.HSL, tt.wantHSL)
-			}
-			if got.Formats.CMYK != tt.wantCMYK {
-				t.Errorf("Formats.CMYK = %q, want %q", got.Formats.CMYK, tt.wantCMYK)
-			}
+			assert.Equal(t, tt.wantInput, got.Input)
+			assert.Equal(t, tt.wantResult, got.Result)
+			assert.Equal(t, tt.wantHex, got.Formats.Hex)
+			assert.Equal(t, tt.wantRGB, got.Formats.RGB)
+			assert.Equal(t, tt.wantHSL, got.Formats.HSL)
+			assert.Equal(t, tt.wantCMYK, got.Formats.CMYK)
 		})
 	}
 }

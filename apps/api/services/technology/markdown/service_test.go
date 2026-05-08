@@ -1,8 +1,14 @@
 package markdown
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -63,13 +69,10 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.input, tt.sanitize)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if got.HTML != tt.wantHTML {
-				t.Errorf("HTML mismatch\ngot:  %q\nwant: %q", got.HTML, tt.wantHTML)
-			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.wantHTML, got.HTML)
 		})
 	}
 }

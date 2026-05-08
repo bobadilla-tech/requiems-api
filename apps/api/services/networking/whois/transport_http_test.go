@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -51,48 +53,38 @@ func setupRouter(q Querier) chi.Router {
 }
 
 func TestWhois_ValidDomain(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
 
 	req := httptest.NewRequest(http.MethodGet, "/whois/example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Domain != "example.com" {
-		t.Errorf("expected domain=example.com, got %q", resp.Data.Domain)
-	}
-	if resp.Data.Registrar == "" {
-		t.Error("expected non-empty registrar")
-	}
-	if len(resp.Data.NameServers) == 0 {
-		t.Error("expected at least one name server")
-	}
-	if resp.Data.CreatedDate == "" {
-		t.Error("expected non-empty created_date")
-	}
+	assert.Equal(t, "example.com", resp.Data.Domain)
+	assert.NotEmpty(t, resp.Data.Registrar)
+	assert.NotEmpty(t, resp.Data.NameServers)
+	assert.NotEmpty(t, resp.Data.CreatedDate)
 }
 
 func TestWhois_DomainNotFound(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(&fakeQuerier{result: notFoundWHOIS})
 
 	req := httptest.NewRequest(http.MethodGet, "/whois/doesnotexist123456789.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestWhois_InvalidDomainFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
 
 	tests := []struct {
@@ -106,53 +98,43 @@ func TestWhois_InvalidDomainFormat(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			req := httptest.NewRequest(http.MethodGet, "/whois/"+tt.domain, http.NoBody)
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400 for %q, got %d: %s", tt.domain, w.Code, w.Body.String())
-			}
+			assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for %q, got %d: %s", tt.domain, w.Code, w.Body.String())
 		})
 	}
 }
 
 func TestWhois_QueryError(t *testing.T) {
+	t.Parallel()
 	r := setupRouter(&fakeQuerier{err: ErrDomainNotFound})
 
 	req := httptest.NewRequest(http.MethodGet, "/whois/example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestService_Lookup_NotFound(t *testing.T) {
+	t.Parallel()
 	svc := &Service{q: &fakeQuerier{result: notFoundWHOIS}}
 
 	_, err := svc.Lookup(context.Background(), "doesnotexist.com")
-	if err == nil {
-		t.Fatal("expected an error for not-found domain")
-	}
+	require.Error(t, err)
 }
 
 func TestService_Lookup_ValidDomain(t *testing.T) {
+	t.Parallel()
 	svc := &Service{q: &fakeQuerier{result: sampleWHOIS}}
 
 	resp, err := svc.Lookup(context.Background(), "example.com")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if resp.Domain != "example.com" {
-		t.Errorf("expected domain=example.com, got %q", resp.Domain)
-	}
-	if resp.CreatedDate == "" {
-		t.Error("expected non-empty created_date")
-	}
-	if resp.ExpiryDate == "" {
-		t.Error("expected non-empty expiry_date")
-	}
+	assert.Equal(t, "example.com", resp.Domain)
+	assert.NotEmpty(t, resp.CreatedDate)
+	assert.NotEmpty(t, resp.ExpiryDate)
 }

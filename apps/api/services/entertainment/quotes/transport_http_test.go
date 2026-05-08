@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5"
+	"github.com/stretchr/testify/assert"
 )
 
 type httpMockQuerier struct {
@@ -19,6 +20,7 @@ func (m *httpMockQuerier) QueryRow(ctx context.Context, sql string, args ...any)
 }
 
 func TestTransport_HappyPath(t *testing.T) {
+	t.Parallel()
 	mockRow := &mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 1
@@ -40,12 +42,11 @@ func TestTransport_HappyPath(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Result().StatusCode != http.StatusOK {
-		t.Errorf("expected 200, got %d", w.Result().StatusCode)
-	}
+	assert.Equal(t, http.StatusOK, w.Result().StatusCode)
 }
 
 func TestTransport_Error(t *testing.T) {
+	t.Parallel()
 	mockRow := &mockRow{
 		scanFn: func(dest ...any) error {
 			return pgx.ErrNoRows
@@ -64,12 +65,11 @@ func TestTransport_Error(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Result().StatusCode != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Result().StatusCode)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Result().StatusCode)
 }
 
 func TestTransport_MethodNotAllowed(t *testing.T) {
+	t.Parallel()
 	svc := &Service{}
 
 	r := chi.NewRouter()
@@ -82,7 +82,5 @@ func TestTransport_MethodNotAllowed(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Result().StatusCode != http.StatusMethodNotAllowed {
-		t.Errorf("expected 405, got %d", w.Result().StatusCode)
-	}
+	assert.Equal(t, http.StatusMethodNotAllowed, w.Result().StatusCode)
 }

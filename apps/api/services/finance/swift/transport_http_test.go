@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -49,15 +51,15 @@ func setupRouter(svc Looker) chi.Router {
 func decodeResponse(t *testing.T, body *httptest.ResponseRecorder) httpx.Response[LookupResponse] {
 	t.Helper()
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(body.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(body.Body).Decode(&resp)
+	require.NoError(t, err)
 	return resp
 }
 
 // ---- tests ----
 
 func TestSWIFT_KnownCode_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{
 		BankCode:     "DEUT",
 		CountryCode:  "DE",
@@ -74,20 +76,15 @@ func TestSWIFT_KnownCode_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.SwiftCode != "DEUTDEDBXXX" {
-		t.Errorf("expected swift_code DEUTDEDBXXX, got %q", resp.Data.SwiftCode)
-	}
-	if resp.Data.BankName != "Deutsche Bank" {
-		t.Errorf("expected bank_name Deutsche Bank, got %q", resp.Data.BankName)
-	}
+	assert.Equal(t, "DEUTDEDBXXX", resp.Data.SwiftCode)
+	assert.Equal(t, "Deutsche Bank", resp.Data.BankName)
 }
 
 func TestSWIFT_List_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{list: ListResponse{
 		Items: []LookupResponse{
 			{SwiftCode: "DEUTDEDBXXX", BankCode: "DEUT", CountryCode: "DE", BankName: "Deutsche Bank"},
@@ -103,21 +100,17 @@ func TestSWIFT_List_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ListResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Returned != 2 {
-		t.Fatalf("expected returned=2, got %d", resp.Data.Returned)
-	}
+	require.Equal(t, 2, resp.Data.Returned)
 }
 
 func TestSWIFT_List_InvalidLimit_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{}
 	r := setupRouter(svc)
 
@@ -125,12 +118,11 @@ func TestSWIFT_List_InvalidLimit_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestSWIFT_List_InvalidOffset_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{}
 	r := setupRouter(svc)
 
@@ -138,12 +130,11 @@ func TestSWIFT_List_InvalidOffset_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestSWIFT_List_ServiceAppError_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{err: &httpx.AppError{Status: http.StatusBadRequest, Code: "bad_request", Message: "invalid filter"}}
 	r := setupRouter(svc)
 
@@ -151,12 +142,11 @@ func TestSWIFT_List_ServiceAppError_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestSWIFT_List_ServiceGenericError_Returns500(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{err: errors.New("db down")}
 	r := setupRouter(svc)
 
@@ -164,12 +154,11 @@ func TestSWIFT_List_ServiceGenericError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("expected 500, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
 func TestSWIFT_ResponseEnvelope(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{BankCode: "DEUT"}}
 	r := setupRouter(svc)
 
@@ -177,23 +166,19 @@ func TestSWIFT_ResponseEnvelope(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var raw map[string]json.RawMessage
-	if err := json.NewDecoder(w.Body).Decode(&raw); err != nil {
-		t.Fatalf("failed to decode: %v", err)
-	}
-	if _, ok := raw["data"]; !ok {
-		t.Error("response must have a 'data' key")
-	}
-	if _, ok := raw["metadata"]; !ok {
-		t.Error("response must have a 'metadata' key")
-	}
+	err := json.NewDecoder(w.Body).Decode(&raw)
+	require.NoError(t, err)
+	_, ok := raw["data"]
+	assert.True(t, ok, "response must have a 'data' key")
+	_, ok = raw["metadata"]
+	assert.True(t, ok, "response must have a 'metadata' key")
 }
 
 func TestSWIFT_MetadataTimestamp(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{}}
 	r := setupRouter(svc)
 
@@ -202,12 +187,11 @@ func TestSWIFT_MetadataTimestamp(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	if resp.Metadata.Timestamp == "" {
-		t.Error("expected metadata.timestamp to be set")
-	}
+	assert.NotEmpty(t, resp.Metadata.Timestamp)
 }
 
 func TestSWIFT_UnknownCode_Returns404(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{err: &httpx.AppError{
 		Status:  http.StatusNotFound,
 		Code:    "not_found",
@@ -219,12 +203,11 @@ func TestSWIFT_UnknownCode_Returns404(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Fatalf("expected 404, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestSWIFT_BadFormat_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{err: &httpx.AppError{
 		Status:  http.StatusBadRequest,
 		Code:    "bad_request",
@@ -236,12 +219,11 @@ func TestSWIFT_BadFormat_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestSWIFT_DBError_Returns500(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{err: errors.New("db unavailable")}
 
 	r := setupRouter(svc)
@@ -249,12 +231,11 @@ func TestSWIFT_DBError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("expected 500, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
 func TestSWIFT_PrimaryOffice_IsPrimaryTrue(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{BranchCode: "XXX", IsPrimary: true}}
 	r := setupRouter(svc)
 
@@ -263,12 +244,11 @@ func TestSWIFT_PrimaryOffice_IsPrimaryTrue(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	if !resp.Data.IsPrimary {
-		t.Error("expected is_primary = true for XXX branch")
-	}
+	assert.True(t, resp.Data.IsPrimary)
 }
 
 func TestSWIFT_BranchOffice_IsPrimaryFalse(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{BranchCode: "001", IsPrimary: false}}
 	r := setupRouter(svc)
 
@@ -277,12 +257,11 @@ func TestSWIFT_BranchOffice_IsPrimaryFalse(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.IsPrimary {
-		t.Error("expected is_primary = false for non-XXX branch")
-	}
+	assert.False(t, resp.Data.IsPrimary)
 }
 
 func TestSWIFT_AllResponseFieldsPresent(t *testing.T) {
+	t.Parallel()
 	svc := &stubService{result: LookupResponse{
 		BankCode:     "CHAS",
 		CountryCode:  "US",
@@ -299,9 +278,7 @@ func TestSWIFT_AllResponseFieldsPresent(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
 	d := resp.Data
@@ -319,8 +296,6 @@ func TestSWIFT_AllResponseFieldsPresent(t *testing.T) {
 	}
 
 	for name, ok := range checks {
-		if !ok {
-			t.Errorf("field check failed: %s", name)
-		}
+		assert.True(t, ok, "field check failed: %s", name)
 	}
 }

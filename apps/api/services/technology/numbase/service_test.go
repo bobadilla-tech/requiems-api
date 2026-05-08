@@ -3,9 +3,13 @@ package numbase
 import (
 	"errors"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -139,34 +143,21 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.value, tt.fromBase, tt.toBase)
 
 			if tt.wantErr != nil {
-				if err == nil {
-					t.Fatal("expected error, got nil")
-				}
-				if !errors.Is(err, tt.wantErr) {
-					t.Fatalf("expected error %v, got %v", tt.wantErr, err)
-				}
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tt.wantErr), "expected error %v, got %v", tt.wantErr, err)
 				return
 			}
 
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
+			require.NoError(t, err)
 
-			if got.Result != tt.want {
-				t.Errorf("Convert(%q, %d, %d) = %q, want %q", tt.value, tt.fromBase, tt.toBase, got.Result, tt.want)
-			}
-			if got.Input != tt.value {
-				t.Errorf("Convert(%q, %d, %d): input = %q, want %q", tt.value, tt.fromBase, tt.toBase, got.Input, tt.value)
-			}
-			if got.From != tt.fromBase {
-				t.Errorf("Convert(%q, %d, %d): from = %d, want %d", tt.value, tt.fromBase, tt.toBase, got.From, tt.fromBase)
-			}
-			if got.To != tt.toBase {
-				t.Errorf("Convert(%q, %d, %d): to = %d, want %d", tt.value, tt.fromBase, tt.toBase, got.To, tt.toBase)
-			}
+			assert.Equal(t, tt.want, got.Result)
+			assert.Equal(t, tt.value, got.Input)
+			assert.Equal(t, tt.fromBase, got.From)
+			assert.Equal(t, tt.toBase, got.To)
 		})
 	}
 }

@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter(mockServer *httptest.Server) chi.Router {
 }
 
 func TestGeocode_HappyPath(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`[{"lat":"38.8976763","lon":"-77.0365298","display_name":"White House, Washington, DC","address":{"city":"Washington","country_code":"us"}}]`)) //nolint:errcheck // test helper, write error is inconsequential
@@ -29,27 +32,21 @@ func TestGeocode_HappyPath(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[GeocodeResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.City != "Washington" {
-		t.Errorf("expected city 'Washington', got %q", resp.Data.City)
-	}
-	if resp.Data.Country != "US" {
-		t.Errorf("expected country 'US', got %q", resp.Data.Country)
-	}
+	assert.Equal(t, "Washington", resp.Data.City)
+	assert.Equal(t, "US", resp.Data.Country)
 	if resp.Data.Lat == 0 {
 		t.Error("expected non-zero latitude")
 	}
 }
 
 func TestGeocode_MissingAddress(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Write([]byte(`[]`)) //nolint:errcheck // test helper, write error is inconsequential
 	}))
@@ -59,12 +56,11 @@ func TestGeocode_MissingAddress(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400 for missing address, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestGeocode_NoResults(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`[]`)) //nolint:errcheck // test helper, write error is inconsequential
@@ -75,12 +71,11 @@ func TestGeocode_NoResults(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestGeocode_UpstreamError(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
@@ -90,12 +85,11 @@ func TestGeocode_UpstreamError(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }
 
 func TestReverseGeocode_HappyPath(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(`{"display_name":"White House, Washington, DC","address":{"city":"Washington","country_code":"us"}}`)) //nolint:errcheck // test helper, write error is inconsequential
@@ -106,21 +100,17 @@ func TestReverseGeocode_HappyPath(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ReverseGeocodeResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.City != "Washington" {
-		t.Errorf("expected city 'Washington', got %q", resp.Data.City)
-	}
+	assert.Equal(t, "Washington", resp.Data.City)
 }
 
 func TestReverseGeocode_MissingParams(t *testing.T) {
+	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {}))
 	defer mock.Close()
 
@@ -128,7 +118,5 @@ func TestReverseGeocode_MissingParams(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400 for missing lon, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
