@@ -48,7 +48,7 @@ func TestRawIBANCountry_BankAndAccountOffsets(t *testing.T) {
 	}
 
 	assert.Equal(t, 0, de.BankOffset())
-	assert.Equal(t, 8, de.BankLength()) // 7-0+1
+	assert.Equal(t, 8, de.BankLength())     // 7-0+1
 	assert.Equal(t, 13, de.AccountOffset()) // BranchIDEnd(12)+1
 	assert.Equal(t, 5, de.AccountLength())  // BBANLength(18) - 1 - AccountOffset(13) + 1
 }

@@ -60,7 +60,7 @@ func TestApp_Handler(t *testing.T) {
 	}
 
 	app, err := New(context.Background(), cfg)
-	
+
 	if err != nil {
 		t.Skipf("infrastructure unavailable; skipping App integration test: %v", err)
 	}
