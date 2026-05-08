@@ -6,27 +6,25 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
 )
 
-// Servicio falso
 type mockService struct {
 	result Lorem
 }
 
-// Implementa interfaz, y devuelve m.result
 func (m *mockService) Generate(paragraphs, sentences int) Lorem {
 	return m.result
 }
 
-// aux, arma el router
 func newRouter(svc Generator) chi.Router {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 	return r
 }
 
-// slice de casos del tests
 func TestGetLorem(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name       string
 		url        string
@@ -60,17 +58,14 @@ func TestGetLorem(t *testing.T) {
 	// Run each test case
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svc := &mockService{result: tt.mockResult}
 
 			req := httptest.NewRequest(http.MethodGet, tt.url, http.NoBody)
 			rec := httptest.NewRecorder()
 
-			// simula llamada http
 			newRouter(svc).ServeHTTP(rec, req)
-			// validacion
-			if rec.Code != tt.wantStatus {
-				t.Errorf("esperado %d, obtuve %d", tt.wantStatus, rec.Code)
-			}
+			assert.Equal(t, tt.wantStatus, rec.Code)
 		})
 	}
 }

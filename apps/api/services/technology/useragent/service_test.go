@@ -1,8 +1,13 @@
 package useragent
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestService_Parse(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -129,26 +134,15 @@ func TestService_Parse(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := svc.Parse(tt.ua)
 
-			if got.Browser != tt.wantBrowser {
-				t.Errorf("browser: got %q, want %q", got.Browser, tt.wantBrowser)
-			}
-			if got.BrowserVersion != tt.wantBrowserVer {
-				t.Errorf("browser_version: got %q, want %q", got.BrowserVersion, tt.wantBrowserVer)
-			}
-			if got.OS != tt.wantOS {
-				t.Errorf("os: got %q, want %q", got.OS, tt.wantOS)
-			}
-			if got.OSVersion != tt.wantOSVer {
-				t.Errorf("os_version: got %q, want %q", got.OSVersion, tt.wantOSVer)
-			}
-			if got.Device != tt.wantDevice {
-				t.Errorf("device: got %q, want %q", got.Device, tt.wantDevice)
-			}
-			if got.IsBot != tt.wantBot {
-				t.Errorf("is_bot: got %v, want %v", got.IsBot, tt.wantBot)
-			}
+			assert.Equal(t, tt.wantBrowser, got.Browser)
+			assert.Equal(t, tt.wantBrowserVer, got.BrowserVersion)
+			assert.Equal(t, tt.wantOS, got.OS)
+			assert.Equal(t, tt.wantOSVer, got.OSVersion)
+			assert.Equal(t, tt.wantDevice, got.Device)
+			assert.Equal(t, tt.wantBot, got.IsBot)
 		})
 	}
 }

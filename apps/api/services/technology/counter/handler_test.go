@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -35,7 +37,9 @@ func newTestRouter(svc Service) http.Handler {
 }
 
 func TestIncrementHandler(t *testing.T) {
+	t.Parallel()
 	t.Run("returns updated counter value", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			incrementFn: func(_ context.Context, ns string) (int64, error) {
 				return 5, nil
@@ -47,27 +51,20 @@ func TestIncrementHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Fatalf("expected 200, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusOK, w.Code)
 
 		var resp httpx.Response[Counter]
 
-		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-			t.Fatalf("decode response: %v", err)
-		}
+		err := json.NewDecoder(w.Body).Decode(&resp)
+		require.NoError(t, err)
 		got := resp.Data
 
-		if got.Namespace != "hits" {
-			t.Errorf("namespace: want %q got %q", "hits", got.Namespace)
-		}
-
-		if got.Value != 5 {
-			t.Errorf("value: want 5 got %d", got.Value)
-		}
+		assert.Equal(t, "hits", got.Namespace)
+		assert.Equal(t, int64(5), got.Value)
 	})
 
 	t.Run("returns 400 for invalid namespace from URL param validation", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			incrementFn: func(_ context.Context, ns string) (int64, error) {
 				return 1, nil
@@ -79,12 +76,11 @@ func TestIncrementHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusBadRequest {
-			t.Fatalf("expected 400, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusBadRequest, w.Code)
 	})
 
 	t.Run("returns 500 for internal server error", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			incrementFn: func(_ context.Context, ns string) (int64, error) {
 				return 0, errRedisDown
@@ -96,14 +92,14 @@ func TestIncrementHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusInternalServerError {
-			t.Fatalf("expected 500, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
 
 func TestGetHandler(t *testing.T) {
+	t.Parallel()
 	t.Run("returns counter value", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			getFn: func(_ context.Context, ns string) (int64, error) {
 				return 42, nil
@@ -115,26 +111,19 @@ func TestGetHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Fatalf("expected 200, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusOK, w.Code)
 
 		var resp httpx.Response[Counter]
-		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-			t.Fatalf("decode response: %v", err)
-		}
+		err := json.NewDecoder(w.Body).Decode(&resp)
+		require.NoError(t, err)
 		got := resp.Data
 
-		if got.Namespace != "page-views" {
-			t.Errorf("namespace: want %q got %q", "page-views", got.Namespace)
-		}
-
-		if got.Value != 42 {
-			t.Errorf("value: want 42 got %d", got.Value)
-		}
+		assert.Equal(t, "page-views", got.Namespace)
+		assert.Equal(t, int64(42), got.Value)
 	})
 
 	t.Run("returns 400 for invalid namespace from URL param validation", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			getFn: func(_ context.Context, ns string) (int64, error) {
 				return 42, nil
@@ -146,12 +135,11 @@ func TestGetHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusBadRequest {
-			t.Fatalf("expected 400, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusBadRequest, w.Code)
 	})
 
 	t.Run("returns 500 for internal server error", func(t *testing.T) {
+		t.Parallel()
 		svc := &mockService{
 			getFn: func(_ context.Context, ns string) (int64, error) {
 				return 0, errRedisDown
@@ -163,8 +151,6 @@ func TestGetHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusInternalServerError {
-			t.Fatalf("expected 500, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }

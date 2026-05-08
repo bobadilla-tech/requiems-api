@@ -57,6 +57,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.api == 'true'
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/api
 
     services:
       postgres:
@@ -86,17 +90,14 @@ jobs:
         run: grep -v '^#' infra/docker/.env.example | grep -v '^$' | grep -v '=\s*$' >> $GITHUB_ENV
 
       - name: Download dependencies
-        working-directory: apps/api
         run: go mod download
 
       - name: Run tests
-        working-directory: apps/api
         env:
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
           BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
-          # .env.example uses host "redis" (Docker Compose). Override so integration tests fail fast on localhost instead of DNS timeouts.
           REDIS_URL: redis://127.0.0.1:6379/0
-        run: go test -v -race -coverprofile=coverage.out ./...
+        run: go test -race -coverprofile=coverage.out ./...
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v6
@@ -136,6 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.dashboard == 'true'
+    timeout-minutes: 15
 
     services:
       postgres:
@@ -306,6 +308,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.auth-gateway == 'true'
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v6
@@ -424,6 +427,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.api-management == 'true'
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v6

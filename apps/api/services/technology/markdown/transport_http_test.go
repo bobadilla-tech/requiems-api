@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestMarkdown_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"markdown":"# Hello\n\nThis is **bold** text."}`
@@ -28,22 +31,18 @@ func TestMarkdown_HappyPath(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
 	want := "<h1>Hello</h1>\n<p>This is <strong>bold</strong> text.</p>"
-	if resp.Data.HTML != want {
-		t.Errorf("html mismatch\ngot:  %q\nwant: %q", resp.Data.HTML, want)
-	}
+	assert.Equal(t, want, resp.Data.HTML)
 }
 
 func TestMarkdown_Sanitize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"markdown":"Hello <script>alert('xss')</script>","sanitize":true}`
@@ -53,21 +52,17 @@ func TestMarkdown_Sanitize(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if strings.Contains(resp.Data.HTML, "<script>") {
-		t.Errorf("expected script tag to be stripped, got: %q", resp.Data.HTML)
-	}
+	assert.False(t, strings.Contains(resp.Data.HTML, "<script>"), "expected script tag to be stripped, got: %q", resp.Data.HTML)
 }
 
 func TestMarkdown_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/markdown", http.NoBody)
@@ -76,12 +71,11 @@ func TestMarkdown_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestMarkdown_EmptyMarkdown(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"markdown":""}`
@@ -92,7 +86,5 @@ func TestMarkdown_EmptyMarkdown(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	// Empty markdown triggers validation failure (required field)
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

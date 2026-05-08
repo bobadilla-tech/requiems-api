@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestNormalize_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"email":"user@example.com"}`
@@ -28,30 +31,20 @@ func TestNormalize_HappyPath(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[EmailNormalization]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Normalized == "" {
-		t.Error("expected non-empty Normalized field")
-	}
-	if resp.Data.Original != "user@example.com" {
-		t.Errorf("expected Original %q, got %q", "user@example.com", resp.Data.Original)
-	}
-	if resp.Data.Local != "user" {
-		t.Errorf("expected Local %q, got %q", "user", resp.Data.Local)
-	}
-	if resp.Data.Domain != "example.com" {
-		t.Errorf("expected Domain %q, got %q", "example.com", resp.Data.Domain)
-	}
+	assert.NotEmpty(t, resp.Data.Normalized)
+	assert.Equal(t, "user@example.com", resp.Data.Original)
+	assert.Equal(t, "user", resp.Data.Local)
+	assert.Equal(t, "example.com", resp.Data.Domain)
 }
 
 func TestNormalize_GmailNormalization(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"email":"te.st.user+spam@gmail.com"}`
@@ -61,24 +54,18 @@ func TestNormalize_GmailNormalization(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[EmailNormalization]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Normalized != "testuser@gmail.com" {
-		t.Errorf("expected normalized %q, got %q", "testuser@gmail.com", resp.Data.Normalized)
-	}
-	if len(resp.Data.Changes) == 0 {
-		t.Error("expected at least one change for gmail normalization")
-	}
+	assert.Equal(t, "testuser@gmail.com", resp.Data.Normalized)
+	assert.NotEmpty(t, resp.Data.Changes)
 }
 
 func TestNormalize_UppercaseDomainLowercased(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	// For unknown providers the local part is preserved (case-sensitive per
@@ -90,21 +77,17 @@ func TestNormalize_UppercaseDomainLowercased(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[EmailNormalization]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Normalized != "USER@example.com" {
-		t.Errorf("expected normalized %q, got %q", "USER@example.com", resp.Data.Normalized)
-	}
+	assert.Equal(t, "USER@example.com", resp.Data.Normalized)
 }
 
 func TestNormalize_OriginalIsAlwaysUnmodifiedInput(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	input := "Test.User+tag@Gmail.com"
@@ -115,21 +98,17 @@ func TestNormalize_OriginalIsAlwaysUnmodifiedInput(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[EmailNormalization]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Original != input {
-		t.Errorf("expected Original %q, got %q", input, resp.Data.Original)
-	}
+	assert.Equal(t, input, resp.Data.Original)
 }
 
 func TestNormalize_MissingEmailField(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/normalize", strings.NewReader(`{}`))
@@ -138,12 +117,11 @@ func TestNormalize_MissingEmailField(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestNormalize_InvalidEmailFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"email":"not-an-email"}`
@@ -153,12 +131,11 @@ func TestNormalize_InvalidEmailFormat(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestNormalize_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/normalize", http.NoBody)
@@ -167,12 +144,11 @@ func TestNormalize_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestNormalize_UnknownFieldsRejected(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"email":"user@example.com","unexpected_field":"value"}`
@@ -182,12 +158,11 @@ func TestNormalize_UnknownFieldsRejected(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400 for unknown fields, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestNormalizeBatch_HappyPathSetsUsageCount(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"emails":["a@b.co","user@example.com"]}`
@@ -197,26 +172,18 @@ func TestNormalizeBatch_HappyPathSetsUsageCount(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
-	if got := w.Header().Get("X-Usage-Count"); got != "2" {
-		t.Errorf("X-Usage-Count: want 2, got %q", got)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 
 	var resp httpx.Response[EmailNormalizationBatchResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Data.Total != 2 || len(resp.Data.Results) != 2 {
-		t.Fatalf("total/results: %+v", resp.Data)
-	}
-	if !resp.Data.Results[0].Valid || !resp.Data.Results[1].Valid {
-		t.Fatalf("expected both valid, got %+v", resp.Data.Results)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	require.True(t, resp.Data.Total == 2 && len(resp.Data.Results) == 2, "total/results: %+v", resp.Data)
+	require.True(t, resp.Data.Results[0].Valid && resp.Data.Results[1].Valid, "expected both valid, got %+v", resp.Data.Results)
 }
 
 func TestNormalizeBatch_InvalidItemInBand(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"emails":["user@example.com","not-an-email"]}`
@@ -226,20 +193,16 @@ func TestNormalizeBatch_InvalidItemInBand(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[EmailNormalizationBatchResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if !resp.Data.Results[0].Valid || resp.Data.Results[1].Valid {
-		t.Fatalf("want first valid second invalid, got %+v", resp.Data.Results)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.True(t, resp.Data.Results[0].Valid && !resp.Data.Results[1].Valid, "want first valid second invalid, got %+v", resp.Data.Results)
 }
 
 func TestNormalizeBatch_EmptyArrayValidation(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"emails":[]}`
@@ -249,7 +212,5 @@ func TestNormalizeBatch_EmptyArrayValidation(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
