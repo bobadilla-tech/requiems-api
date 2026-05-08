@@ -448,11 +448,11 @@ the `/v1/` namespace. No composition logic, just cleaner DX.
 
 ### Engine: `GET /v1/qr/base64`
 
-Generate a QR code and return it as a base64-encoded PNG in a JSON envelope.
-Use this for API workflows, inline embedding, or storing the image as a data URI.
+Generate a QR code and return it as a base64-encoded PNG in a JSON envelope. Use
+this for API workflows, inline embedding, or storing the image as a data URI.
 
-**Query params:** `data` (required), `size` (pixels, default `256`, range `50–1000`),
-`recovery` (`low` | `medium` | `high` | `highest`, default `medium`)
+**Query params:** `data` (required), `size` (pixels, default `256`, range
+`50–1000`), `recovery` (`low` | `medium` | `high` | `highest`, default `medium`)
 
 **Request** (query params)
 
@@ -480,8 +480,8 @@ Use the `image` value directly as a data URI: `data:image/png;base64,{image}`
 
 ### `GET /v1/qr/generate`
 
-Returns the QR code as a raw binary PNG blob (`Content-Type: image/png`).
-Use when you want to serve the image directly or stream it to a browser.
+Returns the QR code as a raw binary PNG blob (`Content-Type: image/png`). Use
+when you want to serve the image directly or stream it to a browser.
 
 **Query params:** same as `/v1/qr/base64`
 
