@@ -15,13 +15,20 @@ type LookupResponse struct {
 func (LookupResponse) IsData() {}
 
 
-
 type BatchLookupRequest struct {
-	Domains []string `json:"domains" validate:"required,min=1,dive,required"`
+	Domains []string `json:"domains" validate:"required,min=1,max=50,dive,required,hostname_rfc1123"`
+}
+
+type BatchLookupItem struct {
+	Domain string         `json:"domain"`
+	Found  bool           `json:"found"`
+	Error  string         `json:"error,omitempty"`
+	Data   LookupResponse `json:"data,omitempty"`
 }
 
 type BatchLookupResponse struct {
-	Results []LookupResponse `json:"results"`
+	Results []BatchLookupItem `json:"results"`
+	Total int 				`json:"total"`
 }
 
 func (BatchLookupResponse) IsData() {}
