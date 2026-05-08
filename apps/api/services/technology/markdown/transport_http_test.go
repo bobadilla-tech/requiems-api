@@ -189,7 +189,7 @@ func TestMarkdownBatch_Sanitize(t *testing.T) {
 	}
 }
 
-func TestMarkdownBatch_MissingBody(t *testing.T) { //check
+func TestMarkdownBatch_MissingBody(t *testing.T) { // check
 	r := setupRouter()
 
 	req := httptest.NewRequest(
