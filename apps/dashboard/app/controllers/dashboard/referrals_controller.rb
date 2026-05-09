@@ -11,6 +11,6 @@ class Dashboard::ReferralsController < Dashboard::BaseController
     )
     @total_referred = current_user.referrals_given.count
     @total_converted = current_user.referrals_given.converted.count
-    @recent_referrals = current_user.referrals_given.order(created_at: :desc).limit(10)
+    @recent_referrals = current_user.referrals_given.includes(:referred_user).order(created_at: :desc).limit(10)
   end
 end
