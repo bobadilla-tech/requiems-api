@@ -78,6 +78,7 @@ func TestService_Convert(t *testing.T) {
 }
 
 func TestService_ConvertBatch(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -144,41 +145,13 @@ func TestService_ConvertBatch(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.ConvertBatch(tt.inputs, tt.sanitize)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-
-			if len(got.Results) != len(tt.wantBatch.Results) {
-				t.Fatalf(
-					"results length mismatch\ngot: %d\nwant: %d",
-					len(got.Results),
-					len(tt.wantBatch.Results),
-				)
-			}
-
+			require.NoError(t, err)
+			require.Len(t, got.Results, len(tt.wantBatch.Results))
 			for i := range got.Results {
-				if got.Results[i].HTML != tt.wantBatch.Results[i].HTML {
-					t.Errorf(
-						"result[%d] HTML mismatch\ngot:  %q\nwant: %q",
-						i,
-						got.Results[i].HTML,
-						tt.wantBatch.Results[i].HTML,
-					)
-				}
+				assert.Equal(t, tt.wantBatch.Results[i].HTML, got.Results[i].HTML)
 			}
 		})
 	}
 }
-
-// múltiples documentos markdown
-
-// sanitización en batch
-
-// batch vacío
-
-// elementos vacíos dentro del batch
-
-// validación de orden de resultados
-
-// validación individual de cada Response.HTML

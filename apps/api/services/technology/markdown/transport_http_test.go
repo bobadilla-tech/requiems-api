@@ -58,7 +58,7 @@ func TestMarkdown_Sanitize(t *testing.T) {
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
-	assert.False(t, strings.Contains(resp.Data.HTML, "<script>"), "expected script tag to be stripped, got: %q", resp.Data.HTML)
+	assert.NotContains(t, resp.Data.HTML, "<script>")
 }
 
 func TestMarkdown_MissingBody(t *testing.T) {
@@ -90,6 +90,7 @@ func TestMarkdown_EmptyMarkdown(t *testing.T) {
 }
 
 func TestMarkdownBatch_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{
@@ -99,44 +100,26 @@ func TestMarkdownBatch_HappyPath(t *testing.T) {
 			"- item one"
 		]
 	}`
-
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		strings.NewReader(body),
-	)
-
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, w.Body.String())
 
 	var resp httpx.Response[BatchResponse]
-
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
-
-	if len(resp.Data.Results) != 3 {
-		t.Fatalf(
-			"expected 3 results, got %d",
-			len(resp.Data.Results),
-		)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	require.Len(t, resp.Data.Results, 3)
 
 	for i, result := range resp.Data.Results {
-		if result.HTML == "" {
-			t.Errorf("expected non-empty html in result[%d]", i)
-		}
+		assert.NotEmpty(t, result.HTML, "result[%d] should have non-empty HTML", i)
 	}
 }
 
 func TestMarkdownBatch_Sanitize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{
@@ -146,116 +129,69 @@ func TestMarkdownBatch_Sanitize(t *testing.T) {
 		],
 		"sanitize": true
 	}`
-
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		strings.NewReader(body),
-	)
-
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, w.Body.String())
 
 	var resp httpx.Response[BatchResponse]
-
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
 	for i, result := range resp.Data.Results {
-		if strings.Contains(result.HTML, "<script>") {
-			t.Errorf(
-				"expected script tag to be stripped in result[%d], got: %q",
-				i,
-				result.HTML,
-			)
-		}
+		assert.NotContains(t, result.HTML, "<script>", "result[%d] should not contain script tag", i)
 	}
 }
 
-func TestMarkdownBatch_MissingBody(t *testing.T) { // check
+func TestMarkdownBatch_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		http.NoBody,
-	)
-
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", http.NoBody)
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestMarkdownBatch_EmptyMarkdowns(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
-	body := `{
-		"markdowns": []
-	}`
-
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		strings.NewReader(body),
-	)
-
+	body := `{"markdowns": []}`
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, w.Body.String())
 }
 
 func TestMarkdownBatch_WithEmptyMarkdownItem(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
-	body := `{
-		"markdowns": [
-			"",
-			"# Title"
-		]
-	}`
-
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		strings.NewReader(body),
-	)
-
+	body := `{"markdowns": ["", "# Title"]}`
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, w.Body.String())
 }
 
 func TestMarkdownBatch_TooManyMarkdowns(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	items := make([]string, 51)
-
 	for i := range items {
 		items[i] = "# Title"
 	}
@@ -267,23 +203,13 @@ func TestMarkdownBatch_TooManyMarkdowns(t *testing.T) {
 	}
 
 	bodyBytes, err := json.Marshal(payload)
-	if err != nil {
-		t.Fatalf("failed to marshal payload: %v", err)
-	}
+	require.NoError(t, err)
 
-	req := httptest.NewRequest(
-		http.MethodPost,
-		"/markdown/batch",
-		strings.NewReader(string(bodyBytes)),
-	)
-
+	req := httptest.NewRequest(http.MethodPost, "/markdown/batch", strings.NewReader(string(bodyBytes)))
 	req.Header.Set("Content-Type", "application/json")
-
 	w := httptest.NewRecorder()
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, w.Body.String())
 }
