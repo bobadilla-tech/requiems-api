@@ -21,7 +21,6 @@ func setupRouter() chi.Router {
 }
 
 func TestProfanity_CleanText(t *testing.T) {
-	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"Hello, world!"}`
@@ -43,7 +42,6 @@ func TestProfanity_CleanText(t *testing.T) {
 }
 
 func TestProfanity_ProfaneText(t *testing.T) {
-	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"What the fuck is this shit"}`
@@ -73,7 +71,6 @@ func TestProfanity_ProfaneText(t *testing.T) {
 }
 
 func TestProfanity_MissingTextField(t *testing.T) {
-	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/profanity", strings.NewReader(`{}`))
@@ -86,7 +83,6 @@ func TestProfanity_MissingTextField(t *testing.T) {
 }
 
 func TestProfanity_MissingBody(t *testing.T) {
-	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/profanity", http.NoBody)

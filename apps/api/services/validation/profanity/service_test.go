@@ -8,7 +8,6 @@ import (
 )
 
 func TestService_Check_NoProfanity(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	result := svc.Check(context.Background(), "Hello, world!")
@@ -19,7 +18,6 @@ func TestService_Check_NoProfanity(t *testing.T) {
 }
 
 func TestService_Check_WithProfanity(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	result := svc.Check(context.Background(), "What the fuck is this shit")
@@ -30,7 +28,6 @@ func TestService_Check_WithProfanity(t *testing.T) {
 }
 
 func TestService_Check_CaseInsensitive(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	// go-away detects "shit" as a substring of "BULLSHIT" and censors only
@@ -44,7 +41,6 @@ func TestService_Check_CaseInsensitive(t *testing.T) {
 }
 
 func TestService_Check_DeduplicatesFlaggedWords(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	result := svc.Check(context.Background(), "shit shit shit")
@@ -53,7 +49,6 @@ func TestService_Check_DeduplicatesFlaggedWords(t *testing.T) {
 }
 
 func TestService_Check_EmptyFlaggedWordsSlice(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	result := svc.Check(context.Background(), "clean text here")
@@ -65,7 +60,6 @@ func TestService_Check_EmptyFlaggedWordsSlice(t *testing.T) {
 }
 
 func TestService_Check_EmptyText(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	result := svc.Check(context.Background(), "")
@@ -75,7 +69,6 @@ func TestService_Check_EmptyText(t *testing.T) {
 }
 
 func TestService_Check_LeetSpeak(t *testing.T) {
-	t.Parallel()
 	svc := NewService()
 
 	// go-away handles leet-speak obfuscation out of the box.
