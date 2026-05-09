@@ -113,6 +113,110 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['corrected']
         data['data']['corrections'].each { |c| puts "#{c['original']} -> #{c['suggested']}" }
+  - name: Check Spelling (Batch)
+    method: POST
+    path: /v1/text/spellcheck/batch
+    description: Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+    parameters:
+      - name: texts
+        type: array
+        required: true
+        location: body
+        description: The list of texts to spell-check. Between 1 and 50 items.
+        example: '["Ths is a tset", "Smiple example"]'
+    request_example: |
+      {
+        "texts": ["Ths is a tset", "Smiple example"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "corrected": "This is a test",
+              "corrections": [
+                {"original": "Ths", "suggested": "This", "position": 0},
+                {"original": "tset", "suggested": "test", "position": 9}
+              ]
+            },
+            {
+              "corrected": "Simple example",
+              "corrections": [
+                {"original": "Smiple", "suggested": "Simple", "position": 0}
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array of objects
+        description: One entry per input text, in the same order as the input array. Each item contains corrected (the fixed text) and corrections (list of individual corrections with original, suggested, and position).
+      - name: total
+        type: integer
+        description: Number of texts processed. Equals the length of the input array.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The texts field is missing, empty, or exceeds 50 items.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+      - code: internal_error
+        status: 500
+        description: Unexpected server error.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/text/spellcheck/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"texts": ["Ths is a tset", "Smiple example"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/text/spellcheck/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"texts": ["Ths is a tset", "Smiple example"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        data = response.json()
+        for item in data["data"]["results"]:
+            print(item["corrected"])
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/text/spellcheck/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ texts: ['Ths is a tset', 'Smiple example'] })
+        });
+
+        const data = await response.json();
+        data.data.results.forEach(item => console.log(item.corrected));
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/text/spellcheck/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { texts: ['Ths is a tset', 'Smiple example'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)
+        data['data']['results'].each { |item| puts item['corrected'] }
 faq:
   - question: What language does spell check support?
     answer: The spell checker currently supports English only.

@@ -1,105 +1,133 @@
 package spellcheck
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
+// newMockLT starts a test HTTP server that returns the given matches,
+// simulating the LanguageTool /v2/check endpoint.
+func newMockLT(t *testing.T, matches []ltMatch) *httptest.Server {
+	t.Helper()
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(ltResponse{Matches: matches})
+	}))
+}
+
 func TestService_Check_NoMistakes(t *testing.T) {
 	t.Parallel()
-	svc := NewService()
+	srv := newMockLT(t, []ltMatch{})
+	defer srv.Close()
 
-	result, err := svc.Check("This is a test")
+	result, err := NewService(srv.URL).Check("This is a test")
+
 	require.NoError(t, err)
-
 	assert.Equal(t, "This is a test", result.Corrected)
-	assert.Len(t, result.Corrections, 0)
+	assert.Empty(t, result.Corrections)
 }
 
 func TestService_Check_MisspelledWords(t *testing.T) {
 	t.Parallel()
-	svc := NewService()
+	srv := newMockLT(t, []ltMatch{
+		{Offset: 0, Length: 3, Replacements: []ltReplacement{{Value: "This"}}},
+		{Offset: 9, Length: 4, Replacements: []ltReplacement{{Value: "test"}}},
+	})
+	defer srv.Close()
 
-	result, err := svc.Check("Ths is a tset")
+	result, err := NewService(srv.URL).Check("Ths is a tset")
+
 	require.NoError(t, err)
-
-	assert.NotEmpty(t, result.Corrections)
-
-	foundThs := false
-	foundTset := false
-	for _, c := range result.Corrections {
-		if c.Original == "Ths" && c.Position == 0 && c.Suggested != "" {
-			foundThs = true
-		}
-		if c.Original == "tset" && c.Position == 9 && c.Suggested != "" {
-			foundTset = true
-		}
-	}
-
-	assert.True(t, foundThs, "expected correction for Ths at position 0; got %+v", result.Corrections)
-	assert.True(t, foundTset, "expected correction for tset at position 9; got %+v", result.Corrections)
-}
-
-func TestService_Check_EmptyText(t *testing.T) {
-	t.Parallel()
-	svc := NewService()
-
-	// Empty text is not a valid request (validate:"required" enforces that at
-	// the HTTP layer), but the service itself should return a safe empty result.
-	result, err := svc.Check("")
-	require.NoError(t, err)
-
-	assert.Equal(t, "", result.Corrected)
-	assert.Len(t, result.Corrections, 0)
+	require.Len(t, result.Corrections, 2)
+	assert.Equal(t, "Ths", result.Corrections[0].Original)
+	assert.Equal(t, "This", result.Corrections[0].Suggested)
+	assert.Equal(t, 0, result.Corrections[0].Position)
+	assert.Equal(t, "tset", result.Corrections[1].Original)
+	assert.Equal(t, "test", result.Corrections[1].Suggested)
+	assert.Equal(t, 9, result.Corrections[1].Position)
 }
 
 func TestService_Check_CorrectedTextReflectsFixes(t *testing.T) {
 	t.Parallel()
-	svc := NewService()
+	srv := newMockLT(t, []ltMatch{
+		{Offset: 0, Length: 3, Replacements: []ltReplacement{{Value: "This"}}},
+		{Offset: 9, Length: 4, Replacements: []ltReplacement{{Value: "test"}}},
+	})
+	defer srv.Close()
 
-	result, err := svc.Check("Ths is a tset")
+	result, err := NewService(srv.URL).Check("Ths is a tset")
+
 	require.NoError(t, err)
-
-	assert.False(t, result.Corrected == "Ths is a tset", "expected corrected text to differ from misspelled input")
+	assert.Equal(t, "This is a test", result.Corrected)
 }
 
 func TestService_Check_CorrectionsSliceNotNil(t *testing.T) {
 	t.Parallel()
-	svc := NewService()
+	srv := newMockLT(t, []ltMatch{})
+	defer srv.Close()
 
-	result, err := svc.Check("Hello world")
+	result, err := NewService(srv.URL).Check("Hello world")
+
 	require.NoError(t, err)
-
 	assert.NotNil(t, result.Corrections)
+}
+
+func TestService_Check_Unreachable(t *testing.T) {
+	t.Parallel()
+	// Nothing is listening on this port.
+	_, err := NewService("http://localhost:19999").Check("hello")
+	assert.Error(t, err)
 }
 
 func TestService_Check_PositionIsRuneOffset(t *testing.T) {
 	t.Parallel()
-	svc := NewService()
-	// "é" is a single rune but 2 UTF-8 bytes.
-	// "tset" starts at rune index 2 (é=1, space=1) but byte index 3.
-	result, err := svc.Check("é tset")
+	// "é" is one rune but two UTF-8 bytes. "tset" starts at rune index 2.
+	srv := newMockLT(t, []ltMatch{
+		{Offset: 2, Length: 4, Replacements: []ltReplacement{{Value: "test"}}},
+	})
+	defer srv.Close()
+
+	result, err := NewService(srv.URL).Check("é tset")
+
 	require.NoError(t, err)
-	require.NotEmpty(t, result.Corrections)
+	require.Len(t, result.Corrections, 1)
 	assert.Equal(t, 2, result.Corrections[0].Position)
 }
 
-func TestMatchCase_LowerInput(t *testing.T) {
+func TestService_Check_SuggestionsTopThree(t *testing.T) {
 	t.Parallel()
-	got := matchCase("abc", "suggested")
-	assert.Equal(t, "suggested", got)
+	// LanguageTool returns 4 replacements; we expect only the first 3.
+	srv := newMockLT(t, []ltMatch{
+		{Offset: 0, Length: 3, Replacements: []ltReplacement{
+			{Value: "This"}, {Value: "The"}, {Value: "Thus"}, {Value: "Those"},
+		}},
+	})
+	defer srv.Close()
+
+	result, err := NewService(srv.URL).Check("Ths is fine")
+
+	require.NoError(t, err)
+	require.Len(t, result.Corrections, 1)
+	assert.Equal(t, "This", result.Corrections[0].Suggested)
+	assert.Equal(t, []string{"This", "The", "Thus"}, result.Corrections[0].Suggestions)
 }
 
-func TestMatchCase_CapitalisedInput(t *testing.T) {
+func TestService_Check_SuggestionsOnlyOne(t *testing.T) {
 	t.Parallel()
-	got := matchCase("Abc", "suggested")
-	assert.Equal(t, "Suggested", got)
-}
+	// When LanguageTool returns a single replacement, Suggestions has length 1.
+	srv := newMockLT(t, []ltMatch{
+		{Offset: 0, Length: 4, Replacements: []ltReplacement{{Value: "test"}}},
+	})
+	defer srv.Close()
 
-func TestMatchCase_AllUpperInput(t *testing.T) {
-	t.Parallel()
-	got := matchCase("ABC", "suggested")
-	assert.Equal(t, "SUGGESTED", got)
+	result, err := NewService(srv.URL).Check("tset done")
+
+	require.NoError(t, err)
+	require.Len(t, result.Corrections, 1)
+	assert.Equal(t, []string{"test"}, result.Corrections[0].Suggestions)
 }
