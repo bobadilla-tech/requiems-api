@@ -1,8 +1,14 @@
 es:
   shared:
     nav:
+      divisions: "Divisiones"
+      systems: "Systems"
+      divisions_hub: "Resumen de todas las divisiones"
+      divisions_panel_heading: "Ir a una división"
+      divisions_all: "Todas las divisiones"
       apis: "APIs"
       examples: "Ejemplos"
+      case_studies: "Casos de estudio"
       pricing: "Precios"
       dashboard: "Panel"
       api_keys: "Claves API"
@@ -15,12 +21,15 @@ es:
       dark_mode: "Modo oscuro"
       light_mode: "Modo claro"
       open_menu: "Abrir menú principal"
+      close_menu: "Cerrar menú principal"
+      mobile_menu_title: "Menú"
+      mobile_menu_close: "Cerrar"
       search_placeholder: "APIs, ejemplos, docs..."
       search_no_results: "Sin resultados"
       search_try_different: "Prueba otras palabras"
       language: "Idioma"
     footer:
-      tagline: "APIs listas para producción para desarrolladores modernos"
+      tagline: "Una clave API: validación, utilidades y más, sin dispersión de integraciones"
       copyright: "© %{year} Bobadilla Tech. Todos los derechos reservados."
       sections:
         get_started: "Comenzar"

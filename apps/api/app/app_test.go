@@ -7,6 +7,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/config"
 )
 
@@ -20,9 +23,7 @@ func TestNew_ErrorOnBadDatabaseURL(t *testing.T) {
 		RedisURL:    "redis://localhost:6379/0",
 	})
 
-	if err == nil {
-		t.Fatal("expected error for unreachable database, got nil")
-	}
+	require.Error(t, err)
 }
 
 // TestApp_Handler is an integration test that creates a real App and verifies
@@ -33,16 +34,19 @@ func TestNew_ErrorOnBadDatabaseURL(t *testing.T) {
 // The test is skipped when DATABASE_URL or BACKEND_SECRET is not set.
 func TestApp_Handler(t *testing.T) {
 	dsn := os.Getenv("DATABASE_URL")
+
 	if dsn == "" {
 		t.Skip("DATABASE_URL not set; skipping App integration test")
 	}
 
 	backendSecret := os.Getenv("BACKEND_SECRET")
+
 	if backendSecret == "" {
 		t.Skip("BACKEND_SECRET not set; skipping App integration test")
 	}
 
 	redisURL := os.Getenv("REDIS_URL")
+
 	if redisURL == "" {
 		redisURL = "redis://localhost:6379/0"
 	}
@@ -56,23 +60,20 @@ func TestApp_Handler(t *testing.T) {
 	}
 
 	app, err := New(context.Background(), cfg)
+
 	if err != nil {
 		t.Skipf("infrastructure unavailable; skipping App integration test: %v", err)
 	}
 
 	h := app.Handler()
-	if h == nil {
-		t.Fatal("Handler() returned nil")
-	}
+	require.NotNil(t, h)
 
 	t.Run("healthz is publicly accessible", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/healthz", http.NoBody)
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Errorf("expected 200 from /healthz, got %d: %s", w.Code, w.Body.String())
-		}
+		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
 	t.Run("v1 routes require backend secret", func(t *testing.T) {
@@ -80,9 +81,7 @@ func TestApp_Handler(t *testing.T) {
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
 
-		if w.Code != http.StatusUnauthorized {
-			t.Errorf("expected 401 for /v1/* without auth header, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusUnauthorized, w.Code)
 	})
 
 	t.Run("v1 routes are accessible with valid backend secret", func(t *testing.T) {
@@ -92,8 +91,7 @@ func TestApp_Handler(t *testing.T) {
 		h.ServeHTTP(w, req)
 
 		// The endpoint itself may return any 2xx; 401/403 would indicate auth failure.
-		if w.Code == http.StatusUnauthorized || w.Code == http.StatusForbidden {
-			t.Errorf("expected authenticated request to pass auth, got %d", w.Code)
-		}
+		assert.NotEqual(t, http.StatusUnauthorized, w.Code)
+		assert.NotEqual(t, http.StatusForbidden, w.Code)
 	})
 }

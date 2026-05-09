@@ -13,9 +13,21 @@
           <span class="block text-yellow-300"><%= t("home.index.hero.title_line2") %></span>
         </h1>
 
-        <p class="text-xl text-blue-100 mb-8">
+        <p class="text-xl text-blue-100 mb-6">
           <%= t("home.index.hero.description") %>
         </p>
+
+        <!-- Proof strip -->
+        <div class="flex flex-wrap gap-x-4 gap-y-2 mb-8">
+          <% t("home.index.hero.proof_badges").each do |badge| %>
+            <span class="flex items-center gap-1.5 text-sm text-blue-200">
+              <svg class="h-4 w-4 text-blue-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <%= badge %>
+            </span>
+          <% end %>
+        </div>
 
         <!-- CTA buttons -->
         <div class="flex flex-col sm:flex-row gap-4 mb-8">
@@ -28,7 +40,7 @@
             <% end %>
           <% end %>
 
-          <%= link_to apis_path, class: "inline-flex items-center justify-center px-8 py-4 border-2 border-white text-base font-medium rounded-lg text-white hover:bg-white/10 transition-colors" do %>
+          <%= link_to systems_path, class: "inline-flex items-center justify-center px-8 py-4 border-2 border-white text-base font-medium rounded-lg text-white hover:bg-white/10 transition-colors" do %>
             <%= t("home.index.hero.cta_secondary") %>
           <% end %>
         </div>
@@ -59,7 +71,7 @@
           <!-- Divider -->
           <div style="height: 1px; background: rgba(255,255,255,0.04); margin: 0 1rem;"></div>
 
-          <!-- Response area — fixed height (tall enough for longest demo) -->
+          <!-- Response area - fixed height (tall enough for longest demo) -->
           <div class="px-4 pt-3 pb-4">
             <div style="height: 320px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;">
               <div data-hero-demo-target="responseArea"></div>

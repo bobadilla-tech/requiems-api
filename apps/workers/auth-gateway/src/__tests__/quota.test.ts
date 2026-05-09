@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import worker from "../index";
 import { PLANS } from "@requiem/workers-shared";
 import type { ApiKeyData } from "@requiem/workers-shared";
@@ -33,6 +33,10 @@ function monthStartKey(userId: string): string {
 describe("Quota exceeded — integration", () => {
   let kvStore: Map<string, string>;
   let bindings: WorkerBindings;
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
   beforeEach(() => {
     vi.useFakeTimers();

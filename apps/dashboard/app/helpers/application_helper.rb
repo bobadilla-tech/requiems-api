@@ -5,11 +5,19 @@ module ApplicationHelper
 
   LOCALE_NAMES = {
     en: "English",
-    es: "Español"
+    es: "Español",
+    fr: "Français"
   }.freeze
 
   def locale_name(locale)
     LOCALE_NAMES[locale.to_sym] || locale.to_s.upcase
+  end
+
+  # POST /locale is declared outside the optional `(:locale)` scope. `default_url_options`
+  # still merges `locale: I18n.locale`, so `switch_locale_path` becomes "/locale?locale=fr".
+  # That duplicates the `locale` param with the select field and breaks language switching.
+  def locale_switch_path
+    "#{request.script_name}/locale".gsub(%r{/+}, "/")
   end
 
   def global_search_data
@@ -48,6 +56,33 @@ module ApplicationHelper
         quadrillion: "Q"
       }
     )
+  end
+
+  def organization_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Organization",
+      "name" => "Requiems API",
+      "url" => "https://requiems.xyz",
+      "logo" => "https://requiems.xyz/logo.png",
+      "description" => "All-in-one backend for SaaS products. Authentication, validation, fraud detection, payments intelligence, and global data through one unified API.",
+      "sameAs" => []
+    }.to_json
+  end
+
+  def api_json_ld(api)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "WebAPI",
+      "name" => api["name"],
+      "description" => api["description"],
+      "documentation" => api["documentation_url"].presence || "https://requiems.xyz/en/apis/#{api["id"]}",
+      "provider" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      }
+    }.compact_blank.to_json
   end
 
   private

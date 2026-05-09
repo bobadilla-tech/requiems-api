@@ -23,7 +23,9 @@ func newTestRouter(svc *Service) http.Handler {
 
 // TestRandomUserHandler tests the GET /random-user single-user endpoint.
 func TestRandomUserHandler(t *testing.T) {
+	t.Parallel()
 	t.Run("returns 200 with valid user fields", func(t *testing.T) {
+		t.Parallel()
 		svc := NewService()
 
 		req := httptest.NewRequest(http.MethodGet, "/random-user", http.NoBody)
@@ -31,34 +33,22 @@ func TestRandomUserHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		if w.Code != http.StatusOK {
-			t.Fatalf("expected 200, got %d", w.Code)
-		}
+		require.Equal(t, http.StatusOK, w.Code)
 
 		var resp httpx.Response[User]
-		if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-			t.Fatalf("decode response: %v", err)
-		}
+		err := json.NewDecoder(w.Body).Decode(&resp)
+		require.NoError(t, err)
 
 		u := resp.Data
-		if u.Name == "" {
-			t.Error("Name should not be empty")
-		}
-		if u.Email == "" {
-			t.Error("Email should not be empty")
-		}
-		if u.Phone == "" {
-			t.Error("Phone should not be empty")
-		}
-		if u.Address.Street == "" {
-			t.Error("Address.Street should not be empty")
-		}
-		if u.Avatar == "" {
-			t.Error("Avatar should not be empty")
-		}
+		assert.NotEmpty(t, u.Name)
+		assert.NotEmpty(t, u.Email)
+		assert.NotEmpty(t, u.Phone)
+		assert.NotEmpty(t, u.Address.Street)
+		assert.NotEmpty(t, u.Avatar)
 	})
 
 	t.Run("content-type is application/json", func(t *testing.T) {
+		t.Parallel()
 		svc := NewService()
 
 		req := httptest.NewRequest(http.MethodGet, "/random-user", http.NoBody)
@@ -67,12 +57,11 @@ func TestRandomUserHandler(t *testing.T) {
 		newTestRouter(svc).ServeHTTP(w, req)
 
 		ct := w.Header().Get("Content-Type")
-		if ct != "application/json" {
-			t.Errorf("expected Content-Type application/json, got %q", ct)
-		}
+		assert.Equal(t, "application/json", ct)
 	})
 
 	t.Run("returns different users on successive calls", func(t *testing.T) {
+		t.Parallel()
 		svc := NewService()
 		router := newTestRouter(svc)
 
@@ -83,9 +72,8 @@ func TestRandomUserHandler(t *testing.T) {
 			router.ServeHTTP(w, req)
 
 			var resp httpx.Response[User]
-			if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-				t.Fatalf("decode response: %v", err)
-			}
+			err := json.NewDecoder(w.Body).Decode(&resp)
+			require.NoError(t, err)
 			names[resp.Data.Name] = struct{}{}
 		}
 

@@ -1,0 +1,21 @@
+<%# locals: (slug:) %>
+<%# Single CTA strip to the API directory (replaces the old four-step journey block). %>
+<section class="py-12 border-y border-slate-200/90 dark:border-slate-700/80 bg-gradient-to-br from-slate-50 via-white to-blue-50/50 dark:from-slate-950 dark:via-gray-950 dark:to-slate-900/90" aria-labelledby="division-next-heading">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <div class="min-w-0">
+      <h2 id="division-next-heading" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+        <%= t("divisions.common.next_step_heading") %>
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed max-w-xl">
+        <%= t("divisions.common.next_step_body") %>
+      </p>
+    </div>
+    <%= link_to category_path(slug),
+                class: "inline-flex shrink-0 items-center justify-center px-5 py-3 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors shadow-sm" do %>
+      <%= t("divisions.common.technical_api_action") %>
+      <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+      </svg>
+    <% end %>
+  </div>
+</section>

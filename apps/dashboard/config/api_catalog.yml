@@ -100,7 +100,7 @@ apis:
     categories:
       - finance
     description: Validate IBAN numbers and extract the bank code and account number. Supports all countries in the official SWIFT IBAN Registry (~80 countries).
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/iban
@@ -178,7 +178,7 @@ apis:
     categories:
       - validation
     description: Full email validation in one call. Syntax check, MX record lookup, disposable domain detection, normalization, and typo suggestions. Includes everything from the Disposable Domain Checker and Email Normalizer in a single request.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
     documentation_url: /apis/email-validate
@@ -372,7 +372,7 @@ apis:
     categories:
       - places
     description: Get a list of holidays for a specific country and year
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/holidays
@@ -515,7 +515,7 @@ apis:
       - text
       - technology
     description: Convert Markdown to HTML in a single API call. Optionally sanitize the output to strip unsafe tags and prevent XSS.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/markdown
@@ -558,7 +558,7 @@ apis:
     categories:
       - text
     description: Normalize email addresses to their canonical form. Lowercased, trimmed, and canonicalized with provider-specific rules including alias-domain resolution. Also available as part of the full Email Validator.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/email-normalize
@@ -804,7 +804,7 @@ apis:
     categories:
       - entertainment
     description: Generate Sudoku puzzles with solutions across multiple difficulty levels
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/sudoku

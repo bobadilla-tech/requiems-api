@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -18,6 +20,7 @@ func setupRouter(svc *Service) chi.Router {
 }
 
 func TestCrypto_GetPrice_ValidSymbol(t *testing.T) {
+	t.Parallel()
 	upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body := coinGeckoResponse{
 			"bitcoin": {
@@ -39,27 +42,19 @@ func TestCrypto_GetPrice_ValidSymbol(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d: %s", w.Code, w.Body.String())
 
 	var resp httpx.Response[Price]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Symbol != "BTC" {
-		t.Errorf("expected symbol BTC, got %s", resp.Data.Symbol)
-	}
-	if resp.Data.Name != "Bitcoin" {
-		t.Errorf("expected name Bitcoin, got %s", resp.Data.Name)
-	}
-	if resp.Data.PriceUSD != 42000.50 {
-		t.Errorf("expected price 42000.50, got %f", resp.Data.PriceUSD)
-	}
+	assert.Equal(t, "BTC", resp.Data.Symbol)
+	assert.Equal(t, "Bitcoin", resp.Data.Name)
+	assert.Equal(t, 42000.50, resp.Data.PriceUSD)
 }
 
 func TestCrypto_GetPrice_UppercaseNormalization(t *testing.T) {
+	t.Parallel()
 	upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body := coinGeckoResponse{
 			"bitcoin": {USD: 42000.50},
@@ -77,12 +72,11 @@ func TestCrypto_GetPrice_UppercaseNormalization(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code, "expected 200, got %d: %s", w.Code, w.Body.String())
 }
 
 func TestCrypto_GetPrice_UnknownSymbol(t *testing.T) {
+	t.Parallel()
 	svc := newServiceWithClient(http.DefaultClient, "http://unused")
 	r := setupRouter(svc)
 
@@ -90,12 +84,11 @@ func TestCrypto_GetPrice_UnknownSymbol(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestCrypto_GetPrice_UpstreamDown(t *testing.T) {
+	t.Parallel()
 	upstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 	}))
@@ -108,7 +101,5 @@ func TestCrypto_GetPrice_UpstreamDown(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }

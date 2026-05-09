@@ -64,7 +64,7 @@ Check whether an email domain belongs to a known disposable/temporary provider.
 - **Status:** mvp
 - **Endpoints:**
   - `POST /v1/networking/disposable/check`
-  - `POST /v1/networking/disposable/check-batch`
+  - `POST /v1/networking/disposable/batch`
   - `GET /v1/networking/disposable/domain/{domain}`
   - `GET /v1/networking/disposable/domains`
   - `GET /v1/networking/disposable/stats`

@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func newTestClient() (*ipi.Client, error) {
@@ -17,6 +19,7 @@ func newTestClient() (*ipi.Client, error) {
 }
 
 func TestService_CheckIP(t *testing.T) {
+	t.Parallel()
 	client, err := newTestClient()
 	if err != nil {
 		t.Skipf("VPN service not available: %v", err)
@@ -51,25 +54,24 @@ func TestService_CheckIP(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			ip := net.ParseIP(tt.ip)
-			if ip == nil {
-				t.Fatalf("failed to parse IP: %s", tt.ip)
-			}
+			require.NotNil(t, ip, "failed to parse IP: %s", tt.ip)
 
 			result, err := svc.CheckIP(context.Background(), ip)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("CheckIP() error = %v, wantErr %v", err, tt.wantErr)
+			if tt.wantErr {
+				assert.Error(t, err)
 				return
 			}
+			require.NoError(t, err)
 
-			if result.IP != tt.wantIP {
-				t.Errorf("CheckIP() IP = %v, want %v", result.IP, tt.wantIP)
-			}
+			assert.Equal(t, tt.wantIP, result.IP)
 		})
 	}
 }
 
 func TestService_CheckIP_ResponseFields(t *testing.T) {
+	t.Parallel()
 	client, err := newTestClient()
 	if err != nil {
 		t.Skipf("VPN service not available: %v", err)
@@ -78,17 +80,11 @@ func TestService_CheckIP_ResponseFields(t *testing.T) {
 
 	ip := net.ParseIP("8.8.8.8")
 	result, err := svc.CheckIP(context.Background(), ip)
-	if err != nil {
-		t.Fatalf("CheckIP() unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if result.IP == "" {
-		t.Error("expected non-empty IP")
-	}
+	assert.NotEmpty(t, result.IP)
 
-	if result.Score < 0 {
-		t.Errorf("expected non-negative score, got %d", result.Score)
-	}
+	assert.True(t, result.Score >= 0, "expected non-negative score, got %d", result.Score)
 
 	validThreats := map[string]bool{
 		"none":     true,
@@ -97,11 +93,7 @@ func TestService_CheckIP_ResponseFields(t *testing.T) {
 		"high":     true,
 		"critical": true,
 	}
-	if !validThreats[result.Threat.String()] {
-		t.Errorf("invalid threat level: %s", result.Threat)
-	}
+	assert.True(t, validThreats[result.Threat.String()], "invalid threat level: %s", result.Threat)
 
-	if result.FraudScore < 0 || result.FraudScore > 100 {
-		t.Errorf("fraud_score out of range: %d", result.FraudScore)
-	}
+	assert.True(t, result.FraudScore >= 0 && result.FraudScore <= 100, "fraud_score out of range: %d", result.FraudScore)
 }

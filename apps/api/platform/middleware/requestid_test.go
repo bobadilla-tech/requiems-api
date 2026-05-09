@@ -4,9 +4,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRequestID(t *testing.T) {
+	t.Parallel()
+
 	captureHandler := func(gotID *string) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			*gotID = GetRequestID(r.Context())
@@ -15,6 +19,8 @@ func TestRequestID(t *testing.T) {
 	}
 
 	t.Run("propagates existing X-Request-ID", func(t *testing.T) {
+		t.Parallel()
+
 		var ctxID string
 		handler := RequestID(captureHandler(&ctxID))
 
@@ -24,15 +30,13 @@ func TestRequestID(t *testing.T) {
 
 		handler.ServeHTTP(w, req)
 
-		if ctxID != "trace-abc-123" {
-			t.Errorf("context id = %q, want %q", ctxID, "trace-abc-123")
-		}
-		if got := w.Header().Get("X-Request-ID"); got != "trace-abc-123" {
-			t.Errorf("response header = %q, want %q", got, "trace-abc-123")
-		}
+		assert.Equal(t, "trace-abc-123", ctxID)
+		assert.Equal(t, "trace-abc-123", w.Header().Get("X-Request-ID"))
 	})
 
 	t.Run("generates ID when header is absent", func(t *testing.T) {
+		t.Parallel()
+
 		var ctxID string
 		handler := RequestID(captureHandler(&ctxID))
 
@@ -41,15 +45,13 @@ func TestRequestID(t *testing.T) {
 
 		handler.ServeHTTP(w, req)
 
-		if ctxID == "" {
-			t.Error("expected a generated request ID in context")
-		}
-		if got := w.Header().Get("X-Request-ID"); got != ctxID {
-			t.Errorf("response header %q does not match context ID %q", got, ctxID)
-		}
+		assert.NotEmpty(t, ctxID)
+		assert.Equal(t, ctxID, w.Header().Get("X-Request-ID"))
 	})
 
 	t.Run("generated IDs are unique", func(t *testing.T) {
+		t.Parallel()
+
 		ids := make(map[string]struct{}, 100)
 		for i := 0; i < 100; i++ {
 			var ctxID string
@@ -58,15 +60,13 @@ func TestRequestID(t *testing.T) {
 			handler.ServeHTTP(httptest.NewRecorder(), req)
 			ids[ctxID] = struct{}{}
 		}
-		if len(ids) != 100 {
-			t.Errorf("expected 100 unique IDs, got %d", len(ids))
-		}
+		assert.Len(t, ids, 100)
 	})
 }
 
 func TestGetRequestID_missing(t *testing.T) {
+	t.Parallel()
+
 	req := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
-	if id := GetRequestID(req.Context()); id != "" {
-		t.Errorf("expected empty string, got %q", id)
-	}
+	assert.Equal(t, "", GetRequestID(req.Context()))
 }

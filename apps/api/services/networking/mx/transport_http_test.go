@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -18,6 +20,7 @@ func setupRouter() chi.Router {
 }
 
 func TestMXLookup_InvalidDomain(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	tests := []struct {
@@ -32,26 +35,23 @@ func TestMXLookup_InvalidDomain(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			req := httptest.NewRequest(http.MethodGet, "/mx/"+tc.domain, http.NoBody)
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400 for %q, got %d", tc.domain, w.Code)
-			}
+			assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for %q, got %d", tc.domain, w.Code)
 
 			var resp httpx.ErrorResponse
-			if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-				t.Fatalf("failed to decode error response: %v", err)
-			}
-			if resp.Error != "bad_request" {
-				t.Errorf("expected error code 'bad_request', got %q", resp.Error)
-			}
+			err := json.NewDecoder(w.Body).Decode(&resp)
+			require.NoError(t, err)
+			assert.Equal(t, "bad_request", resp.Error)
 		})
 	}
 }
 
 func TestMXLookup_NonExistentDomain(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/mx/nonexistent-domain-that-does-not-exist.invalid", http.NoBody)
@@ -59,12 +59,11 @@ func TestMXLookup_NonExistentDomain(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	// Should return 404 (no MX records / NXDOMAIN) or 500 (network unavailable in CI)
-	if w.Code != http.StatusNotFound && w.Code != http.StatusInternalServerError {
-		t.Errorf("expected 404 or 500 for non-existent domain, got %d", w.Code)
-	}
+	assert.True(t, w.Code == http.StatusNotFound || w.Code == http.StatusInternalServerError, "expected 404 or 500 for non-existent domain, got %d", w.Code)
 }
 
 func TestMXLookup_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/mx/gmail.com", http.NoBody)
@@ -76,34 +75,24 @@ func TestMXLookup_HappyPath(t *testing.T) {
 		t.Skip("DNS not available in this environment")
 	}
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[LookupResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Domain != "gmail.com" {
-		t.Errorf("expected domain 'gmail.com', got %q", resp.Data.Domain)
-	}
-	if len(resp.Data.Records) == 0 {
-		t.Error("expected at least one MX record for gmail.com")
-	}
+	assert.Equal(t, "gmail.com", resp.Data.Domain)
+	assert.NotEmpty(t, resp.Data.Records)
 
 	// Verify priority ordering (ascending)
 	for i := 1; i < len(resp.Data.Records); i++ {
-		if resp.Data.Records[i].Priority < resp.Data.Records[i-1].Priority {
-			t.Errorf("records not sorted by priority: record[%d].Priority=%d < record[%d].Priority=%d",
-				i, resp.Data.Records[i].Priority, i-1, resp.Data.Records[i-1].Priority)
-		}
+		assert.True(t, resp.Data.Records[i].Priority >= resp.Data.Records[i-1].Priority,
+			"records not sorted by priority: record[%d].Priority=%d < record[%d].Priority=%d",
+			i, resp.Data.Records[i].Priority, i-1, resp.Data.Records[i-1].Priority)
 	}
 
 	// Each record should have a non-empty host
 	for i, rec := range resp.Data.Records {
-		if rec.Host == "" {
-			t.Errorf("record[%d] has empty host", i)
-		}
+		assert.NotEmpty(t, rec.Host, "record[%d] has empty host", i)
 	}
 }

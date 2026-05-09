@@ -1,0 +1,33 @@
+<%# locals: (slug:) %>
+<section class="py-12 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+      <%= t("case_studies.common.related_heading") %>
+    </h2>
+    <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+      <% if slug.to_s == "verigeo" %>
+        <li>
+          <%= link_to t("divisions.index.cards.places.title"), division_path("places"),
+                      class: "font-medium text-blue-600 dark:text-blue-400 hover:underline" %>
+          <span class="text-gray-500 dark:text-gray-400">: <%= t("divisions.index.cards.places.blurb") %></span>
+        </li>
+        <li>
+          <%= link_to t("divisions.index.cards.validation.title"), division_path("validation"),
+                      class: "font-medium text-blue-600 dark:text-blue-400 hover:underline" %>
+          <span class="text-gray-500 dark:text-gray-400">: <%= t("divisions.index.cards.validation.blurb") %></span>
+        </li>
+        <li>
+          <%= link_to t("divisions.index.cards.finance.title"), division_path("finance"),
+                      class: "font-medium text-blue-600 dark:text-blue-400 hover:underline" %>
+          <span class="text-gray-500 dark:text-gray-400">: <%= t("divisions.index.cards.finance.blurb") %></span>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to t("divisions.index.cards.health.title"), division_path("health"),
+                      class: "font-medium text-blue-600 dark:text-blue-400 hover:underline" %>
+          <span class="text-gray-500 dark:text-gray-400">: <%= t("divisions.index.cards.health.blurb") %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>

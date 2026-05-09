@@ -27,21 +27,21 @@
     "kv:seed": "node scripts/seed-kv.ts"
   },
   "dependencies": {
-    "@sentry/cloudflare": "^10.48.0",
-    "hono": "^4.12.14",
-    "zod": "^4.0.0"
+    "@sentry/cloudflare": "^10.52.0",
+    "hono": "^4.12.18",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260416.2",
-    "@biomejs/biome": "^2.4.12",
+    "@cloudflare/workers-types": "^4.20260507.1",
+    "@biomejs/biome": "^2.4.14",
     "@edge-runtime/vm": "^5.0.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^1.2.0",
     "js-yaml": "^4.1.0",
     "tsx": "^4.19.2",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^1.2.0",
-    "wrangler": "^4.83.0"
+    "wrangler": "^4.84.1"
   }
 }
