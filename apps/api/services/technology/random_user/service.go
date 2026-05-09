@@ -13,6 +13,15 @@ func NewService() *Service {
 	return &Service{}
 }
 
+// GenerateBatch generates count random users and returns them in order.
+func (s *Service) GenerateBatch(count int) BatchGenerateResponse {
+	results := make([]User, count)
+	for i := range count {
+		results[i] = s.Generate()
+	}
+	return BatchGenerateResponse{Results: results, Total: count}
+}
+
 // Returns a randomly generated User.
 func (s *Service) Generate() User {
 	f := faker.New()

@@ -19,3 +19,16 @@ type User struct {
 }
 
 func (User) IsData() {}
+
+// BatchGenerateRequest is the body for generating multiple random users at once.
+type BatchGenerateRequest struct {
+	Count int `json:"count" validate:"required,min=1,max=50"`
+}
+
+// BatchGenerateResponse is the response for a batch random user generation request.
+type BatchGenerateResponse struct {
+	Results []User `json:"results"`
+	Total   int    `json:"total"`
+}
+
+func (BatchGenerateResponse) IsData() {}
