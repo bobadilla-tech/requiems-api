@@ -20,13 +20,15 @@ class Referral < ApplicationRecord
   end
 
   def mark_converted!(subscription)
-    return if converted?
+    with_lock do
+      return if converted?
 
-    update!(
-      status: "converted",
-      converted_at: Time.current,
-      converting_subscription: subscription
-    )
+      update!(
+        status: "converted",
+        converted_at: Time.current,
+        converting_subscription: subscription
+      )
+    end
   end
 
   private
