@@ -18,6 +18,7 @@ type User struct {
 	Avatar  string  `json:"avatar"`
 }
 
+// IsData marks User as a valid httpx response data type.
 func (User) IsData() {}
 
 // BatchGenerateRequest is the body for generating multiple random users at once.
@@ -31,4 +32,5 @@ type BatchGenerateResponse struct {
 	Total   int    `json:"total"`
 }
 
+// IsData marks BatchGenerateResponse as a valid httpx response data type.
 func (BatchGenerateResponse) IsData() {}

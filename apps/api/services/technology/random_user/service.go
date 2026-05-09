@@ -9,6 +9,7 @@ import (
 // Generates random fake user data.
 type Service struct{}
 
+// NewService returns a new instance of Service.
 func NewService() *Service {
 	return &Service{}
 }
