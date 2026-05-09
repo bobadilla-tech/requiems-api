@@ -7,7 +7,7 @@ class AddReferralCodeToUsers < ActiveRecord::Migration[8.1]
 
     User.find_each do |user|
       begin
-        user.update_column(:referral_code, SecureRandom.alphanumeric(8).upcase)
+        user.update_columns(referral_code: SecureRandom.alphanumeric(8).upcase)
       rescue ActiveRecord::RecordNotUnique
         retry
       end
