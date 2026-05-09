@@ -35,7 +35,9 @@
       />
       <button
         type="button"
-        onclick="navigator.clipboard.writeText(document.getElementById('referral-link').value).then(() => { this.textContent = '<%= t("dashboard.referrals.link.copied") %>'; setTimeout(() => { this.textContent = '<%= t("dashboard.referrals.link.copy") %>'; }, 2000); })"
+        data-copy-label="<%= t("dashboard.referrals.link.copy") %>"
+        data-copied-label="<%= t("dashboard.referrals.link.copied") %>"
+        onclick="const btn=this; navigator.clipboard.writeText(document.getElementById('referral-link').value).then(() => { btn.textContent=btn.dataset.copiedLabel; setTimeout(()=>{ btn.textContent=btn.dataset.copyLabel; },2000); })"
         class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
       >
         <%= t("dashboard.referrals.link.copy") %>
