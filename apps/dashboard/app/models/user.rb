@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :private_deployment_requests, dependent: :destroy
 
   PLAN_LIMITS = PlanConfig::PLANS.transform_values { |v| v[:requests_per_month] }.freeze
-  SUPPORTED_LOCALES = %w[en es].freeze
+  SUPPORTED_LOCALES = Rails.application.config.i18n.available_locales.map(&:to_s).freeze
 
   validates :locale, inclusion: { in: SUPPORTED_LOCALES }, allow_nil: true
 

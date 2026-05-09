@@ -4,6 +4,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
@@ -25,24 +28,23 @@ func (s *stubGetter) Get(_ context.Context, slug string) (CommodityPrice, error)
 // ---- HistoricalPrice ----
 
 func TestHistoricalPrice_FieldsPresent(t *testing.T) {
+	t.Parallel()
 	h := HistoricalPrice{Period: "2023", Price: 1940.54}
-	if h.Period != "2023" {
-		t.Errorf("expected period 2023, got %q", h.Period)
-	}
-	if h.Price != 1940.54 {
-		t.Errorf("expected price 1940.54, got %v", h.Price)
-	}
+	assert.Equal(t, "2023", h.Period)
+	assert.Equal(t, 1940.54, h.Price)
 }
 
 // ---- CommodityPrice ----
 
 func TestCommodityPrice_IsData(t *testing.T) {
+	t.Parallel()
 	// IsData() must be callable — verifies the interface is satisfied.
 	var c CommodityPrice
 	c.IsData()
 }
 
 func TestCommodityPrice_FullResponse(t *testing.T) {
+	t.Parallel()
 	cp := CommodityPrice{
 		Commodity: "gold",
 		Name:      "Gold",
@@ -56,20 +58,15 @@ func TestCommodityPrice_FullResponse(t *testing.T) {
 		},
 	}
 
-	if cp.Commodity != "gold" {
-		t.Errorf("expected commodity gold, got %q", cp.Commodity)
-	}
-	if cp.Price != 2386.33 {
-		t.Errorf("expected price 2386.33, got %v", cp.Price)
-	}
-	if len(cp.Historical) != 2 {
-		t.Errorf("expected 2 historical entries, got %d", len(cp.Historical))
-	}
+	assert.Equal(t, "gold", cp.Commodity)
+	assert.Equal(t, 2386.33, cp.Price)
+	assert.Len(t, cp.Historical, 2)
 }
 
 // ---- Getter stub ----
 
 func TestStubGetter_ReturnsCommodity(t *testing.T) {
+	t.Parallel()
 	stub := &stubGetter{result: CommodityPrice{
 		Name:  "Gold",
 		Price: 2386.33,
@@ -77,15 +74,12 @@ func TestStubGetter_ReturnsCommodity(t *testing.T) {
 	}}
 
 	result, err := stub.Get(context.Background(), "gold")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if result.Commodity != "gold" {
-		t.Errorf("expected commodity gold, got %q", result.Commodity)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "gold", result.Commodity)
 }
 
 func TestStubGetter_PropagatesError(t *testing.T) {
+	t.Parallel()
 	stub := &stubGetter{err: &httpx.AppError{
 		Status:  404,
 		Code:    "not_found",
@@ -93,7 +87,5 @@ func TestStubGetter_PropagatesError(t *testing.T) {
 	}}
 
 	_, err := stub.Get(context.Background(), "unknown")
-	if err == nil {
-		t.Fatal("expected error, got nil")
-	}
+	require.Error(t, err)
 }

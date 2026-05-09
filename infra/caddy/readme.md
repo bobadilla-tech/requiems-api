@@ -44,10 +44,6 @@ Any request without the correct secret gets a `403 Unauthorized`. Only the
 Cloudflare Worker knows this secret, so the Go API is effectively private even
 though `internal.requiems.xyz` is a public domain.
 
-## Files
-
-- `Caddyfile` — server configuration
-
 ## Local Development
 
 Caddy is **not** used in local development. Services are accessed directly via

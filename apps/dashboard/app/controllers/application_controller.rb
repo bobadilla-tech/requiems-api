@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   include Pagy::Method
   include HttpAcceptLanguage::EasyAccess
 
+  # Navbar and shared layouts use category SVGs (same as home / API directory).
+  helper ApisHelper
+
   allow_browser versions: :modern
 
   stale_when_importmap_changes

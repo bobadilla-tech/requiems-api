@@ -1,0 +1,78 @@
+<% content_for :title, t("case_studies.hub.meta_title") %>
+<% content_for :description, t("case_studies.hub.meta_description") %>
+
+<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+      <%= t("case_studies.hub.hero_headline") %>
+    </h1>
+    <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+      <%= t("case_studies.hub.hero_subheadline") %>
+    </p>
+  </div>
+</section>
+
+<section class="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-10 text-center">
+      <%= t("case_studies.hub.cards_heading") %>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <% [
+           { slug: "verigeo", blurb_key: "verigeo_blurb" },
+           { slug: "compilestrength", blurb_key: "compilestrength_blurb" }
+         ].each do |card| %>
+        <% logo = case_study_logo_asset(card[:slug]) %>
+        <%= link_to case_study_path(card[:slug]),
+                    class: "group flex flex-col rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all" do %>
+          <div class="mb-6 flex h-16 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800/80 px-4">
+            <% if logo %>
+              <%= image_tag logo, alt: t("case_studies.#{card[:slug]}.quote_name"), class: "max-h-12 w-auto object-contain", loading: "lazy" %>
+            <% end %>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+            <%= t("case_studies.#{card[:slug]}.quote_name") %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed flex-1 mb-6">
+            <%= t("case_studies.hub.#{card[:blurb_key]}") %>
+          </p>
+          <span class="text-sm font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center">
+            <%= t("case_studies.hub.card_cta") %>
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <p class="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
+      <%= t("case_studies.hub.hub_divisions_hint") %> —
+      <%= link_to t("shared.nav.divisions"), divisions_path, class: "font-semibold text-blue-600 dark:text-blue-400 hover:underline" %>
+    </p>
+  </div>
+</section>
+
+<section class="py-16 bg-white dark:bg-gray-900">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      <%= t("case_studies.hub.partnership_heading") %>
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+      <%= t("case_studies.hub.partnership_body") %>
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <%= link_to cal_com_strategy_url,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg transition-colors w-full sm:w-auto" do %>
+        <%= t("case_studies.hub.partnership_primary_cta") %>
+        <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+      <%= link_to apis_path,
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto" do %>
+        <%= t("case_studies.hub.partnership_secondary_cta") %>
+      <% end %>
+    </div>
+  </div>
+</section>

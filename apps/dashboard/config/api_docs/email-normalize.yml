@@ -137,6 +137,102 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['normalized'] # testuser@gmail.com
 
+  - name: Normalize Email Batch
+    method: POST
+    path: /v1/text/normalize/batch
+    description: Normalizes up to 100 email addresses in one request. Results are in the same order as the input. Each item includes valid (boolean); when false, only original and message are set. Usage is billed per email processed (see gateway usage headers).
+    parameters:
+      - name: emails
+        type: array
+        required: true
+        location: body
+        description: Array of addresses to normalize (min 1, max 100; each entry non-empty)
+        example:
+          - user@example.com
+          - not-an-email
+          - te.st@gmail.com
+    request_example: |
+      {
+        "emails": [
+          "user@example.com",
+          "not-an-email",
+          "te.st@gmail.com"
+        ]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "original": "user@example.com",
+              "normalized": "user@example.com",
+              "local": "user",
+              "domain": "example.com",
+              "changes": [],
+              "valid": true
+            },
+            {
+              "original": "not-an-email",
+              "valid": false,
+              "message": "invalid email address"
+            },
+            {
+              "original": "te.st@gmail.com",
+              "normalized": "test@gmail.com",
+              "local": "test",
+              "domain": "gmail.com",
+              "changes": ["lowercased", "removed_dots"],
+              "valid": true
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: One normalization result per input email, in order
+      - name: total
+        type: integer
+        description: Number of emails in the batch (same as results length)
+    errors:
+      - code: validation_failed
+        status: 422
+        description: Missing emails, empty array, too many items, or empty string in the array
+      - code: bad_request
+        status: 400
+        description: Invalid JSON or unknown fields in the body
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/text/normalize/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"emails":["user@example.com","te.st@gmail.com"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/text/normalize/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        data = {"emails": ["user@example.com", "te.st@gmail.com"]}
+        response = requests.post(url, headers=headers, json=data)
+        print(response.json())
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/text/normalize/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ emails: ['user@example.com', 'te.st@gmail.com'] })
+        });
+        console.log(await response.json());
+
 faq:
   - question: Which email providers have provider-specific normalization?
     answer: Gmail and Googlemail have dots removed from the local part and plus tags stripped. Googlemail.com is also resolved to its canonical gmail.com domain. Other providers receive only the universal normalizations (lowercase, whitespace trimming).

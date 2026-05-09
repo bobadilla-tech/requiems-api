@@ -37,7 +37,7 @@ func Handle[Req any, Res Data](
 
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 
@@ -74,7 +74,7 @@ func HandleBatch[Req any, Res Data](
 		var req Req
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))

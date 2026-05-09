@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -38,63 +40,51 @@ func setupRouter() chi.Router {
 }
 
 func TestFind_HappyPath(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/cities/london", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[City]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Name != "London" {
-		t.Errorf("expected name 'London', got %q", resp.Data.Name)
-	}
-	if resp.Data.Country != "GB" {
-		t.Errorf("expected country 'GB', got %q", resp.Data.Country)
-	}
-	if resp.Data.Timezone != "Europe/London" {
-		t.Errorf("expected timezone 'Europe/London', got %q", resp.Data.Timezone)
-	}
+	assert.Equal(t, "London", resp.Data.Name)
+	assert.Equal(t, "GB", resp.Data.Country)
+	assert.Equal(t, "Europe/London", resp.Data.Timezone)
 }
 
 func TestFind_CaseInsensitive(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/cities/London", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for mixed-case lookup, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestFind_NotFound(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/cities/atlantis", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestFind_MultiWordCity(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/cities/new%20york%20city", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[City]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
 	if resp.Data.Population == 0 {
 		t.Error("expected non-zero population")

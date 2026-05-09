@@ -1,0 +1,25 @@
+<div class="bg-white dark:bg-gray-900 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("home.index.why_different.heading") %>
+      </h2>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <%= t("home.index.why_different.subheading") %>
+      </p>
+    </div>
+
+    <ul class="max-w-xl mx-auto space-y-4">
+      <% t("home.index.why_different.points").each do |point| %>
+        <li class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+          <span class="text-gray-800 dark:text-gray-200 font-medium"><%= point %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

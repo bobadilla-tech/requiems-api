@@ -2,11 +2,13 @@ package exchange
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -31,35 +33,28 @@ func newTestService(handler http.Handler) (svc *Service, cleanup func()) {
 }
 
 func TestGetRate_CacheMiss_FetchesFromAPI(t *testing.T) {
+	t.Parallel()
 	svc, cleanup := newTestService(fakeFrankfurter("USD", "EUR", 0.92))
 	defer cleanup()
 
 	rate, ts, err := svc.GetRate(t.Context(), "USD", "EUR")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if rate != 0.92 {
-		t.Errorf("rate: want 0.92, got %v", rate)
-	}
-	if ts.IsZero() {
-		t.Error("timestamp must not be zero")
-	}
+	require.NoError(t, err)
+	assert.Equal(t, 0.92, rate)
+	assert.False(t, ts.IsZero(), "timestamp must not be zero")
 }
 
 func TestGetRate_DateParsedCorrectly(t *testing.T) {
+	t.Parallel()
 	svc, cleanup := newTestService(fakeFrankfurter("USD", "GBP", 0.78))
 	defer cleanup()
 
 	_, ts, err := svc.GetRate(t.Context(), "USD", "GBP")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if ts.Year() != 2024 || ts.Month() != 12 || ts.Day() != 15 {
-		t.Errorf("expected date 2024-12-15, got %s", ts.Format("2006-01-02"))
-	}
+	require.NoError(t, err)
+	assert.True(t, ts.Year() == 2024 && ts.Month() == 12 && ts.Day() == 15, "expected date 2024-12-15, got %s", ts.Format("2006-01-02"))
 }
 
 func TestGetRate_InvalidTargetCurrency_Returns422(t *testing.T) {
+	t.Parallel()
 	// API returns empty rates map for an unknown target.
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resp := frankfurterResponse{Base: "USD", Date: "2024-12-15", Rates: map[string]float64{}}
@@ -70,23 +65,16 @@ func TestGetRate_InvalidTargetCurrency_Returns422(t *testing.T) {
 	defer cleanup()
 
 	_, _, err := svc.GetRate(t.Context(), "USD", "XYZ")
-	if err == nil {
-		t.Fatal("expected error for unknown target currency")
-	}
+	require.Error(t, err)
 
 	var ae *httpx.AppError
-	if !errors.As(err, &ae) {
-		t.Fatalf("expected *httpx.AppError, got %T", err)
-	}
-	if ae.Code != "invalid_currency" {
-		t.Errorf("code: want invalid_currency, got %s", ae.Code)
-	}
-	if ae.Status != http.StatusUnprocessableEntity {
-		t.Errorf("status: want 422, got %d", ae.Status)
-	}
+	require.ErrorAs(t, err, &ae)
+	assert.Equal(t, "invalid_currency", ae.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, ae.Status)
 }
 
 func TestGetRate_APIReturns404_Returns422(t *testing.T) {
+	t.Parallel()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	})
@@ -94,20 +82,15 @@ func TestGetRate_APIReturns404_Returns422(t *testing.T) {
 	defer cleanup()
 
 	_, _, err := svc.GetRate(t.Context(), "XYZ", "EUR")
-	if err == nil {
-		t.Fatal("expected error for 404 response")
-	}
+	require.Error(t, err)
 
 	var ae *httpx.AppError
-	if !errors.As(err, &ae) {
-		t.Fatalf("expected *httpx.AppError, got %T", err)
-	}
-	if ae.Code != "invalid_currency" {
-		t.Errorf("code: want invalid_currency, got %s", ae.Code)
-	}
+	require.ErrorAs(t, err, &ae)
+	assert.Equal(t, "invalid_currency", ae.Code)
 }
 
 func TestGetRate_APIReturns500_Returns503(t *testing.T) {
+	t.Parallel()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal error", http.StatusInternalServerError)
 	})
@@ -115,51 +98,34 @@ func TestGetRate_APIReturns500_Returns503(t *testing.T) {
 	defer cleanup()
 
 	_, _, err := svc.GetRate(t.Context(), "USD", "EUR")
-	if err == nil {
-		t.Fatal("expected error for 500 response")
-	}
+	require.Error(t, err)
 
 	var ae *httpx.AppError
-	if !errors.As(err, &ae) {
-		t.Fatalf("expected *httpx.AppError, got %T", err)
-	}
-	if ae.Code != "upstream_error" {
-		t.Errorf("code: want upstream_error, got %s", ae.Code)
-	}
-	if ae.Status != http.StatusServiceUnavailable {
-		t.Errorf("status: want 503, got %d", ae.Status)
-	}
+	require.ErrorAs(t, err, &ae)
+	assert.Equal(t, "upstream_error", ae.Code)
+	assert.Equal(t, http.StatusServiceUnavailable, ae.Status)
 }
 
 func TestParseCache_RoundTrip(t *testing.T) {
+	t.Parallel()
 	rate := 0.9205
 	ts := time.Date(2024, 12, 15, 0, 0, 0, 0, time.UTC)
 	val := formatCacheValue(rate, ts)
 
 	gotRate, gotTS, err := parseCache(val)
-	if err != nil {
-		t.Fatalf("parseCache: %v", err)
-	}
-	if gotRate != rate {
-		t.Errorf("rate: want %v, got %v", rate, gotRate)
-	}
-	if !gotTS.Equal(ts) {
-		t.Errorf("ts: want %v, got %v", ts, gotTS)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, rate, gotRate)
+	assert.True(t, gotTS.Equal(ts), "ts: want %v, got %v", ts, gotTS)
 }
 
 func TestParseCache_InvalidFormat(t *testing.T) {
+	t.Parallel()
 	_, _, err := parseCache("notvalid")
-	if err == nil {
-		t.Error("expected error for invalid cache value")
-	}
+	assert.Error(t, err, "expected error for invalid cache value")
 }
 
 func TestCacheKey_AlwaysUppercase(t *testing.T) {
-	if cacheKey("usd", "eur") != "exchange:USD:EUR" {
-		t.Error("cache key must be uppercase")
-	}
-	if cacheKey("USD", "EUR") != "exchange:USD:EUR" {
-		t.Error("cache key must be uppercase")
-	}
+	t.Parallel()
+	assert.Equal(t, "exchange:USD:EUR", cacheKey("usd", "eur"), "cache key must be uppercase")
+	assert.Equal(t, "exchange:USD:EUR", cacheKey("USD", "EUR"), "cache key must be uppercase")
 }

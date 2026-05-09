@@ -7,10 +7,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
 func TestGetPrice_ValidSymbol(t *testing.T) {
+	t.Parallel()
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body := coinGeckoResponse{
 			"bitcoin": {
@@ -27,44 +31,28 @@ func TestGetPrice_ValidSymbol(t *testing.T) {
 
 	svc := newServiceWithClient(srv.Client(), srv.URL)
 	p, err := svc.GetPrice(context.Background(), "BTC")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if p.Symbol != "BTC" {
-		t.Errorf("expected symbol BTC, got %s", p.Symbol)
-	}
-	if p.Name != "Bitcoin" {
-		t.Errorf("expected name Bitcoin, got %s", p.Name)
-	}
-	if p.PriceUSD != 42000.50 {
-		t.Errorf("expected price 42000.50, got %f", p.PriceUSD)
-	}
-	if p.Change24h != 2.5 {
-		t.Errorf("expected change 2.5, got %f", p.Change24h)
-	}
+	assert.Equal(t, "BTC", p.Symbol)
+	assert.Equal(t, "Bitcoin", p.Name)
+	assert.Equal(t, 42000.50, p.PriceUSD)
+	assert.Equal(t, 2.5, p.Change24h)
 }
 
 func TestGetPrice_UnknownSymbol(t *testing.T) {
+	t.Parallel()
 	svc := newServiceWithClient(http.DefaultClient, "http://unused")
 	_, err := svc.GetPrice(context.Background(), "FAKE")
-	if err == nil {
-		t.Fatal("expected error for unknown symbol")
-	}
+	require.Error(t, err)
 
-	ae, ok := err.(*httpx.AppError)
-	if !ok {
-		t.Fatalf("expected *httpx.AppError, got %T", err)
-	}
-	if ae.Code != "unknown_symbol" {
-		t.Errorf("expected code unknown_symbol, got %s", ae.Code)
-	}
-	if ae.Status != http.StatusUnprocessableEntity {
-		t.Errorf("expected status 422, got %d", ae.Status)
-	}
+	var ae *httpx.AppError
+	require.ErrorAs(t, err, &ae)
+	assert.Equal(t, "unknown_symbol", ae.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, ae.Status)
 }
 
 func TestGetPrice_UpstreamError(t *testing.T) {
+	t.Parallel()
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
@@ -72,20 +60,15 @@ func TestGetPrice_UpstreamError(t *testing.T) {
 
 	svc := newServiceWithClient(srv.Client(), srv.URL)
 	_, err := svc.GetPrice(context.Background(), "BTC")
-	if err == nil {
-		t.Fatal("expected error for upstream 500")
-	}
+	require.Error(t, err)
 
-	ae, ok := err.(*httpx.AppError)
-	if !ok {
-		t.Fatalf("expected *httpx.AppError, got %T", err)
-	}
-	if ae.Code != "upstream_error" {
-		t.Errorf("expected code upstream_error, got %s", ae.Code)
-	}
+	var ae *httpx.AppError
+	require.ErrorAs(t, err, &ae)
+	assert.Equal(t, "upstream_error", ae.Code)
 }
 
 func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
+	t.Parallel()
 	callCount := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		callCount++
@@ -100,12 +83,9 @@ func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
 	svc := newServiceWithClient(srv.Client(), srv.URL)
 
 	for i := 0; i < 2; i++ {
-		if _, err := svc.GetPrice(context.Background(), "BTC"); err != nil {
-			t.Fatalf("call %d failed: %v", i+1, err)
-		}
+		_, err := svc.GetPrice(context.Background(), "BTC")
+		require.NoError(t, err, "call %d failed", i+1)
 	}
 
-	if callCount != 2 {
-		t.Errorf("expected 2 upstream calls (no Redis), got %d", callCount)
-	}
+	assert.Equal(t, 2, callCount, "expected 2 upstream calls (no Redis), got %d", callCount)
 }

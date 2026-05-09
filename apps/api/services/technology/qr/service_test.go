@@ -2,19 +2,19 @@ package qr
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Generate_ValidData(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	png, err := svc.Generate("https://example.com", 256, "medium")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if len(png) == 0 {
-		t.Error("expected non-empty PNG bytes")
-	}
+	assert.NotEmpty(t, png)
 
 	// Verify PNG signature (\x89PNG\r\n\x1a\n)
 	if len(png) < 8 || string(png[:4]) != "\x89PNG" {
@@ -23,45 +23,37 @@ func TestService_Generate_ValidData(t *testing.T) {
 }
 
 func TestService_Generate_SmallSize(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	png, err := svc.Generate("hello", 50, "")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if len(png) == 0 {
-		t.Error("expected non-empty PNG bytes for small size")
-	}
+	assert.NotEmpty(t, png)
 }
 
 func TestService_Generate_LargeSize(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	png, err := svc.Generate("https://example.com/very/long/path?foo=bar&baz=qux", 1000, "low")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if len(png) == 0 {
-		t.Error("expected non-empty PNG bytes for large size")
-	}
+	assert.NotEmpty(t, png)
 }
 
 func TestService_Generate_HighestRecovery(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	png, err := svc.Generate("https://example.com", 256, "highest")
-	if err != nil {
-		t.Fatalf("unexpected error for highest recovery level: %v", err)
-	}
+	require.NoError(t, err)
 
-	if len(png) == 0 {
-		t.Error("expected non-empty PNG bytes for highest recovery level")
-	}
+	assert.NotEmpty(t, png)
 }
 
 func TestService_Generate_AllRecoveryLevels(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	levels := []string{"low", "medium", "high", "highest"}
@@ -71,17 +63,14 @@ func TestService_Generate_AllRecoveryLevels(t *testing.T) {
 			t.Errorf("unexpected error for recovery=%q: %v", level, err)
 			continue
 		}
-		if len(png) == 0 {
-			t.Errorf("expected non-empty PNG for recovery=%q", level)
-		}
+		assert.NotEmpty(t, png)
 	}
 }
 
 func TestService_Generate_EmptyData(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	_, err := svc.Generate("", 256, "medium")
-	if err == nil {
-		t.Error("expected error for empty data")
-	}
+	assert.Error(t, err)
 }

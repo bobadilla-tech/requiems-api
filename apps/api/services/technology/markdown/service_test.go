@@ -1,8 +1,14 @@
 package markdown
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -63,12 +69,88 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.input, tt.sanitize)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if got.HTML != tt.wantHTML {
-				t.Errorf("HTML mismatch\ngot:  %q\nwant: %q", got.HTML, tt.wantHTML)
+			require.NoError(t, err)
+			assert.Equal(t, tt.wantHTML, got.HTML)
+		})
+	}
+}
+
+func TestService_ConvertBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	tests := []struct {
+		name      string
+		inputs    []string
+		sanitize  bool
+		wantBatch BatchResponse
+	}{
+		{
+			name: "multiple markdown documents",
+			inputs: []string{
+				"# Hello",
+				"**bold**",
+				"- item",
+			},
+			sanitize: false,
+			wantBatch: BatchResponse{
+				Results: []Response{
+					{HTML: "<h1>Hello</h1>"},
+					{HTML: "<p><strong>bold</strong></p>"},
+					{HTML: "<ul>\n<li>item</li>\n</ul>"},
+				},
+			},
+		},
+		{
+			name: "sanitize html in batch",
+			inputs: []string{
+				"Hello <script>alert('xss')</script>",
+				"<strong>safe?</strong>",
+			},
+			sanitize: true,
+			wantBatch: BatchResponse{
+				Results: []Response{
+					{
+						HTML: "<p>Hello <!-- raw HTML omitted -->alert('xss')<!-- raw HTML omitted --></p>",
+					},
+					{
+						HTML: "<p><!-- raw HTML omitted -->safe?<!-- raw HTML omitted --></p>",
+					},
+				},
+			},
+		},
+		{
+			name:      "empty batch",
+			inputs:    []string{},
+			sanitize:  false,
+			wantBatch: BatchResponse{Results: []Response{}},
+		},
+		{
+			name: "batch with empty markdown",
+			inputs: []string{
+				"",
+				"# Title",
+			},
+			sanitize: false,
+			wantBatch: BatchResponse{
+				Results: []Response{
+					{HTML: ""},
+					{HTML: "<h1>Title</h1>"},
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := svc.ConvertBatch(tt.inputs, tt.sanitize)
+			require.NoError(t, err)
+			require.Len(t, got.Results, len(tt.wantBatch.Results))
+			for i := range got.Results {
+				assert.Equal(t, tt.wantBatch.Results[i].HTML, got.Results[i].HTML)
 			}
 		})
 	}
