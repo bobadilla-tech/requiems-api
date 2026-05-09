@@ -123,10 +123,10 @@ endpoints:
         required: true
         location: body
         description: "Number of users to generate (min: 1, max: 50)."
-        example: "5"
+        example: 2
     request_example: |
       {
-        "count": 5
+        "count": 2
       }
     response_example: |
       {

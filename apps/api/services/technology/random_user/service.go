@@ -15,7 +15,15 @@ func NewService() *Service {
 }
 
 // GenerateBatch generates count random users and returns them in order.
+// count is clamped to the range [1, 50]; a count below 1 returns an empty response.
 func (s *Service) GenerateBatch(count int) BatchGenerateResponse {
+	if count < 1 {
+		return BatchGenerateResponse{Results: []User{}, Total: 0}
+	}
+	if count > 50 {
+		count = 50
+	}
+
 	results := make([]User, count)
 	for i := range count {
 		results[i] = s.Generate()

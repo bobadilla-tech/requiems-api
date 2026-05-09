@@ -14,12 +14,14 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// newTestRouter returns an http.Handler with all random-user routes registered for testing.
 func newTestRouter(svc *Service) http.Handler {
 	r := chi.NewRouter()
 	RegisterRoutes(r, svc)
 	return r
 }
 
+// TestRandomUserHandler tests the GET /random-user single-user endpoint.
 func TestRandomUserHandler(t *testing.T) {
 	t.Run("returns 200 with valid user fields", func(t *testing.T) {
 		svc := NewService()
@@ -94,6 +96,7 @@ func TestRandomUserHandler(t *testing.T) {
 	})
 }
 
+// TestRandomUserBatchHandler tests the POST /random-user/batch endpoint.
 func TestRandomUserBatchHandler(t *testing.T) {
 	t.Parallel()
 
