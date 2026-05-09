@@ -34,7 +34,7 @@ class ReferralTest < ActiveSupport::TestCase
 
   test "referred_user_id has unique index — second referral for same user is invalid" do
     third_user = create_user(email: "another@example.com")
-    assert_raises(ActiveRecord::RecordInvalid) do
+    assert_raises(ActiveRecord::RecordNotUnique) do
       Referral.create!(referrer: third_user, referred_user: @referred)
     end
   end
