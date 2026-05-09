@@ -20,6 +20,7 @@ class User < ApplicationRecord
   SUPPORTED_LOCALES = Rails.application.config.i18n.available_locales.map(&:to_s).freeze
 
   validates :locale, inclusion: { in: SUPPORTED_LOCALES }, allow_nil: true
+  validates :referral_code, uniqueness: true, allow_nil: true
 
   before_create :ensure_referral_code
 

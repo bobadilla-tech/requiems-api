@@ -14,8 +14,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super do |resource|
-      attribute_referral(resource, session.delete(:referral_token)) if resource.persisted?
+    retries = 0
+    max_retries = 3
+
+    begin
+      super do |resource|
+        attribute_referral(resource, session.delete(:referral_token)) if resource.persisted?
+      end
+    rescue ActiveRecord::RecordNotUnique => e
+      if e.message.include?("referral_code") && retries < max_retries
+        retries += 1
+        sleep(0.1 * retries)
+        retry
+      else
+        raise
+      end
     end
   end
 
