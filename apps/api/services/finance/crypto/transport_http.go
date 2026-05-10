@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts crypto price handlers on the given router.
@@ -26,9 +27,8 @@ func registerCryptoRoutes(r chi.Router, g Getter) {
 
 		price, err := g.GetPrice(r.Context(), symbol)
 		if err != nil {
-			var ae *httpx.AppError
-			if errors.As(err, &ae) {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusServiceUnavailable, "upstream_error", "crypto price service unavailable")

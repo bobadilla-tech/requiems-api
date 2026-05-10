@@ -13,7 +13,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const (
@@ -64,12 +64,11 @@ func (s *Service) Geocode(ctx context.Context, address string) (GeocodeResponse,
 	}
 
 	var results []nominatimSearchResult
-	if err := json.Unmarshal(body, &results); err != nil || len(results) == 0 {
-		return GeocodeResponse{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "no results found for the given address",
-		}
+	if err := json.Unmarshal(body, &results); err != nil {
+		return GeocodeResponse{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
+	}
+	if len(results) == 0 {
+		return GeocodeResponse{}, svcerr.NotFound("not_found", "no results found for the given address")
 	}
 
 	first := results[0]
@@ -110,12 +109,11 @@ func (s *Service) ReverseGeocode(ctx context.Context, lat, lon float64) (Reverse
 	}
 
 	var result nominatimReverseResult
-	if err := json.Unmarshal(body, &result); err != nil || result.DisplayName == "" {
-		return ReverseGeocodeResponse{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "no results found for the given coordinates",
-		}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return ReverseGeocodeResponse{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
+	}
+	if result.DisplayName == "" {
+		return ReverseGeocodeResponse{}, svcerr.NotFound("not_found", "no results found for the given coordinates")
 	}
 
 	resp := ReverseGeocodeResponse{
@@ -139,29 +137,17 @@ func (s *Service) doRequest(ctx context.Context, apiURL string) ([]byte, error) 
 
 	resp, err := s.httpClient.Do(req) //nolint:gosec // URL is built from a trusted base URL + encoded user input
 	if err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "geocoding service unavailable",
-		}
+		return nil, svcerr.Upstream("upstream_error", "geocoding service unavailable")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "geocoding service unavailable",
-		}
+		return nil, svcerr.Upstream("upstream_error", "geocoding service unavailable")
 	}
 
 	buf, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "geocoding service unavailable",
-		}
+		return nil, svcerr.Upstream("upstream_error", "geocoding service unavailable")
 	}
 
 	return buf, nil

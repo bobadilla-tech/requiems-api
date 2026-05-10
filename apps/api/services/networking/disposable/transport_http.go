@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func RegisterRoutes(router chi.Router, svc *Service) {
@@ -50,8 +51,8 @@ func RegisterRoutes(router chi.Router, svc *Service) {
 		result, err := svc.GetDomains(q.Page, q.PerPage)
 
 		if err != nil {
-			if appErr, ok := errors.AsType[*httpx.AppError](err); ok {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "unexpected error")

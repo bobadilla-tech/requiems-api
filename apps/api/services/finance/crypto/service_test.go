@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func TestGetPrice_ValidSymbol(t *testing.T) {
@@ -45,10 +45,10 @@ func TestGetPrice_UnknownSymbol(t *testing.T) {
 	_, err := svc.GetPrice(context.Background(), "FAKE")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "unknown_symbol", ae.Code)
-	assert.Equal(t, http.StatusUnprocessableEntity, ae.Status)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "unknown_symbol", se.Code)
+	assert.Equal(t, svcerr.KindUnknown, se.Kind)
 }
 
 func TestGetPrice_UpstreamError(t *testing.T) {
@@ -62,9 +62,9 @@ func TestGetPrice_UpstreamError(t *testing.T) {
 	_, err := svc.GetPrice(context.Background(), "BTC")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "upstream_error", ae.Code)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "upstream_error", se.Code)
 }
 
 func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
@@ -88,4 +88,24 @@ func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
 	}
 
 	assert.Equal(t, 2, callCount, "expected 2 upstream calls (no Redis), got %d", callCount)
+}
+
+func TestGetPrice_CoinMissingFromResponse_Upstream(t *testing.T) {
+	t.Parallel()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Return a valid JSON body that doesn't include the requested coin ID.
+		body := coinGeckoResponse{}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(body)
+	}))
+	defer srv.Close()
+
+	svc := newServiceWithClient(srv.Client(), srv.URL)
+	_, err := svc.GetPrice(context.Background(), "BTC")
+	require.Error(t, err)
+
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
+	assert.Equal(t, "upstream_error", se.Code)
 }

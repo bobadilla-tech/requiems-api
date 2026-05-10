@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 type stubFetcher struct {
@@ -118,8 +119,8 @@ func TestExchangeRate_InvalidCurrencyCode_Returns400(t *testing.T) {
 
 func TestExchangeRate_UnknownCurrency_Returns422(t *testing.T) {
 	t.Parallel()
-	appErr := &httpx.AppError{Status: http.StatusUnprocessableEntity, Code: "invalid_currency", Message: "unknown currency code: XYZ"}
-	r := setupRouter(errFetcher(appErr))
+	svcErr := svcerr.Unknown("invalid_currency", "unknown currency code: XYZ")
+	r := setupRouter(errFetcher(svcErr))
 
 	req := httptest.NewRequest(http.MethodGet, "/exchange-rate?from=XYZ&to=EUR", http.NoBody)
 	w := httptest.NewRecorder()
@@ -188,8 +189,8 @@ func TestConvert_ZeroAmount_Returns400(t *testing.T) {
 
 func TestConvert_UnknownCurrency_Returns422(t *testing.T) {
 	t.Parallel()
-	appErr := &httpx.AppError{Status: http.StatusUnprocessableEntity, Code: "invalid_currency", Message: "unknown currency code: XYZ"}
-	r := setupRouter(errFetcher(appErr))
+	svcErr := svcerr.Unknown("invalid_currency", "unknown currency code: XYZ")
+	r := setupRouter(errFetcher(svcErr))
 
 	req := httptest.NewRequest(http.MethodGet, "/convert?from=XYZ&to=EUR&amount=50", http.NoBody)
 	w := httptest.NewRecorder()

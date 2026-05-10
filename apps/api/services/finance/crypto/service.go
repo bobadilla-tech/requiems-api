@@ -10,7 +10,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const (
@@ -78,11 +78,7 @@ func newServiceWithClient(client *http.Client, baseURL string) *Service {
 func (s *Service) GetPrice(ctx context.Context, symbol string) (Price, error) {
 	coin, ok := coinMap[symbol]
 	if !ok {
-		return Price{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "unknown_symbol",
-			Message: fmt.Sprintf("unsupported symbol: %s", symbol),
-		}
+		return Price{}, svcerr.Unknown("unknown_symbol", fmt.Sprintf("unsupported symbol: %s", symbol))
 	}
 
 	if s.rdb != nil {
@@ -146,38 +142,22 @@ func (s *Service) fetchPrice(ctx context.Context, coinID, symbol, name string) (
 
 	resp, err := s.httpClient.Do(req) //nolint:gosec // URL is built from a hardcoded base, not user input
 	if err != nil {
-		return Price{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "crypto price service unavailable",
-		}
+		return Price{}, svcerr.Upstream("upstream_error", "crypto price service unavailable")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return Price{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "crypto price service unavailable",
-		}
+		return Price{}, svcerr.Upstream("upstream_error", "crypto price service unavailable")
 	}
 
 	var body coinGeckoResponse
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return Price{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "crypto price service unavailable",
-		}
+		return Price{}, svcerr.Upstream("upstream_error", "crypto price service unavailable")
 	}
 
 	data, ok := body[coinID]
 	if !ok {
-		return Price{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "crypto price service unavailable",
-		}
+		return Price{}, svcerr.Upstream("upstream_error", "crypto price service unavailable")
 	}
 
 	return Price{

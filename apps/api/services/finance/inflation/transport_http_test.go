@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubGetter implements Getter for transport tests. It returns a fixed result
@@ -128,11 +129,7 @@ func TestInflation_ResponseEnvelope(t *testing.T) {
 
 func TestInflation_UnknownCountry_Returns404(t *testing.T) {
 	t.Parallel()
-	svc := &stubGetter{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "no inflation data found for country",
-	}}
+	svc := &stubGetter{err: svcerr.NotFound("not_found", "no inflation data found for country")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/inflation?country=XK", http.NoBody)
@@ -224,11 +221,7 @@ func TestBatch_HappyPath_Returns200(t *testing.T) {
 func TestBatch_PartialFailure_NotFoundItemIsInBand(t *testing.T) {
 	t.Parallel()
 	// Stub returns error for every call — all items should be found: false, but status is still 200.
-	svc := &stubGetter{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "no inflation data found for country",
-	}}
+	svc := &stubGetter{err: svcerr.NotFound("not_found", "no inflation data found for country")}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": ["US", "AR"]}`)

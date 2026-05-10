@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // fakeFrankfurter returns a handler that serves a Frankfurter-shaped response.
@@ -67,10 +67,10 @@ func TestGetRate_InvalidTargetCurrency_Returns422(t *testing.T) {
 	_, _, err := svc.GetRate(t.Context(), "USD", "XYZ")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "invalid_currency", ae.Code)
-	assert.Equal(t, http.StatusUnprocessableEntity, ae.Status)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "invalid_currency", se.Code)
+	assert.Equal(t, svcerr.KindUnknown, se.Kind)
 }
 
 func TestGetRate_APIReturns404_Returns422(t *testing.T) {
@@ -84,9 +84,10 @@ func TestGetRate_APIReturns404_Returns422(t *testing.T) {
 	_, _, err := svc.GetRate(t.Context(), "XYZ", "EUR")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "invalid_currency", ae.Code)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "invalid_currency", se.Code)
+	assert.Equal(t, svcerr.KindUnknown, se.Kind)
 }
 
 func TestGetRate_APIReturns500_Returns503(t *testing.T) {
@@ -100,10 +101,10 @@ func TestGetRate_APIReturns500_Returns503(t *testing.T) {
 	_, _, err := svc.GetRate(t.Context(), "USD", "EUR")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "upstream_error", ae.Code)
-	assert.Equal(t, http.StatusServiceUnavailable, ae.Status)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "upstream_error", se.Code)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
 }
 
 func TestParseCache_RoundTrip(t *testing.T) {
@@ -128,4 +129,22 @@ func TestCacheKey_AlwaysUppercase(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, "exchange:USD:EUR", cacheKey("usd", "eur"), "cache key must be uppercase")
 	assert.Equal(t, "exchange:USD:EUR", cacheKey("USD", "EUR"), "cache key must be uppercase")
+}
+
+func TestGetRate_BadDateFallsBackToNow(t *testing.T) {
+	t.Parallel()
+	svc, cleanup := newTestService(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := frankfurterResponse{
+			Base:  "USD",
+			Date:  "not-a-date",
+			Rates: map[string]float64{"EUR": 0.91},
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(resp)
+	}))
+	defer cleanup()
+
+	_, ts, err := svc.GetRate(t.Context(), "USD", "EUR")
+	require.NoError(t, err)
+	assert.Equal(t, time.Now().UTC().Year(), ts.Year(), "bad date must fall back to current year")
 }

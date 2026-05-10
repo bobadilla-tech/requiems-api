@@ -17,8 +17,8 @@ temporarily disable test mode locally, override with
 ### Step 1: Get your ngrok hostname
 
 Start your ngrok tunnel and note the public hostname (e.g.
-`unprized-unseditiously-marilynn.ngrok-free.dev`). Add it to
-`infra/docker/.env` (no protocol, no trailing slash):
+`unprized-unseditiously-marilynn.ngrok-free.dev`). Add it to `infra/docker/.env`
+(no protocol, no trailing slash):
 
 ```bash
 NGROK_HOST=your-hostname.ngrok-free.dev
@@ -31,8 +31,7 @@ host. Restart the Rails server after changing this value.
 
 1. Enable test mode in LemonSqueezy (toggle in the top bar)
 2. Go to Settings > Webhooks > Add webhook
-3. Set the URL to:
-   `https://<your NGROK_HOST>/webhooks/lemonsqueezy`
+3. Set the URL to: `https://<your NGROK_HOST>/webhooks/lemonsqueezy`
 4. Select all subscription events:
    - `subscription_created`
    - `subscription_updated`
@@ -77,7 +76,8 @@ If you have a reserved domain, pass it via `--domain`:
 ngrok http --domain=your-hostname.ngrok-free.dev 3000
 ```
 
-Confirm the tunnel is live: `https://<your NGROK_HOST>` → `http://localhost:3000`
+Confirm the tunnel is live: `https://<your NGROK_HOST>` →
+`http://localhost:3000`
 
 Test mode is already `true` by default — nothing to toggle.
 
@@ -138,8 +138,8 @@ The signing secret doesn't match.
 
 ### Webhook not being delivered
 
-1. Confirm ngrok is running:
-   `https://<your NGROK_HOST>/healthz` should return 200
+1. Confirm ngrok is running: `https://<your NGROK_HOST>/healthz` should return
+   200
 2. Check delivery attempts in LemonSqueezy > Settings > Webhooks > (your
    webhook) > Recent deliveries
 3. Make sure LemonSqueezy test mode is ON when triggering test checkouts

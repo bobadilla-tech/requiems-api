@@ -74,7 +74,7 @@ func TestColor_InvalidValue(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestColor_ServiceError(t *testing.T) {
@@ -90,7 +90,7 @@ func TestColor_ServiceError(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 	assert.True(t, strings.Contains(w.Header().Get("Content-Type"), "application/json"), "expected application/json, got %s", w.Header().Get("Content-Type"))
 
 	var resp httpx.ErrorResponse

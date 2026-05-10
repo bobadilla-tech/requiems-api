@@ -13,7 +13,7 @@ import (
 func TestLoadExercises_HappyPath(t *testing.T) {
 	t.Parallel()
 
-	exercises := []map[string]interface{}{
+	exercises := []map[string]any{
 		{
 			"exerciseId":       "ex001",
 			"name":             "Push-up",
@@ -43,7 +43,7 @@ func TestLoadExercises_HappyPath(t *testing.T) {
 func TestLoadExercises_SkipsMissingIDOrName(t *testing.T) {
 	t.Parallel()
 
-	exercises := []map[string]interface{}{
+	exercises := []map[string]any{
 		{"exerciseId": "", "name": "No ID Exercise"},               // missing ID
 		{"exerciseId": "ex002", "name": ""},                        // missing name
 		{"exerciseId": "ex003", "name": "Valid", "bodyParts": nil}, // valid — nil fields normalised
@@ -59,7 +59,7 @@ func TestLoadExercises_SkipsMissingIDOrName(t *testing.T) {
 func TestLoadExercises_NilSlicesNormalised(t *testing.T) {
 	t.Parallel()
 
-	exercises := []map[string]interface{}{
+	exercises := []map[string]any{
 		{"exerciseId": "ex004", "name": "Squat"}, // omit all slice fields
 	}
 
@@ -95,7 +95,7 @@ func TestLoadExercises_InvalidJSON(t *testing.T) {
 
 // writeExercisesJSON marshals exercises to exercises.json in a temp dir and
 // returns the dir path.
-func writeExercisesJSON(t *testing.T, exercises interface{}) string {
+func writeExercisesJSON(t *testing.T, exercises any) string {
 	t.Helper()
 
 	dir := t.TempDir()

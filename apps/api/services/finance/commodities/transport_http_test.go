@@ -3,6 +3,7 @@ package commodities
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubGetterHTTP implements Getter for transport tests.
@@ -91,11 +93,7 @@ func TestCommodity_ResponseEnvelope(t *testing.T) {
 
 func TestCommodity_UnknownSlug_Returns404(t *testing.T) {
 	t.Parallel()
-	svc := &stubGetterHTTP{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "commodity not found",
-	}}
+	svc := &stubGetterHTTP{err: svcerr.NotFound("not_found", "commodity not found")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/commodities/unobtainium", http.NoBody)
@@ -107,11 +105,7 @@ func TestCommodity_UnknownSlug_Returns404(t *testing.T) {
 
 func TestCommodity_InternalError_Returns500(t *testing.T) {
 	t.Parallel()
-	svc := &stubGetterHTTP{err: &httpx.AppError{
-		Status:  http.StatusInternalServerError,
-		Code:    "internal_error",
-		Message: "internal server error",
-	}}
+	svc := &stubGetterHTTP{err: errors.New("internal server error")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/commodities/gold", http.NoBody)

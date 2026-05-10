@@ -3,6 +3,7 @@ package exercises
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubQuerier implements exerciseQuerier for HTTP handler tests.
@@ -108,9 +110,7 @@ func TestListExercises_ResponseEnvelope(t *testing.T) {
 
 func TestListExercises_ServiceError_Returns500(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusInternalServerError, Code: "internal_error", Message: "db down",
-	}}
+	stub := &stubQuerier{err: errors.New("db down")}
 
 	r := setupTestRouter(stub)
 	req := httptest.NewRequest(http.MethodGet, "/exercises", http.NoBody)
@@ -153,9 +153,7 @@ func TestRandomExercise_Returns200(t *testing.T) {
 
 func TestRandomExercise_NoMatch_Returns404(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusNotFound, Code: "not_found", Message: "no exercises found",
-	}}
+	stub := &stubQuerier{err: svcerr.NotFound("not_found", "no exercises found")}
 
 	r := setupTestRouter(stub)
 	req := httptest.NewRequest(http.MethodGet, "/exercises/random?body_part=unknown", http.NoBody)
@@ -210,9 +208,7 @@ func TestGetExercise_ZeroID_Returns400(t *testing.T) {
 
 func TestGetExercise_NotFound_Returns404(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusNotFound, Code: "not_found", Message: "exercise not found",
-	}}
+	stub := &stubQuerier{err: svcerr.NotFound("not_found", "exercise not found")}
 
 	r := setupTestRouter(stub)
 	req := httptest.NewRequest(http.MethodGet, "/exercises/9999", http.NoBody)
@@ -279,9 +275,7 @@ func TestMetadata_ServiceError_Returns500(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			stub := &stubQuerier{err: &httpx.AppError{
-				Status: http.StatusInternalServerError, Code: "internal_error", Message: "db error",
-			}}
+			stub := &stubQuerier{err: errors.New("db error")}
 
 			r := setupTestRouter(stub)
 			req := httptest.NewRequest(http.MethodGet, tt.path, http.NoBody)

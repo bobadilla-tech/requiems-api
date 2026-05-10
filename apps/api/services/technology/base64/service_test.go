@@ -1,14 +1,12 @@
 package base64 //nolint:revive // package name matches the service it tests; renaming would obscure intent
 
 import (
-	"errors"
-	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func TestService_Encode(t *testing.T) {
@@ -120,9 +118,9 @@ func TestService_Decode(t *testing.T) {
 
 			if tt.wantErr {
 				require.Error(t, err)
-				var appErr *httpx.AppError
-				require.True(t, errors.As(err, &appErr), "expected *httpx.AppError, got %T", err)
-				assert.Equal(t, http.StatusUnprocessableEntity, appErr.Status)
+				var se *svcerr.Error
+				require.ErrorAs(t, err, &se, "expected *svcerr.Error, got %T", err)
+				assert.Equal(t, svcerr.KindUnknown, se.Kind)
 				return
 			}
 

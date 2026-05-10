@@ -3,12 +3,11 @@ package commodities
 import (
 	"context"
 	"math"
-	"net/http"
 	"strconv"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const historyDepth = 11 // 1 current + 10 historical years
@@ -58,11 +57,7 @@ func (s *Service) Get(ctx context.Context, slug string) (CommodityPrice, error) 
 	}
 
 	if len(results) == 0 {
-		return CommodityPrice{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "commodity not found",
-		}
+		return CommodityPrice{}, svcerr.NotFound("not_found", "commodity not found")
 	}
 
 	latest := results[0]

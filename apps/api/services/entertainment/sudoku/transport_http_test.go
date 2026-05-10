@@ -79,7 +79,8 @@ func TestSudoku_PuzzleHasEmptyCells(t *testing.T) {
 	for _, d := range []string{"easy", "medium", "hard"} {
 		t.Run(d, func(t *testing.T) {
 			t.Parallel()
-			p := svc.Generate(d)
+			p, err := svc.Generate(d)
+			require.NoError(t, err)
 
 			empty := 0
 			for r := range 9 {
@@ -99,7 +100,8 @@ func TestSudoku_PuzzleHasEmptyCells(t *testing.T) {
 func TestSudoku_SolutionIsComplete(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
-	p := svc.Generate("hard")
+	p, err := svc.Generate("hard")
+	require.NoError(t, err)
 
 	for r := range 9 {
 		for c := range 9 {
@@ -111,7 +113,8 @@ func TestSudoku_SolutionIsComplete(t *testing.T) {
 func TestSudoku_SolutionIsValid(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
-	p := svc.Generate("medium")
+	p, err := svc.Generate("medium")
+	require.NoError(t, err)
 
 	// Check each row contains 1-9.
 	for r := range 9 {
@@ -144,7 +147,8 @@ func TestSudoku_SolutionIsValid(t *testing.T) {
 func TestSudoku_PuzzleMatchesSolution(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
-	p := svc.Generate("easy")
+	p, err := svc.Generate("easy")
+	require.NoError(t, err)
 
 	for r := range 9 {
 		for c := range 9 {
