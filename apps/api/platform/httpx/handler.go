@@ -54,10 +54,16 @@ func Handle[Req any, Res Data](
 				Error(w, ae.Status, ae.Code, ae.Message)
 				return
 			}
+			
 			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
+
 			sentry.CaptureException(err)
 			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
 			return
@@ -93,6 +99,9 @@ func HandleBatch[Req any, Res Data](
 				return
 			}
 			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

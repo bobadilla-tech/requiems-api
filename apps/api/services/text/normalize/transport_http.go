@@ -16,6 +16,7 @@ func RegisterRoutes(router chi.Router, svc *Service) {
 
 	router.Post("/normalize", httpx.Handle(func(_ context.Context, req EmailNormalizationRequest) (EmailNormalization, error) {
 		res, err := svc.Normalize(req.Email)
+		
 		if err != nil {
 			return EmailNormalization{}, &httpx.AppError{Status: http.StatusBadRequest, Code: "bad_request", Message: err.Error()}
 		}
