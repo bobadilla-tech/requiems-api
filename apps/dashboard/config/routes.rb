@@ -59,6 +59,8 @@ Rails.application.routes.draw do
       post "billing/portal", to: "billing#portal", as: :portal_billing
       delete "billing/cancel_subscription", to: "billing#cancel_subscription", as: :cancel_subscription_billing
 
+      resource :referral, only: [ :show ], controller: "referrals"
+
       resources :invoices, only: [ :index, :show ]
 
       get "quick_start", to: "quick_start#index"

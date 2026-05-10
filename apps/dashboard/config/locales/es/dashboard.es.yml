@@ -358,3 +358,23 @@ es:
         checkout_notice: "Serás redirigido a nuestro proceso de pago seguro en LemonSqueezy para completar tu suscripción."
         submit: "Continuar al pago →"
         redirecting: "Redirigiendo..."
+
+    referrals:
+      title: "Programa de Referidos"
+      subtitle: "Comparte tu enlace de referido y gana recompensas cuando tus amigos actualicen a un plan de pago."
+      stats:
+        total_referred: "Usuarios Referidos"
+        total_converted: "Conversiones de Pago"
+      link:
+        heading: "Tu Enlace de Referido"
+        description: "Comparte este enlace con tus amigos. Cuando se registren y actualicen, se les atribuirá a ti."
+        copy: "Copiar"
+        copied: "¡Copiado!"
+      table:
+        heading: "Referidos Recientes"
+        empty: "Aún no tienes referidos. ¡Comparte tu enlace para empezar!"
+        user_col: "Usuario"
+        date_col: "Registro"
+        status_col: "Estado"
+        status_pending: "Pendiente"
+        status_converted: "Convertido"

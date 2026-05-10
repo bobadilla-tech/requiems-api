@@ -111,6 +111,9 @@ class Dashboard::BillingController < ApplicationController
       "checkout[custom][plan]" => plan
     }
 
+    referral = current_user.referral_received
+    params["checkout[custom][referred_by_code]"] = referral.referrer.referral_code if referral
+
     "#{checkout_url}?#{params.to_query}"
   end
 end

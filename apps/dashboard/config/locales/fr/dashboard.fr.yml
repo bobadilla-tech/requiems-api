@@ -358,3 +358,23 @@ fr:
         checkout_notice: "Vous serez redirigé vers notre tunnel de paiement sécurisé LemonSqueezy pour finaliser votre abonnement."
         submit: "Continuer vers le paiement →"
         redirecting: "Redirection..."
+
+    referrals:
+      title: "Programme de Parrainage"
+      subtitle: "Partagez votre lien de parrainage et gagnez des récompenses quand vos amis souscrivent à un plan payant."
+      stats:
+        total_referred: "Utilisateurs Parrainés"
+        total_converted: "Conversions Payantes"
+      link:
+        heading: "Votre Lien de Parrainage"
+        description: "Partagez ce lien avec vos amis. Quand ils s'inscrivent et passent à un plan payant, ils vous sont attribués."
+        copy: "Copier"
+        copied: "Copié !"
+      table:
+        heading: "Parrainages Récents"
+        empty: "Aucun parrainage pour l'instant. Partagez votre lien pour commencer !"
+        user_col: "Utilisateur"
+        date_col: "Inscription"
+        status_col: "Statut"
+        status_pending: "En attente"
+        status_converted: "Converti"
