@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func setupSwiftTestDB(t *testing.T) *pgxpool.Pool {
@@ -104,9 +104,9 @@ func TestServiceList_InvalidFilters(t *testing.T) {
 
 	_, err := svc.List(context.Background(), ListFilter{CountryCode: "D1"})
 	require.Error(t, err)
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "bad_request", ae.Code)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "bad_request", se.Code)
 
 	_, err = svc.List(context.Background(), ListFilter{BankCode: "TS1A"})
 	require.Error(t, err)

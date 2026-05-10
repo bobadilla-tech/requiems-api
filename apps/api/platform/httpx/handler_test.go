@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // handleReq / handleRes are minimal request and response types used across
@@ -84,11 +85,11 @@ func TestHandle_ValidationFailure_Returns422(t *testing.T) {
 	assert.NotEmpty(t, resp.Fields)
 }
 
-func TestHandle_AppError_MapsStatus(t *testing.T) {
+func TestHandle_SvcError_MapsStatus(t *testing.T) {
 	t.Parallel()
 
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
-		return handleRes{}, &httpx.AppError{Status: http.StatusTeapot, Code: "im_a_teapot", Message: "brew something"}
+		return handleRes{}, svcerr.NotFound("not_found", "resource not found")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -96,12 +97,12 @@ func TestHandle_AppError_MapsStatus(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	assert.Equal(t, http.StatusTeapot, w.Code)
+	assert.Equal(t, http.StatusNotFound, w.Code)
 
 	var resp httpx.ErrorResponse
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
-	assert.Equal(t, "im_a_teapot", resp.Error)
+	assert.Equal(t, "not_found", resp.Error)
 }
 
 func TestHandle_InternalError_Returns500(t *testing.T) {
@@ -155,11 +156,11 @@ func TestHandleBatch_ValidationFailure_Returns422(t *testing.T) {
 	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
-func TestHandleBatch_AppError_MapsStatus(t *testing.T) {
+func TestHandleBatch_SvcError_MapsStatus(t *testing.T) {
 	t.Parallel()
 
 	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, &httpx.AppError{Status: http.StatusBadGateway, Code: "bad_gateway", Message: "upstream down"}
+		return handleRes{}, 0, svcerr.Upstream("upstream_error", "upstream down")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -167,7 +168,7 @@ func TestHandleBatch_AppError_MapsStatus(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	assert.Equal(t, http.StatusBadGateway, w.Code)
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }
 
 func TestHandleBatch_InternalError_Returns500(t *testing.T) {

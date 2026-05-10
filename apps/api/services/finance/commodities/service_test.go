@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubGetter implements Getter for service-layer unit tests.
@@ -80,11 +80,7 @@ func TestStubGetter_ReturnsCommodity(t *testing.T) {
 
 func TestStubGetter_PropagatesError(t *testing.T) {
 	t.Parallel()
-	stub := &stubGetter{err: &httpx.AppError{
-		Status:  404,
-		Code:    "not_found",
-		Message: "commodity not found",
-	}}
+	stub := &stubGetter{err: svcerr.NotFound("not_found", "commodity not found")}
 
 	_, err := stub.Get(context.Background(), "unknown")
 	require.Error(t, err)

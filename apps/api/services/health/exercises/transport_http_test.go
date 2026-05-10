@@ -275,9 +275,7 @@ func TestMetadata_ServiceError_Returns500(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			stub := &stubQuerier{err: &httpx.AppError{
-				Status: http.StatusInternalServerError, Code: "internal_error", Message: "db error",
-			}}
+			stub := &stubQuerier{err: errors.New("db error")}
 
 			r := setupTestRouter(stub)
 			req := httptest.NewRequest(http.MethodGet, tt.path, http.NoBody)

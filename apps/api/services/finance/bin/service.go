@@ -103,8 +103,8 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 	return r, err
 }
 
-// sanitizeBIN strips common separators, validates that the result is 6–8
-// decimal digits, and returns an *httpx.AppError for client-side failures.
+// sanitizeBIN strips common separators and validates that the result is 6–8
+// decimal digits.
 func sanitizeBIN(raw string) (string, error) {
 	cleaned := strings.Map(func(r rune) rune {
 		if r == '-' || r == ' ' {
