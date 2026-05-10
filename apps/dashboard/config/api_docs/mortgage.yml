@@ -182,7 +182,7 @@ endpoints:
             "principal": 250000,
             "rate": 5.2,
             "years": 30
-          },
+          }
         ] 
       }
     response_example: |
@@ -210,7 +210,7 @@ endpoints:
                   "principal": 895.54,
                   "interest": 807.68,
                   "balance": 148213.74
-                },
+                }
               ]
             },
             {
@@ -234,7 +234,7 @@ endpoints:
                   "principal": 290.7,
                   "interest": 1082.08,
                   "balance": 249419.86
-                },
+                }
               ]
             }
           ],
