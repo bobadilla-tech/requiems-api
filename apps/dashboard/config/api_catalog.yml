@@ -130,7 +130,7 @@ apis:
     categories:
       - finance
     description: Calculate monthly mortgage payments and full amortization schedules. Pass principal, annual interest rate, and loan term in years.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/mortgage
