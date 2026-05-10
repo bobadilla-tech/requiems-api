@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts exchange rate handlers on the given router.
@@ -33,9 +34,9 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 
 		rate, ts, err := f.GetRate(r.Context(), from, to)
 		if err != nil {
-			var ae *httpx.AppError
-			if errors.As(err, &ae) {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusServiceUnavailable, "upstream_error", "exchange rate service unavailable")
@@ -63,9 +64,9 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 
 		rate, ts, err := f.GetRate(r.Context(), from, to)
 		if err != nil {
-			var ae *httpx.AppError
-			if errors.As(err, &ae) {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusServiceUnavailable, "upstream_error", "exchange rate service unavailable")

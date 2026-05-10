@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubService implements Looker for transport tests. It returns a fixed result
@@ -135,7 +136,7 @@ func TestSWIFT_List_InvalidOffset_Returns400(t *testing.T) {
 
 func TestSWIFT_List_ServiceAppError_Returns400(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{Status: http.StatusBadRequest, Code: "bad_request", Message: "invalid filter"}}
+	svc := &stubService{err: svcerr.Invalid("bad_request", "invalid filter")}
 	r := setupRouter(svc)
 
 	req := httptest.NewRequest(http.MethodGet, "/swift?country_code=D1", http.NoBody)
@@ -192,11 +193,7 @@ func TestSWIFT_MetadataTimestamp(t *testing.T) {
 
 func TestSWIFT_UnknownCode_Returns404(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "SWIFT code not found",
-	}}
+	svc := &stubService{err: svcerr.NotFound("not_found", "SWIFT code not found")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/swift/ZZZZZZZZXXX", http.NoBody)
@@ -208,11 +205,7 @@ func TestSWIFT_UnknownCode_Returns404(t *testing.T) {
 
 func TestSWIFT_BadFormat_Returns400(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusBadRequest,
-		Code:    "bad_request",
-		Message: "SWIFT code must be 8 or 11 characters",
-	}}
+	svc := &stubService{err: svcerr.Invalid("bad_request", "SWIFT code must be 8 or 11 characters")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/swift/INVALID", http.NoBody)

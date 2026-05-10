@@ -12,7 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const (
@@ -110,46 +110,26 @@ func (s *Service) fetchRate(ctx context.Context, from, to string) (float64, time
 
 	resp, err := s.httpClient.Do(req) //nolint:gosec // URL is built from a fixed base URL and validated 3-char alpha currency codes
 	if err != nil {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusNotFound {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_currency",
-			Message: fmt.Sprintf("unknown currency code: %s or %s", from, to),
-		}
+		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency code: %s or %s", from, to))
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 
 	var body frankfurterResponse
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 
 	rate, ok := body.Rates[to]
 	if !ok {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_currency",
-			Message: fmt.Sprintf("unknown currency code: %s", to),
-		}
+		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency code: %s", to))
 	}
 
 	ts, err := time.Parse("2006-01-02", body.Date)

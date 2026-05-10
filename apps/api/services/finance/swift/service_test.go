@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func TestSanitizeSWIFT_Valid8Char(t *testing.T) {
@@ -127,13 +127,13 @@ func TestSanitizeAlphaCode_InvalidChars(t *testing.T) {
 	assertAppError(t, err)
 }
 
-// assertAppError verifies that err is a 400 bad_request *httpx.AppError.
-// All sanitizeSWIFT validation errors return this exact status and code.
+// assertAppError verifies that err is a bad_request *svcerr.Error (KindInvalid).
+// All sanitizeSWIFT validation errors return this kind and code.
 func assertAppError(t *testing.T, err error) {
 	t.Helper()
 	require.Error(t, err)
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, 400, ae.Status)
-	assert.Equal(t, "bad_request", ae.Code)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindInvalid, se.Kind)
+	assert.Equal(t, "bad_request", se.Code)
 }

@@ -43,7 +43,7 @@ func TestParseFREDRow(t *testing.T) {
 func TestParseYahooClose(t *testing.T) {
 	t.Parallel()
 
-	closes := []interface{}{
+	closes := []any{
 		float64(1234.56),
 		nil,
 		json.Number("99.99"),

@@ -3,11 +3,10 @@ package color //nolint:revive // package name matches the service domain it impl
 import (
 	"fmt"
 	"math"
-	"net/http"
 	"strconv"
 	"strings"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // Service provides color format conversion operations.
@@ -80,11 +79,7 @@ func parse(format, value string) (rgb, error) {
 }
 
 func invalidColor(value string) error {
-	return &httpx.AppError{
-		Status:  http.StatusUnprocessableEntity,
-		Code:    "invalid_color",
-		Message: fmt.Sprintf("cannot parse color value %q", value),
-	}
+	return svcerr.Unknown("invalid_color", fmt.Sprintf("cannot parse color value %q", value))
 }
 
 // parseHex parses a "#rrggbb" or "#rgb" hex color string.

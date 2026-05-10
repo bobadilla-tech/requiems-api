@@ -1,11 +1,13 @@
 package bin
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts BIN lookup handlers on the given router.
@@ -23,8 +25,9 @@ func registerBINRoutes(r chi.Router, l Looker) {
 
 		result, err := l.Lookup(r.Context(), rawBIN)
 		if err != nil {
-			if ae, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")

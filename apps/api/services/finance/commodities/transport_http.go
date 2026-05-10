@@ -1,11 +1,13 @@
 package commodities
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts commodity price handlers on the given router.
@@ -24,8 +26,9 @@ func registerCommodityRoutes(r chi.Router, g Getter) {
 
 		result, err := g.Get(r.Context(), slug)
 		if err != nil {
-			if ae, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")

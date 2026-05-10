@@ -3,13 +3,12 @@ package bin
 import (
 	"context"
 	"errors"
-	"net/http"
 	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // Service provides BIN lookup against the bin_data PostgreSQL table.
@@ -41,11 +40,7 @@ func (s *Service) Lookup(ctx context.Context, raw string) (LookupResponse, error
 	}
 
 	if errors.Is(err, pgx.ErrNoRows) {
-		return LookupResponse{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "BIN not found",
-		}
+		return LookupResponse{}, svcerr.NotFound("not_found", "BIN not found")
 	}
 	if err != nil {
 		return LookupResponse{}, err
@@ -119,20 +114,12 @@ func sanitizeBIN(raw string) (string, error) {
 	}, strings.TrimSpace(raw))
 
 	if len(cleaned) < 6 || len(cleaned) > 8 {
-		return "", &httpx.AppError{
-			Status:  http.StatusBadRequest,
-			Code:    "bad_request",
-			Message: "BIN must be between 6 and 8 digits",
-		}
+		return "", svcerr.Invalid("bad_request", "BIN must be between 6 and 8 digits")
 	}
 
 	for _, ch := range cleaned {
 		if ch < '0' || ch > '9' {
-			return "", &httpx.AppError{
-				Status:  http.StatusBadRequest,
-				Code:    "bad_request",
-				Message: "BIN must contain digits only",
-			}
+			return "", svcerr.Invalid("bad_request", "BIN must contain digits only")
 		}
 	}
 

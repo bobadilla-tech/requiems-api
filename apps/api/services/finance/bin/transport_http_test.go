@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubService implements Looker for transport tests. It returns a fixed result
@@ -96,11 +97,7 @@ func TestBINLookup_ResponseEnvelope(t *testing.T) {
 
 func TestBINLookup_UnknownBIN_Returns404(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "BIN not found",
-	}}
+	svc := &stubService{err: svcerr.NotFound("not_found", "BIN not found")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/bin/999999", http.NoBody)
@@ -112,11 +109,7 @@ func TestBINLookup_UnknownBIN_Returns404(t *testing.T) {
 
 func TestBINLookup_TooShort_Returns400(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusBadRequest,
-		Code:    "bad_request",
-		Message: "BIN must be between 6 and 8 digits",
-	}}
+	svc := &stubService{err: svcerr.Invalid("bad_request", "BIN must be between 6 and 8 digits")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/bin/4242", http.NoBody)
@@ -128,11 +121,7 @@ func TestBINLookup_TooShort_Returns400(t *testing.T) {
 
 func TestBINLookup_TooLong_Returns400(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusBadRequest,
-		Code:    "bad_request",
-		Message: "BIN must be between 6 and 8 digits",
-	}}
+	svc := &stubService{err: svcerr.Invalid("bad_request", "BIN must be between 6 and 8 digits")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/bin/424242424", http.NoBody)
@@ -144,11 +133,7 @@ func TestBINLookup_TooLong_Returns400(t *testing.T) {
 
 func TestBINLookup_NonDigits_Returns400(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{err: &httpx.AppError{
-		Status:  http.StatusBadRequest,
-		Code:    "bad_request",
-		Message: "BIN must contain digits only",
-	}}
+	svc := &stubService{err: svcerr.Invalid("bad_request", "BIN must contain digits only")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/bin/abcdef", http.NoBody)

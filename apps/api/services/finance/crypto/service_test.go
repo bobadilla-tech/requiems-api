@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func TestGetPrice_ValidSymbol(t *testing.T) {
@@ -45,10 +45,10 @@ func TestGetPrice_UnknownSymbol(t *testing.T) {
 	_, err := svc.GetPrice(context.Background(), "FAKE")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "unknown_symbol", ae.Code)
-	assert.Equal(t, http.StatusUnprocessableEntity, ae.Status)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "unknown_symbol", se.Code)
+	assert.Equal(t, svcerr.KindUnknown, se.Kind)
 }
 
 func TestGetPrice_UpstreamError(t *testing.T) {
@@ -62,9 +62,9 @@ func TestGetPrice_UpstreamError(t *testing.T) {
 	_, err := svc.GetPrice(context.Background(), "BTC")
 	require.Error(t, err)
 
-	var ae *httpx.AppError
-	require.ErrorAs(t, err, &ae)
-	assert.Equal(t, "upstream_error", ae.Code)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "upstream_error", se.Code)
 }
 
 func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {

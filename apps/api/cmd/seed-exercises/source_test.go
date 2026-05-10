@@ -59,7 +59,7 @@ func TestLoadExercises_SkipsMissingIDOrName(t *testing.T) {
 func TestLoadExercises_NilSlicesNormalised(t *testing.T) {
 	t.Parallel()
 
-	exercises := []map[string]interface{}{
+	exercises := []map[string]any{
 		{"exerciseId": "ex004", "name": "Squat"}, // omit all slice fields
 	}
 

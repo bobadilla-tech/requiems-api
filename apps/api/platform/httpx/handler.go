@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	sentry "github.com/getsentry/sentry-go"
+
+	"requiems-api/platform/svcerr"
 )
 
 // Handle wraps an endpoint function with automatic JSON binding, validation,
@@ -52,7 +54,11 @@ func Handle[Req any, Res Data](
 				Error(w, ae.Status, ae.Code, ae.Message)
 				return
 			}
-
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
+				return
+			}
 			sentry.CaptureException(err)
 			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
 			return
@@ -85,6 +91,11 @@ func HandleBatch[Req any, Res Data](
 		if err != nil {
 			if ae, ok := errors.AsType[*AppError](err); ok {
 				Error(w, ae.Status, ae.Code, ae.Message)
+				return
+			}
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			sentry.CaptureException(err)

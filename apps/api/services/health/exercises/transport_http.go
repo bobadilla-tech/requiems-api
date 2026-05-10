@@ -2,12 +2,14 @@ package exercises
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // exerciseQuerier is the interface consumed by HTTP handlers, allowing stub
@@ -58,8 +60,9 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Random(r.Context(), params)
 		if err != nil {
-			if appErr, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch random exercise")
@@ -79,8 +82,9 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Get(r.Context(), id)
 		if err != nil {
-			if appErr, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			var se *svcerr.Error
+			if errors.As(err, &se) {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch exercise")
