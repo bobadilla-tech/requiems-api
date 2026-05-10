@@ -130,3 +130,21 @@ func TestCacheKey_AlwaysUppercase(t *testing.T) {
 	assert.Equal(t, "exchange:USD:EUR", cacheKey("usd", "eur"), "cache key must be uppercase")
 	assert.Equal(t, "exchange:USD:EUR", cacheKey("USD", "EUR"), "cache key must be uppercase")
 }
+
+func TestGetRate_BadDateFallsBackToNow(t *testing.T) {
+	t.Parallel()
+	svc, cleanup := newTestService(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resp := frankfurterResponse{
+			Base:  "USD",
+			Date:  "not-a-date",
+			Rates: map[string]float64{"EUR": 0.91},
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(resp)
+	}))
+	defer cleanup()
+
+	_, ts, err := svc.GetRate(t.Context(), "USD", "EUR")
+	require.NoError(t, err)
+	assert.Equal(t, time.Now().UTC().Year(), ts.Year(), "bad date must fall back to current year")
+}

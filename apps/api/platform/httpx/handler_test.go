@@ -185,3 +185,24 @@ func TestHandleBatch_InternalError_Returns500(t *testing.T) {
 
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
 }
+
+func TestHandle_BodyTooLarge_Returns400(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
+		return handleRes{}, nil
+	})
+
+	big := strings.NewReader(`{"name":"` + strings.Repeat("x", 1<<20+1) + `"}`)
+	r := httptest.NewRequest(http.MethodPost, "/", big)
+	r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	var resp httpx.ErrorResponse
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Message, "too large")
+}

@@ -89,3 +89,23 @@ func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
 
 	assert.Equal(t, 2, callCount, "expected 2 upstream calls (no Redis), got %d", callCount)
 }
+
+func TestGetPrice_CoinMissingFromResponse_Upstream(t *testing.T) {
+	t.Parallel()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Return a valid JSON body that doesn't include the requested coin ID.
+		body := coinGeckoResponse{}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(body)
+	}))
+	defer srv.Close()
+
+	svc := newServiceWithClient(srv.Client(), srv.URL)
+	_, err := svc.GetPrice(context.Background(), "BTC")
+	require.Error(t, err)
+
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
+	assert.Equal(t, "upstream_error", se.Code)
+}
