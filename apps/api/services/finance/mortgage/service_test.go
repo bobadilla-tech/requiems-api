@@ -88,3 +88,29 @@ func TestCalculate_ScheduleMonthNumbers(t *testing.T) {
 		}
 	}
 }
+
+func TestService_CalculateBatch(t *testing.T) {
+	svc := NewService()
+	mortgages := []Request{
+		{100000, 5.0, 1},
+		{100000, 5.6, 3},
+		{100000, 5.5, 5},
+	}
+	result := svc.CalculateBatch(mortgages)
+
+	if result.Total != 3 {
+		t.Errorf("expected 3, got %v", result.Total)
+	}
+
+	if result.Results[0].MonthlyPayment != 8560.75 {
+		t.Errorf("expected MonthlyPayment = 8560.75, got %v", result.Results[0].MonthlyPayment)
+	}
+
+	if result.Results[1].MonthlyPayment != 3024.1 {
+		t.Errorf("expected MonthlyPayment = 3024.1, got %v", result.Results[1].MonthlyPayment)
+	}
+
+	if result.Results[2].MonthlyPayment != 1910.12 {
+		t.Errorf("expected MonthlyPayment = 1910.12, got %v", result.Results[2].MonthlyPayment)
+	}
+}

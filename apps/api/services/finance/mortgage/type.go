@@ -27,4 +27,16 @@ type Response struct {
 	Schedule       []ScheduleEntry `json:"schedule"`
 }
 
-func (Response) IsData() {}
+// BatchRequest is the body for validating miltiple mortgages at once.
+type BatchRequest struct {
+	Mortgages []Request `json:"mortgages" validate:"required,min=1,max=50,dive"`
+}
+
+// BatchResponse is the response payload for POST /v1/finance/mortgage/batch.
+type BatchResponse struct {
+	Results []Response `json:"results"`
+	Total   int        `json:"total"`
+}
+
+func (Response) IsData()      {}
+func (BatchResponse) IsData() {}
