@@ -14,4 +14,3 @@ type ValidationFailure struct {
 }
 
 func (e *ValidationFailure) Error() string { return "validation_failed" }
-

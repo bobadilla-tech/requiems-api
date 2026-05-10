@@ -87,6 +87,7 @@ func TestGetRate_APIReturns404_Returns422(t *testing.T) {
 	var se *svcerr.Error
 	require.ErrorAs(t, err, &se)
 	assert.Equal(t, "invalid_currency", se.Code)
+	assert.Equal(t, svcerr.KindUnknown, se.Kind)
 }
 
 func TestGetRate_APIReturns500_Returns503(t *testing.T) {

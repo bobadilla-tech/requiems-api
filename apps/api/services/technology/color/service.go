@@ -79,7 +79,7 @@ func parse(format, value string) (rgb, error) {
 }
 
 func invalidColor(value string) error {
-	return svcerr.Unknown("invalid_color", fmt.Sprintf("cannot parse color value %q", value))
+	return svcerr.Invalid("invalid_color", fmt.Sprintf("cannot parse color value %q", value))
 }
 
 // parseHex parses a "#rrggbb" or "#rgb" hex color string.

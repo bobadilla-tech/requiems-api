@@ -24,6 +24,9 @@ func (e *Error) Error() string { return e.Message }
 
 // Returns the HTTP status code that corresponds to the error kind.
 func HTTPStatus(e *Error) int {
+	if e == nil {
+		return http.StatusInternalServerError
+	}
 	switch e.Kind {
 	case KindNotFound:
 		return http.StatusNotFound

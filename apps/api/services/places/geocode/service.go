@@ -64,7 +64,10 @@ func (s *Service) Geocode(ctx context.Context, address string) (GeocodeResponse,
 	}
 
 	var results []nominatimSearchResult
-	if err := json.Unmarshal(body, &results); err != nil || len(results) == 0 {
+	if err := json.Unmarshal(body, &results); err != nil {
+		return GeocodeResponse{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
+	}
+	if len(results) == 0 {
 		return GeocodeResponse{}, svcerr.NotFound("not_found", "no results found for the given address")
 	}
 
@@ -106,7 +109,10 @@ func (s *Service) ReverseGeocode(ctx context.Context, lat, lon float64) (Reverse
 	}
 
 	var result nominatimReverseResult
-	if err := json.Unmarshal(body, &result); err != nil || result.DisplayName == "" {
+	if err := json.Unmarshal(body, &result); err != nil {
+		return ReverseGeocodeResponse{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
+	}
+	if result.DisplayName == "" {
 		return ReverseGeocodeResponse{}, svcerr.NotFound("not_found", "no results found for the given coordinates")
 	}
 

@@ -115,7 +115,7 @@ func (s *Service) fetchRate(ctx context.Context, from, to string) (float64, time
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusNotFound {
-		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency code: %s or %s", from, to))
+		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency pair: %s/%s", from, to))
 	}
 
 	if resp.StatusCode != http.StatusOK {

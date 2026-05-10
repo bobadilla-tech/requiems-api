@@ -202,7 +202,7 @@ func TestService_Convert(t *testing.T) {
 				require.Error(t, err)
 				var se *svcerr.Error
 				require.ErrorAs(t, err, &se, "expected *svcerr.Error, got %T", err)
-				assert.Equal(t, svcerr.KindUnknown, se.Kind)
+				assert.Equal(t, svcerr.KindInvalid, se.Kind)
 				if tt.wantErrCode != "" {
 					assert.Equal(t, tt.wantErrCode, se.Code)
 				}

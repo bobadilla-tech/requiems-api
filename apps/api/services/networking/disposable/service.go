@@ -64,10 +64,12 @@ func (s *Service) GetDomains(page, perPage int) (DomainsListResponse, error) {
 	allDomains := disposable.GetAllDomains()
 	total := len(allDomains)
 
-	start := (page - 1) * perPage
-	if start >= total {
+	maxPages := (total + perPage - 1) / perPage
+	if page > maxPages {
 		return DomainsListResponse{}, svcerr.NotFound("page_out_of_range", "page exceeds total number of available pages")
 	}
+
+	start := (page - 1) * perPage
 
 	end := start + perPage
 	if end > total {
