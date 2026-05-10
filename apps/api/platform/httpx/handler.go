@@ -54,8 +54,7 @@ func Handle[Req any, Res Data](
 				Error(w, ae.Status, ae.Code, ae.Message)
 				return
 			}
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
@@ -93,8 +92,7 @@ func HandleBatch[Req any, Res Data](
 				Error(w, ae.Status, ae.Code, ae.Message)
 				return
 			}
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

@@ -60,8 +60,7 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Random(r.Context(), params)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
@@ -82,8 +81,7 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Get(r.Context(), id)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

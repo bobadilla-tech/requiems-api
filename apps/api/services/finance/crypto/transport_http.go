@@ -27,8 +27,7 @@ func registerCryptoRoutes(r chi.Router, g Getter) {
 
 		price, err := g.GetPrice(r.Context(), symbol)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

@@ -29,8 +29,7 @@ func registerSWIFTRoutes(r chi.Router, l Looker) {
 
 		result, err := l.List(r.Context(), filter)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
@@ -47,8 +46,7 @@ func registerSWIFTRoutes(r chi.Router, l Looker) {
 
 		result, err := l.Lookup(r.Context(), rawCode)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

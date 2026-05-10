@@ -1,5 +1,7 @@
 package svcerr
 
+import "net/http"
+
 // Kind classifies a service error so the HTTP layer can map it to a status code.
 type Kind int
 
@@ -10,7 +12,7 @@ const (
 	KindUpstream             // 503
 )
 
-// Error is a transport-agnostic service error. Services return this type;
+// A transport-agnostic service error. Services return this type;
 // the HTTP layer maps Kind to an HTTP status code.
 type Error struct {
 	Kind    Kind
@@ -20,19 +22,19 @@ type Error struct {
 
 func (e *Error) Error() string { return e.Message }
 
-// HTTPStatus returns the HTTP status code that corresponds to the error kind.
+// Returns the HTTP status code that corresponds to the error kind.
 func HTTPStatus(e *Error) int {
 	switch e.Kind {
 	case KindNotFound:
-		return 404
+		return http.StatusNotFound
 	case KindInvalid:
-		return 400
+		return http.StatusBadRequest
 	case KindUnknown:
-		return 422
+		return http.StatusUnprocessableEntity
 	case KindUpstream:
-		return 503
+		return http.StatusServiceUnavailable
 	}
-	return 500
+	return http.StatusInternalServerError
 }
 
 func NotFound(code, msg string) *Error { return &Error{Kind: KindNotFound, Code: code, Message: msg} }

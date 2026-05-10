@@ -23,8 +23,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		result, err := svc.Convert(req.From, req.To, req.Value)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

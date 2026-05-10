@@ -34,8 +34,7 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 
 		rate, ts, err := f.GetRate(r.Context(), from, to)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
@@ -64,8 +63,7 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 
 		rate, ts, err := f.GetRate(r.Context(), from, to)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}

@@ -24,8 +24,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		result, err := svc.Geocode(r.Context(), q.Address)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
@@ -50,8 +49,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		result, err := svc.ReverseGeocode(r.Context(), q.Lat, q.Lon)
 		if err != nil {
-			var se *svcerr.Error
-			if errors.As(err, &se) {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
