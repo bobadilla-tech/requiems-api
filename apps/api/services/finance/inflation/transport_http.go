@@ -2,12 +2,14 @@ package inflation
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts inflation handlers on the given router.
@@ -37,8 +39,8 @@ func registerInflationRoutes(r chi.Router, g Getter) {
 
 		resp, err := g.GetInflation(r.Context(), req.Country)
 		if err != nil {
-			if ae, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")

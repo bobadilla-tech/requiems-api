@@ -3,6 +3,9 @@ package main
 import (
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestIsValidBINPrefix(t *testing.T) {
@@ -24,9 +27,7 @@ func TestIsValidBINPrefix(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.bin, func(t *testing.T) {
 			t.Parallel()
-			if got := isValidBINPrefix(tt.bin); got != tt.want {
-				t.Fatalf("isValidBINPrefix(%q) = %v, want %v", tt.bin, got, tt.want)
-			}
+			require.Equal(t, tt.want, isValidBINPrefix(tt.bin))
 		})
 	}
 }
@@ -40,29 +41,15 @@ func TestParseIannuttall(t *testing.T) {
 		"INVALID,VISA,Credit,Classic,Skip Me,US,USA,United States,0,0,,\n"
 
 	records, err := parseIannuttall(strings.NewReader(csv), "test", 0.75)
-	if err != nil {
-		t.Fatalf("parseIannuttall: %v", err)
-	}
-	if len(records) != 1 {
-		t.Fatalf("expected 1 record, got %d", len(records))
-	}
+	require.NoError(t, err)
+	require.Len(t, records, 1)
 
 	r := records[0]
-	if r.BINPrefix != "411111" {
-		t.Errorf("BINPrefix = %q, want %q", r.BINPrefix, "411111")
-	}
-	if r.Scheme != "VISA" {
-		t.Errorf("Scheme = %q, want %q", r.Scheme, "VISA")
-	}
-	if r.CountryCode != "US" {
-		t.Errorf("CountryCode = %q, want %q", r.CountryCode, "US")
-	}
-	if r.Source != "test" {
-		t.Errorf("Source = %q, want %q", r.Source, "test")
-	}
-	if r.Confidence != 0.75 {
-		t.Errorf("Confidence = %v, want %v", r.Confidence, 0.75)
-	}
+	assert.Equal(t, "411111", r.BINPrefix)
+	assert.Equal(t, "VISA", r.Scheme)
+	assert.Equal(t, "US", r.CountryCode)
+	assert.Equal(t, "test", r.Source)
+	assert.Equal(t, 0.75, r.Confidence)
 }
 
 func TestParseVenelinkochev(t *testing.T) {
@@ -74,21 +61,11 @@ func TestParseVenelinkochev(t *testing.T) {
 		"BADINP,Visa,Credit,Classic,Skip,,,US,USA,United States\n"
 
 	records, err := parseVenelinkochev(strings.NewReader(csv), "venelinkochev", 0.80)
-	if err != nil {
-		t.Fatalf("parseVenelinkochev: %v", err)
-	}
-	if len(records) != 1 {
-		t.Fatalf("expected 1 record, got %d", len(records))
-	}
+	require.NoError(t, err)
+	require.Len(t, records, 1)
 
 	r := records[0]
-	if r.BINPrefix != "411111" {
-		t.Errorf("BINPrefix = %q, want %q", r.BINPrefix, "411111")
-	}
-	if r.IssuerName != "My Bank" {
-		t.Errorf("IssuerName = %q, want %q", r.IssuerName, "My Bank")
-	}
-	if r.CountryName != "United States" {
-		t.Errorf("CountryName = %q, want %q", r.CountryName, "United States")
-	}
+	assert.Equal(t, "411111", r.BINPrefix)
+	assert.Equal(t, "My Bank", r.IssuerName)
+	assert.Equal(t, "United States", r.CountryName)
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -103,7 +103,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
     t.index ["status"], name: "index_private_deployment_requests_on_status"
     t.index ["subdomain_slug"], name: "index_private_deployment_requests_on_subdomain_slug", unique: true, where: "(subdomain_slug IS NOT NULL)"
     t.index ["user_id"], name: "index_private_deployment_requests_on_user_id"
-    t.check_constraint "status::text = ANY (ARRAY['pending_payment'::character varying::text, 'pending'::character varying::text, 'deploying'::character varying::text, 'active'::character varying::text, 'cancelled'::character varying::text])", name: "private_deployment_requests_status_check"
+    t.check_constraint "status::text = ANY (ARRAY['pending_payment'::character varying, 'pending'::character varying, 'deploying'::character varying, 'active'::character varying, 'cancelled'::character varying]::text[])", name: "private_deployment_requests_status_check"
+  end
+
+  create_table "referrals", force: :cascade do |t|
+    t.datetime "converted_at"
+    t.bigint "converting_subscription_id"
+    t.datetime "created_at", null: false
+    t.bigint "referred_user_id", null: false
+    t.bigint "referrer_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referred_user_id"], name: "index_referrals_on_referred_user_id", unique: true
+    t.index ["referrer_id"], name: "index_referrals_on_referrer_id"
+    t.check_constraint "referrer_id <> referred_user_id", name: "chk_referrals_no_self_referral"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
@@ -160,8 +173,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
     t.index ["api_key_id", "used_at"], name: "index_usage_logs_on_api_key_and_time"
     t.index ["api_key_id"], name: "index_usage_logs_on_api_key_id"
     t.index ["endpoint", "used_at"], name: "index_usage_logs_on_endpoint_and_time"
+    t.index ["request_method"], name: "index_usage_logs_on_request_method"
     t.index ["status_code"], name: "index_usage_logs_on_status_code"
     t.index ["usage_date"], name: "index_usage_logs_on_usage_date"
+    t.index ["user_id", "request_method"], name: "index_usage_logs_on_user_id_and_request_method"
     t.index ["user_id", "used_at"], name: "index_usage_logs_on_user_and_time"
     t.index ["user_id"], name: "index_usage_logs_on_user_id"
   end
@@ -189,6 +204,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
     t.string "locale"
     t.string "name"
     t.text "notes"
+    t.string "referral_code", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
@@ -202,6 +218,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deletion_token"], name: "index_users_on_deletion_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["status"], name: "index_users_on_status"
     t.check_constraint "locale IS NULL OR (locale::text = ANY (ARRAY['en'::character varying, 'es'::character varying, 'fr'::character varying]::text[]))", name: "locale_valid_values"
@@ -214,6 +231,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_120000) do
   add_foreign_key "credit_adjustments", "users"
   add_foreign_key "daily_usage_summaries", "users"
   add_foreign_key "private_deployment_requests", "users"
+  add_foreign_key "referrals", "subscriptions", column: "converting_subscription_id"
+  add_foreign_key "referrals", "users", column: "referred_user_id"
+  add_foreign_key "referrals", "users", column: "referrer_id"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "subscriptions", "users", column: "promoted_by_id"
   add_foreign_key "usage_logs", "api_keys"

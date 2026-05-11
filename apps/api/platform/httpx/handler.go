@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	sentry "github.com/getsentry/sentry-go"
+
+	"requiems-api/platform/svcerr"
 )
 
 // Handle wraps an endpoint function with automatic JSON binding, validation,
@@ -17,7 +19,7 @@ import (
 //
 // Error mapping:
 //   - *ValidationFailure  → 422 with {"error":"validation_failed","fields":[...]}
-//   - *AppError           → AppError.Status with {"error":Code,"message":Message}
+//   - *svcerr.Error       → mapped HTTP status with {"error":Code,"message":Message}
 //   - any other error     → 500 with {"error":"internal_error"}
 //
 // Usage:
@@ -48,8 +50,12 @@ func Handle[Req any, Res Data](
 		res, err := fn(r.Context(), req)
 
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 
@@ -83,8 +89,11 @@ func HandleBatch[Req any, Res Data](
 
 		res, count, err := fn(r.Context(), req)
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			sentry.CaptureException(err)

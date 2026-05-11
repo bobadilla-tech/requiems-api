@@ -6,8 +6,10 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 func setupSwiftTestDB(t *testing.T) *pgxpool.Pool {
@@ -70,9 +72,7 @@ func insertSwiftFixture(t *testing.T, pool *pgxpool.Pool, code, bankCode, countr
 			bank_name, city, country_name
 		) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
 	`, code, bankCode, countryCode, locationCode, branchCode, bankName, city, countryName)
-	if err != nil {
-		t.Fatalf("insert fixture %s: %v", code, err)
-	}
+	require.NoError(t, err, "insert fixture %s", code)
 }
 
 func TestServiceLookupAndList_DBBacked(t *testing.T) {
@@ -86,28 +86,16 @@ func TestServiceLookupAndList_DBBacked(t *testing.T) {
 	ctx := context.Background()
 
 	lookup, err := svc.Lookup(ctx, "TSTADEFF")
-	if err != nil {
-		t.Fatalf("Lookup: %v", err)
-	}
-	if lookup.SwiftCode != "TSTADEFFXXX" {
-		t.Fatalf("expected expanded code TSTADEFFXXX, got %q", lookup.SwiftCode)
-	}
+	require.NoError(t, err, "Lookup")
+	require.Equal(t, "TSTADEFFXXX", lookup.SwiftCode)
 
 	list, err := svc.List(ctx, ListFilter{CountryCode: "de", Limit: 10, Offset: 0})
-	if err != nil {
-		t.Fatalf("List: %v", err)
-	}
-	if list.Returned < 2 {
-		t.Fatalf("expected at least 2 DE records, got %d", list.Returned)
-	}
+	require.NoError(t, err, "List")
+	require.True(t, list.Returned >= 2, "expected at least 2 DE records, got %d", list.Returned)
 
 	filtered, err := svc.List(ctx, ListFilter{CountryCode: "US", BankCode: "TSTB", Limit: 10, Offset: 0})
-	if err != nil {
-		t.Fatalf("List filtered: %v", err)
-	}
-	if filtered.Returned != 1 {
-		t.Fatalf("expected 1 US/TSTB fixture record, got %d", filtered.Returned)
-	}
+	require.NoError(t, err, "List filtered")
+	require.Equal(t, 1, filtered.Returned, "expected 1 US/TSTB fixture record, got %d", filtered.Returned)
 }
 
 func TestServiceList_InvalidFilters(t *testing.T) {
@@ -115,16 +103,11 @@ func TestServiceList_InvalidFilters(t *testing.T) {
 	svc := NewService(pool)
 
 	_, err := svc.List(context.Background(), ListFilter{CountryCode: "D1"})
-	if err == nil {
-		t.Fatal("expected bad_request error for invalid country_code")
-	}
-	ae, ok := err.(*httpx.AppError)
-	if !ok || ae.Code != "bad_request" {
-		t.Fatalf("expected bad_request app error, got %T: %v", err, err)
-	}
+	require.Error(t, err)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, "bad_request", se.Code)
 
 	_, err = svc.List(context.Background(), ListFilter{BankCode: "TS1A"})
-	if err == nil {
-		t.Fatal("expected bad_request error for invalid bank_code")
-	}
+	require.Error(t, err)
 }

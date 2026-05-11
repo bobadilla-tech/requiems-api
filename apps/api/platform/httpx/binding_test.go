@@ -7,6 +7,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
@@ -17,59 +20,54 @@ type bindReq struct {
 }
 
 func TestBindAndValidate_ValidJSON(t *testing.T) {
+	t.Parallel()
+
 	body := strings.NewReader(`{"email":"user@example.com","count":3}`)
 	r := httptest.NewRequest("POST", "/", body)
 
 	var req bindReq
-	if err := httpx.BindAndValidate(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if req.Email != "user@example.com" {
-		t.Errorf("email: want user@example.com, got %q", req.Email)
-	}
-	if req.Count != 3 {
-		t.Errorf("count: want 3, got %d", req.Count)
-	}
+	err := httpx.BindAndValidate(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, "user@example.com", req.Email)
+	assert.Equal(t, 3, req.Count)
 }
 
 func TestBindAndValidate_MalformedJSON(t *testing.T) {
+	t.Parallel()
+
 	body := strings.NewReader(`not-json`)
 	r := httptest.NewRequest("POST", "/", body)
 
 	var req bindReq
-	if err := httpx.BindAndValidate(r, &req); err == nil {
-		t.Fatal("expected error for malformed JSON, got nil")
-	}
+	err := httpx.BindAndValidate(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindAndValidate_UnknownFields(t *testing.T) {
+	t.Parallel()
+
 	body := strings.NewReader(`{"email":"user@example.com","count":1,"unknown":"field"}`)
 	r := httptest.NewRequest("POST", "/", body)
 
 	var req bindReq
-	if err := httpx.BindAndValidate(r, &req); err == nil {
-		t.Fatal("expected error for unknown field, got nil")
-	}
+	err := httpx.BindAndValidate(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindAndValidate_ValidationFailure(t *testing.T) {
+	t.Parallel()
+
 	// count is below min=1
 	body := strings.NewReader(`{"email":"user@example.com","count":0}`)
 	r := httptest.NewRequest("POST", "/", body)
 
 	var req bindReq
 	err := httpx.BindAndValidate(r, &req)
-	if err == nil {
-		t.Fatal("expected validation error, got nil")
-	}
+	require.Error(t, err)
 
-	vf, ok := err.(*httpx.ValidationFailure)
-	if !ok {
-		t.Fatalf("expected *httpx.ValidationFailure, got %T", err)
-	}
-	if len(vf.Fields) == 0 {
-		t.Error("expected at least one field error")
-	}
+	var vf *httpx.ValidationFailure
+	require.ErrorAs(t, err, &vf)
+	assert.NotEmpty(t, vf.Fields)
 }
 
 // queryReq is used to exercise BindQuery with several field types.
@@ -83,123 +81,122 @@ type queryReq struct {
 }
 
 func TestBindQuery_StringField(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=alice", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if req.Name != "alice" {
-		t.Errorf("name: want alice, got %q", req.Name)
-	}
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, "alice", req.Name)
 }
 
 func TestBindQuery_IntField(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&age=30", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if req.Age != 30 {
-		t.Errorf("age: want 30, got %d", req.Age)
-	}
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, 30, req.Age)
 }
 
 func TestBindQuery_FloatField(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&score=9.5", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if req.Score != 9.5 {
-		t.Errorf("score: want 9.5, got %v", req.Score)
-	}
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, 9.5, req.Score)
 }
 
 func TestBindQuery_BoolField(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&active=true", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !req.Active {
-		t.Error("active: want true, got false")
-	}
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
+	assert.True(t, req.Active, "active: want true, got false")
 }
 
 func TestBindQuery_TimeField(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&since=2024-06-15", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
 
 	want := time.Date(2024, 6, 15, 0, 0, 0, 0, time.UTC)
-	if !req.Since.Equal(want) {
-		t.Errorf("since: want %v, got %v", want, req.Since)
-	}
+	assert.True(t, req.Since.Equal(want), "since: want %v, got %v", want, req.Since)
 }
 
 func TestBindQuery_InvalidInt(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&age=notanint", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err == nil {
-		t.Fatal("expected error for invalid int, got nil")
-	}
+	err := httpx.BindQuery(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindQuery_InvalidFloat(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&score=notafloat", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err == nil {
-		t.Fatal("expected error for invalid float, got nil")
-	}
+	err := httpx.BindQuery(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindQuery_InvalidBool(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&active=notabool", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err == nil {
-		t.Fatal("expected error for invalid bool, got nil")
-	}
+	err := httpx.BindQuery(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindQuery_InvalidTime(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/?name=x&since=not-a-date", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, &req); err == nil {
-		t.Fatal("expected error for invalid date, got nil")
-	}
+	err := httpx.BindQuery(r, &req)
+	require.Error(t, err)
 }
 
 func TestBindQuery_ValidationFailure(t *testing.T) {
+	t.Parallel()
+
 	// name is required but missing
 	r := httptest.NewRequest("GET", "/", http.NoBody)
 
 	var req queryReq
 	err := httpx.BindQuery(r, &req)
-	if err == nil {
-		t.Fatal("expected validation error for missing required field, got nil")
-	}
+	require.Error(t, err)
 
-	if _, ok := err.(*httpx.ValidationFailure); !ok {
-		t.Fatalf("expected *httpx.ValidationFailure, got %T", err)
-	}
+	var vf *httpx.ValidationFailure
+	require.ErrorAs(t, err, &vf)
 }
 
 func TestBindQuery_NonPointerDst(t *testing.T) {
+	t.Parallel()
+
 	r := httptest.NewRequest("GET", "/", http.NoBody)
 
 	var req queryReq
-	if err := httpx.BindQuery(r, req); err == nil {
-		t.Fatal("expected error when dst is not a pointer, got nil")
-	}
+	err := httpx.BindQuery(r, req)
+	require.Error(t, err)
 }

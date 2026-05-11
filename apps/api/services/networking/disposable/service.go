@@ -5,7 +5,7 @@ import (
 
 	disposable "github.com/bobadilla-tech/is-email-disposable"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 type Service struct{}
@@ -54,30 +54,24 @@ func (s *Service) CheckDomain(domain string) DomainCheckResponse {
 
 // GetDomains returns paginated list of disposable domains
 func (s *Service) GetDomains(page, perPage int) (DomainsListResponse, error) {
+	if page < 1 {
+		return DomainsListResponse{}, svcerr.Invalid("bad_request", "page must be at least 1")
+	}
+	if perPage < 1 || perPage > 1000 {
+		return DomainsListResponse{}, svcerr.Invalid("bad_request", "per_page must be between 1 and 1000")
+	}
+
 	allDomains := disposable.GetAllDomains()
 	total := len(allDomains)
 
-	// Default pagination values
-	if page < 1 {
-		page = 1
-	}
-	if perPage < 1 || perPage > 1000 {
-		perPage = 100
+	maxPages := (total + perPage - 1) / perPage
+	if page > maxPages {
+		return DomainsListResponse{}, svcerr.NotFound("page_out_of_range", "page exceeds total number of available pages")
 	}
 
-	// Calculate pagination
 	start := (page - 1) * perPage
+
 	end := start + perPage
-
-	// Page is beyond the last page
-	if start >= total {
-		return DomainsListResponse{}, &httpx.AppError{
-			Status:  404,
-			Code:    "page_out_of_range",
-			Message: "page exceeds total number of available pages",
-		}
-	}
-
 	if end > total {
 		end = total
 	}

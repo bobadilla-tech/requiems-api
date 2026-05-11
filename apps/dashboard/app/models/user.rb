@@ -13,11 +13,16 @@ class User < ApplicationRecord
   has_many :audit_logs, dependent: :destroy
   has_many :abuse_reports, dependent: :destroy
   has_many :private_deployment_requests, dependent: :destroy
+  has_many :referrals_given, class_name: "Referral", foreign_key: "referrer_id", dependent: :destroy, inverse_of: :referrer
+  has_one :referral_received, class_name: "Referral", foreign_key: "referred_user_id", dependent: :destroy, inverse_of: :referred_user
 
   PLAN_LIMITS = PlanConfig::PLANS.transform_values { |v| v[:requests_per_month] }.freeze
   SUPPORTED_LOCALES = Rails.application.config.i18n.available_locales.map(&:to_s).freeze
 
   validates :locale, inclusion: { in: SUPPORTED_LOCALES }, allow_nil: true
+  validates :referral_code, uniqueness: true, allow_nil: true
+
+  before_create :ensure_referral_code
 
   scope :admins, -> { where(admin: true) }
   scope :active_users, -> { where(status: "active") }
@@ -151,5 +156,20 @@ class User < ApplicationRecord
 
   def clear_deletion_token!
     update_columns(deletion_token: nil, deletion_token_sent_at: nil, deletion_reason: nil)
+  end
+
+  def referral_token
+    Rails.application.message_verifier("referral").generate(referral_code, expires_in: 30.days)
+  end
+
+  private
+
+  def ensure_referral_code
+    return if referral_code.present?
+
+    loop do
+      self.referral_code = SecureRandom.alphanumeric(8).upcase
+      break unless User.exists?(referral_code: referral_code)
+    end
   end
 end

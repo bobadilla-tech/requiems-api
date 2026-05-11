@@ -2,9 +2,8 @@ package base64 //nolint:revive // package name matches the service domain it imp
 
 import (
 	"encoding/base64"
-	"net/http"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // Service provides Base64 encode and decode operations.
@@ -38,11 +37,7 @@ func (s *Service) Decode(value, variant string) (Result, error) {
 	}
 
 	if err != nil {
-		return Result{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_base64",
-			Message: "value is not valid base64",
-		}
+		return Result{}, svcerr.Unknown("invalid_base64", "value is not valid base64")
 	}
 
 	return Result{Result: string(decoded)}, nil

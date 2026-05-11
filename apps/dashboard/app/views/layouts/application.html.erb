@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
+    <% if !user_signed_in? && ENV["GA4_MEASUREMENT_ID"].present? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA4_MEASUREMENT_ID"] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV["GA4_MEASUREMENT_ID"] %>');
+      </script>
+    <% end %>
     <script>
       (function() {
         var theme = localStorage.getItem('theme');
@@ -9,11 +18,26 @@
         }
       })();
     </script>
-    <title><%= content_for(:title) || "Dashboard" %></title>
+    <title><%= content_for(:title) || "Requiems API" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Dashboard">
+    <meta name="application-name" content="Requiems API">
     <meta name="mobile-web-app-capable" content="yes">
+    <% _page_title = content_for?(:title) ? content_for(:title) : "Requiems API: All-in-one backend for SaaS products" %>
+    <% _page_description = content_for?(:description) ? content_for(:description) : "Authentication, validation, fraud detection, payments intelligence, and global data — one API key for your entire SaaS stack." %>
+    <meta name="description" content="<%= _page_description %>">
+    <meta property="og:site_name" content="Requiems API">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://requiems.xyz<%= request.path %>">
+    <meta property="og:title" content="<%= content_for?(:og_title) ? content_for(:og_title) : _page_title %>">
+    <meta property="og:description" content="<%= content_for?(:og_description) ? content_for(:og_description) : _page_description %>">
+    <meta property="og:image" content="https://requiems.xyz/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= content_for?(:og_title) ? content_for(:og_title) : _page_title %>">
+    <meta name="twitter:description" content="<%= content_for?(:og_description) ? content_for(:og_description) : _page_description %>">
+    <meta name="twitter:image" content="https://requiems.xyz/og-image.png">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -33,6 +57,8 @@
 
     <%= favicon_link_tag "logo.png", rel: "icon", type: "image/png" %>
     <%= favicon_link_tag "logo.png", rel: "apple-touch-icon" %>
+
+    <script type="application/ld+json"><%= organization_json_ld.html_safe %></script>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

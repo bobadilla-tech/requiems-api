@@ -98,6 +98,9 @@ class Webhooks::LemonsqueezyController < ApplicationController
         promotion_expires_at: nil
       )
 
+      # Mark referral as converted on first paid subscription — idempotent via pending? check
+      user.referral_received&.mark_converted!(subscription) if plan_name != "free"
+
       # Sync to Cloudflare KV — inside transaction so a failure rolls back the DB save
       Cloudflare::ApiManagementService.new.sync_user_plan(user, plan_name)
     end

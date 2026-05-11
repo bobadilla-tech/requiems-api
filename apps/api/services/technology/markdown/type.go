@@ -13,13 +13,13 @@ type Response struct {
 
 func (Response) IsData() {}
 
-
-
+// BatchRequest is the input for batch markdown-to-HTML conversion.
 type BatchRequest struct {
-	Markdowns []string `json:"markdowns"`
+	Markdowns []string `json:"markdowns" validate:"required,min=1,max=50,dive,required"`
 	Sanitize  bool     `json:"sanitize"`
 }
 
+// BatchResponse holds multiple converted HTML results.
 type BatchResponse struct {
 	Results []Response `json:"results"`
 }

@@ -8,6 +8,8 @@ import (
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -48,6 +50,7 @@ func skipIfNoService(t *testing.T) {
 }
 
 func TestASN_HappyPath(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -55,24 +58,18 @@ func TestASN_HappyPath(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPAddressASNResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP == "" {
-		t.Error("expected non-empty IP in response")
-	}
-	if resp.Data.ASN == "" {
-		t.Error("expected non-empty ASN for public IP")
-	}
+	assert.NotEmpty(t, resp.Data.IP)
+	assert.NotEmpty(t, resp.Data.ASN)
 }
 
 func TestASN_InvalidIPFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/ip/asn/not-an-ip", http.NoBody)
@@ -80,26 +77,20 @@ func TestASN_InvalidIPFormat(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if testSvc == nil {
-		if w.Code != http.StatusServiceUnavailable {
-			t.Errorf("expected 503 without service, got %d", w.Code)
-		}
+		assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 		return
 	}
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode error response: %v", err)
-	}
-	if resp.Error != "bad_request" {
-		t.Errorf("expected error code 'bad_request', got %q", resp.Error)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "bad_request", resp.Error)
 }
 
 func TestASN_PrivateIP(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -107,24 +98,18 @@ func TestASN_PrivateIP(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for private IP, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPAddressASNResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.IP != "192.168.1.1" {
-		t.Errorf("expected IP 192.168.1.1, got %s", resp.Data.IP)
-	}
-	if resp.Data.ASN != "" {
-		t.Errorf("expected empty ASN for private IP, got %s", resp.Data.ASN)
-	}
+	assert.Equal(t, "192.168.1.1", resp.Data.IP)
+	assert.Empty(t, resp.Data.ASN)
 }
 
 func TestASN_NoIPParam_UsesRemoteAddr(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -133,12 +118,11 @@ func TestASN_NoIPParam_UsesRemoteAddr(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestASN_XForwardedFor(t *testing.T) {
+	t.Parallel()
 	skipIfNoService(t)
 	r := setupRouter()
 
@@ -147,15 +131,10 @@ func TestASN_XForwardedFor(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[IPAddressASNResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
-	if resp.Data.IP != "1.1.1.1" {
-		t.Errorf("expected IP 1.1.1.1 (first XFF), got %s", resp.Data.IP)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "1.1.1.1", resp.Data.IP)
 }

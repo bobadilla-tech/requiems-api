@@ -50,6 +50,12 @@
         active: controller_name == "billing" %>
 
       <%= render "partials/dashboard/sidebar_link",
+        icon: "users",
+        text: "Referrals",
+        path: dashboard_referral_path,
+        active: controller_name == "referrals" %>
+
+      <%= render "partials/dashboard/sidebar_link",
         icon: "cog",
         text: "Settings",
         path: dashboard_settings_path,

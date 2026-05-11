@@ -27,5 +27,9 @@ docker exec requiem-dev-api-1 sh -lc 'go fmt ./... && golangci-lint run'
 docker exec requiem-dev-api-1 go test ./...
 ```
 
+Tests use `github.com/stretchr/testify` (`assert`/`require`) and `t.Parallel()`.
+Every new test must call `t.Parallel()` as its first line; table-driven subtests
+must do the same inside each `t.Run` callback.
+
 For more options (race, coverage, single package), see
 [`agents.md`](../../agents.md).

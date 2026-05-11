@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,31 +21,25 @@ func setupRouter() chi.Router {
 }
 
 func TestNumbase_HappyPath(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/base?from=16&to=2&value=0xFF", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
-
-	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
-		t.Errorf("expected Content-Type application/json, got %q", ct)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Result != "11111111" {
-		t.Errorf("expected 11111111, got %q", resp.Data.Result)
-	}
+	assert.Equal(t, "11111111", resp.Data.Result)
 }
 
 func TestNumbase_MissingRequiredParam(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		url  string
@@ -68,21 +64,20 @@ func TestNumbase_MissingRequiredParam(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.name, func(t *testing.T) {
+			t.Parallel()
 			r := setupRouter()
 			req := httptest.NewRequest(http.MethodGet, v.url, http.NoBody)
 			w := httptest.NewRecorder()
 
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-			}
-
+			assert.Equal(t, http.StatusBadRequest, w.Code)
 		})
 	}
 }
 
 func TestNumbase_InvalidParamValue(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		url  string
@@ -99,6 +94,7 @@ func TestNumbase_InvalidParamValue(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.name, func(t *testing.T) {
+			t.Parallel()
 			r := setupRouter()
 
 			req := httptest.NewRequest(http.MethodGet, v.url, http.NoBody)
@@ -106,14 +102,13 @@ func TestNumbase_InvalidParamValue(t *testing.T) {
 
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-			}
+			assert.Equal(t, http.StatusBadRequest, w.Code)
 		})
 	}
 }
 
 func TestNumbase_ServiceError(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		url  string
@@ -130,6 +125,7 @@ func TestNumbase_ServiceError(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.name, func(t *testing.T) {
+			t.Parallel()
 			r := setupRouter()
 
 			req := httptest.NewRequest(http.MethodGet, v.url, http.NoBody)
@@ -137,9 +133,7 @@ func TestNumbase_ServiceError(t *testing.T) {
 
 			r.ServeHTTP(w, req)
 
-			if w.Code != http.StatusBadRequest {
-				t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-			}
+			assert.Equal(t, http.StatusBadRequest, w.Code)
 		})
 	}
 }
