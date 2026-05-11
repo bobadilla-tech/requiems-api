@@ -156,7 +156,7 @@ faq:
         type: array
         required: true
         location: body
-        description: Array of domain names. Min: 1, Max: 50.
+        description: "Array of domain names. Min: 1, Max: 50."
         example: '["example.com", "google.com"]'
 
     response_example: |
