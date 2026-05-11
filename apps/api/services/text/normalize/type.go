@@ -16,4 +16,24 @@ type EmailNormalization struct {
 	Changes    []normalizer.Change `json:"changes"`
 }
 
-func (EmailNormalization) IsData() {}
+type BatchEmailNormalizationRequest struct {
+	Emails []string `json:"emails" validate:"required,min=1,max=100,dive,required"`
+}
+
+type EmailNormalizationBatchItem struct {
+	Original   string              `json:"original"`
+	Normalized string              `json:"normalized,omitempty"`
+	Local      string              `json:"local,omitempty"`
+	Domain     string              `json:"domain,omitempty"`
+	Changes    []normalizer.Change `json:"changes,omitempty"`
+	Valid      bool                `json:"valid"`
+	Message    string              `json:"message,omitempty"`
+}
+
+type EmailNormalizationBatchResponse struct {
+	Results []EmailNormalizationBatchItem `json:"results"`
+	Total   int                           `json:"total"`
+}
+
+func (EmailNormalization) IsData()              {}
+func (EmailNormalizationBatchResponse) IsData() {}

@@ -119,7 +119,139 @@ endpoints:
         end
 
         puts JSON.parse(response.body)['data']['html']
+  - name: Convert Markdown Batch
+    method: POST
+    path: /v1/technology/markdown/batch
+    description: >-
+      Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array.
+      Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
 
+    parameters:
+      - name: markdowns
+        type: array
+        required: true
+        location: body
+        description: "Array of Markdown strings. Min: 1, Max: 50."
+        example: '["# Hello", "**bold**", "- item one"]'
+      - name: sanitize
+        type: boolean
+        required: false
+        location: body
+        description: When true, sanitizes HTML output to remove unsafe tags and attributes.
+        default: false
+
+    request_example: |
+      {
+        "markdowns": [
+          "# Hello",
+          "**bold**",
+          "- item one"
+        ],
+        "sanitize": true
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            { "html": "<h1>Hello</h1>" },
+            { "html": "<p><strong>bold</strong></p>" },
+            { "html": "<ul>\n<li>item one</li>\n</ul>" }
+          ]
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: One HTML result per Markdown input, preserving input order
+      - name: results[].html
+        type: string
+        description: Rendered HTML output for each Markdown string
+
+    errors:
+      - code: validation_failed
+        status: 422
+        description: "Body is invalid: empty array, more than 50 items, or invalid Markdown entry."
+      - code: bad_request
+        status: 400
+        description: Missing or malformed request body.
+      - code: internal_error
+        status: 500
+        description: Unexpected server error.
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/markdown/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "markdowns": ["# Hello", "**bold**", "- item"],
+            "sanitize": true
+          }'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/technology/markdown/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "markdowns": ["# Hello", "**bold**", "- item"],
+            "sanitize": True
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        results = response.json()["data"]["results"]
+
+        for r in results:
+            print(r["html"])
+
+      javascript: |
+        const response = await fetch(
+          "https://api.requiems.xyz/v1/technology/markdown/batch",
+          {
+            method: "POST",
+            headers: {
+              "requiems-api-key": "YOUR_API_KEY",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              markdowns: ["# Hello", "**bold**", "- item"],
+              sanitize: true
+            })
+          }
+        );
+
+        const { data } = await response.json();
+        console.log(data.results);
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/technology/markdown/batch')
+
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          markdowns: ["# Hello", "**bold**", "- item"],
+          sanitize: true
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        results = JSON.parse(response.body)['data']['results']
+        puts results
 faq:
   - question: What Markdown spec does this follow?
     answer: The converter follows CommonMark — the standardized Markdown specification used by GitHub, GitLab, and most modern platforms.

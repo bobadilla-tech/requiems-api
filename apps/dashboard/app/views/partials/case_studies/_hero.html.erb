@@ -1,0 +1,19 @@
+<%# locals: (i18n_scope:) %>
+<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-14 sm:py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <% logo = case_study_logo_asset(@slug) %>
+    <% if logo %>
+      <div class="mb-8 flex justify-center">
+        <div class="inline-flex rounded-2xl bg-white/95 dark:bg-white/10 px-6 py-4 ring-1 ring-white/30 shadow-lg backdrop-blur-sm">
+          <%= image_tag logo, alt: t("case_studies.#{@slug}.quote_name"), class: "max-h-14 w-auto object-contain", loading: "lazy" %>
+        </div>
+      </div>
+    <% end %>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+      <%= t("#{i18n_scope}.hero_headline") %>
+    </h1>
+    <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+      <%= t("#{i18n_scope}.hero_subheadline") %>
+    </p>
+  </div>
+</section>

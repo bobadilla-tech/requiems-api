@@ -17,9 +17,11 @@ func init() {
 	// Report errors using the JSON field name rather than the Go struct field name.
 	Validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+
 		if name == "-" {
 			return ""
 		}
+
 		return name
 	})
 }

@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -38,62 +40,52 @@ func setupRouter() chi.Router {
 }
 
 func TestLookup_HappyPath(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/postal/10001?country=US", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[PostalCode]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.City != "New York City" {
-		t.Errorf("expected city 'New York City', got %q", resp.Data.City)
-	}
+	assert.Equal(t, "New York City", resp.Data.City)
 	if resp.Data.Lat == 0 {
 		t.Error("expected non-zero latitude")
 	}
 }
 
 func TestLookup_DefaultsToUS(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/postal/10001", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 with default country=US, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestLookup_NotFound(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/postal/99999?country=US", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Errorf("expected 404, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestLookup_NonUSCountry(t *testing.T) {
+	t.Parallel()
 	req := httptest.NewRequest(http.MethodGet, "/postal/SW1A1AA?country=GB", http.NoBody)
 	w := httptest.NewRecorder()
 	setupRouter().ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[PostalCode]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Country != "GB" {
-		t.Errorf("expected country 'GB', got %q", resp.Data.Country)
-	}
+	assert.Equal(t, "GB", resp.Data.Country)
 }

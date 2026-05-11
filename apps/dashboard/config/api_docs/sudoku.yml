@@ -16,6 +16,140 @@ overview:
     - Each request produces a freshly shuffled, unique puzzle
     - Standard 9×9 grid format
 endpoints:
+  - name: Batch Generate Sudoku Puzzles
+    method: POST
+    path: /v1/entertainment/sudoku/batch
+    description: >-
+      Generate up to 20 Sudoku puzzles in a single request. Results are returned in the same order as the input array.
+      Each puzzle in the batch counts as one unit of API usage.
+    parameters:
+      - name: puzzles
+        type: array
+        required: true
+        location: body
+        description: "Array of difficulty levels to generate (min: 1, max: 20). Each must be one of: easy, medium, hard."
+        example: '["easy", "medium", "hard"]'
+    request_example: |
+      {
+        "puzzles": ["easy", "hard"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "difficulty": "easy",
+              "puzzle": [
+                [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+              ],
+              "solution": [
+                [5, 3, 4, 6, 7, 8, 9, 1, 2],
+                [6, 7, 2, 1, 9, 5, 3, 4, 8],
+                [1, 9, 8, 3, 4, 2, 5, 6, 7],
+                [8, 5, 9, 7, 6, 1, 4, 2, 3],
+                [4, 2, 6, 8, 5, 3, 7, 9, 1],
+                [7, 1, 3, 9, 2, 4, 8, 5, 6],
+                [9, 6, 1, 5, 3, 7, 2, 8, 4],
+                [2, 8, 7, 4, 1, 9, 6, 3, 5],
+                [3, 4, 5, 2, 8, 6, 1, 7, 9]
+              ]
+            }
+          ],
+          "total": 1
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: Generated puzzles in the same order as the input array. Each item has the same fields as the single-puzzle endpoint.
+      - name: results[].difficulty
+        type: string
+        description: The difficulty level of the puzzle (easy, medium, or hard)
+      - name: results[].puzzle
+        type: array[array[integer]]
+        description: "9×9 grid representing the puzzle — 0 means an empty cell to be filled in"
+      - name: results[].solution
+        type: array[array[integer]]
+        description: 9×9 grid containing the complete, valid solution
+      - name: total
+        type: integer
+        description: Number of puzzles returned. Matches the length of the input array.
+    errors:
+      - code: bad_request
+        status: 400
+        description: The request body is missing or contains malformed JSON.
+      - code: validation_failed
+        status: 422
+        description: "The puzzles array is missing, empty, exceeds 20 items, or contains a value other than easy, medium, or hard."
+      - status: 401
+        code: unauthorized
+        description: Missing API key
+      - status: 403
+        code: forbidden
+        description: Invalid or revoked API key
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/entertainment/sudoku/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"puzzles":["easy","medium","hard"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/entertainment/sudoku/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"puzzles": ["easy", "medium", "hard"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        for puzzle in response.json()["data"]["results"]:
+            print(puzzle["difficulty"], puzzle["puzzle"])
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/entertainment/sudoku/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ puzzles: ['easy', 'medium', 'hard'] })
+          }
+        );
+
+        const { data } = await response.json();
+        data.results.forEach(p => console.log(p.difficulty, p.puzzle));
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/entertainment/sudoku/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { puzzles: ['easy', 'medium', 'hard'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |p|
+          puts "#{p['difficulty']}: #{p['puzzle'].inspect}"
+        end
+
   - name: Get Sudoku Puzzle
     method: GET
     path: /v1/entertainment/sudoku

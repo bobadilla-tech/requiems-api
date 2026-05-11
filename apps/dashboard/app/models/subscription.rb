@@ -3,6 +3,7 @@
 class Subscription < ApplicationRecord
   belongs_to :user
   belongs_to :promoted_by, class_name: "User", optional: true
+  has_one :referral, foreign_key: "converting_subscription_id", dependent: :nullify, inverse_of: :converting_subscription
 
   # Validations
   validates :plan_name, presence: true, inclusion: { in: %w[free developer business professional] }

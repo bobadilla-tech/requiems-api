@@ -1,0 +1,11 @@
+{
+  "name": "requiems-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen-og-image": "node gen-og-image.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.0"
+  }
+}

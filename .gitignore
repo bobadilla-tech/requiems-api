@@ -14,8 +14,6 @@ go.work.sum
 .env.*.local
 .dev.vars
 .idea/
-.vscode/
-!.vscode/extensions.json
 *.swp
 *.swo
 .DS_Store
@@ -31,3 +29,4 @@ vendor/
 apps/dashboard/vendor/
 temp/
 .mcp.json
+tickets/

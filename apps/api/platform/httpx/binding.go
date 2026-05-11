@@ -36,7 +36,7 @@ func BindAndValidate(r *http.Request, dst any) error {
 // current value (defaults can be set before calling BindQuery).
 func BindQuery(r *http.Request, dst any) error {
 	v := reflect.ValueOf(dst)
-	if v.Kind() != reflect.Ptr || v.Elem().Kind() != reflect.Struct {
+	if v.Kind() != reflect.Pointer || v.Elem().Kind() != reflect.Struct {
 		return fmt.Errorf("BindQuery: dst must be a pointer to a struct")
 	}
 

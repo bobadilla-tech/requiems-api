@@ -10,12 +10,14 @@
 export const endpointYamlMap: Record<string, string> = {
   // ── Validation ─────────────────────────────────────────────────────────────
   "/v1/validation/email": "email-validate",
-  "/v1/text/normalize": "email-validate",
+  "/v1/text/normalize": "email-normalize",
+  "/v1/text/normalize/batch": "email-normalize",
   "/v1/validation/phone": "phone-validation",
   "/v1/validation/profanity": "profanity",
 
   // ── Networking ─────────────────────────────────────────────────────────────
   "/v1/networking/disposable/check": "disposable-email",
+  "/v1/networking/disposable/batch": "disposable-email",
   "/v1/networking/disposable/stats": "disposable-email",
   "/v1/networking/ip": "ip-info",
   "/v1/networking/ip/8.8.8.8": "ip-info",

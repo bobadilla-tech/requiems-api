@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestDetectLanguage_French(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"Bonjour, comment ça va?"}`
@@ -28,27 +31,19 @@ func TestDetectLanguage_French(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Language != "French" {
-		t.Errorf("expected language French, got %q", resp.Data.Language)
-	}
-	if resp.Data.Code != "fr" {
-		t.Errorf("expected code fr, got %q", resp.Data.Code)
-	}
-	if resp.Data.Confidence <= 0 {
-		t.Error("expected confidence to be greater than 0")
-	}
+	assert.Equal(t, "French", resp.Data.Language)
+	assert.Equal(t, "fr", resp.Data.Code)
+	assert.True(t, resp.Data.Confidence > 0)
 }
 
 func TestDetectLanguage_English(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"The quick brown fox jumps over the lazy dog"}`
@@ -58,24 +53,18 @@ func TestDetectLanguage_English(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Language != "English" {
-		t.Errorf("expected language English, got %q", resp.Data.Language)
-	}
-	if resp.Data.Code != "en" {
-		t.Errorf("expected code en, got %q", resp.Data.Code)
-	}
+	assert.Equal(t, "English", resp.Data.Language)
+	assert.Equal(t, "en", resp.Data.Code)
 }
 
 func TestDetectLanguage_MissingTextField(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/detect-language", strings.NewReader(`{}`))
@@ -84,12 +73,11 @@ func TestDetectLanguage_MissingTextField(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestDetectLanguage_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/detect-language", http.NoBody)
@@ -98,7 +86,5 @@ func TestDetectLanguage_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

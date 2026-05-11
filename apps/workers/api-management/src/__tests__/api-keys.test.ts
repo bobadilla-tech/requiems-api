@@ -78,14 +78,17 @@ describe("POST /api-keys", () => {
     });
   });
 
-  it("returns 400 for an empty body", async () => {
+  it("returns 422 for an empty body", async () => {
     const req = authedRequest("/api-keys", { method: "POST" });
     const res = await worker.fetch(req, bindings, makeCtx());
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { error: string; fields: Array<{ field: string }> };
+    expect(body.error).toBe("validation_failed");
+    expect(body.fields.length).toBeGreaterThan(0);
   });
 
-  it("returns 400 when required fields are missing", async () => {
+  it("returns 422 when required fields are missing", async () => {
     const req = authedRequest("/api-keys", {
       method: "POST",
       body: JSON.stringify({ userId: "u1" }), // missing plan and name
@@ -93,10 +96,14 @@ describe("POST /api-keys", () => {
     });
     const res = await worker.fetch(req, bindings, makeCtx());
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string }> };
+    const fieldNames = body.fields.map((f) => f.field);
+    expect(fieldNames).toContain("plan");
+    expect(fieldNames).toContain("name");
   });
 
-  it("returns 400 for an invalid plan value", async () => {
+  it("returns 422 for an invalid plan value", async () => {
     const req = authedRequest("/api-keys", {
       method: "POST",
       body: JSON.stringify({ userId: "u1", plan: "invalid-plan", name: "My Key" }),
@@ -104,7 +111,109 @@ describe("POST /api-keys", () => {
     });
     const res = await worker.fetch(req, bindings, makeCtx());
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string }> };
+    expect(body.fields.some((f) => f.field === "plan")).toBe(true);
+  });
+
+  it("returns 422 when userId is whitespace only", async () => {
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({ userId: "   \t  ", plan: "free", name: "Key" }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string; message: string }> };
+    const userIdIssue = body.fields.find((f) => f.field === "userId");
+    expect(userIdIssue).toBeDefined();
+    expect(userIdIssue?.message).toMatch(/empty|whitespace/i);
+  });
+
+  it("returns 422 when name is whitespace only", async () => {
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({ userId: "u1", plan: "free", name: " " }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string }> };
+    expect(body.fields.some((f) => f.field === "name")).toBe(true);
+  });
+
+  it("returns 422 when userId exceeds 255 characters", async () => {
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: "x".repeat(256),
+        plan: "free",
+        name: "Key",
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string }> };
+    expect(body.fields.some((f) => f.field === "userId")).toBe(true);
+  });
+
+  it("returns 422 when name exceeds 255 characters", async () => {
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: "u1",
+        plan: "free",
+        name: "n".repeat(256),
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { fields: Array<{ field: string }> };
+    expect(body.fields.some((f) => f.field === "name")).toBe(true);
+  });
+
+  it("accepts userId and name at exactly 255 characters after trim", async () => {
+    const id255 = `u${"a".repeat(254)}`; // 255 chars total
+    const name255 = "n".repeat(255);
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: `  ${id255}  `,
+        plan: "free",
+        name: name255,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(201);
+    const body = (await res.json()) as { userId: string };
+    expect(body.userId).toBe(id255);
+  });
+
+  it("creates a key for a UUID-shaped userId", async () => {
+    const userId = "550e8400-e29b-41d4-a716-446655440000";
+    const req = authedRequest("/api-keys", {
+      method: "POST",
+      body: JSON.stringify({
+        userId,
+        plan: "developer",
+        name: "UUID user key",
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const res = await worker.fetch(req, bindings, makeCtx());
+
+    expect(res.status).toBe(201);
+    const body = (await res.json()) as { userId: string; apiKey: string };
+    expect(body.userId).toBe(userId);
+    expect(body.apiKey).toMatch(/^requiem_/);
   });
 
   it("creates a key and returns 201 with apiKey and keyPrefix", async () => {

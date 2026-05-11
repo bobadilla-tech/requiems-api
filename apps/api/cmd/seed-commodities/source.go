@@ -144,7 +144,7 @@ type yahooChart struct {
 			Timestamps []int64 `json:"timestamp"`
 			Indicators struct {
 				Quote []struct {
-					Close []interface{} `json:"close"`
+					Close []any `json:"close"`
 				} `json:"quote"`
 			} `json:"indicators"`
 		} `json:"result"`
@@ -236,7 +236,7 @@ func parseFREDRow(record []string) (val float64, year int, ok bool) {
 }
 
 // parseYahooClose extracts a positive finite float64 from closes at index i.
-func parseYahooClose(closes []interface{}, i int) (float64, bool) {
+func parseYahooClose(closes []any, i int) (float64, bool) {
 	if i >= len(closes) || closes[i] == nil {
 		return 0, false
 	}

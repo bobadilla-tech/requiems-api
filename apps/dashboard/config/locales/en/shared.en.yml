@@ -1,8 +1,18 @@
 en:
   shared:
     nav:
+      docs: "Docs"
+      docs_apis_desc: "Browse every endpoint"
+      docs_examples_desc: "Copy-paste integrations"
+      docs_divisions_desc: "APIs by category"
+      divisions: "Divisions"
+      systems: "Systems"
+      divisions_hub: "Overview of all divisions"
+      divisions_panel_heading: "Jump to a division"
+      divisions_all: "All divisions"
       apis: "APIs"
       examples: "Examples"
+      case_studies: "Case studies"
       pricing: "Pricing"
       dashboard: "Dashboard"
       api_keys: "API Keys"
@@ -15,12 +25,15 @@ en:
       dark_mode: "Dark Mode"
       light_mode: "Light Mode"
       open_menu: "Open main menu"
+      close_menu: "Close main menu"
+      mobile_menu_title: "Menu"
+      mobile_menu_close: "Close"
       search_placeholder: "APIs, examples, docs..."
       search_no_results: "No results found"
       search_try_different: "Try different keywords"
       language: "Language"
     footer:
-      tagline: "Production-ready APIs for modern developers"
+      tagline: "Backend infrastructure for SaaS products, delivered through one unified API"
       copyright: "© %{year} Bobadilla Tech. All rights reserved."
       sections:
         get_started: "Get Started"

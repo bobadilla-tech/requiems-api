@@ -8,6 +8,13 @@ module.exports = {
     "./app/javascript/**/*.js",
     "./app/views/**/*.{erb,haml,html,slim}",
   ],
+  safelist: [
+    "bg-gradient-to-br",
+    "from-gray-950", "from-slate-900",
+    "via-amber-900", "via-green-900", "via-blue-900", "via-emerald-900",
+    "via-purple-900", "via-cyan-900", "via-orange-900", "via-rose-900",
+    "to-gray-900", "to-slate-900", "to-indigo-900",
+  ],
   theme: {
     extend: {
       fontFamily: {

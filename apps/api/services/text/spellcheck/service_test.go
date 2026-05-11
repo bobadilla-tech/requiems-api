@@ -2,35 +2,30 @@ package spellcheck
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Check_NoMistakes(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	result, err := svc.Check("This is a test")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if result.Corrected != "This is a test" {
-		t.Errorf("expected corrected to equal input, got %q", result.Corrected)
-	}
-	if len(result.Corrections) != 0 {
-		t.Errorf("expected no corrections, got %v", result.Corrections)
-	}
+	assert.Equal(t, "This is a test", result.Corrected)
+	assert.Len(t, result.Corrections, 0)
 }
 
 func TestService_Check_MisspelledWords(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	result, err := svc.Check("Ths is a tset")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if len(result.Corrections) == 0 {
-		t.Fatal("expected corrections, got none")
-	}
+	assert.NotEmpty(t, result.Corrections)
 
 	foundThs := false
 	foundTset := false
@@ -43,91 +38,68 @@ func TestService_Check_MisspelledWords(t *testing.T) {
 		}
 	}
 
-	if !foundThs {
-		t.Errorf("expected correction for Ths at position 0; got %+v", result.Corrections)
-	}
-	if !foundTset {
-		t.Errorf("expected correction for tset at position 9; got %+v", result.Corrections)
-	}
+	assert.True(t, foundThs, "expected correction for Ths at position 0; got %+v", result.Corrections)
+	assert.True(t, foundTset, "expected correction for tset at position 9; got %+v", result.Corrections)
 }
 
 func TestService_Check_EmptyText(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	// Empty text is not a valid request (validate:"required" enforces that at
 	// the HTTP layer), but the service itself should return a safe empty result.
 	result, err := svc.Check("")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if result.Corrected != "" {
-		t.Errorf("expected empty corrected string, got %q", result.Corrected)
-	}
-	if len(result.Corrections) != 0 {
-		t.Errorf("expected no corrections for empty input, got %v", result.Corrections)
-	}
+	assert.Equal(t, "", result.Corrected)
+	assert.Len(t, result.Corrections, 0)
 }
 
 func TestService_Check_CorrectedTextReflectsFixes(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	result, err := svc.Check("Ths is a tset")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if result.Corrected == "Ths is a tset" {
-		t.Error("expected corrected text to differ from misspelled input")
-	}
+	assert.False(t, result.Corrected == "Ths is a tset", "expected corrected text to differ from misspelled input")
 }
 
 func TestService_Check_CorrectionsSliceNotNil(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	result, err := svc.Check("Hello world")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 
-	if result.Corrections == nil {
-		t.Error("expected non-nil corrections slice for clean input")
-	}
+	assert.NotNil(t, result.Corrections)
 }
 
 func TestService_Check_PositionIsRuneOffset(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	// "é" is a single rune but 2 UTF-8 bytes.
 	// "tset" starts at rune index 2 (é=1, space=1) but byte index 3.
 	result, err := svc.Check("é tset")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if len(result.Corrections) == 0 {
-		t.Fatal("expected a correction for tset")
-	}
-	if result.Corrections[0].Position != 2 {
-		t.Errorf("expected rune position 2, got %d", result.Corrections[0].Position)
-	}
+	require.NoError(t, err)
+	require.NotEmpty(t, result.Corrections)
+	assert.Equal(t, 2, result.Corrections[0].Position)
 }
 
 func TestMatchCase_LowerInput(t *testing.T) {
+	t.Parallel()
 	got := matchCase("abc", "suggested")
-	if got != "suggested" {
-		t.Errorf("expected %q, got %q", "suggested", got)
-	}
+	assert.Equal(t, "suggested", got)
 }
 
 func TestMatchCase_CapitalisedInput(t *testing.T) {
+	t.Parallel()
 	got := matchCase("Abc", "suggested")
-	if got != "Suggested" {
-		t.Errorf("expected %q, got %q", "Suggested", got)
-	}
+	assert.Equal(t, "Suggested", got)
 }
 
 func TestMatchCase_AllUpperInput(t *testing.T) {
+	t.Parallel()
 	got := matchCase("ABC", "suggested")
-	if got != "SUGGESTED" {
-		t.Errorf("expected %q, got %q", "SUGGESTED", got)
-	}
+	assert.Equal(t, "SUGGESTED", got)
 }

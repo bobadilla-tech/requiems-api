@@ -82,7 +82,7 @@
   - Abuse detection
 - API key sync to Cloudflare KV
 
-**Technology:** Rails 8.1, Tailwind CSS, Hotwire (Turbo + Stimulus)
+**Technology:** Rails, Tailwind CSS, Hotwire (Turbo + Stimulus)
 
 ### 3. Go Backend (internal.requiems.xyz)
 
@@ -94,7 +94,7 @@
 - Database queries for business data
 - Only accessible with X-Backend-Secret header
 
-**Technology:** Go 1.24, Chi router
+**Technology:** Go, Chi router
 
 ### 4. Shared PostgreSQL
 

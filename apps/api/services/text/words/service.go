@@ -10,32 +10,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type Word struct {
-	ID           int    `json:"id"`
-	Word         string `json:"word"`
-	Definition   string `json:"definition"`
-	PartOfSpeech string `json:"part_of_speech,omitempty"`
-}
-
-func (Word) IsData() {}
-
-// Definition represents a single definition entry for a word.
-type Definition struct {
-	PartOfSpeech string `json:"partOfSpeech"`
-	Definition   string `json:"definition"`
-	Example      string `json:"example,omitempty"`
-}
-
-// DictionaryEntry is the response payload for the dictionary endpoint.
-type DictionaryEntry struct {
-	Word        string       `json:"word"`
-	Phonetic    string       `json:"phonetic,omitempty"`
-	Definitions []Definition `json:"definitions"`
-	Synonyms    []string     `json:"synonyms"`
-}
-
-func (DictionaryEntry) IsData() {}
-
 type querier interface {
 	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 }
@@ -96,5 +70,34 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 		Phonetic:    e.phonetic,
 		Definitions: defs,
 		Synonyms:    synonyms,
+	}, nil
+}
+
+func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) (BatchResponse, error) {
+	results := make([]BatchItem, len(req.Items))
+
+	for i, raw := range req.Items {
+		word := strings.ToLower(strings.TrimSpace(raw))
+
+		entry, err := s.Define(word)
+		if err != nil {
+			results[i] = BatchItem{
+				Word:  word,
+				Found: false,
+				Error: err.Error(),
+			}
+			continue
+		}
+
+		results[i] = BatchItem{
+			Word:  word,
+			Found: true,
+			Entry: &entry,
+		}
+	}
+
+	return BatchResponse{
+		Results: results,
+		Total:   len(results),
 	}, nil
 }

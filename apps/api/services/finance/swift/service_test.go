@@ -3,158 +3,137 @@ package swift
 import (
 	"testing"
 
-	"requiems-api/platform/httpx"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/svcerr"
 )
 
 func TestSanitizeSWIFT_Valid8Char(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("DEUTDEDB")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDEDBXXX" {
-		t.Errorf("expected DEUTDEDBXXX, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDEDBXXX", got)
 }
 
 func TestSanitizeSWIFT_Valid11Char(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("DEUTDEDB001")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDEDB001" {
-		t.Errorf("expected DEUTDEDB001, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDEDB001", got)
 }
 
 func TestSanitizeSWIFT_Lowercase(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("deutdedb")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDEDBXXX" {
-		t.Errorf("expected DEUTDEDBXXX, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDEDBXXX", got)
 }
 
 func TestSanitizeSWIFT_WithSpaces(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("  DEUTDEDB  ")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDEDBXXX" {
-		t.Errorf("expected DEUTDEDBXXX, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDEDBXXX", got)
 }
 
 func TestSanitizeSWIFT_PrimaryOfficeXXX(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("DEUTDEDBXXX")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDEDBXXX" {
-		t.Errorf("expected DEUTDEDBXXX, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDEDBXXX", got)
 }
 
 func TestSanitizeSWIFT_AlphanumericLocation(t *testing.T) {
+	t.Parallel()
 	// Location code with digit is valid (chars 7-8 are alphanumeric).
 	got, err := sanitizeSWIFT("DEUTDE2B")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DEUTDE2BXXX" {
-		t.Errorf("expected DEUTDE2BXXX, got %q", got)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, "DEUTDE2BXXX", got)
 }
 
 func TestSanitizeSWIFT_TooShort(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUTDE")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_TooLong(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUTDEDB001X")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_9Chars(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUTDEDB0")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_10Chars(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUTDEDB01")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_Empty(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_DigitInBankCode(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("1EUTDEDB")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_DigitInCountryCode(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUT1EDB")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_InvalidBranchCode(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeSWIFT("DEUTDEDB0-1")
 	assertAppError(t, err)
 }
 
 func TestSanitizeSWIFT_8Char_AppendXXX(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeSWIFT("CHASUS33")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if len(got) != 11 {
-		t.Errorf("expected 11-char result, got %d: %q", len(got), got)
-	}
-	if got[8:] != "XXX" {
-		t.Errorf("expected branch code XXX, got %q", got[8:])
-	}
+	require.NoError(t, err)
+	assert.Len(t, got, 11)
+	assert.Equal(t, "XXX", got[8:])
 }
 
 func TestSanitizeAlphaCode_Valid(t *testing.T) {
+	t.Parallel()
 	got, err := sanitizeAlphaCode("de", 2, "country code")
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got != "DE" {
-		t.Fatalf("expected DE, got %q", got)
-	}
+	require.NoError(t, err)
+	require.Equal(t, "DE", got)
 }
 
 func TestSanitizeAlphaCode_InvalidLength(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeAlphaCode("D", 2, "country code")
 	assertAppError(t, err)
 }
 
 func TestSanitizeAlphaCode_InvalidChars(t *testing.T) {
+	t.Parallel()
 	_, err := sanitizeAlphaCode("D1", 2, "country code")
 	assertAppError(t, err)
 }
 
-// assertAppError verifies that err is a 400 bad_request *httpx.AppError.
-// All sanitizeSWIFT validation errors return this exact status and code.
+// assertAppError verifies that err is a bad_request *svcerr.Error (KindInvalid).
+// All sanitizeSWIFT validation errors return this kind and code.
 func assertAppError(t *testing.T, err error) {
 	t.Helper()
-	if err == nil {
-		t.Fatal("expected an error, got nil")
-	}
-	ae, ok := err.(*httpx.AppError)
-	if !ok {
-		t.Fatalf("expected *httpx.AppError, got %T: %v", err, err)
-	}
-	if ae.Status != 400 {
-		t.Errorf("expected status 400, got %d", ae.Status)
-	}
-	if ae.Code != "bad_request" {
-		t.Errorf("expected code %q, got %q", "bad_request", ae.Code)
-	}
+	require.Error(t, err)
+	var se *svcerr.Error
+	require.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindInvalid, se.Kind)
+	assert.Equal(t, "bad_request", se.Code)
 }

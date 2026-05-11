@@ -4,8 +4,6 @@ This guide walks through every step required to ship a new endpoint: from
 writing the Go code to updating the dashboard catalog and API documentation.
 Follow it in order — the checklist at the end maps to each section.
 
----
-
 ## Architecture Refresher
 
 Before writing any code, understand where the Go backend sits in the request
@@ -30,6 +28,7 @@ apps/api/
 │   └── routes_v1.go      # Mounts all /v1 domain routers
 ├── platform/
 │   ├── httpx/            # JSON, Error, Handle, BindQuery helpers
+│   ├── svcerr/           # Transport-agnostic service errors (use in services)
 │   ├── config/           # Env config
 │   ├── db/               # PostgreSQL connection + migrations
 │   └── middleware/       # BackendSecretAuth
@@ -186,13 +185,43 @@ func (RiddleList) IsData() {}
 Services receive dependencies through their constructor. Keep this layer free of
 HTTP concerns.
 
+**Service Layer Rules — read these before writing a single line:**
+
+1. **Never import `net/http` or `requiems-api/platform/httpx` in a service.**
+   Services must not know about HTTP status codes. All error information is
+   communicated through `requiems-api/platform/svcerr`.
+
+2. **Return `*svcerr.Error` for expected failure cases** (not found, invalid
+   input, upstream unavailable). Return a plain `error` only for unexpected
+   infrastructure failures that should become `500`.
+
+3. **Never silently clamp or default invalid input.** If `difficulty` is not one
+   of `easy|medium|hard`, return `svcerr.Invalid(...)`. If `page > maxPages`,
+   return `svcerr.NotFound(...)`. Silent defaults hide bugs in callers.
+
+**`svcerr` constructor reference:**
+
+| Constructor                  | HTTP status | Use when                                   |
+| ---------------------------- | ----------- | ------------------------------------------ |
+| `svcerr.NotFound(code, msg)` | 404         | Resource does not exist                    |
+| `svcerr.Invalid(code, msg)`  | 400         | Bad input the caller can fix               |
+| `svcerr.Unknown(code, msg)`  | 422         | Unprocessable but structurally valid input |
+| `svcerr.Upstream(code, msg)` | 503         | Third-party service / DB unavailable       |
+
+`httpx.Handle` and `httpx.HandleBatch` map `*svcerr.Error` to the correct HTTP
+response automatically. `KindUpstream` errors are also forwarded to Sentry.
+
 ```go
 package riddle
 
 import (
     "context"
+    "errors"
 
+    "github.com/jackc/pgx/v5"
     "github.com/jackc/pgx/v5/pgxpool"
+
+    "requiems-api/platform/svcerr"
 )
 
 type Service struct {
@@ -203,17 +232,17 @@ func NewService(db *pgxpool.Pool) *Service {
     return &Service{db: db}
 }
 
-func (s *Service) Random(ctx context.Context, category string) (Riddle, error) {
+func (s *Service) GetByID(ctx context.Context, id int) (Riddle, error) {
     row := s.db.QueryRow(ctx, `
         SELECT id, question, answer, category
-        FROM riddles
-        WHERE category = $1
-        ORDER BY random()
-        LIMIT 1`, category)
+        FROM riddles WHERE id = $1`, id)
 
     var r Riddle
     if err := row.Scan(&r.ID, &r.Question, &r.Answer, &r.Category); err != nil {
-        return Riddle{}, err
+        if errors.Is(err, pgx.ErrNoRows) {
+            return Riddle{}, svcerr.NotFound("not_found", "riddle not found")
+        }
+        return Riddle{}, err // unexpected DB failure → 500
     }
     return r, nil
 }
@@ -232,19 +261,17 @@ func NewService() *Service { return &Service{} }
 
 Choose the right pattern based on the endpoint's input method.
 
----
-
 #### Pattern A: `httpx.Handle` — POST with JSON body (recommended for mutations)
 
 Use this when the request has a JSON body. The wrapper handles decoding,
-validation, and `AppError` unwrapping automatically.
+validation, and error mapping automatically. The service just returns errors —
+the handler does not need to inspect them.
 
 ```go
 package riddle
 
 import (
     "context"
-    "net/http"
 
     "github.com/go-chi/chi/v5"
     "requiems-api/platform/httpx"
@@ -265,8 +292,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 - Decodes JSON (strict mode — unknown fields are rejected)
 - Runs struct validation; returns `422 Unprocessable Entity` with field-level
   errors on failure
-- Returns `500 Internal Server Error` for unexpected errors
-- Unwraps `*httpx.AppError` and responds with the specified status/code
+- Unwraps `*svcerr.Error` and maps it to the appropriate HTTP status
+- Captures `KindUpstream` errors in Sentry before responding
+- Returns `500 Internal Server Error` for any other unhandled error
 
 ---
 
@@ -277,6 +305,17 @@ calling `BindQuery`. Always declare required fields and constraints using
 `validate` tags on the struct — do not add manual checks in the handler body.
 
 ```go
+package riddle
+
+import (
+    "errors"
+    "net/http"
+
+    "github.com/go-chi/chi/v5"
+    "requiems-api/platform/httpx"
+    "requiems-api/platform/svcerr"
+)
+
 func RegisterRoutes(r chi.Router, svc *Service) {
     r.Get("/riddles", func(w http.ResponseWriter, r *http.Request) {
         // Always set defaults before binding.
@@ -289,7 +328,11 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
         result, err := svc.List(r.Context(), req.Page, req.PerPage)
         if err != nil {
-            httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch riddles")
+            if se, ok := errors.AsType[*svcerr.Error](err); ok {
+                httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
+                return
+            }
+            httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
             return
         }
 
@@ -297,6 +340,11 @@ func RegisterRoutes(r chi.Router, svc *Service) {
     })
 }
 ```
+
+> **Never hardcode a status code based on a guess about what the service
+> returned.** Propagate the `*svcerr.Error` from the service — it carries the
+> correct status. Hardcoding `http.StatusInternalServerError` for all service
+> errors masks not-found and upstream failures behind a misleading 500.
 
 ---
 
@@ -315,7 +363,11 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
         riddle, err := svc.GetByID(r.Context(), id)
         if err != nil {
-            httpx.Error(w, http.StatusNotFound, "not_found", "riddle not found")
+            if se, ok := errors.AsType[*svcerr.Error](err); ok {
+                httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
+                return
+            }
+            httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
             return
         }
 
@@ -324,18 +376,28 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 }
 ```
 
+> The service returns `svcerr.NotFound(...)` when the riddle does not exist. The
+> handler propagates that decision rather than assuming a 404 — if the service
+> later returns a 422 for a malformed id, the handler still does the right thing
+> without any changes.
+
 ---
 
 **Error response reference:**
 
-| Situation                 | Status | Code (snake_case)                          |
-| ------------------------- | ------ | ------------------------------------------ |
-| Missing/invalid JSON body | 400    | `bad_request`                              |
-| Failed struct validation  | 422    | `validation_failed` (automatic via Handle) |
-| Resource not found        | 404    | `not_found`                                |
-| Caller not authorised     | 403    | `forbidden`                                |
-| Upstream/DB unavailable   | 503    | `service_unavailable`                      |
-| Unexpected failure        | 500    | `internal_error`                           |
+| Situation                    | Status | Code (snake_case)    | Source                 |
+| ---------------------------- | ------ | -------------------- | ---------------------- |
+| Missing/invalid JSON body    | 400    | `bad_request`        | `httpx` (automatic)    |
+| Failed struct validation     | 422    | `validation_failed`  | `httpx` (automatic)    |
+| Bad input the caller can fix | 400    | anything descriptive | `svcerr.Invalid(...)`  |
+| Resource not found           | 404    | anything descriptive | `svcerr.NotFound(...)` |
+| Valid input, unprocessable   | 422    | anything descriptive | `svcerr.Unknown(...)`  |
+| Third-party / DB unavailable | 503    | `upstream_error`     | `svcerr.Upstream(...)` |
+| Unexpected failure           | 500    | `internal_error`     | plain `error` from svc |
+
+`svcerr.Upstream` errors are captured in Sentry automatically by `httpx.Handle`
+and `httpx.HandleBatch`. `NotFound`, `Invalid`, and `Unknown` are not — they are
+expected outcomes, not bugs.
 
 ### 1d. `router.go` — Wire the Domain
 
@@ -423,9 +485,13 @@ package riddle
 
 import (
     "testing"
+
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
 )
 
 func TestService_Random(t *testing.T) {
+    t.Parallel()
     // For services with no DB: svc := NewService()
     // For DB-backed services: use a test DB or interface/mock.
 
@@ -440,7 +506,16 @@ func TestService_Random(t *testing.T) {
 
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
-            // assertion logic here
+            t.Parallel()
+
+            svc := NewService()
+            result, err := svc.Random(tt.category)
+            if tt.wantErr {
+                require.Error(t, err)
+            } else {
+                require.NoError(t, err)
+                assert.NotEmpty(t, result.Question)
+            }
         })
     }
 }
@@ -461,52 +536,47 @@ import (
     "testing"
 
     "github.com/go-chi/chi/v5"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+
     "requiems-api/platform/httpx"
 )
 
-func setupRouter() chi.Router {
+func setupRouter(svc *Service) chi.Router {
     r := chi.NewRouter()
-    svc := NewService() // inject test deps here if needed
     RegisterRoutes(r, svc)
     return r
 }
 
 func TestRiddle_Generate_HappyPath(t *testing.T) {
-    r := setupRouter()
+    t.Parallel()
+
+    r := setupRouter(NewService())
 
     body := `{"category":"general"}`
     req := httptest.NewRequest(http.MethodPost, "/riddle/generate", strings.NewReader(body))
     req.Header.Set("Content-Type", "application/json")
     w := httptest.NewRecorder()
-
     r.ServeHTTP(w, req)
 
-    if w.Code != http.StatusOK {
-        t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-    }
+    require.Equal(t, http.StatusOK, w.Code)
 
     var resp httpx.Response[Riddle]
-    if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-        t.Fatalf("failed to decode: %v", err)
-    }
-
-    if resp.Data.Question == "" {
-        t.Error("expected a non-empty question")
-    }
+    err := json.NewDecoder(w.Body).Decode(&resp)
+    require.NoError(t, err)
+    assert.NotEmpty(t, resp.Data.Question)
 }
 
 func TestRiddle_Generate_MissingCategory(t *testing.T) {
-    r := setupRouter()
+    t.Parallel()
 
+    r := setupRouter(NewService())
     req := httptest.NewRequest(http.MethodPost, "/riddle/generate", strings.NewReader(`{}`))
     req.Header.Set("Content-Type", "application/json")
     w := httptest.NewRecorder()
-
     r.ServeHTTP(w, req)
 
-    if w.Code != http.StatusUnprocessableEntity {
-        t.Errorf("expected 422, got %d", w.Code)
-    }
+    assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 ```
 
@@ -1080,35 +1150,32 @@ import (
     "testing"
 
     "github.com/go-chi/chi/v5"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+
     "requiems-api/platform/httpx"
 )
 
-func setupRouter() chi.Router {
+func newRouter() chi.Router {
     r := chi.NewRouter()
     RegisterRoutes(r, NewService())
     return r
 }
 
 func TestRiddle_Random(t *testing.T) {
+    t.Parallel()
+
     req := httptest.NewRequest(http.MethodGet, "/riddle/random", http.NoBody)
     w := httptest.NewRecorder()
-    setupRouter().ServeHTTP(w, req)
+    newRouter().ServeHTTP(w, req)
 
-    if w.Code != http.StatusOK {
-        t.Fatalf("expected 200, got %d", w.Code)
-    }
+    require.Equal(t, http.StatusOK, w.Code)
 
     var resp httpx.Response[Riddle]
-    if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-        t.Fatalf("decode error: %v", err)
-    }
-
-    if resp.Data.Question == "" {
-        t.Error("expected non-empty question")
-    }
-    if resp.Data.Answer == "" {
-        t.Error("expected non-empty answer")
-    }
+    err := json.NewDecoder(w.Body).Decode(&resp)
+    require.NoError(t, err)
+    assert.NotEmpty(t, resp.Data.Question)
+    assert.NotEmpty(t, resp.Data.Answer)
 }
 ```
 

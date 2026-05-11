@@ -1,6 +1,7 @@
 package words
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -36,4 +37,15 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, entry)
 	})
+	r.Post("/words/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (BatchResponse, int, error) {
+
+			resp, err := svc.BatchDefine(ctx, req)
+			if err != nil {
+				return BatchResponse{}, http.StatusInternalServerError, err
+			}
+
+			return resp, http.StatusOK, nil
+		},
+	))
 }
