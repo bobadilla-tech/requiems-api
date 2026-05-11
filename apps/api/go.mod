@@ -13,6 +13,8 @@ require (
 require (
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -24,11 +26,11 @@ require (
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/paulmach/orb v0.13.0 // indirect
-	github.com/ringsaturn/tzf-dist v0.0.2026-b-fix1 // indirect
+  github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+  github.com/ringsaturn/tzf-dist v0.0.2026-b-fix1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
-	github.com/stretchr/testify v1.11.1
 	github.com/tidwall/geoindex v1.7.0 // indirect
 	github.com/tidwall/rtree v1.10.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
@@ -59,13 +61,9 @@ require (
 	github.com/sajari/fuzzy v1.0.0
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.10.2
+	github.com/stretchr/testify v1.11.1
 	github.com/yuin/goldmark v1.8.2
 	gopkg.in/yaml.v3 v3.0.1
-)
-
-require (
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 )
 
 require (

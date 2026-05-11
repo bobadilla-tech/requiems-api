@@ -643,7 +643,7 @@ apis:
     categories:
       - technology
     description: Generate random fake user profiles for testing and prototyping — names, emails, phone numbers, addresses, and avatars
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/random-user

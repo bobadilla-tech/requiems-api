@@ -40,3 +40,29 @@ func TestGenerate_AvatarContainsName(t *testing.T) {
 		t.Errorf("avatar URL should contain seed parameter: %q", u.Avatar)
 	}
 }
+
+// TestGenerateBatch_ValidCount verifies that GenerateBatch returns the correct number of users.
+func TestGenerateBatch_ValidCount(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	users, err := svc.GenerateBatch(5)
+	assert.NoError(t, err)
+	assert.Len(t, users, 5)
+}
+
+// TestGenerateBatch_FieldsPopulated verifies that each user returned by GenerateBatch has all fields set.
+func TestGenerateBatch_FieldsPopulated(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	users, err := svc.GenerateBatch(3)
+	assert.NoError(t, err)
+	for i, u := range users {
+		assert.NotEmpty(t, u.Name, "user[%d].Name", i)
+		assert.NotEmpty(t, u.Email, "user[%d].Email", i)
+		assert.NotEmpty(t, u.Phone, "user[%d].Phone", i)
+		assert.NotEmpty(t, u.Address.Street, "user[%d].Address.Street", i)
+		assert.NotEmpty(t, u.Avatar, "user[%d].Avatar", i)
+	}
+}
