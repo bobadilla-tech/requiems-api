@@ -103,7 +103,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.index ["status"], name: "index_private_deployment_requests_on_status"
     t.index ["subdomain_slug"], name: "index_private_deployment_requests_on_subdomain_slug", unique: true, where: "(subdomain_slug IS NOT NULL)"
     t.index ["user_id"], name: "index_private_deployment_requests_on_user_id"
-    t.check_constraint "status::text = ANY (ARRAY['pending_payment'::character varying, 'pending'::character varying, 'deploying'::character varying, 'active'::character varying, 'cancelled'::character varying]::text[])", name: "private_deployment_requests_status_check"
+    t.check_constraint "status::text = ANY (ARRAY['pending_payment'::character varying::text, 'pending'::character varying::text, 'deploying'::character varying::text, 'active'::character varying::text, 'cancelled'::character varying::text])", name: "private_deployment_requests_status_check"
   end
 
   create_table "referrals", force: :cascade do |t|
@@ -173,10 +173,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.index ["api_key_id", "used_at"], name: "index_usage_logs_on_api_key_and_time"
     t.index ["api_key_id"], name: "index_usage_logs_on_api_key_id"
     t.index ["endpoint", "used_at"], name: "index_usage_logs_on_endpoint_and_time"
-    t.index ["request_method"], name: "index_usage_logs_on_request_method"
     t.index ["status_code"], name: "index_usage_logs_on_status_code"
     t.index ["usage_date"], name: "index_usage_logs_on_usage_date"
-    t.index ["user_id", "request_method"], name: "index_usage_logs_on_user_id_and_request_method"
     t.index ["user_id", "used_at"], name: "index_usage_logs_on_user_and_time"
     t.index ["user_id"], name: "index_usage_logs_on_user_id"
   end

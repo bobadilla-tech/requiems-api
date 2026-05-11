@@ -1,7 +1,5 @@
 name: requiem-dev
 
-# Explicit bridge so every app resolves service names (db, redis, api, …).
-# Relying on the implicit default alone can intermittently fail on some Docker Desktop setups.
 networks:
   stack:
     driver: bridge
@@ -173,7 +171,6 @@ services:
       auth-gateway:
         condition: service_healthy
 
-  # Sidekiq for background jobs
   sidekiq:
     build:
       context: ../../apps/dashboard
