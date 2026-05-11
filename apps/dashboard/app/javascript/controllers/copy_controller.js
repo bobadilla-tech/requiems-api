@@ -33,7 +33,7 @@ export default class extends Controller {
     try {
       const targetName = this.targetValueValue ||
         this.element.dataset.copyTargetValue;
-      const playground = this.element.closest('[data-controller="api-playground"]');
+      const playground = this.element.closest('[data-controller~="api-playground"]');
       const scope = playground || document;
       const targetElement = scope.querySelector(
         `[data-api-playground-target="${targetName}"]`,
