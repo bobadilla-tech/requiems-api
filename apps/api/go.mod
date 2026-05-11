@@ -26,6 +26,8 @@ require (
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/paulmach/orb v0.13.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/ringsaturn/tzf-dist v0.0.2026-b // indirect
   github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
   github.com/ringsaturn/tzf-dist v0.0.2026-b-fix1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect

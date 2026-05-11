@@ -269,7 +269,7 @@ apis:
     categories:
       - networking
     description: Get domain registration details including registrar, name servers, status, creation and expiry dates, and DNSSEC information.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/whois

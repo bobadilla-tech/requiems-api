@@ -3,6 +3,8 @@ package whois
 import (
 	"context"
 	"errors"
+	"sync"
+	"time"
 
 	"github.com/likexian/whois"
 	whoisparser "github.com/likexian/whois-parser"
@@ -58,3 +60,60 @@ func (s *Service) Lookup(_ context.Context, domain string) (LookupResponse, erro
 
 // ErrDomainNotFound is returned when no WHOIS record is found for the domain.
 var ErrDomainNotFound = errors.New("domain not found")
+
+// BATCH
+func (s *Service) LookupBatch(ctx context.Context, domains []string) (BatchLookupResponse, error) {
+	const (
+		maxWorkers     = 10
+		perItemTimeout = 3 * time.Second
+	)
+
+	results := make([]BatchLookupItem, len(domains))
+
+	sem := make(chan struct{}, maxWorkers)
+
+	var wg sync.WaitGroup
+
+	for i, domain := range domains {
+		wg.Add(1)
+
+		sem <- struct{}{}
+
+		go func(i int, domain string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			itemCtx, cancel := context.WithTimeout(ctx, perItemTimeout)
+			defer cancel()
+
+			resp, err := s.Lookup(itemCtx, domain)
+			if err != nil {
+				results[i] = BatchLookupItem{
+					Domain: domain,
+					Found:  false,
+					Error:  err.Error(),
+				}
+
+				return
+			}
+
+			results[i] = BatchLookupItem{
+				Domain: domain,
+				Found:  true,
+				Data:   resp,
+			}
+		}(i, domain)
+	}
+
+	wg.Wait()
+
+	// optional: propagate parent context cancellation
+	if err := ctx.Err(); err != nil {
+		return BatchLookupResponse{}, err
+	}
+
+	return BatchLookupResponse{
+		Results: results,
+		Total:   len(results),
+	}, nil
+}

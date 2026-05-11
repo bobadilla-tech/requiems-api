@@ -1,6 +1,7 @@
 package whois
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"regexp"
@@ -31,4 +32,17 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 			httpx.JSON(w, http.StatusOK, result)
 		})
+
+	r.Post("/whois/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchLookupRequest) (BatchLookupResponse, int, error) {
+			resp, err := svc.LookupBatch(ctx, req.Domains)
+
+			if err != nil {
+				return BatchLookupResponse{}, http.StatusInternalServerError, err
+			}
+
+			return resp, http.StatusOK, nil
+		},
+	))
+
 }
