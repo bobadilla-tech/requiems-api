@@ -129,19 +129,6 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['registrar']
 
-faq:
-  - question: What domains are supported?
-    answer: Any publicly registered domain with a WHOIS server is supported. This includes all common TLDs (.com, .net, .org, .io, etc.) and most country-code TLDs (ccTLDs).
-
-  - question: Why are some fields empty in the response?
-    answer: WHOIS data availability depends on the registry and registrar policies. Many registrars redact personal contact information under GDPR or similar privacy regulations. Fields will be omitted from the response when not available.
-
-  - question: What does the not_found error mean?
-    answer: A 404 not_found response means the domain is either unregistered or the registry returned no data for it.
-
-  - question: How fresh is the WHOIS data?
-    answer: WHOIS data is fetched live from the authoritative WHOIS servers on each request. There is no caching layer, so the data reflects the current state of the registry.
-
   - name: Batch WHOIS Lookup
     method: POST
     path: /v1/networking/whois/batch
@@ -320,15 +307,16 @@ faq:
 
 faq:
   - question: What domains are supported?
-    answer: >-
-      Any publicly registered domain with a WHOIS server is supported.
-      This includes common TLDs (.com, .net, .org, .io, etc.) and most
-      country-code TLDs.
+    answer: Any publicly registered domain with a WHOIS server is supported. This includes all common TLDs (.com, .net, .org, .io, etc.) and most country-code TLDs (ccTLDs).
 
   - question: Why are some fields empty in the response?
-    answer: >-
-      WHOIS data availability depends on registry and registrar policies.
-      Many registrars redact information under GDPR or similar privacy laws.
+    answer: WHOIS data availability depends on the registry and registrar policies. Many registrars redact personal contact information under GDPR or similar privacy regulations. Fields will be omitted from the response when not available.
+
+  - question: What does the not_found error mean?
+    answer: A 404 not_found response means the domain is either unregistered or the registry returned no data for it.
+
+  - question: How fresh is the WHOIS data?
+    answer: WHOIS data is fetched live from the authoritative WHOIS servers on each request. There is no caching layer, so the data reflects the current state of the registry.
 
   - question: What does found false mean in the batch endpoint?
     answer: >-
@@ -344,9 +332,4 @@ faq:
     answer: >-
       Yes. Results are returned in the same order as the domains sent
       in the request body.
-
-  - question: Is WHOIS data cached?
-    answer: >-
-      No. WHOIS information is fetched live from upstream WHOIS servers
-      on every request.
 
