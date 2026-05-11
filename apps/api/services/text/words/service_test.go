@@ -97,3 +97,117 @@ func TestRandom_EmptyPartOfSpeechAllowed(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "", got.PartOfSpeech)
 }
+func TestBatchDefine_MixedWords(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"ephemeral",
+			"SERENDIPITY",
+			"zzyzx",
+		},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, resp.Total)
+	require.Len(t, resp.Results, 3)
+
+	assert.True(t, resp.Results[0].Found)
+	assert.Equal(t, "ephemeral", resp.Results[0].Word)
+
+	assert.True(t, resp.Results[1].Found)
+	assert.Equal(t, "serendipity", resp.Results[1].Word)
+
+	assert.False(t, resp.Results[2].Found)
+	assert.Nil(t, resp.Results[2].Entry)
+	assert.NotEmpty(t, resp.Results[2].Error)
+}
+
+func TestBatchDefine_AllValid(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"melancholy",
+			"resilience",
+			"eloquent",
+		},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, resp.Total)
+	require.Len(t, resp.Results, 3)
+
+	for i, r := range resp.Results {
+		assert.True(t, r.Found, "item %d should be found", i)
+		assert.NotNil(t, r.Entry)
+		assert.NotEmpty(t, r.Entry.Definitions)
+	}
+}
+
+func TestBatchDefine_AllInvalid(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{"xxx", "yyy", "zzz"},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, resp.Total)
+
+	for _, r := range resp.Results {
+		assert.False(t, r.Found)
+		assert.Nil(t, r.Entry)
+		assert.NotEmpty(t, r.Error)
+	}
+}
+
+func TestBatchDefine_TrimsAndNormalizes(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"  Ephemeral  ",
+			"  SERENDIPITY ",
+		},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.True(t, resp.Results[0].Found)
+	assert.Equal(t, "ephemeral", resp.Results[0].Word)
+
+	assert.True(t, resp.Results[1].Found)
+	assert.Equal(t, "serendipity", resp.Results[1].Word)
+}
+
+func TestBatchDefine_EmptyRequest(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 0, resp.Total)
+	assert.Len(t, resp.Results, 0)
+}

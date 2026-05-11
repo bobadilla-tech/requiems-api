@@ -544,7 +544,7 @@ apis:
     categories:
       - text
     description: Generate random words for testing, games, and creative projects
-    endpoints_count: 2
+    endpoints_count: 3
     status: live
     popular: false
     documentation_url: /apis/words

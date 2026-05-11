@@ -98,3 +98,52 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 		Synonyms:    synonyms,
 	}, nil
 }
+
+type BatchRequest struct {
+	Items []string `json:"items" validate:"required,min=1,max=50,dive,required"`
+}
+
+type BatchItem struct {
+	Word  string           `json:"word"`
+	Found bool             `json:"found"`
+	Entry *DictionaryEntry `json:"entry,omitempty"`
+	Error string           `json:"error,omitempty"`
+}
+
+type BatchResponse struct {
+	Results []BatchItem `json:"results"`
+	Total   int         `json:"total"`
+}
+
+func (BatchResponse) IsData() {}
+
+// -------------------- BATCH --------------------
+
+func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) (BatchResponse, error) {
+	results := make([]BatchItem, len(req.Items))
+
+	for i, raw := range req.Items {
+		word := strings.ToLower(strings.TrimSpace(raw))
+
+		entry, err := s.Define(word)
+		if err != nil {
+			results[i] = BatchItem{
+				Word:  word,
+				Found: false,
+				Error: err.Error(),
+			}
+			continue
+		}
+
+		results[i] = BatchItem{
+			Word:  word,
+			Found: true,
+			Entry: &entry,
+		}
+	}
+
+	return BatchResponse{
+		Results: results,
+		Total:   len(results),
+	}, nil
+}
