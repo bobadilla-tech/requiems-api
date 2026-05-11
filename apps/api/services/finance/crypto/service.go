@@ -140,7 +140,7 @@ func (s *Service) fetchPrice(ctx context.Context, coinID, symbol, name string) (
 		return Price{}, fmt.Errorf("crypto: build request: %w", err)
 	}
 
-	resp, err := s.httpClient.Do(req) //nolint:gosec
+	resp, err := s.httpClient.Do(req) //nolint:gosec // same URL, already validated above
 
 	if err != nil {
 		return Price{}, svcerr.Upstream("upstream_error", "crypto price service unavailable")

@@ -108,7 +108,7 @@ func (s *Service) fetchRate(ctx context.Context, from, to string) (float64, time
 		return 0, time.Time{}, fmt.Errorf("exchange: build request: %w", err)
 	}
 
-	resp, err := s.httpClient.Do(req) //nolint:gosec
+	resp, err := s.httpClient.Do(req) //nolint:gosec // same URL, already validated above
 
 	if err != nil {
 		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
