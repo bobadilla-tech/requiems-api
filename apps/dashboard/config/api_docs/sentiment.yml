@@ -125,6 +125,146 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts "#{data['sentiment']} (#{data['score'].round(2)})"
 
+  - name: Analyze Sentiment (Batch)
+    method: POST
+    path: /v1/text/sentiment/batch
+    description: Analyzes the sentiment of up to 50 texts in a single request. Results are returned in the same order as the input. Each text counts as one unit of usage.
+
+    parameters:
+      - name: texts
+        type: array
+        required: true
+        location: body
+        description: The list of texts to analyze. Between 1 and 50 items.
+        example: '["I love this!", "This is terrible.", "The table is there."]'
+
+    request_example: |
+      {
+        "texts": [
+          "I love this product! It's absolutely amazing.",
+          "This is terrible. I hate it.",
+          "The document is on the table."
+        ]
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "sentiment": "positive",
+              "score": 0.91,
+              "breakdown": { "positive": 0.91, "negative": 0.02, "neutral": 0.07 }
+            },
+            {
+              "sentiment": "negative",
+              "score": 0.88,
+              "breakdown": { "positive": 0.03, "negative": 0.88, "neutral": 0.09 }
+            },
+            {
+              "sentiment": "neutral",
+              "score": 1.0,
+              "breakdown": { "positive": 0.0, "negative": 0.0, "neutral": 1.0 }
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: Sentiment results for each input text, in the same order as the input.
+      - name: results[].sentiment
+        type: string
+        description: "The dominant sentiment class: positive, negative, or neutral"
+      - name: results[].score
+        type: number
+        description: Confidence score for the dominant sentiment, between 0.0 and 1.0
+      - name: results[].breakdown.positive
+        type: number
+        description: Proportional score for positive sentiment (sums to 1.0 with other classes)
+      - name: results[].breakdown.negative
+        type: number
+        description: Proportional score for negative sentiment (sums to 1.0 with other classes)
+      - name: results[].breakdown.neutral
+        type: number
+        description: Proportional score for neutral sentiment (sums to 1.0 with other classes)
+      - name: total
+        type: number
+        description: Total number of results returned.
+
+    errors:
+      - code: 422
+        message: unprocessable_entity
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/text/sentiment/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"texts": ["I love this!", "This is terrible.", "The table is there."]}'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/text/sentiment/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "texts": [
+                "I love this!",
+                "This is terrible.",
+                "The table is there."
+            ]
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        for item in response.json()['data']['results']:
+            print(f"{item['sentiment']} ({item['score']:.2f})")
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/text/sentiment/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              texts: ['I love this!', 'This is terrible.', 'The table is there.']
+            })
+          }
+        );
+        const { data } = await response.json();
+        data.results.forEach(r => console.log(`${r.sentiment} (${r.score.toFixed(2)})`));
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/text/sentiment/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          texts: ['I love this!', 'This is terrible.', 'The table is there.']
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |r|
+          puts "#{r['sentiment']} (#{r['score'].round(2)})"
+        end
+
 faq:
   - question: What are the possible sentiment values?
     answer: The sentiment field returns one of three values — positive, negative, or neutral — based on whichever class has the highest score.
@@ -134,3 +274,6 @@ faq:
 
   - question: How long can the input text be?
     answer: There is no strict character limit enforced at the API level, but very long inputs may be truncated by the underlying model. Aim for inputs under 512 tokens for best accuracy.
+
+  - question: Can I analyze multiple texts at once?
+    answer: Yes. Use the batch endpoint (POST /v1/text/sentiment/batch) to send up to 50 texts in a single request. Results are returned in the same order as the input and each text counts as one unit of usage.

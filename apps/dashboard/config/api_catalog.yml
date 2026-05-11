@@ -481,6 +481,23 @@ apis:
       - AI
       - Text Analysis
 
+  - id: sentiment_batch
+    name: Sentiment Analysis (Batch)
+    categories:
+      - text
+    description: Analyze the sentiment of up to 50 texts in a single request. Returns results in the same order as the input. Each item counts as one unit of usage.
+    endpoints_count: 1
+    status: live
+    popular: false
+    batch_eligible: true
+    documentation_url: /apis/sentiment
+    tags:
+      - Sentiment
+      - NLP
+      - AI
+      - Text Analysis
+      - Batch
+
   - id: detect-language
     name: Language Detection
     categories:

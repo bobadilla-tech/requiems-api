@@ -2,6 +2,8 @@ package sentiment
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAnalyze_Positive(t *testing.T) {
@@ -116,4 +118,34 @@ func TestAnalyze_ScoreMatchesDominantClass(t *testing.T) {
 		t.Errorf("score %.2f does not match dominant class %q (%.2f)",
 			result.Score, result.Sentiment, dominant)
 	}
+}
+
+func TestAnalyzeBatch_ReturnsResultsInOrder(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	texts := []string{
+		"I love this product! It's amazing.",
+		"This is terrible and I hate it.",
+		"The document is on the table.",
+	}
+
+	resp := svc.AnalyzeBatch(texts)
+
+	assert.Equal(t, 3, resp.Total)
+	assert.Len(t, resp.Results, 3)
+	assert.Equal(t, "positive", resp.Results[0].Sentiment)
+	assert.Equal(t, "negative", resp.Results[1].Sentiment)
+	assert.Equal(t, "neutral", resp.Results[2].Sentiment)
+}
+
+func TestAnalyzeBatch_SingleItem(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	resp := svc.AnalyzeBatch([]string{"I love this!"})
+
+	assert.Equal(t, 1, resp.Total)
+	assert.Len(t, resp.Results, 1)
+	assert.Equal(t, "positive", resp.Results[0].Sentiment)
 }
