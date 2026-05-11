@@ -103,12 +103,13 @@ type frankfurterResponse struct {
 func (s *Service) fetchRate(ctx context.Context, from, to string) (float64, time.Time, error) {
 	url := fmt.Sprintf("%s/latest?from=%s&to=%s", s.baseURL, from, to)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody) //nolint:gosec // URL is built from a fixed base URL and validated 3-char alpha currency codes
 	if err != nil {
 		return 0, time.Time{}, fmt.Errorf("exchange: build request: %w", err)
 	}
 
-	resp, err := s.httpClient.Do(req) //nolint:gosec // URL is built from a fixed base URL and validated 3-char alpha currency codes
+	resp, err := s.httpClient.Do(req) //nolint:gosec
+
 	if err != nil {
 		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
