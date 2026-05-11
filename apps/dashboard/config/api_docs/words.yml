@@ -97,7 +97,7 @@ endpoints:
       - name: items
         type: array
         required: true
-        description: List of words to look up in batch (max 50 items recommended)
+        description: List of words to look up in batch (max 50 items )
         items:
           type: string
     request_example: |
@@ -109,19 +109,18 @@ endpoints:
         "data": {
           "results": [
             {
-              "word": "ephemeral",
+              "word": "serendipity",
               "found": true,
               "entry": {
-                "word": "ephemeral",
-                "phonetic": "/ɪˈfɛm(ə)rəl/",
+                "word": "serendipity",
+                "phonetic": "/ˌserənˈdipədē/",
                 "definitions": [
                   {
-                    "partOfSpeech": "adjective",
-                    "definition": "lasting for a very short time",
-                    "example": "ephemeral pleasures"
+                    "partOfSpeech": "noun",
+                    "definition": "the occurrence of events by chance in a happy way"
                   }
                 ],
-                "synonyms": ["transient", "fleeting", "momentary"]
+                "synonyms": ["fluke", "chance", "fortuity"]
               }
             },
             {
@@ -130,7 +129,7 @@ endpoints:
               "error": "word not found: fakeword"
             }
           ],
-          "total": 2
+          "total": 3
         },
         "metadata": {
           "timestamp": "2026-01-01T00:00:00Z"

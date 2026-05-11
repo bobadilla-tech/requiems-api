@@ -244,7 +244,7 @@ func TestWordsBatch_UnknownWords(t *testing.T) {
 
 	for _, item := range resp.Data.Results {
 		assert.False(t, item.Found)
-		assert.NotNil(t, item.Error)
+		assert.NotEmpty(t, item.Error)
 		assert.Nil(t, item.Entry)
 	}
 }
