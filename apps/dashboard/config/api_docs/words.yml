@@ -97,7 +97,8 @@ endpoints:
       - name: items
         type: array
         required: true
-        description: List of words to look up in batch (max 50 items )
+        location: body
+        description: List of words to look up in batch (max 50 items)
         items:
           type: string
     request_example: |

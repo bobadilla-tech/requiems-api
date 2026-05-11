@@ -10,7 +10,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-
 type querier interface {
 	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 }
@@ -73,7 +72,6 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 		Synonyms:    synonyms,
 	}, nil
 }
-
 
 func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) (BatchResponse, error) {
 	results := make([]BatchItem, len(req.Items))
