@@ -198,6 +198,8 @@ endpoints:
         description: Total number of results returned.
 
     errors:
+      - code: 400
+        message: bad_request
       - code: 422
         message: unprocessable_entity
 
