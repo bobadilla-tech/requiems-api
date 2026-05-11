@@ -1,13 +1,16 @@
 package whois
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
 
 	"requiems-api/platform/httpx"
 )
@@ -155,4 +158,147 @@ func TestService_Lookup_ValidDomain(t *testing.T) {
 	if resp.ExpiryDate == "" {
 		t.Error("expected non-empty expiry_date")
 	}
+}
+
+func TestWhois_BatchLookup(t *testing.T) {
+	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
+
+	body := `{
+		"domains": [
+			"example.com",
+			"google.com"
+		]
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/whois/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchLookupResponse]
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.Len(t, resp.Data.Results, 2)
+
+	for _, item := range resp.Data.Results {
+		assert.True(t, item.Found)
+		assert.NotEmpty(t, item.Data.Domain)
+		assert.Empty(t, item.Error)
+	}
+}
+
+func TestWhois_BatchLookup_InvalidJSON(t *testing.T) {
+	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/whois/batch",
+		strings.NewReader(`{"domains":`),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestWhois_BatchLookup_EmptyDomains(t *testing.T) {
+	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
+
+	body := `{
+		"domains": []
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/whois/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+func TestWhois_BatchLookup_NotFound(t *testing.T) {
+	r := setupRouter(&fakeQuerier{result: notFoundWHOIS})
+
+	body := `{
+		"domains": [
+			"doesnotexist.com"
+		]
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/whois/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchLookupResponse]
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+
+	assert.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 1)
+
+	item := resp.Data.Results[0]
+
+	assert.False(t, item.Found)
+	assert.NotEmpty(t, item.Error)
+}
+func TestWhois_BatchLookup_TooManyDomains(t *testing.T) {
+	r := setupRouter(&fakeQuerier{result: sampleWHOIS})
+
+	domains := make([]string, 51)
+
+	for i := range domains {
+		domains[i] = "example.com"
+	}
+
+	body, err := json.Marshal(map[string]any{
+		"domains": domains,
+	})
+
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/whois/batch",
+		bytes.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

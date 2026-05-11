@@ -141,3 +141,212 @@ faq:
 
   - question: How fresh is the WHOIS data?
     answer: WHOIS data is fetched live from the authoritative WHOIS servers on each request. There is no caching layer, so the data reflects the current state of the registry.
+
+  - name: Batch WHOIS Lookup
+    method: POST
+    path: /v1/networking/whois/batch
+    description: >-
+      Returns WHOIS information for up to 50 domains in a single request.
+      Results are returned in the same order as the input array.
+      Domains without WHOIS data return found: false instead of failing the
+      entire request.
+
+    parameters:
+      - name: domains
+        type: array
+        required: true
+        location: body
+        description: Array of domain names. Min: 1, Max: 50.
+        example: '["example.com", "google.com"]'
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "domain": "example.com",
+              "found": true,
+              "data": {
+                "domain": "example.com",
+                "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                "name_servers": [
+                  "A.IANA-SERVERS.NET",
+                  "B.IANA-SERVERS.NET"
+                ],
+                "status": [
+                  "clientDeleteProhibited"
+                ],
+                "created_date": "1995-08-14T04:00:00Z",
+                "updated_date": "2023-08-14T07:01:38Z",
+                "expiry_date": "2024-08-13T04:00:00Z",
+                "dnssec": true
+              }
+            },
+            {
+              "domain": "doesnotexist.com",
+              "found": false,
+              "error": "domain not found"
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: One entry per domain, in the same order as the input
+
+      - name: results[].domain
+        type: string
+        description: Domain name requested in the batch
+
+      - name: results[].found
+        type: boolean
+        description: False when WHOIS data could not be found
+
+      - name: results[].error
+        type: string
+        description: Error message when found is false
+
+      - name: results[].data
+        type: object
+        description: WHOIS information for the domain when found is true
+
+      - name: total
+        type: integer
+        description: Total number of results returned
+
+    errors:
+      - code: validation_failed
+        status: 422
+        description: >-
+          Invalid request body. This includes empty arrays,
+          more than 50 domains, invalid domain names,
+          or malformed payloads.
+
+      - code: internal_error
+        status: 500
+        description: Unexpected server error during batch WHOIS lookup.
+
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/networking/whois/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"domains":["example.com","google.com"]}'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/networking/whois/batch"
+
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "domains": ["example.com", "google.com"]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+
+        for item in response.json()["data"]["results"]:
+            if item["found"]:
+                print(item["data"]["registrar"])
+            else:
+                print(item["error"])
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/networking/whois/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              domains: ['example.com', 'google.com']
+            })
+          }
+        );
+
+        const { data } = await response.json();
+
+        data.results.forEach(item => {
+          if (item.found) {
+            console.log(item.data.domain, item.data.registrar);
+          } else {
+            console.log(item.domain, item.error);
+          }
+        });
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/networking/whois/batch')
+
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          domains: ['example.com', 'google.com']
+        }.to_json
+
+        response = Net::HTTP.start(
+          uri.hostname,
+          uri.port,
+          use_ssl: true
+        ) do |http|
+          http.request(request)
+        end
+
+        results = JSON.parse(response.body)['data']['results']
+
+        results.each do |item|
+          if item['found']
+            puts "#{item['domain']} -> #{item['data']['registrar']}"
+          else
+            puts "#{item['domain']} -> #{item['error']}"
+          end
+        end
+
+faq:
+  - question: What domains are supported?
+    answer: >-
+      Any publicly registered domain with a WHOIS server is supported.
+      This includes common TLDs (.com, .net, .org, .io, etc.) and most
+      country-code TLDs.
+
+  - question: Why are some fields empty in the response?
+    answer: >-
+      WHOIS data availability depends on registry and registrar policies.
+      Many registrars redact information under GDPR or similar privacy laws.
+
+  - question: What does found false mean in the batch endpoint?
+    answer: >-
+      It means the domain does not have WHOIS data available or is not
+      registered. The batch request itself still succeeds.
+
+  - question: How many domains can I send in a batch request?
+    answer: >-
+      Up to 50 domains per request. Sending more than 50 domains returns
+      a 422 validation_failed error.
+
+  - question: Are batch responses ordered?
+    answer: >-
+      Yes. Results are returned in the same order as the domains sent
+      in the request body.
+
+  - question: Is WHOIS data cached?
+    answer: >-
+      No. WHOIS information is fetched live from upstream WHOIS servers
+      on every request.
+

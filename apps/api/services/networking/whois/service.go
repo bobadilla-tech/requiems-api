@@ -61,7 +61,7 @@ func (s *Service) Lookup(_ context.Context, domain string) (LookupResponse, erro
 // ErrDomainNotFound is returned when no WHOIS record is found for the domain.
 var ErrDomainNotFound = errors.New("domain not found")
 
-// service.go
+// BATCH
 func (s *Service) LookupBatch(ctx context.Context, domains []string) (BatchLookupResponse, error) {
 	const (
 		maxWorkers     = 10

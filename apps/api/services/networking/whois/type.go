@@ -14,7 +14,6 @@ type LookupResponse struct {
 
 func (LookupResponse) IsData() {}
 
-
 type BatchLookupRequest struct {
 	Domains []string `json:"domains" validate:"required,min=1,max=50,dive,required,hostname_rfc1123"`
 }
@@ -28,7 +27,7 @@ type BatchLookupItem struct {
 
 type BatchLookupResponse struct {
 	Results []BatchLookupItem `json:"results"`
-	Total int 				`json:"total"`
+	Total   int               `json:"total"`
 }
 
 func (BatchLookupResponse) IsData() {}
