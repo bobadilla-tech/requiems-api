@@ -38,10 +38,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			resp, err := svc.LookupBatch(ctx, req.Domains)
 
 			if err != nil {
-				return BatchLookupResponse{}, http.StatusInternalServerError, err
+				return BatchLookupResponse{}, 0, err
 			}
 
-			return resp, http.StatusOK, nil
+			return resp, len(req.Domains), nil
 		},
 	))
 
