@@ -71,6 +71,10 @@ func Handle[Req any, Res Data](
 // HandleBatch is like Handle but the handler also returns an item count.
 // The count is written as X-Usage-Count header so the auth gateway can
 // charge per item instead of per request.
+//
+// IMPORTANT: the second return value is the item count (e.g. len(req.Items)),
+// NOT an HTTP status code. Returning http.StatusOK (200) silently sets the
+// usage count to 200, breaking billing. On error, return 0.
 func HandleBatch[Req any, Res Data](
 	fn func(ctx context.Context, req Req) (Res, int, error),
 ) http.HandlerFunc {
