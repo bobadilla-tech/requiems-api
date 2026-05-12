@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -248,6 +249,20 @@ func TestWordsBatch_UnknownWords(t *testing.T) {
 		assert.Nil(t, item.Entry)
 	}
 }
+func TestWordsRandom_DBFailure_Returns503(t *testing.T) {
+	t.Parallel()
+	r := chi.NewRouter()
+	RegisterRoutes(r, &Service{db: &mockQuerier{
+		row: &mockRow{scanFn: func(_ ...any) error { return pgx.ErrNoRows }},
+	}})
+
+	req := httptest.NewRequest(http.MethodGet, "/words/random", http.NoBody)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
+}
+
 func TestWordsBatch_TooManyItems(t *testing.T) {
 	t.Parallel()
 

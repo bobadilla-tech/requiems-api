@@ -2,12 +2,13 @@ package words
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"requiems-api/platform/svcerr"
 )
 
 type querier interface {
@@ -34,8 +35,9 @@ LIMIT 1;
 `)
 
 	var w Word
+
 	if err := row.Scan(&w.ID, &w.Word, &w.Definition, &w.PartOfSpeech); err != nil {
-		return Word{}, fmt.Errorf("scan word: %w", err)
+		return Word{}, svcerr.Upstream("service_unavailable", "no words available")
 	}
 
 	return w, nil
@@ -48,7 +50,7 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 
 	e, ok := dictionaryData[normalized]
 	if !ok {
-		return DictionaryEntry{}, fmt.Errorf("word not found: %s", normalized)
+		return DictionaryEntry{}, svcerr.NotFound("not_found", "word not found in dictionary")
 	}
 
 	defs := make([]Definition, 0, len(e.definitions))
