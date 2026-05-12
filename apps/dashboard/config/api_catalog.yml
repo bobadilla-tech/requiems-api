@@ -471,15 +471,17 @@ apis:
     categories:
       - text
     description: Analyze the sentiment of any text and get a positive, negative, or neutral classification with a confidence score and full class breakdown.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/sentiment
     tags:
       - Sentiment
       - NLP
       - AI
       - Text Analysis
+      - Batch
 
   - id: detect-language
     name: Language Detection

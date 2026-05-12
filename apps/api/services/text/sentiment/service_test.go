@@ -95,3 +95,37 @@ func TestAnalyze_ScoreMatchesDominantClass(t *testing.T) {
 
 	assert.Equal(t, dominant, result.Score)
 }
+
+func TestAnalyzeBatch_ReturnsResultsInOrder(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	texts := []string{
+		"I love this product! It's amazing.",
+		"This is terrible and I hate it.",
+		"The document is on the table.",
+	}
+
+	results := svc.AnalyzeBatch(texts)
+
+	assert.Len(t, results, 3)
+	assert.Equal(t, "positive", results[0].Sentiment)
+	assert.Equal(t, "negative", results[1].Sentiment)
+	assert.Equal(t, "neutral", results[2].Sentiment)
+}
+
+func TestAnalyzeBatch_SingleItem(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	results := svc.AnalyzeBatch([]string{"I love this!"})
+
+	assert.Len(t, results, 1)
+	assert.Equal(t, "positive", results[0].Sentiment)
+}
+
+func TestBatchAnalyzeResponse_IsData(t *testing.T) {
+	t.Parallel()
+	// IsData() must be callable — verifies the interface is satisfied.
+	BatchAnalyzeResponse{}.IsData()
+}
