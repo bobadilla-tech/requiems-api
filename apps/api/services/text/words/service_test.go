@@ -2,12 +2,13 @@ package words
 
 import (
 	"context"
-	"errors"
 	"testing"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/svcerr"
 )
 
 // mockRow implements pgx.Row.
@@ -37,7 +38,9 @@ func TestRandom_EmptyTable(t *testing.T) {
 	})
 
 	_, err := svc.Random(context.Background())
-	assert.ErrorIs(t, err, pgx.ErrNoRows)
+	var se *svcerr.Error
+	assert.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
 }
 
 func TestRandom_SingleRow(t *testing.T) {
@@ -62,13 +65,14 @@ func TestRandom_SingleRow(t *testing.T) {
 
 func TestRandom_ScanError(t *testing.T) {
 	t.Parallel()
-	scanErr := errors.New("scan failed")
 	svc := newTestService(&mockRow{
-		scanFn: func(_ ...any) error { return scanErr },
+		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	_, err := svc.Random(context.Background())
-	assert.ErrorIs(t, err, scanErr)
+	var se *svcerr.Error
+	assert.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
 }
 
 func TestRandom_ReturnsZeroValueOnError(t *testing.T) {
