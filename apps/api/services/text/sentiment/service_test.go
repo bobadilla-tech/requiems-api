@@ -106,22 +106,26 @@ func TestAnalyzeBatch_ReturnsResultsInOrder(t *testing.T) {
 		"The document is on the table.",
 	}
 
-	resp := svc.AnalyzeBatch(texts)
+	results := svc.AnalyzeBatch(texts)
 
-	assert.Equal(t, 3, resp.Total)
-	assert.Len(t, resp.Results, 3)
-	assert.Equal(t, "positive", resp.Results[0].Sentiment)
-	assert.Equal(t, "negative", resp.Results[1].Sentiment)
-	assert.Equal(t, "neutral", resp.Results[2].Sentiment)
+	assert.Len(t, results, 3)
+	assert.Equal(t, "positive", results[0].Sentiment)
+	assert.Equal(t, "negative", results[1].Sentiment)
+	assert.Equal(t, "neutral", results[2].Sentiment)
 }
 
 func TestAnalyzeBatch_SingleItem(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
 
-	resp := svc.AnalyzeBatch([]string{"I love this!"})
+	results := svc.AnalyzeBatch([]string{"I love this!"})
 
-	assert.Equal(t, 1, resp.Total)
-	assert.Len(t, resp.Results, 1)
-	assert.Equal(t, "positive", resp.Results[0].Sentiment)
+	assert.Len(t, results, 1)
+	assert.Equal(t, "positive", results[0].Sentiment)
+}
+
+func TestBatchAnalyzeResponse_IsData(t *testing.T) {
+	t.Parallel()
+	// IsData() must be callable — verifies the interface is satisfied.
+	BatchAnalyzeResponse{}.IsData()
 }

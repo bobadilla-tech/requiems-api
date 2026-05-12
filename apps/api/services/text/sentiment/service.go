@@ -218,10 +218,10 @@ func round2(f float64) float64 {
 }
 
 // AnalyzeBatch analyzes a slice of texts and returns results in the same order.
-func (s *Service) AnalyzeBatch(texts []string) BatchAnalyzeResponse {
+func (s *Service) AnalyzeBatch(texts []string) []Result {
 	results := make([]Result, len(texts))
 	for i, text := range texts {
 		results[i] = s.Analyze(text)
 	}
-	return BatchAnalyzeResponse{Results: results, Total: len(results)}
+	return results
 }
