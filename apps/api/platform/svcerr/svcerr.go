@@ -22,11 +22,12 @@ type Error struct {
 
 func (e *Error) Error() string { return e.Message }
 
-// Returns the HTTP status code that corresponds to the error kind.
+// Status code that corresponds to the error kind.
 func HTTPStatus(e *Error) int {
 	if e == nil {
 		return http.StatusInternalServerError
 	}
+
 	switch e.Kind {
 	case KindNotFound:
 		return http.StatusNotFound
@@ -37,6 +38,7 @@ func HTTPStatus(e *Error) int {
 	case KindUpstream:
 		return http.StatusServiceUnavailable
 	}
+	
 	return http.StatusInternalServerError
 }
 
