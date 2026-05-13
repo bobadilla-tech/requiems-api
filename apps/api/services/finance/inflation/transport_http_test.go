@@ -33,7 +33,7 @@ func (s *stubGetter) GetInflation(_ context.Context, countryCode string) (Respon
 }
 
 // GetInflationBatch delegates to GetInflation per item, matching real service behaviour.
-func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) BatchResponse {
+func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
 	results := make([]BatchItem, len(countries))
 	for i, c := range countries {
 		resp, err := s.GetInflation(ctx, c)
@@ -49,7 +49,7 @@ func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) 
 			}
 		}
 	}
-	return BatchResponse{Results: results, Total: len(results)}
+	return results
 }
 
 // setupRouter wires up a stub getter into a chi router for handler testing.
@@ -69,9 +69,9 @@ func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[R
 	return resp
 }
 
-func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[BatchResponse] {
+func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[httpx.BatchResponse[BatchItem]] {
 	t.Helper()
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	return resp

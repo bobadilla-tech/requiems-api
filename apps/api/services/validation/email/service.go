@@ -111,7 +111,7 @@ func (s *Service) ValidateEmail(ctx context.Context, email string) Validation {
 
 // ValidateEmailBatch processes multiple emails using the same validation logic.
 // Each item is processed independently.
-func (s *Service) ValidateEmailBatch(ctx context.Context, emails []string) BatchResponse {
+func (s *Service) ValidateEmailBatch(ctx context.Context, emails []string) []BatchItem {
 
 	const maxWorkers = 8
 	const perItemTimeout = 2 * time.Second
@@ -145,10 +145,7 @@ func (s *Service) ValidateEmailBatch(ctx context.Context, emails []string) Batch
 	}
 	wg.Wait()
 
-	return BatchResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }
 
 // isValidSyntax reports whether email is a syntactically valid RFC 5322 plain

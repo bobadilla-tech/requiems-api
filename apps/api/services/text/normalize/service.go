@@ -47,7 +47,7 @@ func (s *Service) Normalize(email string) (EmailNormalization, error) {
 
 // NormalizeBatch normalizes each address in order. Invalid addresses yield
 // valid=false and a message; the overall response is always a full result slice.
-func (s *Service) NormalizeBatch(emails []string) EmailNormalizationBatchResponse {
+func (s *Service) NormalizeBatch(emails []string) []EmailNormalizationBatchItem {
 	results := make([]EmailNormalizationBatchItem, len(emails))
 
 	for i, email := range emails {
@@ -71,8 +71,5 @@ func (s *Service) NormalizeBatch(emails []string) EmailNormalizationBatchRespons
 		}
 	}
 
-	return EmailNormalizationBatchResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }

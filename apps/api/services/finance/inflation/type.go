@@ -1,10 +1,6 @@
 package inflation
 
-import (
-	"context"
-
-	"requiems-api/platform/httpx"
-)
+import "context"
 
 // HistoricalRate is a single year's inflation rate.
 type HistoricalRate struct {
@@ -31,7 +27,7 @@ type Request struct {
 // tests to inject a stub without requiring a database connection.
 type Getter interface {
 	GetInflation(ctx context.Context, countryCode string) (Response, error)
-	GetInflationBatch(ctx context.Context, countries []string) BatchResponse
+	GetInflationBatch(ctx context.Context, countries []string) []BatchItem
 }
 
 // BatchRequest is the body for fetching inflation data for multiple countries at once.
@@ -48,6 +44,3 @@ type BatchItem struct {
 	Period     string           `json:"period,omitempty"`
 	Historical []HistoricalRate `json:"historical,omitempty"`
 }
-
-// BatchResponse is the response payload for POST /v1/finance/inflation/batch.
-type BatchResponse = httpx.BatchResponse[BatchItem]

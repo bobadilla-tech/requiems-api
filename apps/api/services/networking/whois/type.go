@@ -1,7 +1,5 @@
 package whois
 
-import "requiems-api/platform/httpx"
-
 // LookupResponse is the JSON payload returned by the WHOIS endpoint.
 type LookupResponse struct {
 	Domain      string   `json:"domain"`
@@ -26,5 +24,3 @@ type BatchLookupItem struct {
 	Error  string         `json:"error,omitempty"`
 	Data   LookupResponse `json:"data,omitempty"`
 }
-
-type BatchLookupResponse = httpx.BatchResponse[BatchLookupItem]

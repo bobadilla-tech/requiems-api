@@ -79,7 +79,7 @@ func (s *Service) GetInflation(ctx context.Context, rawCode string) (Response, e
 
 // GetInflationBatch returns inflation data for multiple countries in the same
 // order as the input slice. Countries with no data are returned with Found: false.
-func (s *Service) GetInflationBatch(ctx context.Context, countries []string) BatchResponse {
+func (s *Service) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
 	results := make([]BatchItem, len(countries))
 
 	for i, c := range countries {
@@ -102,8 +102,5 @@ func (s *Service) GetInflationBatch(ctx context.Context, countries []string) Bat
 		}
 	}
 
-	return BatchResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }

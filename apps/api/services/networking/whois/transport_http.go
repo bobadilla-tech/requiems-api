@@ -36,8 +36,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		})
 
 	r.Post("/whois/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchLookupRequest) (BatchLookupResponse, error) {
-			return svc.LookupBatch(ctx, req.Domains)
+		func(ctx context.Context, req BatchLookupRequest) (httpx.BatchResponse[BatchLookupItem], error) {
+			items, err := svc.LookupBatch(ctx, req.Domains)
+			return httpx.BatchResponse[BatchLookupItem]{Results: items}, err
 		},
 	))
 

@@ -75,7 +75,7 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 	}, nil
 }
 
-func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) (BatchResponse, error) {
+func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) ([]BatchItem, error) {
 	results := make([]BatchItem, len(req.Items))
 
 	for i, raw := range req.Items {
@@ -98,8 +98,5 @@ func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) (BatchRespo
 		}
 	}
 
-	return BatchResponse{
-		Results: results,
-		Total:   len(results),
-	}, nil
+	return results, nil
 }

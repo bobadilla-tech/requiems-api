@@ -10,7 +10,7 @@ import (
 	whoisparser "github.com/likexian/whois-parser"
 )
 
-// Interface for making raw WHOIS queries.
+// Does raw WHOIS queries.
 type Querier interface {
 	Whois(domain string, servers ...string) (string, error)
 }
@@ -64,7 +64,7 @@ func (s *Service) Lookup(_ context.Context, domain string) (LookupResponse, erro
 	return resp, nil
 }
 
-func (s *Service) LookupBatch(ctx context.Context, domains []string) (BatchLookupResponse, error) {
+func (s *Service) LookupBatch(ctx context.Context, domains []string) ([]BatchLookupItem, error) {
 	const (
 		maxWorkers     = 10
 		perItemTimeout = 3 * time.Second
@@ -109,13 +109,9 @@ func (s *Service) LookupBatch(ctx context.Context, domains []string) (BatchLooku
 
 	wg.Wait()
 
-	// optional: propagate parent context cancellation
 	if err := ctx.Err(); err != nil {
-		return BatchLookupResponse{}, err
+		return nil, err
 	}
 
-	return BatchLookupResponse{
-		Results: results,
-		Total:   len(results),
-	}, nil
+	return results, nil
 }

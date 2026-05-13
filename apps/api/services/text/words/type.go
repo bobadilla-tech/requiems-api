@@ -1,7 +1,5 @@
 package words
 
-import "requiems-api/platform/httpx"
-
 type Word struct {
 	ID           int    `json:"id"`
 	Word         string `json:"word"`
@@ -38,5 +36,3 @@ type BatchItem struct {
 	Entry *DictionaryEntry `json:"entry,omitempty"`
 	Error string           `json:"error,omitempty"`
 }
-
-type BatchResponse = httpx.BatchResponse[BatchItem]

@@ -22,8 +22,8 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	r.Post("/phone/batch", httpx.HandleBatch(
-		func(_ context.Context, req BatchValidateRequest) (BatchValidateResponse, error) {
-			return svc.ValidateBatch(req.Numbers), nil
+		func(_ context.Context, req BatchValidateRequest) (httpx.BatchResponse[ValidateResponse], error) {
+			return httpx.BatchResponse[ValidateResponse]{Results: svc.ValidateBatch(req.Numbers)}, nil
 		},
 	))
 }

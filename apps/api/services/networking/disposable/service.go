@@ -28,7 +28,7 @@ func (s *Service) CheckEmail(email string) CheckEmailResponse {
 }
 
 // CheckBatch checks multiple emails for disposability
-func (s *Service) CheckBatch(emails []string) BatchCheckResponse {
+func (s *Service) CheckBatch(emails []string) []CheckEmailResponse {
 	results := make([]CheckEmailResponse, 0, len(emails))
 
 	for _, email := range emails {
@@ -36,10 +36,7 @@ func (s *Service) CheckBatch(emails []string) BatchCheckResponse {
 		results = append(results, result)
 	}
 
-	return BatchCheckResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }
 
 // CheckDomain checks if a domain is disposable

@@ -45,8 +45,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	r.Post("/words/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchRequest) (BatchResponse, error) {
-			return svc.BatchDefine(ctx, req)
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
+			items, err := svc.BatchDefine(ctx, req)
+			return httpx.BatchResponse[BatchItem]{Results: items}, err
 		},
 	))
 }

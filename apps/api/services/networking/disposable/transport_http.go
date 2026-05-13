@@ -19,8 +19,8 @@ func RegisterRoutes(router chi.Router, svc *Service) {
 	))
 
 	router.Post("/disposable/batch", httpx.HandleBatch(
-		func(_ context.Context, req BatchCheckRequest) (BatchCheckResponse, error) {
-			return svc.CheckBatch(req.Emails), nil
+		func(_ context.Context, req BatchCheckRequest) (httpx.BatchResponse[CheckEmailResponse], error) {
+			return httpx.BatchResponse[CheckEmailResponse]{Results: svc.CheckBatch(req.Emails)}, nil
 		},
 	))
 
