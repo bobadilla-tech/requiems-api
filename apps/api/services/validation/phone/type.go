@@ -1,5 +1,7 @@
 package phone
 
+import "requiems-api/platform/httpx"
+
 // ValidateRequest holds query parameters for the phone validation endpoint.
 type ValidateRequest struct {
 	Number string `query:"number" validate:"required"`
@@ -36,9 +38,4 @@ type BatchValidateRequest struct {
 }
 
 // BatchValidateResponse is the response for a batch phone number validation request.
-type BatchValidateResponse struct {
-	Results []ValidateResponse `json:"results"`
-	Total   int                `json:"total"`
-}
-
-func (BatchValidateResponse) IsData() {}
+type BatchValidateResponse = httpx.BatchResponse[ValidateResponse]

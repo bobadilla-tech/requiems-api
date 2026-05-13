@@ -2,6 +2,8 @@ package normalize
 
 import (
 	normalizer "github.com/bobadilla-tech/go-email-normalizer"
+
+	"requiems-api/platform/httpx"
 )
 
 type EmailNormalizationRequest struct {
@@ -30,10 +32,6 @@ type EmailNormalizationBatchItem struct {
 	Message    string              `json:"message,omitempty"`
 }
 
-type EmailNormalizationBatchResponse struct {
-	Results []EmailNormalizationBatchItem `json:"results"`
-	Total   int                           `json:"total"`
-}
+type EmailNormalizationBatchResponse = httpx.BatchResponse[EmailNormalizationBatchItem]
 
-func (EmailNormalization) IsData()              {}
-func (EmailNormalizationBatchResponse) IsData() {}
+func (EmailNormalization) IsData() {}

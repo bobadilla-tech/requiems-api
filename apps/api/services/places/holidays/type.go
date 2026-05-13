@@ -1,5 +1,7 @@
 package holidays
 
+import "requiems-api/platform/httpx"
+
 type Request struct {
 	Country string `query:"country" validate:"required,iso3166_1_alpha2"`
 	Year    int    `query:"year" validate:"required,min=1"`
@@ -44,9 +46,4 @@ type BatchItem struct {
 }
 
 // BatchResponse is the response payload for POST /v1/places/holidays/batch.
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}
+type BatchResponse = httpx.BatchResponse[BatchItem]

@@ -38,7 +38,7 @@ func HTTPStatus(e *Error) int {
 	case KindUpstream:
 		return http.StatusServiceUnavailable
 	}
-	
+
 	return http.StatusInternalServerError
 }
 

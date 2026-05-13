@@ -282,7 +282,7 @@ func TestIBAN_BatchParse_MissingBody(t *testing.T) {
 
 func TestIBAN_BatchParse_SetsUsageCountHeader(t *testing.T) {
 	t.Parallel()
-	svc := &stubValidator{}
+	svc := &stubValidator{results: BatchParseResponse{Results: make([]ParseResponse, 3)}}
 	r := setupRouter(svc)
 
 	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`

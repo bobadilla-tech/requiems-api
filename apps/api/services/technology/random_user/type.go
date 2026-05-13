@@ -1,5 +1,7 @@
 package randomuser
 
+import "requiems-api/platform/httpx"
+
 // Holds the user's postal address fields.
 type Address struct {
 	Street  string `json:"street"`
@@ -27,10 +29,4 @@ type BatchGenerateRequest struct {
 }
 
 // BatchGenerateResponse is the response for a batch random user generation request.
-type BatchGenerateResponse struct {
-	Results []User `json:"results"`
-	Total   int    `json:"total"`
-}
-
-// IsData marks BatchGenerateResponse as a valid httpx response data type.
-func (BatchGenerateResponse) IsData() {}
+type BatchGenerateResponse = httpx.BatchResponse[User]

@@ -23,11 +23,3 @@ func (Puzzle) IsData() {}
 type BatchRequest struct {
 	Puzzles []string `json:"puzzles" validate:"required,min=1,max=20,dive,oneof=easy medium hard"`
 }
-
-// BatchResponse is the response for a batch Sudoku puzzle generation request.
-type BatchResponse struct {
-	Results []Puzzle `json:"results"`
-	Total   int      `json:"total"`
-}
-
-func (BatchResponse) IsData() {}

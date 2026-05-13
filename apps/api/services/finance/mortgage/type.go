@@ -1,5 +1,7 @@
 package mortgage
 
+import "requiems-api/platform/httpx"
+
 // Request holds the validated query parameters for the mortgage endpoint.
 type Request struct {
 	Principal float64 `query:"principal" validate:"required,gt=0"`
@@ -33,10 +35,6 @@ type BatchRequest struct {
 }
 
 // BatchResponse is the response payload for POST /v1/finance/mortgage/batch.
-type BatchResponse struct {
-	Results []Response `json:"results"`
-	Total   int        `json:"total"`
-}
+type BatchResponse = httpx.BatchResponse[Response]
 
-func (Response) IsData()      {}
-func (BatchResponse) IsData() {}
+func (Response) IsData() {}

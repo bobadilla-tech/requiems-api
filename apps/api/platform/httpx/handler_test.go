@@ -128,8 +128,9 @@ func TestHandle_InternalError_Returns500(t *testing.T) {
 func TestHandleBatch_HappyPath_SetsUsageCountHeader(t *testing.T) {
 	t.Parallel()
 
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{Greeting: "hi " + req.Name}, 5, nil
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		items := []handleRes{{Greeting: "a"}, {Greeting: "b"}, {Greeting: "c"}, {Greeting: "d"}, {Greeting: "e"}}
+		return httpx.BatchResponse[handleRes]{Results: items}, nil
 	})
 
 	body := strings.NewReader(`{"name":"batch"}`)
@@ -141,11 +142,30 @@ func TestHandleBatch_HappyPath_SetsUsageCountHeader(t *testing.T) {
 	assert.Equal(t, "5", w.Header().Get("X-Usage-Count"))
 }
 
+func TestHandleBatch_AutoSetsTotal(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{Results: []handleRes{{Greeting: "x"}, {Greeting: "y"}}}, nil
+	})
+
+	body := strings.NewReader(`{"name":"batch"}`)
+	r := httptest.NewRequest(http.MethodPost, "/", body)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[handleRes]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+}
+
 func TestHandleBatch_ValidationFailure_Returns422(t *testing.T) {
 	t.Parallel()
 
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, nil
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, nil
 	})
 
 	body := strings.NewReader(`{}`)
@@ -159,8 +179,8 @@ func TestHandleBatch_ValidationFailure_Returns422(t *testing.T) {
 func TestHandleBatch_SvcError_MapsStatus(t *testing.T) {
 	t.Parallel()
 
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, svcerr.Upstream("upstream_error", "upstream down")
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, svcerr.Upstream("upstream_error", "upstream down")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -174,8 +194,8 @@ func TestHandleBatch_SvcError_MapsStatus(t *testing.T) {
 func TestHandleBatch_InternalError_Returns500(t *testing.T) {
 	t.Parallel()
 
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, errors.New("unexpected")
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, errors.New("unexpected")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)

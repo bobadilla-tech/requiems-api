@@ -1,6 +1,10 @@
 package inflation
 
-import "context"
+import (
+	"context"
+
+	"requiems-api/platform/httpx"
+)
 
 // HistoricalRate is a single year's inflation rate.
 type HistoricalRate struct {
@@ -46,9 +50,4 @@ type BatchItem struct {
 }
 
 // BatchResponse is the response payload for POST /v1/finance/inflation/batch.
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}
+type BatchResponse = httpx.BatchResponse[BatchItem]

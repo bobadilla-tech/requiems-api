@@ -123,9 +123,3 @@ func TestAnalyzeBatch_SingleItem(t *testing.T) {
 	assert.Len(t, results, 1)
 	assert.Equal(t, "positive", results[0].Sentiment)
 }
-
-func TestBatchAnalyzeResponse_IsData(t *testing.T) {
-	t.Parallel()
-	// IsData() must be callable — verifies the interface is satisfied.
-	BatchAnalyzeResponse{}.IsData()
-}

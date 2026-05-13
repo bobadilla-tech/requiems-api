@@ -1,5 +1,7 @@
 package markdown
 
+import "requiems-api/platform/httpx"
+
 // Request is the input for the markdown-to-HTML conversion endpoint.
 type Request struct {
 	Markdown string `json:"markdown" validate:"required"`
@@ -20,8 +22,4 @@ type BatchRequest struct {
 }
 
 // BatchResponse holds multiple converted HTML results.
-type BatchResponse struct {
-	Results []Response `json:"results"`
-}
-
-func (BatchResponse) IsData() {}
+type BatchResponse = httpx.BatchResponse[Response]

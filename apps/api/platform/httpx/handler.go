@@ -68,15 +68,11 @@ func Handle[Req any, Res Data](
 	}
 }
 
-// HandleBatch is like Handle but the handler also returns an item count.
-// The count is written as X-Usage-Count header so the auth gateway can
-// charge per item instead of per request.
-//
-// IMPORTANT: the second return value is the item count (e.g. len(req.Items)),
-// NOT an HTTP status code. Returning http.StatusOK (200) silently sets the
-// usage count to 200, breaking billing. On error, return 0.
-func HandleBatch[Req any, Res Data](
-	fn func(ctx context.Context, req Req) (Res, int, error),
+// HandleBatch is like Handle but for batch endpoints. It reads len(res.Results)
+// to set the X-Usage-Count header (used by the auth gateway for per-item billing)
+// and auto-populates res.Total before writing the response.
+func HandleBatch[Req any, Item any](
+	fn func(ctx context.Context, req Req) (BatchResponse[Item], error),
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
@@ -91,7 +87,7 @@ func HandleBatch[Req any, Res Data](
 			return
 		}
 
-		res, count, err := fn(r.Context(), req)
+		res, err := fn(r.Context(), req)
 		if err != nil {
 			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				if se.Kind == svcerr.KindUpstream {
@@ -105,7 +101,8 @@ func HandleBatch[Req any, Res Data](
 			return
 		}
 
-		w.Header().Set("X-Usage-Count", strconv.Itoa(count))
+		res.Total = len(res.Results)
+		w.Header().Set("X-Usage-Count", strconv.Itoa(len(res.Results)))
 		JSON(w, http.StatusOK, res)
 	}
 }

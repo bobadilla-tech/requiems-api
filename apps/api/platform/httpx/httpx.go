@@ -13,6 +13,15 @@ type Data interface {
 	IsData()
 }
 
+// BatchResponse is the standard envelope for batch endpoints. HandleBatch
+// reads Results to set X-Usage-Count and auto-populates Total before writing.
+type BatchResponse[T any] struct {
+	Results []T `json:"results"`
+	Total   int `json:"total"`
+}
+
+func (BatchResponse[T]) IsData() {}
+
 // Included in every response.
 type Metadata struct {
 	Timestamp string `json:"timestamp"`

@@ -1,6 +1,10 @@
 package iban
 
-import "context"
+import (
+	"context"
+
+	"requiems-api/platform/httpx"
+)
 
 // ParseResponse is the response payload for GET /v1/finance/iban/{iban}.
 type ParseResponse struct {
@@ -26,9 +30,4 @@ type BatchParseRequest struct {
 }
 
 // BatchParseResponse is the response for a batch IBAN parse request.
-type BatchParseResponse struct {
-	Results []ParseResponse `json:"results"`
-	Total   int             `json:"total"`
-}
-
-func (BatchParseResponse) IsData() {}
+type BatchParseResponse = httpx.BatchResponse[ParseResponse]

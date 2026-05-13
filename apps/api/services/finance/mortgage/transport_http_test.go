@@ -244,7 +244,7 @@ func TestMortgage_BatchCalculate_ExccedsLimit(t *testing.T) {
 }
 
 func TestMortgage_BatchCalculate_SetsUsageCountHeader(t *testing.T) {
-	svc := &stubCalculator{}
+	svc := &stubCalculator{results: BatchResponse{Results: make([]Response, 2)}}
 
 	r := setupRouter(svc)
 

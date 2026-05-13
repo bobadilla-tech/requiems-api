@@ -100,7 +100,7 @@ func TestSentimentBatchHandler_OK(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchAnalyzeResponse]
+	var resp httpx.Response[httpx.BatchResponse[Result]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 

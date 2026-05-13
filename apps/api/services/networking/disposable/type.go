@@ -1,5 +1,7 @@
 package disposable
 
+import "requiems-api/platform/httpx"
+
 // CheckEmailRequest is the body for a single-email disposable check.
 type CheckEmailRequest struct {
 	Email string `json:"email" validate:"required,email"`
@@ -18,10 +20,7 @@ type BatchCheckRequest struct {
 }
 
 // BatchCheckResponse represents the response for a batch email check
-type BatchCheckResponse struct {
-	Results []CheckEmailResponse `json:"results"`
-	Total   int                  `json:"total"`
-}
+type BatchCheckResponse = httpx.BatchResponse[CheckEmailResponse]
 
 // DomainCheckResponse represents the response for a domain check
 type DomainCheckResponse struct {
@@ -49,7 +48,6 @@ type StatsResponse struct {
 }
 
 func (CheckEmailResponse) IsData()  {}
-func (BatchCheckResponse) IsData()  {}
 func (DomainCheckResponse) IsData() {}
 func (DomainsListResponse) IsData() {}
 func (StatsResponse) IsData()       {}

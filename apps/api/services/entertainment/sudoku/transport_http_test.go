@@ -172,7 +172,7 @@ func TestSudokuBatch_HappyPath(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code, "expected status 200, got %d: %s", w.Code, w.Body.String())
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[Puzzle]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
