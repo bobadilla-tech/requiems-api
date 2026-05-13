@@ -232,9 +232,8 @@ func TestService_ParseBatch_MixedResults(t *testing.T) {
 		"XX89370400440532013000", // invalid — unknown country
 	}
 
-	resp, err := svc.ParseBatch(context.Background(), numbers)
+	resp := svc.ParseBatch(context.Background(), numbers)
 
-	require.NoError(t, err)
 	assert.Equal(t, 3, len(resp))
 	assert.True(t, resp[0].Valid, "expected result[0] valid=true")
 	assert.True(t, resp[1].Valid, "expected result[1] valid=true")
@@ -247,10 +246,11 @@ func TestService_ParseBatch_DBError(t *testing.T) {
 
 	numbers := []string{"GB29NWBK60161331926819"}
 
-	resp, err := svc.ParseBatch(context.Background(), numbers)
+	resp := svc.ParseBatch(context.Background(), numbers)
 
-	require.Error(t, err)
-	assert.Equal(t, 0, len(resp))
+	require.Len(t, resp, 1)
+	assert.False(t, resp[0].Valid, "DB failure should return Valid: false in-band")
+	assert.Equal(t, "GB29NWBK60161331926819", resp[0].IBAN)
 }
 
 func TestService_ParseBatch_OrderPreserved(t *testing.T) {
@@ -267,9 +267,8 @@ func TestService_ParseBatch_OrderPreserved(t *testing.T) {
 		"ES9121000418450200051332",
 	}
 
-	resp, err := svc.ParseBatch(context.Background(), numbers)
+	resp := svc.ParseBatch(context.Background(), numbers)
 
-	require.NoError(t, err)
 	assert.Equal(t, "GB29NWBK60161331926819", resp[0].IBAN)
 	assert.Equal(t, "DE89370400440532013000", resp[1].IBAN)
 	assert.Equal(t, "ES9121000418450200051332", resp[2].IBAN)

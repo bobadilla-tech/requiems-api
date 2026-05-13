@@ -175,14 +175,17 @@ func extract(s string, offset, length int) string {
 }
 
 // ParseBatch parses a slice of IBANs and returns the results in the same order as the input.
-func (s *Service) ParseBatch(ctx context.Context, numbers []string) ([]ParseResponse, error) {
+// Infrastructure failures for individual items are absorbed: the item is returned with Valid: false
+// rather than failing the entire batch.
+func (s *Service) ParseBatch(ctx context.Context, numbers []string) []ParseResponse {
 	results := make([]ParseResponse, len(numbers))
 	for i, n := range numbers {
 		result, err := s.Parse(ctx, n)
 		if err != nil {
-			return nil, err
+			results[i] = ParseResponse{IBAN: n, Valid: false}
+			continue
 		}
 		results[i] = result
 	}
-	return results, nil
+	return results
 }

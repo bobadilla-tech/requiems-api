@@ -33,11 +33,8 @@ func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, err
 	return r, nil
 }
 
-func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) ([]ParseResponse, error) {
-	if s.err != nil {
-		return nil, s.err
-	}
-	return s.results, nil
+func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) []ParseResponse {
+	return s.results
 }
 
 func setupRouter(v Validator) chi.Router {
