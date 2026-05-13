@@ -165,7 +165,7 @@ func TestWhois_BatchLookup(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchLookupResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchLookupItem]]
 
 	err := json.NewDecoder(w.Body).Decode(&resp)
 
@@ -242,7 +242,7 @@ func TestWhois_BatchLookup_NotFound(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchLookupResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchLookupItem]]
 
 	err := json.NewDecoder(w.Body).Decode(&resp)
 

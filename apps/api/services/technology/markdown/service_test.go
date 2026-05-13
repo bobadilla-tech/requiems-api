@@ -85,7 +85,7 @@ func TestService_ConvertBatch(t *testing.T) {
 		name      string
 		inputs    []string
 		sanitize  bool
-		wantBatch BatchResponse
+		wantBatch []Response
 	}{
 		{
 			name: "multiple markdown documents",
@@ -95,12 +95,10 @@ func TestService_ConvertBatch(t *testing.T) {
 				"- item",
 			},
 			sanitize: false,
-			wantBatch: BatchResponse{
-				Results: []Response{
-					{HTML: "<h1>Hello</h1>"},
-					{HTML: "<p><strong>bold</strong></p>"},
-					{HTML: "<ul>\n<li>item</li>\n</ul>"},
-				},
+			wantBatch: []Response{
+				{HTML: "<h1>Hello</h1>"},
+				{HTML: "<p><strong>bold</strong></p>"},
+				{HTML: "<ul>\n<li>item</li>\n</ul>"},
 			},
 		},
 		{
@@ -110,14 +108,12 @@ func TestService_ConvertBatch(t *testing.T) {
 				"<strong>safe?</strong>",
 			},
 			sanitize: true,
-			wantBatch: BatchResponse{
-				Results: []Response{
-					{
-						HTML: "<p>Hello <!-- raw HTML omitted -->alert('xss')<!-- raw HTML omitted --></p>",
-					},
-					{
-						HTML: "<p><!-- raw HTML omitted -->safe?<!-- raw HTML omitted --></p>",
-					},
+			wantBatch: []Response{
+				{
+					HTML: "<p>Hello <!-- raw HTML omitted -->alert('xss')<!-- raw HTML omitted --></p>",
+				},
+				{
+					HTML: "<p><!-- raw HTML omitted -->safe?<!-- raw HTML omitted --></p>",
 				},
 			},
 		},
@@ -125,7 +121,7 @@ func TestService_ConvertBatch(t *testing.T) {
 			name:      "empty batch",
 			inputs:    []string{},
 			sanitize:  false,
-			wantBatch: BatchResponse{Results: []Response{}},
+			wantBatch: []Response{},
 		},
 		{
 			name: "batch with empty markdown",
@@ -134,11 +130,9 @@ func TestService_ConvertBatch(t *testing.T) {
 				"# Title",
 			},
 			sanitize: false,
-			wantBatch: BatchResponse{
-				Results: []Response{
-					{HTML: ""},
-					{HTML: "<h1>Title</h1>"},
-				},
+			wantBatch: []Response{
+				{HTML: ""},
+				{HTML: "<h1>Title</h1>"},
 			},
 		},
 	}
@@ -148,9 +142,9 @@ func TestService_ConvertBatch(t *testing.T) {
 			t.Parallel()
 			got, err := svc.ConvertBatch(tt.inputs, tt.sanitize)
 			require.NoError(t, err)
-			require.Len(t, got.Results, len(tt.wantBatch.Results))
-			for i := range got.Results {
-				assert.Equal(t, tt.wantBatch.Results[i].HTML, got.Results[i].HTML)
+			require.Len(t, got, len(tt.wantBatch))
+			for i := range got {
+				assert.Equal(t, tt.wantBatch[i].HTML, got[i].HTML)
 			}
 		})
 	}

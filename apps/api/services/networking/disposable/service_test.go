@@ -46,11 +46,11 @@ func TestCheckBatch_CountMatchesInput(t *testing.T) {
 	svc := NewService()
 	emails := []string{"a@mailinator.com", "b@gmail.com", "c@mailinator.com"}
 	res := svc.CheckBatch(emails)
-	assert.Equal(t, 3, res.Total)
-	assert.Len(t, res.Results, 3)
-	assert.True(t, res.Results[0].IsDisposable)
-	assert.False(t, res.Results[1].IsDisposable)
-	assert.True(t, res.Results[2].IsDisposable)
+	assert.Equal(t, 3, len(res))
+	assert.Len(t, res, 3)
+	assert.True(t, res[0].IsDisposable)
+	assert.False(t, res[1].IsDisposable)
+	assert.True(t, res[2].IsDisposable)
 }
 
 func TestGetStats_TotalNonZero(t *testing.T) {

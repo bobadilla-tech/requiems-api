@@ -118,7 +118,7 @@ func TestWordsBatch_ValidRequest(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
@@ -150,7 +150,7 @@ func TestWordsBatch_CaseInsensitive(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
@@ -179,7 +179,7 @@ func TestWordsBatch_PartialFailure(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
@@ -239,7 +239,7 @@ func TestWordsBatch_UnknownWords(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 

@@ -18,4 +18,3 @@ type BatchRequest struct {
 	Markdowns []string `json:"markdowns" validate:"required,min=1,max=50,dive,required"`
 	Sanitize  bool     `json:"sanitize"`
 }
-

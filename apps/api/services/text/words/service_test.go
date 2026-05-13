@@ -117,18 +117,18 @@ func TestBatchDefine_MixedWords(t *testing.T) {
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.Equal(t, 3, resp.Total)
-	require.Len(t, resp.Results, 3)
+	assert.Equal(t, 3, len(resp))
+	require.Len(t, resp, 3)
 
-	assert.True(t, resp.Results[0].Found)
-	assert.Equal(t, "ephemeral", resp.Results[0].Word)
+	assert.True(t, resp[0].Found)
+	assert.Equal(t, "ephemeral", resp[0].Word)
 
-	assert.True(t, resp.Results[1].Found)
-	assert.Equal(t, "serendipity", resp.Results[1].Word)
+	assert.True(t, resp[1].Found)
+	assert.Equal(t, "serendipity", resp[1].Word)
 
-	assert.False(t, resp.Results[2].Found)
-	assert.Nil(t, resp.Results[2].Entry)
-	assert.NotEmpty(t, resp.Results[2].Error)
+	assert.False(t, resp[2].Found)
+	assert.Nil(t, resp[2].Entry)
+	assert.NotEmpty(t, resp[2].Error)
 }
 
 func TestBatchDefine_AllValid(t *testing.T) {
@@ -147,10 +147,10 @@ func TestBatchDefine_AllValid(t *testing.T) {
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.Equal(t, 3, resp.Total)
-	require.Len(t, resp.Results, 3)
+	assert.Equal(t, 3, len(resp))
+	require.Len(t, resp, 3)
 
-	for i, r := range resp.Results {
+	for i, r := range resp {
 		assert.True(t, r.Found, "item %d should be found", i)
 		assert.NotNil(t, r.Entry)
 		assert.NotEmpty(t, r.Entry.Definitions)
@@ -169,9 +169,9 @@ func TestBatchDefine_AllInvalid(t *testing.T) {
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.Equal(t, 3, resp.Total)
+	assert.Equal(t, 3, len(resp))
 
-	for _, r := range resp.Results {
+	for _, r := range resp {
 		assert.False(t, r.Found)
 		assert.Nil(t, r.Entry)
 		assert.NotEmpty(t, r.Error)
@@ -193,11 +193,11 @@ func TestBatchDefine_TrimsAndNormalizes(t *testing.T) {
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.True(t, resp.Results[0].Found)
-	assert.Equal(t, "ephemeral", resp.Results[0].Word)
+	assert.True(t, resp[0].Found)
+	assert.Equal(t, "ephemeral", resp[0].Word)
 
-	assert.True(t, resp.Results[1].Found)
-	assert.Equal(t, "serendipity", resp.Results[1].Word)
+	assert.True(t, resp[1].Found)
+	assert.Equal(t, "serendipity", resp[1].Word)
 }
 
 func TestBatchDefine_EmptyRequest(t *testing.T) {
@@ -212,6 +212,6 @@ func TestBatchDefine_EmptyRequest(t *testing.T) {
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.Equal(t, 0, resp.Total)
-	assert.Len(t, resp.Results, 0)
+	assert.Equal(t, 0, len(resp))
+	assert.Len(t, resp, 0)
 }
