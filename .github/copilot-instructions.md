@@ -54,7 +54,7 @@ go test -race ./...
 golangci-lint run
 
 # Docker dev container equivalent
-docker exec requiem-dev-api-1 sh -lc 'export PATH=/usr/local/go/bin:$PATH; cd /app; /app/bin/golangci-lint run'
+docker exec requiem-dev-api-1 golangci-lint run
 ```
 
 Environment required for tests:

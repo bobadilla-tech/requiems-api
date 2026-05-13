@@ -7,31 +7,37 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/config"
 )
 
 func TestServiceEnabled(t *testing.T) {
+	t.Parallel()
+
 	t.Run("returns true when enabled services is blank", func(t *testing.T) {
-		if !serviceEnabled(config.Config{}, "text") {
-			t.Fatal("expected service to be enabled when config is blank")
-		}
+		t.Parallel()
+
+		assert.True(t, serviceEnabled(config.Config{}, "text"), "expected service to be enabled when config is blank")
 	})
 
 	t.Run("matches trimmed service names from config", func(t *testing.T) {
+		t.Parallel()
+
 		cfg := config.Config{EnabledServices: "text, validation,networking"}
 
-		if !serviceEnabled(cfg, "text") {
-			t.Fatal("expected text service to be enabled")
-		}
-		if serviceEnabled(cfg, "finance") {
-			t.Fatal("expected finance service to be disabled")
-		}
+		assert.True(t, serviceEnabled(cfg, "text"), "expected text service to be enabled")
+		assert.False(t, serviceEnabled(cfg, "finance"), "expected finance service to be disabled")
 	})
 }
 
 func TestRegisterV1Routes(t *testing.T) {
+	t.Parallel()
+
 	t.Run("mounts all services when enabled services is blank", func(t *testing.T) {
+		t.Parallel()
+
 		r := chi.NewRouter()
 
 		registerV1Routes(context.Background(), r, nil, nil, config.Config{})
@@ -41,30 +47,22 @@ func TestRegisterV1Routes(t *testing.T) {
 			"/entertainment", "/finance", "/health", "/networking",
 			"/places", "/technology", "/text", "/validation",
 		} {
-			if !hasRoutePrefix(routes, prefix) {
-				t.Fatalf("expected mounted routes to include prefix %s; got %v", prefix, routes)
-			}
+			require.True(t, hasRoutePrefix(routes, prefix), "expected mounted routes to include prefix %s; got %v", prefix, routes)
 		}
 	})
 
 	t.Run("mounts only explicitly enabled services", func(t *testing.T) {
+		t.Parallel()
+
 		r := chi.NewRouter()
 
 		registerV1Routes(context.Background(), r, nil, nil, config.Config{EnabledServices: "validation,text"})
 
 		routes := walkRoutes(t, r)
-		if !hasRoutePrefix(routes, "/validation") {
-			t.Fatalf("expected validation routes to be mounted; got %v", routes)
-		}
-		if !hasRoutePrefix(routes, "/text") {
-			t.Fatalf("expected text routes to be mounted; got %v", routes)
-		}
-		if hasRoutePrefix(routes, "/finance") {
-			t.Fatalf("expected finance routes to be absent; got %v", routes)
-		}
-		if hasRoutePrefix(routes, "/technology") {
-			t.Fatalf("expected technology routes to be absent; got %v", routes)
-		}
+		require.True(t, hasRoutePrefix(routes, "/validation"), "expected validation routes to be mounted; got %v", routes)
+		require.True(t, hasRoutePrefix(routes, "/text"), "expected text routes to be mounted; got %v", routes)
+		assert.False(t, hasRoutePrefix(routes, "/finance"), "expected finance routes to be absent; got %v", routes)
+		assert.False(t, hasRoutePrefix(routes, "/technology"), "expected technology routes to be absent; got %v", routes)
 	})
 }
 

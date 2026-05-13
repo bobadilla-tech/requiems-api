@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,33 +21,27 @@ func setupRouter() chi.Router {
 }
 
 func TestChuckNorris_Random(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/chuck-norris", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Fact]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
 	f := resp.Data
 
-	if f.Fact == "" {
-		t.Error("expected non-empty fact")
-	}
-
-	if !strings.HasPrefix(f.ID, "cn_") {
-		t.Errorf("expected ID to start with 'cn_', got %q", f.ID)
-	}
+	assert.NotEmpty(t, f.Fact)
+	assert.True(t, strings.HasPrefix(f.ID, "cn_"), "expected ID to start with 'cn_', got %q", f.ID)
 }
 
 func TestChuckNorris_Randomness(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	seen := make(map[string]bool)
@@ -55,20 +51,15 @@ func TestChuckNorris_Randomness(t *testing.T) {
 	}
 
 	// With 30 facts and 50 draws, expect at least 5 distinct facts.
-	if len(seen) < 5 {
-		t.Errorf("expected variety in random facts, got only %d distinct IDs in 50 draws", len(seen))
-	}
+	assert.GreaterOrEqual(t, len(seen), 5, "expected variety in random facts, got only %d distinct IDs in 50 draws", len(seen))
 }
 
 func TestChuckNorris_FactsNonEmpty(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	for i := range 10 {
 		f := svc.Random()
-		if f.Fact == "" {
-			t.Errorf("call %d: expected non-empty fact", i)
-		}
-		if f.ID == "" {
-			t.Errorf("call %d: expected non-empty ID", i)
-		}
+		assert.NotEmpty(t, f.Fact, "call %d: expected non-empty fact", i)
+		assert.NotEmpty(t, f.ID, "call %d: expected non-empty ID", i)
 	}
 }

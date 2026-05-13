@@ -8,6 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
@@ -20,39 +23,33 @@ func (m mockPinger) Ping(_ context.Context) error {
 }
 
 func TestHealthz_DBAvailable(t *testing.T) {
+	t.Parallel()
+
 	req := httptest.NewRequest(http.MethodGet, "/healthz", http.NoBody)
 	w := httptest.NewRecorder()
 	Healthz(mockPinger{}).ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[healthzResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Status != "ok" {
-		t.Errorf("expected status 'ok', got %q", resp.Data.Status)
-	}
+	assert.Equal(t, "ok", resp.Data.Status)
 }
 
 func TestHealthz_DBUnavailable(t *testing.T) {
+	t.Parallel()
+
 	req := httptest.NewRequest(http.MethodGet, "/healthz", http.NoBody)
 	w := httptest.NewRecorder()
 	Healthz(mockPinger{err: errors.New("connection refused")}).ServeHTTP(w, req)
 
-	if w.Code != http.StatusServiceUnavailable {
-		t.Errorf("expected 503, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode error: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Error != "db_unavailable" {
-		t.Errorf("expected error code 'db_unavailable', got %q", resp.Error)
-	}
+	assert.Equal(t, "db_unavailable", resp.Error)
 }

@@ -1,0 +1,110 @@
+<% content_for :title, t("systems.index.meta_title") %>
+
+<div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <p class="text-sm font-semibold uppercase tracking-widest text-indigo-300 mb-4">
+      <%= t("systems.index.kicker") %>
+    </p>
+    <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+      <%= t("systems.index.hero.headline") %>
+    </h1>
+    <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
+      <%= t("systems.index.hero.subheadline") %>
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <% unless user_signed_in? %>
+        <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg" do %>
+          <%= t("systems.index.hero.primary_cta") %>
+          <svg class="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        <% end %>
+      <% end %>
+      <%= link_to divisions_path, class: "inline-flex items-center justify-center px-8 py-4 border-2 border-white/40 text-base font-medium rounded-lg text-white hover:bg-white/10 transition-colors" do %>
+        <%= t("systems.index.hero.secondary_cta") %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<section class="py-16 bg-gray-50 dark:bg-gray-950">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t("systems.index.grid_heading") %></h2>
+      <p class="mt-3 text-lg text-gray-600 dark:text-gray-400"><%= t("systems.index.grid_subheading") %></p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+      <% @systems.first(4).each do |system| %>
+        <% slug = system[:slug] %>
+        <div class="group block rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all">
+          <div class="flex items-start gap-5 mb-5">
+            <div class="inline-flex h-13 w-13 shrink-0 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-3">
+              <%= render "partials/systems/icon", slug: slug %>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+                <%= t("systems.index.cards.#{slug.tr('-', '_')}.title") %>
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <%= t("systems.index.cards.#{slug.tr('-', '_')}.blurb") %>
+              </p>
+            </div>
+          </div>
+          <ul class="space-y-1.5 mb-6">
+            <% t("systems.index.cards.#{slug.tr('-', '_')}.signals").each do |signal| %>
+              <li class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <svg class="h-4 w-4 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <%= signal %>
+              </li>
+            <% end %>
+          </ul>
+          <%= link_to system_path(system_slug: slug), class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+            <%= t("systems.index.explore_cta") %>
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Developer Utilities — smaller, lower-emphasis card %>
+    <% dev = @systems.last %>
+    <% slug = dev[:slug] %>
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-8 py-6 flex flex-col sm:flex-row sm:items-center gap-6">
+      <div class="flex-1">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1"><%= t("systems.index.utilities_kicker") %></p>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">
+          <%= t("systems.index.cards.developer_utilities.title") %>
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          <%= t("systems.index.cards.developer_utilities.blurb") %>
+        </p>
+      </div>
+      <%= link_to system_path(system_slug: slug), class: "inline-flex items-center justify-center shrink-0 px-5 py-2.5 text-sm font-semibold rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" do %>
+        <%= t("systems.index.utilities_cta") %>
+        <svg class="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="py-14 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="rounded-2xl border border-gray-200 bg-gray-50/80 dark:border-gray-700 dark:bg-gray-800/50 px-6 py-10 sm:px-10 sm:py-12 text-center shadow-sm">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+        <%= t("systems.index.apis_catalog_title") %>
+      </h2>
+      <p class="text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+        <%= t("systems.index.apis_catalog_subtitle") %>
+      </p>
+      <%= link_to apis_path, class: "inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-base font-semibold text-white shadow-md transition-colors hover:bg-blue-700" do %>
+        <%= t("systems.index.apis_catalog_cta") %>
+        <svg class="ml-2 h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -34,8 +34,8 @@ Annual CPI inflation rates for 241 countries, sourced from the World Bank.
 `POST /v1/finance/inflation/batch`
 
 Accepts up to **50 countries** per request. Results are returned in the same
-order as the input array. Countries with no data are included with `found: false`
-instead of failing the entire request.
+order as the input array. Countries with no data are included with
+`found: false` instead of failing the entire request.
 
 Each country in the request counts as **1 credit** (`X-Usage-Count` is set to
 the number of countries in the request).
@@ -81,8 +81,10 @@ the number of countries in the request).
 }
 ```
 
-- `found: false` — the country code is valid but has no data in the World Bank set.
-- `total` — total number of items returned (always equals the number of countries sent).
+- `found: false` — the country code is valid but has no data in the World Bank
+  set.
+- `total` — total number of items returned (always equals the number of
+  countries sent).
 
 ## Data Source
 

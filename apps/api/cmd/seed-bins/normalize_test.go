@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
 
 func TestNormaliseScheme(t *testing.T) {
 	t.Parallel()
@@ -31,9 +35,7 @@ func TestNormaliseScheme(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
-			if got := normaliseScheme(tt.input); got != tt.want {
-				t.Fatalf("normaliseScheme(%q) = %q, want %q", tt.input, got, tt.want)
-			}
+			require.Equal(t, tt.want, normaliseScheme(tt.input))
 		})
 	}
 }
@@ -58,9 +60,7 @@ func TestNormaliseCardType(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
-			if got := normaliseCardType(tt.input); got != tt.want {
-				t.Fatalf("normaliseCardType(%q) = %q, want %q", tt.input, got, tt.want)
-			}
+			require.Equal(t, tt.want, normaliseCardType(tt.input))
 		})
 	}
 }
@@ -90,9 +90,7 @@ func TestNormaliseCardLevel(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			t.Parallel()
-			if got := normaliseCardLevel(tt.input); got != tt.want {
-				t.Fatalf("normaliseCardLevel(%q) = %q, want %q", tt.input, got, tt.want)
-			}
+			require.Equal(t, tt.want, normaliseCardLevel(tt.input))
 		})
 	}
 }
@@ -124,9 +122,7 @@ func TestDetectScheme(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.bin, func(t *testing.T) {
 			t.Parallel()
-			if got := detectScheme(tt.bin); got != tt.want {
-				t.Fatalf("detectScheme(%q) = %q, want %q", tt.bin, got, tt.want)
-			}
+			require.Equal(t, tt.want, detectScheme(tt.bin))
 		})
 	}
 }
@@ -143,12 +139,8 @@ func TestNormalise_PrepaidSetsFlag(t *testing.T) {
 	}
 
 	got := normalise(r)
-	if !got.Prepaid {
-		t.Fatal("expected Prepaid = true for card type PREPAID")
-	}
-	if got.Scheme != "visa" {
-		t.Fatalf("Scheme = %q, want %q", got.Scheme, "visa")
-	}
+	require.True(t, got.Prepaid, "expected Prepaid = true for card type PREPAID")
+	require.Equal(t, "visa", got.Scheme)
 }
 
 func TestNormalise_InvalidCountryCodeCleared(t *testing.T) {
@@ -162,12 +154,8 @@ func TestNormalise_InvalidCountryCodeCleared(t *testing.T) {
 	}
 
 	got := normalise(r)
-	if got.CountryCode != "" {
-		t.Fatalf("CountryCode = %q, want empty for 3-letter code", got.CountryCode)
-	}
-	if got.CountryName != "" {
-		t.Fatalf("CountryName = %q, want empty when CountryCode is cleared", got.CountryName)
-	}
+	require.Equal(t, "", got.CountryCode)
+	require.Equal(t, "", got.CountryName)
 }
 
 func TestMergeRecords_HigherConfidenceWins(t *testing.T) {
@@ -180,12 +168,8 @@ func TestMergeRecords_HigherConfidenceWins(t *testing.T) {
 
 	merged := mergeRecords(records)
 	r, ok := merged["411111"]
-	if !ok {
-		t.Fatal("expected merged record for BIN 411111")
-	}
-	if r.IssuerName != "High Conf Bank" {
-		t.Fatalf("IssuerName = %q, want %q", r.IssuerName, "High Conf Bank")
-	}
+	require.True(t, ok, "expected merged record for BIN 411111")
+	require.Equal(t, "High Conf Bank", r.IssuerName)
 }
 
 func TestMergeRecords_FillsEmptyFieldsFromLoser(t *testing.T) {
@@ -200,9 +184,7 @@ func TestMergeRecords_FillsEmptyFieldsFromLoser(t *testing.T) {
 
 	merged := mergeRecords(records)
 	r := merged["411111"]
-	if r.IssuerURL != "https://loser.com" {
-		t.Fatalf("IssuerURL = %q, want filled from loser", r.IssuerURL)
-	}
+	require.Equal(t, "https://loser.com", r.IssuerURL)
 }
 
 func TestCombineSources(t *testing.T) {
@@ -220,9 +202,7 @@ func TestCombineSources(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.a+"/"+tt.b, func(t *testing.T) {
 			t.Parallel()
-			if got := combineSources(tt.a, tt.b); got != tt.want {
-				t.Fatalf("combineSources(%q, %q) = %q, want %q", tt.a, tt.b, got, tt.want)
-			}
+			require.Equal(t, tt.want, combineSources(tt.a, tt.b))
 		})
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts the color conversion handler on the given router.
@@ -22,9 +23,8 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		result, err := svc.Convert(req.From, req.To, req.Value)
 		if err != nil {
-			var appErr *httpx.AppError
-			if errors.As(err, &appErr) {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to convert color")

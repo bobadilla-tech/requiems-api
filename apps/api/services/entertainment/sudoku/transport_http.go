@@ -1,6 +1,7 @@
 package sudoku
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -18,6 +19,21 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return
 		}
 
-		httpx.JSON(w, http.StatusOK, svc.Generate(req.Difficulty))
+		puzzle, err := svc.Generate(req.Difficulty)
+		if err != nil {
+			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
+			return
+		}
+		httpx.JSON(w, http.StatusOK, puzzle)
 	})
+
+	r.Post("/sudoku/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (BatchResponse, int, error) {
+			results, err := svc.GenerateBatch(req.Puzzles)
+			if err != nil {
+				return BatchResponse{}, 0, err
+			}
+			return BatchResponse{Results: results, Total: len(results)}, len(results), nil
+		},
+	))
 }

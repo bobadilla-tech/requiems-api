@@ -1,0 +1,19 @@
+<%# locals: (i18n_scope:, hub_page: false) %>
+<% hub_page = local_assigns.fetch(:hub_page, false) %>
+<% kicker = hub_page ? t("divisions.common.division_hub_tagline_kicker") : t("#{i18n_scope}.tagline_kicker", default: "") %>
+<section class="relative overflow-hidden border-b border-gray-200/90 dark:border-gray-800">
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.07] via-transparent to-indigo-600/[0.06] dark:from-blue-400/10 dark:to-indigo-500/10" aria-hidden="true"></div>
+  <div class="absolute -left-24 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-blue-400/10 blur-3xl dark:bg-blue-500/15" aria-hidden="true"></div>
+  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div class="rounded-2xl border border-gray-200/90 bg-white/90 px-6 py-8 shadow-lg shadow-slate-900/[0.04] backdrop-blur-sm dark:border-gray-700 dark:bg-gray-900/85 dark:shadow-none sm:px-10 sm:py-10">
+      <% if kicker.present? %>
+        <p class="mb-4 text-center text-xs font-semibold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 sm:text-left">
+          <%= kicker %>
+        </p>
+      <% end %>
+      <p class="text-center text-lg font-normal leading-relaxed text-gray-800 dark:text-gray-100 sm:text-left sm:text-xl sm:leading-relaxed">
+        <%= t("#{i18n_scope}.tagline") %>
+      </p>
+    </div>
+  </div>
+</section>

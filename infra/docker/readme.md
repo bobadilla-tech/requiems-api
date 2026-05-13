@@ -68,8 +68,10 @@ Rebuild after dependency changes or the first time you start the stack:
 1. `apps/api/go.mod` or `apps/api/go.sum`
 2. `apps/dashboard/Gemfile` or `apps/dashboard/Gemfile.lock`
 3. `infra/docker/api.dev.Dockerfile` or `infra/docker/dashboard.dev.Dockerfile`
-4. `apps/workers/auth-gateway/wrangler.toml` or `apps/workers/api-management/wrangler.toml`
-5. `infra/docker/auth-gateway.dev.Dockerfile` or `infra/docker/api-management.dev.Dockerfile`
+4. `apps/workers/auth-gateway/wrangler.toml` or
+   `apps/workers/api-management/wrangler.toml`
+5. `infra/docker/auth-gateway.dev.Dockerfile` or
+   `infra/docker/api-management.dev.Dockerfile`
 
 ### Worker local state and migrations
 
@@ -259,22 +261,19 @@ be set via `wrangler secret put` — they are not read from `.env`.
 1. **Keep dev running:** Leave `docker-compose.dev.yml` running while you code.
    All changes are picked up automatically.
 
-2. **Use separate terminals:** Run Docker in one terminal, keep another open for
-   git commands.
-
-3. **Database GUI:** Connect with TablePlus, DBeaver, or pgAdmin using:
+2. **Database GUI:** Connect with Datagrip, DBeaver, or pgAdmin using:
    - Host: `localhost`
    - Port: `5432`
    - Database: `requiem`
    - User: `requiem`
    - Password: `requiem`
 
-4. **Reset database:**
+3. **Reset database:**
 
    ```bash
    docker compose -f docker-compose.dev.yml down -v
    docker compose -f docker-compose.dev.yml up
    ```
 
-5. **Dependency changes:** Rebuild the affected dev image after changing
+4. **Dependency changes:** Rebuild the affected dev image after changing
    `Gemfile.lock`, `go.sum`, or the dev Dockerfiles.

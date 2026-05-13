@@ -44,6 +44,19 @@ export function jsonError(
   return jsonResponse({ error: message }, status, headers);
 }
 
+/** One field-level validation failure (matches Go httpx validation_failed shape, with message). */
+export type ValidationFieldError = {
+  field: string;
+  message: string;
+};
+
+/**
+ * 422 Unprocessable Entity with structured field errors (Zod, etc.).
+ */
+export function jsonValidationFailed(fields: ValidationFieldError[]): Response {
+  return jsonResponse({ error: "validation_failed", fields }, 422);
+}
+
 /**
  * Returns a 500 error response. In development, includes the error message.
  */

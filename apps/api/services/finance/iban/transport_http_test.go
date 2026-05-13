@@ -6,9 +6,12 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -16,8 +19,9 @@ import (
 // stubValidator implements Validator for transport tests. It returns a fixed
 // result or a fixed error on every call, keeping tests DB-free and fast.
 type stubValidator struct {
-	result ParseResponse
-	err    error
+	result  ParseResponse
+	results BatchParseResponse
+	err     error
 }
 
 func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, error) {
@@ -26,6 +30,14 @@ func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, err
 	}
 	r := s.result
 	r.IBAN = raw
+	return r, nil
+}
+
+func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) (BatchParseResponse, error) {
+	if s.err != nil {
+		return BatchParseResponse{}, s.err
+	}
+	r := s.results
 	return r, nil
 }
 
@@ -38,15 +50,15 @@ func setupRouter(v Validator) chi.Router {
 func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[ParseResponse] {
 	t.Helper()
 	var resp httpx.Response[ParseResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	return resp
 }
 
 // ---- tests ----
 
 func TestIBAN_ValidDE_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{result: ParseResponse{
 		Valid:    true,
 		Country:  "Germany",
@@ -59,32 +71,19 @@ func TestIBAN_ValidDE_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if !resp.Data.Valid {
-		t.Error("expected valid = true")
-	}
-	if resp.Data.IBAN != "DE89370400440532013000" {
-		t.Errorf("expected IBAN echoed, got %q", resp.Data.IBAN)
-	}
-	if resp.Data.Country != "Germany" {
-		t.Errorf("expected country Germany, got %q", resp.Data.Country)
-	}
-	if resp.Data.BankCode != "37040044" {
-		t.Errorf("expected bank_code 37040044, got %q", resp.Data.BankCode)
-	}
-	if resp.Data.Account != "0532013000" {
-		t.Errorf("expected account 0532013000, got %q", resp.Data.Account)
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("expected metadata.timestamp to be set")
-	}
+	assert.True(t, resp.Data.Valid)
+	assert.Equal(t, "DE89370400440532013000", resp.Data.IBAN)
+	assert.Equal(t, "Germany", resp.Data.Country)
+	assert.Equal(t, "37040044", resp.Data.BankCode)
+	assert.Equal(t, "0532013000", resp.Data.Account)
+	assert.NotEmpty(t, resp.Metadata.Timestamp)
 }
 
 func TestIBAN_ResponseEnvelope(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{result: ParseResponse{Valid: true, Country: "Netherlands"}}
 	r := setupRouter(svc)
 
@@ -92,23 +91,19 @@ func TestIBAN_ResponseEnvelope(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var raw map[string]json.RawMessage
-	if err := json.NewDecoder(w.Body).Decode(&raw); err != nil {
-		t.Fatalf("failed to decode: %v", err)
-	}
-	if _, ok := raw["data"]; !ok {
-		t.Error("response must have a 'data' key")
-	}
-	if _, ok := raw["metadata"]; !ok {
-		t.Error("response must have a 'metadata' key")
-	}
+	err := json.NewDecoder(w.Body).Decode(&raw)
+	require.NoError(t, err)
+	_, ok := raw["data"]
+	assert.True(t, ok, "response must have a 'data' key")
+	_, ok = raw["metadata"]
+	assert.True(t, ok, "response must have a 'metadata' key")
 }
 
 func TestIBAN_InvalidChecksum_Returns200WithValidFalse(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{result: ParseResponse{Valid: false, Country: "Germany"}}
 	r := setupRouter(svc)
 
@@ -116,17 +111,14 @@ func TestIBAN_InvalidChecksum_Returns200WithValidFalse(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for invalid IBAN, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.Valid {
-		t.Error("expected valid = false for invalid IBAN")
-	}
+	assert.False(t, resp.Data.Valid)
 }
 
 func TestIBAN_DBError_Returns500(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{err: errors.New("db unavailable")}
 	r := setupRouter(svc)
 
@@ -134,12 +126,11 @@ func TestIBAN_DBError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("expected 500 for DB error, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
 func TestIBAN_UnknownCountry_Returns200(t *testing.T) {
+	t.Parallel()
 	// IBAN from country not in DB — valid checksum, empty bank_code/account.
 	svc := &stubValidator{result: ParseResponse{Valid: true}}
 	r := setupRouter(svc)
@@ -148,12 +139,11 @@ func TestIBAN_UnknownCountry_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestIBAN_AllResponseFieldsPresent(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{result: ParseResponse{
 		Valid:    true,
 		Country:  "Netherlands",
@@ -177,13 +167,12 @@ func TestIBAN_AllResponseFieldsPresent(t *testing.T) {
 		"valid is true":       d.Valid,
 	}
 	for name, ok := range checks {
-		if !ok {
-			t.Errorf("field check failed: %s", name)
-		}
+		assert.True(t, ok, "field check failed: %s", name)
 	}
 }
 
 func TestIBAN_GBParsing_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubValidator{result: ParseResponse{
 		Valid:    true,
 		Country:  "United Kingdom",
@@ -196,15 +185,111 @@ func TestIBAN_GBParsing_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.BankCode != "WEST" {
-		t.Errorf("expected bank_code WEST, got %q", resp.Data.BankCode)
+	assert.Equal(t, "WEST", resp.Data.BankCode)
+	assert.Equal(t, "98765432", resp.Data.Account)
+}
+
+func TestIBAN_BatchParse(t *testing.T) {
+	t.Parallel()
+	svc := &stubValidator{results: BatchParseResponse{
+		Results: []ParseResponse{
+			{IBAN: "GB29NWBK60161331926819", Valid: true, Country: "United Kingdom", BankCode: "NWBK", Account: "31926819"},
+			{IBAN: "DE89370400440532013000", Valid: true, Country: "Germany", BankCode: "37040044", Account: "0532013000"},
+			{IBAN: "XX89370400440532013000", Valid: false},
+		},
+		Total: 3,
+	}}
+
+	r := setupRouter(svc)
+
+	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchParseResponse]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, resp.Data.Total)
+
+	require.Len(t, resp.Data.Results, 3)
+
+	// valid UK IBAN
+	assert.True(t, resp.Data.Results[0].Valid)
+	assert.Equal(t, "United Kingdom", resp.Data.Results[0].Country)
+	assert.Equal(t, "NWBK", resp.Data.Results[0].BankCode)
+
+	// valid DE IBAN
+	assert.True(t, resp.Data.Results[1].Valid)
+	assert.Equal(t, "Germany", resp.Data.Results[1].Country)
+	assert.Equal(t, "37040044", resp.Data.Results[1].BankCode)
+
+	// invalid IBAN
+	assert.False(t, resp.Data.Results[2].Valid)
+}
+
+func TestIBAN_BatchParse_EmptyBody(t *testing.T) {
+	t.Parallel()
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(`{"numbers": []}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestIBAN_BatchParse_ExceedsLimmit(t *testing.T) {
+	t.Parallel()
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	numbers := make([]string, 51)
+
+	for i := range numbers {
+		numbers[i] = `"GB29NWBK60161331926819"`
 	}
-	if resp.Data.Account != "98765432" {
-		t.Errorf("expected account 98765432, got %q", resp.Data.Account)
-	}
+
+	body := `{"numbers":[` + strings.Join(numbers, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestIBAN_BatchParse_MissingBody(t *testing.T) {
+	t.Parallel()
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(`{}`))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestIBAN_BatchParse_SetsUsageCountHeader(t *testing.T) {
+	t.Parallel()
+	svc := &stubValidator{}
+	r := setupRouter(svc)
+
+	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`
+	req := httptest.NewRequest(http.MethodPost, "/iban/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "3", w.Header().Get("X-Usage-Count"))
 }

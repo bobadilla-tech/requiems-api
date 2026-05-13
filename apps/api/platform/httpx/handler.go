@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	sentry "github.com/getsentry/sentry-go"
+
+	"requiems-api/platform/svcerr"
 )
 
 // Handle wraps an endpoint function with automatic JSON binding, validation,
@@ -17,7 +19,7 @@ import (
 //
 // Error mapping:
 //   - *ValidationFailure  → 422 with {"error":"validation_failed","fields":[...]}
-//   - *AppError           → AppError.Status with {"error":Code,"message":Message}
+//   - *svcerr.Error       → mapped HTTP status with {"error":Code,"message":Message}
 //   - any other error     → 500 with {"error":"internal_error"}
 //
 // Usage:
@@ -37,7 +39,7 @@ func Handle[Req any, Res Data](
 
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 
@@ -48,8 +50,12 @@ func Handle[Req any, Res Data](
 		res, err := fn(r.Context(), req)
 
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 
@@ -65,6 +71,10 @@ func Handle[Req any, Res Data](
 // HandleBatch is like Handle but the handler also returns an item count.
 // The count is written as X-Usage-Count header so the auth gateway can
 // charge per item instead of per request.
+//
+// IMPORTANT: the second return value is the item count (e.g. len(req.Items)),
+// NOT an HTTP status code. Returning http.StatusOK (200) silently sets the
+// usage count to 200, breaking billing. On error, return 0.
 func HandleBatch[Req any, Res Data](
 	fn func(ctx context.Context, req Req) (Res, int, error),
 ) http.HandlerFunc {
@@ -74,7 +84,7 @@ func HandleBatch[Req any, Res Data](
 		var req Req
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))
@@ -83,8 +93,11 @@ func HandleBatch[Req any, Res Data](
 
 		res, count, err := fn(r.Context(), req)
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			sentry.CaptureException(err)

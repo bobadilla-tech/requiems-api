@@ -44,7 +44,7 @@
             <% end %>
           </h3>
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            <% if @subscription %>
+            <% if @subscription&.current_period_end %>
               <% if @subscription.cancel_at_period_end %>
                 <%= t("dashboard.billing.current_plan.cancels_on", date: @subscription.current_period_end.strftime("%B %d, %Y")) %>
               <% else %>

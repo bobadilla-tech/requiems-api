@@ -1,5 +1,5 @@
 import { PLANS } from "@requiem/workers-shared";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WorkerBindings } from "../env";
 import { checkRateLimit, getPlanLimits, getRequestLimitMessage } from "../rate-limit";
 
@@ -7,6 +7,10 @@ describe("Rate Limiting", () => {
   // Mock KV store
   let mockKV: Map<string, { value: string; expirationTtl?: number }>;
   let bindings: WorkerBindings;
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
   beforeEach(() => {
     // Reset mock KV store before each test

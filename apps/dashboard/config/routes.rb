@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../lib/division_slugs.rb"
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
@@ -24,8 +25,9 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
 
-  # All user-facing routes scoped under optional locale prefix (/en/... or /es/...)
-  scope "(:locale)", locale: /en|es/ do
+  locale_route_pattern = Regexp.union(*Rails.application.config.i18n.available_locales.map(&:to_s))
+  # All user-facing routes scoped under optional locale prefix (/en/, /es/, /fr/, ...)
+  scope "(:locale)", locale: locale_route_pattern do
     devise_for :users, controllers: {
       registrations: "users/registrations",
       sessions: "users/sessions",
@@ -56,6 +58,8 @@ Rails.application.routes.draw do
       post "billing/checkout", to: "billing#checkout", as: :checkout_billing
       post "billing/portal", to: "billing#portal", as: :portal_billing
       delete "billing/cancel_subscription", to: "billing#cancel_subscription", as: :cancel_subscription_billing
+
+      resource :referral, only: [ :show ], controller: "referrals"
 
       resources :invoices, only: [ :index, :show ]
 
@@ -145,5 +149,17 @@ Rails.application.routes.draw do
     resources :apis, only: [ :index, :show ]
     resources :categories, only: [ :show ]
     resources :examples, only: [ :show ]
+
+    get "divisions", to: "divisions#index", as: :divisions
+    get "systems", to: "systems#index", as: :systems
+    get "systems/:system_slug", to: "systems#show", as: :system,
+        constraints: { system_slug: /identity-risk|payments-intelligence|global-data|data-integrity|developer-utilities/ }
+
+    get "case-studies", to: "case_studies#index", as: :case_studies
+    get "case-studies/:slug", to: "case_studies#show", as: :case_study
+
+    get ":division_slug", to: "divisions#show",
+                         constraints: { division_slug: Regexp.union(*DivisionSlugs::ALL) },
+                         as: :division
   end
 end

@@ -6,14 +6,13 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"net/http"
 	"sort"
 	"strings"
 
 	"github.com/BurntSushi/toml"
 	yaml "gopkg.in/yaml.v3"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const maxContentSize = 512 * 1024 // 512 KB
@@ -27,11 +26,7 @@ func NewService() *Service { return &Service{} }
 // Convert converts content from one format to another.
 func (s *Service) Convert(req Request) (Response, error) {
 	if len(req.Content) > maxContentSize {
-		return Response{}, &httpx.AppError{
-			Status:  http.StatusRequestEntityTooLarge,
-			Code:    "content_too_large",
-			Message: fmt.Sprintf("content exceeds maximum allowed size of %d bytes", maxContentSize),
-		}
+		return Response{}, svcerr.Invalid("content_too_large", fmt.Sprintf("content exceeds maximum allowed size of %d bytes", maxContentSize))
 	}
 
 	if req.From == req.To {
@@ -68,11 +63,7 @@ func parseInput(format, content string) (any, error) {
 	case "toml":
 		return parseTOML(content)
 	default:
-		return nil, &httpx.AppError{
-			Status:  http.StatusBadRequest,
-			Code:    "unsupported_format",
-			Message: fmt.Sprintf("unsupported input format: %s", format),
-		}
+		return nil, svcerr.Invalid("unsupported_format", fmt.Sprintf("unsupported input format: %s", format))
 	}
 }
 
@@ -90,11 +81,7 @@ func serializeOutput(format string, v any) (string, error) {
 	case "toml":
 		return toTOML(v)
 	default:
-		return "", &httpx.AppError{
-			Status:  http.StatusBadRequest,
-			Code:    "unsupported_format",
-			Message: fmt.Sprintf("unsupported output format: %s", format),
-		}
+		return "", svcerr.Invalid("unsupported_format", fmt.Sprintf("unsupported output format: %s", format))
 	}
 }
 
@@ -105,11 +92,7 @@ func parseJSON(content string) (any, error) {
 	dec.UseNumber()
 	var v any
 	if err := dec.Decode(&v); err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_json",
-			Message: fmt.Sprintf("invalid JSON: %s", err.Error()),
-		}
+		return nil, svcerr.Unknown("invalid_json", fmt.Sprintf("invalid JSON: %s", err.Error()))
 	}
 	return normalizeNumbers(v), nil
 }
@@ -117,11 +100,7 @@ func parseJSON(content string) (any, error) {
 func toJSON(v any) (string, error) {
 	b, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
-		return "", &httpx.AppError{
-			Status:  http.StatusInternalServerError,
-			Code:    "conversion_error",
-			Message: "failed to serialize to JSON",
-		}
+		return "", fmt.Errorf("failed to serialize to JSON: %w", err)
 	}
 	return string(b), nil
 }
@@ -131,24 +110,16 @@ func toJSON(v any) (string, error) {
 func parseYAML(content string) (any, error) {
 	var v any
 	if err := yaml.Unmarshal([]byte(content), &v); err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_yaml",
-			Message: fmt.Sprintf("invalid YAML: %s", err.Error()),
-		}
+		return nil, svcerr.Unknown("invalid_yaml", fmt.Sprintf("invalid YAML: %s", err.Error()))
 	}
-	// yaml.v3 unmarshals maps as map[string]interface{}, which is what we want.
+	// yaml.v3 unmarshals maps as map[string]any, which is what we want.
 	return v, nil
 }
 
 func toYAML(v any) (string, error) {
 	b, err := yaml.Marshal(v)
 	if err != nil {
-		return "", &httpx.AppError{
-			Status:  http.StatusInternalServerError,
-			Code:    "conversion_error",
-			Message: "failed to serialize to YAML",
-		}
+		return "", fmt.Errorf("failed to serialize to YAML: %w", err)
 	}
 	return string(b), nil
 }
@@ -161,11 +132,7 @@ func parseCSV(content string) (any, error) {
 	r := csv.NewReader(strings.NewReader(content))
 	records, err := r.ReadAll()
 	if err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_csv",
-			Message: fmt.Sprintf("invalid CSV: %s", err.Error()),
-		}
+		return nil, svcerr.Unknown("invalid_csv", fmt.Sprintf("invalid CSV: %s", err.Error()))
 	}
 	if len(records) == 0 {
 		return []any{}, nil
@@ -175,11 +142,7 @@ func parseCSV(content string) (any, error) {
 	rows := make([]any, 0, len(records)-1)
 	for rowIdx, record := range records[1:] {
 		if len(record) > len(headers) {
-			return nil, &httpx.AppError{
-				Status:  http.StatusUnprocessableEntity,
-				Code:    "invalid_csv",
-				Message: fmt.Sprintf("row %d has %d columns but header defines %d", rowIdx+2, len(record), len(headers)),
-			}
+			return nil, svcerr.Unknown("invalid_csv", fmt.Sprintf("row %d has %d columns but header defines %d", rowIdx+2, len(record), len(headers)))
 		}
 		row := make(map[string]any, len(headers))
 		for i, h := range headers {
@@ -199,11 +162,7 @@ func parseCSV(content string) (any, error) {
 func toCSV(v any) (string, error) {
 	rows, ok := v.([]any)
 	if !ok {
-		return "", &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "conversion_error",
-			Message: "CSV output requires a JSON array of objects",
-		}
+		return "", svcerr.Unknown("conversion_error", "CSV output requires a JSON array of objects")
 	}
 	if len(rows) == 0 {
 		return "", nil
@@ -211,11 +170,7 @@ func toCSV(v any) (string, error) {
 
 	firstRow, ok := rows[0].(map[string]any)
 	if !ok {
-		return "", &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "conversion_error",
-			Message: "CSV output requires a JSON array of objects",
-		}
+		return "", svcerr.Unknown("conversion_error", "CSV output requires a JSON array of objects")
 	}
 
 	// Collect headers from first row in deterministic order.
@@ -229,21 +184,13 @@ func toCSV(v any) (string, error) {
 	w := csv.NewWriter(&buf)
 
 	if err := w.Write(headers); err != nil {
-		return "", &httpx.AppError{
-			Status:  http.StatusInternalServerError,
-			Code:    "conversion_error",
-			Message: "failed to write CSV headers",
-		}
+		return "", fmt.Errorf("failed to write CSV headers: %w", err)
 	}
 
 	for _, row := range rows {
 		m, ok := row.(map[string]any)
 		if !ok {
-			return "", &httpx.AppError{
-				Status:  http.StatusUnprocessableEntity,
-				Code:    "conversion_error",
-				Message: "CSV output requires all array elements to be objects",
-			}
+			return "", svcerr.Unknown("conversion_error", "CSV output requires all array elements to be objects")
 		}
 		record := make([]string, len(headers))
 		for i, h := range headers {
@@ -252,20 +199,12 @@ func toCSV(v any) (string, error) {
 			}
 		}
 		if err := w.Write(record); err != nil {
-			return "", &httpx.AppError{
-				Status:  http.StatusInternalServerError,
-				Code:    "conversion_error",
-				Message: "failed to write CSV row",
-			}
+			return "", fmt.Errorf("failed to write CSV row: %w", err)
 		}
 	}
 	w.Flush()
 	if err := w.Error(); err != nil {
-		return "", &httpx.AppError{
-			Status:  http.StatusInternalServerError,
-			Code:    "conversion_error",
-			Message: "failed to flush CSV writer",
-		}
+		return "", fmt.Errorf("failed to flush CSV writer: %w", err)
 	}
 
 	return buf.String(), nil
@@ -278,11 +217,7 @@ func parseXML(content string) (any, error) {
 	dec := xml.NewDecoder(strings.NewReader(content))
 	result, err := xmlDecodeElement(dec)
 	if err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_xml",
-			Message: fmt.Sprintf("invalid XML: %s", err.Error()),
-		}
+		return nil, svcerr.Unknown("invalid_xml", fmt.Sprintf("invalid XML: %s", err.Error()))
 	}
 	return result, nil
 }
@@ -358,19 +293,16 @@ func toXML(v any) (string, error) {
 
 	root := xml.StartElement{Name: xml.Name{Local: "root"}}
 	if err := enc.EncodeToken(root); err != nil {
-		return "", conversionError()
+		return "", fmt.Errorf("failed to serialize to XML: %w", err)
 	}
 	if err := encodeXMLValue(enc, v); err != nil {
-		if ae, ok := err.(*httpx.AppError); ok {
-			return "", ae
-		}
-		return "", conversionError()
+		return "", fmt.Errorf("failed to serialize to XML: %w", err)
 	}
 	if err := enc.EncodeToken(root.End()); err != nil {
-		return "", conversionError()
+		return "", fmt.Errorf("failed to serialize to XML: %w", err)
 	}
 	if err := enc.Flush(); err != nil {
-		return "", conversionError()
+		return "", fmt.Errorf("failed to serialize to XML: %w", err)
 	}
 
 	return buf.String(), nil
@@ -439,24 +371,12 @@ func sanitizeXMLName(name string) string {
 	return b.String()
 }
 
-func conversionError() *httpx.AppError {
-	return &httpx.AppError{
-		Status:  http.StatusInternalServerError,
-		Code:    "conversion_error",
-		Message: "failed to serialize to XML",
-	}
-}
-
 // --- TOML ---
 
 func parseTOML(content string) (any, error) {
 	var v map[string]any
 	if _, err := toml.Decode(content, &v); err != nil {
-		return nil, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_toml",
-			Message: fmt.Sprintf("invalid TOML: %s", err.Error()),
-		}
+		return nil, svcerr.Unknown("invalid_toml", fmt.Sprintf("invalid TOML: %s", err.Error()))
 	}
 	return v, nil
 }
@@ -464,20 +384,12 @@ func parseTOML(content string) (any, error) {
 func toTOML(v any) (string, error) {
 	m, ok := v.(map[string]any)
 	if !ok {
-		return "", &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "conversion_error",
-			Message: "TOML output requires a JSON object (not an array or scalar)",
-		}
+		return "", svcerr.Unknown("conversion_error", "TOML output requires a JSON object (not an array or scalar)")
 	}
 	var buf strings.Builder
 	enc := toml.NewEncoder(&buf)
 	if err := enc.Encode(m); err != nil {
-		return "", &httpx.AppError{
-			Status:  http.StatusInternalServerError,
-			Code:    "conversion_error",
-			Message: "failed to serialize to TOML",
-		}
+		return "", fmt.Errorf("failed to serialize to TOML: %w", err)
 	}
 	return buf.String(), nil
 }

@@ -1,0 +1,15 @@
+<% i18n_scope = "case_studies.#{@slug}" %>
+<% content_for :title, t("#{i18n_scope}.meta_title") %>
+<% content_for :description, t("#{i18n_scope}.meta_description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= case_study_json_ld(@slug).html_safe %></script>
+<% end %>
+
+<%= render "partials/case_studies/hero", i18n_scope: i18n_scope %>
+<%= render "partials/case_studies/sections", i18n_scope: i18n_scope %>
+<%= render "partials/case_studies/outcome_note" %>
+<%= render "partials/case_studies/quote", i18n_scope: i18n_scope %>
+<%= render "partials/case_studies/api_mapping", i18n_scope: i18n_scope %>
+<%= render "partials/case_studies/related_links", slug: @slug %>
+<%= render "partials/case_studies/ctas" %>
+<%= render "partials/case_studies/back_to_hub" %>

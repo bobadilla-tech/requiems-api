@@ -21,3 +21,16 @@ type Result struct {
 }
 
 func (Result) IsData() {}
+
+// BatchAnalyzeRequest is the request body for analyzing multiple texts at once.
+type BatchAnalyzeRequest struct {
+	Texts []string `json:"texts" validate:"required,min=1,max=50,dive,required"`
+}
+
+// BatchAnalyzeResponse is the response for a batch sentiment analysis request.
+type BatchAnalyzeResponse struct {
+	Results []Result `json:"results"`
+	Total   int      `json:"total"`
+}
+
+func (BatchAnalyzeResponse) IsData() {}
