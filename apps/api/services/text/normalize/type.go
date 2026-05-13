@@ -30,10 +30,4 @@ type EmailNormalizationBatchItem struct {
 	Message    string              `json:"message,omitempty"`
 }
 
-type EmailNormalizationBatchResponse struct {
-	Results []EmailNormalizationBatchItem `json:"results"`
-	Total   int                           `json:"total"`
-}
-
-func (EmailNormalization) IsData()              {}
-func (EmailNormalizationBatchResponse) IsData() {}
+func (EmailNormalization) IsData() {}

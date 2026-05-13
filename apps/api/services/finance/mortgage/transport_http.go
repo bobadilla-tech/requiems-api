@@ -29,7 +29,7 @@ func registerMortgageRoutes(r chi.Router, c Calculator) {
 
 		httpx.JSON(w, http.StatusOK, c.Calculate(req.Principal, req.Rate, req.Years))
 	})
-	r.Post("/mortgage/batch", httpx.HandleBatch(func(ctx context.Context, req BatchRequest) (BatchResponse, int, error) {
-		return c.CalculateBatch(req.Mortgages), len(req.Mortgages), nil
+	r.Post("/mortgage/batch", httpx.HandleBatch(func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
+		return httpx.BatchResponse[Response]{Results: c.CalculateBatch(req.Mortgages)}, nil
 	}))
 }

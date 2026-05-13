@@ -17,12 +17,6 @@ type BatchCheckRequest struct {
 	Emails []string `json:"emails" validate:"required,min=1,max=100,dive,email"`
 }
 
-// BatchCheckResponse represents the response for a batch email check
-type BatchCheckResponse struct {
-	Results []CheckEmailResponse `json:"results"`
-	Total   int                  `json:"total"`
-}
-
 // DomainCheckResponse represents the response for a domain check
 type DomainCheckResponse struct {
 	Domain       string `json:"domain"`
@@ -49,7 +43,6 @@ type StatsResponse struct {
 }
 
 func (CheckEmailResponse) IsData()  {}
-func (BatchCheckResponse) IsData()  {}
 func (DomainCheckResponse) IsData() {}
 func (DomainsListResponse) IsData() {}
 func (StatsResponse) IsData()       {}

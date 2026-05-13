@@ -70,12 +70,12 @@ func numberType(t phonenumbers.PhoneNumberType) string {
 }
 
 // ValidateBatch validates a slice of phone numbers and returns results in the same order.
-func (s *Service) ValidateBatch(numbers []string) BatchValidateResponse {
+func (s *Service) ValidateBatch(numbers []string) []ValidateResponse {
 	results := make([]ValidateResponse, len(numbers))
 	for i, n := range numbers {
 		results[i] = s.Validate(n)
 	}
-	return BatchValidateResponse{Results: results, Total: len(results)}
+	return results
 }
 
 // numberRisk returns VOIP and virtual risk flags for a given phone number type.

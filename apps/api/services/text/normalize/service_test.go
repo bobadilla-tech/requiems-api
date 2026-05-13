@@ -196,9 +196,9 @@ func TestService_NormalizeBatch_OrderAndValidity(t *testing.T) {
 	svc := NewService()
 
 	got := svc.NormalizeBatch([]string{"user@example.com", "not-an-email", "te.st@gmail.com"})
-	require.Equal(t, 3, got.Total)
-	require.Len(t, got.Results, 3)
-	assert.True(t, got.Results[0].Valid && got.Results[0].Normalized == "user@example.com", "result[0]: want valid normalized user@example.com, got %+v", got.Results[0])
-	assert.True(t, !got.Results[1].Valid && got.Results[1].Message != "", "result[1]: want invalid with message, got %+v", got.Results[1])
-	assert.True(t, got.Results[2].Valid && got.Results[2].Normalized == "test@gmail.com", "result[2]: want gmail normalized, got %+v", got.Results[2])
+	require.Equal(t, 3, len(got))
+	require.Len(t, got, 3)
+	assert.True(t, got[0].Valid && got[0].Normalized == "user@example.com", "result[0]: want valid normalized user@example.com, got %+v", got[0])
+	assert.True(t, !got[1].Valid && got[1].Message != "", "result[1]: want invalid with message, got %+v", got[1])
+	assert.True(t, got[2].Valid && got[2].Normalized == "test@gmail.com", "result[2]: want gmail normalized, got %+v", got[2])
 }

@@ -97,8 +97,8 @@ func TestService_GetHolidaysBatch_AllFound(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	assert.Equal(t, 2, resp.Total)
-	for _, item := range resp.Results {
+	assert.Equal(t, 2, len(resp))
+	for _, item := range resp {
 		if !item.Found {
 			t.Errorf("expected found=true for %s %d", item.Country, item.Year)
 		}
@@ -119,14 +119,14 @@ func TestService_GetHolidaysBatch_PartialFailure(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	assert.Equal(t, 2, resp.Total)
-	if !resp.Results[0].Found {
+	assert.Equal(t, 2, len(resp))
+	if !resp[0].Found {
 		t.Error("expected Results[0] (US) to be found")
 	}
-	if resp.Results[1].Found {
+	if resp[1].Found {
 		t.Error("expected Results[1] (ZZ) to be not found")
 	}
-	if len(resp.Results[1].Holidays) != 0 {
+	if len(resp[1].Holidays) != 0 {
 		t.Error("expected empty holidays slice for not-found item")
 	}
 }
@@ -143,7 +143,7 @@ func TestService_GetHolidaysBatch_PreservesOrder(t *testing.T) {
 
 	resp := svc.GetHolidaysBatch(queries)
 
-	assert.Equal(t, "DE", resp.Results[0].Country)
-	assert.Equal(t, "AR", resp.Results[1].Country)
-	assert.Equal(t, "JP", resp.Results[2].Country)
+	assert.Equal(t, "DE", resp[0].Country)
+	assert.Equal(t, "AR", resp[1].Country)
+	assert.Equal(t, "JP", resp[2].Country)
 }

@@ -27,7 +27,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 					httpx.Error(w, http.StatusNotFound, "not_found", "domain not found")
 					return
 				}
-				
+
 				httpx.Error(w, http.StatusInternalServerError, "internal_error", "whois lookup failed")
 				return
 			}
@@ -36,14 +36,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		})
 
 	r.Post("/whois/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchLookupRequest) (BatchLookupResponse, int, error) {
-			resp, err := svc.LookupBatch(ctx, req.Domains)
-
-			if err != nil {
-				return BatchLookupResponse{}, 0, err
-			}
-
-			return resp, len(req.Domains), nil
+		func(ctx context.Context, req BatchLookupRequest) (httpx.BatchResponse[BatchLookupItem], error) {
+			items, err := svc.LookupBatch(ctx, req.Domains)
+			return httpx.BatchResponse[BatchLookupItem]{Results: items}, err
 		},
 	))
 

@@ -175,7 +175,7 @@ func TestNormalizeBatch_HappyPathSetsUsageCount(t *testing.T) {
 	require.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 
-	var resp httpx.Response[EmailNormalizationBatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[EmailNormalizationBatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	require.True(t, resp.Data.Total == 2 && len(resp.Data.Results) == 2, "total/results: %+v", resp.Data)
@@ -195,7 +195,7 @@ func TestNormalizeBatch_InvalidItemInBand(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[EmailNormalizationBatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[EmailNormalizationBatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	assert.True(t, resp.Data.Results[0].Valid && !resp.Data.Results[1].Valid, "want first valid second invalid, got %+v", resp.Data.Results)

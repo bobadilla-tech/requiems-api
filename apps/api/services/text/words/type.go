@@ -36,10 +36,3 @@ type BatchItem struct {
 	Entry *DictionaryEntry `json:"entry,omitempty"`
 	Error string           `json:"error,omitempty"`
 }
-
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}

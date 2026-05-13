@@ -24,10 +24,3 @@ type BatchLookupItem struct {
 	Error  string         `json:"error,omitempty"`
 	Data   LookupResponse `json:"data,omitempty"`
 }
-
-type BatchLookupResponse struct {
-	Results []BatchLookupItem `json:"results"`
-	Total   int               `json:"total"`
-}
-
-func (BatchLookupResponse) IsData() {}

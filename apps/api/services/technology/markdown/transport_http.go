@@ -16,12 +16,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	))
 
 	r.Post("/markdown/batch", httpx.HandleBatch(
-		func(_ context.Context, req BatchRequest) (BatchResponse, int, error) {
-			res, err := svc.ConvertBatch(req.Markdowns, req.Sanitize)
-			if err != nil {
-				return BatchResponse{}, 0, err
-			}
-			return res, len(req.Markdowns), nil
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
+			items, err := svc.ConvertBatch(req.Markdowns, req.Sanitize)
+			return httpx.BatchResponse[Response]{Results: items}, err
 		},
 	))
 }

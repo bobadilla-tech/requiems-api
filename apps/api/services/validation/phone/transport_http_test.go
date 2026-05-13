@@ -170,7 +170,7 @@ func TestPhone_BatchValidate(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchValidateResponse]
+	var resp httpx.Response[httpx.BatchResponse[ValidateResponse]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 

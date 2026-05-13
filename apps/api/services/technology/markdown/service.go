@@ -41,19 +41,17 @@ func (s *Service) Convert(markdown string, sanitize bool) (Response, error) {
 // Each markdown input is processed independently using Convert.
 // When sanitize is true, raw HTML blocks and inline HTML in each markdown input
 // are stripped from the output instead of being passed through.
-func (s *Service) ConvertBatch(markdowns []string, sanitize bool) (BatchResponse, error) {
+func (s *Service) ConvertBatch(markdowns []string, sanitize bool) ([]Response, error) {
 	results := make([]Response, 0, len(markdowns))
 
 	for _, md := range markdowns {
 		resp, err := s.Convert(md, sanitize)
 		if err != nil {
-			return BatchResponse{}, err
+			return nil, err
 		}
 
 		results = append(results, resp)
 	}
 
-	return BatchResponse{
-		Results: results,
-	}, nil
+	return results, nil
 }

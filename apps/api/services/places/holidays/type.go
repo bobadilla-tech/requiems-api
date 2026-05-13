@@ -42,11 +42,3 @@ type BatchItem struct {
 	Holidays []Holiday `json:"holidays,omitempty"`
 	Total    int       `json:"total,omitempty"`
 }
-
-// BatchResponse is the response payload for POST /v1/places/holidays/batch.
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}

@@ -36,11 +36,3 @@ type BatchItem struct {
 	Domain      *string `json:"domain,omitempty"`
 	Suggestion  *string `json:"suggestion,omitempty"`
 }
-
-// BatchResponse is the response payload for POST /v1/validation/email/batch.
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}

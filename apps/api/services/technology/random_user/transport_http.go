@@ -17,12 +17,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	r.Post("/random-user/batch", httpx.HandleBatch(
-		func(_ context.Context, req BatchGenerateRequest) (BatchGenerateResponse, int, error) {
+		func(_ context.Context, req BatchGenerateRequest) (BatchGenerateResponse, error) {
 			users, err := svc.GenerateBatch(req.Count)
 			if err != nil {
-				return BatchGenerateResponse{}, 0, err
+				return BatchGenerateResponse{}, err
 			}
-			return BatchGenerateResponse{Results: users, Total: len(users)}, len(users), nil
+			return BatchGenerateResponse{Results: users}, nil
 		},
 	))
 }

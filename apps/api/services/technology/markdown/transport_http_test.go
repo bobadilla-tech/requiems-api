@@ -108,7 +108,7 @@ func TestMarkdownBatch_HappyPath(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code, w.Body.String())
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[Response]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	require.Len(t, resp.Data.Results, 3)
@@ -137,7 +137,7 @@ func TestMarkdownBatch_Sanitize(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code, w.Body.String())
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[Response]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 

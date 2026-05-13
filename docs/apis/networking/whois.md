@@ -59,8 +59,8 @@ Returns WHOIS information for a domain.
 
 `POST /v1/networking/whois/batch`
 
-Accepts up to **50 domains** per request. Results are returned in the same
-order as the input array.
+Accepts up to **50 domains** per request. Results are returned in the same order
+as the input array.
 
 Domains that do not exist or have no WHOIS data are returned with:
 

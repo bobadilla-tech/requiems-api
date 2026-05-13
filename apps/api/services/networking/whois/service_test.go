@@ -24,10 +24,10 @@ func TestService_LookupBatch(t *testing.T) {
 	resp, err := svc.LookupBatch(context.Background(), domains)
 
 	assert.NoError(t, err)
-	assert.Equal(t, 2, resp.Total)
-	assert.Len(t, resp.Results, 2)
+	assert.Equal(t, 2, len(resp))
+	assert.Len(t, resp, 2)
 
-	for i, item := range resp.Results {
+	for i, item := range resp {
 		assert.Equal(t, domains[i], item.Domain)
 		assert.True(t, item.Found)
 		assert.Empty(t, item.Error)
@@ -54,10 +54,10 @@ func TestService_LookupBatch_NotFound(t *testing.T) {
 	resp, err := svc.LookupBatch(context.Background(), domains)
 
 	assert.NoError(t, err)
-	assert.Equal(t, 1, resp.Total)
-	assert.Len(t, resp.Results, 1)
+	assert.Equal(t, 1, len(resp))
+	assert.Len(t, resp, 1)
 
-	item := resp.Results[0]
+	item := resp[0]
 
 	assert.Equal(t, "doesnotexist.com", item.Domain)
 	assert.False(t, item.Found)
@@ -76,6 +76,6 @@ func TestService_LookupBatch_Empty(t *testing.T) {
 	resp, err := svc.LookupBatch(context.Background(), []string{})
 
 	assert.NoError(t, err)
-	assert.Equal(t, 0, resp.Total)
-	assert.Empty(t, resp.Results)
+	assert.Equal(t, 0, len(resp))
+	assert.Empty(t, resp)
 }

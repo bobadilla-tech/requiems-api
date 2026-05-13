@@ -17,7 +17,7 @@ import (
 // stubCalculator implements Calculator for transport tests.
 type stubCalculator struct {
 	result  Response
-	results BatchResponse
+	results []Response
 }
 
 func (s *stubCalculator) Calculate(principal, annualRate float64, years int) Response {
@@ -28,9 +28,8 @@ func (s *stubCalculator) Calculate(principal, annualRate float64, years int) Res
 	return r
 }
 
-func (s *stubCalculator) CalculateBatch(mortgages []Request) BatchResponse {
-	r := s.results
-	return r
+func (s *stubCalculator) CalculateBatch(mortgages []Request) []Response {
+	return s.results
 }
 
 func setupRouter(c Calculator) chi.Router {
@@ -158,10 +157,7 @@ func TestMortgage_MetadataTimestampSet(t *testing.T) {
 }
 
 func TestMortgage_BatchCalculate_HappyPath(t *testing.T) {
-	svc := &stubCalculator{results: BatchResponse{
-		Results: []Response{{MonthlyPayment: 1896.20}, {MonthlyPayment: 1896.20}},
-		Total:   2,
-	}}
+	svc := &stubCalculator{results: []Response{{MonthlyPayment: 1896.20}, {MonthlyPayment: 1896.20}}}
 
 	r := setupRouter(svc)
 
@@ -174,7 +170,7 @@ func TestMortgage_BatchCalculate_HappyPath(t *testing.T) {
 		t.Errorf("expected status 200, got %d: %s", w.Code, w.Body.String())
 	}
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[Response]]
 	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
 		t.Fatalf("failed to decode response: %v", err)
 	}
@@ -244,7 +240,7 @@ func TestMortgage_BatchCalculate_ExccedsLimit(t *testing.T) {
 }
 
 func TestMortgage_BatchCalculate_SetsUsageCountHeader(t *testing.T) {
-	svc := &stubCalculator{}
+	svc := &stubCalculator{results: make([]Response, 2)}
 
 	r := setupRouter(svc)
 

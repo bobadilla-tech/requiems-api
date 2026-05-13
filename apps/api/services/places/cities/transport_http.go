@@ -18,7 +18,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		}
 
 		city, ok := svc.Find(name)
-		
+
 		if !ok {
 			httpx.Error(w, http.StatusNotFound, "not_found", "city not found")
 			return

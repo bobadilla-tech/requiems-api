@@ -28,12 +28,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	r.Post("/sudoku/batch", httpx.HandleBatch(
-		func(_ context.Context, req BatchRequest) (BatchResponse, int, error) {
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Puzzle], error) {
 			results, err := svc.GenerateBatch(req.Puzzles)
 			if err != nil {
-				return BatchResponse{}, 0, err
+				return httpx.BatchResponse[Puzzle]{}, err
 			}
-			return BatchResponse{Results: results, Total: len(results)}, len(results), nil
+			return httpx.BatchResponse[Puzzle]{Results: results}, nil
 		},
 	))
 }

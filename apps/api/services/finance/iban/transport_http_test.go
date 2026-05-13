@@ -20,7 +20,7 @@ import (
 // result or a fixed error on every call, keeping tests DB-free and fast.
 type stubValidator struct {
 	result  ParseResponse
-	results BatchParseResponse
+	results []ParseResponse
 	err     error
 }
 
@@ -33,12 +33,8 @@ func (s *stubValidator) Parse(_ context.Context, raw string) (ParseResponse, err
 	return r, nil
 }
 
-func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) (BatchParseResponse, error) {
-	if s.err != nil {
-		return BatchParseResponse{}, s.err
-	}
-	r := s.results
-	return r, nil
+func (s *stubValidator) ParseBatch(_ context.Context, numbers []string) []ParseResponse {
+	return s.results
 }
 
 func setupRouter(v Validator) chi.Router {
@@ -194,13 +190,10 @@ func TestIBAN_GBParsing_Returns200(t *testing.T) {
 
 func TestIBAN_BatchParse(t *testing.T) {
 	t.Parallel()
-	svc := &stubValidator{results: BatchParseResponse{
-		Results: []ParseResponse{
-			{IBAN: "GB29NWBK60161331926819", Valid: true, Country: "United Kingdom", BankCode: "NWBK", Account: "31926819"},
-			{IBAN: "DE89370400440532013000", Valid: true, Country: "Germany", BankCode: "37040044", Account: "0532013000"},
-			{IBAN: "XX89370400440532013000", Valid: false},
-		},
-		Total: 3,
+	svc := &stubValidator{results: []ParseResponse{
+		{IBAN: "GB29NWBK60161331926819", Valid: true, Country: "United Kingdom", BankCode: "NWBK", Account: "31926819"},
+		{IBAN: "DE89370400440532013000", Valid: true, Country: "Germany", BankCode: "37040044", Account: "0532013000"},
+		{IBAN: "XX89370400440532013000", Valid: false},
 	}}
 
 	r := setupRouter(svc)
@@ -213,7 +206,7 @@ func TestIBAN_BatchParse(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchParseResponse]
+	var resp httpx.Response[httpx.BatchResponse[ParseResponse]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
@@ -282,7 +275,7 @@ func TestIBAN_BatchParse_MissingBody(t *testing.T) {
 
 func TestIBAN_BatchParse_SetsUsageCountHeader(t *testing.T) {
 	t.Parallel()
-	svc := &stubValidator{}
+	svc := &stubValidator{results: make([]ParseResponse, 3)}
 	r := setupRouter(svc)
 
 	body := `{"numbers": ["GB29NWBK60161331926819","DE89370400440532013000","XX89370400440532013000"]}`

@@ -38,9 +38,9 @@ func postBatch(body string) *httptest.ResponseRecorder {
 	return w
 }
 
-func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[BatchResponse] {
+func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[httpx.BatchResponse[BatchItem]] {
 	t.Helper()
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	return resp

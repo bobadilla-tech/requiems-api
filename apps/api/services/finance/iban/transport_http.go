@@ -34,12 +34,8 @@ func registerIBANRoutes(r chi.Router, v Validator) {
 
 	// POST /iban/batch — validate and parse IBANs
 	r.Post("/iban/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchParseRequest) (BatchParseResponse, int, error) {
-			result, err := v.ParseBatch(ctx, req.Numbers)
-			if err != nil {
-				return BatchParseResponse{}, 0, err
-			}
-			return result, len(req.Numbers), nil
+		func(ctx context.Context, req BatchParseRequest) (httpx.BatchResponse[ParseResponse], error) {
+			return httpx.BatchResponse[ParseResponse]{Results: v.ParseBatch(ctx, req.Numbers)}, nil
 		},
 	))
 }
