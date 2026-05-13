@@ -16,7 +16,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		return svc.ValidateEmail(ctx, req.Email), nil
 	}))
 
-	r.Post("/email/batch", httpx.Handle(func(ctx context.Context, req BatchRequest) (BatchResponse, error) {
+	r.Post("/email/batch", httpx.HandleBatch(func(ctx context.Context, req BatchRequest) (BatchResponse, error) {
 		return svc.ValidateEmailBatch(ctx, req.Emails), nil
 	}))
 }

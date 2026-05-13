@@ -1,5 +1,7 @@
 package email
 
+import "requiems-api/platform/httpx"
+
 // Request holds the JSON body for email validation.
 type Request struct {
 	Email string `json:"email" validate:"required"`
@@ -38,9 +40,4 @@ type BatchItem struct {
 }
 
 // BatchResponse is the response payload for POST /v1/validation/email/batch.
-type BatchResponse struct {
-	Results []BatchItem `json:"results"`
-	Total   int         `json:"total"`
-}
-
-func (BatchResponse) IsData() {}
+type BatchResponse = httpx.BatchResponse[BatchItem]
