@@ -105,6 +105,172 @@ endpoints:
 
         data = JSON.parse(response.body)['data']
         data['records'].each { |r| puts "#{r['priority']} #{r['host']}" }
+  - name: Batch MX Lookup 
+    method: POST
+    path: /v1/networking/mx/batch
+    description: >-
+      Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority
+      ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+    parameters:
+      - name: domains
+        type: array
+        required: true
+        location: body
+        description: "Array of domains to lookup (min: 1, max: 50)."
+        example: "[\"outlook.com\", \"yahoo.com\"]"
+    request_example: |
+      {
+        "domains": ["outlook.com", "yahoo.com"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "domain": "outlook.com",
+              "found": true,
+              "data": {
+                "domain": "outlook.com",
+                "records": [
+                  {
+                    "host": "outlook-com.olc.protection.outlook.com.",
+                    "priority": 5
+                  }
+                ]
+                }
+              },
+              {
+                "domain": "yahoo.com",
+                "found": true,
+                "data": {
+                  "domain": "yahoo.com",
+                  "records": [
+                    {
+                      "host": "mta5.am0.yahoodns.net.",
+                      "priority": 1
+                    },
+                    {
+                      "host": "mta7.am0.yahoodns.net.",
+                      "priority": 1
+                    },
+                    {
+                      "host": "mta6.am0.yahoodns.net.",
+                      "priority": 1
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-05-13T21:34:51Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: MX lookup results for each input domain, in the same order as the input.
+      - name: results[].domain
+        type: string
+        description: The domain name that was queried.
+      - name: results[].found
+        type: boolean
+        description: Whether MX records were found for the domain.
+      - name: results[].error
+        type: string
+        description: Error message if the lookup failed. Empty if found is true.
+      - name: results[].data
+        type: object
+        description: MX lookup data. Present only when found is true.
+      - name: results[].data.domain
+        type: string
+        description: The domain name associated with the MX records.
+      - name: results[].data.records
+        type: array
+        description: List of MX records sorted by priority ascending (lower value means higher priority).
+      - name: results[].data.records[].host
+        type: string
+        description: Hostname of the mail server.
+      - name: results[].data.records[].priority
+        type: number
+        description: Priority of the mail server. Lower value means higher priority.
+      - name: total
+        type: number
+        description: Total number of results returned.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The domains array is missing, empty, or contains more than 50 items.
+      - code: internal_error
+        status: 500
+        description: DNS lookup failed due to an unexpected server error.
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/networking/mx/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"domains":["outlook.com", "yahoo.com"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/networking/mx/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"domains": ["outlook.com", "yahoo.com"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        for result in response.json()["data"]["results"]:
+          print(result["domain"], result["found"])
+          if result["found"]:
+              for record in result["data"]["records"]:
+                print(f"  {record['host']} (priority: {record['priority']})")
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/networking/mx/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ domains: ['outlook.com', 'yahoo.com'] })
+          }
+        );
+
+        const { data } = await response.json();
+        data.results.forEach(r => {
+          console.log(r.domain, r.found);
+          if (r.found) {
+            r.data.records.forEach(record => {
+              console.log(record.host, record.priority);
+            });
+          }
+        });
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/networking/mx/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { domains: ['outlook.com', 'yahoo.com'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |r|
+          puts "#{r['domain']}: #{r['found']}"
+          if r['found']
+            r['data']['records'].each do |record|
+              puts "  #{record['host']} (priority: #{record['priority']})"
+            end
+          end
+        end
 faq:
   - question: What does priority mean in MX records?
     answer: >-

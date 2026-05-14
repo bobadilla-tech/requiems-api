@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -95,4 +96,80 @@ func TestMXLookup_HappyPath(t *testing.T) {
 	for i, rec := range resp.Data.Records {
 		assert.NotEmpty(t, rec.Host, "record[%d] has empty host", i)
 	}
+}
+
+func TestMXLookup_BatchLookup_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"domains":["gmail.com","outlook.com","yahoo.com"]}`
+	req := httptest.NewRequest(http.MethodPost, "/mx/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[BatchLookupItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Equal(t, 3, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 3)
+
+	for _, item := range resp.Data.Results {
+		assert.True(t, item.Found)
+		assert.NotEmpty(t, item.Data.Domain)
+		assert.Empty(t, item.Error)
+	}
+}
+
+func TestMxLookup_BatchLookup_EmptyBody(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"domains":[]}`
+	req := httptest.NewRequest(http.MethodPost, "/mx/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	var resp httpx.Response[httpx.BatchResponse[BatchLookupItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestMxLookup_BatchLookup_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	domains := make([]string, 51)
+
+	for i := range domains {
+		domains[i] = "gmail.com"
+	}
+
+	body, _ := json.Marshal(BatchRequest{
+		Domains: domains,
+	})
+
+	req := httptest.NewRequest(http.MethodPost, "/mx/batch", strings.NewReader(string(body)))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestMxLookup_BatchLookup_setUsageCountHeader(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"domains":["gmail.com","outlook.com","yahoo.com"]}`
+	req := httptest.NewRequest(http.MethodPost, "/mx/batch", strings.NewReader(body))
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	require.Equal(t, "3", w.Header().Get("X-Usage-Count"))
 }

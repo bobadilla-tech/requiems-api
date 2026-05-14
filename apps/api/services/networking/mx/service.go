@@ -39,3 +39,25 @@ func (s *Service) Lookup(ctx context.Context, domain string) (LookupResponse, er
 		Records: sorted,
 	}, nil
 }
+
+func (s *Service) LookupBatch(ctx context.Context, domains []string) []BatchLookupItem {
+	results := make([]BatchLookupItem, len(domains))
+
+	for i, d := range domains {
+
+		result, err := s.Lookup(ctx, d)
+
+		if err != nil {
+			results[i] = BatchLookupItem{Domain: d, Found: false, Error: err.Error()}
+			continue
+		}
+
+		results[i] = BatchLookupItem{
+			Domain: d,
+			Found:  true,
+			Data:   result,
+		}
+	}
+
+	return results
+}
