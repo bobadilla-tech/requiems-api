@@ -737,6 +737,7 @@ apis:
       - entertainment
     description: Access a database of inspirational and famous quotes
     endpoints_count: 2
+    batch_eligible: true
     status: live
     popular: false
     documentation_url: /apis/quotes

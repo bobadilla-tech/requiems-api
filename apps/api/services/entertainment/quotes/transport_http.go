@@ -1,6 +1,7 @@
 package quotes
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -19,4 +20,14 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, q)
 	})
+
+	r.Post("/quotes/random/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRandomRequest) (BatchRandomResponse, error) {
+			results, err := svc.RandomBatch(ctx, req.Count)
+			if err != nil {
+				return BatchRandomResponse{}, err
+			}
+			return BatchRandomResponse{Results: results}, nil
+		},
+	))
 }
