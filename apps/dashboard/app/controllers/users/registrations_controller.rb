@@ -5,16 +5,32 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
+  before_action :capture_referral_token, only: [ :new, :create ]
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    super
+  end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    retries = 0
+    max_retries = 3
+
+    begin
+      super do |resource|
+        attribute_referral(resource, session.delete(:referral_token)) if resource.persisted?
+      end
+    rescue ActiveRecord::RecordNotUnique => e
+      if e.message.include?("referral_code") && retries < max_retries
+        retries += 1
+        sleep(0.1 * retries)
+        retry
+      else
+        raise
+      end
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -63,6 +79,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  def capture_referral_token
+    session[:referral_token] = params[:ref] if params[:ref].present?
+  end
+
+  def attribute_referral(user, token)
+    return if token.blank?
+
+    referral_code = Rails.application.message_verifier("referral").verified(token)
+    return if referral_code.blank?
+
+    referrer = User.find_by(referral_code: referral_code)
+    return if referrer.nil?
+    return if referrer.id == user.id
+
+    Referral.create!(referrer: referrer, referred_user: user)
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique
+    # Silently ignore: duplicate referral (unique index) or validation failure
+  end
 
   def resolve_layout
     case action_name

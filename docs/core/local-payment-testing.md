@@ -14,12 +14,24 @@ temporarily disable test mode locally, override with
 
 ## One-time setup
 
+### Step 1: Get your ngrok hostname
+
+Start your ngrok tunnel and note the public hostname (e.g.
+`unprized-unseditiously-marilynn.ngrok-free.dev`). Add it to `infra/docker/.env`
+(no protocol, no trailing slash):
+
+```bash
+NGROK_HOST=your-hostname.ngrok-free.dev
+```
+
+This tells Rails' `HostAuthorization` middleware to allow requests from that
+host. Restart the Rails server after changing this value.
+
 ### Step 2: Configure the webhook in LemonSqueezy dashboard
 
 1. Enable test mode in LemonSqueezy (toggle in the top bar)
 2. Go to Settings > Webhooks > Add webhook
-3. Set the URL to:
-   `https://goblin-mature-annually.ngrok-free.app/webhooks/lemonsqueezy`
+3. Set the URL to: `https://<your NGROK_HOST>/webhooks/lemonsqueezy`
 4. Select all subscription events:
    - `subscription_created`
    - `subscription_updated`
@@ -38,8 +50,8 @@ LEMONSQUEEZY_SIGNING_SECRET_TEST=<signing secret from step 2>
 This is a separate secret from the production webhook — each webhook in
 LemonSqueezy has its own signing secret.
 
-Since the ngrok domain is static (`goblin-mature-annually.ngrok-free.app`), you
-only need to do this webhook setup once.
+> **Note:** If your ngrok hostname changes, update `NGROK_HOST` in `.env`,
+> update the webhook URL in LemonSqueezy, and restart Rails.
 
 ---
 
@@ -55,10 +67,16 @@ docker compose -f docker-compose.dev.yml up
 ### 2. Start ngrok
 
 ```bash
-ngrok http --domain=goblin-mature-annually.ngrok-free.app 3000
+ngrok http 3000
 ```
 
-Confirm the tunnel is live: `https://goblin-mature-annually.ngrok-free.app` →
+If you have a reserved domain, pass it via `--domain`:
+
+```bash
+ngrok http --domain=your-hostname.ngrok-free.dev 3000
+```
+
+Confirm the tunnel is live: `https://<your NGROK_HOST>` →
 `http://localhost:3000`
 
 Test mode is already `true` by default — nothing to toggle.
@@ -82,7 +100,7 @@ docker compose -f docker-compose.dev.yml logs -f dashboard | grep LemonSqueezy
 
 Expected output:
 
-```
+```text
 [LemonSqueezy Webhook] Received: subscription_created
 [LemonSqueezy] Subscription created for user 1: developer
 ```
@@ -120,11 +138,17 @@ The signing secret doesn't match.
 
 ### Webhook not being delivered
 
-1. Confirm ngrok is running:
-   `https://goblin-mature-annually.ngrok-free.app/healthz` should return 200
+1. Confirm ngrok is running: `https://<your NGROK_HOST>/healthz` should return
+   200
 2. Check delivery attempts in LemonSqueezy > Settings > Webhooks > (your
    webhook) > Recent deliveries
 3. Make sure LemonSqueezy test mode is ON when triggering test checkouts
+
+### Blocked host errors in Rails logs
+
+If you see `[ActionDispatch::HostAuthorization] Blocked hosts: ...`, your
+`NGROK_HOST` env var doesn't match the active tunnel hostname. Update it in
+`infra/docker/.env` and restart Rails.
 
 ### User not found in webhook
 
@@ -135,14 +159,8 @@ Upgrade.
 
 ### ngrok tunnel not working
 
-Re-run:
-
-```bash
-ngrok http --domain=goblin-mature-annually.ngrok-free.app 3000
-```
-
-No need to reconfigure the LemonSqueezy webhook — the static domain stays the
-same.
+Re-run the ngrok command and verify the tunnel URL matches `NGROK_HOST` in
+`.env`. If the hostname changed, also update the webhook URL in LemonSqueezy.
 
 ### Missing `_TEST` env vars on startup
 

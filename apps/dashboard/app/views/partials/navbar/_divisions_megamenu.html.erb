@@ -1,0 +1,33 @@
+<%# Desktop: flyout left-aligned under nav gutters; width capped to viewport so it never overflows. %>
+<% slugs = DivisionSlugs::ALL %>
+
+<div class="relative z-[90] inline-block"
+     data-controller="navbar-divisions-megamenu"
+     data-action="mouseenter->navbar-divisions-megamenu#onEnter mouseleave->navbar-divisions-megamenu#onLeave focusin->navbar-divisions-megamenu#onEnter focusout->navbar-divisions-megamenu#onLeave">
+  <%= link_to divisions_path,
+              class: "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors",
+              "aria-haspopup": "true",
+              "aria-expanded": "false",
+              data: { navbar_divisions_megamenu_target: "trigger" } do %>
+    <%= t("shared.nav.divisions") %>
+  <% end %>
+
+  <div data-navbar-divisions-megamenu-target="panel"
+       data-action="mouseenter->navbar-divisions-megamenu#onEnter mouseleave->navbar-divisions-megamenu#onLeave"
+       class="invisible fixed left-0 right-0 top-16 z-[110] mt-2 flex justify-start px-4 pt-1 opacity-0 transition-opacity duration-150 ease-out pointer-events-none sm:px-6 lg:px-8">
+    <div class="min-w-0 w-full max-w-[min(110rem,100%)] overflow-x-hidden rounded-2xl border border-gray-200 bg-white px-5 py-8 shadow-2xl ring-1 ring-black/5 sm:px-7 sm:py-10 lg:px-9 dark:border-gray-700 dark:bg-gray-800 dark:ring-white/10">
+      <div class="min-w-0 w-full gap-x-4 gap-y-3 sm:gap-x-5 sm:gap-y-3 lg:gap-x-6 xl:gap-x-8"
+           style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+        <% slugs.each do |slug| %>
+          <%= link_to division_path(slug),
+                      class: "group flex min-h-[3.25rem] min-w-0 items-center gap-5 rounded-xl px-2 py-2 text-left text-base font-medium leading-snug text-gray-800 transition-colors hover:bg-gray-50 hover:text-gray-950 sm:gap-6 sm:px-3 sm:text-lg dark:text-gray-100 dark:hover:bg-gray-700 dark:hover:text-white" do %>
+            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg sm:h-11 sm:w-11 <%= category_color_classes(slug, hover: true) %>">
+              <%= category_icon_svg(slug, size: "w-5 h-5") %>
+            </span>
+            <span class="min-w-0 flex-1 break-words group-hover:text-gray-950 dark:group-hover:text-white"><%= t("divisions.index.cards.#{slug}.title") %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

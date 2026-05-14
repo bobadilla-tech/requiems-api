@@ -7,17 +7,18 @@ import {
   internalError,
   jsonError,
   jsonResponse,
+  jsonValidationFailed,
 } from "@requiem/workers-shared";
 import { generateApiKey } from "../../lib/generate-api-key";
 import type { WorkerBindings } from "../../env";
-import { planSchema } from "./schemas";
+import { apiKeyLabelStringSchema, planSchema } from "./schemas";
 
 const app = new Hono<{ Bindings: WorkerBindings }>();
 
 const createApiKeySchema = z.object({
-  userId: z.string().min(1),
+  userId: apiKeyLabelStringSchema,
   plan: planSchema,
-  name: z.string().min(1),
+  name: apiKeyLabelStringSchema,
   billingCycleStart: z.string().optional(),
 });
 
@@ -40,7 +41,12 @@ app.post("/", async (c) => {
   const rawBody = await c.req.json().catch(() => null);
   const parsed = createApiKeySchema.safeParse(rawBody);
   if (!parsed.success) {
-    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
+    return jsonValidationFailed(
+      parsed.error.issues.map((issue) => ({
+        field: issue.path.length > 0 ? issue.path.map(String).join(".") : "body",
+        message: issue.message,
+      })),
+    );
   }
   const body = parsed.data;
 

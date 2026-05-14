@@ -38,6 +38,11 @@ type DomainsListResponse struct {
 	HasMore bool     `json:"has_more"`
 }
 
+type DomainsListQuery struct {
+	Page    int `query:"page"     validate:"min=1"`
+	PerPage int `query:"per_page" validate:"min=1"`
+}
+
 // StatsResponse represents statistics about disposable domains
 type StatsResponse struct {
 	TotalDomains int `json:"total_domains"`

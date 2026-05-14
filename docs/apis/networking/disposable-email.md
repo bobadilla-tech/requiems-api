@@ -57,7 +57,7 @@ curl -X POST https://api.requiems.xyz/v1/networking/disposable/check \
 Check multiple email addresses in a single request. Maximum 100 emails per
 batch.
 
-**Endpoint:** `POST /v1/networking/disposable/check-batch`
+**Endpoint:** `POST /v1/networking/disposable/batch`
 
 **Request Body:**
 
@@ -101,7 +101,7 @@ batch.
 
 ```bash
 # Production
-curl -X POST https://api.requiems.xyz/v1/networking/disposable/check-batch \
+curl -X POST https://api.requiems.xyz/v1/networking/disposable/batch \
   -H "Content-Type: application/json" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -d '{
@@ -290,7 +290,7 @@ const emails = [
 ];
 
 const response = await fetch(
-  "https://api.requiems.xyz/v1/networking/disposable/check-batch",
+  "https://api.requiems.xyz/v1/networking/disposable/batch",
   {
     method: "POST",
     headers: {

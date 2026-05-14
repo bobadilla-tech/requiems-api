@@ -135,7 +135,117 @@ endpoints:
         else
           puts "Invalid IBAN"
         end
+  - name: Batch Validate IBANs
+    method: POST
+    path: /v1/finance/iban/batch
+    description: Validates up to 50 iban numbers in a single request. Results are returned in the same order as the input.
+    parameters:
+      - name: numbers
+        type: array
+        required: true
+        location: body
+        description: "Array of iban numbers to validate (min: 1, max: 50)."
+        example: "[\"GB29NWBK60161331926819\", \"DE89370400440532013000\"]"
+    request_example: |
+      {
+        "numbers": ["GB29NWBK60161331926819", "DE89370400440532013000", "XX89370400440532013000"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "iban": "GB29NWBK60161331926819",
+              "valid": true,
+              "country": "United Kingdom",
+              "bank_code": "NWBK",
+              "account": "31926819"
+            },
+            {
+              "iban": "DE89370400440532013000",
+              "valid": true,
+              "country": "Germany",
+              "bank_code": "37040044",
+              "account": "0532013000"
+            },
+            {
+              "iban": "XX89370400440532013000",
+              "valid": false,
+              "country": "",
+              "bank_code": "",
+              "account": ""
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2026-05-03T19:25:02Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: >-
+          Validation result for each number in the same order as the input. Each item has the same fields as the single
+          validate endpoint.
+      - name: total
+        type: integer
+        description: Number of results returned. Matches the length of the input array.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The numbers array is missing, empty, or contains more than 50 items.
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/finance/iban/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"numbers":["GB29NWBK60161331926819","DE89370400440532013000"]}'
+      python: |
+        import requests
 
+        url = "https://api.requiems.xyz/v1/finance/iban/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"numbers": ["GB29NWBK60161331926819", "DE89370400440532013000"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        for result in response.json()["data"]["results"]:
+            print(result["iban"], result["valid"])
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/finance/iban/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ numbers: ['GB29NWBK60161331926819', 'DE89370400440532013000'] })
+          }
+        );
+
+        const { data } = await response.json();
+        data.results.forEach(r => console.log(r.iban, r.valid));
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/finance/iban/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { numbers: ['GB29NWBK60161331926819', 'DE89370400440532013000'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |r|
+          puts "#{r['iban']}: #{r['valid']}"
+        end
 faq:
   - question: What happens if the IBAN is invalid?
     answer: "The API always returns HTTP 200. Set valid: false in the data object means the IBAN failed length or checksum validation. Check the valid field rather than the HTTP status code."

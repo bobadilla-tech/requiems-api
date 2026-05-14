@@ -6,12 +6,17 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
 )
 
 type dummyService struct{}
 
 func TestGuard_NilService_Returns500(t *testing.T) {
+	t.Parallel()
+
 	var svc *dummyService
 
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
@@ -22,21 +27,18 @@ func TestGuard_NilService_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	handler(w, req)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("expected 500, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Error != "internal_error" {
-		t.Errorf("expected error code %q, got %q", "internal_error", resp.Error)
-	}
+	assert.Equal(t, "internal_error", resp.Error)
 }
 
 func TestGuard_NonNilService_CallsHandler(t *testing.T) {
+	t.Parallel()
+
 	svc := &dummyService{}
 
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +49,5 @@ func TestGuard_NonNilService_CallsHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 	handler(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 }

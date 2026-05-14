@@ -9,8 +9,19 @@ import (
 // Generates random fake user data.
 type Service struct{}
 
+// NewService returns a new instance of Service.
 func NewService() *Service {
 	return &Service{}
+}
+
+// GenerateBatch generates count random users and returns them in order.
+// The caller is responsible for passing a valid count; no bounds checking is performed here.
+func (s *Service) GenerateBatch(count int) ([]User, error) {
+	results := make([]User, count)
+	for i := range count {
+		results[i] = s.Generate()
+	}
+	return results, nil
 }
 
 // Returns a randomly generated User.

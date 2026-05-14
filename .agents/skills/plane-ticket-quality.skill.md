@@ -169,3 +169,138 @@ Evidence:
 "Use skill plane-ticket-quality to draft Plane issues from these commits/PRs. If
 context is weak, inspect diffs and PR descriptions first, then write tickets
 with business impact and no dates."
+
+---
+
+## Plane API (tasks.bobadilla.tech): identifiers and `curl` examples
+
+Use this to **call the Plane REST API** from a shell. Do **not** paste real PATs
+into skills, commits, or chat; use `export PLANE_API_KEY='plane_api_…'` locally
+or a private `.env` that stays untracked.
+
+### Identifiers (this workspace)
+
+| What | Value |
+|------|--------|
+| Host (UI + API) | `https://tasks.bobadilla.tech` |
+| API prefix | `/api/v1/` |
+| Workspace **slug** | `core` |
+| Project id (**UUID**) | `5da3caa1-cbba-4e0d-b9a9-0bcad39bba09` |
+| Example backlog **state** id (new issues) | `57725193-924f-4477-b9bc-b305e553efb9` |
+
+Re-check **state** and **project** ids in the Plane UI if workflows were
+reconfigured. Assignees and labels in JSON bodies are **member UUIDs** and
+**label UUIDs** from the workspace (Members / Labels screens or API responses).
+
+**Base path for issues in this project:**
+
+```text
+https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/
+```
+
+### Headers that work through Cloudflare
+
+- **`X-API-Key`**: personal access token (Plane); not `Authorization: Bearer …`
+  for PAT-based calls.
+- **`Content-Type: application/json`** and **`Accept: application/json`**
+- **`User-Agent`**: use a normal browser string. A generic script UA can
+  trigger Cloudflare **error 1010**; a desktop Chrome string is a safe default.
+
+Define once:
+
+```bash
+export PLANE_API_KEY='plane_api_REPLACE_ME'
+export PLANE_UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+```
+
+### `curl`: create an issue (POST)
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' -X POST \
+  'https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/' \
+  -H "X-API-Key: ${PLANE_API_KEY}" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "User-Agent: ${PLANE_UA}" \
+  -d '{
+    "name": "Example: created via curl",
+    "description_html": "<p>Short HTML body. Priorities: urgent, high, medium, low.</p>",
+    "priority": "medium",
+    "state": "57725193-924f-4477-b9bc-b305e553efb9"
+  }'
+```
+
+Save the returned JSON `id` (issue UUID) for the examples below.
+
+### `curl`: list issues (GET, first page)
+
+Query params vary by Plane version; `cursor` / `per_page` are common. If the
+server ignores unknown params, you still get a page of results.
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' -G \
+  'https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/' \
+  -H "X-API-Key: ${PLANE_API_KEY}" \
+  -H 'Accept: application/json' \
+  -H "User-Agent: ${PLANE_UA}" \
+  --data-urlencode 'per_page=20'
+```
+
+### `curl`: fetch one issue (GET)
+
+Replace `ISSUE_UUID` with the work item id from create or list.
+
+```bash
+ISSUE_UUID='00000000-0000-0000-0000-000000000000'
+
+curl -sS -w '\nHTTP %{http_code}\n' \
+  "https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/${ISSUE_UUID}/" \
+  -H "X-API-Key: ${PLANE_API_KEY}" \
+  -H 'Accept: application/json' \
+  -H "User-Agent: ${PLANE_UA}"
+```
+
+Use a **trailing slash** on URLs; some setups return redirects without it.
+
+### `curl`: partial update (PATCH)
+
+Many installs accept **`/issues/{uuid}/`**. Current public Plane docs also show
+**`/work-items/{uuid}/`** — if PATCH on `issues` fails with 404/301, try the
+same JSON against `work-items` instead.
+
+```bash
+ISSUE_UUID='00000000-0000-0000-0000-000000000000'
+
+curl -sS -w '\nHTTP %{http_code}\n' -X PATCH \
+  "https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/${ISSUE_UUID}/" \
+  -H "X-API-Key: ${PLANE_API_KEY}" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "User-Agent: ${PLANE_UA}" \
+  -d '{
+    "name": "Example: renamed via curl",
+    "priority": "high",
+    "description_html": "<p>Updated description.</p>"
+  }'
+```
+
+Example with **assignees** (array of **user UUIDs** from Members):
+
+```bash
+curl -sS -w '\nHTTP %{http_code}\n' -X PATCH \
+  "https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-b9a9-0bcad39bba09/issues/${ISSUE_UUID}/" \
+  -H "X-API-Key: ${PLANE_API_KEY}" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "User-Agent: ${PLANE_UA}" \
+  -d '{
+    "assignees": ["MEMBER_UUID_1", "MEMBER_UUID_2"]
+  }'
+```
+
+### Rate limits and errors
+
+Roughly **60 requests/minute** per key is a safe cadence for bulk creates. On
+**HTTP 429**, sleep and retry. **403** with **error 1010** is usually Cloudflare
+blocking the client fingerprint—fix **User-Agent** / network path first, not the
+JSON body.

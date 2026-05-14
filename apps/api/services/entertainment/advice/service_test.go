@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // mockRow implements pgx.Row.
@@ -29,17 +31,17 @@ func newTestService(row pgx.Row) *Service {
 }
 
 func TestRandom_EmptyTable(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, pgx.ErrNoRows) {
-		t.Errorf("expected pgx.ErrNoRows, got %v", err)
-	}
+	assert.ErrorIs(t, err, pgx.ErrNoRows)
 }
 
 func TestRandom_SingleRow(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 1
@@ -49,36 +51,29 @@ func TestRandom_SingleRow(t *testing.T) {
 	})
 
 	got, err := svc.Random(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got.ID != 1 {
-		t.Errorf("expected ID 1, got %d", got.ID)
-	}
-	if got.Text != "Do one thing every day that scares you." {
-		t.Errorf("unexpected text: %q", got.Text)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, 1, got.ID)
+	assert.Equal(t, "Do one thing every day that scares you.", got.Text)
 }
 
 func TestRandom_ScanError(t *testing.T) {
+	t.Parallel()
 	scanErr := errors.New("scan failed")
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return scanErr },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, scanErr) {
-		t.Errorf("expected scan error, got %v", err)
-	}
+	assert.ErrorIs(t, err, scanErr)
 }
 
 func TestRandom_ReturnsZeroValueOnError(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	got, _ := svc.Random(context.Background())
-	if got.ID != 0 || got.Text != "" {
-		t.Errorf("expected zero Advice on error, got %+v", got)
-	}
+	assert.Equal(t, 0, got.ID)
+	assert.Equal(t, "", got.Text)
 }

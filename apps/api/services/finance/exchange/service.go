@@ -12,7 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const (
@@ -103,53 +103,34 @@ type frankfurterResponse struct {
 func (s *Service) fetchRate(ctx context.Context, from, to string) (float64, time.Time, error) {
 	url := fmt.Sprintf("%s/latest?from=%s&to=%s", s.baseURL, from, to)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody) //nolint:gosec // URL is built from a fixed base URL and validated 3-char alpha currency codes
 	if err != nil {
 		return 0, time.Time{}, fmt.Errorf("exchange: build request: %w", err)
 	}
 
-	resp, err := s.httpClient.Do(req) //nolint:gosec // URL is built from a fixed base URL and validated 3-char alpha currency codes
+	resp, err := s.httpClient.Do(req) //nolint:gosec // same URL, already validated above
+
 	if err != nil {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusNotFound {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_currency",
-			Message: fmt.Sprintf("unknown currency code: %s or %s", from, to),
-		}
+		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency pair: %s/%s", from, to))
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 
 	var body frankfurterResponse
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusServiceUnavailable,
-			Code:    "upstream_error",
-			Message: "exchange rate service unavailable",
-		}
+		return 0, time.Time{}, svcerr.Upstream("upstream_error", "exchange rate service unavailable")
 	}
 
 	rate, ok := body.Rates[to]
 	if !ok {
-		return 0, time.Time{}, &httpx.AppError{
-			Status:  http.StatusUnprocessableEntity,
-			Code:    "invalid_currency",
-			Message: fmt.Sprintf("unknown currency code: %s", to),
-		}
+		return 0, time.Time{}, svcerr.Unknown("invalid_currency", fmt.Sprintf("unknown currency code: %s", to))
 	}
 
 	ts, err := time.Parse("2006-01-02", body.Date)

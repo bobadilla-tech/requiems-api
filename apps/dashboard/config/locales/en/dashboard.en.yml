@@ -358,3 +358,23 @@ en:
         checkout_notice: "You'll be redirected to our secure checkout on LemonSqueezy to complete your subscription."
         submit: "Continue to Payment →"
         redirecting: "Redirecting..."
+
+    referrals:
+      title: "Referral Program"
+      subtitle: "Share your referral link and earn rewards when your friends upgrade to a paid plan."
+      stats:
+        total_referred: "Users Referred"
+        total_converted: "Paid Conversions"
+      link:
+        heading: "Your Referral Link"
+        description: "Share this link with friends. When they sign up and upgrade, they'll be attributed to you."
+        copy: "Copy"
+        copied: "Copied!"
+      table:
+        heading: "Recent Referrals"
+        empty: "No referrals yet. Share your link to get started!"
+        user_col: "User"
+        date_col: "Signed Up"
+        status_col: "Status"
+        status_pending: "Pending"
+        status_converted: "Converted"

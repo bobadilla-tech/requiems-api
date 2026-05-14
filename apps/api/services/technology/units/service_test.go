@@ -1,12 +1,15 @@
 package units
 
 import (
-	"errors"
 	"slices"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -153,31 +156,25 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.from, tt.to, tt.value)
 
 			if tt.wantErr != nil {
-				if !errors.Is(err, tt.wantErr) {
-					t.Errorf("expected error %v, got %v", tt.wantErr, err)
-				}
+				assert.ErrorIs(t, err, tt.wantErr)
 				return
 			}
 
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
+			require.NoError(t, err)
 
-			if got.Result != tt.wantResult {
-				t.Errorf("result: got %v, want %v", got.Result, tt.wantResult)
-			}
+			assert.Equal(t, tt.wantResult, got.Result)
 
-			if got.Formula != tt.wantFormula {
-				t.Errorf("formula: got %q, want %q", got.Formula, tt.wantFormula)
-			}
+			assert.Equal(t, tt.wantFormula, got.Formula)
 		})
 	}
 }
 
 func TestService_Units(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	got := svc.Units()
 
@@ -201,9 +198,7 @@ func TestService_Units(t *testing.T) {
 
 	for cat, members := range expectedMembers {
 		got := categories[cat]
-		if len(got) != len(members) {
-			t.Errorf("%s: got %d units, want %d", cat, len(got), len(members))
-		}
+		assert.Len(t, got, len(members))
 		for _, key := range members {
 			if !slices.Contains(got, key) {
 				t.Errorf("%s: missing unit %q", cat, key)
@@ -219,6 +214,7 @@ func TestService_Units(t *testing.T) {
 }
 
 func TestTypes_IsData(t *testing.T) {
+	t.Parallel()
 	Result{}.IsData()
 	Results{}.IsData()
 }
