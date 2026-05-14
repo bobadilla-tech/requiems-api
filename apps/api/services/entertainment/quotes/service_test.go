@@ -175,12 +175,6 @@ func TestRandomBatch_InvalidCount(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestBatchRandomResponse_IsData(t *testing.T) {
-	t.Parallel()
-	// IsData() must be callable — verifies the interface is satisfied.
-	BatchRandomResponse{}.IsData()
-}
-
 func TestRandomBatch_ReturnsResultsInOrder(t *testing.T) {
 	t.Parallel()
 	// Each call to QueryRow should return a different quote.

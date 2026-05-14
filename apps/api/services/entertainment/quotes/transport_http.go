@@ -22,12 +22,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	r.Post("/quotes/random/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchRandomRequest) (BatchRandomResponse, int, error) {
+		func(ctx context.Context, req BatchRandomRequest) (BatchRandomResponse, error) {
 			results, err := svc.RandomBatch(ctx, req.Count)
 			if err != nil {
-				return BatchRandomResponse{}, 0, err
+				return BatchRandomResponse{}, err
 			}
-			return BatchRandomResponse{Results: results, Total: req.Count}, req.Count, nil
+			return BatchRandomResponse{Results: results}, nil
 		},
 	))
 }
