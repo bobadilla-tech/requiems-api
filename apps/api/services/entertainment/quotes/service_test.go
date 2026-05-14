@@ -162,6 +162,19 @@ func TestRandomBatch_SingleItem(t *testing.T) {
 	assert.Len(t, got, 1)
 }
 
+func TestRandomBatch_InvalidCount(t *testing.T) {
+	t.Parallel()
+	svc := newTestService(&mockRow{
+		scanFn: func(_ ...any) error { return nil },
+	})
+
+	_, err := svc.RandomBatch(context.Background(), 0)
+	assert.Error(t, err)
+
+	_, err = svc.RandomBatch(context.Background(), -1)
+	assert.Error(t, err)
+}
+
 func TestBatchRandomResponse_IsData(t *testing.T) {
 	t.Parallel()
 	// IsData() must be callable — verifies the interface is satisfied.

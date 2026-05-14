@@ -743,7 +743,6 @@ apis:
       - Random
       - Inspiration
       - Literature
-      - Batch
 
   - id: trivia
     name: Trivia
