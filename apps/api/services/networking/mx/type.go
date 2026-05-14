@@ -12,7 +12,7 @@ type LookupResponse struct {
 	Records []Record `json:"records"`
 }
 
-//	BatchRequest is the body for validating multiple domains at once.
+// BatchRequest is the body for validating multiple domains at once.
 type BatchRequest struct {
 	Domains []string `json:"domains" validate:"required,min=1,max=50,dive,required,fqdn"`
 }
