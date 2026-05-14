@@ -299,7 +299,7 @@ apis:
     categories:
       - networking
     description: Look up MX (Mail Exchange) records for any domain. Returns all mail server hostnames with their priorities, sorted from highest to lowest priority.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/mx-lookup
