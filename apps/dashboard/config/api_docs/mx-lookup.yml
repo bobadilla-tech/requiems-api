@@ -225,8 +225,9 @@ endpoints:
         response = requests.post(url, headers=headers, json=payload)
         for result in response.json()["data"]["results"]:
           print(result["domain"], result["found"])
-          for record in result["data"]["records"]:
-              print(f"  {record['host']} (priority: {record['priority']})")
+          if result["found"]:
+              for record in result["data"]["records"]:
+                print(f"  {record['host']} (priority: {record['priority']})")
       javascript: |
         const response = await fetch('https://api.requiems.xyz/v1/networking/mx/batch',
           {
@@ -242,9 +243,11 @@ endpoints:
         const { data } = await response.json();
         data.results.forEach(r => {
           console.log(r.domain, r.found);
-          r.data.records.forEach(record => {
-           console.log(record.host, record.priority);
-          });
+          if (r.found) {
+            r.data.records.forEach(record => {
+              console.log(record.host, record.priority);
+            });
+          }
         });
       ruby: |
         require 'net/http'
@@ -262,8 +265,10 @@ endpoints:
 
         JSON.parse(response.body)['data']['results'].each do |r|
           puts "#{r['domain']}: #{r['found']}"
-          r['data']['records'].each do |record|
-            puts "  #{record['host']} (priority: #{record['priority']})"
+          if r['found']
+            r['data']['records'].each do |record|
+              puts "  #{record['host']} (priority: #{record['priority']})"
+            end
           end
         end
 faq:
