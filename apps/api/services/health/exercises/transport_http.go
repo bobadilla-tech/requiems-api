@@ -16,6 +16,7 @@ type exerciseQuerier interface {
 	List(ctx context.Context, p ListParams) (ExerciseList, error)
 	Get(ctx context.Context, id int) (Exercise, error)
 	Random(ctx context.Context, p ListParams) (Exercise, error)
+	GetBatch(ctx context.Context, ids []int) ([]Exercise, error)
 	BodyParts(ctx context.Context) (StringList, error)
 	Equipment(ctx context.Context) (StringList, error)
 	Muscles(ctx context.Context) (StringList, error)
@@ -116,4 +117,14 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 		}
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	r.Post("/exercises/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, int, error) {
+			results, err := q.GetBatch(ctx, req.IDs)
+			if err != nil {
+				return BatchExerciseResponse{}, 0, err
+			}
+			return BatchExerciseResponse{Results: results, Total: len(results)}, len(results), nil
+		},
+	))
 }

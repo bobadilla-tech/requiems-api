@@ -1,5 +1,7 @@
 package exercises
 
+import "requiems-api/platform/httpx"
+
 // Exercise is the public representation of an exercise record.
 // external_id is intentionally omitted — it is an internal upsert key only.
 type Exercise struct {
@@ -41,3 +43,11 @@ type ListParams struct {
 	Page      int    `query:"page"     validate:"min=1"`
 	PerPage   int    `query:"per_page" validate:"min=1,max=100"`
 }
+
+// BatchGetRequest is the body for fetching multiple exercises by ID.
+type BatchGetRequest struct {
+	IDs []int `json:"ids" validate:"required,min=1,max=50,dive,min=1"`
+}
+
+// BatchExerciseResponse is the response for a batch exercise lookup.
+type BatchExerciseResponse = httpx.BatchResponse[Exercise]

@@ -138,6 +138,40 @@ func (s *Service) Random(ctx context.Context, p ListParams) (Exercise, error) {
 	return e, nil
 }
 
+// GetBatch returns the exercises matching the given IDs.
+// IDs that do not exist are silently skipped.
+// Results are ordered to match the input ID slice.
+func (s *Service) GetBatch(ctx context.Context, ids []int) ([]Exercise, error) {
+	const q = `
+		SELECT id, name, body_parts, equipment, target_muscles, secondary_muscles, instructions
+		FROM exercises
+		WHERE id = ANY($1::int[])
+		ORDER BY array_position($1::int[], id)
+	`
+
+	rows, err := s.db.Query(ctx, q, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	items := make([]Exercise, 0, len(ids))
+	for rows.Next() {
+		var e Exercise
+		if err := rows.Scan(
+			&e.ID, &e.Name, &e.BodyParts, &e.Equipment,
+			&e.TargetMuscles, &e.SecondaryMuscles, &e.Instructions,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, e)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 // BodyParts returns a sorted list of all distinct body part values.
 func (s *Service) BodyParts(ctx context.Context) (StringList, error) {
 	return s.distinctValues(ctx, `

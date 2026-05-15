@@ -62,6 +62,15 @@ func Error(w http.ResponseWriter, status int, code, message string) {
 	}
 }
 
+// BatchResponse is the standard envelope for batch endpoints.
+// Total is set automatically by HandleBatch from len(Results).
+type BatchResponse[T any] struct {
+	Results []T `json:"results"`
+	Total   int `json:"total"`
+}
+
+func (BatchResponse[T]) IsData() {}
+
 // writeValidationError writes a 422 Unprocessable Entity with a structured
 // list of field-level constraint violations.
 func writeValidationError(w http.ResponseWriter, fields []FieldError) {

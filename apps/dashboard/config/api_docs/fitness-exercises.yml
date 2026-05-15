@@ -172,7 +172,7 @@ endpoints:
         data = JSON.parse(response.body)
         data['data']['items'].each { |e| puts e['name'] }
 
-  - name: Get Exercise by ID
+  - name: Exercise by ID
     method: GET
     path: /v1/health/exercises/{id}
     description: Returns a single exercise by its numeric ID.
@@ -545,6 +545,144 @@ endpoints:
         response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
         puts JSON.parse(response.body)['data']['items'].inspect
 
+  - name: Batch Get Exercises
+    method: POST
+    path: /v1/health/exercises/batch
+    description: "Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array."
+
+    parameters:
+      - name: ids
+        type: array
+        required: true
+        location: body
+        description: "Array of numeric exercise IDs to fetch. Must contain between 1 and 50 items. Each ID must be a positive integer."
+        example: "[1, 7, 42]"
+
+    request_example: |
+      {
+        "ids": [1, 7, 42]
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "id": 1,
+              "name": "barbell bench press",
+              "body_parts": ["chest"],
+              "equipment": ["barbell"],
+              "target_muscles": ["pectorals"],
+              "secondary_muscles": ["triceps", "deltoids"],
+              "instructions": [
+                "Lie flat on a bench and grip the barbell slightly wider than shoulder-width.",
+                "Lower the bar to your chest under control.",
+                "Press the bar back up to full arm extension.",
+                "Repeat for the desired number of repetitions."
+              ]
+            },
+            {
+              "id": 7,
+              "name": "dumbbell curl",
+              "body_parts": ["upper arms"],
+              "equipment": ["dumbbell"],
+              "target_muscles": ["biceps"],
+              "secondary_muscles": ["brachialis"],
+              "instructions": [
+                "Stand with a dumbbell in each hand, arms fully extended.",
+                "Curl the weights toward your shoulders, keeping your elbows close to your torso.",
+                "Squeeze at the top, then lower the weights slowly.",
+                "Repeat for the desired number of repetitions."
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: Exercises found for the given IDs, in input order. IDs not found are omitted.
+      - name: results[].id
+        type: integer
+        description: Unique exercise identifier
+      - name: results[].name
+        type: string
+        description: Exercise name
+      - name: results[].body_parts
+        type: array
+        description: Body part categories involved
+      - name: results[].equipment
+        type: array
+        description: Equipment required
+      - name: results[].target_muscles
+        type: array
+        description: Primary muscles targeted
+      - name: results[].secondary_muscles
+        type: array
+        description: Secondary muscles engaged
+      - name: results[].instructions
+        type: array
+        description: Ordered step-by-step instructions
+      - name: total
+        type: integer
+        description: Number of exercises returned
+
+    errors:
+      - code: bad_request
+        status: 400
+        description: The request body is missing or not valid JSON.
+      - code: unprocessable_entity
+        status: 422
+        description: "The ids array is empty, exceeds 50 items, or contains a non-positive integer."
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/health/exercises/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"ids": [1, 7, 42]}'
+
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/health/exercises/batch",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"ids": [1, 7, 42]}
+        )
+        for exercise in response.json()["data"]["results"]:
+            print(exercise["name"])
+
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/health/exercises/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ids: [1, 7, 42] })
+        });
+        const { data } = await response.json();
+        data.results.forEach(e => console.log(e.name));
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/health/exercises/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { ids: [1, 7, 42] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+        JSON.parse(response.body)['data']['results'].each { |e| puts e['name'] }
+
 faq:
   - question: How do I find valid filter values?
     answer: "Call /v1/health/body-parts, /v1/health/equipment, or /v1/health/muscles to get the exact strings accepted by the body_part, equipment, and muscle query parameters."
@@ -557,3 +695,6 @@ faq:
 
   - question: Is there a GIF or image for each exercise?
     answer: "No. This API intentionally excludes media files. Only text data (names, muscles, instructions) is served."
+
+  - question: What happens if some IDs in a batch request do not exist?
+    answer: "Non-existent IDs are silently skipped. The response only includes exercises that were found. Check the total field to verify how many were returned."
