@@ -210,7 +210,8 @@ endpoints:
         required: true
         location: body
         description: "Array of operations to convert (min: 1, max: 50)."
-        example: "[{\"from\":\"kg\",\"to\":\"lb\",\"value\":10},{\"from\":\"c\",\"to\":\"f\",\"value\":5}]"
+        example: |
+          [{"from": "kg", "to": "lb", "value": 10}, {"from": "c", "to": "f", "value": 5}]
     request_example: |
       {
         "operations": [
