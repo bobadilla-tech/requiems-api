@@ -297,7 +297,7 @@ endpoints:
         type: string
         description: Formula or conversion factor used to calculate the result.
       - name: total
-        type: number
+        type: integer
         description: Total number of conversion results returned.
     errors:
       - code: validation_failed
