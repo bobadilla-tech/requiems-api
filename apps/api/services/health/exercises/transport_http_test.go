@@ -3,6 +3,7 @@ package exercises
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,8 +11,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubQuerier implements exerciseQuerier for HTTP handler tests.
@@ -76,16 +79,17 @@ func TestListExercises_Returns200(t *testing.T) {
 			PerPage: 20,
 		},
 	}
-
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ExerciseList]
-	assert.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	assert.Equal(t, 1, resp.Data.Total)
 	assert.Len(t, resp.Data.Items, 1)
 }
@@ -107,16 +111,14 @@ func TestListExercises_ResponseEnvelope(t *testing.T) {
 
 func TestListExercises_ServiceError_Returns500(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusInternalServerError, Code: "internal_error", Message: "db down",
-	}}
-
+	stub := &stubQuerier{err: errors.New("db down")}
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	require.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
 func TestListExercises_InvalidPerPage_Returns400(t *testing.T) {
@@ -128,7 +130,7 @@ func TestListExercises_InvalidPerPage_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 // ---- GET /exercises/random ----
@@ -142,25 +144,24 @@ func TestRandomExercise_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Exercise]
-	assert.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	assert.Equal(t, "deadlift", resp.Data.Name)
 }
 
 func TestRandomExercise_NoMatch_Returns404(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusNotFound, Code: "not_found", Message: "no exercises found",
-	}}
-
+	stub := &stubQuerier{err: svcerr.NotFound("not_found", "no exercises found")}
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises/random?body_part=unknown", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusNotFound, w.Code)
+	require.Equal(t, http.StatusNotFound, w.Code)
 }
 
 // ---- GET /exercises/{id} ----
@@ -174,10 +175,11 @@ func TestGetExercise_ValidID_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Exercise]
-	assert.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	assert.Equal(t, "bench press", resp.Data.Name)
 }
 
@@ -190,7 +192,7 @@ func TestGetExercise_NonNumericID_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestGetExercise_ZeroID_Returns400(t *testing.T) {
@@ -202,21 +204,19 @@ func TestGetExercise_ZeroID_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestGetExercise_NotFound_Returns404(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusNotFound, Code: "not_found", Message: "exercise not found",
-	}}
-
+	stub := &stubQuerier{err: svcerr.NotFound("not_found", "exercise not found")}
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises/9999", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusNotFound, w.Code)
+	require.Equal(t, http.StatusNotFound, w.Code)
 }
 
 // ---- GET /body-parts, /equipment, /muscles ----
@@ -230,10 +230,11 @@ func TestBodyParts_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[StringList]
-	assert.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	assert.Equal(t, 2, resp.Data.Total)
 }
 
@@ -246,7 +247,7 @@ func TestEquipment_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestMuscles_Returns200(t *testing.T) {
@@ -258,7 +259,7 @@ func TestMuscles_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 }
 
 // ---- POST /exercises/batch ----
@@ -279,10 +280,11 @@ func TestBatchExercises_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[BatchExerciseResponse]
-	assert.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	assert.Len(t, resp.Data.Results, 2)
 	assert.Equal(t, 2, resp.Data.Total)
 	assert.Equal(t, "squat", resp.Data.Results[0].Name)
@@ -335,9 +337,7 @@ func TestBatchExercises_InvalidBody_Returns400(t *testing.T) {
 
 func TestBatchExercises_ServiceError_Returns500(t *testing.T) {
 	t.Parallel()
-	stub := &stubQuerier{err: &httpx.AppError{
-		Status: http.StatusInternalServerError, Code: "internal_error", Message: "db down",
-	}}
+	stub := &stubQuerier{err: errors.New("db down")}
 	r := setupTestRouter(stub)
 
 	body := `{"ids": [1, 2, 3]}`
@@ -359,20 +359,16 @@ func TestMetadata_ServiceError_Returns500(t *testing.T) {
 		{"equipment", "/equipment"},
 		{"muscles", "/muscles"},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			stub := &stubQuerier{err: &httpx.AppError{
-				Status: http.StatusInternalServerError, Code: "internal_error", Message: "db error",
-			}}
-
+			stub := &stubQuerier{err: errors.New("db error")}
 			r := setupTestRouter(stub)
 			req := httptest.NewRequest(http.MethodGet, tt.path, http.NoBody)
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
-
 			assert.Equal(t, http.StatusInternalServerError, w.Code)
 		})
 	}
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

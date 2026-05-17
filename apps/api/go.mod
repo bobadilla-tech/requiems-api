@@ -8,14 +8,15 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/jackc/pgx/v5 v5.9.1
 	github.com/redis/go-redis/v9 v9.18.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
-	github.com/getsentry/sentry-go v0.45.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -26,6 +27,7 @@ require (
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/paulmach/orb v0.12.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ringsaturn/tzf-rel-lite v0.0.2026-a // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
@@ -52,6 +54,7 @@ require (
 	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.0
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
 	github.com/boombuler/barcode v1.1.0
+	github.com/getsentry/sentry-go v0.45.1
 	github.com/jaswdr/faker/v2 v2.9.1
 	github.com/likexian/whois v1.15.7
 	github.com/likexian/whois-parser v1.24.21

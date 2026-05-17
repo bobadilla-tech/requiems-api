@@ -2,12 +2,14 @@ package exercises
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // exerciseQuerier is the interface consumed by HTTP handlers, allowing stub
@@ -59,8 +61,8 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Random(r.Context(), params)
 		if err != nil {
-			if appErr, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch random exercise")
@@ -80,8 +82,8 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 
 		exercise, err := q.Get(r.Context(), id)
 		if err != nil {
-			if appErr, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, appErr.Status, appErr.Code, appErr.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch exercise")
@@ -119,16 +121,12 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 	})
 
 	r.Post("/exercises/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, int, error) {
+		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, error) {
 			results, err := q.GetBatch(ctx, req.IDs)
 			if err != nil {
-				return BatchExerciseResponse{}, 0, &httpx.AppError{
-					Status:  http.StatusInternalServerError,
-					Code:    "internal_error",
-					Message: "failed to fetch exercises",
-				}
+				return BatchExerciseResponse{}, err
 			}
-			return BatchExerciseResponse{Results: results, Total: len(results)}, len(results), nil
+			return BatchExerciseResponse{Results: results}, nil
 		},
 	))
 }
