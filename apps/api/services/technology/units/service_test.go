@@ -250,8 +250,6 @@ func TestService_ConvertBatch(t *testing.T) {
 	require.False(t, results[2].Success)
 }
 
-// perserved Order
-
 func TestService_ConvertBatch_PreservedOrder(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
