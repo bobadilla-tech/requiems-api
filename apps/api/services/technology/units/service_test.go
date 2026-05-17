@@ -283,3 +283,22 @@ func TestService_ConvertBatch_PreservedOrder(t *testing.T) {
 	require.Equal(t, "c", results[2].From)
 	require.Equal(t, "g", results[2].To)
 }
+
+func TestService_ConvertBatch_NilValue(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: nil, // malformed — missing value
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Len(t, results, 1)
+	assert.False(t, results[0].Success)
+	assert.Equal(t, "value is required", results[0].Error)
+}

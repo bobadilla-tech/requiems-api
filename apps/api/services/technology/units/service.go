@@ -234,6 +234,16 @@ func (s *Service) ConvertBatch(ctx context.Context, operations []BatchItem) []Ba
 	results := make([]BatchResponse, len(operations))
 
 	for i, op := range operations {
+		if op.Value == nil {
+			results[i] = BatchResponse{
+				From:    op.From,
+				To:      op.To,
+				Success: false,
+				Error:   "value is required",
+			}
+			continue
+		}
+
 		result, err := s.Convert(op.From, op.To, *op.Value)
 		if err != nil {
 			results[i] = BatchResponse{
