@@ -1,6 +1,7 @@
 package units
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 
@@ -38,4 +39,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	r.Post("/convert/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchResponse], error) {
+			return httpx.BatchResponse[BatchResponse]{Results: svc.ConvertBatch(ctx, req.Operations)}, nil
+		}),
+	)
 }

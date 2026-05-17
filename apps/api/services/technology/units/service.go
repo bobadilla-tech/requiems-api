@@ -1,6 +1,7 @@
 package units
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"math"
@@ -225,3 +226,46 @@ func formatFactor(f float64) string {
 
 	return s[:i+1]
 }
+
+// ConvertBatch processes multiple unit conversion operations and returns a result for each one.
+// Each operation is converted independently — if one fails, the rest continue processing.
+// The returned slice preserves the same order as the input operations.
+func (s *Service) ConvertBatch(ctx context.Context, operations []BatchItem) []BatchResponse {
+	results := make([]BatchResponse, len(operations))
+
+	for i, op := range operations {
+		if op.Value == nil {
+			results[i] = BatchResponse{
+				From:    op.From,
+				To:      op.To,
+				Success: false,
+				Error:   "value is required",
+			}
+			continue
+		}
+
+		result, err := s.Convert(op.From, op.To, *op.Value)
+		if err != nil {
+			results[i] = BatchResponse{
+				From:    op.From,
+				To:      op.To,
+				Success: false,
+				Error:   err.Error(),
+			}
+			continue
+		}
+
+		results[i] = BatchResponse{
+			From:    op.From,
+			To:      op.To,
+			Success: true,
+			Data:    result,
+		}
+
+	}
+
+	return results
+}
+
+// Ptr returns a pointer to the given float64 value.
+func Ptr(v float64) *float64 { return &v }
