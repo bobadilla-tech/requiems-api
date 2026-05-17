@@ -105,6 +105,8 @@ curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
 }
 ```
 
+> **Note:** IDs 7 and 42 were not found and were silently skipped. Only existing IDs appear in `results`.
+
 **Error codes:**
 
 | Code                | Status | When                                             |

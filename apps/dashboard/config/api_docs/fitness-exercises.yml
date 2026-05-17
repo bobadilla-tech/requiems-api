@@ -636,7 +636,7 @@ endpoints:
       - code: bad_request
         status: 400
         description: The request body is missing or not valid JSON.
-      - code: unprocessable_entity
+      - code: validation_failed
         status: 422
         description: "The ids array is empty, exceeds 50 items, or contains a non-positive integer."
 

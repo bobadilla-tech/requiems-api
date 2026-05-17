@@ -122,7 +122,11 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, int, error) {
 			results, err := q.GetBatch(ctx, req.IDs)
 			if err != nil {
-				return BatchExerciseResponse{}, 0, err
+				return BatchExerciseResponse{}, 0, &httpx.AppError{
+					Status:  http.StatusInternalServerError,
+					Code:    "internal_error",
+					Message: "failed to fetch exercises",
+				}
 			}
 			return BatchExerciseResponse{Results: results, Total: len(results)}, len(results), nil
 		},

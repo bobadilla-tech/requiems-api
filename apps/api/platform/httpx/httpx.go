@@ -63,7 +63,7 @@ func Error(w http.ResponseWriter, status int, code, message string) {
 }
 
 // BatchResponse is the standard envelope for batch endpoints.
-// Total is set automatically by HandleBatch from len(Results).
+// Callers are responsible for setting Total (typically len(Results)).
 type BatchResponse[T any] struct {
 	Results []T `json:"results"`
 	Total   int `json:"total"`
