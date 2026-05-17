@@ -1,6 +1,7 @@
 package units
 
 import (
+	"context"
 	"slices"
 	"testing"
 
@@ -217,4 +218,70 @@ func TestTypes_IsData(t *testing.T) {
 	t.Parallel()
 	Result{}.IsData()
 	Results{}.IsData()
+}
+
+func TestService_ConvertBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: Ptr(10),
+		},
+		{
+			From:  "kg",
+			To:    "lb",
+			Value: Ptr(5),
+		},
+		{
+			From:  "c",
+			To:    "g",
+			Value: Ptr(25),
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Equal(t, 3, len(results))
+	require.True(t, results[0].Success)
+	require.True(t, results[1].Success)
+	require.False(t, results[2].Success)
+}
+
+// perserved Order
+
+func TestService_ConvertBatch_PreservedOrder(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: Ptr(10),
+		},
+		{
+			From:  "kg",
+			To:    "lb",
+			Value: Ptr(5),
+		},
+		{
+			From:  "c",
+			To:    "g",
+			Value: Ptr(25),
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Equal(t, "miles", results[0].From)
+	require.Equal(t, "km", results[0].To)
+
+	require.Equal(t, "kg", results[1].From)
+	require.Equal(t, "lb", results[1].To)
+
+	require.Equal(t, "c", results[2].From)
+	require.Equal(t, "g", results[2].To)
 }
