@@ -703,7 +703,7 @@ apis:
     categories:
       - technology
     description: Convert between units of measurement — length, weight, volume, temperature, area, and speed
-    endpoints_count: 2
+    endpoints_count: 3
     status: live
     popular: false
     documentation_url: /apis/unit-conversion
