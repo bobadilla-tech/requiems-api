@@ -38,3 +38,30 @@ func (s *Service) Random(ctx context.Context) (Advice, error) {
 	}
 	return a, nil
 }
+
+
+func (s *Service) RandomBatch(ctx context.Context, count int) ([]Advice, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	results := make([]Advice, 0, count)
+
+	for i := 0; i < count; i++ {
+		row := s.db.QueryRow(ctx, `
+			SELECT id, text
+			FROM advice
+			ORDER BY random()
+			LIMIT 1;
+		`)
+
+		var a Advice
+
+		if err := row.Scan(&a.ID, &a.Text); err != nil {
+			return nil, fmt.Errorf("scan advice: %w", err)
+		}
+
+		results = append(results, a)
+	}
+
+	return results, nil
+}

@@ -6,3 +6,14 @@ type Advice struct {
 }
 
 func (Advice) IsData() {}
+
+
+type BatchRequest struct {
+	Count int `json:"count"`
+}
+
+type BatchResponse[T any] struct {
+	Results []T `json:"results"`
+}
+
+func (BatchResponse[T]) IsData() {}
