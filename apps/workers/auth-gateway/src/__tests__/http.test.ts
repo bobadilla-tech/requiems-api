@@ -88,7 +88,9 @@ describe("HTTP Utilities", () => {
 
       expect(response.status).toBe(429);
       expect(response.headers.get("X-RateLimit-Remaining")).toBe("0");
-      expect(response.headers.get("X-RateLimit-Reset")).toBe("2024-01-01T00:00:00Z");
+      expect(response.headers.get("X-RateLimit-Reset")).toBe(
+        "2024-01-01T00:00:00Z",
+      );
     });
   });
 
@@ -178,7 +180,9 @@ describe("HTTP Utilities", () => {
 
       expect(modified.headers.get("X-Requests-Used")).toBe("5");
       expect(modified.headers.get("X-Requests-Remaining")).toBe("95");
-      expect(modified.headers.get("X-Requests-Reset")).toBe("2024-01-01T00:00:00Z");
+      expect(modified.headers.get("X-Requests-Reset")).toBe(
+        "2024-01-01T00:00:00Z",
+      );
       expect(modified.headers.get("X-Plan")).toBe("developer");
       expect(modified.headers.get("X-RateLimit-Limit")).toBe("60");
       expect(modified.headers.get("X-RateLimit-Remaining")).toBe("55");
@@ -272,7 +276,9 @@ describe("HTTP Utilities", () => {
     });
 
     it("returns error on fetch failure", async () => {
-      vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(new Error("Network error"));
+      vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(
+        new Error("Network error"),
+      );
 
       const result = await fetchBackend("https://api.example.com", {
         method: "GET",
@@ -289,13 +295,20 @@ describe("HTTP Utilities", () => {
       vi.spyOn(globalThis, "fetch").mockImplementationOnce(
         (_url, init) =>
           new Promise((_resolve, reject) => {
-            (init?.signal as AbortSignal | undefined)?.addEventListener("abort", () => {
-              reject(new DOMException("The operation was aborted.", "AbortError"));
-            });
+            (init?.signal as AbortSignal | undefined)?.addEventListener(
+              "abort",
+              () => {
+                reject(
+                  new DOMException("The operation was aborted.", "AbortError"),
+                );
+              },
+            );
           }),
       );
 
-      const result = await fetchBackend("https://api.example.com", { method: "GET" }, 1);
+      const result = await fetchBackend("https://api.example.com", {
+        method: "GET",
+      }, 1);
 
       expect(result.ok).toBe(false);
       if (!result.ok) {

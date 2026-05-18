@@ -1,6 +1,11 @@
 import { Hono } from "hono";
 import * as z from "zod";
-import { createLogger, jsonError, jsonResponse, internalError } from "@requiem/workers-shared";
+import {
+  createLogger,
+  internalError,
+  jsonError,
+  jsonResponse,
+} from "@requiem/workers-shared";
 import type { WorkerBindings } from "../../env";
 
 const app = new Hono<{ Bindings: WorkerBindings }>();
@@ -31,7 +36,10 @@ app.get("/", async (c) => {
   const log = createLogger(c.req.raw);
   const parsed = listQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
+    return jsonError(
+      400,
+      parsed.error.issues[0]?.message ?? "Validation error",
+    );
   }
   const { userId, active } = parsed.data;
   const activeOnly = active !== "false";

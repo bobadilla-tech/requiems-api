@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import * as z from "zod";
 import {
-  jsonError,
-  jsonResponse,
+  ANALYTICS_ENDPOINT_MAX_LIMIT,
   createLogger,
   internalError,
+  jsonError,
+  jsonResponse,
   THIRTY_DAYS_AGO_MS,
-  ANALYTICS_ENDPOINT_MAX_LIMIT,
 } from "@requiem/workers-shared";
 import type { WorkerBindings } from "../../env";
 import type { EndpointStats } from "./types";
@@ -38,7 +38,10 @@ app.get("/by-endpoint", async (c) => {
 
   const parsed = byEndpointQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
+    return jsonError(
+      400,
+      parsed.error.issues[0]?.message ?? "Validation error",
+    );
   }
   const { userId, limit, since, until } = parsed.data;
 
@@ -58,9 +61,12 @@ app.get("/by-endpoint", async (c) => {
         sinceDate = billingResult.earliest;
       } else {
         sinceDate = new Date(Date.now() - THIRTY_DAYS_AGO_MS).toISOString();
-        log.warn("No active billing cycle found for user; falling back to 30-day window", {
-          userId,
-        });
+        log.warn(
+          "No active billing cycle found for user; falling back to 30-day window",
+          {
+            userId,
+          },
+        );
       }
     }
 

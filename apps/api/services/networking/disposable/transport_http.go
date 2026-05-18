@@ -11,6 +11,22 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// CheckEmailRequest is the body for a single-email disposable check.
+type CheckEmailRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+// BatchCheckRequest is the body for checking multiple emails at once.
+type BatchCheckRequest struct {
+	Emails []string `json:"emails" validate:"required,min=1,max=100,dive,email"`
+}
+
+// DomainsListQuery holds optional pagination parameters for domain listing.
+type DomainsListQuery struct {
+	Page    int `query:"page"     validate:"min=1"`
+	PerPage int `query:"per_page" validate:"min=1"`
+}
+
 func RegisterRoutes(router chi.Router, svc *Service) {
 	router.Post("/disposable/check", httpx.Handle(
 		func(_ context.Context, req CheckEmailRequest) (CheckEmailResponse, error) {

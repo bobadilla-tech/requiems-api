@@ -39,20 +39,25 @@ function serializeError(error: unknown): object {
   return { value: String(error) };
 }
 
-function formatLog(level: string, rayId: string, msg: string, data?: object): string {
+function formatLog(
+  level: string,
+  rayId: string,
+  msg: string,
+  data?: object,
+): string {
   const processedData = data
     ? Object.entries(data).reduce(
-        (acc, [key, value]) => {
-          // Serialize error objects properly
-          if (key === "error" || value instanceof Error) {
-            acc[key] = serializeError(value);
-          } else {
-            acc[key] = value;
-          }
-          return acc;
-        },
-        {} as Record<string, unknown>,
-      )
+      (acc, [key, value]) => {
+        // Serialize error objects properly
+        if (key === "error" || value instanceof Error) {
+          acc[key] = serializeError(value);
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {} as Record<string, unknown>,
+    )
     : {};
 
   const entry: LogEntry = { level, rayId, msg, ...processedData };
@@ -65,7 +70,8 @@ function formatLog(level: string, rayId: string, msg: string, data?: object): st
  * @param request - The incoming request (uses cf-ray header as trace ID)
  */
 export function createLogger(request: Request): Logger {
-  const rayId = request.headers.get("cf-ray") ?? crypto.randomUUID().slice(0, 16);
+  const rayId = request.headers.get("cf-ray") ??
+    crypto.randomUUID().slice(0, 16);
 
   return {
     info: (msg, data) => console.log(formatLog("info", rayId, msg, data)),

@@ -1,10 +1,20 @@
 import { captureException, wrapRequestHandler } from "@sentry/cloudflare";
-import { createWorkerFetch, errorHandler, notFoundHandler } from "@requiem/workers-shared";
+import {
+  createWorkerFetch,
+  errorHandler,
+  notFoundHandler,
+} from "@requiem/workers-shared";
 import { Hono } from "hono";
 
 import { validateEnv, type WorkerBindings } from "./env";
 import { apiKeyAuthMiddleware, docsMiddleware } from "./middleware/";
-import { analyticsRoute, apiKeysRoute, healthzRoute, swaggerRoute, usageRoute } from "./routes";
+import {
+  analyticsRoute,
+  apiKeysRoute,
+  healthzRoute,
+  swaggerRoute,
+  usageRoute,
+} from "./routes";
 
 const app = new Hono<{ Bindings: WorkerBindings }>();
 
@@ -33,7 +43,11 @@ app.onError((err, c) => {
 const baseHandler = createWorkerFetch(app, validateEnv);
 
 export default {
-  fetch(request: Request, env: WorkerBindings, ctx: ExecutionContext): Promise<Response> {
+  fetch(
+    request: Request,
+    env: WorkerBindings,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
     return wrapRequestHandler(
       {
         options: {

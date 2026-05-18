@@ -14,7 +14,10 @@ export const METHODS_WITH_BODY = ["POST", "PUT", "PATCH"];
 const monorepoRoot = resolve(import.meta.dirname, "../../../../../");
 
 export const apiDocsDir = join(monorepoRoot, "apps/dashboard/config/api_docs");
-export const catalogPath = join(monorepoRoot, "apps/dashboard/config/api_catalog.yml");
+export const catalogPath = join(
+  monorepoRoot,
+  "apps/dashboard/config/api_catalog.yml",
+);
 
 export const baseSpec = {
   openapi: "3.0.3",

@@ -17,7 +17,10 @@ import proxyRoute from "./routes/proxy";
 
 const app = new Hono<{ Bindings: WorkerBindings }>();
 
-app.get("/healthz", (_c) => jsonResponse({ status: "ok", service: "auth-gateway" }));
+app.get(
+  "/healthz",
+  (_c) => jsonResponse({ status: "ok", service: "auth-gateway" }),
+);
 
 app.get("/openapi.json", (c) => c.json(openApiSpec));
 
@@ -38,7 +41,11 @@ app.onError((err, c) => {
 const baseHandler = createWorkerFetch(app, validateEnv);
 
 export default {
-  fetch(request: Request, env: WorkerBindings, ctx: ExecutionContext): Promise<Response> {
+  fetch(
+    request: Request,
+    env: WorkerBindings,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
     return wrapRequestHandler(
       {
         options: {

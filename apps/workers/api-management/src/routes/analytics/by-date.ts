@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import * as z from "zod";
 import {
-  jsonError,
-  jsonResponse,
   createLogger,
   internalError,
+  jsonError,
+  jsonResponse,
   THIRTY_DAYS_AGO_MS,
 } from "@requiem/workers-shared";
 import type { WorkerBindings } from "../../env";
@@ -42,7 +42,10 @@ app.get("/by-date", async (c) => {
 
   const parsed = byDateQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
+    return jsonError(
+      400,
+      parsed.error.issues[0]?.message ?? "Validation error",
+    );
   }
   const { userId, groupBy, since, until } = parsed.data;
 

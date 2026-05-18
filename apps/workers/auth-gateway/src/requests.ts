@@ -1,4 +1,8 @@
-import { type Logger, type RequestCheckResult, withRetry } from "@requiem/workers-shared";
+import {
+  type Logger,
+  type RequestCheckResult,
+  withRetry,
+} from "@requiem/workers-shared";
 import type { WorkerBindings } from "./env";
 
 /**
@@ -20,7 +24,9 @@ export async function getRequestUsage(
   billingCycleStart?: string,
   logger?: Logger,
 ): Promise<number> {
-  const startDate = period === "daily" ? getTodayStart() : billingCycleStart || getMonthStart();
+  const startDate = period === "daily"
+    ? getTodayStart()
+    : billingCycleStart || getMonthStart();
   const cacheKey = `quota:${userId}:${startDate}`;
 
   // KV cache hit — avoids a D1 aggregate query on every request
@@ -42,9 +48,14 @@ export async function getRequestUsage(
   const usage = result?.total || 0;
 
   // Write to KV with 60-second TTL (best-effort, don't block on failure)
-  bindings.KV.put(cacheKey, usage.toString(), { expirationTtl: 60 }).catch((err) => {
-    logger?.warn("KV cache write failed in getRequestUsage", { error: err, cacheKey });
-  });
+  bindings.KV.put(cacheKey, usage.toString(), { expirationTtl: 60 }).catch(
+    (err) => {
+      logger?.warn("KV cache write failed in getRequestUsage", {
+        error: err,
+        cacheKey,
+      });
+    },
+  );
 
   return usage;
 }
@@ -84,7 +95,7 @@ export async function recordRequestUsage(
         responseTimeMs,
         new Date().toISOString(),
       )
-      .run(),
+      .run()
   );
 
   // Optimistically increment the KV cache so the next quota check stays warm.
@@ -97,7 +108,10 @@ export async function recordRequestUsage(
     bindings.KV.put(cacheKey, (Number(cached) + requests).toString(), {
       expirationTtl: 60,
     }).catch((err) => {
-      logger?.warn("KV cache write failed in recordRequestUsage", { error: err, cacheKey });
+      logger?.warn("KV cache write failed in recordRequestUsage", {
+        error: err,
+        cacheKey,
+      });
     });
   }
 }
@@ -113,7 +127,13 @@ export async function checkRequestUsage(
   billingCycleStart?: string,
   logger?: Logger,
 ): Promise<RequestCheckResult> {
-  const usage = await getRequestUsage(bindings, userId, period, billingCycleStart, logger);
+  const usage = await getRequestUsage(
+    bindings,
+    userId,
+    period,
+    billingCycleStart,
+    logger,
+  );
   const remaining = Math.max(0, limit - usage);
   const resetAt = getResetTime(period, billingCycleStart);
 
@@ -149,7 +169,10 @@ export function getMonthStart(): string {
 /**
  * Get when request quota will reset
  */
-export function getResetTime(period: "daily" | "monthly", billingCycleStart?: string): string {
+export function getResetTime(
+  period: "daily" | "monthly",
+  billingCycleStart?: string,
+): string {
   const now = new Date();
 
   if (period === "daily") {

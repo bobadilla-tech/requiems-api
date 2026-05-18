@@ -42,7 +42,12 @@ describe("Configuration", () => {
     });
 
     it("plans are in ascending order by request limits", () => {
-      const plans = [PLANS.free, PLANS.developer, PLANS.business, PLANS.professional];
+      const plans = [
+        PLANS.free,
+        PLANS.developer,
+        PLANS.business,
+        PLANS.professional,
+      ];
 
       for (let i = 0; i < plans.length - 1; i++) {
         expect(plans[i].requestLimit).toBeLessThan(plans[i + 1].requestLimit);
@@ -105,12 +110,20 @@ describe("Configuration", () => {
     });
 
     it("returns default multiplier for unlisted endpoints", () => {
-      const multiplier = getRequestMultiplier("GET", "/v1/email/disposable/check");
+      const multiplier = getRequestMultiplier(
+        "GET",
+        "/v1/email/disposable/check",
+      );
       expect(multiplier).toBe(DEFAULT_REQUEST_MULTIPLIER);
     });
 
     it("returns default multiplier for common text endpoints", () => {
-      const endpoints = ["/v1/text/advice", "/v1/text/lorem", "/v1/text/quotes", "/v1/text/words"];
+      const endpoints = [
+        "/v1/text/advice",
+        "/v1/text/lorem",
+        "/v1/text/quotes",
+        "/v1/text/words",
+      ];
 
       endpoints.forEach((path) => {
         const multiplier = getRequestMultiplier("GET", path);
@@ -130,7 +143,10 @@ describe("Configuration", () => {
     it("handles prefix matching for dynamic routes", () => {
       // If /v1/text/words/define is configured with multiplier 2,
       // and we call /v1/text/words/define/something, it should match via prefix
-      const multiplier = getRequestMultiplier("GET", "/v1/text/words/define/something");
+      const multiplier = getRequestMultiplier(
+        "GET",
+        "/v1/text/words/define/something",
+      );
       expect(multiplier).toBe(2);
     });
 
@@ -163,11 +179,14 @@ describe("Configuration", () => {
     });
 
     it("business plan has 10x more requests than developer", () => {
-      expect(PLANS.business.requestLimit / PLANS.developer.requestLimit).toBe(10);
+      expect(PLANS.business.requestLimit / PLANS.developer.requestLimit).toBe(
+        10,
+      );
     });
 
     it("professional plan has 10x more requests than business", () => {
-      expect(PLANS.professional.requestLimit / PLANS.business.requestLimit).toBe(10);
+      expect(PLANS.professional.requestLimit / PLANS.business.requestLimit)
+        .toBe(10);
     });
   });
 

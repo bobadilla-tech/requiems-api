@@ -34,7 +34,10 @@ app.get("/export", async (c) => {
 
   const parsed = exportQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
+    return jsonError(
+      400,
+      parsed.error.issues[0]?.message ?? "Validation error",
+    );
   }
   const { since, limit, cursor: afterId } = parsed.data;
 
@@ -64,11 +67,15 @@ app.get("/export", async (c) => {
       throw new Error("D1 query failed");
     }
     if (!Array.isArray(result.results)) {
-      throw new Error(`Unexpected D1 response shape: results is ${typeof result.results}`);
+      throw new Error(
+        `Unexpected D1 response shape: results is ${typeof result.results}`,
+      );
     }
     const records = result.results;
     const hasMore = records.length === limit;
-    const nextCursor = hasMore ? records[records.length - 1].id.toString() : undefined;
+    const nextCursor = hasMore
+      ? records[records.length - 1].id.toString()
+      : undefined;
 
     log.info("Usage export successful", {
       returned: records.length,
@@ -91,7 +98,11 @@ app.get("/export", async (c) => {
       params: { since, limit, afterId },
     });
 
-    return internalError(error, "Failed to export usage data", c.env.ENVIRONMENT);
+    return internalError(
+      error,
+      "Failed to export usage data",
+      c.env.ENVIRONMENT,
+    );
   }
 });
 

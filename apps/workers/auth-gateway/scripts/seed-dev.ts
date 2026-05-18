@@ -50,7 +50,11 @@ run(
     `${WRANGLER} d1 execute requiem-usage --local --yes --command="DROP TABLE IF EXISTS credit_usage; DROP TABLE IF EXISTS api_keys;"`,
   ),
 );
-run(withPersist(`${WRANGLER} d1 execute requiem-usage --local --yes --file=./schema.sql`));
+run(
+  withPersist(
+    `${WRANGLER} d1 execute requiem-usage --local --yes --file=./schema.sql`,
+  ),
+);
 
 console.log("Applying D1 migrations...");
 run(
@@ -63,7 +67,11 @@ console.log("\nSeeding KV with dev test keys...");
 for (const { apiKey, userId, plan } of DEV_KEYS) {
   const kvKey = `key:${apiKey}`;
   const value = JSON.stringify({ userId, plan, createdAt: CREATED_AT });
-  run(withPersist(`${WRANGLER} kv key put '${kvKey}' '${value}' --binding=KV --local`));
+  run(
+    withPersist(
+      `${WRANGLER} kv key put '${kvKey}' '${value}' --binding=KV --local`,
+    ),
+  );
 }
 
 console.log("\nSeeding D1 api_keys with dev test keys...");
@@ -72,7 +80,11 @@ for (const { apiKey, userId, plan } of DEV_KEYS) {
   const sql =
     `INSERT OR REPLACE INTO api_keys (key_prefix, user_id, plan, active, created_at, billing_cycle_start)` +
     ` VALUES ('${keyPrefix}', '${userId}', '${plan}', 1, '${CREATED_AT}', '${CREATED_AT}')`;
-  run(withPersist(`${WRANGLER} d1 execute requiem-usage --local --yes --command="${sql}"`));
+  run(
+    withPersist(
+      `${WRANGLER} d1 execute requiem-usage --local --yes --command="${sql}"`,
+    ),
+  );
 }
 
 console.log("\nDev test keys seeded (header: requiems-api-key):");
@@ -80,5 +92,7 @@ for (const { apiKey, plan } of DEV_KEYS) {
   console.log(`  ${plan.padEnd(12)} -> ${apiKey}`);
 }
 console.log(
-  `\nExample: curl -H 'requiems-api-key: ${DEV_KEYS[0].apiKey}' http://localhost:4455/v1/text/advice\n`,
+  `\nExample: curl -H 'requiems-api-key: ${
+    DEV_KEYS[0].apiKey
+  }' http://localhost:4455/v1/text/advice\n`,
 );

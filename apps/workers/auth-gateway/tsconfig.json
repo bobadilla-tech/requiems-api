@@ -21,7 +21,9 @@
       "zod": ["./node_modules/zod"],
       "zod/*": ["./node_modules/zod/*"],
       "@cloudflare/workers-types": ["./node_modules/@cloudflare/workers-types"],
-      "@cloudflare/workers-types/*": ["./node_modules/@cloudflare/workers-types/*"]
+      "@cloudflare/workers-types/*": [
+        "./node_modules/@cloudflare/workers-types/*"
+      ]
     }
   },
   "include": ["src/**/*", "scripts/**/*", "../shared/src/**/*"],
