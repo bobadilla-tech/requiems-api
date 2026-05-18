@@ -3,7 +3,7 @@ package advice
 import (
 	"encoding/json"
 	"net/http"
-	
+
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
@@ -25,12 +25,17 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		var req BatchRequest
 
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "invalid_request", "invalid json body")
+			httpx.Error(w, http.StatusBadRequest, "bad_request", "invalid json body")
 			return
 		}
 
 		if req.Count <= 0 {
-			httpx.Error(w, http.StatusBadRequest, "invalid_count", "count must be greater than zero")
+			httpx.Error(w, http.StatusBadRequest, "bad_request", "count must be greater than zero")
+			return
+		}
+
+		if req.Count > 50 {
+			httpx.Error(w, http.StatusBadRequest, "bad_request", "max 50 items allowed")
 			return
 		}
 

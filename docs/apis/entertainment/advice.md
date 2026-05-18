@@ -110,6 +110,143 @@ puts "Advice ##{data['id']}: #{data['advice']}"
 - Fast response times
 - Unique ID for each piece of advice
 
+## POST /v1/entertainment/advice/batch
+
+Returns multiple random pieces of advice in a single request.
+
+### Request Body
+
+```json
+{
+  "count": 3
+}
+```
+
+| Field   | Type    | Required | Description                                                  |
+| ------- | ------- | -------- | ------------------------------------------------------------ |
+| `count` | integer | ✅       | Number of advice items to return. Must be greater than zero. |
+
+### Response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": 12,
+        "advice": "Stay consistent."
+      },
+      {
+        "id": 87,
+        "advice": "Do one thing every day that scares you."
+      },
+      {
+        "id": 34,
+        "advice": "Don't compare yourself to others."
+      }
+    ]
+  },
+  "metadata": {
+    "timestamp": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+| Field              | Type    | Description                      |
+| ------------------ | ------- | -------------------------------- |
+| `results`          | array   | List of random advice items      |
+| `results[].id`     | integer | Unique identifier for the advice |
+| `results[].advice` | string  | A random piece of advice         |
+
+### Error Codes
+
+| Code                  | Status | When                            |
+| --------------------- | ------ | ------------------------------- |
+| `invalid_request`     | 400    | Invalid or malformed JSON body  |
+| `invalid_count`       | 400    | `count` is zero or negative     |
+| `service_unavailable` | 503    | No advice available in database |
+
+### Code Examples
+
+#### cURL
+
+```bash
+curl -X POST https://api.requiems.xyz/v1/entertainment/advice/batch \
+  -H "requiems-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"count": 3}'
+```
+
+#### Python
+
+```python
+import requests
+
+url = "https://api.requiems.xyz/v1/entertainment/advice/batch"
+headers = {"requiems-api-key": "YOUR_API_KEY"}
+payload = {"count": 3}
+
+response = requests.post(url, json=payload, headers=headers)
+results = response.json()['data']['results']
+for item in results:
+    print(f"Advice #{item['id']}: {item['advice']}")
+```
+
+#### JavaScript
+
+```javascript
+const response = await fetch(
+  "https://api.requiems.xyz/v1/entertainment/advice/batch",
+  {
+    method: "POST",
+    headers: {
+      "requiems-api-key": "YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ count: 3 }),
+  },
+);
+
+const { data } = await response.json();
+data.results.forEach((item) => {
+  console.log(`Advice #${item.id}: ${item.advice}`);
+});
+```
+
+#### Ruby
+
+```ruby
+require 'net/http'
+require 'json'
+
+uri = URI('https://api.requiems.xyz/v1/entertainment/advice/batch')
+request = Net::HTTP::Post.new(uri)
+request['requiems-api-key'] = 'YOUR_API_KEY'
+request['Content-Type'] = 'application/json'
+request.body = JSON.generate({ count: 3 })
+
+response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+  http.request(request)
+end
+
+results = JSON.parse(response.body)['data']['results']
+results.each { |item| puts "Advice ##{item['id']}: #{item['advice']}" }
+```
+
+## Use Cases
+
+- **Daily Motivation Apps** - Provide users with daily wisdom and inspiration
+- **Chatbot Responses** - Add helpful advice to conversational AI responses
+- **Content Placeholders** - Fill content areas during development
+- **Quote Widgets** - Display rotating advice on websites and dashboards
+
+## Features
+
+- Curated collection of advice and wisdom
+- Simple REST API with no parameters
+- Fast response times
+- Unique ID for each piece of advice
+
 ## FAQ
 
 **Can I request specific types of advice?** Currently, the API returns random

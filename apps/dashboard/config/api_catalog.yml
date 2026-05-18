@@ -848,7 +848,7 @@ apis:
     categories:
       - entertainment
     description: Get random pieces of advice and wisdom for inspiration
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/advice
