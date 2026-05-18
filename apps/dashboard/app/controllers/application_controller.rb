@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   stale_when_importmap_changes
 
-  NON_LOCALE_CONTROLLERS = %w[rails/health sitemap api_proxy locale webhooks/lemonsqueezy].freeze
+  NON_LOCALE_CONTROLLERS = %w[rails/health sitemap api_proxy locale webhooks/lemonsqueezy pwa].freeze
 
   before_action :set_locale
 

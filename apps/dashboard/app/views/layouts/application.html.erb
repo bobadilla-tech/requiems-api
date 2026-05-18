@@ -60,6 +60,9 @@
 
     <script type="application/ld+json"><%= organization_json_ld.html_safe %></script>
     <script type="application/ld+json"><%= website_json_ld.html_safe %></script>
+    <% if (bc = breadcrumb_json_ld) %>
+      <script type="application/ld+json"><%= bc.html_safe %></script>
+    <% end %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

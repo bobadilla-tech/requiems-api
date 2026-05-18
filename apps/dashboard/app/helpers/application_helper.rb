@@ -58,6 +58,82 @@ module ApplicationHelper
     )
   end
 
+  BREADCRUMB_NAMES = {
+    "apis"          => "APIs",
+    "systems"       => "Systems",
+    "categories"    => "Categories",
+    "examples"      => "Examples",
+    "case-studies"  => "Case Studies",
+    "pricing"       => "Pricing",
+    "faq"           => "FAQ",
+    "about"         => "About",
+    "team"          => "Team",
+    "contact"       => "Contact",
+    "blog"          => "Blog",
+    "changelog"     => "Changelog",
+    "api_reference" => "API Reference",
+    "glossary"      => "Glossary",
+    "error_codes"   => "Error Codes",
+    "status"        => "Status",
+    "divisions"     => "Divisions",
+    "privacy"       => "Privacy Policy",
+    "terms"         => "Terms of Service"
+  }.freeze
+
+  def breadcrumb_json_ld
+    locale_prefix_re = /\A\/(#{I18n.available_locales.map { |l| Regexp.escape(l.to_s) }.join("|")})(?=\/|\z)/
+    base_path = request.path.sub(locale_prefix_re, "").presence || "/"
+    return nil if base_path == "/"
+
+    segments = base_path.split("/").reject(&:blank?)
+    return nil if segments.empty?
+
+    items = [ { "@type" => "ListItem", "position" => 1, "name" => "Home", "item" => "https://requiems.xyz/#{I18n.locale}/" } ]
+    segments.each_with_index do |segment, i|
+      items << {
+        "@type"    => "ListItem",
+        "position" => i + 2,
+        "name"     => BREADCRUMB_NAMES[segment] || segment.gsub(/[-_]/, " ").split.map(&:capitalize).join(" "),
+        "item"     => "https://requiems.xyz/#{I18n.locale}/#{segments[0..i].join("/")}"
+      }
+    end
+
+    { "@context" => "https://schema.org", "@type" => "BreadcrumbList", "itemListElement" => items }.to_json
+  end
+
+  def faq_json_ld
+    rate_answer = t("home.faq.rate_limits.a1") + " " +
+      PlanConfig::PLAN_NAMES.map { |p|
+        t("home.faq.rate_limits.#{p}", rate_limit: number_with_delimiter(PlanConfig::PLANS[p][:rate_limit_per_minute]))
+      }.join(". ") + "."
+
+    pairs = [
+      [ t("home.faq.getting_started.q1"), strip_tags(t("home.faq.getting_started.a1_html", docs_link: t("home.faq.getting_started.docs_link"))) ],
+      [ t("home.faq.getting_started.q2"), t("home.faq.getting_started.a2") ],
+      [ t("home.faq.getting_started.q3"), t("home.faq.getting_started.a3") ],
+      [ t("home.faq.authentication.q1"),  "#{t("home.faq.authentication.a1")} Authorization: Bearer YOUR_API_KEY" ],
+      [ t("home.faq.authentication.q2"),  strip_tags(t("home.faq.authentication.a2_html")) ],
+      [ t("home.faq.authentication.q3"),  t("home.faq.authentication.a3") ],
+      [ t("home.faq.billing.q1"),         t("home.faq.billing.a1") ],
+      [ t("home.faq.billing.q2"),         t("home.faq.billing.a2") ],
+      [ t("home.faq.billing.q3"),         t("home.faq.billing.a3") ],
+      [ t("home.faq.billing.q4"),         t("home.faq.billing.a4") ],
+      [ t("home.faq.rate_limits.q1"),     rate_answer ],
+      [ t("home.faq.rate_limits.q2"),     strip_tags(t("home.faq.rate_limits.a2_html")) ],
+      [ t("home.faq.support.q1"),         "#{t("home.faq.support.a1")} #{t("home.faq.support.docs_channel.label")}: #{t("home.faq.support.docs_channel.description")}. #{t("home.faq.support.contact_channel.label")}: #{t("home.faq.support.contact_channel.description")}." ],
+      [ t("home.faq.support.q2"),         "#{t("home.faq.support.a2")} #{t("home.faq.support.free_dev")}. #{t("home.faq.support.business_time")}. #{t("home.faq.support.professional_time")}." ],
+      [ t("home.faq.support.q3"),         strip_tags(t("home.faq.support.a3_html", sales_link: t("home.faq.support.contact_sales"))) ]
+    ]
+
+    {
+      "@context"   => "https://schema.org",
+      "@type"      => "FAQPage",
+      "mainEntity" => pairs.map { |q, a|
+        { "@type" => "Question", "name" => q, "acceptedAnswer" => { "@type" => "Answer", "text" => a } }
+      }
+    }.to_json
+  end
+
   def organization_json_ld
     {
       "@context" => "https://schema.org",
