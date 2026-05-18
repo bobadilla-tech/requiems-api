@@ -61,7 +61,6 @@ func Error(w http.ResponseWriter, status int, code, message string) {
 			Timestamp: time.Now().UTC().Format(time.RFC3339),
 		},
 	})
-
 }
 
 // ValidationError writes 422 for a BindAndValidate / BindQuery validation failure.
@@ -96,7 +95,6 @@ func writeValidationError(w http.ResponseWriter, fields []FieldError) {
 func write(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-
 	if err := json.NewEncoder(w).Encode(v); err != nil {
 		log.Printf("httpx: failed to encode JSON response: %v", err)
 	}
