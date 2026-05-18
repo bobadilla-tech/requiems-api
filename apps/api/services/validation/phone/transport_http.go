@@ -9,6 +9,16 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// ValidateRequest holds query parameters for the phone validation endpoint.
+type ValidateRequest struct {
+	Number string `query:"number" validate:"required"`
+}
+
+// BatchValidateRequest is the body for validating multiple phone numbers at once.
+type BatchValidateRequest struct {
+	Numbers []string `json:"numbers" validate:"required,min=1,max=50,dive,required"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/phone", func(w http.ResponseWriter, r *http.Request) {
 		req := ValidateRequest{}
