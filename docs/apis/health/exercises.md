@@ -66,7 +66,8 @@ curl "https://api.requiems.xyz/v1/health/exercises/random?body_part=back&equipme
 
 `POST /v1/health/exercises/batch`
 
-Fetch up to 50 exercises in a single request. Results are returned in the same order as the input IDs. IDs that do not exist are silently skipped.
+Fetch up to 50 exercises in a single request. Results are returned in the same
+order as the input IDs. IDs that do not exist are silently skipped.
 
 ```bash
 curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
@@ -77,9 +78,9 @@ curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
 
 **Request body:**
 
-| Field | Type             | Required | Constraints                        |
-| ----- | ---------------- | -------- | ---------------------------------- |
-| `ids` | array of integer | yes      | 1–50 items, each must be ≥ 1       |
+| Field | Type             | Required | Constraints                  |
+| ----- | ---------------- | -------- | ---------------------------- |
+| `ids` | array of integer | yes      | 1–50 items, each must be ≥ 1 |
 
 **Response:**
 
@@ -105,14 +106,15 @@ curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
 }
 ```
 
-> **Note:** IDs 7 and 42 were not found and were silently skipped. Only existing IDs appear in `results`.
+> **Note:** IDs 7 and 42 were not found and were silently skipped. Only existing
+> IDs appear in `results`.
 
 **Error codes:**
 
-| Code                | Status | When                                             |
-| ------------------- | ------ | ------------------------------------------------ |
-| `bad_request`       | 400    | Missing or malformed JSON body                   |
-| `validation_failed` | 422    | Empty list, more than 50 IDs, or any ID below 1  |
+| Code                | Status | When                                            |
+| ------------------- | ------ | ----------------------------------------------- |
+| `bad_request`       | 400    | Missing or malformed JSON body                  |
+| `validation_failed` | 422    | Empty list, more than 50 IDs, or any ID below 1 |
 
 ## Metadata Endpoints
 
