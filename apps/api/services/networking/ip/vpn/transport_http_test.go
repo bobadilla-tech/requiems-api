@@ -1,12 +1,12 @@
 package vpn
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"strings"
-	"bytes"
+	"testing"
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"

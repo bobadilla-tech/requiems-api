@@ -252,7 +252,7 @@ apis:
     categories:
       - networking
     description: Detect if an IP address belongs to a VPN, proxy, Tor exit node, or hosting provider. Returns threat scores and fraud indicators for fraud prevention and risk assessment.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/vpn-detection

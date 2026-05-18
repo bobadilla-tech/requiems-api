@@ -123,6 +123,128 @@ endpoints:
         end
 
         puts JSON.parse(response.body)
+  - name: Check IP Batch
+    method: POST
+    path: /v1/networking/ip/vpn/batch
+    description: |
+      Analyze multiple IP addresses in a single request to determine if they
+      belong to a VPN, proxy, Tor exit node, or hosting provider. Returns
+      threat indicators, fraud scores, and ASN information for each IP.
+
+    parameters:
+      - name: ips
+        type: array[string]
+        required: true
+        location: body
+        description: List of IP addresses to analyze (IPv4 or IPv6). Maximum 50 items.
+        example:
+          - 8.8.8.8
+          - 1.1.1.1
+          - 2001:4860:4860::8888
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "ip": "8.8.8.8",
+              "is_vpn": false,
+              "is_proxy": false,
+              "is_tor": false,
+              "is_hosting": true,
+              "score": 1,
+              "threat": 1,
+              "fraud_score": 0,
+              "asn_org": "GOOGLE-ASN"
+            },
+            {
+              "ip": "1.1.1.1",
+              "is_vpn": false,
+              "is_proxy": false,
+              "is_tor": false,
+              "is_hosting": true,
+              "score": 1,
+              "threat": 1,
+              "fraud_score": 0,
+              "asn_org": "CLOUDFLARE-ASN"
+            },
+            {
+              "ip": "invalid-ip",
+              "is_vpn": false,
+              "is_proxy": false,
+              "is_tor": false,
+              "is_hosting": false,
+              "score": 0,
+              "threat": 0,
+              "fraud_score": 0,
+              "asn_org": ""
+            }
+          ]
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: List of IP detection results (preserves input order)
+
+      - name: ip
+        type: string
+        description: The analyzed IP address
+
+      - name: is_vpn
+        type: boolean
+        description: True when the IP belongs to a known VPN provider
+
+      - name: is_proxy
+        type: boolean
+        description: True when the IP is a known public or web proxy
+
+      - name: is_tor
+        type: boolean
+        description: True when the IP is a known Tor exit node
+
+      - name: is_hosting
+        type: boolean
+        description: True when the IP belongs to a data-centre or hosting provider (DCH)
+
+      - name: score
+        type: integer
+        description: |
+          Raw threat score (0-9+). Computed as:
+          Tor (+3), VPN (+2), Proxy (+2), Hosting (+1)
+
+      - name: threat
+        type: integer
+        description: |
+          Threat level derived from score:
+          0=None, 1=Low, 2-3=Medium, 4-5=High, 6+=Critical
+
+      - name: fraud_score
+        type: integer
+        description: Fraud risk score from 0 (no risk) to 100 (high risk)
+
+      - name: asn_org
+        type: string
+        description: Organization name owning the Autonomous System (ASN)
+
+    errors:
+      - code: bad_request
+        status: 400
+        description: Invalid or missing IP list (empty or malformed request body)
+
+      - code: internal_error
+        status: 500
+        description: Unexpected server error
+
+    notes: |
+      - Maximum 50 IPs per request
+      - Invalid IPs are included in the response with zeroed detection fields
+      - Response preserves input order
+      - Each IP is processed independently          
 
 faq:
   - question: What databases are used for detection?

@@ -1,9 +1,9 @@
 package vpn
 
 import (
+	"encoding/json"
 	"net"
 	"net/http"
-	"encoding/json"
 	"requiems-api/platform/httpx"
 
 	"github.com/go-chi/chi/v5"
