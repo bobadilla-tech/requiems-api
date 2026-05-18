@@ -33,3 +33,15 @@ type IPCheckResponse struct {
 }
 
 func (IPCheckResponse) IsData() {}
+
+
+type BatchRequest struct {
+	IPs []string `json:"ips" validate:"required,min=1,max=50,dive,required,ip"`
+}
+
+
+type BatchResponse struct {
+	Results []IPCheckResponse `json:"results"`
+}
+
+func (BatchResponse) IsData() {}

@@ -37,3 +37,54 @@ func (s *Service) CheckIP(ctx context.Context, ip net.IP) (IPCheckResponse, erro
 		AsnOrg:     result.AsnOrg,
 	}, nil
 }
+
+func (s *Service) CheckBatch(ctx context.Context, ips []string) (BatchResponse, error) {
+	results := make([]IPCheckResponse, len(ips))
+
+	type item struct {
+		index  int
+		result IPCheckResponse
+	}
+
+	ch := make(chan item, len(ips))
+
+	for i, rawIP := range ips {
+		go func(index int, raw string) {
+			ip := net.ParseIP(raw)
+			if ip == nil {
+				ch <- item{
+					index: index,
+					result: IPCheckResponse{
+						IP: raw,
+					},
+				}
+				return
+			}
+
+			result, err := s.CheckIP(ctx, ip)
+			if err != nil {
+				ch <- item{
+					index: index,
+					result: IPCheckResponse{
+						IP: raw,
+					},
+				}
+				return
+			}
+
+			ch <- item{
+				index:  index,
+				result: result,
+			}
+		}(i, rawIP)
+	}
+
+	for range ips {
+		item := <-ch
+		results[item.index] = item.result
+	}
+
+	return BatchResponse{
+		Results: results,
+	}, nil
+}
