@@ -21,3 +21,13 @@ type WorkingDays struct {
 }
 
 func (WorkingDays) IsData() {}
+
+type BatchRequest struct {
+	Items []Request `json:"items" validate:"required,min=1,max=50,dive"`
+}
+
+type BatchResponse struct {
+	Results []WorkingDays `json:"results"`
+}
+
+func (BatchResponse) IsData() {}

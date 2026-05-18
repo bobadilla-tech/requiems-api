@@ -1,6 +1,7 @@
 package workingdays
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -30,5 +31,27 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		}
 
 		httpx.JSON(w, http.StatusOK, response)
+	})
+	r.Post("/working-days/batch", func(w http.ResponseWriter, r *http.Request) {
+		var req BatchRequest
+
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			httpx.Error(w, http.StatusBadRequest, "invalid_request", "invalid json body")
+			return
+		}
+
+		if len(req.Items) == 0 {
+			httpx.Error(w, http.StatusBadRequest, "invalid_request", "items must not be empty")
+			return
+		}
+
+		if len(req.Items) > 50 {
+			httpx.Error(w, http.StatusBadRequest, "invalid_request", "items must not exceed 50")
+			return
+		}
+
+		results := svc.GetWorkingDaysBatch(req.Items)
+
+		httpx.JSON(w, http.StatusOK, BatchResponse{Results: results})
 	})
 }

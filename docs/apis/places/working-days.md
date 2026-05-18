@@ -138,6 +138,174 @@ result = JSON.parse(response.body)['data']
 puts "#{result['working_days']} working days between #{result['from']} and #{result['to']}"
 ```
 
+---
+
+## POST /v1/places/working-days/batch
+
+Calculate working days for multiple date ranges in a single request. Results preserve input order.
+
+### Request Body
+
+```json
+{
+  "items": [
+    {
+      "from": "2024-02-23",
+      "to": "2024-02-28"
+    },
+    {
+      "from": "2024-02-23",
+      "to": "2024-02-28",
+      "country": "US",
+      "subdivision": "NY"
+    }
+  ]
+}
+```
+
+| Field                 | Type   | Description                                                                       |
+| --------------------- | ------ | --------------------------------------------------------------------------------- |
+| `items`               | array  | List of date range objects. Minimum 1, maximum 50.                                |
+| `items[].from`        | string | Start date in YYYY-MM-DD format (ISO 8601)                                        |
+| `items[].to`          | string | End date in YYYY-MM-DD format. Must be >= `from`.                                 |
+| `items[].country`     | string | ISO 3166-1 alpha-2 country code (e.g. `"US"`, `"GB"`). Excludes country holidays. |
+| `items[].subdivision` | string | ISO 3166-2 subdivision code (e.g. `"NY"`, `"CA"`). Requires `country`.            |
+
+### Response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "working_days": 4,
+        "from": "2024-02-23",
+        "to": "2024-02-28"
+      },
+      {
+        "working_days": 4,
+        "from": "2024-02-23",
+        "to": "2024-02-28",
+        "country": "US",
+        "subdivision": "NY"
+      }
+    ]
+  },
+  "metadata": {
+    "timestamp": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+| Field                    | Type    | Description                                                     |
+| ------------------------ | ------- | --------------------------------------------------------------- |
+| `results`                | array   | List of working days results, preserving input order            |
+| `results[].working_days` | integer | Number of working days between the two dates                    |
+| `results[].from`         | string  | Start date (echoed from request)                                |
+| `results[].to`           | string  | End date (echoed from request)                                  |
+| `results[].country`      | string  | Country code (echoed from request, omitted if not provided)     |
+| `results[].subdivision`  | string  | Subdivision code (echoed from request, omitted if not provided) |
+
+### Error Codes
+
+| Code              | Status | When                           |
+| ----------------- | ------ | ------------------------------ |
+| `invalid_request` | 400    | Invalid or malformed JSON body |
+| `invalid_request` | 400    | `items` is missing or empty    |
+| `invalid_request` | 400    | `items` exceeds 50 entries     |
+
+### Code Examples
+
+#### cURL
+
+```bash
+curl -X POST "https://api.requiems.xyz/v1/places/working-days/batch" \
+  -H "requiems-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "from": "2024-02-23", "to": "2024-02-28" },
+      { "from": "2024-02-23", "to": "2024-02-28", "country": "US", "subdivision": "NY" }
+    ]
+  }'
+```
+
+#### Python
+
+```python
+import requests
+
+url = "https://api.requiems.xyz/v1/places/working-days/batch"
+headers = {"requiems-api-key": "YOUR_API_KEY"}
+payload = {
+    "items": [
+        {"from": "2024-02-23", "to": "2024-02-28"},
+        {"from": "2024-02-23", "to": "2024-02-28", "country": "US", "subdivision": "NY"},
+    ]
+}
+
+response = requests.post(url, json=payload, headers=headers)
+results = response.json()['data']['results']
+for r in results:
+    print(f"{r['working_days']} working days between {r['from']} and {r['to']}")
+```
+
+#### JavaScript
+
+```javascript
+const response = await fetch(
+  "https://api.requiems.xyz/v1/places/working-days/batch",
+  {
+    method: "POST",
+    headers: {
+      "requiems-api-key": "YOUR_API_KEY",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      items: [
+        { from: "2024-02-23", to: "2024-02-28" },
+        {
+          from: "2024-02-23",
+          to: "2024-02-28",
+          country: "US",
+          subdivision: "NY",
+        },
+      ],
+    }),
+  },
+);
+
+const { data } = await response.json();
+data.results.forEach((r) => {
+  console.log(`${r.working_days} working days between ${r.from} and ${r.to}`);
+});
+```
+
+#### Ruby
+
+```ruby
+require 'net/http'
+require 'json'
+
+uri = URI('https://api.requiems.xyz/v1/places/working-days/batch')
+request = Net::HTTP::Post.new(uri)
+request['requiems-api-key'] = 'YOUR_API_KEY'
+request['Content-Type'] = 'application/json'
+request.body = JSON.generate({
+  items: [
+    { from: '2024-02-23', to: '2024-02-28' },
+    { from: '2024-02-23', to: '2024-02-28', country: 'US', subdivision: 'NY' }
+  ]
+})
+
+response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+  http.request(request)
+end
+
+results = JSON.parse(response.body)['data']['results']
+results.each { |r| puts "#{r['working_days']} working days between #{r['from']} and #{r['to']}" }
+```
+
 ## Use Cases
 
 - **Project Deadline Calculations** - Estimate realistic project timelines
