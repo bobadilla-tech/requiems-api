@@ -122,6 +122,172 @@ endpoints:
 
         data = JSON.parse(response.body)
         puts data['data']['timezone']
+  - name: Get Timezone Batch
+    method: POST
+    path: /v1/places/timezone/batch
+    description: |
+      Returns timezone information for multiple cities in a single request.
+      The response preserves the input order. Invalid cities are returned
+      with `info: null`.
+
+    request_headers:
+      - name: Content-Type
+        value: application/json
+
+    request_body:
+      required: true
+      content_type: application/json
+      schema:
+        type: object
+        required:
+          - cities
+        properties:
+          cities:
+            type: array
+            minItems: 1
+            maxItems: 50
+            items:
+              type: string
+            description: List of city names to lookup.
+
+    request_example: |
+      {
+        "cities": [
+          "Tokyo",
+          "Lima",
+          "New York"
+        ]
+      }
+
+    response_example: |
+      {
+        "results": [
+          {
+            "city": "Tokyo",
+            "info": {
+              "timezone": "Asia/Tokyo",
+              "offset": "+09:00",
+              "current_time": "2024-12-15T14:30:00Z",
+              "is_dst": false
+            }
+          },
+          {
+            "city": "Lima",
+            "info": {
+              "timezone": "America/Lima",
+              "offset": "-05:00",
+              "current_time": "2024-12-15T14:30:00Z",
+              "is_dst": false
+            }
+          },
+          {
+            "city": "Atlantis",
+            "info": null
+          }
+        ]
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: List of timezone lookup results in the same order as the request.
+
+      - name: city
+        type: string
+        description: City name provided in the request.
+
+      - name: info
+        type: object|null
+        description: |
+          Timezone information for the city.
+          Null when the city is not found.
+
+      - name: timezone
+        type: string
+        description: IANA timezone identifier.
+
+      - name: offset
+        type: string
+        description: UTC offset in +HH:MM or -HH:MM format.
+
+      - name: current_time
+        type: string
+        description: Current UTC time formatted as RFC3339.
+
+      - name: is_dst
+        type: boolean
+        description: Whether the timezone is currently observing DST.
+
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/places/timezone/batch" \
+          -H "Content-Type: application/json" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -d '{
+            "cities": ["Tokyo", "Lima", "New York"]
+          }'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/places/timezone/batch"
+
+        headers = {
+          "requiems-api-key": "YOUR_API_KEY",
+          "Content-Type": "application/json"
+        }
+
+        payload = {
+          "cities": ["Tokyo", "Lima", "New York"]
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        print(response.json())
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/places/timezone/batch',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'requiems-api-key': 'YOUR_API_KEY'
+            },
+            body: JSON.stringify({
+              cities: ['Tokyo', 'Lima', 'New York']
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        console.log(data.results);
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/places/timezone/batch')
+
+        request = Net::HTTP::Post.new(uri)
+
+        request['Content-Type'] = 'application/json'
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+
+        request.body = {
+          cities: ['Tokyo', 'Lima', 'New York']
+        }.to_json
+
+        response = Net::HTTP.start(
+          uri.hostname,
+          uri.port,
+          use_ssl: true
+        ) do |http|
+          http.request(request)
+        end
+
+        puts response.body
 
 faq:
   - question: Which lookup method should I use — coordinates or city name?

@@ -330,7 +330,7 @@ apis:
     categories:
       - places
     description: Get timezone information for any location by coordinates or city name
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/timezone
