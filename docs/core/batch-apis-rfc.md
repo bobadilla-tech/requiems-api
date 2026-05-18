@@ -79,7 +79,7 @@ still count as **1** request.
 
 ## Checklist before merging a new batch endpoint
 
-- [ ] Uses `httpx.HandleBatch` and returns correct **item count**.
+- [ ] Uses `httpx.HandleBatch`
 - [ ] Struct validation documents **min/max** batch size; tests cover boundary
       and oversize.
 - [ ] Public docs include curl example and error cases.
