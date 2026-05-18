@@ -35,10 +35,7 @@ app.get("/summary", async (c) => {
 
   const parsed = summaryQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(
-      400,
-      parsed.error.issues[0]?.message ?? "Validation error",
-    );
+    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
   }
   const { userId, since, until } = parsed.data;
 
@@ -54,8 +51,8 @@ app.get("/summary", async (c) => {
         .bind(userId)
         .first<{ earliest: string }>();
 
-      sinceDate = billingResult?.earliest ||
-        new Date(Date.now() - THIRTY_DAYS_AGO_MS).toISOString();
+      sinceDate =
+        billingResult?.earliest || new Date(Date.now() - THIRTY_DAYS_AGO_MS).toISOString();
     }
 
     // Run independent queries in parallel

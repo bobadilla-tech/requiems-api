@@ -7,6 +7,18 @@ import (
 	ua "github.com/medama-io/go-useragent"
 )
 
+// Result holds parsed user agent information.
+type Result struct {
+	Browser        string `json:"browser"`
+	BrowserVersion string `json:"browser_version"`
+	OS             string `json:"os"`
+	OSVersion      string `json:"os_version"`
+	Device         string `json:"device"`
+	IsBot          bool   `json:"is_bot"`
+}
+
+func (Result) IsData() {}
+
 // osVersionRegexes maps OS names (as returned by the library) to regexes that
 // extract the version string from the raw UA.
 var osVersionRegexes = map[string]*regexp.Regexp{

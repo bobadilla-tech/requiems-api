@@ -7,10 +7,7 @@
  * Filter headers before forwarding to backend
  * Removes Cloudflare headers and sensitive data
  */
-export function filterHeaders(
-  headers: Headers,
-  backendSecret: string,
-): Headers {
+export function filterHeaders(headers: Headers, backendSecret: string): Headers {
   const filtered = new Headers();
 
   // Capture real client IP before stripping Cloudflare headers
@@ -59,20 +56,11 @@ export function addUsageHeaders(
   newResponse.headers.delete("X-Usage-Count");
   newResponse.headers.set("Access-Control-Allow-Origin", "*");
   newResponse.headers.set("X-Requests-Used", headers.requestsUsed.toString());
-  newResponse.headers.set(
-    "X-Requests-Remaining",
-    headers.requestsRemaining.toString(),
-  );
+  newResponse.headers.set("X-Requests-Remaining", headers.requestsRemaining.toString());
   newResponse.headers.set("X-Requests-Reset", headers.requestsReset);
   newResponse.headers.set("X-Plan", headers.plan);
-  newResponse.headers.set(
-    "X-RateLimit-Limit",
-    headers.rateLimitLimit.toString(),
-  );
-  newResponse.headers.set(
-    "X-RateLimit-Remaining",
-    headers.rateLimitRemaining.toString(),
-  );
+  newResponse.headers.set("X-RateLimit-Limit", headers.rateLimitLimit.toString());
+  newResponse.headers.set("X-RateLimit-Remaining", headers.rateLimitRemaining.toString());
 
   return newResponse;
 }

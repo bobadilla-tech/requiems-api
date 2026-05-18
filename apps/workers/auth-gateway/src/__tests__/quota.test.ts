@@ -135,10 +135,7 @@ describe("Quota exceeded — integration", () => {
 
   it("does not query D1 when quota is already cached in KV", async () => {
     // Warm the cache with an over-limit value
-    kvStore.set(
-      monthStartKey(TEST_USER_ID),
-      String(PLANS.free.requestLimit + 1),
-    );
+    kvStore.set(monthStartKey(TEST_USER_ID), String(PLANS.free.requestLimit + 1));
 
     const dbPrepare = vi.fn().mockReturnValue({
       bind: vi.fn().mockReturnValue({

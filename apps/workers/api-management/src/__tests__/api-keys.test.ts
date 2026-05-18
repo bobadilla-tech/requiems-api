@@ -1,12 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import worker from "../index";
-import {
-  authedRequest,
-  makeBindings,
-  makeCtx,
-  makeDB,
-  makeKV,
-} from "./helpers";
+import { authedRequest, makeBindings, makeCtx, makeDB, makeKV } from "./helpers";
 import type { WorkerBindings } from "../env";
 import type { ApiKeyData } from "@requiem/workers-shared";
 
@@ -417,9 +411,7 @@ describe("PATCH /api-keys/:keyPrefix", () => {
     });
     await worker.fetch(req, bindings, makeCtx());
 
-    const stored = JSON.parse(
-      kvStore.get(`key:${FULL_KEY}`) ?? "{}",
-    ) as ApiKeyData;
+    const stored = JSON.parse(kvStore.get(`key:${FULL_KEY}`) ?? "{}") as ApiKeyData;
     expect(stored.plan).toBe("business");
   });
 });

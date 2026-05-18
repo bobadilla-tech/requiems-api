@@ -5,10 +5,7 @@
  * not exist in the standard @edge-runtime/vm environment used by Vitest.
  * We provide a functionally equivalent polyfill for testing purposes.
  */
-if (
-  typeof crypto !== "undefined" && crypto.subtle &&
-  !crypto.subtle.timingSafeEqual
-) {
+if (typeof crypto !== "undefined" && crypto.subtle && !crypto.subtle.timingSafeEqual) {
   (crypto.subtle as unknown as Record<string, unknown>).timingSafeEqual = (
     a: ArrayBuffer,
     b: ArrayBuffer,

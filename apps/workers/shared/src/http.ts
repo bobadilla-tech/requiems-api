@@ -60,16 +60,9 @@ export function jsonValidationFailed(fields: ValidationFieldError[]): Response {
 /**
  * Returns a 500 error response. In development, includes the error message.
  */
-export function internalError(
-  error: unknown,
-  message: string,
-  environment: string,
-): Response {
+export function internalError(error: unknown, message: string, environment: string): Response {
   if (environment === "development") {
-    return jsonError(
-      500,
-      `${message}: ${error instanceof Error ? error.message : String(error)}`,
-    );
+    return jsonError(500, `${message}: ${error instanceof Error ? error.message : String(error)}`);
   }
 
   return jsonError(500, message);

@@ -3,19 +3,8 @@ import { join } from "node:path";
 
 import yaml from "js-yaml";
 
-import type {
-  CatalogEntry,
-  YamlApiDoc,
-  YamlEndpoint,
-  YamlError,
-} from "./types";
-import {
-  apiDocsDir,
-  baseSpec,
-  catalogPath,
-  METHODS_WITH_BODY,
-  TYPE_SCHEMAS,
-} from "./constants";
+import type { CatalogEntry, YamlApiDoc, YamlEndpoint, YamlError } from "./types";
+import { apiDocsDir, baseSpec, catalogPath, METHODS_WITH_BODY, TYPE_SCHEMAS } from "./constants";
 
 export function yamlTypeToSchema(type: string): Record<string, unknown> {
   return TYPE_SCHEMAS[type] ?? { type: "string" };
@@ -43,10 +32,7 @@ export function getErrorStatus(error: YamlError): number {
   return KNOWN_ERROR_CODES[String(error.code)] ?? 400;
 }
 
-export function buildOperation(
-  endpoint: YamlEndpoint,
-  apiId: string,
-): Record<string, unknown> {
+export function buildOperation(endpoint: YamlEndpoint, apiId: string): Record<string, unknown> {
   const params = endpoint.parameters ?? [];
 
   const pathAndQueryParams = params
@@ -205,13 +191,9 @@ export async function loadAPIDocs() {
   try {
     const files = await readdir(apiDocsDir);
 
-    return files.filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))
-      .sort();
+    return files.filter((f) => f.endsWith(".yml") || f.endsWith(".yaml")).sort();
   } catch (err) {
-    console.error(
-      `❌ Failed to read api_docs directory at ${apiDocsDir}:`,
-      err,
-    );
+    console.error(`❌ Failed to read api_docs directory at ${apiDocsDir}:`, err);
     process.exit(1);
   }
 }

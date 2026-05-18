@@ -7,13 +7,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import {
-  buildOperation,
-  buildSpec,
-  loadAPIDoc,
-  loadAPIDocs,
-  loadCatalog,
-} from "./helpers";
+import { buildOperation, buildSpec, loadAPIDoc, loadAPIDocs, loadCatalog } from "./helpers";
 
 import type { CatalogEntry } from "./types";
 
@@ -72,9 +66,7 @@ async function main() {
   }
 
   console.log(
-    `✅ OpenAPI spec generated: ${
-      Object.keys(paths).length
-    } paths across ${docFiles.length} APIs`,
+    `✅ OpenAPI spec generated: ${Object.keys(paths).length} paths across ${docFiles.length} APIs`,
   );
 }
 

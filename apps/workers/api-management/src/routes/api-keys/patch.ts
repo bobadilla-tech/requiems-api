@@ -18,8 +18,7 @@ const patchApiKeySchema = z
     billingCycleStart: z.string().optional(),
   })
   .refine((d) => d.plan !== undefined || d.billingCycleStart !== undefined, {
-    message:
-      "Must provide at least one field to update: plan, billingCycleStart",
+    message: "Must provide at least one field to update: plan, billingCycleStart",
   });
 
 /**
@@ -34,10 +33,7 @@ app.patch("/:keyPrefix", async (c) => {
   const rawBody = await c.req.json().catch(() => null);
   const parsed = patchApiKeySchema.safeParse(rawBody);
   if (!parsed.success) {
-    return jsonError(
-      400,
-      parsed.error.issues[0]?.message ?? "Validation error",
-    );
+    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
   }
   const body = parsed.data;
 
@@ -63,8 +59,7 @@ app.patch("/:keyPrefix", async (c) => {
     const updatedData: ApiKeyData = {
       ...existingData,
       ...(body.plan && { plan: body.plan }),
-      ...(body.billingCycleStart &&
-        { billingCycleStart: body.billingCycleStart }),
+      ...(body.billingCycleStart && { billingCycleStart: body.billingCycleStart }),
     };
 
     // Write updated data to KV

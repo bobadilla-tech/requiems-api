@@ -78,6 +78,37 @@ var ErrUnknownUnit = errors.New("unknown unit")
 // ErrIncompatibleUnits is returned when from and to belong to different categories.
 var ErrIncompatibleUnits = errors.New("incompatible units: cannot convert between different measurement types")
 
+type Result struct {
+	From    string  `json:"from"`
+	To      string  `json:"to"`
+	Input   float64 `json:"input"`
+	Result  float64 `json:"result"`
+	Formula string  `json:"formula"`
+}
+
+func (Result) IsData() {}
+
+// Results maps each measurement category to its supported unit keys.
+type Results struct {
+	Length      []string `json:"length"`
+	Weight      []string `json:"weight"`
+	Volume      []string `json:"volume"`
+	Temperature []string `json:"temperature"`
+	Area        []string `json:"area"`
+	Speed       []string `json:"speed"`
+}
+
+func (Results) IsData() {}
+
+// BatchResponse represents the result of a single batch conversion operation.
+type BatchResponse struct {
+	From    string `json:"from"`
+	To      string `json:"to"`
+	Success bool   `json:"success"`
+	Error   string `json:"error,omitempty"`
+	Data    Result `json:"data"`
+}
+
 type Service struct{}
 
 func NewService() *Service {

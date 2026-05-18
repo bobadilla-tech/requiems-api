@@ -115,9 +115,8 @@ app.all("/*", async (c) => {
   // otherwise fall back to the static per-endpoint multiplier.
   const usageCountHeader = backendResponse.headers.get("X-Usage-Count");
   const parsedCount = usageCountHeader ? parseInt(usageCountHeader, 10) : NaN;
-  const effectiveMultiplier = !Number.isNaN(parsedCount) && parsedCount > 0
-    ? parsedCount
-    : requestMultiplier;
+  const effectiveMultiplier =
+    !Number.isNaN(parsedCount) && parsedCount > 0 ? parsedCount : requestMultiplier;
 
   // Record usage after response is sent — waitUntil keeps the worker alive for the write.
   // recordRequestUsage retries up to 3 times internally; log if all attempts fail.
@@ -145,10 +144,7 @@ app.all("/*", async (c) => {
   // Add usage headers to successful response
   const response = addUsageHeaders(backendResponse, {
     requestsUsed: effectiveMultiplier,
-    requestsRemaining: Math.max(
-      0,
-      requestUsage.remaining - effectiveMultiplier,
-    ),
+    requestsRemaining: Math.max(0, requestUsage.remaining - effectiveMultiplier),
     requestsReset: requestUsage.resetAt,
     plan: keyData.plan,
     rateLimitLimit: plan.ratePerMinute,

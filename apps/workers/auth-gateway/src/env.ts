@@ -12,9 +12,7 @@ export interface WorkerBindings extends BaseWorkerBindings {
 const envSchema = z.object({
   BACKEND_URL: z.string().url(),
   BACKEND_SECRET: z.string().min(32),
-  ENVIRONMENT: z.enum(["development", "staging", "production"]).default(
-    "production",
-  ),
+  ENVIRONMENT: z.enum(["development", "staging", "production"]).default("production"),
   SENTRY_DSN: z.string().optional(),
 });
 

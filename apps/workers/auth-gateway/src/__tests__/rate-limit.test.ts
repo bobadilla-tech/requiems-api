@@ -1,11 +1,7 @@
 import { PLANS } from "@requiem/workers-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WorkerBindings } from "../env";
-import {
-  checkRateLimit,
-  getPlanLimits,
-  getRequestLimitMessage,
-} from "../rate-limit";
+import { checkRateLimit, getPlanLimits, getRequestLimitMessage } from "../rate-limit";
 
 describe("Rate Limiting", () => {
   // Mock KV store
@@ -26,11 +22,7 @@ describe("Rate Limiting", () => {
           const entry = mockKV.get(key);
           return entry ? entry.value : null;
         },
-        put: async (
-          key: string,
-          value: string,
-          options?: { expirationTtl?: number },
-        ) => {
+        put: async (key: string, value: string, options?: { expirationTtl?: number }) => {
           mockKV.set(key, { value, expirationTtl: options?.expirationTtl });
         },
       } as unknown as KVNamespace,
@@ -48,11 +40,7 @@ describe("Rate Limiting", () => {
     it("allows request when under rate limit", async () => {
       vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-      const result = await checkRateLimit(
-        bindings,
-        "test-key",
-        PLANS.developer,
-      );
+      const result = await checkRateLimit(bindings, "test-key", PLANS.developer);
 
       expect(result.allowed).toBe(true);
       expect(result.remaining).toBe(PLANS.developer.ratePerMinute - 1);
@@ -156,11 +144,7 @@ describe("Rate Limiting", () => {
       const minuteKey = `rl:m:enterprise-key:${currentMinute}`;
       await bindings.KV.put(minuteKey, "999999", { expirationTtl: 60 });
 
-      const result = await checkRateLimit(
-        bindings,
-        "enterprise-key",
-        PLANS.enterprise,
-      );
+      const result = await checkRateLimit(bindings, "enterprise-key", PLANS.enterprise);
 
       expect(result.allowed).toBe(true);
     });
@@ -181,11 +165,7 @@ describe("Rate Limiting", () => {
       expect(results.every((r) => r.allowed)).toBe(true);
 
       // Next request should be denied
-      const exceededResult = await checkRateLimit(
-        bindings,
-        "free-key",
-        freePlan,
-      );
+      const exceededResult = await checkRateLimit(bindings, "free-key", freePlan);
       expect(exceededResult.allowed).toBe(false);
       expect(exceededResult.remaining).toBe(0);
     });

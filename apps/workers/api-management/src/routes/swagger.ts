@@ -7,13 +7,13 @@ const swaggerRoute = new Hono<{ Bindings: WorkerBindings }>();
 function getOpenApiMeta(isDev: boolean) {
   const servers = isDev
     ? [
-      { url: "http://localhost:5544", description: "Local development" },
-      { url: "https://api-management.requiems.xyz", description: "Production" },
-    ]
+        { url: "http://localhost:5544", description: "Local development" },
+        { url: "https://api-management.requiems.xyz", description: "Production" },
+      ]
     : [
-      { url: "https://api-management.requiems.xyz", description: "Production" },
-      { url: "http://localhost:5544", description: "Local development" },
-    ];
+        { url: "https://api-management.requiems.xyz", description: "Production" },
+        { url: "http://localhost:5544", description: "Local development" },
+      ];
 
   const description = isDev
     ? "Internal API for managing API keys, usage data, and analytics. Only accessible by Rails dashboard.\n\n**Local dev key:** `dev_api_mgmt_key_for_local_dev_only`"
@@ -144,13 +144,7 @@ swaggerRoute.get("/openapi.json", (c) => {
                     userId: { type: "string" },
                     plan: {
                       type: "string",
-                      enum: [
-                        "free",
-                        "developer",
-                        "business",
-                        "professional",
-                        "enterprise",
-                      ],
+                      enum: ["free", "developer", "business", "professional", "enterprise"],
                     },
                     name: {
                       type: "string",
@@ -253,13 +247,7 @@ swaggerRoute.get("/openapi.json", (c) => {
                   properties: {
                     plan: {
                       type: "string",
-                      enum: [
-                        "free",
-                        "developer",
-                        "business",
-                        "professional",
-                        "enterprise",
-                      ],
+                      enum: ["free", "developer", "business", "professional", "enterprise"],
                     },
                     billingCycleStart: { type: "string", format: "date-time" },
                   },
@@ -357,9 +345,7 @@ swaggerRoute.get("/docs", (c) => {
     <title>API Management</title>
   </head>
   <body>
-    ${
-    SwaggerUI({ url: "/openapi.json", persistAuthorization: true, onComplete })
-  }
+    ${SwaggerUI({ url: "/openapi.json", persistAuthorization: true, onComplete })}
   </body>
 </html>`);
 });

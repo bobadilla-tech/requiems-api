@@ -5,11 +5,7 @@
  * @param attempts - Max number of attempts (default: 3)
  * @param delayMs - Initial delay in ms, doubles each retry (default: 100)
  */
-export async function withRetry<T>(
-  fn: () => Promise<T>,
-  attempts = 3,
-  delayMs = 100,
-): Promise<T> {
+export async function withRetry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 100): Promise<T> {
   let lastError: unknown;
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
@@ -17,9 +13,7 @@ export async function withRetry<T>(
     } catch (err) {
       lastError = err;
       if (attempt < attempts - 1) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, delayMs * 2 ** attempt)
-        );
+        await new Promise((resolve) => setTimeout(resolve, delayMs * 2 ** attempt));
       }
     }
   }

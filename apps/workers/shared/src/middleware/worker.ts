@@ -6,8 +6,7 @@ import type { Hono, NotFoundHandler } from "hono";
 /**
  * Standard 404 handler for all workers.
  */
-export const notFoundHandler: NotFoundHandler = (_c) =>
-  jsonResponse({ error: "Not found" }, 404);
+export const notFoundHandler: NotFoundHandler = (_c) => jsonResponse({ error: "Not found" }, 404);
 
 /**
  * Wraps a Hono app in the Cloudflare Worker `fetch` export, running env
@@ -18,11 +17,7 @@ export function createWorkerFetch<TEnv extends object>(
   validateEnv: (env: TEnv) => void,
 ) {
   return {
-    async fetch(
-      request: Request,
-      env: TEnv,
-      ctx: ExecutionContext,
-    ): Promise<Response> {
+    async fetch(request: Request, env: TEnv, ctx: ExecutionContext): Promise<Response> {
       try {
         validateEnv(env);
       } catch (error) {

@@ -42,10 +42,7 @@ app.get("/by-date", async (c) => {
 
   const parsed = byDateQuerySchema.safeParse(c.req.query());
   if (!parsed.success) {
-    return jsonError(
-      400,
-      parsed.error.issues[0]?.message ?? "Validation error",
-    );
+    return jsonError(400, parsed.error.issues[0]?.message ?? "Validation error");
   }
   const { userId, groupBy, since, until } = parsed.data;
 

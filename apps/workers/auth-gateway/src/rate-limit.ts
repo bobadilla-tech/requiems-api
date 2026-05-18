@@ -1,8 +1,4 @@
-import type {
-  PlanConfig,
-  PlanName,
-  RateLimitResult,
-} from "@requiem/workers-shared";
+import type { PlanConfig, PlanName, RateLimitResult } from "@requiem/workers-shared";
 import type { WorkerBindings } from "./env";
 
 const RATE_LIMIT_WINDOW_SECONDS = 60;

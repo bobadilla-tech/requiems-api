@@ -43,9 +43,7 @@ app.post("/", async (c) => {
   if (!parsed.success) {
     return jsonValidationFailed(
       parsed.error.issues.map((issue) => ({
-        field: issue.path.length > 0
-          ? issue.path.map(String).join(".")
-          : "body",
+        field: issue.path.length > 0 ? issue.path.map(String).join(".") : "body",
         message: issue.message,
       })),
     );

@@ -15,11 +15,7 @@ describe("apiKeyAuthMiddleware", () => {
   });
 
   it("returns 401 when the wrong key is sent", async () => {
-    const req = authedRequest(
-      PROTECTED_PATH,
-      {},
-      "wrong-key-that-is-not-valid-at-all",
-    );
+    const req = authedRequest(PROTECTED_PATH, {}, "wrong-key-that-is-not-valid-at-all");
     const res = await worker.fetch(req, makeBindings(), makeCtx());
 
     expect(res.status).toBe(401);

@@ -12,6 +12,15 @@ const (
 	charsetSymbols = "!@#$%^&*()-_=+[]{}|;:,.<>?"
 )
 
+// Password is the response payload for the password generator.
+type Password struct {
+	Password string `json:"password"` //nolint:gosec // intentional: this is the generated password value, not a secret
+	Length   int    `json:"length"`
+	Strength string `json:"strength"`
+}
+
+func (Password) IsData() {}
+
 // Service generates cryptographically secure passwords.
 type Service struct{}
 

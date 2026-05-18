@@ -39,10 +39,7 @@ export function makeKV(store = new Map<string, string>()): KVNamespace {
  * Build a minimal D1 stub. `results` is returned from `.all()`, and
  * `firstResult` from `.first()`.  Override either per-test as needed.
  */
-export function makeDB(
-  results: unknown[] = [],
-  firstResult: unknown = null,
-): D1Database {
+export function makeDB(results: unknown[] = [], firstResult: unknown = null): D1Database {
   return {
     prepare: (_sql: string) => ({
       bind: (..._args: unknown[]) => ({
@@ -62,9 +59,7 @@ export function makeDB(
  * Assemble default WorkerBindings with overrides.
  * Tests that need specific KV / DB behaviour should pass in their own mocks.
  */
-export function makeBindings(
-  overrides: Partial<WorkerBindings> = {},
-): WorkerBindings {
+export function makeBindings(overrides: Partial<WorkerBindings> = {}): WorkerBindings {
   return {
     API_MANAGEMENT_API_KEY: API_MANAGEMENT_KEY,
     ENVIRONMENT: "development",
