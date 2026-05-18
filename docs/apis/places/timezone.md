@@ -21,9 +21,9 @@ Get timezone information for a location by coordinates or city name.
 
 | Parameter | Type   | Required | Description                                               |
 | --------- | ------ | -------- | --------------------------------------------------------- |
-| `lat`     | float  | *        | Latitude (-90 to 90). Required when using coordinates.    |
-| `lon`     | float  | *        | Longitude (-180 to 180). Required when using coordinates. |
-| `city`    | string | *        | City name. Required when not using coordinates.           |
+| `lat`     | float  | \*       | Latitude (-90 to 90). Required when using coordinates.    |
+| `lon`     | float  | \*       | Longitude (-180 to 180). Required when using coordinates. |
+| `city`    | string | \*       | City name. Required when not using coordinates.           |
 
 \* Either `city` **or** both `lat` + `lon` must be provided.
 
@@ -59,8 +59,7 @@ GET /v1/places/timezone?city=Tokyo
 | `current_time` | string  | Current UTC time in RFC 3339 format               |
 | `is_dst`       | boolean | Whether the location is currently observing DST   |
 
-
-## Batch Timezone 
+## Batch Timezone
 
 **Endpoint:** `POST /v1/places/timezone/batch`
 
@@ -80,15 +79,11 @@ cities return `"info": null`.
 ```http
 POST /v1/places/timezone/batch
 Content-Type: application/json
-````
+```
 
 ```json
 {
-  "cities": [
-    "Tokyo",
-    "Lima",
-    "New York"
-  ]
+  "cities": ["Tokyo", "Lima", "Atlantis"]
 }
 ```
 
@@ -130,11 +125,11 @@ Content-Type: application/json
 
 ### Response Fields
 
-| Field            | Type         | Description                                      |
-| ---------------- | ------------ | ------------------------------------------------ |
-| `results`        | object[]     | List of timezone lookup results                  |
-| `results[].city` | string       | Original city name from the request              |
-| `results[].info` | object | nil | Timezone information or `null` if city not found |
+| Field            | Type        | Description                                      |
+| ---------------- | ----------- | ------------------------------------------------ |
+| `results`        | object[]    | List of timezone lookup results                  |
+| `results[].city` | string      | Original city name from the request              |
+| `results[].info` | object\|nil | Timezone information or `null` if city not found |
 
 ### Info Object Fields
 
@@ -147,8 +142,7 @@ Content-Type: application/json
 
 ### Validation Rules
 
-* `cities` must contain at least 1 city
-* Maximum 50 cities per request
-* Invalid city names do not fail the request
-* Results preserve request ordering
-
+- `cities` must contain at least 1 city
+- Maximum 50 cities per request
+- Invalid city names do not fail the request
+- Results preserve request ordering

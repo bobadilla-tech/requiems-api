@@ -1,9 +1,9 @@
 package timezone
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
-	"encoding/json"
 
 	"github.com/go-chi/chi/v5"
 

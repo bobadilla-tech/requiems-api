@@ -1,11 +1,11 @@
 package timezone
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"sync"
 	"time"
-	"context"
 
 	"github.com/ringsaturn/tzf"
 )

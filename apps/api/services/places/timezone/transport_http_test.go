@@ -1,13 +1,12 @@
 package timezone
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"testing"
-	"bytes"
 	"strings"
-
+	"testing"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"
