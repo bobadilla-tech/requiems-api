@@ -7,6 +7,18 @@ import (
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 )
 
+// LookupResponse is the JSON payload returned by the IP geolocation endpoint.
+type LookupResponse struct {
+	IP          string `json:"ip"`
+	Country     string `json:"country"`
+	CountryCode string `json:"country_code"`
+	City        string `json:"city"`
+	ISP         string `json:"isp"`
+	IsVPN       bool   `json:"is_vpn"`
+}
+
+func (LookupResponse) IsData() {}
+
 type Service struct {
 	c *ipi.Client
 }
