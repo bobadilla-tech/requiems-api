@@ -21,10 +21,27 @@ const (
 	httpTimeout    = 5 * time.Second
 )
 
-// Fetcher is the interface used by the HTTP transport layer.
-type Fetcher interface {
-	GetRate(ctx context.Context, from, to string) (rate float64, fetchedAt time.Time, err error)
+// RateResponse is the response payload for GET /v1/finance/exchange-rate.
+type RateResponse struct {
+	From      string  `json:"from"`
+	To        string  `json:"to"`
+	Rate      float64 `json:"rate"`
+	Timestamp string  `json:"timestamp"`
 }
+
+func (RateResponse) IsData() {}
+
+// ConvertResponse is the response payload for GET /v1/finance/convert.
+type ConvertResponse struct {
+	From      string  `json:"from"`
+	To        string  `json:"to"`
+	Rate      float64 `json:"rate"`
+	Amount    float64 `json:"amount"`
+	Converted float64 `json:"converted"`
+	Timestamp string  `json:"timestamp"`
+}
+
+func (ConvertResponse) IsData() {}
 
 // Service fetches exchange rates from the Frankfurter API and caches them in Redis.
 type Service struct {

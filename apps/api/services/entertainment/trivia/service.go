@@ -5,6 +5,17 @@ import (
 	"math/rand/v2"
 )
 
+// Question is a trivia question with multiple-choice answers.
+type Question struct {
+	Question   string   `json:"question"`
+	Options    []string `json:"options"`
+	Answer     string   `json:"answer"`
+	Category   string   `json:"category"`
+	Difficulty string   `json:"difficulty"`
+}
+
+func (Question) IsData() {}
+
 // questions is the in-memory trivia question database.
 var questions = []Question{
 	// --- science ---

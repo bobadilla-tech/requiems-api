@@ -9,6 +9,12 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+type BatchRandomRequest struct {
+	Count int `json:"count" validate:"required,min=1,max=50"`
+}
+
+type BatchRandomResponse = httpx.BatchResponse[Quote]
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/quotes/random", func(w http.ResponseWriter, r *http.Request) {
 		q, err := svc.Random(r.Context())

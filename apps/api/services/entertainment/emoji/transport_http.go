@@ -9,6 +9,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// SearchRequest holds the query parameter for emoji search.
+type SearchRequest struct {
+	Query string `query:"q" validate:"required,min=1,max=100"`
+}
+
 // RegisterRoutes mounts emoji handlers on the given router.
 // Paths are relative to the parent mount point (/v1/entertainment).
 func RegisterRoutes(r chi.Router, svc *Service) {

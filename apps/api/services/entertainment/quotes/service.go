@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"requiems-api/platform/db"
 )
 
 type Quote struct {
@@ -17,16 +18,12 @@ type Quote struct {
 
 func (Quote) IsData() {}
 
-type querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-}
-
 type Service struct {
-	db querier
+	db db.Querier
 }
 
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 func (s *Service) Random(ctx context.Context) (Quote, error) {
@@ -54,10 +51,6 @@ LIMIT 1;
 // Quote is used for that slot so the batch always returns exactly n results.
 // The batch is aborted only if the context is cancelled or times out.
 func (s *Service) RandomBatch(ctx context.Context, n int) ([]Quote, error) {
-	if n < 1 {
-		return nil, fmt.Errorf("count must be at least 1")
-	}
-
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

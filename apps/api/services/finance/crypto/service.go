@@ -19,6 +19,18 @@ const (
 	httpTimeout  = 10 * time.Second
 )
 
+// Price is the response payload for GET /v1/finance/crypto/{symbol}.
+type Price struct {
+	Symbol    string  `json:"symbol"`
+	Name      string  `json:"name"`
+	PriceUSD  float64 `json:"price_usd"`
+	Change24h float64 `json:"change_24h"`
+	MarketCap float64 `json:"market_cap"`
+	Volume24h float64 `json:"volume_24h"`
+}
+
+func (Price) IsData() {}
+
 type coinInfo struct {
 	id   string
 	name string
@@ -46,11 +58,6 @@ var coinMap = map[string]coinInfo{
 	"NEAR":  {id: "near", name: "NEAR Protocol"},
 	"FTM":   {id: "fantom", name: "Fantom"},
 	"SHIB":  {id: "shiba-inu", name: "Shiba Inu"},
-}
-
-// Getter is the interface used by the HTTP transport layer.
-type Getter interface {
-	GetPrice(ctx context.Context, symbol string) (Price, error)
 }
 
 // Service fetches cryptocurrency prices from CoinGecko and caches them in Redis.

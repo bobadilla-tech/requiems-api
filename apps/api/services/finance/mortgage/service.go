@@ -2,12 +2,27 @@ package mortgage
 
 import "math"
 
-// Calculator is the interface used by the HTTP transport layer, allowing
-// transport tests to inject a stub without requiring the concrete *Service.
-type Calculator interface {
-	Calculate(principal, annualRate float64, years int) Response
-	CalculateBatch(mortgages []Request) []Response
+// ScheduleEntry represents a single month in the amortization schedule.
+type ScheduleEntry struct {
+	Month     int     `json:"month"`
+	Payment   float64 `json:"payment"`
+	Principal float64 `json:"principal"`
+	Interest  float64 `json:"interest"`
+	Balance   float64 `json:"balance"`
 }
+
+// Response is the response payload for GET /v1/finance/mortgage.
+type Response struct {
+	Principal      float64         `json:"principal"`
+	Rate           float64         `json:"rate"`
+	Years          int             `json:"years"`
+	MonthlyPayment float64         `json:"monthly_payment"`
+	TotalPayment   float64         `json:"total_payment"`
+	TotalInterest  float64         `json:"total_interest"`
+	Schedule       []ScheduleEntry `json:"schedule"`
+}
+
+func (Response) IsData() {}
 
 // Service computes mortgage payments and amortization schedules.
 type Service struct{}
