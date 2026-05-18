@@ -8,6 +8,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// ParseRequest holds the query parameters for the user agent parse endpoint.
+type ParseRequest struct {
+	UA string `query:"ua" validate:"required"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/useragent", func(w http.ResponseWriter, r *http.Request) {
 		var req ParseRequest

@@ -9,6 +9,13 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds the query parameters for the QR code endpoints.
+type Request struct {
+	Data     string `query:"data"     validate:"required"`
+	Size     int    `query:"size"     validate:"min=50,max=1000"`
+	Recovery string `query:"recovery" validate:"omitempty,oneof=low medium high highest"`
+}
+
 const defaultSize = 256
 
 func RegisterRoutes(r chi.Router, svc *Service) {
