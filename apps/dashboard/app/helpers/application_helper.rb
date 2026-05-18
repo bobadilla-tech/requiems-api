@@ -64,9 +64,32 @@ module ApplicationHelper
       "@type" => "Organization",
       "name" => "Requiems API",
       "url" => "https://requiems.xyz",
-      "logo" => "https://requiems.xyz/logo.png",
+      "logo" => {
+        "@type" => "ImageObject",
+        "url" => "https://requiems.xyz/logo.png",
+        "width" => 512,
+        "height" => 512
+      },
+      "image" => "https://requiems.xyz/og-image.png",
       "description" => "All-in-one backend for SaaS products. Authentication, validation, fraud detection, payments intelligence, and global data through one unified API.",
       "sameAs" => []
+    }.to_json
+  end
+
+  def website_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "WebSite",
+      "name" => "Requiems API",
+      "url" => "https://requiems.xyz",
+      "potentialAction" => {
+        "@type" => "SearchAction",
+        "target" => {
+          "@type" => "EntryPoint",
+          "urlTemplate" => "https://requiems.xyz/en/apis?search={search_term_string}"
+        },
+        "query-input" => "required name=search_term_string"
+      }
     }.to_json
   end
 
