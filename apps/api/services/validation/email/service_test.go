@@ -3,6 +3,11 @@ package email
 import (
 	"context"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/httpx"
 )
 
 func newTestService() *Service {
@@ -12,6 +17,7 @@ func newTestService() *Service {
 // ---- isValidSyntax ----------------------------------------------------------
 
 func TestIsValidSyntax(t *testing.T) {
+	t.Parallel()
 	cases := []struct {
 		email string
 		want  bool
@@ -47,6 +53,7 @@ func TestIsValidSyntax(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.email, func(t *testing.T) {
+			t.Parallel()
 			if got := isValidSyntax(tc.email); got != tc.want {
 				t.Errorf("isValidSyntax(%q) = %v, want %v", tc.email, got, tc.want)
 			}
@@ -57,6 +64,7 @@ func TestIsValidSyntax(t *testing.T) {
 // ---- suggestDomain ----------------------------------------------------------
 
 func TestSuggestDomain(t *testing.T) {
+	t.Parallel()
 	cases := []struct {
 		domain     string
 		wantNil    bool
@@ -79,6 +87,7 @@ func TestSuggestDomain(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.domain, func(t *testing.T) {
+			t.Parallel()
 			got := suggestDomain(tc.domain)
 			if tc.wantNil {
 				if got != nil {
@@ -86,12 +95,8 @@ func TestSuggestDomain(t *testing.T) {
 				}
 				return
 			}
-			if got == nil {
-				t.Fatalf("suggestDomain(%q) = nil, want %q", tc.domain, tc.wantResult)
-			}
-			if *got != tc.wantResult {
-				t.Errorf("suggestDomain(%q) = %q, want %q", tc.domain, *got, tc.wantResult)
-			}
+			require.NotNil(t, got)
+			assert.Equal(t, tc.wantResult, *got)
 		})
 	}
 }
@@ -99,11 +104,13 @@ func TestSuggestDomain(t *testing.T) {
 // ---- ValidateEmail (syntax path, no network) --------------------------------
 
 func TestValidateEmail_InvalidSyntax(t *testing.T) {
+	t.Parallel()
 	svc := newTestService()
 
 	cases := []string{"notanemail", "", "@nodomain.com", "double@@test.com"}
 	for _, email := range cases {
 		t.Run(email, func(t *testing.T) {
+			t.Parallel()
 			result := svc.ValidateEmail(context.Background(), email)
 			if result.Valid {
 				t.Errorf("expected Valid=false for %q", email)
@@ -118,54 +125,89 @@ func TestValidateEmail_InvalidSyntax(t *testing.T) {
 // ---- ValidateEmail (integration: real DNS) ----------------------------------
 
 func TestValidateEmail_ValidGmail(t *testing.T) {
+	t.Parallel()
 	svc := newTestService()
 
 	result := svc.ValidateEmail(context.Background(), "user@gmail.com")
 
-	if !result.SyntaxValid {
-		t.Error("expected SyntaxValid=true")
-	}
-	if !result.MxValid {
-		t.Error("expected MxValid=true for gmail.com (has MX records)")
-	}
-	if !result.Valid {
-		t.Error("expected Valid=true")
-	}
-	if *result.Domain != "gmail.com" {
-		t.Errorf("expected Domain=gmail.com, got %q", *result.Domain)
-	}
-	if result.Suggestion != nil {
-		t.Errorf("expected Suggestion=nil for known-good domain, got %q", *result.Suggestion)
-	}
+	assert.True(t, result.SyntaxValid)
+	assert.True(t, result.MxValid)
+	assert.True(t, result.Valid)
+	assert.Equal(t, "gmail.com", *result.Domain)
+	assert.Nil(t, result.Suggestion)
 }
 
 func TestValidateEmail_TypoDomain(t *testing.T) {
+	t.Parallel()
 	svc := newTestService()
 
 	// gmial.com is a real domain that likely has no MX records; we care about
 	// the suggestion field, not the MX result.
 	result := svc.ValidateEmail(context.Background(), "user@gmial.com")
 
-	if !result.SyntaxValid {
-		t.Error("expected SyntaxValid=true")
-	}
-	if result.Suggestion == nil {
-		t.Fatal("expected a non-nil suggestion for gmial.com")
-	}
-	if *result.Suggestion != "gmail.com" {
-		t.Errorf("expected suggestion=gmail.com, got %q", *result.Suggestion)
-	}
+	assert.True(t, result.SyntaxValid)
+	require.NotNil(t, result.Suggestion)
+	assert.Equal(t, "gmail.com", *result.Suggestion)
 }
 
 func TestValidateEmail_GmailPlusNormalized(t *testing.T) {
+	t.Parallel()
 	svc := newTestService()
 
 	result := svc.ValidateEmail(context.Background(), "User.Name+tag@gmail.com")
 
-	if !result.SyntaxValid {
-		t.Error("expected SyntaxValid=true")
-	}
+	assert.True(t, result.SyntaxValid)
 	if *result.Normalized == "User.Name+tag@gmail.com" {
 		t.Error("expected email to be normalized (Gmail strips dots and plus-tags)")
+	}
+}
+
+// ---Batch
+
+// ---- ValidateEmailBatch -----------------------------------------------------
+
+func TestBatchRequest_Valid_OneEmail(t *testing.T) {
+	t.Parallel()
+	req := BatchRequest{Emails: []string{"user@gmail.com"}}
+
+	if err := httpx.Validate.Struct(&req); err != nil {
+		t.Errorf("expected no error for single valid email, got %v", err)
+	}
+}
+
+func TestBatchRequest_Valid_MaxEmails(t *testing.T) {
+	t.Parallel()
+	emails := make([]string, 50)
+	for i := range emails {
+		emails[i] = "user@gmail.com"
+	}
+
+	req := BatchRequest{Emails: emails}
+
+	if err := httpx.Validate.Struct(&req); err != nil {
+		t.Errorf("expected no error for 50 emails, got %v", err)
+	}
+}
+
+func TestBatchRequest_Empty_Fails(t *testing.T) {
+	t.Parallel()
+	req := BatchRequest{Emails: []string{}}
+
+	if err := httpx.Validate.Struct(&req); err == nil {
+		t.Error("expected error for empty emails array")
+	}
+}
+
+func TestBatchRequest_OverLimit_Fails(t *testing.T) {
+	t.Parallel()
+	emails := make([]string, 51)
+	for i := range emails {
+		emails[i] = "user@gmail.com"
+	}
+
+	req := BatchRequest{Emails: emails}
+
+	if err := httpx.Validate.Struct(&req); err == nil {
+		t.Error("expected error for >50 emails")
 	}
 }

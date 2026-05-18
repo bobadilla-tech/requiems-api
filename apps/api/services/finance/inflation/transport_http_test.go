@@ -9,8 +9,11 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // stubGetter implements Getter for transport tests. It returns a fixed result
@@ -30,7 +33,7 @@ func (s *stubGetter) GetInflation(_ context.Context, countryCode string) (Respon
 }
 
 // GetInflationBatch delegates to GetInflation per item, matching real service behaviour.
-func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) BatchResponse {
+func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
 	results := make([]BatchItem, len(countries))
 	for i, c := range countries {
 		resp, err := s.GetInflation(ctx, c)
@@ -46,7 +49,7 @@ func (s *stubGetter) GetInflationBatch(ctx context.Context, countries []string) 
 			}
 		}
 	}
-	return BatchResponse{Results: results, Total: len(results)}
+	return results
 }
 
 // setupRouter wires up a stub getter into a chi router for handler testing.
@@ -61,18 +64,16 @@ func setupRouter(g Getter) chi.Router {
 func decodeResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[Response] {
 	t.Helper()
 	var resp httpx.Response[Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	return resp
 }
 
-func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[BatchResponse] {
+func decodeBatchResponse(t *testing.T, w *httptest.ResponseRecorder) httpx.Response[httpx.BatchResponse[BatchItem]] {
 	t.Helper()
-	var resp httpx.Response[BatchResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode batch response: %v", err)
-	}
+	var resp httpx.Response[httpx.BatchResponse[BatchItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 	return resp
 }
 
@@ -87,6 +88,7 @@ func postBatch(r chi.Router, body string) *httptest.ResponseRecorder {
 // ---- single endpoint tests (unchanged) ----
 
 func TestInflation_KnownCountry_Returns200(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetter{result: Response{
 		Rate:       3.2,
 		Period:     "2024",
@@ -98,20 +100,15 @@ func TestInflation_KnownCountry_Returns200(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.Country != "US" {
-		t.Errorf("expected country US, got %q", resp.Data.Country)
-	}
-	if resp.Metadata.Timestamp == "" {
-		t.Error("expected metadata.timestamp to be set")
-	}
+	assert.Equal(t, "US", resp.Data.Country)
+	assert.NotEmpty(t, resp.Metadata.Timestamp)
 }
 
 func TestInflation_ResponseEnvelope(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetter{result: Response{Rate: 2.5, Period: "2024"}}
 	r := setupRouter(svc)
 
@@ -119,40 +116,31 @@ func TestInflation_ResponseEnvelope(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var raw map[string]json.RawMessage
-	if err := json.NewDecoder(w.Body).Decode(&raw); err != nil {
-		t.Fatalf("failed to decode: %v", err)
-	}
-	if _, ok := raw["data"]; !ok {
-		t.Error("response must have a 'data' key")
-	}
-	if _, ok := raw["metadata"]; !ok {
-		t.Error("response must have a 'metadata' key")
-	}
+	err := json.NewDecoder(w.Body).Decode(&raw)
+	require.NoError(t, err)
+	_, ok := raw["data"]
+	assert.True(t, ok, "response must have a 'data' key")
+	_, ok = raw["metadata"]
+	assert.True(t, ok, "response must have a 'metadata' key")
 }
 
 func TestInflation_UnknownCountry_Returns404(t *testing.T) {
-	svc := &stubGetter{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "no inflation data found for country",
-	}}
+	t.Parallel()
+	svc := &stubGetter{err: svcerr.NotFound("not_found", "no inflation data found for country")}
 
 	r := setupRouter(svc)
 	req := httptest.NewRequest(http.MethodGet, "/inflation?country=XK", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusNotFound {
-		t.Fatalf("expected 404, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusNotFound, w.Code)
 }
 
 func TestInflation_MissingCountryParam_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetter{}
 	r := setupRouter(svc)
 
@@ -160,12 +148,11 @@ func TestInflation_MissingCountryParam_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestInflation_InvalidCountryCode_Returns400(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetter{}
 	r := setupRouter(svc)
 
@@ -173,12 +160,11 @@ func TestInflation_InvalidCountryCode_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Fatalf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestInflation_LowercaseCountryAccepted(t *testing.T) {
+	t.Parallel()
 	svc := &stubGetter{result: Response{Rate: 1.5, Period: "2024"}}
 	r := setupRouter(svc)
 
@@ -186,17 +172,14 @@ func TestInflation_LowercaseCountryAccepted(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 for lowercase country, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeResponse(t, w)
-	if resp.Data.Country != "US" {
-		t.Errorf("expected country US (uppercased), got %q", resp.Data.Country)
-	}
+	assert.Equal(t, "US", resp.Data.Country)
 }
 
 func TestInflation_HistoricalFieldPresent(t *testing.T) {
+	t.Parallel()
 	historical := []HistoricalRate{
 		{Period: "2023", Rate: 4.1},
 		{Period: "2022", Rate: 8.0},
@@ -213,92 +196,75 @@ func TestInflation_HistoricalFieldPresent(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	if len(resp.Data.Historical) != 2 {
-		t.Errorf("expected 2 historical entries, got %d", len(resp.Data.Historical))
-	}
+	assert.Len(t, resp.Data.Historical, 2)
 }
 
 // ---- batch endpoint tests ----
 
 func TestBatch_HappyPath_Returns200(t *testing.T) {
+	t.Parallel()
 	// All three countries exist — expect 200 and three found: true items.
 	svc := &stubGetter{result: Response{Rate: 3.2, Period: "2024"}}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": ["US", "AR", "DE"]}`)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeBatchResponse(t, w)
-	if resp.Data.Total != 3 {
-		t.Errorf("expected total 3, got %d", resp.Data.Total)
-	}
+	assert.Equal(t, 3, resp.Data.Total)
 	for _, item := range resp.Data.Results {
-		if !item.Found {
-			t.Errorf("expected found: true for %s, got false", item.Country)
-		}
+		assert.True(t, item.Found, "expected found: true for %s, got false", item.Country)
 	}
 }
 
 func TestBatch_PartialFailure_NotFoundItemIsInBand(t *testing.T) {
+	t.Parallel()
 	// Stub returns error for every call — all items should be found: false, but status is still 200.
-	svc := &stubGetter{err: &httpx.AppError{
-		Status:  http.StatusNotFound,
-		Code:    "not_found",
-		Message: "no inflation data found for country",
-	}}
+	svc := &stubGetter{err: svcerr.NotFound("not_found", "no inflation data found for country")}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": ["US", "AR"]}`)
 
 	// Batch never returns 404 — not_found is handled per item.
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200 even when countries are not found, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeBatchResponse(t, w)
 	for _, item := range resp.Data.Results {
-		if item.Found {
-			t.Errorf("expected found: false for %s, got true", item.Country)
-		}
+		assert.False(t, item.Found, "expected found: false for %s, got true", item.Country)
 	}
 }
 
 func TestBatch_OrderPreserved(t *testing.T) {
+	t.Parallel()
 	// Results must come back in the same order as the input array.
 	svc := &stubGetter{result: Response{Rate: 1.0, Period: "2024"}}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": ["DE", "AR", "US"]}`)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	resp := decodeBatchResponse(t, w)
 	expected := []string{"DE", "AR", "US"}
 	for i, item := range resp.Data.Results {
-		if item.Country != expected[i] {
-			t.Errorf("position %d: expected %s, got %s", i, expected[i], item.Country)
-		}
+		assert.Equal(t, expected[i], item.Country)
 	}
 }
 
 func TestBatch_EmptyArray_Returns422(t *testing.T) {
+	t.Parallel()
 	// An empty countries array must be rejected before hitting the service.
 	svc := &stubGetter{}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": []}`)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Fatalf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestBatch_OverLimit_Returns422(t *testing.T) {
+	t.Parallel()
 	// 51 countries exceeds the max of 50 — must be rejected.
 	countries := make([]string, 51)
 	for i := range countries {
@@ -310,24 +276,22 @@ func TestBatch_OverLimit_Returns422(t *testing.T) {
 
 	w := postBatch(r, body)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Fatalf("expected 422 for 51 countries, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestBatch_InvalidCountryCode_Returns422(t *testing.T) {
+	t.Parallel()
 	// ZZZ is not a valid iso3166_1_alpha2 code — must be rejected.
 	svc := &stubGetter{}
 	r := setupRouter(svc)
 
 	w := postBatch(r, `{"countries": ["US", "ZZZ"]}`)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Fatalf("expected 422 for invalid country code, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestBatch_TotalMatchesInput(t *testing.T) {
+	t.Parallel()
 	// total in the response must always equal the number of countries sent.
 	svc := &stubGetter{result: Response{Rate: 2.0, Period: "2024"}}
 	r := setupRouter(svc)
@@ -335,7 +299,5 @@ func TestBatch_TotalMatchesInput(t *testing.T) {
 	w := postBatch(r, `{"countries": ["US", "DE"]}`)
 
 	resp := decodeBatchResponse(t, w)
-	if resp.Data.Total != 2 {
-		t.Errorf("expected total 2, got %d", resp.Data.Total)
-	}
+	assert.Equal(t, 2, resp.Data.Total)
 }

@@ -1,4 +1,58 @@
 pages:
+  - title: API divisions overview
+    description: Problem-first overviews of every API division—validation, finance, places, and more
+    url: /divisions
+    icon: "🧭"
+    tags: [divisions, overview, marketing, validation, finance, places, networking, text, tools, entertainment, health]
+
+  - title: Validation APIs (overview)
+    description: Stop bad emails, phones, and toxic content with validation APIs explained for business readers
+    url: /validation
+    icon: "✓"
+    tags: [validation, email, phone, profanity, moderation, marketing]
+
+  - title: Networking & Internet APIs (overview)
+    description: IP intelligence, domains, and security-friendly network APIs in plain language
+    url: /networking
+    icon: "🌐"
+    tags: [networking, ip, geolocation, vpn, whois, domain, security]
+
+  - title: Places APIs (overview)
+    description: Timezones, holidays, geocoding, and global scheduling APIs without the edge-case pain
+    url: /places
+    icon: "📍"
+    tags: [places, timezone, holidays, geocode, shipping, global]
+
+  - title: Text & Language APIs (overview)
+    description: Spell check, moderation, language detection, and text utilities in one suite
+    url: /text
+    icon: "📝"
+    tags: [text, language, spell, profanity, sentiment, localization]
+
+  - title: Developer tools APIs (overview)
+    description: QR codes, encodings, conversions, and utilities to ship faster on a small team
+    url: /technology
+    icon: "💻"
+    tags: [developer, tools, qr, base64, conversion, utilities]
+
+  - title: Entertainment APIs (overview)
+    description: Trivia, quotes, jokes, and lightweight fun to boost engagement
+    url: /entertainment
+    icon: "🎬"
+    tags: [entertainment, trivia, quotes, jokes, engagement]
+
+  - title: Health APIs (overview)
+    description: Fitness and wellness-oriented APIs for coaching and retention experiences
+    url: /health
+    icon: "🏥"
+    tags: [health, fitness, wellness, coaching]
+
+  - title: Finance APIs (overview)
+    description: BIN, IBAN, SWIFT, rates, and payment-adjacent APIs for fintech and commerce
+    url: /finance
+    icon: "💰"
+    tags: [finance, bin, iban, swift, payments, fintech]
+
   - title: Documentation
     description: Complete API documentation and integration guides
     url: /docs

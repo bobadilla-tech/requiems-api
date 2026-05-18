@@ -19,7 +19,7 @@ overview:
 endpoints:
   - name: Get Random Quote
     method: GET
-    path: /v1/text/quotes/random
+    path: /v1/entertainment/quotes/random
     description: Returns a random inspirational quote with author attribution
     parameters: []
     response_example: |
@@ -49,19 +49,19 @@ endpoints:
         description: No quotes available in the database
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/text/quotes/random \
+        curl https://api.requiems.xyz/v1/entertainment/quotes/random \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/text/quotes/random"
+        url = "https://api.requiems.xyz/v1/entertainment/quotes/random"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         quote = response.json()['data']
         print(f"{quote['text']} - {quote['author']}")
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/text/quotes/random', {
+        const response = await fetch('https://api.requiems.xyz/v1/entertainment/quotes/random', {
           headers: {
             'requiems-api-key': 'YOUR_API_KEY'
           }
@@ -73,7 +73,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/text/quotes/random')
+        uri = URI('https://api.requiems.xyz/v1/entertainment/quotes/random')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -83,6 +83,118 @@ endpoints:
 
         data = JSON.parse(response.body)['data']
         puts "#{data['text']} - #{data['author']}"
+
+  - name: Get Random Quotes (Batch)
+    method: POST
+    path: /v1/entertainment/quotes/random/batch
+    description: Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+
+    parameters:
+      - name: count
+        type: integer
+        required: true
+        location: body
+        description: Number of random quotes to return. Between 1 and 50.
+        example: "5"
+
+    request_example: |
+      {
+        "count": 5
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            { "id": 42, "text": "The only way to do great work is to love what you do.", "author": "Steve Jobs" },
+            { "id": 7,  "text": "In the middle of every difficulty lies opportunity.", "author": "Albert Einstein" },
+            { "id": 15, "text": "It does not matter how slowly you go as long as you do not stop.", "author": "Confucius" },
+            { "id": 3,  "text": "Life is what happens when you're busy making other plans.", "author": "John Lennon" },
+            { "id": 88, "text": "Spread love everywhere you go.", "author": "Mother Teresa" }
+          ],
+          "total": 5
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: Array of random quotes, one per requested count.
+      - name: results[].id
+        type: integer
+        description: Unique identifier for the quote.
+      - name: results[].text
+        type: string
+        description: The quote text.
+      - name: results[].author
+        type: string
+        description: Name of the person who said or wrote the quote. May be empty.
+      - name: total
+        type: integer
+        description: Total number of quotes returned. Always equals the requested count.
+
+    errors:
+      - code: 400
+        message: bad_request
+        description: Request body is missing or not valid JSON.
+      - code: 422
+        message: unprocessable_entity
+        description: count is missing, less than 1, or greater than 50.
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/entertainment/quotes/random/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"count": 5}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/entertainment/quotes/random/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"count": 5}
+
+        response = requests.post(url, json=payload, headers=headers)
+        for quote in response.json()['data']['results']:
+            print(f"{quote['text']} - {quote['author']}")
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/entertainment/quotes/random/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ count: 5 })
+          }
+        );
+        const { data } = await response.json();
+        data.results.forEach(q => console.log(`${q.text} - ${q.author}`));
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/entertainment/quotes/random/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { count: 5 }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |q|
+          puts "#{q['text']} - #{q['author']}"
+        end
+
 faq:
   - question: Can I request quotes from a specific author?
     answer: >-
@@ -94,6 +206,10 @@ faq:
       and we're constantly adding more.
   - question: Will I get the same quote if I call the endpoint multiple times?
     answer: No, quotes are selected randomly on each request, so consecutive calls will typically return different quotes.
+  - question: Can I get multiple quotes at once?
+    answer: >-
+      Yes. Use the batch endpoint (POST /v1/entertainment/quotes/random/batch) to request up to 50 random
+      quotes in a single call. Each quote counts as one unit of usage.
 performance:
   p50_ms: 921
   p95_ms: 1075

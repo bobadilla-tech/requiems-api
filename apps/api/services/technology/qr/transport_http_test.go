@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -22,24 +24,19 @@ func setupRouter() chi.Router {
 // ── GET /qr (PNG) ──────────────────────────────────────────────────────────
 
 func TestQR_PNG_DefaultSize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr?data=https://example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 
-	if ct := w.Header().Get("Content-Type"); ct != "image/png" {
-		t.Errorf("expected Content-Type image/png, got %q", ct)
-	}
+	assert.Equal(t, "image/png", w.Header().Get("Content-Type"))
 
 	body := w.Body.Bytes()
-	if len(body) == 0 {
-		t.Error("expected non-empty PNG response body")
-	}
+	assert.NotEmpty(t, body)
 
 	if string(body[:4]) != "\x89PNG" {
 		t.Error("expected valid PNG signature in response body")
@@ -47,18 +44,18 @@ func TestQR_PNG_DefaultSize(t *testing.T) {
 }
 
 func TestQR_PNG_CustomSize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr?data=https://example.com&size=200", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestQR_PNG_RecoveryLevels(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	levels := []string{"low", "medium", "high", "highest"}
@@ -74,92 +71,76 @@ func TestQR_PNG_RecoveryLevels(t *testing.T) {
 }
 
 func TestQR_PNG_MissingData(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestQR_PNG_SizeTooSmall(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr?data=test&size=10", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestQR_PNG_SizeTooLarge(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr?data=test&size=2000", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestQR_PNG_InvalidRecovery(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr?data=test&recovery=ultra", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400 for invalid recovery level, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 // ── GET /qr/base64 (JSON) ──────────────────────────────────────────────────
 
 func TestQR_Base64_DefaultSize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr/base64?data=https://example.com", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 
-	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
-		t.Errorf("expected Content-Type application/json, got %q", ct)
-	}
+	assert.Equal(t, "application/json", w.Header().Get("Content-Type"))
 
 	var resp httpx.Response[Base64Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Image == "" {
-		t.Error("expected non-empty base64 image string")
-	}
+	assert.NotEmpty(t, resp.Data.Image)
 
-	if resp.Data.Width != defaultSize {
-		t.Errorf("expected width %d, got %d", defaultSize, resp.Data.Width)
-	}
+	assert.Equal(t, defaultSize, resp.Data.Width)
 
-	if resp.Data.Height != defaultSize {
-		t.Errorf("expected height %d, got %d", defaultSize, resp.Data.Height)
-	}
+	assert.Equal(t, defaultSize, resp.Data.Height)
 
 	// Verify the base64 string decodes to valid PNG bytes.
 	decoded, err := base64.StdEncoding.DecodeString(resp.Data.Image)
-	if err != nil {
-		t.Fatalf("failed to decode base64 image: %v", err)
-	}
+	require.NoError(t, err)
 
 	if string(decoded[:4]) != "\x89PNG" {
 		t.Error("expected valid PNG signature in decoded base64 data")
@@ -167,31 +148,26 @@ func TestQR_Base64_DefaultSize(t *testing.T) {
 }
 
 func TestQR_Base64_CustomSize(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr/base64?data=hello&size=300", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Base64Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Width != 300 {
-		t.Errorf("expected width 300, got %d", resp.Data.Width)
-	}
+	assert.Equal(t, 300, resp.Data.Width)
 
-	if resp.Data.Height != 300 {
-		t.Errorf("expected height 300, got %d", resp.Data.Height)
-	}
+	assert.Equal(t, 300, resp.Data.Height)
 }
 
 func TestQR_Base64_RecoveryLevels(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	levels := []string{"low", "medium", "high", "highest"}
@@ -207,25 +183,23 @@ func TestQR_Base64_RecoveryLevels(t *testing.T) {
 }
 
 func TestQR_Base64_MissingData(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr/base64", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestQR_Base64_InvalidRecovery(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr/base64?data=test&recovery=ultra", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400 for invalid recovery level, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

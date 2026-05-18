@@ -2,13 +2,12 @@ package inflation
 
 import (
 	"context"
-	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 const historyDepth = 11 // 1 current + 10 historical years
@@ -58,11 +57,7 @@ func (s *Service) GetInflation(ctx context.Context, rawCode string) (Response, e
 	}
 
 	if len(results) == 0 {
-		return Response{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "no inflation data found for country",
-		}
+		return Response{}, svcerr.NotFound("not_found", "no inflation data found for country")
 	}
 
 	latest := results[0]
@@ -84,7 +79,7 @@ func (s *Service) GetInflation(ctx context.Context, rawCode string) (Response, e
 
 // GetInflationBatch returns inflation data for multiple countries in the same
 // order as the input slice. Countries with no data are returned with Found: false.
-func (s *Service) GetInflationBatch(ctx context.Context, countries []string) BatchResponse {
+func (s *Service) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
 	results := make([]BatchItem, len(countries))
 
 	for i, c := range countries {
@@ -107,8 +102,5 @@ func (s *Service) GetInflationBatch(ctx context.Context, countries []string) Bat
 		}
 	}
 
-	return BatchResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }

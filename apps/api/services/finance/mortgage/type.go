@@ -27,4 +27,9 @@ type Response struct {
 	Schedule       []ScheduleEntry `json:"schedule"`
 }
 
+// BatchRequest is the body for validating miltiple mortgages at once.
+type BatchRequest struct {
+	Mortgages []Request `json:"mortgages" validate:"required,min=1,max=50,dive"`
+}
+
 func (Response) IsData() {}

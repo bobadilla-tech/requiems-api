@@ -1,0 +1,14 @@
+<%# locals: (i18n_scope:) %>
+<section class="py-14 bg-gray-50 dark:bg-gray-950">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <figure class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-8 shadow-sm">
+      <blockquote class="text-lg text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
+        &ldquo;<%= t("#{i18n_scope}.quote_text") %>&rdquo;
+      </blockquote>
+      <figcaption class="text-sm text-gray-500 dark:text-gray-400">
+        <span class="font-semibold text-gray-800 dark:text-gray-200"><%= t("#{i18n_scope}.quote_name") %></span>
+        <span class="block mt-1"><%= t("#{i18n_scope}.quote_role") %></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>

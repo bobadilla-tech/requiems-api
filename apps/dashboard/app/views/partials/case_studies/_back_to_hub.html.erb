@@ -1,0 +1,11 @@
+<section class="py-10 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <%= link_to case_studies_path,
+                class: "inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+      <svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      <%= t("case_studies.common.back_to_hub") %>
+    <% end %>
+  </div>
+</section>

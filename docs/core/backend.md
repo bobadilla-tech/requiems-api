@@ -3,7 +3,7 @@
 ### Goals
 
 - Single monolithic service supporting 500+ endpoints.
-- Feature-oriented structure that scales without a bloated routes file.
+- Feature-oriented structure.
 
 ### Project layout
 

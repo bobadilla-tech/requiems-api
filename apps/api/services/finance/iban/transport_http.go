@@ -1,6 +1,7 @@
 package iban
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -30,4 +31,11 @@ func registerIBANRoutes(r chi.Router, v Validator) {
 
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	// POST /iban/batch — validate and parse IBANs
+	r.Post("/iban/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchParseRequest) (httpx.BatchResponse[ParseResponse], error) {
+			return httpx.BatchResponse[ParseResponse]{Results: v.ParseBatch(ctx, req.Numbers)}, nil
+		},
+	))
 }

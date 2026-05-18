@@ -9,7 +9,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // handleReq / handleRes are minimal request and response types used across
@@ -25,6 +29,8 @@ type handleRes struct {
 func (handleRes) IsData() {}
 
 func TestHandle_HappyPath(t *testing.T) {
+	t.Parallel()
+
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
 		return handleRes{Greeting: "hello " + req.Name}, nil
 	})
@@ -34,20 +40,17 @@ func TestHandle_HappyPath(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("status: want 200, got %d", w.Code)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[handleRes]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Data.Greeting != "hello world" {
-		t.Errorf("greeting: want %q, got %q", "hello world", resp.Data.Greeting)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "hello world", resp.Data.Greeting)
 }
 
 func TestHandle_MalformedJSON_Returns400(t *testing.T) {
+	t.Parallel()
+
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
 		return handleRes{}, nil
 	})
@@ -57,12 +60,12 @@ func TestHandle_MalformedJSON_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("status: want 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestHandle_ValidationFailure_Returns422(t *testing.T) {
+	t.Parallel()
+
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
 		return handleRes{}, nil
 	})
@@ -73,25 +76,20 @@ func TestHandle_ValidationFailure_Returns422(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("status: want 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Error != "validation_failed" {
-		t.Errorf("error: want validation_failed, got %q", resp.Error)
-	}
-	if len(resp.Fields) == 0 {
-		t.Error("expected at least one field error")
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "validation_failed", resp.Error)
+	assert.NotEmpty(t, resp.Fields)
 }
 
-func TestHandle_AppError_MapsStatus(t *testing.T) {
+func TestHandle_SvcError_MapsStatus(t *testing.T) {
+	t.Parallel()
+
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
-		return handleRes{}, &httpx.AppError{Status: http.StatusTeapot, Code: "im_a_teapot", Message: "brew something"}
+		return handleRes{}, svcerr.NotFound("not_found", "resource not found")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -99,20 +97,17 @@ func TestHandle_AppError_MapsStatus(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusTeapot {
-		t.Errorf("status: want 418, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusNotFound, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Error != "im_a_teapot" {
-		t.Errorf("error: want im_a_teapot, got %q", resp.Error)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "not_found", resp.Error)
 }
 
 func TestHandle_InternalError_Returns500(t *testing.T) {
+	t.Parallel()
+
 	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
 		return handleRes{}, errors.New("boom")
 	})
@@ -122,22 +117,20 @@ func TestHandle_InternalError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Errorf("status: want 500, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
 
 	var resp httpx.ErrorResponse
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-	if resp.Error != "internal_error" {
-		t.Errorf("error: want internal_error, got %q", resp.Error)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "internal_error", resp.Error)
 }
 
 func TestHandleBatch_HappyPath_SetsUsageCountHeader(t *testing.T) {
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{Greeting: "hi " + req.Name}, 5, nil
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		items := []handleRes{{Greeting: "a"}, {Greeting: "b"}, {Greeting: "c"}, {Greeting: "d"}, {Greeting: "e"}}
+		return httpx.BatchResponse[handleRes]{Results: items}, nil
 	})
 
 	body := strings.NewReader(`{"name":"batch"}`)
@@ -145,17 +138,34 @@ func TestHandleBatch_HappyPath_SetsUsageCountHeader(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("status: want 200, got %d", w.Code)
-	}
-	if got := w.Header().Get("X-Usage-Count"); got != "5" {
-		t.Errorf("X-Usage-Count: want 5, got %q", got)
-	}
+	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "5", w.Header().Get("X-Usage-Count"))
+}
+
+func TestHandleBatch_AutoSetsTotal(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{Results: []handleRes{{Greeting: "x"}, {Greeting: "y"}}}, nil
+	})
+
+	body := strings.NewReader(`{"name":"batch"}`)
+	r := httptest.NewRequest(http.MethodPost, "/", body)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[handleRes]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
 }
 
 func TestHandleBatch_ValidationFailure_Returns422(t *testing.T) {
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, nil
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, nil
 	})
 
 	body := strings.NewReader(`{}`)
@@ -163,14 +173,14 @@ func TestHandleBatch_ValidationFailure_Returns422(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("status: want 422, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
-func TestHandleBatch_AppError_MapsStatus(t *testing.T) {
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, &httpx.AppError{Status: http.StatusBadGateway, Code: "bad_gateway", Message: "upstream down"}
+func TestHandleBatch_SvcError_MapsStatus(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, svcerr.Upstream("upstream_error", "upstream down")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -178,14 +188,14 @@ func TestHandleBatch_AppError_MapsStatus(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusBadGateway {
-		t.Errorf("status: want 502, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 }
 
 func TestHandleBatch_InternalError_Returns500(t *testing.T) {
-	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (handleRes, int, error) {
-		return handleRes{}, 0, errors.New("unexpected")
+	t.Parallel()
+
+	h := httpx.HandleBatch(func(_ context.Context, req handleReq) (httpx.BatchResponse[handleRes], error) {
+		return httpx.BatchResponse[handleRes]{}, errors.New("unexpected")
 	})
 
 	body := strings.NewReader(`{"name":"x"}`)
@@ -193,7 +203,26 @@ func TestHandleBatch_InternalError_Returns500(t *testing.T) {
 	w := httptest.NewRecorder()
 	h(w, r)
 
-	if w.Code != http.StatusInternalServerError {
-		t.Errorf("status: want 500, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestHandle_BodyTooLarge_Returns400(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.Handle(func(_ context.Context, req handleReq) (handleRes, error) {
+		return handleRes{}, nil
+	})
+
+	big := strings.NewReader(`{"name":"` + strings.Repeat("x", 1<<20+1) + `"}`)
+	r := httptest.NewRequest(http.MethodPost, "/", big)
+	r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	var resp httpx.ErrorResponse
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Message, "too large")
 }

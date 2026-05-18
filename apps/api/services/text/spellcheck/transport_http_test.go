@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,6 +21,7 @@ func setupRouter() chi.Router {
 }
 
 func TestSpellcheck_CleanText(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"Hello world"}`
@@ -28,21 +31,17 @@ func TestSpellcheck_CleanText(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if len(resp.Data.Corrections) != 0 {
-		t.Errorf("expected no corrections, got %v", resp.Data.Corrections)
-	}
+	assert.Len(t, resp.Data.Corrections, 0)
 }
 
 func TestSpellcheck_MisspelledText(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"text":"Ths is a tset"}`
@@ -52,24 +51,18 @@ func TestSpellcheck_MisspelledText(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Result]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if len(resp.Data.Corrections) == 0 {
-		t.Error("expected at least one correction for misspelled input")
-	}
-	if resp.Data.Corrected == "Ths is a tset" {
-		t.Error("expected corrected text to differ from input")
-	}
+	assert.NotEmpty(t, resp.Data.Corrections)
+	assert.False(t, resp.Data.Corrected == "Ths is a tset", "expected corrected text to differ from input")
 }
 
 func TestSpellcheck_MissingTextField(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/spellcheck", strings.NewReader(`{}`))
@@ -78,12 +71,11 @@ func TestSpellcheck_MissingTextField(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestSpellcheck_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/spellcheck", http.NoBody)
@@ -92,7 +84,5 @@ func TestSpellcheck_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

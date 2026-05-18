@@ -44,3 +44,32 @@ func (s *Service) Normalize(email string) (EmailNormalization, error) {
 		Changes:    changes,
 	}, nil
 }
+
+// NormalizeBatch normalizes each address in order. Invalid addresses yield
+// valid=false and a message; the overall response is always a full result slice.
+func (s *Service) NormalizeBatch(emails []string) []EmailNormalizationBatchItem {
+	results := make([]EmailNormalizationBatchItem, len(emails))
+
+	for i, email := range emails {
+		res, err := s.Normalize(email)
+		if err != nil {
+			results[i] = EmailNormalizationBatchItem{
+				Original: email,
+				Valid:    false,
+				Message:  err.Error(),
+			}
+			continue
+		}
+
+		results[i] = EmailNormalizationBatchItem{
+			Original:   res.Original,
+			Normalized: res.Normalized,
+			Local:      res.Local,
+			Domain:     res.Domain,
+			Changes:    res.Changes,
+			Valid:      true,
+		}
+	}
+
+	return results
+}

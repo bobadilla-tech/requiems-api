@@ -17,12 +17,6 @@ type BatchCheckRequest struct {
 	Emails []string `json:"emails" validate:"required,min=1,max=100,dive,email"`
 }
 
-// BatchCheckResponse represents the response for a batch email check
-type BatchCheckResponse struct {
-	Results []CheckEmailResponse `json:"results"`
-	Total   int                  `json:"total"`
-}
-
 // DomainCheckResponse represents the response for a domain check
 type DomainCheckResponse struct {
 	Domain       string `json:"domain"`
@@ -38,13 +32,17 @@ type DomainsListResponse struct {
 	HasMore bool     `json:"has_more"`
 }
 
+type DomainsListQuery struct {
+	Page    int `query:"page"     validate:"min=1"`
+	PerPage int `query:"per_page" validate:"min=1"`
+}
+
 // StatsResponse represents statistics about disposable domains
 type StatsResponse struct {
 	TotalDomains int `json:"total_domains"`
 }
 
 func (CheckEmailResponse) IsData()  {}
-func (BatchCheckResponse) IsData()  {}
 func (DomainCheckResponse) IsData() {}
 func (DomainsListResponse) IsData() {}
 func (StatsResponse) IsData()       {}

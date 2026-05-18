@@ -200,6 +200,246 @@ endpoints:
 
         units = JSON.parse(response.body)['data']
         puts "Temperature units: #{units['temperature'].join(', ')}"
+  - name: Batch Convert Units
+    method: POST
+    path: /v1/technology/convert/batch
+    description: convert up to 50 unit conversion operations in a single request.
+    parameters:
+      - name: operations
+        type: array
+        required: true
+        location: body
+        description: "Array of operations to convert (min: 1, max: 50)."
+        example: |
+          [{"from": "kg", "to": "lb", "value": 10}, {"from": "c", "to": "f", "value": 5}]
+    request_example: |
+      {
+        "operations": [
+          {
+            "from": "kg",
+            "to": "lb",
+            "value": 10
+          },
+          {
+            "from": "c",
+            "to": "f",
+            "value": 5
+          }
+       ]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "from": "kg",
+              "to": "lb",
+              "success": true,
+              "data": {
+                "from": "kg",
+                "to": "lb",
+                "input": 10,
+                "result": 22.046244,
+                "formula": "kg × 2.204624"
+              }
+            },
+            {
+              "from": "c",
+              "to": "f",
+              "success": true,
+              "data": {
+                "from": "c",
+                "to": "f",
+                "input": 5,
+                "result": 41,
+                "formula": "°C × 9/5 + 32"
+              }
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-05-15T21:52:05Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: List of unit conversion results returned in the same order as the input operations.
+      - name: results[].from
+        type: string
+        description: Source unit used for the conversion.
+      - name: results[].to
+        type: string
+        description: Target unit used for the conversion.
+      - name: results[].success
+        type: boolean
+        description: Indicates whether the conversion operation was successful.
+      - name: results[].error
+        type: string
+        description: Error message if the conversion failed. Empty when success is true.
+      - name: results[].data
+        type: object
+        description: Conversion result details. Contains empty values when the conversion fails.
+      - name: results[].data.from
+        type: string
+        description: Source unit.
+      - name: results[].data.to
+        type: string
+        description: Target unit.
+      - name: results[].data.input
+        type: number
+        description: Original numeric value provided for conversion.
+      - name: results[].data.result
+        type: number
+        description: Converted numeric result.
+      - name: results[].data.formula
+        type: string
+        description: Formula or conversion factor used to calculate the result.
+      - name: total
+        type: integer
+        description: Total number of conversion results returned.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The operations array is missing, empty, or contains more than 50 items.
+      - code: bad_request
+        status: 400
+        description: Invalid JSON, malformed request body, or unexpected field types.
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/technology/convert/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "operations": [
+              {
+                "from": "kg",
+                "to": "lb",
+                "value": 10
+              },
+              {
+                "from": "c",
+                "to": "f",
+                "value": 5
+              }
+            ]
+          }'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/technology/convert/batch"
+
+        headers = {
+          "requiems-api-key": "YOUR_API_KEY",
+          "Content-Type": "application/json"
+        }
+
+        payload = {
+          "operations": [
+            {
+              "from": "kg",
+              "to": "lb",
+              "value": 10
+            },
+            {
+              "from": "c",
+              "to": "f",
+              "value": 5
+            }
+          ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+
+        for item in response.json()["data"]["results"]:
+          print(item["from"], "->", item["to"])
+
+          if item["success"]:
+            print("Result:", item["data"]["result"])
+            print("Formula:", item["data"]["formula"])
+          else:
+            print("Error:", item["error"])
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/technology/convert/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              operations: [
+                {
+                  from: 'kg',
+                  to: 'lb',
+                  value: 10
+                },
+                {
+                  from: 'c',
+                  to: 'f',
+                  value: 5
+                }
+              ]
+            })
+          }
+        );
+
+        const { data } = await response.json();
+
+        data.results.forEach(item => {
+          console.log(item.from, '->', item.to);
+
+          if (item.success) {
+            console.log('Result:', item.data.result);
+            console.log('Formula:', item.data.formula);
+          } else {
+            console.log('Error:', item.error);
+          }
+        });
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/technology/convert/batch')
+
+        request = Net::HTTP::Post.new(uri)
+
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          operations: [
+            {
+              from: 'kg',
+              to: 'lb',
+              value: 10
+            },
+            {
+              from: 'c',
+              to: 'f',
+              value: 5
+            }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |item|
+          puts "#{item['from']} -> #{item['to']}"
+
+          if item['success']
+            puts "Result: #{item['data']['result']}"
+            puts "Formula: #{item['data']['formula']}"
+          else
+            puts "Error: #{item['error']}"
+          end
+        end
 supported_units:
   length:
     - key: mm

@@ -1,6 +1,10 @@
 package seedutil
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
 
 func TestToInt16(t *testing.T) {
 	t.Parallel()
@@ -25,11 +29,11 @@ func TestToInt16(t *testing.T) {
 			t.Parallel()
 
 			got, err := ToInt16(tt.v, tt.field)
-			if (err != nil) != tt.wantErr {
-				t.Fatalf("ToInt16(%d) error = %v, wantErr %v", tt.v, err, tt.wantErr)
-			}
-			if !tt.wantErr && got != tt.want {
-				t.Fatalf("ToInt16(%d) = %d, want %d", tt.v, got, tt.want)
+			if tt.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tt.want, got)
 			}
 		})
 	}

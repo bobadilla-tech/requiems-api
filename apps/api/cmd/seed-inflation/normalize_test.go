@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestNormalise_ValidCountryCode(t *testing.T) {
 	t.Parallel()
@@ -14,16 +18,10 @@ func TestNormalise_ValidCountryCode(t *testing.T) {
 
 	got := normalise(r)
 
-	if got.CountryCode != "US" {
-		t.Errorf("CountryCode = %q, want %q", got.CountryCode, "US")
-	}
-	if got.CountryName != "United States" {
-		t.Errorf("CountryName = %q, want %q", got.CountryName, "United States")
-	}
+	assert.Equal(t, "US", got.CountryCode)
+	assert.Equal(t, "United States", got.CountryName)
 	// Rate is rounded to 4 decimal places.
-	if got.Rate != 2.1235 {
-		t.Errorf("Rate = %v, want 2.1235", got.Rate)
-	}
+	assert.Equal(t, 2.1235, got.Rate)
 }
 
 func TestNormalise_RegionalAggregateCleared(t *testing.T) {
@@ -48,11 +46,10 @@ func TestNormalise_RegionalAggregateCleared(t *testing.T) {
 			t.Parallel()
 			r := RawInflationRecord{CountryCode: tt.code, CountryName: "Region"}
 			got := normalise(r)
-			if tt.cleared && got.CountryCode != "" {
-				t.Errorf("CountryCode = %q, want empty for non-2-letter code %q", got.CountryCode, tt.code)
-			}
-			if !tt.cleared && got.CountryCode == "" {
-				t.Errorf("CountryCode was cleared unexpectedly for code %q", tt.code)
+			if tt.cleared {
+				assert.Equal(t, "", got.CountryCode)
+			} else {
+				assert.NotEmpty(t, got.CountryCode)
 			}
 		})
 	}

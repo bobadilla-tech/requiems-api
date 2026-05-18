@@ -9,25 +9,36 @@ import { Controller } from "@hotwired/stimulus";
 //     </div>
 //   </div>
 export default class extends Controller {
-  static targets = ["menu"];
+  static targets = ["menu", "trigger"];
 
   toggle(event) {
     event.stopPropagation();
     this.menuTarget.classList.toggle("hidden");
   }
 
+  open() {
+    this.menuTarget.classList.remove("hidden");
+  }
+
+  close() {
+    this.menuTarget.classList.add("hidden");
+  }
+
   hide(event) {
-    if (!this.element.contains(event.target)) {
-      this.menuTarget.classList.add("hidden");
-    }
+    if (this.menuTarget.classList.contains("hidden")) return;
+    const t = event.target;
+    if (this.menuTarget.contains(t)) return;
+    if (this.hasTriggerTarget && this.triggerTarget.contains(t)) return;
+    if (!this.hasTriggerTarget && this.element.contains(t)) return;
+    this.menuTarget.classList.add("hidden");
   }
 
   connect() {
-    // Close dropdown when clicking outside
-    document.addEventListener("click", this.hide.bind(this));
+    this._boundHide = this.hide.bind(this);
+    document.addEventListener("click", this._boundHide);
   }
 
   disconnect() {
-    document.removeEventListener("click", this.hide.bind(this));
+    document.removeEventListener("click", this._boundHide);
   }
 }

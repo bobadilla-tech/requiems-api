@@ -10,9 +10,13 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+type querier interface {
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
 // Service provides IBAN validation and parsing against the iban_countries table.
 type Service struct {
-	db *pgxpool.Pool
+	db querier
 }
 
 // NewService creates a new Service backed by the given connection pool.
@@ -168,4 +172,20 @@ func extract(s string, offset, length int) string {
 		return ""
 	}
 	return s[offset : offset+length]
+}
+
+// ParseBatch parses a slice of IBANs and returns the results in the same order as the input.
+// Infrastructure failures for individual items are absorbed: the item is returned with Valid: false
+// rather than failing the entire batch.
+func (s *Service) ParseBatch(ctx context.Context, numbers []string) []ParseResponse {
+	results := make([]ParseResponse, len(numbers))
+	for i, n := range numbers {
+		result, err := s.Parse(ctx, n)
+		if err != nil {
+			results[i] = ParseResponse{IBAN: n, Valid: false}
+			continue
+		}
+		results[i] = result
+	}
+	return results
 }

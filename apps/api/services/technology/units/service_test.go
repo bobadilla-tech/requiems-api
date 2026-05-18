@@ -1,12 +1,16 @@
 package units
 
 import (
-	"errors"
+	"context"
 	"slices"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Convert(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -153,31 +157,25 @@ func TestService_Convert(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Convert(tt.from, tt.to, tt.value)
 
 			if tt.wantErr != nil {
-				if !errors.Is(err, tt.wantErr) {
-					t.Errorf("expected error %v, got %v", tt.wantErr, err)
-				}
+				assert.ErrorIs(t, err, tt.wantErr)
 				return
 			}
 
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
+			require.NoError(t, err)
 
-			if got.Result != tt.wantResult {
-				t.Errorf("result: got %v, want %v", got.Result, tt.wantResult)
-			}
+			assert.Equal(t, tt.wantResult, got.Result)
 
-			if got.Formula != tt.wantFormula {
-				t.Errorf("formula: got %q, want %q", got.Formula, tt.wantFormula)
-			}
+			assert.Equal(t, tt.wantFormula, got.Formula)
 		})
 	}
 }
 
 func TestService_Units(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	got := svc.Units()
 
@@ -201,9 +199,7 @@ func TestService_Units(t *testing.T) {
 
 	for cat, members := range expectedMembers {
 		got := categories[cat]
-		if len(got) != len(members) {
-			t.Errorf("%s: got %d units, want %d", cat, len(got), len(members))
-		}
+		assert.Len(t, got, len(members))
 		for _, key := range members {
 			if !slices.Contains(got, key) {
 				t.Errorf("%s: missing unit %q", cat, key)
@@ -219,6 +215,90 @@ func TestService_Units(t *testing.T) {
 }
 
 func TestTypes_IsData(t *testing.T) {
+	t.Parallel()
 	Result{}.IsData()
 	Results{}.IsData()
+}
+
+func TestService_ConvertBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: Ptr(10),
+		},
+		{
+			From:  "kg",
+			To:    "lb",
+			Value: Ptr(5),
+		},
+		{
+			From:  "c",
+			To:    "g",
+			Value: Ptr(25),
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Equal(t, 3, len(results))
+	require.True(t, results[0].Success)
+	require.True(t, results[1].Success)
+	require.False(t, results[2].Success)
+}
+
+func TestService_ConvertBatch_PreservedOrder(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: Ptr(10),
+		},
+		{
+			From:  "kg",
+			To:    "lb",
+			Value: Ptr(5),
+		},
+		{
+			From:  "c",
+			To:    "g",
+			Value: Ptr(25),
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Equal(t, "miles", results[0].From)
+	require.Equal(t, "km", results[0].To)
+
+	require.Equal(t, "kg", results[1].From)
+	require.Equal(t, "lb", results[1].To)
+
+	require.Equal(t, "c", results[2].From)
+	require.Equal(t, "g", results[2].To)
+}
+
+func TestService_ConvertBatch_NilValue(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	operations := []BatchItem{
+		{
+			From:  "miles",
+			To:    "km",
+			Value: nil, // malformed — missing value
+		},
+	}
+
+	results := svc.ConvertBatch(context.Background(), operations)
+
+	require.Len(t, results, 1)
+	assert.False(t, results[0].Success)
+	assert.Equal(t, "value is required", results[0].Error)
 }

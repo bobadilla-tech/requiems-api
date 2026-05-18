@@ -1,6 +1,7 @@
 package mx
 
 import (
+	"context"
 	"net"
 	"net/http"
 	"regexp"
@@ -34,6 +35,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	r.Post("/mx/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchLookupItem], error) {
+			return httpx.BatchResponse[BatchLookupItem]{Results: svc.LookupBatch(ctx, req.Domains)}, nil
+		},
+	))
 }
 
 // isDNSNotFound reports whether the error is a DNS "no such host" / NXDOMAIN error.

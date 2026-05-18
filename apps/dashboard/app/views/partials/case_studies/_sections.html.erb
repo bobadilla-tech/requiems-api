@@ -1,0 +1,23 @@
+<%# locals: (i18n_scope:) %>
+<% sections = I18n.t("#{i18n_scope}.sections", default: []) %>
+<% if sections.is_a?(Array) && sections.any? %>
+<section class="py-14 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-12">
+    <% sections.each do |sec| %>
+      <% next unless sec.is_a?(Hash) %>
+      <% h = sec.transform_keys(&:to_sym) %>
+      <% paragraphs = Array(h[:paragraphs]) %>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <%= h[:heading] %>
+        </h2>
+        <% paragraphs.each do |p| %>
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4 last:mb-0">
+            <%= p %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
+<% end %>

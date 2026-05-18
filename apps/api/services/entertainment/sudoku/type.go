@@ -17,3 +17,9 @@ type Puzzle struct {
 }
 
 func (Puzzle) IsData() {}
+
+// BatchRequest is the body for generating multiple Sudoku puzzles in a single request.
+// Each element must be one of: easy, medium, hard.
+type BatchRequest struct {
+	Puzzles []string `json:"puzzles" validate:"required,min=1,max=20,dive,oneof=easy medium hard"`
+}

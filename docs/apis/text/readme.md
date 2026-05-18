@@ -85,8 +85,8 @@ Generate random words for testing, games, and creative projects.
 Normalize email addresses to canonical form with provider-specific rules.
 
 - **Status:** mvp
-- **Endpoint:** `POST /v1/text/normalize`
-- **Credit Cost:** 1
+- **Endpoints:** `POST /v1/text/normalize`, `POST /v1/text/normalize/batch`
+- **Credit Cost:** 1 per email (batch charges per item)
 
 ## Category Statistics
 

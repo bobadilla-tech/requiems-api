@@ -17,4 +17,10 @@ func (ParseResponse) IsData() {}
 // transport tests to inject a stub without requiring a database connection.
 type Validator interface {
 	Parse(ctx context.Context, raw string) (ParseResponse, error)
+	ParseBatch(ctx context.Context, numbers []string) []ParseResponse
+}
+
+// BatchParseRequest is the body for validating multiples IBAN at once.
+type BatchParseRequest struct {
+	Numbers []string `json:"numbers" validate:"required,min=1,max=50,dive,required"`
 }

@@ -166,7 +166,29 @@ swaggerRoute.get("/openapi.json", (c) => {
                 },
               },
             },
-            "400": { description: "Invalid request" },
+            "422": {
+              description: "Request body failed validation",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      error: { type: "string", enum: ["validation_failed"] },
+                      fields: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            field: { type: "string" },
+                            message: { type: "string" },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
             "401": { description: "Unauthorized" },
           },
         },

@@ -29,7 +29,7 @@ gem "tzinfo-data"
 
 # Background job processing
 gem "sidekiq", "~> 8.1"
-gem "sidekiq-cron", "~> 2.3"
+gem "sidekiq-cron", "~> 2.4"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -97,4 +97,5 @@ end
 group :development do
   gem "web-console"
   gem "letter_opener_web", "~> 3.0"
+  gem "ruby-lsp", require: false
 end

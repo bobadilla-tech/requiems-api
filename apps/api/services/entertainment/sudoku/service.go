@@ -1,6 +1,7 @@
 package sudoku
 
 import (
+	"fmt"
 	"math/rand/v2"
 )
 
@@ -38,10 +39,10 @@ func NewService() *Service {
 }
 
 // Generate returns a new Sudoku puzzle at the requested difficulty level.
-// The default difficulty is "medium".
-func (s *Service) Generate(difficulty string) Puzzle {
+// Returns an error if difficulty is not one of: easy, medium, hard.
+func (s *Service) Generate(difficulty string) (Puzzle, error) {
 	if _, ok := cellsToRemove[difficulty]; !ok {
-		difficulty = "medium"
+		return Puzzle{}, fmt.Errorf("invalid difficulty %q: must be one of easy, medium, hard", difficulty)
 	}
 
 	rng := rand.New(rand.NewPCG(rand.Uint64(), rand.Uint64())) //nolint:gosec // Good enough for puzzle generation.
@@ -52,7 +53,21 @@ func (s *Service) Generate(difficulty string) Puzzle {
 		Difficulty: difficulty,
 		Puzzle:     puzzle,
 		Solution:   solution,
+	}, nil
+}
+
+// GenerateBatch generates multiple Sudoku puzzles from the given difficulty list.
+// Returns an error if any difficulty value is invalid.
+func (s *Service) GenerateBatch(difficulties []string) ([]Puzzle, error) {
+	results := make([]Puzzle, len(difficulties))
+	for i, d := range difficulties {
+		p, err := s.Generate(d)
+		if err != nil {
+			return nil, err
+		}
+		results[i] = p
 	}
+	return results, nil
 }
 
 // shuffle produces a new valid solution by permuting the base grid.

@@ -15,4 +15,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return svc.Analyze(req.Text), nil
 		},
 	))
+
+	r.Post("/sentiment/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchAnalyzeRequest) (httpx.BatchResponse[Result], error) {
+			return httpx.BatchResponse[Result]{Results: svc.AnalyzeBatch(req.Texts)}, nil
+		},
+	))
 }

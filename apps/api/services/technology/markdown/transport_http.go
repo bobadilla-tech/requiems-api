@@ -14,4 +14,11 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return svc.Convert(req.Markdown, req.Sanitize)
 		},
 	))
+
+	r.Post("/markdown/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
+			items, err := svc.ConvertBatch(req.Markdowns, req.Sanitize)
+			return httpx.BatchResponse[Response]{Results: items}, err
+		},
+	))
 }

@@ -1,14 +1,16 @@
 package base64 //nolint:revive // package name matches the service it tests; renaming would obscure intent
 
 import (
-	"errors"
-	"net/http"
 	"testing"
 
-	"requiems-api/platform/httpx"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/svcerr"
 )
 
 func TestService_Encode(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -55,15 +57,15 @@ func TestService_Encode(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := svc.Encode(tt.value, tt.variant)
-			if got.Result != tt.want {
-				t.Errorf("Encode(%q, %q) = %q, want %q", tt.value, tt.variant, got.Result, tt.want)
-			}
+			assert.Equal(t, tt.want, got.Result)
 		})
 	}
 }
 
 func TestService_Decode(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 
 	tests := []struct {
@@ -111,29 +113,19 @@ func TestService_Decode(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := svc.Decode(tt.value, tt.variant)
 
 			if tt.wantErr {
-				if err == nil {
-					t.Fatal("expected error, got nil")
-				}
-				var appErr *httpx.AppError
-				if !errors.As(err, &appErr) {
-					t.Fatalf("expected *httpx.AppError, got %T", err)
-				}
-				if appErr.Status != http.StatusUnprocessableEntity {
-					t.Errorf("expected status %d, got %d", http.StatusUnprocessableEntity, appErr.Status)
-				}
+				require.Error(t, err)
+				var se *svcerr.Error
+				require.ErrorAs(t, err, &se, "expected *svcerr.Error, got %T", err)
+				assert.Equal(t, svcerr.KindUnknown, se.Kind)
 				return
 			}
 
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-
-			if got.Result != tt.want {
-				t.Errorf("Decode(%q, %q) = %q, want %q", tt.value, tt.variant, got.Result, tt.want)
-			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got.Result)
 		})
 	}
 }

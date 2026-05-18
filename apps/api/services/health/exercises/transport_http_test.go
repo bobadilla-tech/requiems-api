@@ -288,6 +288,8 @@ func TestBatchExercises_Returns200(t *testing.T) {
 	assert.Len(t, resp.Data.Results, 2)
 	assert.Equal(t, 2, resp.Data.Total)
 	assert.Equal(t, "squat", resp.Data.Results[0].Name)
+	assert.Equal(t, "deadlift", resp.Data.Results[1].Name)
+
 }
 
 func TestBatchExercises_EmptyIDs_Returns422(t *testing.T) {
@@ -313,7 +315,8 @@ func TestBatchExercises_TooManyIDs_Returns422(t *testing.T) {
 	for i := range ids {
 		ids[i] = i + 1
 	}
-	bodyBytes, _ := json.Marshal(map[string][]int{"ids": ids})
+	bodyBytes, err := json.Marshal(map[string][]int{"ids": ids})
+	require.NoError(t, err)
 	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(string(bodyBytes)))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
@@ -371,4 +374,3 @@ func TestMetadata_ServiceError_Returns500(t *testing.T) {
 		})
 	}
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

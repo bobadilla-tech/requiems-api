@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	sentry "github.com/getsentry/sentry-go"
+
+	"requiems-api/platform/svcerr"
 )
 
 // Handle wraps an endpoint function with automatic JSON binding, validation,
@@ -17,7 +19,7 @@ import (
 //
 // Error mapping:
 //   - *ValidationFailure  → 422 with {"error":"validation_failed","fields":[...]}
-//   - *AppError           → AppError.Status with {"error":Code,"message":Message}
+//   - *svcerr.Error       → mapped HTTP status with {"error":Code,"message":Message}
 //   - any other error     → 500 with {"error":"internal_error"}
 //
 // Usage:
@@ -37,7 +39,7 @@ func Handle[Req any, Res Data](
 
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 
@@ -48,8 +50,12 @@ func Handle[Req any, Res Data](
 		res, err := fn(r.Context(), req)
 
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 
@@ -62,11 +68,11 @@ func Handle[Req any, Res Data](
 	}
 }
 
-// HandleBatch is like Handle but the handler also returns an item count.
-// The count is written as X-Usage-Count header so the auth gateway can
-// charge per item instead of per request.
-func HandleBatch[Req any, Res Data](
-	fn func(ctx context.Context, req Req) (Res, int, error),
+// HandleBatch is like Handle but for batch endpoints. It reads len(res.Results)
+// to set the X-Usage-Count header (used by the auth gateway for per-item billing)
+// and auto-populates res.Total before writing the response.
+func HandleBatch[Req any, Item any](
+	fn func(ctx context.Context, req Req) (BatchResponse[Item], error),
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
@@ -74,17 +80,20 @@ func HandleBatch[Req any, Res Data](
 		var req Req
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
-				writeValidationError(w, vf.Fields)
+				ValidationError(w, vf)
 				return
 			}
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))
 			return
 		}
 
-		res, count, err := fn(r.Context(), req)
+		res, err := fn(r.Context(), req)
 		if err != nil {
-			if ae, ok := errors.AsType[*AppError](err); ok {
-				Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			sentry.CaptureException(err)
@@ -92,7 +101,8 @@ func HandleBatch[Req any, Res Data](
 			return
 		}
 
-		w.Header().Set("X-Usage-Count", strconv.Itoa(count))
+		res.Total = len(res.Results)
+		w.Header().Set("X-Usage-Count", strconv.Itoa(len(res.Results)))
 		JSON(w, http.StatusOK, res)
 	}
 }

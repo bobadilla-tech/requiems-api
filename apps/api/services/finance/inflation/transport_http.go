@@ -2,12 +2,14 @@ package inflation
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts inflation handlers on the given router.
@@ -37,8 +39,8 @@ func registerInflationRoutes(r chi.Router, g Getter) {
 
 		resp, err := g.GetInflation(r.Context(), req.Country)
 		if err != nil {
-			if ae, ok := err.(*httpx.AppError); ok {
-				httpx.Error(w, ae.Status, ae.Code, ae.Message)
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
@@ -51,9 +53,8 @@ func registerInflationRoutes(r chi.Router, g Getter) {
 	// POST /inflation/batch — return inflation data for up to 50 countries at once.
 	// Uses HandleBatch so the gateway charges one credit per country (X-Usage-Count).
 	r.Post("/inflation/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchRequest) (BatchResponse, int, error) {
-			resp := g.GetInflationBatch(ctx, req.Countries)
-			return resp, len(req.Countries), nil
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
+			return httpx.BatchResponse[BatchItem]{Results: g.GetInflationBatch(ctx, req.Countries)}, nil
 		},
 	))
 }

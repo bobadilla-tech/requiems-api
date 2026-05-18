@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 )
@@ -19,129 +21,95 @@ func setupRouter() chi.Router {
 }
 
 func TestPhone_ValidUSNumber(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone?number=%2B12015551234", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if !resp.Data.Valid {
-		t.Error("expected valid=true for a valid US number")
-	}
-	if resp.Data.Country != "US" {
-		t.Errorf("expected country US, got %q", resp.Data.Country)
-	}
-	if resp.Data.Formatted == "" {
-		t.Error("expected non-empty formatted number")
-	}
-	if resp.Data.Type == "" {
-		t.Error("expected non-empty type")
-	}
+	assert.True(t, resp.Data.Valid)
+	assert.Equal(t, "US", resp.Data.Country)
+	assert.NotEmpty(t, resp.Data.Formatted)
+	assert.NotEmpty(t, resp.Data.Type)
 }
 
 func TestPhone_InvalidNumber(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone?number=12345", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Valid {
-		t.Error("expected valid=false for an invalid number")
-	}
-	if resp.Data.Country != "" {
-		t.Errorf("expected empty country for invalid number, got %q", resp.Data.Country)
-	}
+	assert.False(t, resp.Data.Valid)
+	assert.Equal(t, "", resp.Data.Country)
 }
 
 func TestPhone_MissingNumber(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestPhone_UKMobile(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone?number=%2B447400123456", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if !resp.Data.Valid {
-		t.Error("expected valid=true for a valid UK number")
-	}
-	if resp.Data.Country != "GB" {
-		t.Errorf("expected country GB, got %q", resp.Data.Country)
-	}
-	if resp.Data.Type != "mobile" {
-		t.Errorf("expected type mobile, got %q", resp.Data.Type)
-	}
+	assert.True(t, resp.Data.Valid)
+	assert.Equal(t, "GB", resp.Data.Country)
+	assert.Equal(t, "mobile", resp.Data.Type)
 }
 
 func TestPhone_CarrierPresent(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone?number=%2B447400123456", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[ValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if !resp.Data.Valid {
-		t.Fatal("expected valid=true")
-	}
-	if resp.Data.Carrier == nil {
-		t.Fatal("expected carrier to be present")
-	}
-	if resp.Data.Carrier.Name == "" {
-		t.Error("expected non-empty carrier name")
-	}
-	if resp.Data.Carrier.Source != "metadata" {
-		t.Errorf("expected carrier source %q, got %q", "metadata", resp.Data.Carrier.Source)
-	}
+	require.True(t, resp.Data.Valid)
+	require.NotNil(t, resp.Data.Carrier)
+	assert.NotEmpty(t, resp.Data.Carrier.Name)
+	assert.Equal(t, "metadata", resp.Data.Carrier.Source)
 }
 
 func TestPhone_RiskVoIP(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	// Google Voice numbers are VOIP type in the US (area code 202 VOIP range)
 	// Use a number whose type we know via the service
@@ -155,33 +123,26 @@ func TestPhone_RiskVoIP(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := svc.Validate(tt.number)
-			if result.Risk == nil {
-				t.Fatal("expected risk to be present on valid number")
-			}
+			require.NotNil(t, result.Risk)
 		})
 	}
 }
 
 func TestPhone_RiskMobile(t *testing.T) {
+	t.Parallel()
 	svc := NewService()
 	result := svc.Validate("+447400123456")
 
-	if !result.Valid {
-		t.Fatal("expected valid=true")
-	}
-	if result.Risk == nil {
-		t.Fatal("expected risk to be present")
-	}
-	if result.Risk.IsVoIP {
-		t.Error("expected is_voip=false for mobile number")
-	}
-	if result.Risk.IsVirtual {
-		t.Error("expected is_virtual=false for mobile number")
-	}
+	require.True(t, result.Valid)
+	require.NotNil(t, result.Risk)
+	assert.False(t, result.Risk.IsVoIP)
+	assert.False(t, result.Risk.IsVirtual)
 }
 
 func TestPhone_InvalidHasNoCarrierOrRisk(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/phone?number=12345", http.NoBody)
@@ -189,22 +150,16 @@ func TestPhone_InvalidHasNoCarrierOrRisk(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	var resp httpx.Response[ValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Valid {
-		t.Fatal("expected valid=false")
-	}
-	if resp.Data.Carrier != nil {
-		t.Error("expected carrier to be absent for invalid number")
-	}
-	if resp.Data.Risk != nil {
-		t.Error("expected risk to be absent for invalid number")
-	}
+	require.False(t, resp.Data.Valid)
+	assert.Nil(t, resp.Data.Carrier)
+	assert.Nil(t, resp.Data.Risk)
 }
 
 func TestPhone_BatchValidate(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"numbers":["+447400123456","+12015551234","12345"]}`
@@ -213,33 +168,21 @@ func TestPhone_BatchValidate(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchValidateResponse]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	var resp httpx.Response[httpx.BatchResponse[ValidateResponse]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if resp.Data.Total != 3 {
-		t.Errorf("expected total=3, got %d", resp.Data.Total)
-	}
-	if len(resp.Data.Results) != 3 {
-		t.Fatalf("expected 3 results, got %d", len(resp.Data.Results))
-	}
-	if !resp.Data.Results[0].Valid {
-		t.Error("expected result[0] valid=true")
-	}
-	if !resp.Data.Results[1].Valid {
-		t.Error("expected result[1] valid=true")
-	}
-	if resp.Data.Results[2].Valid {
-		t.Error("expected result[2] valid=false")
-	}
+	assert.Equal(t, 3, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 3)
+	assert.True(t, resp.Data.Results[0].Valid)
+	assert.True(t, resp.Data.Results[1].Valid)
+	assert.False(t, resp.Data.Results[2].Valid)
 }
 
 func TestPhone_BatchValidate_EmptyBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/phone/batch", strings.NewReader(`{"numbers":[]}`))
@@ -247,12 +190,11 @@ func TestPhone_BatchValidate_EmptyBody(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestPhone_BatchValidate_ExceedsLimit(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	numbers := make([]string, 51)
@@ -265,12 +207,11 @@ func TestPhone_BatchValidate_ExceedsLimit(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestService_NumberType(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		number   string
@@ -285,13 +226,10 @@ func TestService_NumberType(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := svc.Validate(tt.number)
-			if !result.Valid {
-				t.Fatalf("expected valid=true for %q", tt.number)
-			}
-			if result.Type != tt.wantType {
-				t.Errorf("expected type %q, got %q", tt.wantType, result.Type)
-			}
+			require.True(t, result.Valid)
+			assert.Equal(t, tt.wantType, result.Type)
 		})
 	}
 }

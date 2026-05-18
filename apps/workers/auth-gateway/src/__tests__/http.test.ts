@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { corsResponse, jsonError, jsonResponse } from "@requiem/workers-shared";
 import { addUsageHeaders, fetchBackend, filterHeaders } from "../http";
 
@@ -251,12 +251,15 @@ describe("HTTP Utilities", () => {
   });
 
   describe("fetchBackend", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it("returns successful response", async () => {
-      // Mock successful fetch
       const mockResponse = new Response(JSON.stringify({ data: "test" }), {
         status: 200,
       });
-      global.fetch = async () => mockResponse;
+      vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(mockResponse);
 
       const result = await fetchBackend("https://api.example.com", {
         method: "GET",
@@ -269,10 +272,7 @@ describe("HTTP Utilities", () => {
     });
 
     it("returns error on fetch failure", async () => {
-      // Mock fetch failure
-      global.fetch = async () => {
-        throw new Error("Network error");
-      };
+      vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(new Error("Network error"));
 
       const result = await fetchBackend("https://api.example.com", {
         method: "GET",
@@ -286,13 +286,14 @@ describe("HTTP Utilities", () => {
     });
 
     it("returns 504 on timeout", async () => {
-      global.fetch = (_url, init) =>
-        new Promise((_resolve, reject) => {
-          (init?.signal as AbortSignal | undefined)?.addEventListener("abort", () => {
-            const err = new DOMException("The operation was aborted.", "AbortError");
-            reject(err);
-          });
-        });
+      vi.spyOn(globalThis, "fetch").mockImplementationOnce(
+        (_url, init) =>
+          new Promise((_resolve, reject) => {
+            (init?.signal as AbortSignal | undefined)?.addEventListener("abort", () => {
+              reject(new DOMException("The operation was aborted.", "AbortError"));
+            });
+          }),
+      );
 
       const result = await fetchBackend("https://api.example.com", { method: "GET" }, 1);
 

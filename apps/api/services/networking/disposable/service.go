@@ -5,7 +5,7 @@ import (
 
 	disposable "github.com/bobadilla-tech/is-email-disposable"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 type Service struct{}
@@ -18,7 +18,7 @@ func NewService() *Service {
 func (s *Service) CheckEmail(email string) CheckEmailResponse {
 	isDisposable := disposable.IsDisposable(email)
 
-	domain := extractDomain(email)
+	domain := ExtractDomainFromEmail(email)
 
 	return CheckEmailResponse{
 		Email:        email,
@@ -28,7 +28,7 @@ func (s *Service) CheckEmail(email string) CheckEmailResponse {
 }
 
 // CheckBatch checks multiple emails for disposability
-func (s *Service) CheckBatch(emails []string) BatchCheckResponse {
+func (s *Service) CheckBatch(emails []string) []CheckEmailResponse {
 	results := make([]CheckEmailResponse, 0, len(emails))
 
 	for _, email := range emails {
@@ -36,10 +36,7 @@ func (s *Service) CheckBatch(emails []string) BatchCheckResponse {
 		results = append(results, result)
 	}
 
-	return BatchCheckResponse{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }
 
 // CheckDomain checks if a domain is disposable
@@ -54,30 +51,24 @@ func (s *Service) CheckDomain(domain string) DomainCheckResponse {
 
 // GetDomains returns paginated list of disposable domains
 func (s *Service) GetDomains(page, perPage int) (DomainsListResponse, error) {
+	if page < 1 {
+		return DomainsListResponse{}, svcerr.Invalid("bad_request", "page must be at least 1")
+	}
+	if perPage < 1 || perPage > 1000 {
+		return DomainsListResponse{}, svcerr.Invalid("bad_request", "per_page must be between 1 and 1000")
+	}
+
 	allDomains := disposable.GetAllDomains()
 	total := len(allDomains)
 
-	// Default pagination values
-	if page < 1 {
-		page = 1
-	}
-	if perPage < 1 || perPage > 1000 {
-		perPage = 100
+	maxPages := (total + perPage - 1) / perPage
+	if page > maxPages {
+		return DomainsListResponse{}, svcerr.NotFound("page_out_of_range", "page exceeds total number of available pages")
 	}
 
-	// Calculate pagination
 	start := (page - 1) * perPage
+
 	end := start + perPage
-
-	// Page is beyond the last page
-	if start >= total {
-		return DomainsListResponse{}, &httpx.AppError{
-			Status:  404,
-			Code:    "page_out_of_range",
-			Message: "page exceeds total number of available pages",
-		}
-	}
-
 	if end > total {
 		end = total
 	}
@@ -98,8 +89,7 @@ func (s *Service) GetStats() StatsResponse {
 	}
 }
 
-// extractDomain extracts the domain from an email address
-func extractDomain(email string) string {
+func ExtractDomainFromEmail(email string) string {
 	parts := strings.Split(email, "@")
 
 	if len(parts) != 2 {

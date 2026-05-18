@@ -36,3 +36,22 @@ func (s *Service) Convert(markdown string, sanitize bool) (Response, error) {
 
 	return Response{HTML: strings.TrimRight(buf.String(), "\n")}, nil
 }
+
+// ConvertBatch renders multiple markdown strings to HTML following the CommonMark spec.
+// Each markdown input is processed independently using Convert.
+// When sanitize is true, raw HTML blocks and inline HTML in each markdown input
+// are stripped from the output instead of being passed through.
+func (s *Service) ConvertBatch(markdowns []string, sanitize bool) ([]Response, error) {
+	results := make([]Response, 0, len(markdowns))
+
+	for _, md := range markdowns {
+		resp, err := s.Convert(md, sanitize)
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, resp)
+	}
+
+	return results, nil
+}

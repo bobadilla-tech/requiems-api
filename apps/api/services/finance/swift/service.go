@@ -4,13 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // Service provides SWIFT/BIC code lookup against the swift_codes PostgreSQL table.
@@ -34,11 +33,7 @@ func (s *Service) Lookup(ctx context.Context, raw string) (LookupResponse, error
 
 	result, err := s.querySwift(ctx, code)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return LookupResponse{}, &httpx.AppError{
-			Status:  http.StatusNotFound,
-			Code:    "not_found",
-			Message: "SWIFT code not found",
-		}
+		return LookupResponse{}, svcerr.NotFound("not_found", "SWIFT code not found")
 	}
 	if err != nil {
 		return LookupResponse{}, err
@@ -144,48 +139,32 @@ func (s *Service) querySwift(ctx context.Context, code string) (LookupResponse, 
 
 // sanitizeSWIFT normalises the raw input and validates it against the SWIFT/BIC
 // format (ISO 9362). Returns the canonical 11-character code (appending "XXX"
-// for 8-character primary office codes) or an *httpx.AppError for client errors.
+// for 8-character primary office codes) or an error for invalid input.
 func sanitizeSWIFT(raw string) (string, error) {
 	code := strings.ToUpper(strings.TrimSpace(raw))
 
 	if len(code) != 8 && len(code) != 11 {
-		return "", &httpx.AppError{
-			Status:  http.StatusBadRequest,
-			Code:    "bad_request",
-			Message: "SWIFT code must be 8 or 11 characters",
-		}
+		return "", svcerr.Invalid("bad_request", "SWIFT code must be 8 or 11 characters")
 	}
 
 	// Positions 0–3: bank code — must be letters only.
 	for i := range 4 {
 		if code[i] < 'A' || code[i] > 'Z' {
-			return "", &httpx.AppError{
-				Status:  http.StatusBadRequest,
-				Code:    "bad_request",
-				Message: "bank code must be 4 letters (positions 1–4)",
-			}
+			return "", svcerr.Invalid("bad_request", "bank code must be 4 letters (positions 1–4)")
 		}
 	}
 
 	// Positions 4–5: country code — must be letters only.
 	for i := 4; i < 6; i++ {
 		if code[i] < 'A' || code[i] > 'Z' {
-			return "", &httpx.AppError{
-				Status:  http.StatusBadRequest,
-				Code:    "bad_request",
-				Message: "country code must be 2 letters (positions 5–6)",
-			}
+			return "", svcerr.Invalid("bad_request", "country code must be 2 letters (positions 5–6)")
 		}
 	}
 
 	// Positions 6–7: location code — alphanumeric.
 	for i := 6; i < 8; i++ {
 		if !isAlphanumeric(code[i]) {
-			return "", &httpx.AppError{
-				Status:  http.StatusBadRequest,
-				Code:    "bad_request",
-				Message: "location code must be alphanumeric (positions 7–8)",
-			}
+			return "", svcerr.Invalid("bad_request", "location code must be alphanumeric (positions 7–8)")
 		}
 	}
 
@@ -193,11 +172,7 @@ func sanitizeSWIFT(raw string) (string, error) {
 	if len(code) == 11 {
 		for i := 8; i < 11; i++ {
 			if !isAlphanumeric(code[i]) {
-				return "", &httpx.AppError{
-					Status:  http.StatusBadRequest,
-					Code:    "bad_request",
-					Message: "branch code must be alphanumeric (positions 9–11)",
-				}
+				return "", svcerr.Invalid("bad_request", "branch code must be alphanumeric (positions 9–11)")
 			}
 		}
 	}
@@ -217,20 +192,12 @@ func isAlphanumeric(b byte) bool {
 func sanitizeAlphaCode(raw string, expectedLen int, label string) (string, error) {
 	value := strings.ToUpper(strings.TrimSpace(raw))
 	if len(value) != expectedLen {
-		return "", &httpx.AppError{
-			Status:  http.StatusBadRequest,
-			Code:    "bad_request",
-			Message: fmt.Sprintf("%s must be %d letters", label, expectedLen),
-		}
+		return "", svcerr.Invalid("bad_request", fmt.Sprintf("%s must be %d letters", label, expectedLen))
 	}
 
 	for i := range expectedLen {
 		if value[i] < 'A' || value[i] > 'Z' {
-			return "", &httpx.AppError{
-				Status:  http.StatusBadRequest,
-				Code:    "bad_request",
-				Message: fmt.Sprintf("%s must contain letters only", label),
-			}
+			return "", svcerr.Invalid("bad_request", fmt.Sprintf("%s must contain letters only", label))
 		}
 	}
 

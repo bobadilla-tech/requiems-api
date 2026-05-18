@@ -1,6 +1,7 @@
-<nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+<nav class="overflow-visible bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
   <div class="w-full px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center h-16 w-full">
+    <div class="relative w-full" data-controller="mobile-menu">
+      <div class="flex items-center h-16 w-full">
 
       <!-- Left: Logo -->
       <div class="flex-shrink-0 pl-2 sm:pl-4">
@@ -40,8 +41,9 @@
         </div>
 
         <!-- Navigation Links -->
-        <%= link_to t("shared.nav.apis"), apis_path, class: "text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
-        <%= link_to t("shared.nav.examples"), examples_path, class: "text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
+        <%= render "partials/navbar/docs_dropdown" %>
+        <%= link_to t("shared.nav.systems"), systems_path, class: "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
+        <%= link_to t("shared.nav.case_studies"), case_studies_path, class: "text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
         <%= link_to t("shared.nav.pricing"), pricing_path, class: "text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %>
 
         <!-- Auth Buttons -->
@@ -116,23 +118,42 @@
         <% end %>
       </div>
 
-      <!-- Mobile: Hamburger Menu (<768px) -->
-      <div class="flex items-center md:hidden ml-auto">
-        <!-- Mobile Menu Button -->
-        <div data-controller="dropdown">
-          <button type="button"
-                  class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  data-action="click->dropdown#toggle">
-            <span class="sr-only"><%= t("shared.nav.open_menu") %></span>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+      <!-- Mobile: hamburger (trigger) + full-width sheet (sibling below flex row; same dropdown instance) -->
+      <div class="flex shrink-0 items-center md:hidden ml-auto">
+        <button type="button"
+                class="inline-flex rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
+                data-mobile-menu-target="trigger"
+                data-action="click->mobile-menu#toggle"
+                aria-expanded="false"
+                aria-controls="mobile-nav-menu">
+          <span class="sr-only"><%= t("shared.nav.open_menu") %></span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
 
-          <!-- Mobile Menu Dropdown -->
-          <div data-dropdown-target="menu"
-               class="hidden absolute top-16 left-0 right-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-lg z-50">
-            <div class="px-4 py-3 space-y-3">
+    <div id="mobile-nav-menu"
+         data-mobile-menu-target="panel"
+         class="fixed inset-0 z-[200] hidden flex min-h-0 flex-col bg-white pt-[env(safe-area-inset-top)] shadow-xl dark:bg-gray-800 md:hidden">
+      <header class="flex min-h-14 shrink-0 items-center justify-between gap-3 border-b border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-900 sm:min-h-16 sm:px-5">
+        <span class="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold leading-none tracking-tight text-gray-900 dark:text-gray-100">
+          <%= t("shared.nav.mobile_menu_title") %>
+        </span>
+        <div class="flex shrink-0 items-center justify-center">
+          <button type="button"
+                  class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-gray-800 shadow-sm transition-colors hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-700 dark:focus-visible:ring-offset-gray-900"
+                  data-action="click->mobile-menu#toggle"
+                  aria-label="<%= t("shared.nav.close_menu") %>">
+            <svg class="h-5 w-5 shrink-0 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span class="whitespace-nowrap"><%= t("shared.nav.mobile_menu_close") %></span>
+          </button>
+        </div>
+      </header>
+      <div class="min-h-0 flex-1 space-y-3 overflow-y-auto overflow-x-hidden overscroll-y-contain px-4 py-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
               <!-- Mobile Search Bar -->
               <div class="pb-2" data-controller="navbar-search" data-navbar-search-search-data-value="<%= global_search_data.to_json %>">
                 <div class="relative">
@@ -180,9 +201,23 @@
               </div>
 
               <!-- Navigation Links -->
-              <%= link_to t("shared.nav.apis"), apis_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
-              <%= link_to t("shared.nav.examples"), examples_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+              <%= link_to t("shared.nav.systems"), systems_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+              <%= link_to t("shared.nav.case_studies"), case_studies_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
               <%= link_to t("shared.nav.pricing"), pricing_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+
+              <details class="border-t border-gray-200 pt-2 dark:border-gray-700">
+                <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 [&::-webkit-details-marker]:hidden">
+                  <span class="text-base font-semibold"><%= t("shared.nav.docs") %></span>
+                  <svg class="ml-2 h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div class="mt-1 space-y-1 px-1 pb-1">
+                  <%= link_to t("shared.nav.apis"), apis_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+                  <%= link_to t("shared.nav.examples"), examples_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+                  <%= link_to t("shared.nav.divisions"), divisions_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+                </div>
+              </details>
 
               <!-- Theme Toggle (Mobile) -->
               <div class="border-t border-gray-200 dark:border-gray-700 pt-3" data-controller="theme">
@@ -207,14 +242,8 @@
               </div>
 
               <!-- Locale Switcher (Mobile) -->
-              <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                <p class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2"><%= t("shared.nav.language") %></p>
-                <div class="flex space-x-2 px-3">
-                  <%= button_to "English", switch_locale_path, method: :post, params: { locale: "en" },
-                      class: "flex-1 text-center px-3 py-2 rounded-lg text-sm font-medium transition-colors #{I18n.locale == :en ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}" %>
-                  <%= button_to "Español", switch_locale_path, method: :post, params: { locale: "es" },
-                      class: "flex-1 text-center px-3 py-2 rounded-lg text-sm font-medium transition-colors #{I18n.locale == :es ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}" %>
-                </div>
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-3 px-3">
+                <%= render "partials/shared/language_switcher", compact: false, select_id: "mobile-nav-language-select" %>
               </div>
 
               <% if user_signed_in? %>
@@ -230,10 +259,8 @@
                   <%= link_to t("shared.nav.get_started"), new_user_registration_path, class: "block px-3 py-2 rounded-lg text-base font-medium text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700" %>
                 </div>
               <% end %>
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
     </div>
   </div>
 </nav>

@@ -3,6 +3,8 @@ package profanity
 import (
 	"context"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestService_Check_NoProfanity(t *testing.T) {
@@ -10,15 +12,9 @@ func TestService_Check_NoProfanity(t *testing.T) {
 
 	result := svc.Check(context.Background(), "Hello, world!")
 
-	if result.HasProfanity {
-		t.Error("expected HasProfanity to be false")
-	}
-	if result.Censored != "Hello, world!" {
-		t.Errorf("expected censored to equal input, got %q", result.Censored)
-	}
-	if len(result.FlaggedWords) != 0 {
-		t.Errorf("expected no flagged words, got %v", result.FlaggedWords)
-	}
+	assert.False(t, result.HasProfanity)
+	assert.Equal(t, "Hello, world!", result.Censored)
+	assert.Empty(t, result.FlaggedWords)
 }
 
 func TestService_Check_WithProfanity(t *testing.T) {
@@ -26,15 +22,9 @@ func TestService_Check_WithProfanity(t *testing.T) {
 
 	result := svc.Check(context.Background(), "What the fuck is this shit")
 
-	if !result.HasProfanity {
-		t.Error("expected HasProfanity to be true")
-	}
-	if result.Censored != "What the **** is this ****" {
-		t.Errorf("unexpected censored output: %q", result.Censored)
-	}
-	if len(result.FlaggedWords) != 2 {
-		t.Errorf("expected 2 flagged words, got %d: %v", len(result.FlaggedWords), result.FlaggedWords)
-	}
+	assert.True(t, result.HasProfanity)
+	assert.Equal(t, "What the **** is this ****", result.Censored)
+	assert.Len(t, result.FlaggedWords, 2)
 }
 
 func TestService_Check_CaseInsensitive(t *testing.T) {
@@ -44,9 +34,7 @@ func TestService_Check_CaseInsensitive(t *testing.T) {
 	// the matched portion; the flagged canonical word is "shit".
 	result := svc.Check(context.Background(), "This is BULLSHIT")
 
-	if !result.HasProfanity {
-		t.Error("expected HasProfanity to be true for uppercase word")
-	}
+	assert.True(t, result.HasProfanity)
 	if len(result.FlaggedWords) != 1 || result.FlaggedWords[0] != "shit" {
 		t.Errorf("expected flagged word [\"shit\"], got %v", result.FlaggedWords)
 	}
@@ -57,9 +45,7 @@ func TestService_Check_DeduplicatesFlaggedWords(t *testing.T) {
 
 	result := svc.Check(context.Background(), "shit shit shit")
 
-	if len(result.FlaggedWords) != 1 {
-		t.Errorf("expected 1 unique flagged word, got %d: %v", len(result.FlaggedWords), result.FlaggedWords)
-	}
+	assert.Len(t, result.FlaggedWords, 1)
 }
 
 func TestService_Check_EmptyFlaggedWordsSlice(t *testing.T) {
@@ -78,12 +64,8 @@ func TestService_Check_EmptyText(t *testing.T) {
 
 	result := svc.Check(context.Background(), "")
 
-	if result.HasProfanity {
-		t.Error("expected no profanity for empty text")
-	}
-	if result.Censored != "" {
-		t.Errorf("expected empty censored, got %q", result.Censored)
-	}
+	assert.False(t, result.HasProfanity)
+	assert.Equal(t, "", result.Censored)
 }
 
 func TestService_Check_LeetSpeak(t *testing.T) {
@@ -92,10 +74,6 @@ func TestService_Check_LeetSpeak(t *testing.T) {
 	// go-away handles leet-speak obfuscation out of the box.
 	result := svc.Check(context.Background(), "F   u   C  k th1$ $h!t")
 
-	if !result.HasProfanity {
-		t.Error("expected HasProfanity to be true for leet-speak input")
-	}
-	if len(result.FlaggedWords) == 0 {
-		t.Error("expected at least one flagged word for leet-speak input")
-	}
+	assert.True(t, result.HasProfanity)
+	assert.NotEmpty(t, result.FlaggedWords)
 }

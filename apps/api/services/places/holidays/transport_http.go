@@ -1,6 +1,7 @@
 package holidays
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -31,4 +32,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, resp)
 	})
+
+	// POST /holidays/batch — return holidays for up to 50 (country, year) pairs at once.
+	// Uses HandleBatch so the gateway charges one credit per query (X-Usage-Count).
+	r.Post("/holidays/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
+			return httpx.BatchResponse[BatchItem]{Results: svc.GetHolidaysBatch(req.Queries)}, nil
+		},
+	))
 }

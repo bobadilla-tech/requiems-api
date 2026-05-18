@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"requiems-api/platform/httpx"
 	convformat "requiems-api/services/technology/format"
@@ -20,6 +22,7 @@ func setupRouter() chi.Router {
 }
 
 func TestFormat_HappyPath_JSONToYAML(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"from":"json","to":"yaml","content":"{\"name\":\"Alice\",\"age\":30}"}`
@@ -29,21 +32,17 @@ func TestFormat_HappyPath_JSONToYAML(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[convformat.Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if !strings.Contains(resp.Data.Result, "Alice") {
-		t.Errorf("expected YAML with 'Alice', got %q", resp.Data.Result)
-	}
+	assert.True(t, strings.Contains(resp.Data.Result, "Alice"), "expected YAML with 'Alice', got %q", resp.Data.Result)
 }
 
 func TestFormat_HappyPath_CSVToJSON(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"from":"csv","to":"json","content":"name,age\nAlice,30\n"}`
@@ -53,21 +52,17 @@ func TestFormat_HappyPath_CSVToJSON(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusOK {
-		t.Fatalf("expected 200, got %d: %s", w.Code, w.Body.String())
-	}
+	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[convformat.Response]
-	if err := json.NewDecoder(w.Body).Decode(&resp); err != nil {
-		t.Fatalf("failed to decode response: %v", err)
-	}
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
 
-	if !strings.Contains(resp.Data.Result, "Alice") {
-		t.Errorf("expected JSON with 'Alice', got %q", resp.Data.Result)
-	}
+	assert.True(t, strings.Contains(resp.Data.Result, "Alice"), "expected JSON with 'Alice', got %q", resp.Data.Result)
 }
 
 func TestFormat_InvalidFromFormat(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"from":"txt","to":"json","content":"hello"}`
@@ -77,12 +72,11 @@ func TestFormat_InvalidFromFormat(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422 for unsupported format, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestFormat_MissingBody(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodPost, "/format", http.NoBody)
@@ -91,12 +85,11 @@ func TestFormat_MissingBody(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("expected 400, got %d", w.Code)
-	}
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestFormat_MalformedInput(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"from":"json","to":"yaml","content":"{invalid json"}`
@@ -106,12 +99,11 @@ func TestFormat_MalformedInput(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422 for malformed input, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestFormat_MissingFields(t *testing.T) {
+	t.Parallel()
 	r := setupRouter()
 
 	body := `{"from":"json","to":"yaml"}`
@@ -121,7 +113,5 @@ func TestFormat_MissingFields(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	if w.Code != http.StatusUnprocessableEntity {
-		t.Errorf("expected 422 for missing content, got %d: %s", w.Code, w.Body.String())
-	}
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

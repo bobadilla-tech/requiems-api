@@ -1,11 +1,8 @@
 User-agent: *
 Allow: /
 
-Disallow: /en/dashboard/
-Disallow: /en/admin/
-Disallow: /en/users/
-Disallow: /es/dashboard/
-Disallow: /es/admin/
-Disallow: /es/users/
+Disallow: /*/dashboard/
+Disallow: /*/admin/
+Disallow: /*/users/
 
 Sitemap: https://requiems.xyz/sitemap.xml

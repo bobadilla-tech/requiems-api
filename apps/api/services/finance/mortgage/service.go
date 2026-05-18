@@ -6,6 +6,7 @@ import "math"
 // transport tests to inject a stub without requiring the concrete *Service.
 type Calculator interface {
 	Calculate(principal, annualRate float64, years int) Response
+	CalculateBatch(mortgages []Request) []Response
 }
 
 // Service computes mortgage payments and amortization schedules.
@@ -63,4 +64,13 @@ func (s *Service) Calculate(principal, annualRate float64, years int) Response {
 
 func round2(v float64) float64 {
 	return math.Round(v*100) / 100
+}
+
+// CalculateBatch calculates multiple mortgages and returns the results in the same order as the input.
+func (s *Service) CalculateBatch(mortgages []Request) []Response {
+	results := make([]Response, len(mortgages))
+	for i, m := range mortgages {
+		results[i] = s.Calculate(m.Principal, m.Rate, m.Years)
+	}
+	return results
 }

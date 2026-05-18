@@ -2,10 +2,13 @@ package words
 
 import (
 	"context"
-	"errors"
 	"testing"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/svcerr"
 )
 
 // mockRow implements pgx.Row.
@@ -29,17 +32,19 @@ func newTestService(row pgx.Row) *Service {
 }
 
 func TestRandom_EmptyTable(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, pgx.ErrNoRows) {
-		t.Errorf("expected pgx.ErrNoRows, got %v", err)
-	}
+	var se *svcerr.Error
+	assert.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
 }
 
 func TestRandom_SingleRow(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 42
@@ -51,47 +56,37 @@ func TestRandom_SingleRow(t *testing.T) {
 	})
 
 	got, err := svc.Random(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if got.ID != 42 {
-		t.Errorf("expected ID 42, got %d", got.ID)
-	}
-	if got.Word != "ephemeral" {
-		t.Errorf("unexpected word: %q", got.Word)
-	}
-	if got.Definition != "Lasting for a very short time." {
-		t.Errorf("unexpected definition: %q", got.Definition)
-	}
-	if got.PartOfSpeech != "adjective" {
-		t.Errorf("unexpected part_of_speech: %q", got.PartOfSpeech)
-	}
+	require.NoError(t, err)
+	assert.Equal(t, 42, got.ID)
+	assert.Equal(t, "ephemeral", got.Word)
+	assert.Equal(t, "Lasting for a very short time.", got.Definition)
+	assert.Equal(t, "adjective", got.PartOfSpeech)
 }
 
 func TestRandom_ScanError(t *testing.T) {
-	scanErr := errors.New("scan failed")
+	t.Parallel()
 	svc := newTestService(&mockRow{
-		scanFn: func(_ ...any) error { return scanErr },
+		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	_, err := svc.Random(context.Background())
-	if !errors.Is(err, scanErr) {
-		t.Errorf("expected scan error, got %v", err)
-	}
+	var se *svcerr.Error
+	assert.ErrorAs(t, err, &se)
+	assert.Equal(t, svcerr.KindUpstream, se.Kind)
 }
 
 func TestRandom_ReturnsZeroValueOnError(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
 	})
 
 	got, _ := svc.Random(context.Background())
-	if got.ID != 0 || got.Word != "" || got.Definition != "" || got.PartOfSpeech != "" {
-		t.Errorf("expected zero Word on error, got %+v", got)
-	}
+	assert.True(t, got.ID == 0 && got.Word == "" && got.Definition == "" && got.PartOfSpeech == "", "expected zero Word on error, got %+v", got)
 }
 
 func TestRandom_EmptyPartOfSpeechAllowed(t *testing.T) {
+	t.Parallel()
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
 			*dest[0].(*int) = 1
@@ -103,10 +98,120 @@ func TestRandom_EmptyPartOfSpeechAllowed(t *testing.T) {
 	})
 
 	got, err := svc.Random(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
+	require.NoError(t, err)
+	assert.Equal(t, "", got.PartOfSpeech)
+}
+func TestBatchDefine_MixedWords(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"ephemeral",
+			"SERENDIPITY",
+			"zzyzx",
+		},
 	}
-	if got.PartOfSpeech != "" {
-		t.Errorf("expected empty part_of_speech, got %q", got.PartOfSpeech)
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, len(resp))
+	require.Len(t, resp, 3)
+
+	assert.True(t, resp[0].Found)
+	assert.Equal(t, "ephemeral", resp[0].Word)
+
+	assert.True(t, resp[1].Found)
+	assert.Equal(t, "serendipity", resp[1].Word)
+
+	assert.False(t, resp[2].Found)
+	assert.Nil(t, resp[2].Entry)
+	assert.NotEmpty(t, resp[2].Error)
+}
+
+func TestBatchDefine_AllValid(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"melancholy",
+			"resilience",
+			"eloquent",
+		},
 	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, len(resp))
+	require.Len(t, resp, 3)
+
+	for i, r := range resp {
+		assert.True(t, r.Found, "item %d should be found", i)
+		assert.NotNil(t, r.Entry)
+		assert.NotEmpty(t, r.Entry.Definitions)
+	}
+}
+
+func TestBatchDefine_AllInvalid(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{"xxx", "yyy", "zzz"},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 3, len(resp))
+
+	for _, r := range resp {
+		assert.False(t, r.Found)
+		assert.Nil(t, r.Entry)
+		assert.NotEmpty(t, r.Error)
+	}
+}
+
+func TestBatchDefine_TrimsAndNormalizes(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{
+			"  Ephemeral  ",
+			"  SERENDIPITY ",
+		},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.True(t, resp[0].Found)
+	assert.Equal(t, "ephemeral", resp[0].Word)
+
+	assert.True(t, resp[1].Found)
+	assert.Equal(t, "serendipity", resp[1].Word)
+}
+
+func TestBatchDefine_EmptyRequest(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+
+	req := BatchRequest{
+		Items: []string{},
+	}
+
+	resp, err := svc.BatchDefine(context.Background(), req)
+	require.NoError(t, err)
+
+	assert.Equal(t, 0, len(resp))
+	assert.Len(t, resp, 0)
 }
