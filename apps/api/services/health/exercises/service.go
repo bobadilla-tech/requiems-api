@@ -10,14 +10,46 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// dbRows is the minimal row-iteration interface used by query methods.
+// pgx.Rows satisfies this interface in production; mockRows satisfies it in unit tests.
+type dbRows interface {
+	Close()
+	Err() error
+	Next() bool
+	Scan(dest ...any) error
+}
+
+// dbPool is the minimal database interface required by Service.
+// poolWrapper adapts *pgxpool.Pool to this interface in production;
+// mockDB satisfies it in unit tests.
+type dbPool interface {
+	Query(ctx context.Context, sql string, args ...any) (dbRows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
+// poolWrapper adapts *pgxpool.Pool to the dbPool interface so that NewService
+// can accept the concrete pool type while still allowing a test double to be
+// injected via the interface.
+type poolWrapper struct {
+	p *pgxpool.Pool
+}
+
+func (pw *poolWrapper) Query(ctx context.Context, sql string, args ...any) (dbRows, error) {
+	return pw.p.Query(ctx, sql, args...)
+}
+
+func (pw *poolWrapper) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
+	return pw.p.QueryRow(ctx, sql, args...)
+}
+
 // Service provides exercise lookups against the exercises PostgreSQL table.
 type Service struct {
-	db *pgxpool.Pool
+	db dbPool
 }
 
 // NewService creates a new Service backed by the given connection pool.
 func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+	return &Service{db: &poolWrapper{p: db}}
 }
 
 // List returns a paginated, optionally-filtered list of exercises.
