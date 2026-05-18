@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"bytes"
+	"strings"
+
 
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"
@@ -256,4 +259,239 @@ func TestTimezone_OffsetFormat(t *testing.T) {
 			t.Errorf("formatOffset(%d) = %q, want %q", tc.offsetSecs, got, tc.expected)
 		}
 	}
+}
+
+func TestTimezone_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	body := `{
+		"cities": [
+			"Tokyo",
+			"Lima",
+			"New York"
+		]
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchResponse]
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Len(t, resp.Data.Results, 3)
+
+	assert.Equal(t, "Tokyo", resp.Data.Results[0].City)
+	assert.Equal(t, "Lima", resp.Data.Results[1].City)
+	assert.Equal(t, "New York", resp.Data.Results[2].City)
+
+	require.NotNil(t, resp.Data.Results[0].Info)
+	require.NotNil(t, resp.Data.Results[1].Info)
+	require.NotNil(t, resp.Data.Results[2].Info)
+}
+
+func TestTimezone_Batch_InvalidJSON(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		strings.NewReader(`{invalid-json}`),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	var resp httpx.ErrorResponse
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Equal(t, "bad_request", resp.Error)
+}
+
+func TestTimezone_Batch_EmptyCities(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	body := `{
+		"cities": []
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	var resp httpx.ErrorResponse
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Equal(t, "bad_request", resp.Error)
+}
+
+func TestTimezone_Batch_InvalidCities(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	body := `{
+		"cities": [
+			"Tokyo",
+			"InvalidCity",
+			"",
+			"Atlantis"
+		]
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchResponse]
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Len(t, resp.Data.Results, 4)
+
+	assert.Equal(t, "Tokyo", resp.Data.Results[0].City)
+	assert.Equal(t, "InvalidCity", resp.Data.Results[1].City)
+	assert.Equal(t, "", resp.Data.Results[2].City)
+	assert.Equal(t, "Atlantis", resp.Data.Results[3].City)
+
+	require.NotNil(t, resp.Data.Results[0].Info)
+
+	assert.Nil(t, resp.Data.Results[1].Info)
+	assert.Nil(t, resp.Data.Results[2].Info)
+	assert.Nil(t, resp.Data.Results[3].Info)
+}
+
+func TestTimezone_Batch_PreservesOrder(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	body := `{
+		"cities": [
+			"Lima",
+			"Tokyo",
+			"Paris",
+			"New York"
+		]
+	}`
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		strings.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchResponse]
+
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	expected := []string{
+		"Lima",
+		"Tokyo",
+		"Paris",
+		"New York",
+	}
+
+	require.Len(t, resp.Data.Results, len(expected))
+
+	for i := range expected {
+		assert.Equal(t, expected[i], resp.Data.Results[i].City)
+	}
+}
+
+func TestTimezone_Batch_TooManyCities(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(t)
+
+	cities := make([]string, 0, 51)
+
+	for i := 0; i < 51; i++ {
+		cities = append(cities, "Tokyo")
+	}
+
+	reqBody := BatchRequest{
+		Cities: cities,
+	}
+
+	body, err := json.Marshal(reqBody)
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/timezone/batch",
+		bytes.NewReader(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+
+	var resp httpx.ErrorResponse
+
+	err = json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Equal(t, "bad_request", resp.Error)
 }

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"context"
 
 	"github.com/ringsaturn/tzf"
 )
@@ -119,4 +120,36 @@ func isDST(t time.Time) bool {
 	}
 
 	return offsetNow != standardOffset
+}
+
+func (s *Service) GetTimezoneBatch(
+	ctx context.Context,
+	cities []string,
+) (BatchResponse, error) {
+	results := make([]BatchResult, len(cities))
+
+	for i, city := range cities {
+		select {
+		case <-ctx.Done():
+			return BatchResponse{}, ctx.Err()
+		default:
+		}
+
+		info, err := s.GetTimezoneByCity(city)
+		if err != nil {
+			results[i] = BatchResult{
+				City: city,
+			}
+			continue
+		}
+
+		results[i] = BatchResult{
+			City: city,
+			Info: info,
+		}
+	}
+
+	return BatchResponse{
+		Results: results,
+	}, nil
 }

@@ -3,6 +3,7 @@ package timezone
 import (
 	"errors"
 	"net/http"
+	"encoding/json"
 
 	"github.com/go-chi/chi/v5"
 
@@ -27,6 +28,46 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	}))
 
 	r.Get("/timezone", httpx.Guard(svc, handleGetTimezone(svc)))
+	r.Post("/timezone/batch", httpx.Guard(svc, handleBatchTimezone(svc)))
+}
+
+func handleBatchTimezone(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req BatchRequest
+
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			httpx.Error(
+				w,
+				http.StatusBadRequest,
+				"bad_request",
+				"invalid request body",
+			)
+			return
+		}
+
+		if err := httpx.Validate.Struct(req); err != nil {
+			httpx.Error(
+				w,
+				http.StatusBadRequest,
+				"bad_request",
+				err.Error(),
+			)
+			return
+		}
+
+		result, err := svc.GetTimezoneBatch(r.Context(), req.Cities)
+		if err != nil {
+			httpx.Error(
+				w,
+				http.StatusInternalServerError,
+				"internal_server_error",
+				err.Error(),
+			)
+			return
+		}
+
+		httpx.JSON(w, http.StatusOK, result)
+	}
 }
 
 func handleGetTimezone(svc *Service) http.HandlerFunc {

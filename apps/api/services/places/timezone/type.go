@@ -17,3 +17,18 @@ type Info struct {
 }
 
 func (Info) IsData() {}
+
+type BatchRequest struct {
+	Cities []string `json:"cities" validate:"required,min=1,max=50"`
+}
+
+type BatchResult struct {
+	City string `json:"city"`
+	Info *Info  `json:"info,omitempty"`
+}
+
+type BatchResponse struct {
+	Results []BatchResult `json:"results"`
+}
+
+func (BatchResponse) IsData() {}
