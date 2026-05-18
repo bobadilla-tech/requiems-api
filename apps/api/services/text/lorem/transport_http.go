@@ -12,6 +12,12 @@ type Generator interface {
 	Generate(paragraphs, sentences int) Lorem
 }
 
+// Request holds the optional query parameters for the lorem endpoint.
+type Request struct {
+	Paragraphs int `query:"paragraphs" validate:"min=1,max=20"`
+	Sentences  int `query:"sentences"  validate:"min=1,max=20"`
+}
+
 func RegisterRoutes(r chi.Router, svc Generator) {
 	r.Get("/lorem", func(w http.ResponseWriter, r *http.Request) {
 		// Set defaults before binding so unset params keep their default value.

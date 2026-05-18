@@ -9,6 +9,16 @@ import (
 )
 
 // RegisterRoutes mounts the sentiment analysis handler on the given router.
+// Request is the input for the sentiment analysis endpoint.
+type Request struct {
+	Text string `json:"text" validate:"required"`
+}
+
+// BatchAnalyzeRequest is the request body for analyzing multiple texts at once.
+type BatchAnalyzeRequest struct {
+	Texts []string `json:"texts" validate:"required,min=1,max=50,dive,required"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/sentiment", httpx.Handle(
 		func(_ context.Context, req Request) (Result, error) {
