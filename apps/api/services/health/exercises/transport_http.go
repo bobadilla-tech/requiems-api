@@ -12,6 +12,24 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// ListParams holds the query parameters accepted by the list and random endpoints.
+type ListParams struct {
+	BodyPart  string `query:"body_part"`
+	Equipment string `query:"equipment"`
+	Muscle    string `query:"muscle"`
+	Search    string `query:"search"`
+	Page      int    `query:"page"     validate:"min=1"`
+	PerPage   int    `query:"per_page" validate:"min=1,max=100"`
+}
+
+// BatchGetRequest is the body for fetching multiple exercises by ID.
+type BatchGetRequest struct {
+	IDs []int `json:"ids" validate:"required,min=1,max=50,dive,min=1"`
+}
+
+// BatchExerciseResponse is the response for a batch exercise lookup.
+type BatchExerciseResponse = httpx.BatchResponse[Exercise]
+
 // exerciseQuerier is the interface consumed by HTTP handlers, allowing stub
 // injection in tests without a live database.
 type exerciseQuerier interface {
