@@ -12,6 +12,7 @@ func NewService() *Service {
 
 func (s *Service) Generate(paragraphs, sentences int) Lorem {
 	lorem := lorelai.ClassicGenerate(paragraphs, sentences)
+	
 	return Lorem{
 		Text:       lorem.Text,
 		Paragraphs: lorem.Paragraphs,
