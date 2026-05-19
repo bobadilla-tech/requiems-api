@@ -43,7 +43,10 @@ export async function getRequestUsage(
 
   // Write to KV with 60-second TTL (best-effort, don't block on failure)
   bindings.KV.put(cacheKey, usage.toString(), { expirationTtl: 60 }).catch((err) => {
-    logger?.warn("KV cache write failed in getRequestUsage", { error: err, cacheKey });
+    logger?.warn("KV cache write failed in getRequestUsage", {
+      error: err,
+      cacheKey,
+    });
   });
 
   return usage;
@@ -97,7 +100,10 @@ export async function recordRequestUsage(
     bindings.KV.put(cacheKey, (Number(cached) + requests).toString(), {
       expirationTtl: 60,
     }).catch((err) => {
-      logger?.warn("KV cache write failed in recordRequestUsage", { error: err, cacheKey });
+      logger?.warn("KV cache write failed in recordRequestUsage", {
+        error: err,
+        cacheKey,
+      });
     });
   }
 }

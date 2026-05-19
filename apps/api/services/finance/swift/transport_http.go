@@ -1,6 +1,7 @@
 package swift
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,6 +10,21 @@ import (
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// ListFilter describes optional filters and pagination for SWIFT listings.
+type ListFilter struct {
+	CountryCode string `query:"country_code"`
+	BankCode    string `query:"bank_code"`
+	Query       string `query:"q"`
+	Limit       int    `query:"limit"  validate:"min=1,max=100"`
+	Offset      int    `query:"offset" validate:"min=0"`
+}
+
+// Looker is the interface used by the HTTP transport layer.
+type Looker interface {
+	Lookup(ctx context.Context, code string) (LookupResponse, error)
+	List(ctx context.Context, filter ListFilter) (ListResponse, error)
+}
 
 // RegisterRoutes mounts SWIFT/BIC lookup handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).

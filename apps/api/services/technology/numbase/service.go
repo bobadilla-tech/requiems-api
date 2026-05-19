@@ -49,6 +49,16 @@ func stripPrefix(value string, fromBase int) string {
 	return s
 }
 
+// Result is the response returned by the base conversion endpoint.
+type Result struct {
+	Input  string `json:"input"`
+	From   int    `json:"from"`
+	To     int    `json:"to"`
+	Result string `json:"result"`
+}
+
+func (Result) IsData() {}
+
 // Service provides number base conversion operations.
 type Service struct{}
 

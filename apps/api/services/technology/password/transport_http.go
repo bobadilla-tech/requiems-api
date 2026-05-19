@@ -8,6 +8,14 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds the optional query parameters for the password endpoint.
+type Request struct {
+	Length    int  `query:"length"    validate:"min=8,max=128"`
+	Uppercase bool `query:"uppercase"`
+	Numbers   bool `query:"numbers"`
+	Symbols   bool `query:"symbols"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/password", func(w http.ResponseWriter, r *http.Request) {
 		req := Request{Length: 16}

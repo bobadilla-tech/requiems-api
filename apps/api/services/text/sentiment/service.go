@@ -92,6 +92,22 @@ var intensifiers = map[string]float64{
 	"most": 1.3,
 }
 
+// Breakdown contains the proportional score for each sentiment class.
+type Breakdown struct {
+	Positive float64 `json:"positive"`
+	Negative float64 `json:"negative"`
+	Neutral  float64 `json:"neutral"`
+}
+
+// Result is the response payload for the sentiment endpoint.
+type Result struct {
+	Sentiment string    `json:"sentiment"`
+	Score     float64   `json:"score"`
+	Breakdown Breakdown `json:"breakdown"`
+}
+
+func (Result) IsData() {}
+
 // Service performs sentiment analysis.
 type Service struct{}
 

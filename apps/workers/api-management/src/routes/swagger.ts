@@ -96,14 +96,28 @@ swaggerRoute.get("/openapi.json", (c) => {
                         items: {
                           type: "object",
                           properties: {
-                            keyPrefix: { type: "string", description: "First 12 chars of the key" },
+                            keyPrefix: {
+                              type: "string",
+                              description: "First 12 chars of the key",
+                            },
                             userId: { type: "string" },
                             plan: { type: "string" },
                             active: { type: "boolean" },
                             createdAt: { type: "string", format: "date-time" },
-                            updatedAt: { type: "string", format: "date-time", nullable: true },
-                            revokedAt: { type: "string", format: "date-time", nullable: true },
-                            billingCycleStart: { type: "string", format: "date-time" },
+                            updatedAt: {
+                              type: "string",
+                              format: "date-time",
+                              nullable: true,
+                            },
+                            revokedAt: {
+                              type: "string",
+                              format: "date-time",
+                              nullable: true,
+                            },
+                            billingCycleStart: {
+                              type: "string",
+                              format: "date-time",
+                            },
                           },
                         },
                       },

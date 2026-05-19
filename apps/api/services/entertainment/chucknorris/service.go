@@ -6,6 +6,14 @@ import (
 	"math/big"
 )
 
+// Fact represents a single Chuck Norris fact/joke.
+type Fact struct {
+	ID   string `json:"id"`
+	Fact string `json:"fact"`
+}
+
+func (Fact) IsData() {}
+
 // Service provides Chuck Norris fact operations.
 type Service struct{}
 

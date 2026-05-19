@@ -1,6 +1,7 @@
 package commodities
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,6 +10,11 @@ import (
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// Getter is the interface used by the HTTP transport layer.
+type Getter interface {
+	Get(ctx context.Context, slug string) (CommodityPrice, error)
+}
 
 // RegisterRoutes mounts commodity price handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).

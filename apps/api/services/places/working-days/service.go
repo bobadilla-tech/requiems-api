@@ -6,6 +6,17 @@ import (
 	businessdayscalculator "github.com/bobadilla-tech/business-days-calculator"
 )
 
+// WorkingDays represents the response for working days calculation.
+type WorkingDays struct {
+	WorkingDays int    `json:"working_days"`
+	From        string `json:"from"`
+	To          string `json:"to"`
+	Country     string `json:"country,omitempty"`
+	Subdivision string `json:"subdivision,omitempty"`
+}
+
+func (WorkingDays) IsData() {}
+
 type Service struct{}
 
 func NewService() *Service {

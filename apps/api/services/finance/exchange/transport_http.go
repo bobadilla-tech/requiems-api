@@ -1,15 +1,35 @@
 package exchange
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// RateRequest holds the validated query parameters for GET /exchange-rate.
+type RateRequest struct {
+	From string `query:"from" validate:"required,len=3,alpha"`
+	To   string `query:"to"   validate:"required,len=3,alpha"`
+}
+
+// ConvertRequest holds the validated query parameters for GET /convert.
+type ConvertRequest struct {
+	From   string  `query:"from"   validate:"required,len=3,alpha"`
+	To     string  `query:"to"     validate:"required,len=3,alpha"`
+	Amount float64 `query:"amount" validate:"required,gt=0"`
+}
+
+// Fetcher is the interface used by the HTTP transport layer.
+type Fetcher interface {
+	GetRate(ctx context.Context, from, to string) (rate float64, fetchedAt time.Time, err error)
+}
 
 // RegisterRoutes mounts exchange rate handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).

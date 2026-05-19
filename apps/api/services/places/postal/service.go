@@ -8,6 +8,18 @@ import (
 	"strings"
 )
 
+// PostalCode is the response returned for a postal code lookup.
+type PostalCode struct { //nolint:revive // established public API type name
+	PostalCode string  `json:"postal_code"`
+	City       string  `json:"city"`
+	State      string  `json:"state"`
+	Country    string  `json:"country"`
+	Lat        float64 `json:"lat"`
+	Lon        float64 `json:"lon"`
+}
+
+func (PostalCode) IsData() {}
+
 // Service looks up postal codes from the GeoNames postal code dataset.
 // The dataset is loaded once at startup and held in memory.
 type Service struct {

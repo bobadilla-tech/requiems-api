@@ -80,5 +80,7 @@ for (const { apiKey, plan } of DEV_KEYS) {
   console.log(`  ${plan.padEnd(12)} -> ${apiKey}`);
 }
 console.log(
-  `\nExample: curl -H 'requiems-api-key: ${DEV_KEYS[0].apiKey}' http://localhost:4455/v1/text/advice\n`,
+  `\nExample: curl -H 'requiems-api-key: ${
+    DEV_KEYS[0].apiKey
+  }' http://localhost:4455/v1/text/advice\n`,
 );

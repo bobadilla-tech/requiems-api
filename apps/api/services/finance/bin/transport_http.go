@@ -1,6 +1,7 @@
 package bin
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,6 +10,11 @@ import (
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// Looker is the interface used by the HTTP transport layer.
+type Looker interface {
+	Lookup(ctx context.Context, bin string) (LookupResponse, error)
+}
 
 // RegisterRoutes mounts BIN lookup handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).

@@ -10,6 +10,32 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// HistoricalRate is a single year's inflation rate.
+type HistoricalRate struct {
+	Period string  `json:"period"`
+	Rate   float64 `json:"rate"`
+}
+
+// Response is the response payload for GET /v1/finance/inflation.
+type Response struct {
+	Country    string           `json:"country"`
+	Rate       float64          `json:"rate"`
+	Period     string           `json:"period"`
+	Historical []HistoricalRate `json:"historical"`
+}
+
+func (Response) IsData() {}
+
+// BatchItem holds the result for a single country in a batch request.
+// Found is false when no data exists for that country code.
+type BatchItem struct {
+	Country    string           `json:"country"`
+	Found      bool             `json:"found"`
+	Rate       float64          `json:"rate,omitempty"`
+	Period     string           `json:"period,omitempty"`
+	Historical []HistoricalRate `json:"historical,omitempty"`
+}
+
 const historyDepth = 11 // 1 current + 10 historical years
 
 // Service provides inflation data lookups against the inflation_data PostgreSQL table.

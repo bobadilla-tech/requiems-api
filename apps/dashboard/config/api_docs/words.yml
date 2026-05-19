@@ -146,7 +146,7 @@ endpoints:
     errors:
       - code: 422
         message: unprocessable_entity
-        description: Invalid or empty items array     
+        description: Invalid or empty items array
 faq:
   - question: What parts of speech are included?
     answer: >-
@@ -171,7 +171,3 @@ performance:
   avg_ms: 1015
   samples: 50
   measured_at: "2026-04-20"
-
-
-
-  

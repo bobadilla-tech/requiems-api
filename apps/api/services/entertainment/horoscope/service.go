@@ -33,6 +33,16 @@ var moods = []string{
 	"focused", "creative", "grateful", "determined", "peaceful", "inspired", "curious",
 }
 
+type Horoscope struct {
+	Sign        string `json:"sign"`
+	Date        string `json:"date"`
+	Horoscope   string `json:"horoscope"`
+	LuckyNumber int    `json:"lucky_number"`
+	Mood        string `json:"mood"`
+}
+
+func (Horoscope) IsData() {}
+
 type Service struct{}
 
 func NewService() *Service {

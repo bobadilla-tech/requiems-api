@@ -43,7 +43,11 @@ export function makeDB(results: unknown[] = [], firstResult: unknown = null): D1
   return {
     prepare: (_sql: string) => ({
       bind: (..._args: unknown[]) => ({
-        all: async <T>() => ({ success: true, results: results as T[], meta: {} }),
+        all: async <T>() => ({
+          success: true,
+          results: results as T[],
+          meta: {},
+        }),
         first: async <T>() => firstResult as T,
         run: async () => ({ success: true, meta: {} }),
       }),

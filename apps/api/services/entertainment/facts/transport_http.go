@@ -9,6 +9,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds optional query parameters for the facts endpoint.
+type Request struct {
+	Category string `query:"category"`
+}
+
 // RegisterRoutes mounts facts handlers on the given router.
 // Paths are relative to the parent mount point (e.g. /v1/entertainment).
 func RegisterRoutes(r chi.Router, svc *Service) {

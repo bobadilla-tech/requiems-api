@@ -59,6 +59,13 @@
     }
   },
   "files": {
-    "includes": ["**", "!node_modules/**", "!dist/**", "!wrangler.toml", "!.wrangler/**", "!**/generated/**"]
+    "includes": [
+      "**",
+      "!node_modules/**",
+      "!dist/**",
+      "!wrangler.toml",
+      "!.wrangler/**",
+      "!**/generated/**"
+    ]
   }
 }
