@@ -32,9 +32,11 @@ func NewService(c *ipi.Client) *Service {
 
 func (s *Service) CheckASN(ctx context.Context, ip string) (IPAddressASNResponse, error) {
 	info, err := s.c.CheckASNString(ctx, ip)
+	
 	if err != nil {
 		return IPAddressASNResponse{}, err
 	}
+
 	return IPAddressASNResponse{
 		IP:     info.IP,
 		ASN:    info.ASN,
