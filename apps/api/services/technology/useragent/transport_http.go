@@ -1,6 +1,7 @@
 package useragent
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -19,4 +20,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, svc.Parse(req.UA))
 	})
+	r.Post("/useragent/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchParseRequest) (httpx.BatchResponse[BatchParseItem], error) {
+			return httpx.BatchResponse[BatchParseItem]{Results: svc.ParseBatch(ctx, req.UserAgents), Total: len(req.UserAgents)}, nil
+		},
+	))
 }

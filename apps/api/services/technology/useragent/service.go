@@ -1,6 +1,7 @@
 package useragent
 
 import (
+	"context"
 	"regexp"
 	"strings"
 
@@ -108,4 +109,18 @@ func extractOSVersion(uaStr, libOS string) string {
 		}
 	}
 	return v
+}
+
+// ParseBatch parses multiple user agents in a single call and returns the results in the same order as the input.
+func (s *Service) ParseBatch(ctx context.Context, uas []string) []BatchParseItem {
+	results := make([]BatchParseItem, len(uas))
+
+	for i, ua := range uas {
+		results[i] = BatchParseItem{
+			UserAgent: ua,
+			Data:      s.Parse(ua),
+		}
+	}
+
+	return results
 }
