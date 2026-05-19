@@ -617,7 +617,7 @@ apis:
     categories:
       - technology
     description: Parse user agent strings to extract browser, OS, device type, and bot detection
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/useragent
