@@ -84,7 +84,7 @@ func HandleBatch[Req any, Item any](
 				ValidationError(w, vf)
 				return
 			}
-			
+
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))
 			return
 		}
@@ -110,7 +110,7 @@ func HandleBatch[Req any, Item any](
 		res.Total = len(res.Results)
 
 		w.Header().Set("X-Usage-Count", strconv.Itoa(len(res.Results)))
-		
+
 		JSON(w, http.StatusOK, res)
 	}
 }
@@ -129,6 +129,7 @@ func Guard[S any](svc *S, h http.HandlerFunc) http.HandlerFunc {
 			Error(w, http.StatusInternalServerError, "internal_error", "service unavailable")
 		}
 	}
+
 	return h
 }
 

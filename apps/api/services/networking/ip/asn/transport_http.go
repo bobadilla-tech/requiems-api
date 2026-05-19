@@ -13,22 +13,26 @@ import (
 func RegisterRoutes(r chi.Router, svc *Service) {
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
 		ipStr := chi.URLParam(r, "ip")
+
 		if ipStr == "" {
 			ipStr = callerIP(r)
 		}
 
 		ip := net.ParseIP(ipStr)
+
 		if ip == nil {
 			httpx.Error(w, http.StatusBadRequest, "bad_request", "invalid IP address")
 			return
 		}
 
 		result, err := svc.CheckASN(r.Context(), ip.String())
+
 		if err != nil {
 			if strings.Contains(err.Error(), "private/reserved") {
 				httpx.JSON(w, http.StatusOK, IPAddressASNResponse{IP: ip.String()})
 				return
 			}
+
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal error")
 			return
 		}
