@@ -69,6 +69,7 @@ func ValidationError(w http.ResponseWriter, vf *ValidationFailure) {
 		Error(w, http.StatusUnprocessableEntity, "validation_failed", "Validation failed.")
 		return
 	}
+
 	writeValidationError(w, vf.Fields)
 }
 
@@ -83,6 +84,7 @@ func writeValidationError(w http.ResponseWriter, fields []FieldError) {
 		})
 		return
 	}
+	
 	write(w, http.StatusUnprocessableEntity, ErrorResponse{
 		Error:  "validation_failed",
 		Fields: fields,
