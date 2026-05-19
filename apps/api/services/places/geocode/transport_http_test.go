@@ -56,7 +56,7 @@ func TestGeocode_MissingAddress(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestGeocode_NoResults(t *testing.T) {
@@ -118,5 +118,5 @@ func TestReverseGeocode_MissingParams(t *testing.T) {
 	w := httptest.NewRecorder()
 	setupRouter(mock).ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
