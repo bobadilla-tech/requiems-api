@@ -44,21 +44,26 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/ip/asn", handler)
 }
 
-// callerIP extracts the real client IP from the request, checking
+// Extracts the real client IP from the request, checking
 // X-Forwarded-For, X-Real-IP, and RemoteAddr in that order.
 func callerIP(r *http.Request) string {
 	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
 		if before, _, ok := strings.Cut(xff, ","); ok {
 			return strings.TrimSpace(before)
 		}
+	
 		return strings.TrimSpace(xff)
 	}
+
 	if xri := r.Header.Get("X-Real-IP"); xri != "" {
 		return strings.TrimSpace(xri)
 	}
+
 	addr := r.RemoteAddr
+	
 	if host, _, err := net.SplitHostPort(addr); err == nil {
 		return host
 	}
+	
 	return addr
 }
