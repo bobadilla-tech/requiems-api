@@ -18,7 +18,6 @@ type Result struct {
 	Confidence float64 `json:"confidence"`
 }
 
-func (Result) IsData() {}
 
 // Service performs language detection.
 type Service struct{}

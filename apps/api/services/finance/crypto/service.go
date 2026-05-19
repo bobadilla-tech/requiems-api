@@ -29,7 +29,6 @@ type Price struct {
 	Volume24h float64 `json:"volume_24h"`
 }
 
-func (Price) IsData() {}
 
 type coinInfo struct {
 	id   string

@@ -27,7 +27,6 @@ type LookupResponse struct {
 	Confidence  float64 `json:"confidence"`
 }
 
-func (LookupResponse) IsData() {}
 
 // Service provides BIN lookup against the bin_data PostgreSQL table.
 type Service struct {

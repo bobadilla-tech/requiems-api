@@ -106,7 +106,6 @@ type Result struct {
 	Breakdown Breakdown `json:"breakdown"`
 }
 
-func (Result) IsData() {}
 
 // Service performs sentiment analysis.
 type Service struct{}

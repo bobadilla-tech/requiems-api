@@ -24,7 +24,6 @@ type Response struct {
 	Formats Formats `json:"formats"`
 }
 
-func (Response) IsData() {}
 
 // Service provides color format conversion operations.
 type Service struct{}

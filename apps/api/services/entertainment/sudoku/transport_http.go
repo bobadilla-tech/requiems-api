@@ -10,7 +10,6 @@ import (
 )
 
 // Request holds the query parameters for the sudoku endpoint.
-// Defaults should be set before calling httpx.BindQuery.
 type Request struct {
 	Difficulty string `query:"difficulty" validate:"omitempty,oneof=easy medium hard"`
 }

@@ -41,7 +41,6 @@ type Horoscope struct {
 	Mood        string `json:"mood"`
 }
 
-func (Horoscope) IsData() {}
 
 type Service struct{}
 

@@ -18,7 +18,6 @@ type Word struct {
 	PartOfSpeech string `json:"part_of_speech,omitempty"`
 }
 
-func (Word) IsData() {}
 
 // Definition represents a single definition entry for a word.
 type Definition struct {
@@ -35,7 +34,6 @@ type DictionaryEntry struct {
 	Synonyms    []string     `json:"synonyms"`
 }
 
-func (DictionaryEntry) IsData() {}
 
 type BatchItem struct {
 	Word  string           `json:"word"`

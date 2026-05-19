@@ -12,7 +12,6 @@ type Result struct {
 	Antonyms []string `json:"antonyms"`
 }
 
-func (Result) IsData() {}
 
 // Service looks up synonyms and antonyms for a given word.
 type Service struct{}

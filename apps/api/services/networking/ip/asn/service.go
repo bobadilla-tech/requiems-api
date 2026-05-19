@@ -17,7 +17,6 @@ type IPAddressASNResponse struct {
 	Type   string `json:"type"`
 }
 
-func (IPAddressASNResponse) IsData() {}
 
 type Service struct {
 	c *ipi.Client

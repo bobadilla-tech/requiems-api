@@ -25,7 +25,6 @@ type GeocodeResponse struct { //nolint:revive // established public API type nam
 	Lon     float64 `json:"lon"`
 }
 
-func (GeocodeResponse) IsData() {}
 
 // ReverseGeocodeResponse is returned for coordinates-to-address lookups.
 type ReverseGeocodeResponse struct {
@@ -36,7 +35,6 @@ type ReverseGeocodeResponse struct {
 	Country string  `json:"country"`
 }
 
-func (ReverseGeocodeResponse) IsData() {}
 
 const (
 	cacheTTL    = 24 * time.Hour

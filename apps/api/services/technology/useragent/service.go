@@ -18,7 +18,6 @@ type Result struct {
 	IsBot          bool   `json:"is_bot"`
 }
 
-func (Result) IsData() {}
 
 // osVersionRegexes maps OS names (as returned by the library) to regexes that
 // extract the version string from the raw UA.

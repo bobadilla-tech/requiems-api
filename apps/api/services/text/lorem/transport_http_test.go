@@ -46,7 +46,7 @@ func TestGetLorem(t *testing.T) {
 		{
 			name:       "invalid param too large",
 			url:        "/lorem?paragraphs=999",
-			wantStatus: http.StatusBadRequest,
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 		{
 			name:       "invalid param not number",

@@ -1,7 +1,7 @@
 package workingdays
 
 import (
-	"net/http"
+	"context"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -18,26 +18,13 @@ type Request struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/working-days", func(w http.ResponseWriter, r *http.Request) {
-		req := Request{}
-
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		// Calculate working days
-		workingDays := svc.GetWorkingDays(req.From, req.To, req.Country, req.Subdivision)
-
-		// Build response
-		response := WorkingDays{
-			WorkingDays: workingDays,
+	r.Get("/working-days", httpx.HandleGet(func(ctx context.Context, req Request) (WorkingDays, error) {
+		return WorkingDays{
+			WorkingDays: svc.GetWorkingDays(req.From, req.To, req.Country, req.Subdivision),
 			From:        req.From.Format("2006-01-02"),
 			To:          req.To.Format("2006-01-02"),
 			Country:     req.Country,
 			Subdivision: req.Subdivision,
-		}
-
-		httpx.JSON(w, http.StatusOK, response)
-	})
+		}, nil
+	}))
 }

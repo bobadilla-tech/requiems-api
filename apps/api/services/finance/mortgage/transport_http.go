@@ -2,7 +2,6 @@ package mortgage
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
@@ -37,16 +36,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // unexported so tests can inject a stub without going through the concrete
 // *Service type.
 func registerMortgageRoutes(r chi.Router, c Calculator) {
-	// GET /mortgage?principal=300000&rate=6.5&years=30
-	r.Get("/mortgage", func(w http.ResponseWriter, r *http.Request) {
-		var req Request
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, c.Calculate(req.Principal, req.Rate, req.Years))
-	})
+	r.Get("/mortgage", httpx.HandleGet(func(ctx context.Context, req Request) (Response, error) {
+		return c.Calculate(req.Principal, req.Rate, req.Years), nil
+	}))
 	r.Post("/mortgage/batch", httpx.HandleBatch(func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
 		return httpx.BatchResponse[Response]{Results: c.CalculateBatch(req.Mortgages)}, nil
 	}))

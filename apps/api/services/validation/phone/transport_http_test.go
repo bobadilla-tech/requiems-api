@@ -66,7 +66,7 @@ func TestPhone_MissingNumber(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestPhone_UKMobile(t *testing.T) {

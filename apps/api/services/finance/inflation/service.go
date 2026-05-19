@@ -24,7 +24,6 @@ type Response struct {
 	Historical []HistoricalRate `json:"historical"`
 }
 
-func (Response) IsData() {}
 
 // BatchItem holds the result for a single country in a batch request.
 // Found is false when no data exists for that country code.

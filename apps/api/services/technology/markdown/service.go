@@ -14,7 +14,6 @@ type Response struct {
 	HTML string `json:"html"`
 }
 
-func (Response) IsData() {}
 
 type Service struct{}
 

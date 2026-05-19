@@ -11,7 +11,6 @@ type Lorem struct {
 	WordCount  int    `json:"wordCount"`
 }
 
-func (Lorem) IsData() {}
 
 type Service struct{}
 

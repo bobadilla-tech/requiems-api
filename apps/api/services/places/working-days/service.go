@@ -15,7 +15,6 @@ type WorkingDays struct {
 	Subdivision string `json:"subdivision,omitempty"`
 }
 
-func (WorkingDays) IsData() {}
 
 type Service struct{}
 

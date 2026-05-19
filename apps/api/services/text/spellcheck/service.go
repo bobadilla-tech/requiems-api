@@ -32,7 +32,6 @@ type Result struct {
 	Corrections []Correction `json:"corrections"`
 }
 
-func (Result) IsData() {}
 
 // Service performs spell checking and correction.
 type Service struct {

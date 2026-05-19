@@ -15,7 +15,6 @@ type Advice struct {
 	Text string `json:"advice"`
 }
 
-func (Advice) IsData() {}
 
 type Service struct {
 	db db.Querier

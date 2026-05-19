@@ -21,7 +21,6 @@ type ParseResponse struct {
 	Account  string `json:"account"`
 }
 
-func (ParseResponse) IsData() {}
 
 // Service provides IBAN validation and parsing against the iban_countries table.
 type Service struct {

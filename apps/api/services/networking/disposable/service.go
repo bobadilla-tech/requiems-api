@@ -35,10 +35,6 @@ type StatsResponse struct {
 	TotalDomains int `json:"total_domains"`
 }
 
-func (CheckEmailResponse) IsData()  {}
-func (DomainCheckResponse) IsData() {}
-func (DomainsListResponse) IsData() {}
-func (StatsResponse) IsData()       {}
 
 type Service struct{}
 

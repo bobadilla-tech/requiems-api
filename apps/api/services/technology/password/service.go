@@ -19,7 +19,6 @@ type Password struct {
 	Strength string `json:"strength"`
 }
 
-func (Password) IsData() {}
 
 // Service generates cryptographically secure passwords.
 type Service struct{}

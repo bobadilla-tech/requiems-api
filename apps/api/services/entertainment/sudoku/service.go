@@ -15,7 +15,6 @@ type Puzzle struct {
 	Solution   Grid   `json:"solution"`
 }
 
-func (Puzzle) IsData() {}
 
 // cellsToRemove maps a difficulty to the number of cells removed from the
 // solved board when constructing the puzzle. The remaining given cells are:

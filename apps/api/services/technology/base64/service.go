@@ -11,7 +11,6 @@ type Result struct {
 	Result string `json:"result"`
 }
 
-func (Result) IsData() {}
 
 // Service provides Base64 encode and decode operations.
 type Service struct{}

@@ -27,7 +27,6 @@ type CommodityPrice struct {
 	Historical []HistoricalPrice `json:"historical"`
 }
 
-func (CommodityPrice) IsData() {}
 
 const historyDepth = 11 // 1 current + 10 historical years
 
