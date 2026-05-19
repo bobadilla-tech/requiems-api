@@ -8,8 +8,8 @@ import (
 	"requiems-api/platform/httpx"
 )
 
-// GeocodeRequest holds the query parameters for the geocode endpoint.
-type GeocodeRequest struct {
+// Request holds the query parameters for the geocode endpoint.
+type Request struct {
 	Address string `query:"address" validate:"required"`
 }
 
@@ -20,7 +20,7 @@ type ReverseGeocodeRequest struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/geocode", httpx.HandleGet(func(ctx context.Context, req GeocodeRequest) (GeocodeResponse, error) {
+	r.Get("/geocode", httpx.HandleGet(func(ctx context.Context, req Request) (GeocodeResponse, error) {
 		return svc.Geocode(ctx, req.Address)
 	}))
 
