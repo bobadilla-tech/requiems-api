@@ -72,19 +72,16 @@ func (s *Service) Check(text string) (Result, error) {
 // CheckBatch processes multiple texts and returns spell-check results for each.
 // It returns an error only if LanguageTool is unreachable; individual texts do
 // not produce per-item errors.
-func (s *Service) CheckBatch(texts []string) (BatchCheckResponse, error) {
+func (s *Service) CheckBatch(texts []string) ([]Result, error) {
 	results := make([]Result, 0, len(texts))
 	for _, text := range texts {
 		result, err := s.Check(text)
 		if err != nil {
-			return BatchCheckResponse{}, err
+			return nil, err
 		}
 		results = append(results, result)
 	}
-	return BatchCheckResponse{
-		Results: results,
-		Total:   len(results),
-	}, nil
+	return results, nil
 }
 
 // buildResult converts LanguageTool matches into our Result type.

@@ -1,5 +1,7 @@
 package spellcheck
 
+import "requiems-api/platform/httpx"
+
 // Request is the input for the spell check endpoint.
 type Request struct {
 	Text string `json:"text" validate:"required"`
@@ -29,10 +31,5 @@ type BatchCheckRequest struct {
 	Texts []string `json:"texts" validate:"required,min=1,max=50,dive,required"`
 }
 
-// BatchCheckResponse is the response for a batch spell check request.
-type BatchCheckResponse struct {
-	Results []Result `json:"results"`
-	Total   int      `json:"total"`
-}
-
-func (BatchCheckResponse) IsData() {}
+// BatchCheckResponse is the standard batch envelope for spell-check results.
+type BatchCheckResponse = httpx.BatchResponse[Result]
