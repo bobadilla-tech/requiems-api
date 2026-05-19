@@ -12,8 +12,6 @@ type Fact struct {
 	Source   string `json:"source"`
 }
 
-func (Fact) IsData() {}
-
 type entry struct {
 	fact     string
 	category string

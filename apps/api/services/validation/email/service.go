@@ -73,8 +73,6 @@ type Validation struct {
 	Suggestion  *string `json:"suggestion"`
 }
 
-func (Validation) IsData() {}
-
 // BatchItem holds the result for a single email in a batch request.
 type BatchItem struct {
 	Email       *string `json:"email"`

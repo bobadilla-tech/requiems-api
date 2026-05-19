@@ -49,12 +49,12 @@ func TestUserAgent_MissingUA(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 
 	var resp httpx.ErrorResponse
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
-	assert.Equal(t, "bad_request", resp.Error)
+	assert.Equal(t, "validation_failed", resp.Error)
 }
 
 func TestUserAgent_BotDetection(t *testing.T) {

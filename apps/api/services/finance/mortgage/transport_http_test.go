@@ -92,7 +92,7 @@ func TestMortgage_MissingPrincipal_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestMortgage_MissingRate_Returns400(t *testing.T) {
@@ -104,7 +104,7 @@ func TestMortgage_MissingRate_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestMortgage_MissingYears_Returns400(t *testing.T) {
@@ -116,7 +116,7 @@ func TestMortgage_MissingYears_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestMortgage_YearsZero_Returns400(t *testing.T) {
@@ -128,7 +128,7 @@ func TestMortgage_YearsZero_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestMortgage_YearsExceedsMax_Returns400(t *testing.T) {
@@ -140,7 +140,7 @@ func TestMortgage_YearsExceedsMax_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestMortgage_MetadataTimestampSet(t *testing.T) {

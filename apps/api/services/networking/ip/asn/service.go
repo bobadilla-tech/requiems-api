@@ -17,8 +17,6 @@ type IPAddressASNResponse struct {
 	Type   string `json:"type"`
 }
 
-func (IPAddressASNResponse) IsData() {}
-
 type Service struct {
 	c *ipi.Client
 }
@@ -32,7 +30,7 @@ func NewService(c *ipi.Client) *Service {
 
 func (s *Service) CheckASN(ctx context.Context, ip string) (IPAddressASNResponse, error) {
 	info, err := s.c.CheckASNString(ctx, ip)
-	
+
 	if err != nil {
 		return IPAddressASNResponse{}, err
 	}

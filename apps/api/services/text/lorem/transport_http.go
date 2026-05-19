@@ -1,7 +1,7 @@
 package lorem
 
 import (
-	"net/http"
+	"context"
 
 	"github.com/go-chi/chi/v5"
 
@@ -19,15 +19,7 @@ type Request struct {
 }
 
 func RegisterRoutes(r chi.Router, svc Generator) {
-	r.Get("/lorem", func(w http.ResponseWriter, r *http.Request) {
-		// Set defaults before binding so unset params keep their default value.
-		req := Request{Paragraphs: 1, Sentences: 5}
-
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, svc.Generate(req.Paragraphs, req.Sentences))
-	})
+	r.Get("/lorem", httpx.HandleGet(func(ctx context.Context, req Request) (Lorem, error) {
+		return svc.Generate(req.Paragraphs, req.Sentences), nil
+	}, Request{Paragraphs: 1, Sentences: 5}))
 }

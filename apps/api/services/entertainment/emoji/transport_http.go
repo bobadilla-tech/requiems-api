@@ -1,6 +1,7 @@
 package emoji
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -21,15 +22,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		httpx.JSON(w, http.StatusOK, svc.Random())
 	})
 
-	r.Get("/emoji/search", func(w http.ResponseWriter, r *http.Request) {
-		req := SearchRequest{}
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, svc.Search(req.Query))
-	})
+	r.Get("/emoji/search", httpx.HandleGet(func(ctx context.Context, req SearchRequest) (List, error) {
+		return svc.Search(req.Query), nil
+	}))
 
 	r.Get("/emoji/{name}", func(w http.ResponseWriter, r *http.Request) {
 		name := strings.ToLower(chi.URLParam(r, "name"))

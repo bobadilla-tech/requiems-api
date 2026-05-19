@@ -2,13 +2,11 @@ package disposable
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
-	"requiems-api/platform/svcerr"
 )
 
 // CheckEmailRequest is the body for a single-email disposable check.
@@ -51,32 +49,9 @@ func RegisterRoutes(router chi.Router, svc *Service) {
 		httpx.JSON(w, http.StatusOK, svc.CheckDomain(domain))
 	})
 
-	router.Get("/disposable/domains", func(w http.ResponseWriter, r *http.Request) {
-		q := DomainsListQuery{Page: 1, PerPage: 100}
-
-		if err := httpx.BindQuery(r, &q); err != nil {
-			if vf, ok := errors.AsType[*httpx.ValidationFailure](err); ok {
-				httpx.ValidationError(w, vf)
-				return
-			}
-
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		result, err := svc.GetDomains(q.Page, q.PerPage)
-
-		if err != nil {
-			if se, ok := errors.AsType[*svcerr.Error](err); ok {
-				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
-				return
-			}
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "unexpected error")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, result)
-	})
+	router.Get("/disposable/domains", httpx.HandleGet(func(ctx context.Context, q DomainsListQuery) (DomainsListResponse, error) {
+		return svc.GetDomains(q.Page, q.PerPage)
+	}, DomainsListQuery{Page: 1, PerPage: 100}))
 
 	router.Get("/disposable/stats", func(w http.ResponseWriter, r *http.Request) {
 		httpx.JSON(w, http.StatusOK, svc.GetStats())

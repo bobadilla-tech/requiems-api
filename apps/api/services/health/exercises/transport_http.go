@@ -52,43 +52,13 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // Note: /exercises/random must be registered before /exercises/{id} so chi
 // matches the literal segment first.
 func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
-	r.Get("/exercises", func(w http.ResponseWriter, r *http.Request) {
-		params := ListParams{Page: 1, PerPage: 20}
+	r.Get("/exercises", httpx.HandleGet(func(ctx context.Context, params ListParams) (ExerciseList, error) {
+		return q.List(ctx, params)
+	}, ListParams{Page: 1, PerPage: 20}))
 
-		if err := httpx.BindQuery(r, &params); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		result, err := q.List(r.Context(), params)
-		if err != nil {
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch exercises")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, result)
-	})
-
-	r.Get("/exercises/random", func(w http.ResponseWriter, r *http.Request) {
-		params := ListParams{Page: 1, PerPage: 20}
-
-		if err := httpx.BindQuery(r, &params); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		exercise, err := q.Random(r.Context(), params)
-		if err != nil {
-			if se, ok := errors.AsType[*svcerr.Error](err); ok {
-				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
-				return
-			}
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch random exercise")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, exercise)
-	})
+	r.Get("/exercises/random", httpx.HandleGet(func(ctx context.Context, params ListParams) (Exercise, error) {
+		return q.Random(ctx, params)
+	}, ListParams{Page: 1, PerPage: 20}))
 
 	r.Get("/exercises/{id}", func(w http.ResponseWriter, r *http.Request) {
 		raw := chi.URLParam(r, "id")

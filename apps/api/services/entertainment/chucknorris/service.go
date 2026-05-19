@@ -12,8 +12,6 @@ type Fact struct {
 	Fact string `json:"fact"`
 }
 
-func (Fact) IsData() {}
-
 // Service provides Chuck Norris fact operations.
 type Service struct{}
 

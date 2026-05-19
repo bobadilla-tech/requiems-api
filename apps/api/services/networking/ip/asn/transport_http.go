@@ -51,7 +51,7 @@ func callerIP(r *http.Request) string {
 		if before, _, ok := strings.Cut(xff, ","); ok {
 			return strings.TrimSpace(before)
 		}
-	
+
 		return strings.TrimSpace(xff)
 	}
 
@@ -60,10 +60,10 @@ func callerIP(r *http.Request) string {
 	}
 
 	addr := r.RemoteAddr
-	
+
 	if host, _, err := net.SplitHostPort(addr); err == nil {
 		return host
 	}
-	
+
 	return addr
 }

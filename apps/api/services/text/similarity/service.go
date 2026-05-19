@@ -12,8 +12,6 @@ type Result struct {
 	Method     string  `json:"method"`
 }
 
-func (Result) IsData() {}
-
 // Service computes text similarity.
 type Service struct{}
 

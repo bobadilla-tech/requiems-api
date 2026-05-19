@@ -115,7 +115,7 @@ func TestEmoji_Search_NoQuery(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code, "expected status 400 for missing query, got %d", w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, "expected status 422 for missing query, got %d", w.Code)
 }
 
 func TestEmoji_Search_ReturnsMatchingEmojis(t *testing.T) {
