@@ -78,31 +78,39 @@ func HandleBatch[Req any, Item any](
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
 
 		var req Req
+
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
 				ValidationError(w, vf)
 				return
 			}
+
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))
 			return
 		}
 
 		res, err := fn(r.Context(), req)
+
 		if err != nil {
 			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				if se.Kind == svcerr.KindUpstream {
 					sentry.CaptureException(err)
 				}
+
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
+
 			sentry.CaptureException(err)
+
 			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
 			return
 		}
 
 		res.Total = len(res.Results)
+
 		w.Header().Set("X-Usage-Count", strconv.Itoa(len(res.Results)))
+
 		JSON(w, http.StatusOK, res)
 	}
 }
@@ -121,6 +129,7 @@ func Guard[S any](svc *S, h http.HandlerFunc) http.HandlerFunc {
 			Error(w, http.StatusInternalServerError, "internal_error", "service unavailable")
 		}
 	}
+
 	return h
 }
 

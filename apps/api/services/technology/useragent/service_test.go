@@ -1,9 +1,11 @@
 package useragent
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Parse(t *testing.T) {
@@ -144,5 +146,49 @@ func TestService_Parse(t *testing.T) {
 			assert.Equal(t, tt.wantDevice, got.Device)
 			assert.Equal(t, tt.wantBot, got.IsBot)
 		})
+	}
+}
+
+func TestService_BatchParse(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	userAgents := []string{
+		"Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
+		"PostmanRuntime/7.36.0",
+		"curl/8.4.0",
+	}
+
+	results := svc.ParseBatch(context.Background(), userAgents)
+
+	require.Len(t, results, 3)
+
+	require.Equal(t, "Android Browser", results[0].Data.Browser)
+	require.Equal(t, "mobile", results[0].Data.Device)
+	assert.False(t, results[0].Data.IsBot)
+
+	require.Equal(t, "unknown", results[1].Data.Device)
+	assert.False(t, results[1].Data.IsBot)
+
+	require.Equal(t, "bot", results[2].Data.Device)
+	assert.True(t, results[2].Data.IsBot)
+}
+
+func TestService_BatchParse_PreservedOrder(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	userAgents := []string{
+		"Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
+		"PostmanRuntime/7.36.0",
+		"curl/8.4.0",
+	}
+
+	results := svc.ParseBatch(context.Background(), userAgents)
+
+	require.Len(t, results, 3)
+
+	for i, ua := range userAgents {
+		assert.Equal(t, ua, results[i].UserAgent)
 	}
 }
