@@ -26,8 +26,6 @@ type handleRes struct {
 	Greeting string `json:"greeting"`
 }
 
-func (handleRes) IsData() {}
-
 func TestHandle_HappyPath(t *testing.T) {
 	t.Parallel()
 

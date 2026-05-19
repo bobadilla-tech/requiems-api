@@ -13,12 +13,12 @@ criteria that define "done."
 
 ## Problem 1: `Data` Interface Provides No Semantic Value
 
-`httpx.Data` is a marker interface with a single empty method `IsData()`.
-It was introduced so `Handle` and `httpx.JSON` could use it as a type
-constraint, preventing arbitrary types from being passed as response payloads.
-In practice it enforces nothing — any type can implement it with a one-liner —
-and it has already been abandoned in `HandleBatch`, which constrains `Item` as
-`any`. The interface now creates work without providing safety.
+`httpx.Data` is a marker interface with a single empty method `IsData()`. It was
+introduced so `Handle` and `httpx.JSON` could use it as a type constraint,
+preventing arbitrary types from being passed as response payloads. In practice
+it enforces nothing — any type can implement it with a one-liner — and it has
+already been abandoned in `HandleBatch`, which constrains `Item` as `any`. The
+interface now creates work without providing safety.
 
 The deeper cost is coupling: every domain type that flows through a
 `Handle`-wrapped endpoint must implement `IsData()`. This leaks an HTTP-platform
@@ -29,16 +29,16 @@ concern into service-layer files that should know nothing about transport.
 `IsData()` is implemented by **65+ types** spread across every service package.
 Every domain entity in the codebase has been annotated with this marker:
 
-| Category | Example types with `IsData()` |
-| --- | --- |
-| `technology/` | `Result`, `Response`, `Password`, `Base64Response`, `User`, `Counter` |
-| `places/` | `PostalCode`, `Info`, `Holiday`, `HolidayList`, `City`, `WorkingDays`, `GeocodeResponse` |
-| `networking/` | `LookupResponse`, `IPCheckResponse`, `IPAddressASNResponse`, `InfoResponse`, `CheckEmailResponse` |
-| `health/` | `Exercise`, `ExerciseList`, `StringList` |
-| `entertainment/` | `Horoscope`, `Quote`, `Emoji`, `Question`, `Advice`, `Puzzle`, `Fact`, `DadJoke` |
-| `finance/` | `Price`, `RateResponse`, `ConvertResponse`, `LookupResponse`, `CommodityPrice`, `ParseResponse`, `Response` |
-| `text/` | `Word`, `DictionaryEntry`, `Result`, `Lorem`, `EmailNormalization` |
-| `validation/` | `Validation`, `ValidateResponse`, `BatchValidateResponse`, `Result` |
+| Category         | Example types with `IsData()`                                                                               |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| `technology/`    | `Result`, `Response`, `Password`, `Base64Response`, `User`, `Counter`                                       |
+| `places/`        | `PostalCode`, `Info`, `Holiday`, `HolidayList`, `City`, `WorkingDays`, `GeocodeResponse`                    |
+| `networking/`    | `LookupResponse`, `IPCheckResponse`, `IPAddressASNResponse`, `InfoResponse`, `CheckEmailResponse`           |
+| `health/`        | `Exercise`, `ExerciseList`, `StringList`                                                                    |
+| `entertainment/` | `Horoscope`, `Quote`, `Emoji`, `Question`, `Advice`, `Puzzle`, `Fact`, `DadJoke`                            |
+| `finance/`       | `Price`, `RateResponse`, `ConvertResponse`, `LookupResponse`, `CommodityPrice`, `ParseResponse`, `Response` |
+| `text/`          | `Word`, `DictionaryEntry`, `Result`, `Lorem`, `EmailNormalization`                                          |
+| `validation/`    | `Validation`, `ValidateResponse`, `BatchValidateResponse`, `Result`                                         |
 
 `BatchResponse[T]` in `apps/api/platform/httpx/httpx.go:23` also implements
 `IsData()` — that is acceptable since it lives in the platform package, but it
@@ -54,7 +54,8 @@ constraint. `HandleBatch` already uses `any`.
 - [ ] `JSON[T Data]` → `JSON[T any]`, `Response[T Data]` → `Response[T any]`
 - [ ] All `IsData()` method implementations removed from `services/`
 - [ ] Tests that exist solely to call `IsData()` removed (e.g.
-      `technology/units/service_test.go:217`, `health/exercises/service_test.go:13-28`,
+      `technology/units/service_test.go:217`,
+      `health/exercises/service_test.go:13-28`,
       `finance/commodities/service_test.go:39`)
 - [ ] `go build ./...` and `go test ./...` pass
 
@@ -77,30 +78,30 @@ envelope shape.
 
 **28 `httpx.BindQuery` call sites across 22 `transport_http.go` files:**
 
-| File | Lines |
-| --- | --- |
-| `technology/useragent/transport_http.go` | 32 |
-| `technology/password/transport_http.go` | 23 |
-| `technology/numbase/transport_http.go` | 23 |
-| `technology/color/transport_http.go` | 26 |
-| `technology/qr/transport_http.go` | 26, 46 |
-| `technology/barcode/transport_http.go` | 23, 43 |
-| `places/timezone/transport_http.go` | 65 |
-| `places/holidays/transport_http.go` | 33 |
-| `places/working-days/transport_http.go` | 24 |
-| `places/geocode/transport_http.go` | 20, 45 |
-| `networking/disposable/transport_http.go` | 57 |
-| `health/exercises/transport_http.go` | 58, 75 |
-| `entertainment/emoji/transport_http.go` | 26 |
-| `entertainment/trivia/transport_http.go` | 22 |
-| `entertainment/sudoku/transport_http.go` | 29 |
-| `entertainment/facts/transport_http.go` | 22 |
-| `finance/exchange/transport_http.go` | 47, 76 |
-| `finance/swift/transport_http.go` | 41 |
-| `finance/inflation/transport_http.go` | 51 |
-| `finance/mortgage/transport_http.go` | 43 |
-| `text/lorem/transport_http.go` | 26 |
-| `validation/phone/transport_http.go` | 26 |
+| File                                      | Lines  |
+| ----------------------------------------- | ------ |
+| `technology/useragent/transport_http.go`  | 32     |
+| `technology/password/transport_http.go`   | 23     |
+| `technology/numbase/transport_http.go`    | 23     |
+| `technology/color/transport_http.go`      | 26     |
+| `technology/qr/transport_http.go`         | 26, 46 |
+| `technology/barcode/transport_http.go`    | 23, 43 |
+| `places/timezone/transport_http.go`       | 65     |
+| `places/holidays/transport_http.go`       | 33     |
+| `places/working-days/transport_http.go`   | 24     |
+| `places/geocode/transport_http.go`        | 20, 45 |
+| `networking/disposable/transport_http.go` | 57     |
+| `health/exercises/transport_http.go`      | 58, 75 |
+| `entertainment/emoji/transport_http.go`   | 26     |
+| `entertainment/trivia/transport_http.go`  | 22     |
+| `entertainment/sudoku/transport_http.go`  | 29     |
+| `entertainment/facts/transport_http.go`   | 22     |
+| `finance/exchange/transport_http.go`      | 47, 76 |
+| `finance/swift/transport_http.go`         | 41     |
+| `finance/inflation/transport_http.go`     | 51     |
+| `finance/mortgage/transport_http.go`      | 43     |
+| `text/lorem/transport_http.go`            | 26     |
+| `validation/phone/transport_http.go`      | 26     |
 
 The repeating pattern in each file:
 
@@ -116,8 +117,8 @@ r.Get("/endpoint", func(w http.ResponseWriter, r *http.Request) {
 ```
 
 Some files (e.g. `places/sudoku`) set struct field defaults before calling
-`BindQuery`. `HandleGet` must accommodate a pre-bind hook or the conversion
-must handle defaults via struct tag defaults.
+`BindQuery`. `HandleGet` must accommodate a pre-bind hook or the conversion must
+handle defaults via struct tag defaults.
 
 ### Acceptance Criteria
 
@@ -135,15 +136,15 @@ must handle defaults via struct tag defaults.
 
 ## Problem 3: Service Types Carry HTTP Concerns
 
-A domain type in `service.go` should represent a business concept. It should
-not know whether it will be served over HTTP, gRPC, or a CLI. The `IsData()`
-marker (Problem 1) is the most visible symptom, but the broader rule is:
-`service.go` must not import `net/http`, `chi`, or `httpx`. The HTTP layer
-calls the service; the service does not reach back into the HTTP layer.
+A domain type in `service.go` should represent a business concept. It should not
+know whether it will be served over HTTP, gRPC, or a CLI. The `IsData()` marker
+(Problem 1) is the most visible symptom, but the broader rule is: `service.go`
+must not import `net/http`, `chi`, or `httpx`. The HTTP layer calls the service;
+the service does not reach back into the HTTP layer.
 
 The previous cleanup plan (2026-05-18) established this rule and moved types
-from `type.go` into the correct files. It did not remove `IsData()` from
-service types or enforce the import constraint programmatically.
+from `type.go` into the correct files. It did not remove `IsData()` from service
+types or enforce the import constraint programmatically.
 
 ### Current Status
 
@@ -156,19 +157,19 @@ since `IsData()` itself does not pull in any import.
 
 **Legitimate `net/http` usage in `service.go` files** (outbound clients — keep):
 
-| File | Purpose |
-| --- | --- |
-| `places/geocode/service.go` | `http.Client` calling Nominatim geocoding API |
-| `finance/crypto/service.go` | `http.Client` calling CoinGecko API |
+| File                          | Purpose                                             |
+| ----------------------------- | --------------------------------------------------- |
+| `places/geocode/service.go`   | `http.Client` calling Nominatim geocoding API       |
+| `finance/crypto/service.go`   | `http.Client` calling CoinGecko API                 |
 | `finance/exchange/service.go` | `http.Client` calling Frankfurter exchange-rate API |
 
 These are integration clients. The service layer calling an external HTTP API is
 correct; the service layer handling inbound HTTP is not.
 
 **Response struct placement:** `transport_http.go` should define the HTTP
-request and response structs with `json:`, `query:`, and `validate:` tags.
-Where a batch endpoint returns `httpx.BatchResponse[DomainType]`, the type
-alias or construction must live in `transport_http.go`, not `service.go`.
+request and response structs with `json:`, `query:`, and `validate:` tags. Where
+a batch endpoint returns `httpx.BatchResponse[DomainType]`, the type alias or
+construction must live in `transport_http.go`, not `service.go`.
 
 ### Acceptance Criteria
 
