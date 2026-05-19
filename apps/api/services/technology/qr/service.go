@@ -4,6 +4,15 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 )
 
+// Base64Response is the JSON response payload returned by GET /qr/base64.
+type Base64Response struct {
+	Image  string `json:"image"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
+}
+
+func (Base64Response) IsData() {}
+
 // Service generates QR codes.
 type Service struct{}
 

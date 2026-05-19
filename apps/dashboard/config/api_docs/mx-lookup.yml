@@ -105,7 +105,7 @@ endpoints:
 
         data = JSON.parse(response.body)['data']
         data['records'].each { |r| puts "#{r['priority']} #{r['host']}" }
-  - name: Batch MX Lookup 
+  - name: Batch MX Lookup
     method: POST
     path: /v1/networking/mx/batch
     description: >-

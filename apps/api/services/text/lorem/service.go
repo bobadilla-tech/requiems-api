@@ -4,6 +4,15 @@ import (
 	lorelai "github.com/bobadilla-tech/lorelai/pkg"
 )
 
+// Lorem is the response payload for the lorem generator.
+type Lorem struct {
+	Text       string `json:"text"`
+	Paragraphs int    `json:"paragraphs"`
+	WordCount  int    `json:"wordCount"`
+}
+
+func (Lorem) IsData() {}
+
 type Service struct{}
 
 func NewService() *Service {
@@ -12,6 +21,7 @@ func NewService() *Service {
 
 func (s *Service) Generate(paragraphs, sentences int) Lorem {
 	lorem := lorelai.ClassicGenerate(paragraphs, sentences)
+
 	return Lorem{
 		Text:       lorem.Text,
 		Paragraphs: lorem.Paragraphs,

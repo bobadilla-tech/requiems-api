@@ -6,6 +6,19 @@ import (
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 )
 
+// IPAddressASNResponse is the JSON payload returned by the ASN lookup endpoint.
+type IPAddressASNResponse struct {
+	IP     string `json:"ip"`
+	ASN    string `json:"asn"`
+	Org    string `json:"org"`
+	ISP    string `json:"isp"`
+	Domain string `json:"domain"`
+	Route  string `json:"route"`
+	Type   string `json:"type"`
+}
+
+func (IPAddressASNResponse) IsData() {}
+
 type Service struct {
 	c *ipi.Client
 }

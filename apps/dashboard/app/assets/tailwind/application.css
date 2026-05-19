@@ -5,7 +5,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Logo dark mode: white circle backdrop */
 .logo-circle {
   display: inline-flex;
   align-items: center;
@@ -29,5 +28,5 @@
 
 /* APIs index main content padding */
 .apis-content {
-    padding: 2rem 3.5rem;
+  padding: 2rem 3.5rem;
 }

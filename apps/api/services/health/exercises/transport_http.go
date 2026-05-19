@@ -12,12 +12,31 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// ListParams holds the query parameters accepted by the list and random endpoints.
+type ListParams struct {
+	BodyPart  string `query:"body_part"`
+	Equipment string `query:"equipment"`
+	Muscle    string `query:"muscle"`
+	Search    string `query:"search"`
+	Page      int    `query:"page"     validate:"min=1"`
+	PerPage   int    `query:"per_page" validate:"min=1,max=100"`
+}
+
+// BatchGetRequest is the body for fetching multiple exercises by ID.
+type BatchGetRequest struct {
+	IDs []int `json:"ids" validate:"required,min=1,max=50,dive,min=1"`
+}
+
+// BatchExerciseResponse is the response for a batch exercise lookup.
+type BatchExerciseResponse = httpx.BatchResponse[Exercise]
+
 // exerciseQuerier is the interface consumed by HTTP handlers, allowing stub
 // injection in tests without a live database.
 type exerciseQuerier interface {
 	List(ctx context.Context, p ListParams) (ExerciseList, error)
 	Get(ctx context.Context, id int) (Exercise, error)
 	Random(ctx context.Context, p ListParams) (Exercise, error)
+	GetBatch(ctx context.Context, ids []int) ([]Exercise, error)
 	BodyParts(ctx context.Context) (StringList, error)
 	Equipment(ctx context.Context) (StringList, error)
 	Muscles(ctx context.Context) (StringList, error)
@@ -118,4 +137,14 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 		}
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	r.Post("/exercises/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, error) {
+			results, err := q.GetBatch(ctx, req.IDs)
+			if err != nil {
+				return BatchExerciseResponse{}, err
+			}
+			return BatchExerciseResponse{Results: results}, nil
+		},
+	))
 }

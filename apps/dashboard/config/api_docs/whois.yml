@@ -332,4 +332,3 @@ faq:
     answer: >-
       Yes. Results are returned in the same order as the domains sent
       in the request body.
-

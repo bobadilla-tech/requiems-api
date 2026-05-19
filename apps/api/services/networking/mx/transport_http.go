@@ -11,6 +11,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// BatchRequest is the body for validating multiple domains at once.
+type BatchRequest struct {
+	Domains []string `json:"domains" validate:"required,min=1,max=50,dive,required,fqdn"`
+}
+
 // domainRe matches valid fully-qualified domain names.
 var domainRe = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$`)
 

@@ -10,6 +10,17 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds the query parameters for the holidays endpoint.
+type Request struct {
+	Country string `query:"country" validate:"required,iso3166_1_alpha2"`
+	Year    int    `query:"year" validate:"required,min=1"`
+}
+
+// BatchRequest is the body for POST /holidays/batch.
+type BatchRequest struct {
+	Queries []BatchQuery `json:"queries" validate:"required,min=1,max=50,dive"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/holidays", func(w http.ResponseWriter, r *http.Request) {
 		if country := r.URL.Query().Get("country"); country != "" {

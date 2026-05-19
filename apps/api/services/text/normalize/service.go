@@ -6,6 +6,26 @@ import (
 	normalizer "github.com/bobadilla-tech/go-email-normalizer"
 )
 
+type EmailNormalization struct {
+	Original   string              `json:"original"`
+	Normalized string              `json:"normalized"`
+	Local      string              `json:"local"`
+	Domain     string              `json:"domain"`
+	Changes    []normalizer.Change `json:"changes"`
+}
+
+func (EmailNormalization) IsData() {}
+
+type EmailNormalizationBatchItem struct {
+	Original   string              `json:"original"`
+	Normalized string              `json:"normalized,omitempty"`
+	Local      string              `json:"local,omitempty"`
+	Domain     string              `json:"domain,omitempty"`
+	Changes    []normalizer.Change `json:"changes,omitempty"`
+	Valid      bool                `json:"valid"`
+	Message    string              `json:"message,omitempty"`
+}
+
 type Service struct {
 	n normalizer.Normalizer
 }

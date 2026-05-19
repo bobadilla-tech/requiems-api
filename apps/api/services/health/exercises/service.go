@@ -10,14 +10,78 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// Exercise is the public representation of an exercise record.
+// external_id is intentionally omitted — it is an internal upsert key only.
+type Exercise struct {
+	ID               int      `json:"id"`
+	Name             string   `json:"name"`
+	BodyParts        []string `json:"body_parts"`
+	Equipment        []string `json:"equipment"`
+	TargetMuscles    []string `json:"target_muscles"`
+	SecondaryMuscles []string `json:"secondary_muscles"`
+	Instructions     []string `json:"instructions"`
+}
+
+func (Exercise) IsData() {}
+
+// ExerciseList wraps a paginated set of exercises.
+type ExerciseList struct {
+	Items   []Exercise `json:"items"`
+	Total   int        `json:"total"`
+	Page    int        `json:"page"`
+	PerPage int        `json:"per_page"`
+}
+
+func (ExerciseList) IsData() {}
+
+// StringList wraps a sorted list of unique string values (muscles, equipment, body parts).
+type StringList struct {
+	Items []string `json:"items"`
+	Total int      `json:"total"`
+}
+
+func (StringList) IsData() {}
+
+// dbRows is the minimal row-iteration interface used by query methods.
+// pgx.Rows satisfies this interface in production; mockRows satisfies it in unit tests.
+type dbRows interface {
+	Close()
+	Err() error
+	Next() bool
+	Scan(dest ...any) error
+}
+
+// dbPool is the minimal database interface required by Service.
+// poolWrapper adapts *pgxpool.Pool to this interface in production;
+// mockDB satisfies it in unit tests.
+type dbPool interface {
+	Query(ctx context.Context, sql string, args ...any) (dbRows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
+// poolWrapper adapts *pgxpool.Pool to the dbPool interface so that NewService
+// can accept the concrete pool type while still allowing a test double to be
+// injected via the interface.
+type poolWrapper struct {
+	p *pgxpool.Pool
+}
+
+func (pw *poolWrapper) Query(ctx context.Context, sql string, args ...any) (dbRows, error) {
+	return pw.p.Query(ctx, sql, args...)
+}
+
+func (pw *poolWrapper) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
+	return pw.p.QueryRow(ctx, sql, args...)
+}
+
 // Service provides exercise lookups against the exercises PostgreSQL table.
 type Service struct {
-	db *pgxpool.Pool
+	db dbPool
 }
 
 // NewService creates a new Service backed by the given connection pool.
 func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+	return &Service{db: &poolWrapper{p: db}}
 }
 
 // List returns a paginated, optionally-filtered list of exercises.
@@ -118,6 +182,40 @@ func (s *Service) Random(ctx context.Context, p ListParams) (Exercise, error) {
 		return Exercise{}, err
 	}
 	return e, nil
+}
+
+// GetBatch returns the exercises matching the given IDs.
+// IDs that do not exist are silently skipped.
+// Results are ordered to match the input ID slice.
+func (s *Service) GetBatch(ctx context.Context, ids []int) ([]Exercise, error) {
+	const q = `
+		SELECT id, name, body_parts, equipment, target_muscles, secondary_muscles, instructions
+		FROM exercises
+		WHERE id = ANY($1::int[])
+		ORDER BY array_position($1::int[], id)
+	`
+
+	rows, err := s.db.Query(ctx, q, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	items := make([]Exercise, 0, len(ids))
+	for rows.Next() {
+		var e Exercise
+		if err := rows.Scan(
+			&e.ID, &e.Name, &e.BodyParts, &e.Equipment,
+			&e.TargetMuscles, &e.SecondaryMuscles, &e.Instructions,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, e)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 // BodyParts returns a sorted list of all distinct body part values.

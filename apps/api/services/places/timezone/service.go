@@ -9,6 +9,16 @@ import (
 	"github.com/ringsaturn/tzf"
 )
 
+// Info represents the timezone response.
+type Info struct {
+	Timezone    string `json:"timezone"`
+	Offset      string `json:"offset"`
+	CurrentTime string `json:"current_time"`
+	IsDST       bool   `json:"is_dst"`
+}
+
+func (Info) IsData() {}
+
 var locationCache sync.Map
 
 // Service handles timezone lookups.

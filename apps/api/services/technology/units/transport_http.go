@@ -10,6 +10,18 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// BatchItem represents a single unit conversion operation.
+type BatchItem struct {
+	From  string   `json:"from" validate:"required"`
+	To    string   `json:"to"  validate:"required"`
+	Value *float64 `json:"value" validate:"required"`
+}
+
+// BatchRequest represents a request containing multiple conversion operations.
+type BatchRequest struct {
+	Operations []BatchItem `json:"operations" validate:"required,min=1,max=50,dive"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/convert/units", func(w http.ResponseWriter, r *http.Request) {
 		httpx.JSON(w, http.StatusOK, svc.Units())

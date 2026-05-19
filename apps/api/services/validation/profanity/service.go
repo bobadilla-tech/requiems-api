@@ -10,6 +10,15 @@ import (
 // detector is the default profanity detector shared across all requests.
 var detector = goaway.NewProfanityDetector()
 
+// Result is the response payload for the profanity check endpoint.
+type Result struct {
+	HasProfanity bool     `json:"has_profanity"`
+	Censored     string   `json:"censored"`
+	FlaggedWords []string `json:"flagged_words"`
+}
+
+func (Result) IsData() {}
+
 // Service performs profanity detection and censoring.
 type Service struct{}
 

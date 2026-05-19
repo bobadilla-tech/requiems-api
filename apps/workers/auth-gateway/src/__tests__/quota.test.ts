@@ -139,7 +139,9 @@ describe("Quota exceeded — integration", () => {
 
     const dbPrepare = vi.fn().mockReturnValue({
       bind: vi.fn().mockReturnValue({
-        first: vi.fn().mockResolvedValue({ total: PLANS.free.requestLimit + 1 }),
+        first: vi.fn().mockResolvedValue({
+          total: PLANS.free.requestLimit + 1,
+        }),
         run: vi.fn().mockResolvedValue({ success: true, meta: {} }),
       }),
     });

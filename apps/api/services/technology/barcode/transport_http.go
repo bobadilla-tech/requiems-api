@@ -9,6 +9,12 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds the query parameters for the barcode endpoints.
+type Request struct {
+	Data string `query:"data" validate:"required"`
+	Type string `query:"type" validate:"required,oneof=code128 code93 code39 ean8 ean13"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	// GET /barcode — returns a raw PNG image.
 	r.Get("/barcode", func(w http.ResponseWriter, r *http.Request) {

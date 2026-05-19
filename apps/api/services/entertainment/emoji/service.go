@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+// Emoji represents a single emoji with its metadata.
+type Emoji struct {
+	Emoji    string `json:"emoji"`
+	Name     string `json:"name"`
+	Category string `json:"category"`
+	Unicode  string `json:"unicode"`
+}
+
+func (Emoji) IsData() {}
+
+// List represents a collection of emoji search results.
+type List struct {
+	Items []Emoji `json:"items"`
+	Total int     `json:"total"`
+}
+
+func (List) IsData() {}
+
 // Service provides emoji lookup and search operations.
 type Service struct{}
 

@@ -253,7 +253,6 @@ endpoints:
         status: 500
         description: Unexpected server error
 
-    
     code_examples:
       curl: |
         curl -X POST https://api.requiems.xyz/v1/validation/email/batch \
@@ -314,7 +313,7 @@ endpoints:
         data['results'].each do |r|
           puts "#{r['email']} #{r['valid']}"
         end
-        
+
 faq:
   - question: What does valid mean exactly?
     answer: >-

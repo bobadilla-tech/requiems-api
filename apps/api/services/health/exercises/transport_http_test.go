@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -21,6 +22,7 @@ type stubQuerier struct {
 	listResult   ExerciseList
 	getResult    Exercise
 	randomResult Exercise
+	batchResult  []Exercise
 	stringResult StringList
 	err          error
 }
@@ -55,6 +57,10 @@ func (s *stubQuerier) Muscles(_ context.Context) (StringList, error) {
 	return s.stringResult, s.err
 }
 
+func (s *stubQuerier) GetBatch(_ context.Context, _ []int) ([]Exercise, error) {
+	return s.batchResult, s.err
+}
+
 func setupTestRouter(q exerciseQuerier) chi.Router {
 	r := chi.NewRouter()
 	registerExerciseRoutes(r, q)
@@ -73,8 +79,8 @@ func TestListExercises_Returns200(t *testing.T) {
 			PerPage: 20,
 		},
 	}
-
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -98,21 +104,16 @@ func TestListExercises_ResponseEnvelope(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	var raw map[string]json.RawMessage
-	err := json.NewDecoder(w.Body).Decode(&raw)
-	require.NoError(t, err)
-	if _, ok := raw["data"]; !ok {
-		t.Error("response must have a 'data' key")
-	}
-	if _, ok := raw["metadata"]; !ok {
-		t.Error("response must have a 'metadata' key")
-	}
+	assert.NoError(t, json.NewDecoder(w.Body).Decode(&raw))
+	assert.Contains(t, raw, "data", "response must have a 'data' key")
+	assert.Contains(t, raw, "metadata", "response must have a 'metadata' key")
 }
 
 func TestListExercises_ServiceError_Returns500(t *testing.T) {
 	t.Parallel()
 	stub := &stubQuerier{err: errors.New("db down")}
-
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -154,8 +155,8 @@ func TestRandomExercise_Returns200(t *testing.T) {
 func TestRandomExercise_NoMatch_Returns404(t *testing.T) {
 	t.Parallel()
 	stub := &stubQuerier{err: svcerr.NotFound("not_found", "no exercises found")}
-
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises/random?body_part=unknown", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -209,8 +210,8 @@ func TestGetExercise_ZeroID_Returns400(t *testing.T) {
 func TestGetExercise_NotFound_Returns404(t *testing.T) {
 	t.Parallel()
 	stub := &stubQuerier{err: svcerr.NotFound("not_found", "exercise not found")}
-
 	r := setupTestRouter(stub)
+
 	req := httptest.NewRequest(http.MethodGet, "/exercises/9999", http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -261,6 +262,96 @@ func TestMuscles_Returns200(t *testing.T) {
 	require.Equal(t, http.StatusOK, w.Code)
 }
 
+// ---- POST /exercises/batch ----
+
+func TestBatchExercises_Returns200(t *testing.T) {
+	t.Parallel()
+	stub := &stubQuerier{
+		batchResult: []Exercise{
+			{ID: 1, Name: "squat"},
+			{ID: 7, Name: "deadlift"},
+		},
+	}
+	r := setupTestRouter(stub)
+
+	body := `{"ids": [1, 7]}`
+	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchExerciseResponse]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.Equal(t, "squat", resp.Data.Results[0].Name)
+	assert.Equal(t, "deadlift", resp.Data.Results[1].Name)
+
+}
+
+func TestBatchExercises_EmptyIDs_Returns422(t *testing.T) {
+	t.Parallel()
+	stub := &stubQuerier{}
+	r := setupTestRouter(stub)
+
+	body := `{"ids": []}`
+	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestBatchExercises_TooManyIDs_Returns422(t *testing.T) {
+	t.Parallel()
+	stub := &stubQuerier{}
+	r := setupTestRouter(stub)
+
+	ids := make([]int, 51)
+	for i := range ids {
+		ids[i] = i + 1
+	}
+	bodyBytes, err := json.Marshal(map[string][]int{"ids": ids})
+	require.NoError(t, err)
+	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(string(bodyBytes)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestBatchExercises_InvalidBody_Returns400(t *testing.T) {
+	t.Parallel()
+	stub := &stubQuerier{}
+	r := setupTestRouter(stub)
+
+	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(`not json`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestBatchExercises_ServiceError_Returns500(t *testing.T) {
+	t.Parallel()
+	stub := &stubQuerier{err: errors.New("db down")}
+	r := setupTestRouter(stub)
+
+	body := `{"ids": [1, 2, 3]}`
+	req := httptest.NewRequest(http.MethodPost, "/exercises/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
 func TestMetadata_ServiceError_Returns500(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -271,17 +362,14 @@ func TestMetadata_ServiceError_Returns500(t *testing.T) {
 		{"equipment", "/equipment"},
 		{"muscles", "/muscles"},
 	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			stub := &stubQuerier{err: errors.New("db error")}
-
 			r := setupTestRouter(stub)
 			req := httptest.NewRequest(http.MethodGet, tt.path, http.NoBody)
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
-
 			assert.Equal(t, http.StatusInternalServerError, w.Code)
 		})
 	}
