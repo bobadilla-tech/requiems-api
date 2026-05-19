@@ -57,7 +57,6 @@ type Result struct {
 	Result string `json:"result"`
 }
 
-
 // Service provides number base conversion operations.
 type Service struct{}
 

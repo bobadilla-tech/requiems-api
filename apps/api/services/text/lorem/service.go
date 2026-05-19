@@ -11,7 +11,6 @@ type Lorem struct {
 	WordCount  int    `json:"wordCount"`
 }
 
-
 type Service struct{}
 
 func NewService() *Service {

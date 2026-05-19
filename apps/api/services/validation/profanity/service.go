@@ -17,7 +17,6 @@ type Result struct {
 	FlaggedWords []string `json:"flagged_words"`
 }
 
-
 // Service performs profanity detection and censoring.
 type Service struct{}
 

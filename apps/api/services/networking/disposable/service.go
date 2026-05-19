@@ -35,7 +35,6 @@ type StatsResponse struct {
 	TotalDomains int `json:"total_domains"`
 }
 
-
 type Service struct{}
 
 func NewService() *Service {

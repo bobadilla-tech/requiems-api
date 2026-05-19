@@ -22,7 +22,6 @@ type Response struct {
 	Schedule       []ScheduleEntry `json:"schedule"`
 }
 
-
 // Service computes mortgage payments and amortization schedules.
 type Service struct{}
 

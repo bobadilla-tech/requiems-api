@@ -18,7 +18,6 @@ type PostalCode struct { //nolint:revive // established public API type name
 	Lon        float64 `json:"lon"`
 }
 
-
 // Service looks up postal codes from the GeoNames postal code dataset.
 // The dataset is loaded once at startup and held in memory.
 type Service struct {

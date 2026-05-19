@@ -25,7 +25,6 @@ type LookupResponse struct {
 	IsPrimary    bool   `json:"is_primary"`
 }
 
-
 // ListResponse is the response payload for SWIFT listings.
 type ListResponse struct {
 	Items    []LookupResponse `json:"items"`
@@ -33,7 +32,6 @@ type ListResponse struct {
 	Offset   int              `json:"offset"`
 	Returned int              `json:"returned"`
 }
-
 
 // Service provides SWIFT/BIC code lookup against the swift_codes PostgreSQL table.
 type Service struct {

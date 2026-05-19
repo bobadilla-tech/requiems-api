@@ -22,7 +22,6 @@ type Response struct {
 	Result string `json:"result"`
 }
 
-
 // Service converts content between supported data formats.
 type Service struct{}
 

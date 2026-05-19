@@ -22,7 +22,6 @@ type LookupResponse struct {
 	DNSSec      bool     `json:"dnssec"`
 }
 
-
 // BatchLookupItem represents a single entry in a WHOIS batch response.
 type BatchLookupItem struct {
 	Domain string         `json:"domain"`

@@ -27,7 +27,6 @@ type LookupResponse struct {
 	Confidence  float64 `json:"confidence"`
 }
 
-
 // Service provides BIN lookup against the bin_data PostgreSQL table.
 type Service struct {
 	db *pgxpool.Pool

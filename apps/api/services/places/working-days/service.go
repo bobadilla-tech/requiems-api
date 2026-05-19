@@ -15,7 +15,6 @@ type WorkingDays struct {
 	Subdivision string `json:"subdivision,omitempty"`
 }
 
-
 type Service struct{}
 
 func NewService() *Service {

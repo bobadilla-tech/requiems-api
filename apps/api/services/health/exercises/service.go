@@ -22,7 +22,6 @@ type Exercise struct {
 	Instructions     []string `json:"instructions"`
 }
 
-
 // ExerciseList wraps a paginated set of exercises.
 type ExerciseList struct {
 	Items   []Exercise `json:"items"`
@@ -31,13 +30,11 @@ type ExerciseList struct {
 	PerPage int        `json:"per_page"`
 }
 
-
 // StringList wraps a sorted list of unique string values (muscles, equipment, body parts).
 type StringList struct {
 	Items []string `json:"items"`
 	Total int      `json:"total"`
 }
-
 
 // dbRows is the minimal row-iteration interface used by query methods.
 // pgx.Rows satisfies this interface in production; mockRows satisfies it in unit tests.

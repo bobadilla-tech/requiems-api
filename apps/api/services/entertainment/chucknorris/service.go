@@ -12,7 +12,6 @@ type Fact struct {
 	Fact string `json:"fact"`
 }
 
-
 // Service provides Chuck Norris fact operations.
 type Service struct{}
 

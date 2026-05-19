@@ -41,7 +41,6 @@ type Horoscope struct {
 	Mood        string `json:"mood"`
 }
 
-
 type Service struct{}
 
 func NewService() *Service {

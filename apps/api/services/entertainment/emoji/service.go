@@ -14,13 +14,11 @@ type Emoji struct {
 	Unicode  string `json:"unicode"`
 }
 
-
 // List represents a collection of emoji search results.
 type List struct {
 	Items []Emoji `json:"items"`
 	Total int     `json:"total"`
 }
-
 
 // Service provides emoji lookup and search operations.
 type Service struct{}

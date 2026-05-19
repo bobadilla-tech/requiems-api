@@ -18,7 +18,6 @@ type Word struct {
 	PartOfSpeech string `json:"part_of_speech,omitempty"`
 }
 
-
 // Definition represents a single definition entry for a word.
 type Definition struct {
 	PartOfSpeech string `json:"partOfSpeech"`
@@ -33,7 +32,6 @@ type DictionaryEntry struct {
 	Definitions []Definition `json:"definitions"`
 	Synonyms    []string     `json:"synonyms"`
 }
-
 
 type BatchItem struct {
 	Word  string           `json:"word"`

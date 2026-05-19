@@ -11,7 +11,6 @@ type Base64Response struct {
 	Height int    `json:"height"`
 }
 
-
 // Service generates QR codes.
 type Service struct{}
 

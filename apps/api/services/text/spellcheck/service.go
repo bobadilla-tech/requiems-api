@@ -32,7 +32,6 @@ type Result struct {
 	Corrections []Correction `json:"corrections"`
 }
 
-
 // Service performs spell checking and correction.
 type Service struct {
 	model   *fuzzy.Model

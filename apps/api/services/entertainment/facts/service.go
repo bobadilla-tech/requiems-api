@@ -12,7 +12,6 @@ type Fact struct {
 	Source   string `json:"source"`
 }
 
-
 type entry struct {
 	fact     string
 	category string

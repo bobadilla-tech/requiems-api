@@ -18,7 +18,6 @@ type LookupResponse struct {
 	Records []Record `json:"records"`
 }
 
-
 // BatchLookupItem represents the result of a single domain lookup in a batch.
 type BatchLookupItem struct {
 	Domain string         `json:"domain"`

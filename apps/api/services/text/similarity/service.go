@@ -12,7 +12,6 @@ type Result struct {
 	Method     string  `json:"method"`
 }
 
-
 // Service computes text similarity.
 type Service struct{}
 

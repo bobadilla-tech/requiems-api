@@ -27,13 +27,11 @@ type ValidateResponse struct {
 	Risk      *Risk    `json:"risk,omitempty"`
 }
 
-
 // BatchValidateResponse is the response for a batch phone number validation request.
 type BatchValidateResponse struct {
 	Results []ValidateResponse `json:"results"`
 	Total   int                `json:"total"`
 }
-
 
 // Service provides phone number validation logic.
 type Service struct{}

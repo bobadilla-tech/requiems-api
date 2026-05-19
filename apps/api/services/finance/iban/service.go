@@ -21,7 +21,6 @@ type ParseResponse struct {
 	Account  string `json:"account"`
 }
 
-
 // Service provides IBAN validation and parsing against the iban_countries table.
 type Service struct {
 	db db.Querier

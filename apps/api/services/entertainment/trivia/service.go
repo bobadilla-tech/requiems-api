@@ -14,7 +14,6 @@ type Question struct {
 	Difficulty string   `json:"difficulty"`
 }
 
-
 // questions is the in-memory trivia question database.
 var questions = []Question{
 	// --- science ---

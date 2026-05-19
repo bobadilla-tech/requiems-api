@@ -17,7 +17,6 @@ type LookupResponse struct {
 	IsVPN       bool   `json:"is_vpn"`
 }
 
-
 type Service struct {
 	c *ipi.Client
 }

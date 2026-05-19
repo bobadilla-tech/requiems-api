@@ -27,7 +27,6 @@ type CommodityPrice struct {
 	Historical []HistoricalPrice `json:"historical"`
 }
 
-
 const historyDepth = 11 // 1 current + 10 historical years
 
 // Service provides commodity price lookups against the commodity_price_history PostgreSQL table.

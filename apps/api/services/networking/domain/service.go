@@ -30,7 +30,6 @@ type InfoResponse struct {
 	DNS       DNSRecords `json:"dns"`
 }
 
-
 // Service handles domain information and availability checks.
 type Service struct{}
 

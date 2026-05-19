@@ -17,7 +17,6 @@ type Info struct {
 	IsDST       bool   `json:"is_dst"`
 }
 
-
 var locationCache sync.Map
 
 // Service handles timezone lookups.

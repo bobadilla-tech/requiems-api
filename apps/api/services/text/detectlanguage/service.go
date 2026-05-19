@@ -18,7 +18,6 @@ type Result struct {
 	Confidence float64 `json:"confidence"`
 }
 
-
 // Service performs language detection.
 type Service struct{}
 

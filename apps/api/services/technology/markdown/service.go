@@ -14,7 +14,6 @@ type Response struct {
 	HTML string `json:"html"`
 }
 
-
 type Service struct{}
 
 func NewService() *Service {

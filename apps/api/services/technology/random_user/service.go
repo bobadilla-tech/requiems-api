@@ -24,7 +24,6 @@ type User struct {
 	Avatar  string  `json:"avatar"`
 }
 
-
 // Generates random fake user data.
 type Service struct{}
 
