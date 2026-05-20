@@ -29,8 +29,6 @@ type RateResponse struct {
 	Timestamp string  `json:"timestamp"`
 }
 
-func (RateResponse) IsData() {}
-
 // ConvertResponse is the response payload for GET /v1/finance/convert.
 type ConvertResponse struct {
 	From      string  `json:"from"`
@@ -40,8 +38,6 @@ type ConvertResponse struct {
 	Converted float64 `json:"converted"`
 	Timestamp string  `json:"timestamp"`
 }
-
-func (ConvertResponse) IsData() {}
 
 // Service fetches exchange rates from the Frankfurter API and caches them in Redis.
 type Service struct {

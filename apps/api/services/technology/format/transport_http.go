@@ -15,7 +15,6 @@ type Request struct {
 	Content string `json:"content" validate:"required"`
 }
 
-// RegisterRoutes mounts the format conversion handler on the given router.
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/format", httpx.Handle(
 		func(_ context.Context, req Request) (Response, error) {

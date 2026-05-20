@@ -44,8 +44,6 @@ type DadJoke struct {
 	Joke string `json:"joke"`
 }
 
-func (DadJoke) IsData() {}
-
 // Service provides access to a collection of dad jokes.
 type Service struct{}
 

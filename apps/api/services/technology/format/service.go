@@ -22,8 +22,6 @@ type Response struct {
 	Result string `json:"result"`
 }
 
-func (Response) IsData() {}
-
 // Service converts content between supported data formats.
 type Service struct{}
 

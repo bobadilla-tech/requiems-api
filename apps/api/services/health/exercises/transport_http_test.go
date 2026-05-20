@@ -121,7 +121,7 @@ func TestListExercises_ServiceError_Returns500(t *testing.T) {
 	require.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
-func TestListExercises_InvalidPerPage_Returns400(t *testing.T) {
+func TestListExercises_InvalidPerPage_Returns422(t *testing.T) {
 	t.Parallel()
 	stub := &stubQuerier{}
 	r := setupTestRouter(stub)
@@ -130,7 +130,7 @@ func TestListExercises_InvalidPerPage_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 // ---- GET /exercises/random ----

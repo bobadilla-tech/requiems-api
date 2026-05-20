@@ -57,8 +57,6 @@ type Result struct {
 	Result string `json:"result"`
 }
 
-func (Result) IsData() {}
-
 // Service provides number base conversion operations.
 type Service struct{}
 

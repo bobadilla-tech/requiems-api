@@ -1,7 +1,7 @@
 package password
 
 import (
-	"net/http"
+	"context"
 
 	"github.com/go-chi/chi/v5"
 
@@ -17,20 +17,7 @@ type Request struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/password", func(w http.ResponseWriter, r *http.Request) {
-		req := Request{Length: 16}
-
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		result, err := svc.Generate(req.Length, req.Uppercase, req.Numbers, req.Symbols)
-		if err != nil {
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to generate password")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, result)
-	})
+	r.Get("/password", httpx.HandleGet(func(ctx context.Context, req Request) (Password, error) {
+		return svc.Generate(req.Length, req.Uppercase, req.Numbers, req.Symbols)
+	}, Request{Length: 16}))
 }

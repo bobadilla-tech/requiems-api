@@ -86,8 +86,6 @@ type Result struct {
 	Formula string  `json:"formula"`
 }
 
-func (Result) IsData() {}
-
 // Results maps each measurement category to its supported unit keys.
 type Results struct {
 	Length      []string `json:"length"`
@@ -97,8 +95,6 @@ type Results struct {
 	Area        []string `json:"area"`
 	Speed       []string `json:"speed"`
 }
-
-func (Results) IsData() {}
 
 // BatchResponse represents the result of a single batch conversion operation.
 type BatchResponse struct {

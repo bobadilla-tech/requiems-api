@@ -7,20 +7,12 @@ import (
 	"time"
 )
 
-// Marker interface for types that can be used as API response payloads.
-// Add IsData() to your response struct to use it with httpx.JSON.
-type Data interface {
-	IsData()
-}
-
 // BatchResponse is the standard envelope for batch endpoints. HandleBatch
 // reads Results to set X-Usage-Count and auto-populates Total before writing.
 type BatchResponse[T any] struct {
 	Results []T `json:"results"`
 	Total   int `json:"total"`
 }
-
-func (BatchResponse[T]) IsData() {}
 
 // Included in every response.
 type Metadata struct {
@@ -29,7 +21,7 @@ type Metadata struct {
 }
 
 // Standard success envelope
-type Response[T Data] struct {
+type Response[T any] struct {
 	Data     T        `json:"data"`
 	Metadata Metadata `json:"metadata"`
 }
@@ -43,7 +35,7 @@ type ErrorResponse struct {
 }
 
 // Writes a 200-class success response wrapped in {"data": ..., "metadata": ...}.
-func JSON[T Data](w http.ResponseWriter, status int, v T) {
+func JSON[T any](w http.ResponseWriter, status int, v T) {
 	write(w, status, Response[T]{
 		Data: v,
 		Metadata: Metadata{
@@ -69,6 +61,7 @@ func ValidationError(w http.ResponseWriter, vf *ValidationFailure) {
 		Error(w, http.StatusUnprocessableEntity, "validation_failed", "Validation failed.")
 		return
 	}
+
 	writeValidationError(w, vf.Fields)
 }
 
@@ -83,6 +76,7 @@ func writeValidationError(w http.ResponseWriter, fields []FieldError) {
 		})
 		return
 	}
+
 	write(w, http.StatusUnprocessableEntity, ErrorResponse{
 		Error:  "validation_failed",
 		Fields: fields,

@@ -8,7 +8,7 @@ This folder contains developer-focused documentation for Requiem API.
 4. [Business](./business.md)
 5. [The Go Backend](./backend.md)
    - [Adding endpoints to the Go backend](./adding-go-endpoints.md)
-   - [Batch APIs (RFC)](./batch-apis-rfc.md)
+   - [Batch APIs](./batch-apis.md)
 6. [The Auth Gateway](./auth-gateway.md)
 7. [API Management](./api-management.md)
 8. [The Ruby on Rails App](./rails-app.md)

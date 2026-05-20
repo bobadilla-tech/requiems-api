@@ -14,8 +14,6 @@ type EmailNormalization struct {
 	Changes    []normalizer.Change `json:"changes"`
 }
 
-func (EmailNormalization) IsData() {}
-
 type EmailNormalizationBatchItem struct {
 	Original   string              `json:"original"`
 	Normalized string              `json:"normalized,omitempty"`

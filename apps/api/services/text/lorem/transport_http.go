@@ -32,19 +32,10 @@ type BatchItemResponse struct {
 }
 
 func RegisterRoutes(r chi.Router, svc Generator) {
-	// Original GET endpoint
-	r.Get("/lorem", func(w http.ResponseWriter, r *http.Request) {
-		req := Request{Paragraphs: 1, Sentences: 5}
+	r.Get("/lorem", httpx.HandleGet(func(ctx context.Context, req Request) (Lorem, error) {
+		return svc.Generate(req.Paragraphs, req.Sentences), nil
+	}, Request{Paragraphs: 1, Sentences: 5}))
 
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, svc.Generate(req.Paragraphs, req.Sentences))
-	})
-
-	// New POST endpoint to process batches
 	r.Post("/lorem/batch", httpx.HandleBatch(func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItemResponse], error) {
 		var results []BatchItemResponse
 

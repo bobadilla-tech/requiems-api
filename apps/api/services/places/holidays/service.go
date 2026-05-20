@@ -11,16 +11,12 @@ type Holiday struct {
 	Name string `json:"name"`
 }
 
-func (Holiday) IsData() {}
-
 type HolidayList struct {
 	Country  string    `json:"country"`
 	Year     int       `json:"year"`
 	Holidays []Holiday `json:"holidays"`
 	Total    int       `json:"total"`
 }
-
-func (HolidayList) IsData() {}
 
 // BatchQuery holds a single (country, year) pair within a batch request.
 type BatchQuery struct {

@@ -16,8 +16,6 @@ type Quote struct {
 	Author string `json:"author,omitempty"`
 }
 
-func (Quote) IsData() {}
-
 type Service struct {
 	db db.Querier
 }

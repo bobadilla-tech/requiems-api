@@ -20,8 +20,6 @@ type IPCheckResponse struct {
 	AsnOrg     string          `json:"asn_org"`
 }
 
-func (IPCheckResponse) IsData() {}
-
 type Service struct {
 	c *ipi.Client
 }

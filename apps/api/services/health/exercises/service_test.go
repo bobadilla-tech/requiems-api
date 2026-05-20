@@ -10,24 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestExercise_IsData(t *testing.T) {
-	t.Parallel()
-	var e Exercise
-	e.IsData()
-}
-
-func TestExerciseList_IsData(t *testing.T) {
-	t.Parallel()
-	var l ExerciseList
-	l.IsData()
-}
-
-func TestStringList_IsData(t *testing.T) {
-	t.Parallel()
-	var s StringList
-	s.IsData()
-}
-
 func TestExercise_FieldsPresent(t *testing.T) {
 	t.Parallel()
 	e := Exercise{

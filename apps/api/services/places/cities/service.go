@@ -17,8 +17,6 @@ type City struct {
 	Lon        float64 `json:"lon"`
 }
 
-func (City) IsData() {}
-
 // Service looks up cities from the GeoNames cities15000 dataset.
 // The dataset is loaded once at startup and held in memory.
 type Service struct {

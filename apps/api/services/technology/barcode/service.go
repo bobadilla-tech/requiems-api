@@ -26,8 +26,6 @@ type Base64Response struct {
 	Height int    `json:"height"`
 }
 
-func (Base64Response) IsData() {}
-
 // Service generates barcodes.
 type Service struct{}
 

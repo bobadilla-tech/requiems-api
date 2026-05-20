@@ -1,6 +1,7 @@
 package qr
 
 import (
+	"context"
 	"encoding/base64"
 	"net/http"
 
@@ -19,7 +20,7 @@ type Request struct {
 const defaultSize = 256
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	// GET /qr — returns a raw PNG image.
+	// GET /qr — returns a raw PNG image (not JSON, must stay inline).
 	r.Get("/qr", func(w http.ResponseWriter, r *http.Request) {
 		req := Request{Size: defaultSize}
 
@@ -40,24 +41,15 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	})
 
 	// GET /qr/base64 — returns a JSON envelope with a base64-encoded PNG.
-	r.Get("/qr/base64", func(w http.ResponseWriter, r *http.Request) {
-		req := Request{Size: defaultSize}
-
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
+	r.Get("/qr/base64", httpx.HandleGet(func(ctx context.Context, req Request) (Base64Response, error) {
 		png, err := svc.Generate(req.Data, req.Size, req.Recovery)
 		if err != nil {
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to generate QR code")
-			return
+			return Base64Response{}, err
 		}
-
-		httpx.JSON(w, http.StatusOK, Base64Response{
+		return Base64Response{
 			Image:  base64.StdEncoding.EncodeToString(png),
 			Width:  req.Size,
 			Height: req.Size,
-		})
-	})
+		}, nil
+	}, Request{Size: defaultSize}))
 }
