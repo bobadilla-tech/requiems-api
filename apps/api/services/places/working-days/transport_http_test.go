@@ -21,8 +21,10 @@ func newBatchRouter() chi.Router {
 
 func mustMarshal(t *testing.T, v any) *bytes.Buffer {
 	t.Helper()
+
 	b, err := json.Marshal(v)
 	require.NoError(t, err)
+
 	return bytes.NewBuffer(b)
 }
 
@@ -30,21 +32,35 @@ func TestWorkingDaysBatch_HappyPath(t *testing.T) {
 	t.Parallel()
 
 	body := BatchRequest{
-		Items: []Request{
+		Items: []BatchItem{
 			{
-				From: time.Date(2026, 1, 5, 0, 0, 0, 0, time.UTC),
-				To:   time.Date(2026, 1, 9, 0, 0, 0, 0, time.UTC),
+				From: Date{
+					Time: mustParseDate(t, "2026-01-05"),
+				},
+				To: Date{
+					Time: mustParseDate(t, "2026-01-09"),
+				},
 			},
 			{
-				From:    time.Date(2026, 1, 5, 0, 0, 0, 0, time.UTC),
-				To:      time.Date(2026, 1, 9, 0, 0, 0, 0, time.UTC),
+				From: Date{
+					Time: mustParseDate(t, "2026-01-05"),
+				},
+				To: Date{
+					Time: mustParseDate(t, "2026-01-09"),
+				},
 				Country: "US",
 			},
 		},
 	}
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", mustMarshal(t, body))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		mustMarshal(t, body),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
@@ -54,6 +70,7 @@ func TestWorkingDaysBatch_HappyPath(t *testing.T) {
 	var got struct {
 		Data BatchResponse `json:"data"`
 	}
+
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&got))
 
 	require.Len(t, got.Data.Results, 2)
@@ -68,8 +85,14 @@ func TestWorkingDaysBatch_HappyPath(t *testing.T) {
 func TestWorkingDaysBatch_InvalidJSON(t *testing.T) {
 	t.Parallel()
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", bytes.NewBufferString(`{invalid}`))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		bytes.NewBufferString(`{invalid}`),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
@@ -80,66 +103,106 @@ func TestWorkingDaysBatch_InvalidJSON(t *testing.T) {
 func TestWorkingDaysBatch_EmptyItems(t *testing.T) {
 	t.Parallel()
 
-	body := BatchRequest{Items: []Request{}}
+	body := BatchRequest{
+		Items: []BatchItem{},
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", mustMarshal(t, body))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		mustMarshal(t, body),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, rec.Code)
 }
 
 func TestWorkingDaysBatch_NilItems(t *testing.T) {
 	t.Parallel()
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", bytes.NewBufferString(`{}`))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		bytes.NewBufferString(`{}`),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, rec.Code)
 }
 
 func TestWorkingDaysBatch_ExceedsLimit(t *testing.T) {
 	t.Parallel()
 
-	items := make([]Request, 51)
+	items := make([]BatchItem, 51)
+
 	for i := range items {
-		items[i] = Request{
-			From: time.Date(2026, 1, 5, 0, 0, 0, 0, time.UTC),
-			To:   time.Date(2026, 1, 9, 0, 0, 0, 0, time.UTC),
+		items[i] = BatchItem{
+			From: Date{
+				Time: mustParseDate(t, "2026-01-05"),
+			},
+			To: Date{
+				Time: mustParseDate(t, "2026-01-09"),
+			},
 		}
 	}
 
-	body := BatchRequest{Items: items}
+	body := BatchRequest{
+		Items: items,
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", mustMarshal(t, body))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		mustMarshal(t, body),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, rec.Code)
 }
 
 func TestWorkingDaysBatch_MaxItems(t *testing.T) {
 	t.Parallel()
 
-	items := make([]Request, 50)
+	items := make([]BatchItem, 50)
+
 	for i := range items {
-		items[i] = Request{
-			From: time.Date(2026, 1, 5, 0, 0, 0, 0, time.UTC),
-			To:   time.Date(2026, 1, 9, 0, 0, 0, 0, time.UTC),
+		items[i] = BatchItem{
+			From: Date{
+				Time: mustParseDate(t, "2026-01-05"),
+			},
+			To: Date{
+				Time: mustParseDate(t, "2026-01-09"),
+			},
 		}
 	}
 
-	body := BatchRequest{Items: items}
+	body := BatchRequest{
+		Items: items,
+	}
 
-	req := httptest.NewRequest(http.MethodPost, "/working-days/batch", mustMarshal(t, body))
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/working-days/batch",
+		mustMarshal(t, body),
+	)
+
 	req.Header.Set("Content-Type", "application/json")
+
 	rec := httptest.NewRecorder()
 
 	newBatchRouter().ServeHTTP(rec, req)
@@ -149,6 +212,17 @@ func TestWorkingDaysBatch_MaxItems(t *testing.T) {
 	var got struct {
 		Data BatchResponse `json:"data"`
 	}
+
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&got))
+
 	assert.Len(t, got.Data.Results, 50)
+}
+
+func mustParseDate(t *testing.T, s string) time.Time {
+	t.Helper()
+
+	parsed, err := time.Parse(time.DateOnly, s)
+	require.NoError(t, err)
+
+	return parsed
 }
