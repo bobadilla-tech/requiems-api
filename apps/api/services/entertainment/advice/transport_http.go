@@ -1,8 +1,9 @@
 package advice
 
 import (
-	"encoding/json"
 	"net/http"
+	"fmt"
+	"context"
 
 	"github.com/go-chi/chi/v5"
 
@@ -21,32 +22,28 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, a)
 	})
-	r.Post("/advice/batch", func(w http.ResponseWriter, r *http.Request) {
-		var req BatchRequest
-
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", "invalid json body")
-			return
-		}
+	r.Post("/advice/batch", httpx.HandleBatch(
+	func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[Advice], error) {
 
 		if req.Count <= 0 {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", "count must be greater than zero")
-			return
+			return httpx.BatchResponse[Advice]{},
+				fmt.Errorf("count must be greater than zero")
 		}
 
 		if req.Count > 50 {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", "max 50 items allowed")
-			return
+			return httpx.BatchResponse[Advice]{},
+				fmt.Errorf("max 50 items allowed")
 		}
 
-		results, err := svc.RandomBatch(r.Context(), req.Count)
+		results, err := svc.RandomBatch(ctx, req.Count)
 		if err != nil {
-			httpx.Error(w, http.StatusServiceUnavailable, "service_unavailable", "no advice available")
-			return
+			return httpx.BatchResponse[Advice]{},
+				fmt.Errorf("no advice available: %w", err)
 		}
 
-		httpx.JSON(w, http.StatusOK, BatchResponse[Advice]{
+		return httpx.BatchResponse[Advice]{
 			Results: results,
-		})
-	})
+		}, nil
+	},
+))
 }

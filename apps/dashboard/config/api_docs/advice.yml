@@ -121,7 +121,7 @@ endpoints:
         status: 400
         when: Invalid or malformed JSON body
       - code: invalid_count
-        status: 400
+        status: 422
         when: count is zero or negative
       - code: service_unavailable
         status: 503

@@ -163,7 +163,7 @@ Returns multiple random pieces of advice in a single request.
 | Code                  | Status | When                            |
 | --------------------- | ------ | ------------------------------- |
 | `invalid_request`     | 400    | Invalid or malformed JSON body  |
-| `invalid_count`       | 400    | `count` is zero or negative     |
+| `invalid_count`       | 422    | `count` is zero or negative     |
 | `service_unavailable` | 503    | No advice available in database |
 
 ### Code Examples

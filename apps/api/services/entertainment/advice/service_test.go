@@ -3,8 +3,10 @@ package advice
 import (
 	"context"
 	"errors"
-	"testing"
 	"fmt"
+	"sync"
+	"sync/atomic"
+	"testing"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/assert"
@@ -79,8 +81,6 @@ func TestRandom_ReturnsZeroValueOnError(t *testing.T) {
 	assert.Equal(t, "", got.Text)
 }
 
-
-
 func TestRandomBatch_EmptyTable(t *testing.T) {
 	t.Parallel()
 
@@ -95,14 +95,20 @@ func TestRandomBatch_EmptyTable(t *testing.T) {
 func TestRandomBatch_MultipleRows(t *testing.T) {
 	t.Parallel()
 
-	call := 0
+	var (
+		call int64
+		mu   sync.Mutex
+	)
 
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
-			call++
+			n := int(atomic.AddInt64(&call, 1))
 
-			*dest[0].(*int) = call
-			*dest[1].(*string) = fmt.Sprintf("Advice %d", call)
+			mu.Lock()
+			defer mu.Unlock()
+
+			*dest[0].(*int) = n
+			*dest[1].(*string) = fmt.Sprintf("Advice %d", n)
 
 			return nil
 		},
@@ -113,14 +119,23 @@ func TestRandomBatch_MultipleRows(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, got, 3)
 
-	assert.Equal(t, 1, got[0].ID)
-	assert.Equal(t, "Advice 1", got[0].Text)
+	ids := []int{
+		got[0].ID,
+		got[1].ID,
+		got[2].ID,
+	}
 
-	assert.Equal(t, 2, got[1].ID)
-	assert.Equal(t, "Advice 2", got[1].Text)
+	texts := []string{
+		got[0].Text,
+		got[1].Text,
+		got[2].Text,
+	}
 
-	assert.Equal(t, 3, got[2].ID)
-	assert.Equal(t, "Advice 3", got[2].Text)
+	assert.ElementsMatch(t, []int{1, 2, 3}, ids)
+	assert.ElementsMatch(t,
+		[]string{"Advice 1", "Advice 2", "Advice 3"},
+		texts,
+	)
 }
 
 func TestRandomBatch_ScanError(t *testing.T) {

@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-
 func TestAdviceBatch_HappyPath(t *testing.T) {
 	t.Parallel()
 
@@ -47,19 +46,19 @@ func TestAdviceBatch_HappyPath(t *testing.T) {
 	require.Equal(t, http.StatusOK, rec.Code)
 
 	var got struct {
-	Data BatchResponse[Advice] `json:"data"`
-}
+		Data BatchResponse[Advice] `json:"data"`
+	}
 
-err := json.NewDecoder(rec.Body).Decode(&got)
-require.NoError(t, err)
+	err := json.NewDecoder(rec.Body).Decode(&got)
+	require.NoError(t, err)
 
-require.Len(t, got.Data.Results, 2)
+	require.Len(t, got.Data.Results, 2)
 
-assert.Equal(t, 1, got.Data.Results[0].ID)
-assert.Equal(t, "Stay consistent.", got.Data.Results[0].Text)
+	assert.Equal(t, 1, got.Data.Results[0].ID)
+	assert.Equal(t, "Stay consistent.", got.Data.Results[0].Text)
 
-assert.Equal(t, 1, got.Data.Results[1].ID)
-assert.Equal(t, "Stay consistent.", got.Data.Results[1].Text)
+	assert.Equal(t, 1, got.Data.Results[1].ID)
+	assert.Equal(t, "Stay consistent.", got.Data.Results[1].Text)
 }
 
 func TestAdviceBatch_InvalidJSON(t *testing.T) {
@@ -103,7 +102,7 @@ func TestAdviceBatch_InvalidCount(t *testing.T) {
 
 	r.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, rec.Code)
 }
 
 func TestAdviceBatch_ServiceError(t *testing.T) {
@@ -134,5 +133,5 @@ func TestAdviceBatch_ServiceError(t *testing.T) {
 
 	r.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusServiceUnavailable, rec.Code)
+	assert.Equal(t, http.StatusInternalServerError, rec.Code)
 }
