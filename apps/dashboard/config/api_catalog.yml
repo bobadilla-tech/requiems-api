@@ -532,7 +532,7 @@ apis:
     categories:
       - text
     description: Generate placeholder text for design mockups and prototypes
-    endpoints_count: 3
+    endpoints_count: 4
     status: live
     popular: false
     documentation_url: /apis/lorem-ipsum
