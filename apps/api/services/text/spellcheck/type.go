@@ -2,11 +2,6 @@ package spellcheck
 
 import "requiems-api/platform/httpx"
 
-// Request is the input for the spell check endpoint.
-type Request struct {
-	Text string `json:"text" validate:"required"`
-}
-
 // Correction describes a single spelling mistake and its suggested fix.
 // Suggested holds the best replacement (used in the auto-corrected text).
 // Suggestions holds the top-3 alternatives returned by LanguageTool so
