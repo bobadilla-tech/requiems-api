@@ -229,9 +229,11 @@ func TestSpellcheckBatch_MissingBody(t *testing.T) {
 
 func TestSpellcheckBatch_ServiceError(t *testing.T) {
 	t.Parallel()
-	// Point the service at a port where nothing is listening so every
-	// LanguageTool call fails, simulating an unreachable backend.
-	r := setupRouter("http://localhost:19999")
+	// Start and immediately close a server to get a guaranteed-dead URL
+	// without relying on a fixed port that might be in use.
+	dead := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	dead.Close()
+	r := setupRouter(dead.URL)
 
 	body := `{"texts":["Hello world","Clean text"]}`
 	req := httptest.NewRequest(http.MethodPost, "/spellcheck/batch", strings.NewReader(body))

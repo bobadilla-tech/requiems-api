@@ -61,6 +61,10 @@ func (s *Service) Check(text string) (Result, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return Result{}, fmt.Errorf("spellcheck: languagetool returned status %d", resp.StatusCode)
+	}
+
 	var ltResp ltResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ltResp); err != nil {
 		return Result{}, fmt.Errorf("spellcheck: failed to decode response: %w", err)
@@ -91,7 +95,7 @@ func buildResult(text string, matches []ltMatch) Result {
 	corrections := make([]Correction, 0, len(matches))
 
 	for _, m := range matches {
-		if len(m.Replacements) == 0 || m.Offset+m.Length > len(runes) {
+		if len(m.Replacements) == 0 || m.Offset < 0 || m.Length < 0 || m.Offset+m.Length > len(runes) {
 			continue
 		}
 		// Collect up to 3 suggestions so callers can present a picker.
@@ -115,7 +119,7 @@ func buildResult(text string, matches []ltMatch) Result {
 	copy(corrected, runes)
 	for i := len(matches) - 1; i >= 0; i-- {
 		m := matches[i]
-		if len(m.Replacements) == 0 || m.Offset+m.Length > len(corrected) {
+		if len(m.Replacements) == 0 || m.Offset < 0 || m.Length < 0 || m.Offset+m.Length > len(corrected) {
 			continue
 		}
 		repl := []rune(m.Replacements[0].Value)

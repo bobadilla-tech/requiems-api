@@ -133,7 +133,7 @@ Each text in the batch counts as **1 unit** of quota. A request with 10 texts co
 
 ### Partial failure
 
-This endpoint always returns `200` with a result for every input text. There are no per-item errors — spell-checking is pure local computation with no external dependencies. If the service is unavailable, the entire request fails with `500`.
+This endpoint always returns `200` with a result for every input text. There are no per-item errors — if LanguageTool is unreachable, the entire batch fails with `500`.
 
 ### Batch Error Codes
 

@@ -12,9 +12,14 @@ import (
 
 // newMockLT starts a test HTTP server that returns the given matches,
 // simulating the LanguageTool /v2/check endpoint.
+// It asserts the HTTP contract: the caller must use POST /v2/check.
 func newMockLT(t *testing.T, matches []ltMatch) *httptest.Server {
 	t.Helper()
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/check" {
+			http.Error(w, "unexpected request: want POST /v2/check", http.StatusBadRequest)
+			return
+		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(ltResponse{Matches: matches})
 	}))
@@ -79,8 +84,12 @@ func TestService_Check_CorrectionsSliceNotNil(t *testing.T) {
 
 func TestService_Check_Unreachable(t *testing.T) {
 	t.Parallel()
-	// Nothing is listening on this port.
-	_, err := NewService("http://localhost:19999").Check("hello")
+	// Start and immediately close a server to get a guaranteed-dead URL
+	// without relying on a fixed port that might be in use.
+	dead := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	dead.Close()
+
+	_, err := NewService(dead.URL).Check("hello")
 	assert.Error(t, err)
 }
 
