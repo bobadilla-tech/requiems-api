@@ -58,14 +58,14 @@ func TestGetLorem(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			svc := &mockService{result: tt.mockResult}
-			r := newRouter(svc)
 
-			req := httptest.NewRequest(http.MethodGet, tt.url, nil)
+			// Volvimos a poner http.NoBody acá como pidió el revisor
+			req := httptest.NewRequest(http.MethodGet, tt.url, http.NoBody)
 			rec := httptest.NewRecorder()
 
-			r.ServeHTTP(rec, req)
-
+			newRouter(svc).ServeHTTP(rec, req)
 			assert.Equal(t, tt.wantStatus, rec.Code)
 		})
 	}
@@ -93,23 +93,24 @@ func TestPostBatchLorem(t *testing.T) {
 	}{
 		{
 			name:       "happy path - valid batch",
-			body:       `{"items": [{"paragraphs": 2, "sentences": 3}, {"paragraphs": 1}]}`,
+			// ¡Acá agregamos el {} al final para el coverage del 100%!
+			body:       `{"items": [{"paragraphs": 2, "sentences": 3}, {"paragraphs": 1}, {}]}`,
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:       "validation error - empty array",
 			body:       `{"items": []}`,
-			wantStatus: http.StatusUnprocessableEntity, // 422 según el RFC
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 		{
 			name:       "validation error - missing items key",
 			body:       `{}`,
-			wantStatus: http.StatusUnprocessableEntity, // 422 según el RFC
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 		{
 			name:       "validation error - oversize batch",
 			body:       oversizeJSON,
-			wantStatus: http.StatusUnprocessableEntity, // 422 según el RFC
+			wantStatus: http.StatusUnprocessableEntity,
 		},
 	}
 
