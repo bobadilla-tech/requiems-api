@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -104,27 +105,34 @@ func (s *Service) GetInflation(ctx context.Context, rawCode string) (Response, e
 // GetInflationBatch returns inflation data for multiple countries in the same
 // order as the input slice. Countries with no data are returned with Found: false.
 func (s *Service) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
+	const maxWorkers = 8
+
 	results := make([]BatchItem, len(countries))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
 
 	for i, c := range countries {
-		resp, err := s.GetInflation(ctx, c)
-		if err != nil {
-			// Country not found or unexpected error: return in-band with Found: false.
-			results[i] = BatchItem{
-				Country: strings.ToUpper(c),
-				Found:   false,
-			}
-			continue
-		}
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, c string) {
+			defer wg.Done()
+			defer func() { <-sem }()
 
-		results[i] = BatchItem{
-			Country:    resp.Country,
-			Found:      true,
-			Rate:       resp.Rate,
-			Period:     resp.Period,
-			Historical: resp.Historical,
-		}
+			resp, err := s.GetInflation(ctx, c)
+			if err != nil {
+				results[i] = BatchItem{Country: strings.ToUpper(c), Found: false}
+				return
+			}
+			results[i] = BatchItem{
+				Country:    resp.Country,
+				Found:      true,
+				Rate:       resp.Rate,
+				Period:     resp.Period,
+				Historical: resp.Historical,
+			}
+		}(i, c)
 	}
 
+	wg.Wait()
 	return results
 }

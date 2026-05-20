@@ -77,9 +77,114 @@ still count as **1** request.
 
 ---
 
+## Service-layer implementation rules
+
+The transport layer (`httpx.HandleBatch`) handles HTTP concerns. The service
+method it calls must itself be a real batch — not a loop over the single-item
+method.
+
+### The anti-pattern (do not do this)
+
+```go
+// WRONG: N serial round-trips disguised as a batch.
+func (s *Service) LookupBatch(ctx context.Context, domains []string) []Result {
+    results := make([]Result, len(domains))
+    for i, d := range domains {
+        results[i], _ = s.Lookup(ctx, d) // one DNS/HTTP/DB call per iteration
+    }
+    return results
+}
+```
+
+This compiles, tests green, and silently gives callers no throughput benefit
+over N individual API calls. A 50-item batch takes 50× the latency of one call.
+
+### Rule 1 — Database: write a batch query, do not call the single-item method
+
+If the single-item method runs a SQL query, the batch version must issue **one
+query** that fetches all items, not N queries in a loop.
+
+```go
+// WRONG — N queries
+for _, id := range ids {
+    row := s.db.QueryRow(ctx, `SELECT ... FROM t WHERE id = $1`, id)
+    ...
+}
+
+// RIGHT — 1 query using ANY / IN / LIMIT n (pick the form that fits the schema)
+rows, err := s.db.Query(ctx, `SELECT ... FROM t WHERE id = ANY($1::int[])`, ids)
+
+// For "N random rows" patterns:
+rows, err := s.db.Query(ctx, `SELECT ... FROM t ORDER BY random() LIMIT $1`, n)
+```
+
+Reusing the single-item method for the batch case is only acceptable when the
+single-item method performs **no I/O** (pure in-memory computation).
+
+### Rule 2 — Network I/O (DNS, HTTP): fan out with goroutines + semaphore
+
+When each item requires an independent network call (DNS lookup, outbound HTTP),
+fan out concurrently. Cap concurrency with a semaphore to avoid exhausting the
+upstream or the connection pool.
+
+```go
+const maxWorkers = 10
+
+results := make([]BatchItem, len(items))
+sem := make(chan struct{}, maxWorkers)
+var wg sync.WaitGroup
+
+for i, item := range items {
+    wg.Add(1)
+    sem <- struct{}{}
+    go func(i int, item string) {
+        defer wg.Done()
+        defer func() { <-sem }()
+
+        itemCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+        defer cancel()
+
+        r, err := s.singleItemCall(itemCtx, item)
+        if err != nil {
+            results[i] = BatchItem{Found: false, Error: err.Error()}
+            return
+        }
+        results[i] = BatchItem{Found: true, Data: r}
+    }(i, item)
+}
+
+wg.Wait()
+```
+
+Results are written to pre-allocated index slots, so input order is preserved
+without sorting. See `networking/whois/service.go` and
+`validation/email/service.go` for the canonical in-codebase reference.
+
+### Rule 3 — Error handling: in-band, never fail-fast
+
+Consistent with the **Partial failure** standard above, goroutine-based batch
+methods must absorb per-item errors in-band (`Found: false` / `Valid: false` /
+`error` field on that item) and continue. Do not use `errgroup` with its
+fail-fast semantics unless the RFC for that endpoint explicitly documents
+all-or-nothing behaviour.
+
+### Summary table
+
+| Underlying operation        | Correct batch strategy                       |
+| --------------------------- | -------------------------------------------- |
+| DB query (rows by key / ID) | Single `WHERE id = ANY($1)` or equivalent    |
+| DB query (N random rows)    | Single `ORDER BY random() LIMIT $1`          |
+| DNS lookup                  | Goroutines + semaphore (`maxWorkers ≈ 10`)   |
+| Outbound HTTP               | Goroutines + semaphore (`maxWorkers ≈ 10`)   |
+| Pure in-memory computation  | Sequential loop is fine — no I/O, no latency |
+
+---
+
 ## Checklist before merging a new batch endpoint
 
 - [ ] Uses `httpx.HandleBatch`
+- [ ] Service method is a real batch — no sequential loop over the single-item
+      method for DB or network I/O (see **Service-layer implementation rules**).
 - [ ] Struct validation documents **min/max** batch size; tests cover boundary
       and oversize.
 - [ ] Public docs include curl example and error cases.

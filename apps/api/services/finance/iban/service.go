@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"strings"
+	"sync"
 	"unicode"
 
 	"github.com/jackc/pgx/v5"
@@ -185,14 +186,28 @@ func extract(s string, offset, length int) string {
 // Infrastructure failures for individual items are absorbed: the item is returned with Valid: false
 // rather than failing the entire batch.
 func (s *Service) ParseBatch(ctx context.Context, numbers []string) []ParseResponse {
+	const maxWorkers = 8
+
 	results := make([]ParseResponse, len(numbers))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
+
 	for i, n := range numbers {
-		result, err := s.Parse(ctx, n)
-		if err != nil {
-			results[i] = ParseResponse{IBAN: n, Valid: false}
-			continue
-		}
-		results[i] = result
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, n string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			result, err := s.Parse(ctx, n)
+			if err != nil {
+				results[i] = ParseResponse{IBAN: n, Valid: false}
+				return
+			}
+			results[i] = result
+		}(i, n)
 	}
+
+	wg.Wait()
 	return results
 }
