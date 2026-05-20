@@ -62,8 +62,8 @@ SELECT id, text, author
 FROM quotes
 ORDER BY random()
 LIMIT $1`, n)
-	
-if err != nil {
+
+	if err != nil {
 		return nil, err
 	}
 
