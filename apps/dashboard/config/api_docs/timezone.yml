@@ -224,7 +224,7 @@ endpoints:
           -H "Content-Type: application/json" \
           -H "requiems-api-key: YOUR_API_KEY" \
           -d '{
-            "cities": ["Tokyo", "Lima", "New York"]
+            "cities": ["Tokyo", "Lima", "Atlantis"]
           }'
 
       python: |
@@ -238,7 +238,7 @@ endpoints:
         }
 
         payload = {
-          "cities": ["Tokyo", "Lima", "New York"]
+          "cities": ["Tokyo", "Lima", "Atlantis"]
         }
 
         response = requests.post(url, json=payload, headers=headers)
@@ -255,7 +255,7 @@ endpoints:
               'requiems-api-key': 'YOUR_API_KEY'
             },
             body: JSON.stringify({
-              cities: ['Tokyo', 'Lima', 'New York']
+              cities: ['Tokyo', 'Lima', 'Atlantis']
             })
           }
         );
@@ -276,7 +276,7 @@ endpoints:
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
         request.body = {
-          cities: ['Tokyo', 'Lima', 'New York']
+          cities: ['Tokyo', 'Lima', 'Atlantis']
         }.to_json
 
         response = Net::HTTP.start(

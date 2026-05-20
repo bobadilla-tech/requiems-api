@@ -1,11 +1,11 @@
 package timezone
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"net/http"
 
 	"requiems-api/platform/httpx"
 )
@@ -28,7 +28,23 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	}))
 
 	r.Get("/timezone", httpx.Guard(svc, handleGetTimezone(svc)))
-	r.Post("/timezone/batch", httpx.Guard(svc, handleBatchTimezone(svc)))
+	r.Post("/timezone/batch", httpx.Guard(svc,httpx.HandleBatch(func(ctx context.Context,req BatchRequest,
+	) (httpx.BatchResponse[BatchResult], error) {
+
+				resp, err := svc.GetTimezoneBatch(
+					ctx,
+					req.Cities,
+				)
+				if err != nil {
+					return httpx.BatchResponse[BatchResult]{}, err
+				}
+
+				return httpx.BatchResponse[BatchResult]{
+					Results: resp.Results,
+				}, nil
+			},
+		),
+	))
 }
 
 func handleBatchTimezone(svc *Service) http.HandlerFunc {
@@ -69,7 +85,6 @@ func handleBatchTimezone(svc *Service) http.HandlerFunc {
 		httpx.JSON(w, http.StatusOK, result)
 	}
 }
-
 func handleGetTimezone(svc *Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, hasCity, hasCoords, err := parseTimezoneQuery(r)
@@ -79,6 +94,7 @@ func handleGetTimezone(svc *Service) http.HandlerFunc {
 		}
 
 		var info *Info
+
 		if hasCity {
 			info, err = svc.GetTimezoneByCity(req.City)
 		} else if hasCoords {
@@ -100,11 +116,14 @@ func parseTimezoneQuery(r *http.Request) (req Request, hasCity, hasCoords bool, 
 	}
 
 	q := r.URL.Query()
+
 	hasCoords = q.Has("lat") && q.Has("lon")
 	hasCity = q.Has("city")
 
 	if !hasCoords && !hasCity {
-		err = errors.New("provide either 'city' or both 'lat' and 'lon' query parameters")
+		err = errors.New(
+			"provide either 'city' or both 'lat' and 'lon' query parameters",
+		)
 	}
 
 	return
