@@ -140,3 +140,31 @@ func TestService_Check_SuggestionsOnlyOne(t *testing.T) {
 	require.Len(t, result.Corrections, 1)
 	assert.Equal(t, []string{"test"}, result.Corrections[0].Suggestions)
 }
+
+func TestService_Check_LanguageToolNonOKStatus(t *testing.T) {
+	t.Parallel()
+	// Simulate LanguageTool returning a 500 — Check must propagate this as an error.
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "internal error", http.StatusInternalServerError)
+	}))
+	defer srv.Close()
+
+	_, err := NewService(srv.URL).Check("hello")
+	assert.Error(t, err)
+}
+
+func TestService_Check_NegativeOffsetIgnored(t *testing.T) {
+	t.Parallel()
+	// A match with a negative offset is malformed — it must be silently skipped,
+	// leaving the corrected text equal to the input.
+	srv := newMockLT(t, []ltMatch{
+		{Offset: -1, Length: 3, Replacements: []ltReplacement{{Value: "This"}}},
+	})
+	defer srv.Close()
+
+	result, err := NewService(srv.URL).Check("Ths is fine")
+
+	require.NoError(t, err)
+	assert.Empty(t, result.Corrections)
+	assert.Equal(t, "Ths is fine", result.Corrected)
+}
