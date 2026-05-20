@@ -126,11 +126,12 @@ func TestSpellcheckBatch_MixedTexts(t *testing.T) {
 
 func TestSpellcheckBatch_OrderPreserved(t *testing.T) {
 	t.Parallel()
+	// No matches returned — so Corrected equals the original text for every
+	// item, letting us assert that each result maps to the right input position.
 	lt := newMockLT(t, []ltMatch{})
 	defer lt.Close()
 	r := setupRouter(lt.URL)
 
-	// RFC requires results to stay in the same order as the input array.
 	body := `{"texts":["Hello world","Clean text","More clean text"]}`
 	req := httptest.NewRequest(http.MethodPost, "/spellcheck/batch", strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -142,6 +143,9 @@ func TestSpellcheckBatch_OrderPreserved(t *testing.T) {
 	var resp httpx.Response[BatchCheckResponse]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	require.Len(t, resp.Data.Results, 3)
+	assert.Equal(t, "Hello world", resp.Data.Results[0].Corrected)
+	assert.Equal(t, "Clean text", resp.Data.Results[1].Corrected)
+	assert.Equal(t, "More clean text", resp.Data.Results[2].Corrected)
 }
 
 func TestSpellcheckBatch_UsageCountHeader(t *testing.T) {
@@ -221,4 +225,19 @@ func TestSpellcheckBatch_MissingBody(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestSpellcheckBatch_ServiceError(t *testing.T) {
+	t.Parallel()
+	// Point the service at a port where nothing is listening so every
+	// LanguageTool call fails, simulating an unreachable backend.
+	r := setupRouter("http://localhost:19999")
+
+	body := `{"texts":["Hello world","Clean text"]}`
+	req := httptest.NewRequest(http.MethodPost, "/spellcheck/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
 }
