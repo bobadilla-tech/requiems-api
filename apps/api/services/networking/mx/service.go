@@ -4,6 +4,8 @@ import (
 	"context"
 	"net"
 	"sort"
+	"sync"
+	"time"
 )
 
 // Record represents a single MX record entry.
@@ -61,23 +63,34 @@ func (s *Service) Lookup(ctx context.Context, domain string) (LookupResponse, er
 }
 
 func (s *Service) LookupBatch(ctx context.Context, domains []string) []BatchLookupItem {
+	const (
+		maxWorkers     = 10
+		perItemTimeout = 3 * time.Second
+	)
+
 	results := make([]BatchLookupItem, len(domains))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
 
 	for i, d := range domains {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, d string) {
+			defer wg.Done()
+			defer func() { <-sem }()
 
-		result, err := s.Lookup(ctx, d)
+			itemCtx, cancel := context.WithTimeout(ctx, perItemTimeout)
+			defer cancel()
 
-		if err != nil {
-			results[i] = BatchLookupItem{Domain: d, Found: false, Error: err.Error()}
-			continue
-		}
-
-		results[i] = BatchLookupItem{
-			Domain: d,
-			Found:  true,
-			Data:   result,
-		}
+			result, err := s.Lookup(itemCtx, d)
+			if err != nil {
+				results[i] = BatchLookupItem{Domain: d, Found: false, Error: err.Error()}
+				return
+			}
+			results[i] = BatchLookupItem{Domain: d, Found: true, Data: result}
+		}(i, d)
 	}
 
+	wg.Wait()
 	return results
 }
