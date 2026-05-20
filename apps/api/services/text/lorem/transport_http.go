@@ -49,7 +49,7 @@ func RegisterRoutes(r chi.Router, svc Generator) {
 			}
 
 			lorem := svc.Generate(p, s)
-			
+
 			results = append(results, BatchItemResponse{
 				Data: &lorem,
 			})

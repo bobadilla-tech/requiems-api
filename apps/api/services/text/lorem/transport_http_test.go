@@ -92,7 +92,7 @@ func TestPostBatchLorem(t *testing.T) {
 		wantStatus int
 	}{
 		{
-			name:       "happy path - valid batch",
+			name: "happy path - valid batch",
 			// ¡Acá agregamos el {} al final para el coverage del 100%!
 			body:       `{"items": [{"paragraphs": 2, "sentences": 3}, {"paragraphs": 1}, {}]}`,
 			wantStatus: http.StatusOK,
