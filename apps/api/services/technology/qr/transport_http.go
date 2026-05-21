@@ -21,7 +21,7 @@ const defaultSize = 256
 
 // BatchQRRequest is the input for the batch QR base64 endpoint.
 type BatchQRRequest struct {
-	Items []QRQuery `json:"items" validate:"required,min=1,max=50,dive"`
+	Items []Query `json:"items" validate:"required,min=1,max=50,dive"`
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {

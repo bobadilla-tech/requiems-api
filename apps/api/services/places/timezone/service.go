@@ -19,9 +19,9 @@ type Info struct {
 
 var locationCache sync.Map
 
-// TimezoneQuery is the per-item input for the batch timezone endpoint.
+// Query is the per-item input for the batch timezone endpoint.
 // Priority order: Timezone name > City > lat+lon (non-zero coords).
-type TimezoneQuery struct {
+type Query struct {
 	Timezone string  `json:"timezone"`
 	City     string  `json:"city"`
 	Lat      float64 `json:"lat" validate:"min=-90,max=90"`
@@ -66,7 +66,7 @@ func (s *Service) GetCurrentTime(tzName string) (*Info, error) {
 
 // BatchLookup resolves timezone info for each item in input order.
 // Per-item errors (unknown timezone, city, or coords) are absorbed in-band.
-func (s *Service) BatchLookup(items []TimezoneQuery) []BatchResult {
+func (s *Service) BatchLookup(items []Query) []BatchResult {
 	results := make([]BatchResult, len(items))
 	for i, item := range items {
 		var info *Info

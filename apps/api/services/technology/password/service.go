@@ -19,8 +19,8 @@ type Password struct {
 	Strength string `json:"strength"`
 }
 
-// PasswordQuery is the per-item input for the batch password endpoint.
-type PasswordQuery struct {
+// Query is the per-item input for the batch password endpoint.
+type Query struct {
 	Length    int  `json:"length"    validate:"omitempty,min=8,max=128"`
 	Uppercase bool `json:"uppercase"`
 	Numbers   bool `json:"numbers"`
@@ -43,7 +43,7 @@ func NewService() *Service {
 
 // GenerateBatch generates a password for each item and returns results in input order.
 // A Length of 0 defaults to 16. Per-item errors are absorbed in-band.
-func (s *Service) GenerateBatch(items []PasswordQuery) []BatchResult {
+func (s *Service) GenerateBatch(items []Query) []BatchResult {
 	results := make([]BatchResult, len(items))
 	for i, item := range items {
 		length := item.Length

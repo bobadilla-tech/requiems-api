@@ -18,7 +18,7 @@ type Request struct {
 
 // BatchPasswordRequest is the input for the batch password endpoint.
 type BatchPasswordRequest struct {
-	Items []PasswordQuery `json:"items" validate:"required,min=1,max=50,dive"`
+	Items []Query `json:"items" validate:"required,min=1,max=50,dive"`
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {

@@ -13,8 +13,8 @@ type Base64Response struct {
 	Height int    `json:"height"`
 }
 
-// QRQuery is the per-item input for the batch QR base64 endpoint.
-type QRQuery struct {
+// Query is the per-item input for the batch QR base64 endpoint.
+type Query struct {
 	Data     string `json:"data"     validate:"required"`
 	Size     int    `json:"size"     validate:"omitempty,min=50,max=1000"`
 	Recovery string `json:"recovery" validate:"omitempty,oneof=low medium high highest"`
@@ -54,7 +54,7 @@ func recoveryLevel(s string) qrcode.RecoveryLevel {
 
 // GenerateBatch generates a base64-encoded QR code for each item in input order.
 // A Size of 0 defaults to 256. Per-item errors are absorbed in-band.
-func (s *Service) GenerateBatch(items []QRQuery) []BatchBase64Item {
+func (s *Service) GenerateBatch(items []Query) []BatchBase64Item {
 	results := make([]BatchBase64Item, len(items))
 	for i, item := range items {
 		size := item.Size

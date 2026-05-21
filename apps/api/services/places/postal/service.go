@@ -18,8 +18,8 @@ type PostalCode struct { //nolint:revive // established public API type name
 	Lon        float64 `json:"lon"`
 }
 
-// PostalQuery is the per-item input for the batch postal code endpoint.
-type PostalQuery struct {
+// Query is the per-item input for the batch postal code endpoint.
+type Query struct {
 	Code    string `json:"code"    validate:"required"`
 	Country string `json:"country" validate:"omitempty,len=2"`
 }
@@ -121,7 +121,7 @@ func (s *Service) Lookup(code, country string) (PostalCode, bool) {
 
 // LookupBatch looks up each item and returns results in input order.
 // Country defaults to "US" when empty. Not-found items have Found: false and no error.
-func (s *Service) LookupBatch(items []PostalQuery) []BatchResult {
+func (s *Service) LookupBatch(items []Query) []BatchResult {
 	results := make([]BatchResult, len(items))
 	for i, item := range items {
 		country := item.Country
