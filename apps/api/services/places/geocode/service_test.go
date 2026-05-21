@@ -227,9 +227,9 @@ func TestGeocodeBatch_Service_PartialNotFound(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if strings.Contains(r.URL.RawQuery, "unknown") {
-			json.NewEncoder(w).Encode([]nominatimSearchResult{}) //nolint:errcheck
+				json.NewEncoder(w).Encode([]nominatimSearchResult{}) //nolint:errcheck -- test server response body writes are intentionally ignored
 		} else {
-			json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck
+				json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck -- test server response body writes are intentionally ignored
 				{Lat: "48.8566", Lon: "2.3522", DisplayName: "Paris, France",
 					Address: nominatimAddress{City: "Paris", CountryCode: "fr"}},
 			})
@@ -271,9 +271,9 @@ func TestReverseGeocodeBatch_Service_PartialNotFound(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if r.URL.Query().Get("lat") == "0.000000" {
-			json.NewEncoder(w).Encode(nominatimReverseResult{DisplayName: ""}) //nolint:errcheck
+				json.NewEncoder(w).Encode(nominatimReverseResult{DisplayName: ""}) //nolint:errcheck -- test server response body writes are intentionally ignored
 		} else {
-			json.NewEncoder(w).Encode(nominatimReverseResult{ //nolint:errcheck
+				json.NewEncoder(w).Encode(nominatimReverseResult{ //nolint:errcheck -- test server response body writes are intentionally ignored
 				DisplayName: "Eiffel Tower, Paris, France",
 				Address:     nominatimAddress{City: "Paris", CountryCode: "fr"},
 			})
