@@ -19,6 +19,11 @@ type Request struct {
 
 const defaultSize = 256
 
+// BatchQRRequest is the input for the batch QR base64 endpoint.
+type BatchQRRequest struct {
+	Items []Query `json:"items" validate:"required,min=1,max=50,dive"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	// GET /qr — returns a raw PNG image (not JSON, must stay inline).
 	r.Get("/qr", func(w http.ResponseWriter, r *http.Request) {
@@ -52,4 +57,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			Height: req.Size,
 		}, nil
 	}, Request{Size: defaultSize}))
+
+	// POST /qr/base64/batch — returns multiple base64-encoded QR codes.
+	// The raw PNG endpoint (GET /qr) has no batch variant: it returns binary image/png.
+	r.Post("/qr/base64/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchQRRequest) (httpx.BatchResponse[BatchBase64Item], error) {
+			return httpx.BatchResponse[BatchBase64Item]{Results: svc.GenerateBatch(req.Items)}, nil
+		},
+	))
 }

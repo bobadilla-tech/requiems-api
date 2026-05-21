@@ -1,4 +1,6 @@
-# RFC: Batch APIs (request shape, billing, and Go handler pattern)
+# Batch APIs
+
+> request shape, billing, and Go handler pattern
 
 ## 1. Goals
 
@@ -40,7 +42,7 @@ returns `(response, itemCount, error)`; the platform sets response header
 - Domain errors from the service → map with `httpx.AppError` as today.
 
 **Ordering:** Results MUST stay in the **same order** as the input array unless
-the RFC for that specific API documents otherwise.
+the doc for that specific API documents otherwise.
 
 ---
 

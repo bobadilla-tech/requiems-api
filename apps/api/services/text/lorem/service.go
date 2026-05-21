@@ -8,7 +8,7 @@ import (
 type Lorem struct {
 	Text       string `json:"text"`
 	Paragraphs int    `json:"paragraphs"`
-	WordCount  int    `json:"wordCount"`
+	WordCount  int    `json:"word_count"`
 }
 
 type Service struct{}

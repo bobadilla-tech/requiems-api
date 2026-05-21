@@ -40,7 +40,7 @@ endpoints:
         "data": {
           "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
           "paragraphs": 1,
-          "wordCount": 45
+          "word_count": 45
         },
         "metadata": {
           "timestamp": "2026-01-01T00:00:00Z"
@@ -53,7 +53,7 @@ endpoints:
       - name: paragraphs
         type: integer
         description: Number of paragraphs generated
-      - name: wordCount
+      - name: word_count
         type: integer
         description: Total number of words in generated text
     errors:
@@ -143,7 +143,7 @@ endpoints:
             "data": {
               "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
               "paragraphs": 2,
-              "wordCount": 90
+              "word_count": 90
             }
           },
           {

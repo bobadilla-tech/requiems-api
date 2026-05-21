@@ -18,6 +18,20 @@ type PostalCode struct { //nolint:revive // established public API type name
 	Lon        float64 `json:"lon"`
 }
 
+// Query is the per-item input for the batch postal code endpoint.
+type Query struct {
+	Code    string `json:"code"    validate:"required"`
+	Country string `json:"country" validate:"omitempty,len=2"`
+}
+
+// BatchResult is the per-item result returned by LookupBatch.
+type BatchResult struct {
+	Code    string      `json:"code"`
+	Country string      `json:"country"`
+	Found   bool        `json:"found"`
+	Result  *PostalCode `json:"result,omitempty"`
+}
+
 // Service looks up postal codes from the GeoNames postal code dataset.
 // The dataset is loaded once at startup and held in memory.
 type Service struct {
@@ -103,4 +117,23 @@ func (s *Service) Lookup(code, country string) (PostalCode, bool) {
 	key := strings.ToUpper(strings.TrimSpace(country)) + ":" + strings.ToUpper(strings.TrimSpace(code))
 	p, ok := s.index[key]
 	return p, ok
+}
+
+// LookupBatch looks up each item and returns results in input order.
+// Country defaults to "US" when empty. Not-found items have Found: false and no error.
+func (s *Service) LookupBatch(items []Query) []BatchResult {
+	results := make([]BatchResult, len(items))
+	for i, item := range items {
+		country := item.Country
+		if country == "" {
+			country = "US"
+		}
+		p, ok := s.Lookup(item.Code, country)
+		if ok {
+			results[i] = BatchResult{Code: item.Code, Country: strings.ToUpper(country), Found: true, Result: &p}
+		} else {
+			results[i] = BatchResult{Code: item.Code, Country: strings.ToUpper(country), Found: false}
+		}
+	}
+	return results
 }

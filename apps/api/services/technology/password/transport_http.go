@@ -16,8 +16,19 @@ type Request struct {
 	Symbols   bool `query:"symbols"`
 }
 
+// BatchPasswordRequest is the input for the batch password endpoint.
+type BatchPasswordRequest struct {
+	Items []Query `json:"items" validate:"required,min=1,max=50,dive"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/password", httpx.HandleGet(func(ctx context.Context, req Request) (Password, error) {
 		return svc.Generate(req.Length, req.Uppercase, req.Numbers, req.Symbols)
 	}, Request{Length: 16}))
+
+	r.Post("/password/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchPasswordRequest) (httpx.BatchResponse[BatchResult], error) {
+			return httpx.BatchResponse[BatchResult]{Results: svc.GenerateBatch(req.Items)}, nil
+		},
+	))
 }

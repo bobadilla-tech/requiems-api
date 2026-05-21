@@ -1,6 +1,7 @@
 package info
 
 import (
+	"context"
 	"net"
 	"net/http"
 	"strings"
@@ -9,6 +10,11 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+
+// BatchInfoRequest is the input for the batch IP geolocation endpoint.
+type BatchInfoRequest struct {
+	IPs []string `json:"ips" validate:"required,min=1,max=50,dive,ip"`
+}
 
 func RegisterRoutes(r chi.Router, svc *Service) {
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +39,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 	r.Get("/ip/{ip}", handler)
 	r.Get("/ip", handler)
+
+	r.Post("/ip/info/batch", httpx.Guard(svc, httpx.HandleBatch(
+		func(ctx context.Context, req BatchInfoRequest) (httpx.BatchResponse[BatchIPInfoItem], error) {
+			return httpx.BatchResponse[BatchIPInfoItem]{Results: svc.CheckInfoBatch(ctx, req.IPs)}, nil
+		},
+	)))
 }
 
 // callerIP extracts the real client IP from the request, checking

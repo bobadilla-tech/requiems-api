@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_Check_NoProfanity(t *testing.T) {
@@ -76,4 +77,23 @@ func TestService_Check_LeetSpeak(t *testing.T) {
 
 	assert.True(t, result.HasProfanity)
 	assert.NotEmpty(t, result.FlaggedWords)
+}
+
+func TestService_CheckBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	texts := []string{"hello world", "what the fuck", ""}
+	results := svc.CheckBatch(context.Background(), texts)
+
+	require.Len(t, results, 3)
+
+	assert.Equal(t, "hello world", results[0].Text)
+	assert.False(t, results[0].Result.HasProfanity)
+
+	assert.Equal(t, "what the fuck", results[1].Text)
+	assert.True(t, results[1].Result.HasProfanity)
+
+	assert.Equal(t, "", results[2].Text)
+	assert.False(t, results[2].Result.HasProfanity)
 }

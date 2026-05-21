@@ -1,8 +1,9 @@
-# Adding a New Endpoint to the Go Backend
+# Adding a New Go Endpoint
 
 This guide walks through every step required to ship a new endpoint: from
 writing the Go code to updating the dashboard catalog and API documentation.
-Follow it in order — the checklist at the end maps to each section.
+
+Follow it in order: the checklist at the end maps to each section.
 
 ## Architecture Refresher
 
@@ -36,7 +37,6 @@ apps/api/
     └── {domain}/
         ├── router.go         # Wires services → chi.Router for this domain
         └── {feature}/
-            ├── type.go           # Request + response types
             ├── service.go        # Business logic
             └── transport_http.go # HTTP handlers
 ```
@@ -56,7 +56,7 @@ Existing top-level domains and their `/v1` prefixes:
 
 ---
 
-## Before Writing Any Code — Check for Existing Libraries
+## Before Writing Any Code: Check for Existing Libraries
 
 **Do not write a service from scratch if a battle-tested library already solves
 the problem.**
@@ -102,40 +102,45 @@ docker exec requiem-dev-api-1 go mod tidy
 
 Commit both `go.mod` and `go.sum`. Never edit them by hand.
 
----
-
 ## Step 1 — Write the Go Code
 
-Create four files in this order (each builds on the previous).
+Create files as needed for the feature. Define request/response structs in the
+file that owns them (typically `service.go` for business types or
+`transport_http.go` for request binding types).
 
-### 1a. `type.go` — Define Your Types
+### 1a. Types — Define Your Types (in the owning file)
 
 > **Rule: always use `snake_case` for JSON field names.** Every `json:"..."` tag
-> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅
-> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌
+> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅:
+> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌:
 > `json:"hasProfanity"` `json:"flaggedWords"` `json:"browserVersion"`
+
+Define request and response structs next to the code that owns them. Small
+features often keep types inside `service.go`; request-binding structs that only
+belong to the HTTP layer can live in `transport_http.go` alongside the handlers.
+
+Example (put this near `service.go` or `transport_http.go`):
 
 ```go
 package riddle
 
 // Request for POST endpoints with JSON body.
-// Use validate tags for automatic validation.
 type GenerateRequest struct {
-    Category string `json:"category" validate:"required,oneof=general science history"`
+  Category string `json:"category" validate:"required,oneof=general science history"`
 }
 
 // Response types.
 type Riddle struct {
-    ID       int    `json:"id"`
-    Question string `json:"question"`
-    Answer   string `json:"answer"`
-    Category string `json:"category"`
+  ID       int    `json:"id"`
+  Question string `json:"question"`
+  Answer   string `json:"answer"`
+  Category string `json:"category"`
 }
 
 // For collections or richer responses:
 type RiddleList struct {
-    Items []Riddle `json:"items"`
-    Total int      `json:"total"`
+  Items []Riddle `json:"items"`
+  Total int      `json:"total"`
 }
 ```
 
@@ -832,7 +837,7 @@ endpoints:
 
 faq:
   - question: Can I request riddles from multiple categories at once?
-    answer: Not currently — each request returns one riddle from one category. Batch support is planned.
+    answer: Not currently — each request returns one riddle from one category.
 
   - question: Are riddle IDs stable across requests?
     answer: Yes, IDs are stable database identifiers. You can use them to avoid showing a riddle twice.
@@ -1073,23 +1078,17 @@ parameters:
 Below is a complete minimal implementation for a riddle endpoint backed by an
 in-memory list (no database).
 
-**`apps/api/services/text/riddle/type.go`**
-
-```go
-package riddle
-
-type Riddle struct {
-    Question string `json:"question"`
-    Answer   string `json:"answer"`
-}
-```
-
-**`apps/api/services/text/riddle/service.go`**
+**`apps/api/services/text/riddle/service.go`** (types included)
 
 ```go
 package riddle
 
 import "math/rand"
+
+type Riddle struct {
+  Question string `json:"question"`
+  Answer   string `json:"answer"`
+}
 
 var riddles = []Riddle{
     {Question: "What has keys but no locks?", Answer: "A keyboard"},

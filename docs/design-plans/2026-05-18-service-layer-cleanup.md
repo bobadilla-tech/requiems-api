@@ -1,17 +1,17 @@
 # Service Layer Cleanup & Standardization
 
-The Go backend (`apps/api/services/`) has ~60 modules each containing three
-files: `service.go`, `transport_http.go`, and `type.go`. The `type.go` split is
-artificial — it accumulates all types for a module regardless of which layer
-owns them. Additionally, 4 modules independently define an identical `querier`
-interface, and some service methods duplicate validation already enforced by
-struct tags.
+The Go backend (`apps/api/services/`) has ~60 modules each typically organized
+around two primary files: `service.go` and `transport_http.go`. Historically
+types were maintained separately which led to types being collected away from
+their owning code. Additionally, 4 modules independently define an identical
+`querier` interface, and some service methods duplicate validation already
+enforced by struct tags.
 
 ---
 
 ## Goals
 
-1. Eliminate `type.go` files. Types live in the file that owns them.
+1. Types should live in the file that owns them.
 2. `service.go` — domain entities + service logic only. No HTTP-specific
    imports.
 3. `transport_http.go` — HTTP handlers + request/response types (with
@@ -90,7 +90,7 @@ results are non-empty, context propagation).
 
 ## Module Change Table
 
-| Module                    | querier update | type.go → service.go               | type.go → transport_http.go                                               | validation removal                 |
+| Module                    | querier update | types → service.go                 | types → transport_http.go                                                 | validation removal                 |
 | ------------------------- | -------------- | ---------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- |
 | entertainment/advice      | `db.Querier`   | `Advice`                           | —                                                                         | —                                  |
 | entertainment/chucknorris | —              | `ChuckNorrisFact`                  | —                                                                         | —                                  |
@@ -152,7 +152,7 @@ results are non-empty, context propagation).
 
 - `go build ./...` — clean
 - `go test ./...` — all pass
-- No `type.go` files in `services/`
+- No standalone type-only files in `services/`
 - `service.go` has no `net/http`, `chi`, `httpx` imports (except `counter/`
   which has its own structure)
 - `transport_http.go` has no `querier`/`dbPool` interface definitions
@@ -164,8 +164,8 @@ results are non-empty, context propagation).
 
 - [ ] `go build ./...` passes locally
 - [ ] `go test ./...` passes locally
-- [ ] No `type.go` files remain: `find apps/api/services -name type.go | wc -l`
-      returns 0
+- [ ] No standalone type-only files remain (types are declared in `service.go`
+      or `transport_http.go`) returns 0
 - [ ] Spot-check: `GET /v1/entertainment/quotes/random` still works
 - [ ] Spot-check: `POST /v1/health/exercises/batch` still works
 

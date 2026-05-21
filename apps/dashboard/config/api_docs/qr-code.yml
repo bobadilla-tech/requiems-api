@@ -223,6 +223,148 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts data['image'][0..39] + '...'
 
+  - name: Batch Generate QR Codes (Base64)
+    method: POST
+    path: /v1/technology/qr/base64/batch
+    description: Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+    parameters:
+      - name: items
+        type: array of objects
+        required: true
+        location: body
+        description: List of QR generation requests (1–50 items).
+      - name: items[].data
+        type: string
+        required: true
+        location: body
+        description: The text or URL to encode.
+      - name: items[].size
+        type: integer
+        required: false
+        location: body
+        description: "Image size in pixels (50–1000). Defaults to 256."
+      - name: items[].recovery
+        type: string
+        required: false
+        location: body
+        description: "Error-correction level: low, medium, high, highest. Defaults to medium."
+    request_example: |
+      {
+        "items": [
+          { "data": "https://example.com", "size": 256, "recovery": "medium" },
+          { "data": "Hello, World!" }
+        ]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            { "data": "https://example.com", "image": "<base64>", "width": 256, "height": 256 },
+            { "data": "Hello, World!",        "image": "<base64>", "width": 256, "height": 256 }
+          ],
+          "total": 2
+        },
+        "metadata": { "timestamp": "2026-01-01T00:00:00Z" }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: Per-item results in input order.
+      - name: results[].data
+        type: string
+        description: The input text or URL that was encoded.
+      - name: results[].image
+        type: string
+        description: Base64-encoded PNG image data (omitted on error).
+      - name: results[].width
+        type: integer
+        description: Width of the generated image in pixels (omitted on error).
+      - name: results[].height
+        type: integer
+        description: Height of the generated image in pixels (omitted on error).
+      - name: results[].error
+        type: string
+        description: Error message if generation failed (omitted on success).
+      - name: total
+        type: integer
+        description: Total number of items processed.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The items array is missing, empty, or exceeds 50 items.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/qr/base64/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"items": [{"data": "https://example.com"}, {"data": "Hello, World!"}]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/technology/qr/base64/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "items": [
+                {"data": "https://example.com", "size": 256},
+                {"data": "Hello, World!"}
+            ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        for item in response.json()["data"]["results"]:
+            if item.get("image"):
+                print(f"{item['data']}: {item['image'][:20]}...")
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/technology/qr/base64/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [
+              { data: 'https://example.com', size: 256 },
+              { data: 'Hello, World!' }
+            ]
+          })
+        });
+
+        const { data } = await response.json();
+        data.results.forEach(item => {
+          if (item.image) {
+            document.getElementById('qr').src = `data:image/png;base64,${item.image}`;
+          }
+        });
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/technology/qr/base64/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          items: [
+            { data: 'https://example.com', size: 256 },
+            { data: 'Hello, World!' }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+        data['results'].each do |item|
+          puts item['image'][0..19] + '...' if item['image']
+        end
+
 faq:
   - question: What content can I encode in a QR code?
     answer: Any UTF-8 text — URLs, plain text, phone numbers, email addresses, vCard data, Wi-Fi credentials, etc. The library encodes whatever string you pass in the data parameter.
