@@ -1,6 +1,7 @@
 package asn
 
 import (
+	"context"
 	"net"
 	"net/http"
 	"strings"
@@ -9,6 +10,11 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+
+// BatchASNRequest is the input for the batch ASN lookup endpoint.
+type BatchASNRequest struct {
+	IPs []string `json:"ips" validate:"required,min=1,max=50,dive,ip"`
+}
 
 func RegisterRoutes(r chi.Router, svc *Service) {
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +48,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 	r.Get("/ip/asn/{ip}", handler)
 	r.Get("/ip/asn", handler)
+
+	r.Post("/ip/asn/batch", httpx.Guard(svc, httpx.HandleBatch(
+		func(ctx context.Context, req BatchASNRequest) (httpx.BatchResponse[BatchASNItem], error) {
+			return httpx.BatchResponse[BatchASNItem]{Results: svc.CheckASNBatch(ctx, req.IPs)}, nil
+		},
+	)))
 }
 
 // Extracts the real client IP from the request, checking

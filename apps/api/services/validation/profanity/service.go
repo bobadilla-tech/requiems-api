@@ -23,6 +23,21 @@ type Service struct{}
 // NewService returns a new profanity Service.
 func NewService() *Service { return &Service{} }
 
+// BatchResult is the per-item result returned by CheckBatch.
+type BatchResult struct {
+	Text   string `json:"text"`
+	Result Result `json:"result"`
+}
+
+// CheckBatch runs Check on each text and returns results in input order.
+func (s *Service) CheckBatch(ctx context.Context, texts []string) []BatchResult {
+	results := make([]BatchResult, len(texts))
+	for i, t := range texts {
+		results[i] = BatchResult{Text: t, Result: s.Check(ctx, t)}
+	}
+	return results
+}
+
 // Check inspects text for profanity, returning a censored copy of the text
 // and the deduplicated list of flagged words found.
 func (s *Service) Check(ctx context.Context, text string) Result {

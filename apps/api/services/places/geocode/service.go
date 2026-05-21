@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -169,6 +170,95 @@ func (s *Service) doRequest(ctx context.Context, apiURL string) ([]byte, error) 
 	}
 
 	return buf, nil
+}
+
+// ReverseQuery is the per-item input for the reverse geocode batch endpoint.
+type ReverseQuery struct {
+	Lat float64 `json:"lat" validate:"required,min=-90,max=90"`
+	Lon float64 `json:"lon" validate:"required,min=-180,max=180"`
+}
+
+// BatchGeocodeItem is the per-item result returned by GeocodeBatch.
+type BatchGeocodeItem struct {
+	Address string           `json:"address"`
+	Result  *GeocodeResponse `json:"result,omitempty"`
+	Error   string           `json:"error,omitempty"`
+}
+
+// BatchReverseGeocodeItem is the per-item result returned by ReverseGeocodeBatch.
+type BatchReverseGeocodeItem struct {
+	Lat    float64                 `json:"lat"`
+	Lon    float64                 `json:"lon"`
+	Result *ReverseGeocodeResponse `json:"result,omitempty"`
+	Error  string                  `json:"error,omitempty"`
+}
+
+const maxGeoWorkers = 10
+
+// GeocodeBatch geocodes each address concurrently and returns results in input order.
+// Per-item errors are absorbed in-band; processing continues for all items.
+func (s *Service) GeocodeBatch(ctx context.Context, addresses []string) []BatchGeocodeItem {
+	results := make([]BatchGeocodeItem, len(addresses))
+	sem := make(chan struct{}, maxGeoWorkers)
+	var wg sync.WaitGroup
+
+	for i, addr := range addresses {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, addr string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			itemCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+			defer cancel()
+
+			r, err := s.Geocode(itemCtx, addr)
+			if err != nil {
+				var msg string
+				if se, ok := err.(interface{ Error() string }); ok {
+					msg = se.Error()
+				} else {
+					msg = "geocoding failed"
+				}
+				results[i] = BatchGeocodeItem{Address: addr, Error: msg}
+			} else {
+				results[i] = BatchGeocodeItem{Address: addr, Result: &r}
+			}
+		}(i, addr)
+	}
+
+	wg.Wait()
+	return results
+}
+
+// ReverseGeocodeBatch reverse-geocodes each coordinate pair concurrently and returns results in input order.
+// Per-item errors are absorbed in-band; processing continues for all items.
+func (s *Service) ReverseGeocodeBatch(ctx context.Context, items []ReverseQuery) []BatchReverseGeocodeItem {
+	results := make([]BatchReverseGeocodeItem, len(items))
+	sem := make(chan struct{}, maxGeoWorkers)
+	var wg sync.WaitGroup
+
+	for i, item := range items {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, item ReverseQuery) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			itemCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+			defer cancel()
+
+			r, err := s.ReverseGeocode(itemCtx, item.Lat, item.Lon)
+			if err != nil {
+				results[i] = BatchReverseGeocodeItem{Lat: item.Lat, Lon: item.Lon, Error: err.Error()}
+			} else {
+				results[i] = BatchReverseGeocodeItem{Lat: item.Lat, Lon: item.Lon, Result: &r}
+			}
+		}(i, item)
+	}
+
+	wg.Wait()
+	return results
 }
 
 func (s *Service) fromCache(ctx context.Context, key string) (string, bool) {

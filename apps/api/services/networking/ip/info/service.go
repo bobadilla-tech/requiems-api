@@ -17,6 +17,13 @@ type LookupResponse struct {
 	IsVPN       bool   `json:"is_vpn"`
 }
 
+// BatchIPInfoItem is the per-item result returned by CheckInfoBatch.
+type BatchIPInfoItem struct {
+	IP     string          `json:"ip"`
+	Result *LookupResponse `json:"result,omitempty"`
+	Error  string          `json:"error,omitempty"`
+}
+
 type Service struct {
 	c *ipi.Client
 }
@@ -26,6 +33,21 @@ func NewService(c *ipi.Client) *Service {
 		return nil
 	}
 	return &Service{c: c}
+}
+
+// CheckInfoBatch looks up IP info for each address and returns results in input order.
+// Per-item errors are absorbed in-band.
+func (s *Service) CheckInfoBatch(ctx context.Context, ips []string) []BatchIPInfoItem {
+	results := make([]BatchIPInfoItem, len(ips))
+	for i, ip := range ips {
+		r, err := s.CheckInfo(ctx, ip)
+		if err != nil {
+			results[i] = BatchIPInfoItem{IP: ip, Error: err.Error()}
+		} else {
+			results[i] = BatchIPInfoItem{IP: ip, Result: &r}
+		}
+	}
+	return results
 }
 
 func (s *Service) CheckInfo(ctx context.Context, ip string) (LookupResponse, error) {

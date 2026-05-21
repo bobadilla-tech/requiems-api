@@ -20,7 +20,7 @@ type Word struct {
 
 // Definition represents a single definition entry for a word.
 type Definition struct {
-	PartOfSpeech string `json:"partOfSpeech"`
+	PartOfSpeech string `json:"part_of_speech"`
 	Definition   string `json:"definition"`
 	Example      string `json:"example,omitempty"`
 }

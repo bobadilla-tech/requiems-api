@@ -57,11 +57,45 @@ type Result struct {
 	Result string `json:"result"`
 }
 
+// ConvertQuery is the per-item input for the batch conversion endpoint.
+type ConvertQuery struct {
+	From  int    `json:"from"  validate:"required,oneof=2 8 10 16"`
+	To    int    `json:"to"    validate:"required,oneof=2 8 10 16"`
+	Value string `json:"value" validate:"required"`
+}
+
+// BatchResult is the per-item result returned by ConvertBatch.
+type BatchResult struct {
+	From   int    `json:"from"`
+	To     int    `json:"to"`
+	Input  string `json:"input"`
+	Result string `json:"result,omitempty"`
+	Error  string `json:"error,omitempty"`
+}
+
 // Service provides number base conversion operations.
 type Service struct{}
 
 // NewService creates a new base conversion Service.
 func NewService() *Service { return &Service{} }
+
+// ConvertBatch converts each item and returns results in input order.
+// Per-item errors are absorbed in-band; processing continues for all items.
+func (s *Service) ConvertBatch(items []ConvertQuery) []BatchResult {
+	results := make([]BatchResult, len(items))
+
+	for i, item := range items {
+		r, err := s.Convert(item.Value, item.From, item.To)
+
+		if err != nil {
+			results[i] = BatchResult{From: item.From, To: item.To, Input: item.Value, Error: err.Error()}
+		} else {
+			results[i] = BatchResult{From: r.From, To: r.To, Input: r.Input, Result: r.Result}
+		}
+	}
+
+	return results
+}
 
 // Convert parses value as a signed integer in fromBase and formats it in toBase.
 // Supported bases are 2 (binary), 8 (octal), 10 (decimal), and 16 (hexadecimal).
