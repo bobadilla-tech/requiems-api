@@ -24,9 +24,8 @@ apps/api/
     ├── {domain}/
     │   ├── router.go     # Instantiates features and registers routes
     │   └── {feature}/
-    │       ├── type.go           # Request/response types
-    │       ├── service.go        # Business logic
-    │       └── transport_http.go # HTTP handlers, RegisterRoutes()
+   │       ├── service.go        # Business logic (also contains request/response types)
+   │       └── transport_http.go # HTTP handlers, RegisterRoutes()
     └── ...
 ```
 
@@ -39,9 +38,8 @@ Domains: `email`, `text`, `tech`, `places`, `entertainment`, `misc`, etc...
    - `000X_feature_name.down.sql`
 
 2. **Feature package** — create `services/<domain>/<feature>/`:
-   - `type.go` — request/response structs
-   - `service.go` — business logic with `NewService(pool)` constructor
-   - `transport_http.go` — `func RegisterRoutes(r chi.Router, svc *Service)`
+   - `service.go` — business logic (define request/response types here unless they belong only to the HTTP layer)
+   - `transport_http.go` — `func RegisterRoutes(r chi.Router, svc *Service)` (request-binding structs that are only used for HTTP may live here)
 
 3. **Wire up** in `services/<domain>/router.go`:
 
