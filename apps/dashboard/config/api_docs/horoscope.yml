@@ -88,6 +88,178 @@ endpoints:
 
         data = JSON.parse(response.body)
         puts data['data']['horoscope']
+  - name: Batch Daily Horoscopes
+    method: POST
+    path: /v1/entertainment/horoscope/batch
+    description: Returns up to 12 daily horoscopes in a single request.
+    parameters:
+      - name: signs
+        type: array
+        required: true
+        location: body
+        description: "Array of signs to get (min: 1, max: 12)."
+        example: |
+          ["taurus","cancer","libra"]
+    request_example: |
+      {
+        "signs": ["taurus","cancer","libra"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "sign": "taurus",
+              "date": "2026-05-21",
+              "horoscope": "Your patience will be rewarded. Take time to reflect before making important decisions today.",
+              "lucky_number": 26,
+              "mood": "reflective"
+            },
+            {
+              "sign": "cancer",
+              "date": "2026-05-21",
+              "horoscope": "Your patience will be rewarded. Take time to reflect before making important decisions today.",
+              "lucky_number": 2,
+              "mood": "reflective"
+            },
+            {
+              "sign": "libra",
+              "date": "2026-05-21",
+              "horoscope": "Rest and self-care are essential today. Taking care of yourself enables you to take care of others.",
+              "lucky_number": 82,
+              "mood": "peaceful"
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2026-05-21T04:09:20Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: List of daily horoscopes returned in the same order as the input signs.
+      - name: results[].sign
+        type: string
+        description: Zodiac sign the horoscope corresponds to.
+      - name: results[].date
+        type: string
+        description: Date the horoscope is for, in YYYY-MM-DD format.
+      - name: results[].horoscope
+        type: string
+        description: Daily horoscope reading for the given sign.
+      - name: results[].lucky_number
+        type: integer
+        description: Lucky number for the given sign on that date.
+      - name: results[].mood
+        type: string
+        description: Predicted mood for the given sign on that date.
+      - name: total
+        type: integer
+        description: Total number of horoscopes returned.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The signs array is missing, empty, or contains more than 12 items.
+      - code: bad_request
+        status: 400
+        description: Invalid JSON, malformed request body, or unexpected field types.
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/entertainment/horoscope/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "signs": [
+              "taurus",
+              "cancer",
+              "libra"
+            ]
+          }'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/entertainment/horoscope/batch"
+
+        headers = {
+          "requiems-api-key": "YOUR_API_KEY",
+          "Content-Type": "application/json"
+        }
+
+        payload = {
+          "signs": [
+            "taurus",
+            "cancer",
+            "libra"
+          ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+
+        for item in response.json()["data"]["results"]:
+          print(item["sign"], "-", item["date"])
+          print("Horoscope:", item["horoscope"])
+          print("Mood:", item["mood"])
+          print("Lucky number:", item["lucky_number"])
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/entertainment/horoscope/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              signs: [
+                'taurus',
+                'cancer',
+                'libra'
+              ]
+            })
+          }
+        );
+
+        const { data } = await response.json();
+
+        data.results.forEach(item => {
+          console.log(item.sign, '-', item.date);
+          console.log('Horoscope:', item.horoscope);
+          console.log('Mood:', item.mood);
+          console.log('Lucky number:', item.lucky_number);
+        });
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/entertainment/horoscope/batch')
+
+        request = Net::HTTP::Post.new(uri)
+
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          signs: [
+            'taurus',
+            'cancer',
+            'libra'
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |item|
+          puts "#{item['sign']} - #{item['date']}"
+          puts "Horoscope: #{item['horoscope']}"
+          puts "Mood: #{item['mood']}"
+          puts "Lucky number: #{item['lucky_number']}"
+        end
 faq:
   - question: Are horoscope readings the same for all users on the same day?
     answer: >-
