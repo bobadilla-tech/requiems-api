@@ -37,7 +37,7 @@ endpoints:
           "phonetic": "/ɪˈfɛm(ə)rəl/",
           "definitions": [
             {
-              "partOfSpeech": "adjective",
+              "part_of_speech": "adjective",
               "definition": "lasting for a very short time",
               "example": "ephemeral pleasures"
             }
@@ -57,8 +57,8 @@ endpoints:
         description: IPA phonetic transcription of the word (may be omitted if unavailable)
       - name: definitions
         type: array of objects
-        description: One or more definitions for the word, each with partOfSpeech, definition, and an optional example
-      - name: definitions[].partOfSpeech
+        description: One or more definitions for the word, each with part_of_speech, definition, and an optional example
+      - name: definitions[].part_of_speech
         type: string
         description: Grammatical category (e.g. noun, verb, adjective)
       - name: definitions[].definition
@@ -91,7 +91,7 @@ endpoints:
         data = response.json()['data']
         print(f"{data['word']} {data['phonetic']}")
         for d in data['definitions']:
-            print(f"  [{d['partOfSpeech']}] {d['definition']}")
+            print(f"  [{d['part_of_speech']}] {d['definition']}")
             if d.get('example'):
                 print(f"  Example: {d['example']}")
         print(f"Synonyms: {', '.join(data['synonyms'])}")
@@ -105,7 +105,7 @@ endpoints:
         const { data } = await response.json();
         console.log(`${data.word} ${data.phonetic}`);
         data.definitions.forEach(d => {
-          console.log(`  [${d.partOfSpeech}] ${d.definition}`);
+          console.log(`  [${d.part_of_speech}] ${d.definition}`);
           if (d.example) console.log(`  Example: ${d.example}`);
         });
         console.log('Synonyms:', data.synonyms.join(', '));
@@ -124,7 +124,7 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts "#{data['word']} #{data['phonetic']}"
         data['definitions'].each do |d|
-          puts "  [#{d['partOfSpeech']}] #{d['definition']}"
+          puts "  [#{d['part_of_speech']}] #{d['definition']}"
           puts "  Example: #{d['example']}" if d['example']
         end
         puts "Synonyms: #{data['synonyms'].join(', ')}"

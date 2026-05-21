@@ -117,7 +117,7 @@ endpoints:
                 "phonetic": "/ˌserənˈdipədē/",
                 "definitions": [
                   {
-                    "partOfSpeech": "noun",
+                    "part_of_speech": "noun",
                     "definition": "the occurrence of events by chance in a happy way"
                   }
                 ],
