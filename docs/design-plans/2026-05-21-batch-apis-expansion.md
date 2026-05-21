@@ -44,7 +44,7 @@ exception:
 
 > **Phone validation** (`POST /v1/validation/phone/batch`) is already live and
 > is excluded from this work.
-
+>
 > **QR PNG** (`GET /v1/technology/qr`) gets no batch variant — it returns
 > `image/png` binary, which is incompatible with the JSON batch envelope. Only
 > the base64 JSON variant (`/qr/base64`) is batched.

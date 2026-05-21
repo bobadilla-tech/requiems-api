@@ -1083,13 +1083,12 @@ in-memory list (no database).
 ```go
 package riddle
 
+import "math/rand"
+
 type Riddle struct {
   Question string `json:"question"`
   Answer   string `json:"answer"`
 }
-
-
-import "math/rand"
 
 var riddles = []Riddle{
     {Question: "What has keys but no locks?", Answer: "A keyboard"},

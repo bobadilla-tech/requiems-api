@@ -174,8 +174,8 @@ func (s *Service) doRequest(ctx context.Context, apiURL string) ([]byte, error) 
 
 // ReverseQuery is the per-item input for the reverse geocode batch endpoint.
 type ReverseQuery struct {
-	Lat float64 `json:"lat" validate:"required,min=-90,max=90"`
-	Lon float64 `json:"lon" validate:"required,min=-180,max=180"`
+	Lat *float64 `json:"lat" validate:"required,min=-90,max=90"`
+	Lon *float64 `json:"lon" validate:"required,min=-180,max=180"`
 }
 
 // BatchGeocodeItem is the per-item result returned by GeocodeBatch.
@@ -242,11 +242,11 @@ func (s *Service) ReverseGeocodeBatch(ctx context.Context, items []ReverseQuery)
 			itemCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
 			defer cancel()
 
-			r, err := s.ReverseGeocode(itemCtx, item.Lat, item.Lon)
+			r, err := s.ReverseGeocode(itemCtx, *item.Lat, *item.Lon)
 			if err != nil {
-				results[i] = BatchReverseGeocodeItem{Lat: item.Lat, Lon: item.Lon, Error: err.Error()}
+				results[i] = BatchReverseGeocodeItem{Lat: *item.Lat, Lon: *item.Lon, Error: err.Error()}
 			} else {
-				results[i] = BatchReverseGeocodeItem{Lat: item.Lat, Lon: item.Lon, Result: &r}
+				results[i] = BatchReverseGeocodeItem{Lat: *item.Lat, Lon: *item.Lon, Result: &r}
 			}
 		}(i, item)
 	}

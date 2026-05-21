@@ -77,7 +77,7 @@ func (s *Service) BatchLookup(items []Query) []BatchResult {
 			info, err = s.GetCurrentTime(item.Timezone)
 		case item.City != "":
 			info, err = s.GetTimezoneByCity(item.City)
-		case item.Lat != 0 || item.Lon != 0:
+		case item.Lat != 0 && item.Lon != 0:
 			info, err = s.GetTimezoneByCoords(item.Lat, item.Lon)
 		default:
 			err = fmt.Errorf("provide timezone name, city, or lat+lon")

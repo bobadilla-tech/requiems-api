@@ -100,6 +100,7 @@ func TestPostal_Batch_HappyPath(t *testing.T) {
 	setupRouter().ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	assert.Equal(t, 2, resp.Data.Total)
@@ -116,6 +117,7 @@ func TestPostal_Batch_NotFound(t *testing.T) {
 	setupRouter().ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	require.Len(t, resp.Data.Results, 2)
@@ -133,6 +135,7 @@ func TestPostal_Batch_DefaultCountry(t *testing.T) {
 	setupRouter().ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "1", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	require.Len(t, resp.Data.Results, 1)
