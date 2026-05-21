@@ -793,7 +793,7 @@ apis:
     categories:
       - entertainment
     description: Get daily horoscope readings for all 12 zodiac signs
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/horoscope
