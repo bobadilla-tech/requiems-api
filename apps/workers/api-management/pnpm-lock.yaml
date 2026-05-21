@@ -10,16 +10,16 @@ importers:
     dependencies:
       '@hono/standard-validator':
         specifier: ^0.2.2
-        version: 0.2.2(@standard-schema/spec@1.1.0)(hono@4.12.18)
+        version: 0.2.2(@standard-schema/spec@1.1.0)(hono@4.12.21)
       '@hono/swagger-ui':
         specifier: ^0.6.1
-        version: 0.6.1(hono@4.12.18)
+        version: 0.6.1(hono@4.12.21)
       '@sentry/cloudflare':
         specifier: ^10.53.1
         version: 10.53.1(@cloudflare/workers-types@4.20260521.1)
       hono:
-        specifier: 4.12.18
-        version: 4.12.18
+        specifier: 4.12.21
+        version: 4.12.21
       nanoid:
         specifier: ^5.1.11
         version: 5.1.11
@@ -965,8 +965,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.12.18:
-    resolution: {integrity: sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==}
+  hono@4.12.21:
+    resolution: {integrity: sha512-uV63apnb0kyPtAUwoWgaGh9HyIFcv8lgmzPZSiTBQAFOFGIzka5EZ1dZocmGnn0XdX0+XTqJ6Tqv7selMuGLRQ==}
     engines: {node: '>=16.9.0'}
 
   html-escaper@2.0.2:
@@ -1574,14 +1574,14 @@ snapshots:
   '@esbuild/win32-x64@0.27.3':
     optional: true
 
-  '@hono/standard-validator@0.2.2(@standard-schema/spec@1.1.0)(hono@4.12.18)':
+  '@hono/standard-validator@0.2.2(@standard-schema/spec@1.1.0)(hono@4.12.21)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      hono: 4.12.18
+      hono: 4.12.21
 
-  '@hono/swagger-ui@0.6.1(hono@4.12.18)':
+  '@hono/swagger-ui@0.6.1(hono@4.12.21)':
     dependencies:
-      hono: 4.12.18
+      hono: 4.12.21
 
   '@img/colour@1.1.0': {}
 
@@ -2016,7 +2016,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.12.18: {}
+  hono@4.12.21: {}
 
   html-escaper@2.0.2: {}
 
