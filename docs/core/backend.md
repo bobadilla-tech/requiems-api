@@ -24,8 +24,8 @@ apps/api/
     ├── {domain}/
     │   ├── router.go     # Instantiates features and registers routes
     │   └── {feature}/
-   │       ├── service.go        # Business logic (also contains request/response types)
-   │       └── transport_http.go # HTTP handlers, RegisterRoutes()
+    │       ├── service.go        # Business logic (also contains request/response types)
+    │       └── transport_http.go # HTTP handlers, RegisterRoutes()
     └── ...
 ```
 

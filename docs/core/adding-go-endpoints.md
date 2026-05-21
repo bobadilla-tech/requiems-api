@@ -837,7 +837,7 @@ endpoints:
 
 faq:
   - question: Can I request riddles from multiple categories at once?
-    answer: "Yes, use the batch version."
+    answer: Not currently — each request returns one riddle from one category.
 
   - question: Are riddle IDs stable across requests?
     answer: Yes, IDs are stable database identifiers. You can use them to avoid showing a riddle twice.

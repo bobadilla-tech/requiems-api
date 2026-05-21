@@ -2,7 +2,7 @@ package asn
 
 import (
 	"context"
-	"strings"
+	"net"
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 )
@@ -42,13 +42,14 @@ func NewService(c *ipi.Client) *Service {
 func (s *Service) CheckASNBatch(ctx context.Context, ips []string) []BatchASNItem {
 	results := make([]BatchASNItem, len(ips))
 	for i, ip := range ips {
+		if parsed := net.ParseIP(ip); parsed != nil &&
+			(parsed.IsPrivate() || parsed.IsLoopback() || parsed.IsLinkLocalUnicast()) {
+			results[i] = BatchASNItem{IP: ip, Result: &IPAddressASNResponse{IP: ip}}
+			continue
+		}
 		r, err := s.CheckASN(ctx, ip)
 		if err != nil {
-			if strings.Contains(err.Error(), "private/reserved") {
-				results[i] = BatchASNItem{IP: ip, Result: &IPAddressASNResponse{IP: ip}}
-			} else {
-				results[i] = BatchASNItem{IP: ip, Error: err.Error()}
-			}
+			results[i] = BatchASNItem{IP: ip, Error: err.Error()}
 		} else {
 			results[i] = BatchASNItem{IP: ip, Result: &r}
 		}

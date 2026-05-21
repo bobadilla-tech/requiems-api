@@ -214,13 +214,7 @@ func (s *Service) GeocodeBatch(ctx context.Context, addresses []string) []BatchG
 
 			r, err := s.Geocode(itemCtx, addr)
 			if err != nil {
-				var msg string
-				if se, ok := err.(interface{ Error() string }); ok {
-					msg = se.Error()
-				} else {
-					msg = "geocoding failed"
-				}
-				results[i] = BatchGeocodeItem{Address: addr, Error: msg}
+				results[i] = BatchGeocodeItem{Address: addr, Error: err.Error()}
 			} else {
 				results[i] = BatchGeocodeItem{Address: addr, Result: &r}
 			}
