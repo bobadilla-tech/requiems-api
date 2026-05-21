@@ -104,8 +104,7 @@ Commit both `go.mod` and `go.sum`. Never edit them by hand.
 
 ## Step 1 — Write the Go Code
 
-Create three files in this order (each builds on the previous). Types no
-longer live in a separate `type.go` file — define request/response structs in
+Create files as needed for the feature. Define request/response structs in
 the file that owns them (typically `service.go` for business types or
 `transport_http.go` for request binding types).
 

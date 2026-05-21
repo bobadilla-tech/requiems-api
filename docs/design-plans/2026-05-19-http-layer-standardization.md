@@ -1,7 +1,8 @@
 # HTTP Layer Standardization
 
-The 2026-05-18 service layer cleanup consolidated types and removed `type.go`
-files. That work left three structural problems unaddressed: a marker interface
+The 2026-05-18 service layer cleanup consolidated types into their owning
+files. That work left three structural problems unaddressed: a marker
+interface
 that has outlived its purpose, GET endpoints that bypass the standard
 `Handle`/`HandleBatch` validation path, and domain types in `service.go` that
 carry HTTP-platform concerns.
@@ -143,8 +144,8 @@ must not import `net/http`, `chi`, or `httpx`. The HTTP layer calls the service;
 the service does not reach back into the HTTP layer.
 
 The previous cleanup plan (2026-05-18) established this rule and moved types
-from `type.go` into the correct files. It did not remove `IsData()` from service
-types or enforce the import constraint programmatically.
+into the correct files. It did not remove `IsData()` from service types or
+enforce the import constraint programmatically.
 
 ### Current Status
 
