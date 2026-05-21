@@ -1,8 +1,9 @@
-# Adding a New Endpoint to the Go Backend
+# Adding a New Go Endpoint
 
 This guide walks through every step required to ship a new endpoint: from
 writing the Go code to updating the dashboard catalog and API documentation.
-Follow it in order — the checklist at the end maps to each section.
+
+Follow it in order: the checklist at the end maps to each section.
 
 ## Architecture Refresher
 
@@ -36,7 +37,6 @@ apps/api/
     └── {domain}/
         ├── router.go         # Wires services → chi.Router for this domain
         └── {feature}/
-            ├── type.go           # Request + response types
             ├── service.go        # Business logic
             └── transport_http.go # HTTP handlers
 ```
@@ -832,7 +832,7 @@ endpoints:
 
 faq:
   - question: Can I request riddles from multiple categories at once?
-    answer: Not currently — each request returns one riddle from one category. Batch support is planned.
+    answer: "Yes, use the batch version."
 
   - question: Are riddle IDs stable across requests?
     answer: Yes, IDs are stable database identifiers. You can use them to avoid showing a riddle twice.
