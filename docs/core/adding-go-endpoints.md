@@ -56,7 +56,7 @@ Existing top-level domains and their `/v1` prefixes:
 
 ---
 
-## Before Writing Any Code — Check for Existing Libraries
+## Before Writing Any Code: Check for Existing Libraries
 
 **Do not write a service from scratch if a battle-tested library already solves
 the problem.**
@@ -101,8 +101,6 @@ docker exec requiem-dev-api-1 go mod tidy
 ```
 
 Commit both `go.mod` and `go.sum`. Never edit them by hand.
-
----
 
 ## Step 1 — Write the Go Code
 
