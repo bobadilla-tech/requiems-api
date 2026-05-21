@@ -126,7 +126,7 @@ func TestGeocodeBatch_HappyPath(t *testing.T) {
 	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck -- test server response body writes are intentionally ignored
+		json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck // test server response body writes are intentionally ignored
 			{Lat: "48.8566", Lon: "2.3522", DisplayName: "Paris, France",
 				Address: nominatimAddress{City: "Paris", CountryCode: "fr"}},
 		})
@@ -152,9 +152,9 @@ func TestGeocodeBatch_PartialError(t *testing.T) {
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if strings.Contains(r.URL.RawQuery, "unknown") {
-			json.NewEncoder(w).Encode([]nominatimSearchResult{}) //nolint:errcheck -- test server response body writes are intentionally ignored
+			json.NewEncoder(w).Encode([]nominatimSearchResult{}) //nolint:errcheck // test server response body writes are intentionally ignored
 		} else {
-			json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck -- test server response body writes are intentionally ignored
+			json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck // test server response body writes are intentionally ignored
 				{Lat: "48.8566", Lon: "2.3522", DisplayName: "Paris, France",
 					Address: nominatimAddress{City: "Paris", CountryCode: "fr"}},
 			})
@@ -180,7 +180,7 @@ func TestGeocodeBatch_PartialError(t *testing.T) {
 func TestGeocodeBatch_EmptyArray(t *testing.T) {
 	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.Write([]byte(`[]`)) //nolint:errcheck -- test server response body writes are intentionally ignored
+		w.Write([]byte(`[]`)) //nolint:errcheck // test server response body writes are intentionally ignored
 	}))
 	defer mock.Close()
 
@@ -195,7 +195,7 @@ func TestGeocodeBatch_EmptyArray(t *testing.T) {
 func TestGeocodeBatch_ExceedsLimit(t *testing.T) {
 	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.Write([]byte(`[]`)) //nolint:errcheck -- test server response body writes are intentionally ignored
+		w.Write([]byte(`[]`)) //nolint:errcheck // test server response body writes are intentionally ignored
 	}))
 	defer mock.Close()
 
@@ -216,7 +216,7 @@ func TestReverseGeocodeBatch_HappyPath(t *testing.T) {
 	t.Parallel()
 	mock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"display_name":"Eiffel Tower, Paris, France","address":{"city":"Paris","country_code":"fr"}}`)) //nolint:errcheck -- test server response body writes are intentionally ignored
+		w.Write([]byte(`{"display_name":"Eiffel Tower, Paris, France","address":{"city":"Paris","country_code":"fr"}}`)) //nolint:errcheck // test server response body writes are intentionally ignored
 	}))
 	defer mock.Close()
 
