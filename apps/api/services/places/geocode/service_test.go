@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -201,4 +202,92 @@ func TestResolveCity_County(t *testing.T) {
 	t.Parallel()
 	a := nominatimAddress{County: "County"}
 	assert.Equal(t, "County", a.resolveCity())
+}
+
+func TestGeocodeBatch_Service_HappyPath(t *testing.T) {
+	t.Parallel()
+	srv := fakeSearchServer([]nominatimSearchResult{
+		{Lat: "48.8566", Lon: "2.3522", DisplayName: "Paris, France",
+			Address: nominatimAddress{City: "Paris", CountryCode: "fr"}},
+	})
+	defer srv.Close()
+
+	svc := newTestService(srv)
+	results := svc.GeocodeBatch(t.Context(), []string{"Paris", "France"})
+
+	require.Len(t, results, 2)
+	for i, r := range results {
+		assert.NotNil(t, r.Result, "expected result at index %d", i)
+		assert.Empty(t, r.Error, "expected no error at index %d", i)
+	}
+}
+
+func TestGeocodeBatch_Service_PartialNotFound(t *testing.T) {
+	t.Parallel()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if strings.Contains(r.URL.RawQuery, "unknown") {
+			json.NewEncoder(w).Encode([]nominatimSearchResult{}) //nolint:errcheck
+		} else {
+			json.NewEncoder(w).Encode([]nominatimSearchResult{ //nolint:errcheck
+				{Lat: "48.8566", Lon: "2.3522", DisplayName: "Paris, France",
+					Address: nominatimAddress{City: "Paris", CountryCode: "fr"}},
+			})
+		}
+	}))
+	defer srv.Close()
+
+	svc := newTestService(srv)
+	results := svc.GeocodeBatch(t.Context(), []string{"Paris", "unknown place xyz"})
+
+	require.Len(t, results, 2)
+	assert.NotNil(t, results[0].Result)
+	assert.Empty(t, results[0].Error)
+	assert.Nil(t, results[1].Result)
+	assert.NotEmpty(t, results[1].Error)
+}
+
+func TestReverseGeocodeBatch_Service_HappyPath(t *testing.T) {
+	t.Parallel()
+	srv := fakeReverseServer(nominatimReverseResult{
+		DisplayName: "Eiffel Tower, Paris, France",
+		Address:     nominatimAddress{City: "Paris", CountryCode: "fr"},
+	})
+	defer srv.Close()
+
+	svc := newTestService(srv)
+	items := []ReverseQuery{{Lat: 48.8584, Lon: 2.2945}, {Lat: 51.5014, Lon: -0.1419}}
+	results := svc.ReverseGeocodeBatch(t.Context(), items)
+
+	require.Len(t, results, 2)
+	for i, r := range results {
+		assert.NotNil(t, r.Result, "expected result at index %d", i)
+		assert.Empty(t, r.Error, "expected no error at index %d", i)
+	}
+}
+
+func TestReverseGeocodeBatch_Service_PartialNotFound(t *testing.T) {
+	t.Parallel()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Query().Get("lat") == "0.000000" {
+			json.NewEncoder(w).Encode(nominatimReverseResult{DisplayName: ""}) //nolint:errcheck
+		} else {
+			json.NewEncoder(w).Encode(nominatimReverseResult{ //nolint:errcheck
+				DisplayName: "Eiffel Tower, Paris, France",
+				Address:     nominatimAddress{City: "Paris", CountryCode: "fr"},
+			})
+		}
+	}))
+	defer srv.Close()
+
+	svc := newTestService(srv)
+	items := []ReverseQuery{{Lat: 48.8584, Lon: 2.2945}, {Lat: 0, Lon: 0}}
+	results := svc.ReverseGeocodeBatch(t.Context(), items)
+
+	require.Len(t, results, 2)
+	assert.NotNil(t, results[0].Result)
+	assert.Empty(t, results[0].Error)
+	assert.Nil(t, results[1].Result)
+	assert.NotEmpty(t, results[1].Error)
 }

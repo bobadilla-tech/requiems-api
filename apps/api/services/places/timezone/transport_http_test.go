@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -256,4 +257,84 @@ func TestTimezone_OffsetFormat(t *testing.T) {
 			t.Errorf("formatOffset(%d) = %q, want %q", tc.offsetSecs, got, tc.expected)
 		}
 	}
+}
+
+func TestTimezone_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter(t)
+
+	body := `{"items":[{"timezone":"America/New_York"},{"city":"Tokyo"},{"lat":51.5,"lon":-0.1}]}`
+	req := httptest.NewRequest(http.MethodPost, "/timezone/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 3, resp.Data.Total)
+	for i, item := range resp.Data.Results {
+		assert.NotNil(t, item.Info, "expected info at index %d", i)
+	}
+}
+
+func TestTimezone_Batch_PartialError(t *testing.T) {
+	t.Parallel()
+	r := setupRouter(t)
+
+	body := `{"items":[{"timezone":"America/New_York"},{}]}`
+	req := httptest.NewRequest(http.MethodPost, "/timezone/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 2)
+	assert.NotNil(t, resp.Data.Results[0].Info)
+	assert.NotEmpty(t, resp.Data.Results[1].Error)
+}
+
+func TestTimezone_Batch_EmptyArray(t *testing.T) {
+	t.Parallel()
+	r := setupRouter(t)
+
+	req := httptest.NewRequest(http.MethodPost, "/timezone/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestTimezone_Batch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter(t)
+
+	items := make([]string, 51)
+	for i := range items {
+		items[i] = `{"timezone":"UTC"}`
+	}
+	body := `{"items":[` + strings.Join(items, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/timezone/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestTimezone_Batch_NilService(t *testing.T) {
+	t.Parallel()
+	r := chi.NewRouter()
+	RegisterRoutes(r, nil)
+
+	body := `{"items":[{"timezone":"UTC"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/timezone/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
 }

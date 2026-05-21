@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -136,4 +137,71 @@ func TestNumbase_ServiceError(t *testing.T) {
 			assert.Equal(t, http.StatusBadRequest, w.Code)
 		})
 	}
+}
+
+func TestNumbase_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"from":10,"to":16,"value":"255"},{"from":2,"to":10,"value":"11111111"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/base/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.NotEmpty(t, resp.Data.Results[0].Result)
+	assert.NotEmpty(t, resp.Data.Results[1].Result)
+}
+
+func TestNumbase_Batch_PartialError(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"from":10,"to":16,"value":"255"},{"from":10,"to":16,"value":"notanumber"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/base/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 2)
+	assert.NotEmpty(t, resp.Data.Results[0].Result)
+	assert.Empty(t, resp.Data.Results[0].Error)
+	assert.Empty(t, resp.Data.Results[1].Result)
+	assert.NotEmpty(t, resp.Data.Results[1].Error)
+}
+
+func TestNumbase_Batch_EmptyArray(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/base/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestNumbase_Batch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	items := make([]string, 51)
+	for i := range items {
+		items[i] = `{"from":10,"to":16,"value":"1"}`
+	}
+	body := `{"items":[` + strings.Join(items, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/base/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

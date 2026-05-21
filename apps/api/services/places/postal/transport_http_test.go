@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -88,4 +89,77 @@ func TestLookup_NonUSCountry(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "GB", resp.Data.Country)
+}
+
+func TestPostal_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	body := `{"items":[{"code":"10001","country":"US"},{"code":"SW1A1AA","country":"GB"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/postal/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupRouter().ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.True(t, resp.Data.Results[0].Found)
+	assert.True(t, resp.Data.Results[1].Found)
+}
+
+func TestPostal_Batch_NotFound(t *testing.T) {
+	t.Parallel()
+	body := `{"items":[{"code":"10001","country":"US"},{"code":"99999","country":"US"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/postal/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupRouter().ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 2)
+	assert.True(t, resp.Data.Results[0].Found)
+	assert.False(t, resp.Data.Results[1].Found)
+	assert.Nil(t, resp.Data.Results[1].Result)
+}
+
+func TestPostal_Batch_DefaultCountry(t *testing.T) {
+	t.Parallel()
+	body := `{"items":[{"code":"10001"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/postal/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupRouter().ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 1)
+	assert.Equal(t, "US", resp.Data.Results[0].Country)
+}
+
+func TestPostal_Batch_EmptyArray(t *testing.T) {
+	t.Parallel()
+	req := httptest.NewRequest(http.MethodPost, "/postal/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupRouter().ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestPostal_Batch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	items := make([]string, 51)
+	for i := range items {
+		items[i] = `{"code":"10001","country":"US"}`
+	}
+	body := `{"items":[` + strings.Join(items, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/postal/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupRouter().ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

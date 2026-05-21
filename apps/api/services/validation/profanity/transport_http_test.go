@@ -93,3 +93,71 @@ func TestProfanity_MissingBody(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
+
+func TestProfanity_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"texts":["hello","fuck"]}`
+	req := httptest.NewRequest(http.MethodPost, "/profanity/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 2)
+}
+
+func TestProfanity_Batch_EmptyArray(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/profanity/batch", strings.NewReader(`{"texts":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestProfanity_Batch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	items := make([]string, 51)
+	for i := range items {
+		items[i] = `"text"`
+	}
+	body := `{"texts":[` + strings.Join(items, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/profanity/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestProfanity_Batch_OrderPreserved(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"texts":["alpha","fuck","beta"]}`
+	req := httptest.NewRequest(http.MethodPost, "/profanity/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 3)
+	assert.Equal(t, "alpha", resp.Data.Results[0].Text)
+	assert.Equal(t, "fuck", resp.Data.Results[1].Text)
+	assert.Equal(t, "beta", resp.Data.Results[2].Text)
+	assert.False(t, resp.Data.Results[0].Result.HasProfanity)
+	assert.True(t, resp.Data.Results[1].Result.HasProfanity)
+	assert.False(t, resp.Data.Results[2].Result.HasProfanity)
+}

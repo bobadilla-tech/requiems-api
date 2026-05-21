@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -198,6 +199,54 @@ func TestQR_Base64_InvalidRecovery(t *testing.T) {
 	r := setupRouter()
 
 	req := httptest.NewRequest(http.MethodGet, "/qr/base64?data=test&recovery=ultra", http.NoBody)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestQR_Base64Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"data":"https://example.com"},{"data":"hello world","size":128}]}`
+	req := httptest.NewRequest(http.MethodPost, "/qr/base64/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchBase64Item]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.NotEmpty(t, resp.Data.Results[0].Image)
+	assert.Equal(t, defaultSize, resp.Data.Results[0].Width)
+	assert.NotEmpty(t, resp.Data.Results[1].Image)
+}
+
+func TestQR_Base64Batch_EmptyArray(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/qr/base64/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestQR_Base64Batch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	items := make([]string, 51)
+	for i := range items {
+		items[i] = `{"data":"test"}`
+	}
+	body := `{"items":[` + strings.Join(items, ",") + `]}`
+	req := httptest.NewRequest(http.MethodPost, "/qr/base64/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 

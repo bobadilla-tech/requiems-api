@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
@@ -137,4 +138,56 @@ func TestASN_XForwardedFor(t *testing.T) {
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	assert.Equal(t, "1.1.1.1", resp.Data.IP)
+}
+
+func TestASN_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	skipIfNoService(t)
+	r := setupRouter()
+
+	body := `{"ips":["8.8.8.8"]}`
+	req := httptest.NewRequest(http.MethodPost, "/ip/asn/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchASNItem]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 1)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.NotEmpty(t, resp.Data.Results[0].Result.ASN)
+}
+
+func TestASN_Batch_PrivateIP(t *testing.T) {
+	t.Parallel()
+	skipIfNoService(t)
+	r := setupRouter()
+
+	body := `{"ips":["10.0.0.1"]}`
+	req := httptest.NewRequest(http.MethodPost, "/ip/asn/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchASNItem]]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	require.Len(t, resp.Data.Results, 1)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.Empty(t, resp.Data.Results[0].Result.ASN)
+}
+
+func TestASN_Batch_InvalidIP_Rejected(t *testing.T) {
+	t.Parallel()
+	skipIfNoService(t)
+	r := setupRouter()
+
+	body := `{"ips":["bad"]}`
+	req := httptest.NewRequest(http.MethodPost, "/ip/asn/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
