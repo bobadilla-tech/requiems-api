@@ -74,3 +74,18 @@ func hash(s string) uint64 {
 	_, _ = h.Write([]byte(s))
 	return h.Sum64()
 }
+
+// DailyBatch return horoscope reading for multiple zodia sign in single call.
+func (s *Service) DailyBatch(signs []string) ([]Horoscope, error) {
+	results := make([]Horoscope, len(signs))
+
+	for i, sign := range signs {
+		result, err := s.Daily(sign)
+		if err != nil {
+			return []Horoscope{}, err
+		}
+
+		results[i] = result
+	}
+	return results, nil
+}
