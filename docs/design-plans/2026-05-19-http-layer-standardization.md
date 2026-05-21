@@ -1,9 +1,8 @@
 # HTTP Layer Standardization
 
-The 2026-05-18 service layer cleanup consolidated types into their owning
-files. That work left three structural problems unaddressed: a marker
-interface
-that has outlived its purpose, GET endpoints that bypass the standard
+The 2026-05-18 service layer cleanup consolidated types into their owning files.
+That work left three structural problems unaddressed: a marker interface that
+has outlived its purpose, GET endpoints that bypass the standard
 `Handle`/`HandleBatch` validation path, and domain types in `service.go` that
 carry HTTP-platform concerns.
 

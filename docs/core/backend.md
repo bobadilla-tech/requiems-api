@@ -38,8 +38,10 @@ Domains: `email`, `text`, `tech`, `places`, `entertainment`, `misc`, etc...
    - `000X_feature_name.down.sql`
 
 2. **Feature package** — create `services/<domain>/<feature>/`:
-   - `service.go` — business logic (define request/response types here unless they belong only to the HTTP layer)
-   - `transport_http.go` — `func RegisterRoutes(r chi.Router, svc *Service)` (request-binding structs that are only used for HTTP may live here)
+   - `service.go` — business logic (define request/response types here unless
+     they belong only to the HTTP layer)
+   - `transport_http.go` — `func RegisterRoutes(r chi.Router, svc *Service)`
+     (request-binding structs that are only used for HTTP may live here)
 
 3. **Wire up** in `services/<domain>/router.go`:
 

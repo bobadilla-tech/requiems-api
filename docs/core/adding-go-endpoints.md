@@ -104,21 +104,20 @@ Commit both `go.mod` and `go.sum`. Never edit them by hand.
 
 ## Step 1 — Write the Go Code
 
-Create files as needed for the feature. Define request/response structs in
-the file that owns them (typically `service.go` for business types or
+Create files as needed for the feature. Define request/response structs in the
+file that owns them (typically `service.go` for business types or
 `transport_http.go` for request binding types).
 
 ### 1a. Types — Define Your Types (in the owning file)
 
 > **Rule: always use `snake_case` for JSON field names.** Every `json:"..."` tag
-> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅
-> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌
+> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅:
+> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌:
 > `json:"hasProfanity"` `json:"flaggedWords"` `json:"browserVersion"`
 
 Define request and response structs next to the code that owns them. Small
-features often keep types inside `service.go`; request-binding structs that
-only belong to the HTTP layer can live in `transport_http.go` alongside the
-handlers.
+features often keep types inside `service.go`; request-binding structs that only
+belong to the HTTP layer can live in `transport_http.go` alongside the handlers.
 
 Example (put this near `service.go` or `transport_http.go`):
 
@@ -126,7 +125,6 @@ Example (put this near `service.go` or `transport_http.go`):
 package riddle
 
 // Request for POST endpoints with JSON body.
-// Use validate tags for automatic validation.
 type GenerateRequest struct {
   Category string `json:"category" validate:"required,oneof=general science history"`
 }

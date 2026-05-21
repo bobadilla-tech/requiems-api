@@ -90,7 +90,7 @@ results are non-empty, context propagation).
 
 ## Module Change Table
 
-| Module                    | querier update | types → service.go                 | types → transport_http.go                                                  | validation removal                 |
+| Module                    | querier update | types → service.go                 | types → transport_http.go                                                 | validation removal                 |
 | ------------------------- | -------------- | ---------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- |
 | entertainment/advice      | `db.Querier`   | `Advice`                           | —                                                                         | —                                  |
 | entertainment/chucknorris | —              | `ChuckNorrisFact`                  | —                                                                         | —                                  |
@@ -164,8 +164,8 @@ results are non-empty, context propagation).
 
 - [ ] `go build ./...` passes locally
 - [ ] `go test ./...` passes locally
-- [ ] No standalone type-only files remain (types are declared in `service.go` or `transport_http.go`)
-      returns 0
+- [ ] No standalone type-only files remain (types are declared in `service.go`
+      or `transport_http.go`) returns 0
 - [ ] Spot-check: `GET /v1/entertainment/quotes/random` still works
 - [ ] Spot-check: `POST /v1/health/exercises/batch` still works
 
