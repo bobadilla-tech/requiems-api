@@ -170,6 +170,7 @@ func TestPassword_Batch_HappyPath(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	assert.Equal(t, 2, resp.Data.Total)
@@ -188,6 +189,7 @@ func TestPassword_Batch_DefaultLength(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "1", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	require.NotNil(t, resp.Data.Results[0].Result)

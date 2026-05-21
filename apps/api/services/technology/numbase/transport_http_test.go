@@ -150,6 +150,7 @@ func TestNumbase_Batch_HappyPath(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	assert.Equal(t, 2, resp.Data.Total)
@@ -168,6 +169,7 @@ func TestNumbase_Batch_PartialError(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 	var resp httpx.Response[httpx.BatchResponse[BatchResult]]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	require.Len(t, resp.Data.Results, 2)
