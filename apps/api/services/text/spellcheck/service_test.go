@@ -168,3 +168,32 @@ func TestService_Check_NegativeOffsetIgnored(t *testing.T) {
 	assert.Empty(t, result.Corrections)
 	assert.Equal(t, "Ths is fine", result.Corrected)
 }
+
+func TestService_CheckBatch_OrderPreserved(t *testing.T) {
+	t.Parallel()
+	// No matches — Corrected equals the input, so we can verify order by content.
+	srv := newMockLT(t, []ltMatch{})
+	defer srv.Close()
+
+	texts := []string{"first", "second", "third"}
+	results := NewService(srv.URL).CheckBatch(texts)
+
+	require.Len(t, results, 3)
+	for i, want := range texts {
+		assert.Equal(t, want, results[i].Corrected, "results[%d] out of order", i)
+	}
+}
+
+func TestService_CheckBatch_LTUnreachable(t *testing.T) {
+	t.Parallel()
+	// Dead server — each item gets a zero-value Result; the batch never errors out.
+	dead := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	dead.Close()
+
+	results := NewService(dead.URL).CheckBatch([]string{"hello", "world"})
+
+	require.Len(t, results, 2)
+	for i, r := range results {
+		assert.Equal(t, "", r.Corrected, "results[%d].Corrected should be zero-value", i)
+	}
+}

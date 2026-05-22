@@ -23,10 +23,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 	r.Post("/spellcheck/batch", httpx.HandleBatch(
 		func(_ context.Context, req BatchCheckRequest) (BatchCheckResponse, error) {
-			results, err := svc.CheckBatch(req.Texts)
-			if err != nil {
-				return BatchCheckResponse{}, err
-			}
+			results := svc.CheckBatch(req.Texts)
 			return BatchCheckResponse{Results: results}, nil
 		},
 	))

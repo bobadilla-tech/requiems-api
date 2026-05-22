@@ -227,10 +227,10 @@ func TestSpellcheckBatch_MissingBody(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
-func TestSpellcheckBatch_ServiceError(t *testing.T) {
+func TestSpellcheckBatch_LTUnreachableReturnsZeroResults(t *testing.T) {
 	t.Parallel()
-	// Start and immediately close a server to get a guaranteed-dead URL
-	// without relying on a fixed port that might be in use.
+	// When LanguageTool is unreachable, CheckBatch uses in-band errors:
+	// each failing item receives a zero-value Result and the batch returns 200.
 	dead := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
 	dead.Close()
 	r := setupRouter(dead.URL)
@@ -241,5 +241,12 @@ func TestSpellcheckBatch_ServiceError(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[BatchCheckResponse]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+	assert.Equal(t, 2, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 2)
+	// Each slot is a zero-value Result: Corrected is empty, Corrections is nil.
+	assert.Equal(t, "", resp.Data.Results[0].Corrected)
+	assert.Equal(t, "", resp.Data.Results[1].Corrected)
 }

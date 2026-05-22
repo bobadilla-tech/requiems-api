@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -73,19 +74,36 @@ func (s *Service) Check(text string) (Result, error) {
 	return buildResult(text, ltResp.Matches), nil
 }
 
-// CheckBatch processes multiple texts and returns spell-check results for each.
-// It returns an error only if LanguageTool is unreachable; individual texts do
-// not produce per-item errors.
-func (s *Service) CheckBatch(texts []string) ([]Result, error) {
-	results := make([]Result, 0, len(texts))
-	for _, text := range texts {
-		result, err := s.Check(text)
-		if err != nil {
-			return nil, err
-		}
-		results = append(results, result)
+// CheckBatch processes multiple texts concurrently and returns spell-check
+// results for each. Up to 10 LanguageTool requests run in parallel to avoid
+// flooding the instance. Results are written to pre-allocated index slots so
+// input order is always preserved. If an individual text fails, its slot
+// receives a zero-value Result and the rest of the batch continues.
+func (s *Service) CheckBatch(texts []string) []Result {
+	const maxWorkers = 10
+
+	results := make([]Result, len(texts))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
+
+	for i, text := range texts {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, text string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			r, err := s.Check(text)
+			if err != nil {
+				results[i] = Result{}
+				return
+			}
+			results[i] = r
+		}(i, text)
 	}
-	return results, nil
+
+	wg.Wait()
+	return results
 }
 
 // buildResult converts LanguageTool matches into our Result type.

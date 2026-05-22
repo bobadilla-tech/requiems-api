@@ -133,7 +133,11 @@ Each text in the batch counts as **1 unit** of quota. A request with 10 texts co
 
 ### Partial failure
 
-This endpoint always returns `200` with a result for every input text. There are no per-item errors — if LanguageTool is unreachable, the entire batch fails with `500`.
+This endpoint always returns `200` with a result for every input text. Up to 10
+texts are checked concurrently. If LanguageTool is unreachable for an individual
+text, that slot returns a zero-value result (`corrected: ""`, `corrections: null`)
+and the batch continues — the caller receives a full-length `results` array
+regardless of individual failures.
 
 ### Batch Error Codes
 
