@@ -92,6 +92,11 @@ func (s *Service) CheckBatch(texts []string) []Result {
 		go func(i int, text string) {
 			defer wg.Done()
 			defer func() { <-sem }()
+			defer func() {
+				if rec := recover(); rec != nil {
+					results[i] = Result{}
+				}
+			}()
 
 			r, err := s.Check(text)
 			if err != nil {
@@ -106,6 +111,16 @@ func (s *Service) CheckBatch(texts []string) []Result {
 	return results
 }
 
+// isValidSpan reports whether m describes a non-empty, non-overflowing span
+// within a slice of runeCount runes.
+func isValidSpan(m ltMatch, runeCount int) bool {
+	return len(m.Replacements) > 0 &&
+		m.Offset >= 0 &&
+		m.Length >= 0 &&
+		m.Offset < runeCount &&
+		m.Length <= runeCount-m.Offset
+}
+
 // buildResult converts LanguageTool matches into our Result type.
 // Replacements are applied in reverse order to keep offsets valid.
 func buildResult(text string, matches []ltMatch) Result {
@@ -113,7 +128,7 @@ func buildResult(text string, matches []ltMatch) Result {
 	corrections := make([]Correction, 0, len(matches))
 
 	for _, m := range matches {
-		if len(m.Replacements) == 0 || m.Offset < 0 || m.Length < 0 || m.Offset+m.Length > len(runes) {
+		if !isValidSpan(m, len(runes)) {
 			continue
 		}
 		// Collect up to 3 suggestions so callers can present a picker.
@@ -137,7 +152,7 @@ func buildResult(text string, matches []ltMatch) Result {
 	copy(corrected, runes)
 	for i := len(matches) - 1; i >= 0; i-- {
 		m := matches[i]
-		if len(m.Replacements) == 0 || m.Offset < 0 || m.Length < 0 || m.Offset+m.Length > len(corrected) {
+		if !isValidSpan(m, len(corrected)) {
 			continue
 		}
 		repl := []rune(m.Replacements[0].Value)

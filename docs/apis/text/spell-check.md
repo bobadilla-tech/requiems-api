@@ -133,19 +133,19 @@ Each text in the batch counts as **1 unit** of quota. A request with 10 texts co
 
 ### Partial failure
 
-This endpoint always returns `200` with a result for every input text. Up to 10
-texts are checked concurrently. If LanguageTool is unreachable for an individual
-text, that slot returns a zero-value result (`corrected: ""`, `corrections: null`)
-and the batch continues — the caller receives a full-length `results` array
-regardless of individual failures.
+Once validation passes, this endpoint returns `200` with a result for every input
+text. Up to 10 texts are checked concurrently. If LanguageTool is unreachable for
+an individual text, that slot returns a zero-value result
+(`corrected: ""`, `corrections: null`) and the batch continues — the caller
+receives a full-length `results` array regardless of individual failures.
 
 ### Batch Error Codes
 
-| Code                | Status | When                                                       |
-| ------------------- | ------ | ---------------------------------------------------------- |
-| `validation_failed` | 422    | `texts` is missing, empty, or contains more than 50 items  |
-| `bad_request`       | 400    | Request body is missing or not JSON                        |
-| `internal_error`    | 500    | Unexpected failure                                         |
+| Code                | Status | When                                                                         |
+| ------------------- | ------ | ---------------------------------------------------------------------------- |
+| `validation_failed` | 422    | `texts` is missing, empty, or contains more than 50 items                    |
+| `bad_request`       | 400    | Request body is missing or not JSON                                          |
+| `internal_error`    | 500    | Infrastructure-level failure before processing begins (e.g. handler error)  |
 
 ---
 
