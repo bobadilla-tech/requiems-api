@@ -225,6 +225,12 @@ endpoints:
       - code: bad_request
         status: 400
         description: Invalid JSON, malformed request body, or unexpected field types.
+      - code: unauthorized
+        status: 401
+        description: Missing API key.
+      - code: forbidden
+        status: 403
+        description: Invalid or revoked API key.
     code_examples:
       curl: |
         curl -X POST "https://api.requiems.xyz/v1/entertainment/trivia/batch" \
