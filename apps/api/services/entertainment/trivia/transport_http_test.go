@@ -175,12 +175,13 @@ func TestTrivia_RandomBatch_HappyPath(t *testing.T) {
 	require.Equal(t, http.StatusOK, w.Code)
 	require.Contains(t, w.Header().Get("Content-Type"), "application/json")
 
-	var resp httpx.Response[httpx.BatchResponse[Question]]
+	var resp httpx.Response[httpx.BatchResponse[BatchResponse]]
 	err = json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 
 	require.Equal(t, 2, resp.Data.Total)
 	require.Len(t, resp.Data.Results, 2)
+	require.NotEmpty(t, resp.Data.Results[0].Data.Question)
 }
 
 func TestTrivia_RandomBatch_EmptyFilters(t *testing.T) {
