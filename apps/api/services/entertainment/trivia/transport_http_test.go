@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -152,4 +153,88 @@ func TestService_Random_NoMatch(t *testing.T) {
 	svc := NewService()
 	_, err := svc.Random("science", "impossible")
 	assert.Error(t, err, "expected error for filters with no matching questions, got nil")
+}
+
+func TestTrivia_RandomBatch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	filters := []Request{
+		{Category: "science", Difficulty: "hard"},
+		{Category: "history", Difficulty: "medium"},
+	}
+
+	bodyJSON, err := json.Marshal(BatchRequest{Filters: filters})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/trivia/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Contains(t, w.Header().Get("Content-Type"), "application/json")
+
+	var resp httpx.Response[httpx.BatchResponse[Question]]
+	err = json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Equal(t, 2, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 2)
+}
+
+func TestTrivia_RandomBatch_EmptyFilters(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	bodyJSON, err := json.Marshal(BatchRequest{Filters: []Request{}})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/trivia/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestTrivia_RandomBatch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	filters := make([]Request, 51)
+	for i := range filters {
+		filters[i] = Request{Category: "science", Difficulty: "easy"}
+	}
+
+	bodyJSON, err := json.Marshal(BatchRequest{Filters: filters})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/trivia/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestTrivia_RandomBatch_SetUsageCountHeader(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	filters := []Request{
+		{Category: "science", Difficulty: "hard"},
+		{Category: "history", Difficulty: "medium"},
+	}
+
+	bodyJSON, err := json.Marshal(BatchRequest{Filters: filters})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/trivia/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 }
