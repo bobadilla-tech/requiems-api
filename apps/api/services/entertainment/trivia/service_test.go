@@ -34,9 +34,9 @@ func TestService_RandomBatch_PreservedOrder(t *testing.T) {
 	svc := NewService()
 
 	filters := []Request{
-		{Category: "sports", Difficulty: "hard"},    // fails
-		{Category: "science", Difficulty: "hard"},   // succeeds
-		{Category: "history", Difficulty: "medium"}, // succeeds
+		{Category: "__invalid__", Difficulty: "__invalid__"}, // fails
+		{Category: "science", Difficulty: "hard"},            // succeeds
+		{Category: "history", Difficulty: "medium"},          // succeeds
 	}
 
 	results := svc.RandomBatch(filters)
