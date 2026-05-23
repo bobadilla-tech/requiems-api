@@ -751,7 +751,7 @@ apis:
     categories:
       - entertainment
     description: Get random trivia questions with multiple-choice answers. Filter by category (science, history, geography, sports, music, movies, literature, math, technology, nature) and difficulty (easy, medium, hard).
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/trivia
