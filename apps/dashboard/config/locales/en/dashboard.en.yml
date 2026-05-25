@@ -45,6 +45,13 @@ en:
     api_keys:
       title: "API Keys"
       subtitle: "Manage your API keys and access credentials"
+      flash:
+        created: "API key created successfully. Make sure to copy it now - you won't be able to see it again!"
+        regenerated: "API key regenerated successfully. Make sure to copy the new key - you won't be able to see it again!"
+        cannot_regenerate_revoked: "Cannot regenerate a revoked key. Please create a new one."
+        revoked: "API key revoked successfully."
+        revoke_error: "Failed to revoke API key."
+        not_found: "API key not found."
       create_btn: "Create New Key"
       info_heading: "Important Information"
       info_shared_label: "Shared Quota:"
@@ -119,6 +126,13 @@ en:
     billing:
       title: "Billing & Subscription"
       subtitle: "Manage your plan, payment method, and billing history"
+      flash:
+        activated: "Subscription activated successfully! Your new plan is now active."
+        canceled: "Checkout was canceled. Your subscription was not changed."
+        invalid_plan: "Invalid plan selected"
+        promotional_no_portal: "Promotional plans do not have a customer portal."
+        no_subscription: "No active subscription found"
+        no_subscription_to_cancel: "No active subscription to cancel"
       plan_notice:
         heading: "Ready to upgrade to %{plan}?"
         body: "Scroll down to see the %{plan} plan details and start your 7-day free trial!"

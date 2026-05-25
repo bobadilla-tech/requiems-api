@@ -774,6 +774,7 @@ en:
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"
+      subheading: "Answers to common questions about billing, auth, rate limits, and integration."
       intro: "Billing, auth, rate limits, and how to get from signup to production quickly."
       getting_started:
         heading: "Getting Started"

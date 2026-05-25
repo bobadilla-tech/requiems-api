@@ -21,7 +21,7 @@ class Dashboard::ApiKeysController < ApplicationController
     if @api_key.save
       # The full key is only available once during creation
       @show_full_key = true
-      flash.now[:notice] = "API key created successfully. Make sure to copy it now - you won't be able to see it again!"
+      flash.now[:notice] = t("dashboard.api_keys.flash.created")
       render :show_key
     else
       render :new, status: :unprocessable_entity
@@ -30,7 +30,7 @@ class Dashboard::ApiKeysController < ApplicationController
 
   def regenerate
     if @api_key.revoked_at.present?
-      redirect_to dashboard_api_keys_path, alert: "Cannot regenerate a revoked key. Please create a new one."
+      redirect_to dashboard_api_keys_path, alert: t("dashboard.api_keys.flash.cannot_regenerate_revoked")
       return
     end
 
@@ -45,15 +45,15 @@ class Dashboard::ApiKeysController < ApplicationController
 
     @show_full_key = true
     @api_key = @new_api_key
-    flash.now[:notice] = "API key regenerated successfully. Make sure to copy the new key - you won't be able to see it again!"
+    flash.now[:notice] = t("dashboard.api_keys.flash.regenerated")
     render :show_key
   end
 
   def revoke
     if @api_key.revoke!(reason: "Revoked by user")
-      redirect_to dashboard_api_keys_path, notice: "API key revoked successfully."
+      redirect_to dashboard_api_keys_path, notice: t("dashboard.api_keys.flash.revoked")
     else
-      redirect_to dashboard_api_keys_path, alert: "Failed to revoke API key."
+      redirect_to dashboard_api_keys_path, alert: t("dashboard.api_keys.flash.revoke_error")
     end
   end
 
@@ -62,7 +62,7 @@ class Dashboard::ApiKeysController < ApplicationController
   def set_api_key
     @api_key = current_user.api_keys.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to dashboard_api_keys_path, alert: "API key not found."
+    redirect_to dashboard_api_keys_path, alert: t("dashboard.api_keys.flash.not_found")
   end
 
   def api_key_params
