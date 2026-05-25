@@ -3,17 +3,30 @@
 require "test_helper"
 require "fileutils"
 
+module SystemCapture
+  def system(*args)
+    if (calls = Thread.current[:captured_system_calls])
+      calls << args.first
+      true
+    else
+      super
+    end
+  end
+end
+
 class I18nRakeTest < ActiveSupport::TestCase
   parallelize(workers: 1)
+
+  Object.prepend(SystemCapture) unless Object.ancestors.include?(SystemCapture)
 
   setup do
     Rails.application.load_tasks
     @system_calls = []
-    stub_system!
+    Thread.current[:captured_system_calls] = @system_calls
   end
 
   teardown do
-    restore_system!
+    Thread.current[:captured_system_calls] = nil
     Rake::Task["i18n:report"].reenable
     Rake::Task["i18n:todos"].reenable
   end
@@ -106,22 +119,5 @@ class I18nRakeTest < ActiveSupport::TestCase
   ensure
     Rails.singleton_class.alias_method(:root, :__orig_root__)
     Rails.singleton_class.remove_method(:__orig_root__)
-  end
-
-  def stub_system!
-    calls = @system_calls
-    Kernel.module_eval do
-      alias_method :__orig_system__, :system
-      define_method(:system) { |*args| calls << args.first; true }
-    end
-  end
-
-  def restore_system!
-    Kernel.module_eval do
-      if method_defined?(:__orig_system__)
-        alias_method :system, :__orig_system__
-        remove_method :__orig_system__
-      end
-    end
   end
 end
