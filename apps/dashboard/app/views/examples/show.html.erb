@@ -8,19 +8,19 @@
       <nav class="flex mb-4" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-2 text-sm">
           <li>
-            <%= link_to "Home", root_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
+            <%= link_to t("examples.show.breadcrumb_home"), root_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
           </li>
           <li class="flex items-center">
             <svg class="h-4 w-4 text-gray-400 dark:text-gray-500 mx-2" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
-            <%= link_to "Examples", examples_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
+            <%= link_to t("examples.show.breadcrumb_examples"), examples_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
           </li>
           <li class="flex items-center">
             <svg class="h-4 w-4 text-gray-400 dark:text-gray-500 mx-2" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
-            <span class="text-gray-900 dark:text-gray-100 font-medium"><%= @example["title"] %></span>
+            <span class="text-gray-900 dark:text-gray-100 font-medium"><%= example_localized(@example, "title") %></span>
           </li>
         </ol>
       </nav>
@@ -29,20 +29,15 @@
         <div class="flex-1 mb-6 lg:mb-0">
           <div class="flex items-center space-x-3 mb-3">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              <%= @example["title"] %>
+              <%= example_localized(@example, "title") %>
             </h1>
             <%= render "partials/shared/badge",
-              text: @example["difficulty"],
-              variant: case @example["difficulty"]
-                when "Beginner" then "success"
-                when "Intermediate" then "warning"
-                when "Advanced" then "danger"
-                else "default"
-              end %>
+              text: example_difficulty_label(@example["difficulty"]),
+              variant: example_difficulty_variant(@example["difficulty"]) %>
           </div>
 
           <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
-            <%= @example["description"] %>
+            <%= example_localized(@example, "description") %>
           </p>
 
           <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
@@ -57,7 +52,7 @@
               <svg class="h-5 w-5 mr-2 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
               </svg>
-              <span><%= @example["category"] %></span>
+              <span><%= example_category_label(@example["category"]) %></span>
             </div>
 
             <div class="flex items-center">

@@ -907,6 +907,8 @@ fr:
 
   examples:
     show:
+      breadcrumb_home: "Accueil"
+      breadcrumb_examples: "Exemples"
       tutorial_coming_soon: "Tutoriel à venir"
       tutorial_description: "Nous préparons un tutoriel pas à pas détaillé pour cet exemple."
       view_source: "Voir le code source"

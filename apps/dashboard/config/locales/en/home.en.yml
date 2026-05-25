@@ -907,6 +907,8 @@ en:
 
   examples:
     show:
+      breadcrumb_home: "Home"
+      breadcrumb_examples: "Examples"
       tutorial_coming_soon: "Tutorial Coming Soon"
       tutorial_description: "We're working on creating a detailed step-by-step tutorial for this example."
       view_source: "View Source Code"
