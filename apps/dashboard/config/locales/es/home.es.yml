@@ -804,3 +804,14 @@ es:
       tip_demo: "TODO: translate"
       tip_docs_html: "TODO: translate"
       api_documentation: "TODO: translate"
+    flash:
+      not_found: "TODO: translate"
+
+  categories:
+    flash:
+      not_found: "TODO: translate"
+
+  apis:
+    flash:
+      not_found: "TODO: translate"
+      no_documentation: "TODO: translate"

@@ -916,3 +916,14 @@ en:
       tip_demo: "Try out the live demo to see it in action"
       tip_docs_html: "Explore the %{docs_link} for the APIs used in this project"
       api_documentation: "API documentation"
+    flash:
+      not_found: "Example not found"
+
+  categories:
+    flash:
+      not_found: "Category not found"
+
+  apis:
+    flash:
+      not_found: "API not found"
+      no_documentation: "Documentation not available for this API yet"
