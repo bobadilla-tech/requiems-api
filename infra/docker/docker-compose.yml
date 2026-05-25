@@ -5,7 +5,10 @@ services:
     image: erikvl87/languagetool
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8010/v2/languages > /dev/null 2>&1"]
+      test: [
+        "CMD-SHELL",
+        "wget -qO- http://localhost:8010/v2/languages > /dev/null 2>&1",
+      ]
       interval: 5s
       timeout: 5s
       retries: 10

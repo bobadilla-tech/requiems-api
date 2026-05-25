@@ -2,925 +2,925 @@
 es:
   divisions:
     carousel:
-      heading: 'TODO: translate'
-      subtitle: 'TODO: translate'
-      pagination_label: 'TODO: translate'
-      previous: 'TODO: translate'
-      next: 'TODO: translate'
-      slide: 'TODO: translate'
+      heading: "TODO: translate"
+      subtitle: "TODO: translate"
+      pagination_label: "TODO: translate"
+      previous: "TODO: translate"
+      next: "TODO: translate"
+      slide: "TODO: translate"
     common:
-      industries_heading: 'TODO: translate'
-      testimonials_heading: 'TODO: translate'
-      use_cases_heading: 'TODO: translate'
-      use_case_example_label: 'TODO: translate'
-      scale_heading: 'TODO: translate'
-      scale_intro: 'TODO: translate'
-      how_heading: 'TODO: translate'
-      how_intro: 'TODO: translate'
-      next_step_heading: 'TODO: translate'
-      next_step_body: 'TODO: translate'
-      technical_api_kicker: 'TODO: translate'
-      technical_api_title: 'TODO: translate'
-      technical_api_subtitle: 'TODO: translate'
-      technical_api_action: 'TODO: translate'
-      division_hub_tagline_kicker: 'TODO: translate'
+      industries_heading: "TODO: translate"
+      testimonials_heading: "TODO: translate"
+      use_cases_heading: "TODO: translate"
+      use_case_example_label: "TODO: translate"
+      scale_heading: "TODO: translate"
+      scale_intro: "TODO: translate"
+      how_heading: "TODO: translate"
+      how_intro: "TODO: translate"
+      next_step_heading: "TODO: translate"
+      next_step_body: "TODO: translate"
+      technical_api_kicker: "TODO: translate"
+      technical_api_title: "TODO: translate"
+      technical_api_subtitle: "TODO: translate"
+      technical_api_action: "TODO: translate"
+      division_hub_tagline_kicker: "TODO: translate"
     index:
-      meta_title: 'TODO: translate'
-      tagline_kicker: 'TODO: translate'
-      tagline: 'TODO: translate'
+      meta_title: "TODO: translate"
+      tagline_kicker: "TODO: translate"
+      tagline: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      view_division: 'TODO: translate'
-      apis_catalog_title: 'TODO: translate'
-      apis_catalog_subtitle: 'TODO: translate'
-      apis_catalog_cta: 'TODO: translate'
+        label: "TODO: translate"
+      view_division: "TODO: translate"
+      apis_catalog_title: "TODO: translate"
+      apis_catalog_subtitle: "TODO: translate"
+      apis_catalog_cta: "TODO: translate"
       cards:
         finance:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         validation:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         networking:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         places:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         text:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         technology:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         entertainment:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
         health:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
-      technical_note: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
+      technical_note: "TODO: translate"
     validation:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials:
-      - name: 'TODO: translate'
-        role: 'TODO: translate'
-        quote: 'TODO: translate'
-      - name: 'TODO: translate'
-        role: 'TODO: translate'
-        quote: 'TODO: translate'
+        - name: "TODO: translate"
+          role: "TODO: translate"
+          quote: "TODO: translate"
+        - name: "TODO: translate"
+          role: "TODO: translate"
+          quote: "TODO: translate"
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     networking:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials: []
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     places:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials: []
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     text:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials: []
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     technology:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials:
-      - name: 'TODO: translate'
-        role: 'TODO: translate'
-        quote: 'TODO: translate'
+        - name: "TODO: translate"
+          role: "TODO: translate"
+          quote: "TODO: translate"
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     entertainment:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials: []
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     health:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials:
-      - name: 'TODO: translate'
-        role: 'TODO: translate'
-        quote: 'TODO: translate'
+        - name: "TODO: translate"
+          role: "TODO: translate"
+          quote: "TODO: translate"
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"
     finance:
-      meta_title: 'TODO: translate'
+      meta_title: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
       strategy_call:
-        label: 'TODO: translate'
-      tagline: 'TODO: translate'
+        label: "TODO: translate"
+      tagline: "TODO: translate"
       filters:
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
-      - key: 'TODO: translate'
-        label: 'TODO: translate'
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
+        - key: "TODO: translate"
+          label: "TODO: translate"
       featured_cases: []
       use_cases:
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
-      - filter_key: 'TODO: translate'
-        endpoint: 'TODO: translate'
-        title: 'TODO: translate'
-        description: 'TODO: translate'
-        tag_problem: 'TODO: translate'
-        tag_industry: 'TODO: translate'
-        case_anchor: 'TODO: translate'
-        example: 'TODO: translate'
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
+        - filter_key: "TODO: translate"
+          endpoint: "TODO: translate"
+          title: "TODO: translate"
+          description: "TODO: translate"
+          tag_problem: "TODO: translate"
+          tag_industry: "TODO: translate"
+          case_anchor: "TODO: translate"
+          example: "TODO: translate"
       scale_metrics:
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
-      - value: 'TODO: translate'
-        label: 'TODO: translate'
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
+        - value: "TODO: translate"
+          label: "TODO: translate"
       how_it_works:
-        step1_title: 'TODO: translate'
-        step1_body: 'TODO: translate'
-        step2_title: 'TODO: translate'
-        step2_body: 'TODO: translate'
-        step3_title: 'TODO: translate'
-        step3_body: 'TODO: translate'
+        step1_title: "TODO: translate"
+        step1_body: "TODO: translate"
+        step2_title: "TODO: translate"
+        step2_body: "TODO: translate"
+        step3_title: "TODO: translate"
+        step3_body: "TODO: translate"
       industries:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
       testimonials:
-      - name: 'TODO: translate'
-        role: 'TODO: translate'
-        quote: 'TODO: translate'
+        - name: "TODO: translate"
+          role: "TODO: translate"
+          quote: "TODO: translate"
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      view_case: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      view_case: "TODO: translate"

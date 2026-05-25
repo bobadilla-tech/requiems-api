@@ -2,250 +2,250 @@
 fr:
   systems:
     index:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_cta: 'TODO: translate'
-      grid_heading: 'TODO: translate'
-      grid_subheading: 'TODO: translate'
-      explore_cta: 'TODO: translate'
-      utilities_kicker: 'TODO: translate'
-      utilities_cta: 'TODO: translate'
-      apis_catalog_title: 'TODO: translate'
-      apis_catalog_subtitle: 'TODO: translate'
-      apis_catalog_cta: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_cta: "TODO: translate"
+      grid_heading: "TODO: translate"
+      grid_subheading: "TODO: translate"
+      explore_cta: "TODO: translate"
+      utilities_kicker: "TODO: translate"
+      utilities_cta: "TODO: translate"
+      apis_catalog_title: "TODO: translate"
+      apis_catalog_subtitle: "TODO: translate"
+      apis_catalog_cta: "TODO: translate"
       cards:
         identity_risk:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
           signals:
-          - 'TODO: translate'
-          - 'TODO: translate'
-          - 'TODO: translate'
+            - "TODO: translate"
+            - "TODO: translate"
+            - "TODO: translate"
         payments_intelligence:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
           signals:
-          - 'TODO: translate'
-          - 'TODO: translate'
-          - 'TODO: translate'
+            - "TODO: translate"
+            - "TODO: translate"
+            - "TODO: translate"
         global_data:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
           signals:
-          - 'TODO: translate'
-          - 'TODO: translate'
-          - 'TODO: translate'
+            - "TODO: translate"
+            - "TODO: translate"
+            - "TODO: translate"
         data_integrity:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
           signals:
-          - 'TODO: translate'
-          - 'TODO: translate'
-          - 'TODO: translate'
+            - "TODO: translate"
+            - "TODO: translate"
+            - "TODO: translate"
         developer_utilities:
-          title: 'TODO: translate'
-          blurb: 'TODO: translate'
+          title: "TODO: translate"
+          blurb: "TODO: translate"
           signals:
-          - 'TODO: translate'
-          - 'TODO: translate'
-          - 'TODO: translate'
+            - "TODO: translate"
+            - "TODO: translate"
+            - "TODO: translate"
     show:
-      back: 'TODO: translate'
-      engine_label: 'TODO: translate'
-      engine_subheading: 'TODO: translate'
-      request_label: 'TODO: translate'
-      response_label: 'TODO: translate'
-      powered_by: 'TODO: translate'
-      other_endpoints_heading: 'TODO: translate'
-      signals_heading: 'TODO: translate'
-      use_cases_heading: 'TODO: translate'
-      get_started: 'TODO: translate'
-      explore_divisions: 'TODO: translate'
+      back: "TODO: translate"
+      engine_label: "TODO: translate"
+      engine_subheading: "TODO: translate"
+      request_label: "TODO: translate"
+      response_label: "TODO: translate"
+      powered_by: "TODO: translate"
+      other_endpoints_heading: "TODO: translate"
+      signals_heading: "TODO: translate"
+      use_cases_heading: "TODO: translate"
+      get_started: "TODO: translate"
+      explore_divisions: "TODO: translate"
     identity-risk:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-      purpose: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+      purpose: "TODO: translate"
       engine:
-        name: 'TODO: translate'
-        headline: 'TODO: translate'
-        endpoint_method: 'TODO: translate'
-        endpoint_path: 'TODO: translate'
-        input: 'TODO: translate'
-        output: 'TODO: translate'
+        name: "TODO: translate"
+        headline: "TODO: translate"
+        endpoint_method: "TODO: translate"
+        endpoint_path: "TODO: translate"
+        input: "TODO: translate"
+        output: "TODO: translate"
       use_cases:
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
       endpoints:
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
       signals:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
     payments-intelligence:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-      purpose: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+      purpose: "TODO: translate"
       engine:
-        name: 'TODO: translate'
-        headline: 'TODO: translate'
-        endpoint_method: 'TODO: translate'
-        endpoint_path: 'TODO: translate'
-        input: 'TODO: translate'
-        output: 'TODO: translate'
+        name: "TODO: translate"
+        headline: "TODO: translate"
+        endpoint_method: "TODO: translate"
+        endpoint_path: "TODO: translate"
+        input: "TODO: translate"
+        output: "TODO: translate"
       use_cases:
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
       endpoints:
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
       signals:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
     global-data:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-      purpose: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+      purpose: "TODO: translate"
       engine:
-        name: 'TODO: translate'
-        headline: 'TODO: translate'
-        endpoint_method: 'TODO: translate'
-        endpoint_path: 'TODO: translate'
-        input: 'TODO: translate'
-        output: 'TODO: translate'
+        name: "TODO: translate"
+        headline: "TODO: translate"
+        endpoint_method: "TODO: translate"
+        endpoint_path: "TODO: translate"
+        input: "TODO: translate"
+        output: "TODO: translate"
       use_cases:
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
       endpoints:
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
       signals:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
     data-integrity:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-      purpose: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+      purpose: "TODO: translate"
       engine:
-        name: 'TODO: translate'
-        headline: 'TODO: translate'
-        endpoint_method: 'TODO: translate'
-        endpoint_path: 'TODO: translate'
-        input: 'TODO: translate'
-        output: 'TODO: translate'
+        name: "TODO: translate"
+        headline: "TODO: translate"
+        endpoint_method: "TODO: translate"
+        endpoint_path: "TODO: translate"
+        input: "TODO: translate"
+        output: "TODO: translate"
       use_cases:
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
       endpoints:
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
       signals:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
     developer-utilities:
-      meta_title: 'TODO: translate'
-      kicker: 'TODO: translate'
+      meta_title: "TODO: translate"
+      kicker: "TODO: translate"
       hero:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-      purpose: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+      purpose: "TODO: translate"
       engine:
-        name: 'TODO: translate'
-        headline: 'TODO: translate'
-        endpoint_method: 'TODO: translate'
-        endpoint_path: 'TODO: translate'
-        input: 'TODO: translate'
-        output: 'TODO: translate'
+        name: "TODO: translate"
+        headline: "TODO: translate"
+        endpoint_method: "TODO: translate"
+        endpoint_path: "TODO: translate"
+        input: "TODO: translate"
+        output: "TODO: translate"
       use_cases:
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
-      - title: 'TODO: translate'
-        body: 'TODO: translate'
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
+        - title: "TODO: translate"
+          body: "TODO: translate"
       endpoints:
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
-      - method: 'TODO: translate'
-        path: 'TODO: translate'
-        description: 'TODO: translate'
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
+        - method: "TODO: translate"
+          path: "TODO: translate"
+          description: "TODO: translate"
       signals:
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
-      - 'TODO: translate'
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"
+        - "TODO: translate"

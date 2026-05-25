@@ -2,102 +2,102 @@
 fr:
   case_studies:
     hub:
-      meta_title: 'TODO: translate'
-      meta_description: 'TODO: translate'
-      hero_headline: 'TODO: translate'
-      hero_subheadline: 'TODO: translate'
-      cards_heading: 'TODO: translate'
-      card_cta: 'TODO: translate'
-      verigeo_blurb: 'TODO: translate'
-      compilestrength_blurb: 'TODO: translate'
-      partnership_heading: 'TODO: translate'
-      partnership_body: 'TODO: translate'
-      partnership_primary_cta: 'TODO: translate'
-      partnership_secondary_cta: 'TODO: translate'
-      hub_divisions_hint: 'TODO: translate'
+      meta_title: "TODO: translate"
+      meta_description: "TODO: translate"
+      hero_headline: "TODO: translate"
+      hero_subheadline: "TODO: translate"
+      cards_heading: "TODO: translate"
+      card_cta: "TODO: translate"
+      verigeo_blurb: "TODO: translate"
+      compilestrength_blurb: "TODO: translate"
+      partnership_heading: "TODO: translate"
+      partnership_body: "TODO: translate"
+      partnership_primary_cta: "TODO: translate"
+      partnership_secondary_cta: "TODO: translate"
+      hub_divisions_hint: "TODO: translate"
     common:
-      apis_heading: 'TODO: translate'
-      apis_intro: 'TODO: translate'
-      table_api: 'TODO: translate'
-      table_benefit: 'TODO: translate'
-      related_heading: 'TODO: translate'
-      outcome_note_heading: 'TODO: translate'
-      outcome_note_body: 'TODO: translate'
+      apis_heading: "TODO: translate"
+      apis_intro: "TODO: translate"
+      table_api: "TODO: translate"
+      table_benefit: "TODO: translate"
+      related_heading: "TODO: translate"
+      outcome_note_heading: "TODO: translate"
+      outcome_note_body: "TODO: translate"
       final_cta:
-        headline: 'TODO: translate'
-        subheadline: 'TODO: translate'
-        primary_cta: 'TODO: translate'
-        secondary_apis: 'TODO: translate'
-        strategy_cta: 'TODO: translate'
-      back_to_hub: 'TODO: translate'
+        headline: "TODO: translate"
+        subheadline: "TODO: translate"
+        primary_cta: "TODO: translate"
+        secondary_apis: "TODO: translate"
+        strategy_cta: "TODO: translate"
+      back_to_hub: "TODO: translate"
     verigeo:
-      meta_title: 'TODO: translate'
-      meta_description: 'TODO: translate'
-      hero_headline: 'TODO: translate'
-      hero_subheadline: 'TODO: translate'
-      quote_text: 'TODO: translate'
-      quote_name: 'TODO: translate'
-      quote_role: 'TODO: translate'
+      meta_title: "TODO: translate"
+      meta_description: "TODO: translate"
+      hero_headline: "TODO: translate"
+      hero_subheadline: "TODO: translate"
+      quote_text: "TODO: translate"
+      quote_name: "TODO: translate"
+      quote_role: "TODO: translate"
       sections:
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
       api_rows:
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
     compilestrength:
-      meta_title: 'TODO: translate'
-      meta_description: 'TODO: translate'
-      hero_headline: 'TODO: translate'
-      hero_subheadline: 'TODO: translate'
-      quote_text: 'TODO: translate'
-      quote_name: 'TODO: translate'
-      quote_role: 'TODO: translate'
+      meta_title: "TODO: translate"
+      meta_description: "TODO: translate"
+      hero_headline: "TODO: translate"
+      hero_subheadline: "TODO: translate"
+      quote_text: "TODO: translate"
+      quote_name: "TODO: translate"
+      quote_role: "TODO: translate"
       sections:
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
-        - 'TODO: translate'
-      - heading: 'TODO: translate'
-        paragraphs:
-        - 'TODO: translate'
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
+            - "TODO: translate"
+        - heading: "TODO: translate"
+          paragraphs:
+            - "TODO: translate"
       api_rows:
-      - id: 'TODO: translate'
-        benefit: 'TODO: translate'
+        - id: "TODO: translate"
+          benefit: "TODO: translate"
