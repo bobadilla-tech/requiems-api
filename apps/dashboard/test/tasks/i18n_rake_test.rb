@@ -94,17 +94,25 @@ class I18nRakeTest < ActiveSupport::TestCase
     Dir.mktmpdir do |tmpdir|
       locale_dir = File.join(tmpdir, "config", "locales")
       FileUtils.mkdir_p(locale_dir)
-      Rails.stub(:root, Pathname.new(tmpdir)) do
-        yield locale_dir
-      end
+      stub_rails_root(tmpdir) { yield locale_dir }
     end
+  end
+
+  def stub_rails_root(path)
+    root_path = Pathname.new(path)
+    Rails.singleton_class.alias_method(:__orig_root__, :root)
+    Rails.define_singleton_method(:root) { root_path }
+    yield
+  ensure
+    Rails.singleton_class.alias_method(:root, :__orig_root__)
+    Rails.singleton_class.remove_method(:__orig_root__)
   end
 
   def stub_system!
     calls = @system_calls
     Kernel.module_eval do
       alias_method :__orig_system__, :system
-      define_method(:system) { |cmd| calls << cmd; true }
+      define_method(:system) { |*args| calls << args.first; true }
     end
   end
 
