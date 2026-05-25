@@ -98,4 +98,5 @@ group :development do
   gem "web-console"
   gem "letter_opener_web", "~> 3.0"
   gem "ruby-lsp", require: false
+  gem "i18n-tasks", "~> 1.0"
 end

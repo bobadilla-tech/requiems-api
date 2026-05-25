@@ -8,33 +8,32 @@
       <div style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
 
         <div style="background-color: #0f172a; padding: 28px 32px;">
-          <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff;">Request Received</h1>
-          <p style="margin: 6px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.7);">Your private deployment is being prepared</p>
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff;"><%= t("dashboard.mailers.private_deployments.request_received.header_title") %></h1>
+          <p style="margin: 6px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.7);"><%= t("dashboard.mailers.private_deployments.request_received.header_subtitle") %></p>
         </div>
 
         <div style="padding: 32px;">
-          <p style="font-size: 15px; color: #374151; margin-bottom: 20px;">Hi <%= @deployment_request.contact_name %>,</p>
+          <p style="font-size: 15px; color: #374151; margin-bottom: 20px;"><%= t("dashboard.mailers.private_deployments.request_received.greeting", name: @deployment_request.contact_name) %></p>
 
           <p style="font-size: 15px; color: #374151; margin-bottom: 24px;">
-            We've received your private deployment request for <strong><%= @deployment_request.company %></strong>.
-            Your dedicated API environment will be ready within <strong>24–48 hours</strong>.
-            We'll email you as soon as it's live.
+            <%= t("dashboard.mailers.private_deployments.request_received.intro", company: @deployment_request.company) %>
+            <%= t("dashboard.mailers.private_deployments.request_received.notify") %>
           </p>
 
           <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
-            <div style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">Order Summary</div>
+            <div style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;"><%= t("dashboard.mailers.private_deployments.request_received.order_summary") %></div>
 
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="padding: 6px 0; font-size: 14px; color: #64748b;">Server tier</td>
+                <td style="padding: 6px 0; font-size: 14px; color: #64748b;"><%= t("dashboard.mailers.private_deployments.request_received.server_tier") %></td>
                 <td style="padding: 6px 0; font-size: 14px; color: #0f172a; font-weight: 600; text-align: right;"><%= @deployment_request.server_tier.capitalize %></td>
               </tr>
               <tr>
-                <td style="padding: 6px 0; font-size: 14px; color: #64748b;">Monthly price</td>
+                <td style="padding: 6px 0; font-size: 14px; color: #64748b;"><%= t("dashboard.mailers.private_deployments.request_received.monthly_price") %></td>
                 <td style="padding: 6px 0; font-size: 14px; color: #0f172a; font-weight: 600; text-align: right;">$<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo</td>
               </tr>
               <tr>
-                <td style="padding: 6px 0; font-size: 14px; color: #64748b; vertical-align: top;">Selected services</td>
+                <td style="padding: 6px 0; font-size: 14px; color: #64748b; vertical-align: top;"><%= t("dashboard.mailers.private_deployments.request_received.selected_services") %></td>
                 <td style="padding: 6px 0; font-size: 14px; color: #0f172a; font-weight: 600; text-align: right;"><%= @deployment_request.selected_services.join(", ") %></td>
               </tr>
             </table>
@@ -42,21 +41,20 @@
 
           <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px;">
             <p style="margin: 0; font-size: 14px; color: #1e40af;">
-              <strong>What happens next:</strong> We'll provision your Hetzner VPS, set up your private Go API with only your selected services, and configure your subdomain at <em>yourcompany.requiems.xyz</em>.
-              Once live you'll receive a second email with your URL and authentication details.
+              <strong><%= t("dashboard.mailers.private_deployments.request_received.what_next") %></strong> <%= t("dashboard.mailers.private_deployments.request_received.what_next_detail") %>
             </p>
           </div>
 
           <p style="font-size: 14px; color: #374151; margin-bottom: 24px;">
-            In the meantime, you can explore our API documentation at
-            <a href="<%= @docs_url %>" style="color: #2563eb;"><%= @docs_url %></a>.
+            <%= t("dashboard.mailers.private_deployments.request_received.docs_notice_html",
+                docs_link: link_to(@docs_url, @docs_url, style: "color: #2563eb;")).html_safe %>
           </p>
 
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
 
           <p style="font-size: 13px; color: #9ca3af; margin: 0;">
-            Questions? Reply to this email or reach us at
-            <%= mail_to "eliaz@bobadilla.tech", "eliaz@bobadilla.tech", style: "color: #6b7280;" %>.
+            <%= t("dashboard.mailers.private_deployments.request_received.questions",
+                email: mail_to("eliaz@bobadilla.tech", "eliaz@bobadilla.tech", style: "color: #6b7280;")).html_safe %>
           </p>
         </div>
 

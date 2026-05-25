@@ -187,6 +187,14 @@ en:
     settings:
       title: "Settings"
       subtitle: "Manage your account preferences and security settings"
+      flash:
+        email_confirm: "Settings updated. Please check your email to confirm your new address."
+        updated: "Settings updated successfully."
+        error: "Failed to update settings. Please check the form for errors."
+        reason_too_short: "Please provide a reason (at least 10 characters)."
+        deletion_email_sent: "Check your email — we sent a confirmation link. It expires in 1 hour."
+        invalid_token: "This link is invalid or has expired. Please request a new one."
+        deleted: "Your account has been permanently deleted. We're sorry to see you go."
       errors:
         one: "%{count} error prohibited these settings from being saved:"
         other: "%{count} errors prohibited these settings from being saved:"
@@ -351,6 +359,22 @@ en:
         consequence_3: "Permanently delete all usage data and history"
         ignore_notice: "If you didn't request this, you can safely ignore this email. Your account will not be deleted."
         contact_notice_html: "If you have concerns, contact us at %{email_link}."
+      private_deployments:
+        request_received:
+          subject: "Request Received: Requiems Private Deployment"
+          header_title: "Request Received"
+          header_subtitle: "Your private deployment is being prepared"
+          greeting: "Hi %{name},"
+          intro: "We've received your private deployment request for %{company}. Your dedicated API environment will be ready within 24–48 hours."
+          notify: "We'll email you as soon as it's live."
+          order_summary: "Order Summary"
+          server_tier: "Server tier"
+          monthly_price: "Monthly price"
+          selected_services: "Selected services"
+          what_next: "What happens next:"
+          what_next_detail: "We'll provision your Hetzner VPS, set up your private Go API with only your selected services, and configure your subdomain at yourcompany.requiems.xyz. Once live you'll receive a second email with your URL and authentication details."
+          docs_notice_html: "In the meantime, you can explore our API documentation at %{docs_link}."
+          questions: "Questions? Reply to this email or reach us at %{email}."
 
     private_deployments:
       new:

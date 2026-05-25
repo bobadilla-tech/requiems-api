@@ -1,0 +1,33 @@
+en:
+  admin:
+    access_denied: "Access denied. Admin privileges required."
+    abuse_reports:
+      investigate_success: "Report marked as investigating."
+      investigate_error: "Failed to update report status."
+      resolve_success: "Report resolved successfully."
+      resolve_error: "Failed to resolve report."
+      not_found: "Abuse report not found."
+    api_keys:
+      revoke_success: "API key revoked successfully."
+      revoke_error: "Failed to revoke API key."
+      revoke_error_detail: "Failed to revoke API key: %{message}"
+      not_found: "API key not found."
+    private_deployments:
+      subdomain_required: "Subdomain slug is required."
+      secret_required: "Tenant secret is required."
+      activate_success: "Deployment marked as active. Confirmation email sent to %{email}."
+      activate_error: "Failed to activate: %{message}"
+      cancel_success: "Deployment request cancelled."
+      cancel_error: "Failed to cancel: %{message}"
+      not_found: "Deployment request not found."
+    promotions:
+      invalid_plan: "Invalid plan selected."
+      expiry_past: "Expiry date must be in the future."
+      reason_required: "Reason is required."
+      upgrade_success: "%{email} has been upgraded to the %{plan} plan until %{date}."
+      upgrade_error: "Failed to apply promotion: %{message}"
+      no_active_promotion: "This user has no active promotion."
+      revoke_success: "Promotion revoked. %{email} has been returned to the free plan."
+      revoke_error: "Failed to revoke promotion: %{message}"
+    users:
+      not_found: "User not found."

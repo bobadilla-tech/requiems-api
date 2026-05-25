@@ -1,0 +1,23 @@
+base_locale: en
+locales: [en, es, fr]
+
+data:
+  read:
+    - config/locales/%{locale}.yml
+    - config/locales/%{locale}/**/*.%{locale}.yml
+  write:
+    - config/locales/%{locale}.yml
+
+# Patterns for ignoring false positives (dynamic keys, etc.)
+ignore_missing: []
+ignore_unused: []
+
+# Search patterns for t() usage in code
+search:
+  paths:
+    - app
+  include:
+    - "*.rb"
+    - "*.erb"
+    - "*.haml"
+    - "*.slim"

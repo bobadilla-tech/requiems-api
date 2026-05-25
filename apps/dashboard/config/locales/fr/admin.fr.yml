@@ -1,0 +1,33 @@
+fr:
+  admin:
+    access_denied: "TODO: translate"
+    abuse_reports:
+      investigate_success: "TODO: translate"
+      investigate_error: "TODO: translate"
+      resolve_success: "TODO: translate"
+      resolve_error: "TODO: translate"
+      not_found: "TODO: translate"
+    api_keys:
+      revoke_success: "TODO: translate"
+      revoke_error: "TODO: translate"
+      revoke_error_detail: "TODO: translate"
+      not_found: "TODO: translate"
+    private_deployments:
+      subdomain_required: "TODO: translate"
+      secret_required: "TODO: translate"
+      activate_success: "TODO: translate"
+      activate_error: "TODO: translate"
+      cancel_success: "TODO: translate"
+      cancel_error: "TODO: translate"
+      not_found: "TODO: translate"
+    promotions:
+      invalid_plan: "TODO: translate"
+      expiry_past: "TODO: translate"
+      reason_required: "TODO: translate"
+      upgrade_success: "TODO: translate"
+      upgrade_error: "TODO: translate"
+      no_active_promotion: "TODO: translate"
+      revoke_success: "TODO: translate"
+      revoke_error: "TODO: translate"
+    users:
+      not_found: "TODO: translate"

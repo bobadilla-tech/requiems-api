@@ -28,11 +28,11 @@ class Admin::PrivateDeploymentsController < ApplicationController
     admin_notes    = params[:admin_notes].to_s.strip
 
     if subdomain_slug.blank?
-      redirect_to admin_private_deployment_path(@deployment_request), alert: "Subdomain slug is required." and return
+      redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.subdomain_required") and return
     end
 
     if tenant_secret.blank?
-      redirect_to admin_private_deployment_path(@deployment_request), alert: "Tenant secret is required." and return
+      redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.secret_required") and return
     end
 
     merged_notes = [ @deployment_request.admin_notes, admin_notes.presence ].compact.join("\n\n---\n\n")
@@ -52,29 +52,29 @@ class Admin::PrivateDeploymentsController < ApplicationController
     end
 
     redirect_to admin_private_deployment_path(@deployment_request),
-      notice: "Deployment marked as active. Confirmation email sent to #{@deployment_request.contact_email}."
+      notice: t("admin.private_deployments.activate_success", email: @deployment_request.contact_email)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_private_deployment_path(@deployment_request), alert: "Failed to activate: #{e.message}"
+    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.activate_error", message: e.message)
   end
 
   def cancel
     @deployment_request.update!(status: "cancelled")
-    redirect_to admin_private_deployments_path, notice: "Deployment request cancelled."
+    redirect_to admin_private_deployments_path, notice: t("admin.private_deployments.cancel_success")
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_private_deployment_path(@deployment_request), alert: "Failed to cancel: #{e.message}"
+    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.cancel_error", message: e.message)
   end
 
   private
 
   def require_admin!
     unless current_user.admin?
-      redirect_to root_path, alert: "Access denied. Admin privileges required."
+      redirect_to root_path, alert: t("admin.access_denied")
     end
   end
 
   def set_deployment_request
     @deployment_request = PrivateDeploymentRequest.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_private_deployments_path, alert: "Deployment request not found."
+    redirect_to admin_private_deployments_path, alert: t("admin.private_deployments.not_found")
   end
 end
