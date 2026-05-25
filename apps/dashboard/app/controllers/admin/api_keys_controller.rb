@@ -33,7 +33,8 @@ class Admin::ApiKeysController < ApplicationController
       redirect_to admin_api_key_path(@api_key), alert: t("admin.api_keys.revoke_error")
     end
   rescue StandardError => e
-    redirect_to admin_api_key_path(@api_key), alert: t("admin.api_keys.revoke_error_detail", message: e.message)
+    Rails.logger.error "[Admin::ApiKeysController#revoke] #{e.class}: #{e.message}\n#{e.backtrace.first(5).join("\n")}"
+    redirect_to admin_api_key_path(@api_key), alert: t("admin.api_keys.revoke_error")
   end
 
   private

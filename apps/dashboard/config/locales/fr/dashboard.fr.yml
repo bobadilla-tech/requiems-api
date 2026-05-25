@@ -388,7 +388,9 @@ fr:
           what_next: "Prochaines étapes :"
           what_next_detail: "Nous provisionnerons votre VPS Hetzner, configurerons votre API Go privée avec uniquement les services choisis et votre sous-domaine sur yourcompany.requiems.xyz. Une fois en ligne, vous recevrez un second e-mail avec l'URL et les informations d'authentification."
           docs_notice_html: "En attendant, explorez notre documentation API sur %{docs_link}."
+          docs_notice: "En attendant, explorez notre documentation API sur %{docs_link}."
           questions: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
+          questions_html: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
 
     private_deployments:
       new:

@@ -47,14 +47,14 @@
 
           <p style="font-size: 14px; color: #374151; margin-bottom: 24px;">
             <%= t("dashboard.mailers.private_deployments.request_received.docs_notice_html",
-                docs_link: link_to(@docs_url, @docs_url, style: "color: #2563eb;")).html_safe %>
+                docs_link: link_to(@docs_url, @docs_url, style: "color: #2563eb;")) %>
           </p>
 
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
 
           <p style="font-size: 13px; color: #9ca3af; margin: 0;">
-            <%= t("dashboard.mailers.private_deployments.request_received.questions",
-                email: mail_to("eliaz@bobadilla.tech", "eliaz@bobadilla.tech", style: "color: #6b7280;")).html_safe %>
+            <%= t("dashboard.mailers.private_deployments.request_received.questions_html",
+                email: mail_to("eliaz@bobadilla.tech", "eliaz@bobadilla.tech", style: "color: #6b7280;")) %>
           </p>
         </div>
 

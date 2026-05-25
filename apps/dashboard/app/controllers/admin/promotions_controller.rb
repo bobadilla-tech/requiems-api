@@ -57,7 +57,8 @@ class Admin::PromotionsController < ApplicationController
     redirect_to admin_user_path(@user),
                 notice: t("admin.promotions.upgrade_success", email: @user.email, plan: plan_name.titleize, date: expires_at.strftime("%B %d, %Y"))
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_user_path(@user), alert: t("admin.promotions.upgrade_error", message: e.message)
+    Rails.logger.error "[Admin::PromotionsController#create] #{e.class}: #{e.message}"
+    redirect_to admin_user_path(@user), alert: t("admin.promotions.upgrade_error")
   end
 
   def destroy
@@ -89,7 +90,8 @@ class Admin::PromotionsController < ApplicationController
     redirect_to admin_user_path(@user),
                 notice: t("admin.promotions.revoke_success", email: @user.email)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_user_path(@user), alert: t("admin.promotions.revoke_error", message: e.message)
+    Rails.logger.error "[Admin::PromotionsController#destroy] #{e.class}: #{e.message}"
+    redirect_to admin_user_path(@user), alert: t("admin.promotions.revoke_error")
   end
 
   private

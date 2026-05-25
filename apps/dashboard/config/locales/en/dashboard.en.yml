@@ -388,7 +388,9 @@ en:
           what_next: "What happens next:"
           what_next_detail: "We'll provision your Hetzner VPS, set up your private Go API with only your selected services, and configure your subdomain at yourcompany.requiems.xyz. Once live you'll receive a second email with your URL and authentication details."
           docs_notice_html: "In the meantime, you can explore our API documentation at %{docs_link}."
+          docs_notice: "In the meantime, you can explore our API documentation at %{docs_link}."
           questions: "Questions? Reply to this email or reach us at %{email}."
+          questions_html: "Questions? Reply to this email or reach us at %{email}."
 
     private_deployments:
       new:

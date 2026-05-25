@@ -12,7 +12,7 @@
 <%= t("dashboard.mailers.private_deployments.request_received.what_next") %>
 <%= t("dashboard.mailers.private_deployments.request_received.what_next_detail") %>
 
-<%= strip_tags(t("dashboard.mailers.private_deployments.request_received.docs_notice_html", docs_link: @docs_url)) %>
+<%= t("dashboard.mailers.private_deployments.request_received.docs_notice", docs_link: @docs_url) %>
 
 <%= t("dashboard.mailers.private_deployments.request_received.questions", email: "eliaz@bobadilla.tech") %>
 

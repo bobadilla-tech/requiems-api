@@ -15,7 +15,7 @@ Click this link to permanently delete your account:
 
 <%= @confirm_url %>
 
-<%= strip_tags(t("dashboard.mailers.account_deletion.expiry_html", expires_at: @expires_at.strftime("%B %d, %Y at %I:%M %p %Z"))) %>
+<%= strip_tags(t("dashboard.mailers.account_deletion.expiry_html", expires_at: l(@expires_at, format: :long))) %>
 
 <%= t("dashboard.mailers.account_deletion.consequences_heading").upcase %>
 ------------------------------------------

@@ -54,14 +54,16 @@ class Admin::PrivateDeploymentsController < ApplicationController
     redirect_to admin_private_deployment_path(@deployment_request),
       notice: t("admin.private_deployments.activate_success", email: @deployment_request.contact_email)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.activate_error", message: e.message)
+    Rails.logger.error "[Admin::PrivateDeploymentsController#activate] #{e.class}: #{e.message}"
+    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.activate_error")
   end
 
   def cancel
     @deployment_request.update!(status: "cancelled")
     redirect_to admin_private_deployments_path, notice: t("admin.private_deployments.cancel_success")
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.cancel_error", message: e.message)
+    Rails.logger.error "[Admin::PrivateDeploymentsController#cancel] #{e.class}: #{e.message}"
+    redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.cancel_error")
   end
 
   private
