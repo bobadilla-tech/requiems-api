@@ -1,13 +1,13 @@
 es:
   home:
     index:
-      title: "Requiems API - Lanza más rápido con una clave: validación, utilidades y más"
+      title: "Requiems API: Backend todo en uno para productos SaaS"
       hero:
-        title_line1: "Lanza más rápido."
-        title_line2: "Una clave API. Todo el catálogo."
-        description: "Más de cincuenta APIs listas para usar: validación, texto, finanzas, lugares y más. Integra una vez en lugar de sumar un proveedor distinto por cada función, ya sea en un MVP o en un proyecto para cliente."
-        cta_primary: "Obtener clave API gratis"
-        cta_secondary: "Ver documentación de APIs"
+        title_line1: "Backend todo en uno"
+        title_line2: "para productos SaaS."
+        description: "Autenticación, validación, detección de fraude, inteligencia de pagos y datos globales, entregados a través de una API unificada."
+        cta_primary: "Obtener clave API"
+        cta_secondary: "Explorar sistemas"
         try_badge: "✨ Pruébalo ahora • Sin tarjeta de crédito"
         api_request: "Solicitud API"
         proof_badges:
@@ -188,11 +188,11 @@ es:
         still_questions: "¿Aún tienes preguntas?"
         contact_link: "Contacta a nuestro equipo de soporte"
       cta:
-        heading: "¿Listo para lanzar más rápido?"
-        subheading: "Startups, agencias y equipos técnicos usan una sola clave para validación, utilidades y más, con plan gratuito incluido."
-        primary: "Comenzar gratis"
-        secondary: "Ver precios"
-        footer: "Sin tarjeta de crédito • Comienza gratis • Cancela en cualquier momento"
+        heading: "Deja de reconstruir la infraestructura backend. Empieza a lanzar producto."
+        subheading: "Una suscripción desbloquea los cuatro sistemas. Sin parches de proveedores ni dispersión de integraciones."
+        primary: "Obtener clave API"
+        secondary: "Hablar con ventas"
+        footer: "Sin tarjeta de crédito • Cancela cuando quieras"
 
     blog:
       title: "Blog - Requiems API"

@@ -34,7 +34,8 @@ es:
         primary_cta: Obtener clave API
         secondary_cta: Ver precios
       strategy_call:
-        label: Reserve una llamada de estrategia
+        label: Reservar una llamada de estrategia
+      questions_intro: "¿Aún tienes preguntas? Hablemos de tu caso de uso."
       view_division: Ver división
       apis_catalog_title: Explora el directorio API completo
       apis_catalog_subtitle: 'Cada punto final activo y beta en un catálogo con capacidad de búsqueda: la misma clave API, documentos consistentes, ejemplos listos para copiar.'

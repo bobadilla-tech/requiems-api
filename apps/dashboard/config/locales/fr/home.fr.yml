@@ -1,13 +1,13 @@
 fr:
   home:
     index:
-      title: "Requiems API — Déployez plus vite avec une clé : validation, utilitaires et plus"
+      title: "Requiems API : Backend tout-en-un pour produits SaaS"
       hero:
-        title_line1: "Déployez plus vite."
-        title_line2: "Une clé API. Tout le catalogue."
-        description: "Plus de cinquante APIs prêtes à l'emploi : validation, texte, finance, lieux et bien plus. Intégrez une fois au lieu d'empiler un nouveau fournisseur pour chaque fonctionnalité, que ce soit pour un MVP ou pour un client."
-        cta_primary: "Obtenir une clé API gratuite"
-        cta_secondary: "Parcourir la documentation des APIs"
+        title_line1: "Backend tout-en-un"
+        title_line2: "pour produits SaaS."
+        description: "Authentification, validation, détection de fraude, intelligence paiements et données mondiales, livrés via une API unifiée."
+        cta_primary: "Obtenir une clé API"
+        cta_secondary: "Explorer les systèmes"
         try_badge: "✨ Essayez maintenant • Sans carte bancaire"
         api_request: "Requête API"
         proof_badges:
@@ -188,11 +188,11 @@ fr:
         still_questions: "Encore des questions ?"
         contact_link: "Contacter notre équipe support"
       cta:
-        heading: "Prêt à déployer plus vite ?"
-        subheading: "Startups, agences et équipes techniques utilisent une seule clé pour la validation, les utilitaires et plus, avec une offre gratuite incluse."
-        primary: "Commencer gratuitement"
-        secondary: "Voir les tarifs"
-        footer: "Sans carte bancaire • Gratuit pour commencer • Annulation à tout moment"
+        heading: "Arrêtez de reconstruire l'infrastructure backend. Livrez votre produit."
+        subheading: "Un abonnement débloque les quatre systèmes. Pas de patchwork de fournisseurs ni de dispersion des intégrations."
+        primary: "Obtenir une clé API"
+        secondary: "Parler aux ventes"
+        footer: "Sans carte bancaire • Résiliation à tout moment"
 
     blog:
       title: "Blog — Requiems API"
