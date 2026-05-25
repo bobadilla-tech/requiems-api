@@ -1,6 +1,7 @@
 package trivia
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -12,6 +13,12 @@ import (
 type Request struct {
 	Category   string `query:"category"   validate:"omitempty,oneof=science history geography sports music movies literature math technology nature"`
 	Difficulty string `query:"difficulty" validate:"omitempty,oneof=easy medium hard"`
+}
+
+// BatchRequest is the request payload for fetching multiple sets
+// of trivia questions in a single call.
+type BatchRequest struct {
+	Filters []Request `json:"filters" validate:"required,min=1,max=50,dive"`
 }
 
 // RegisterRoutes mounts trivia handlers on the given router.
@@ -32,4 +39,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, q)
 	})
+
+	r.Post("/trivia/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[BatchResponse], error) {
+			return httpx.BatchResponse[BatchResponse]{Results: svc.RandomBatch(req.Filters)}, nil
+		},
+	))
 }
