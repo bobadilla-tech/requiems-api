@@ -2,250 +2,346 @@
 es:
   systems:
     index:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Sistemas backend | Requiems API"
+      kicker: "Infraestructura backend para SaaS"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-        secondary_cta: "TODO: translate"
-      grid_heading: "TODO: translate"
-      grid_subheading: "TODO: translate"
-      explore_cta: "TODO: translate"
-      utilities_kicker: "TODO: translate"
-      utilities_cta: "TODO: translate"
-      apis_catalog_title: "TODO: translate"
-      apis_catalog_subtitle: "TODO: translate"
-      apis_catalog_cta: "TODO: translate"
+        headline: "Backend todo en uno para productos SaaS"
+        subheadline: "Autenticación, validación, detección de fraude, inteligencia de pagos y datos globales, entregados a través de una API unificada."
+        primary_cta: "Obtener clave API"
+        secondary_cta: "Ver divisiones"
+      grid_heading: "Sistemas de nivel producción"
+      grid_subheading: "Cada sistema combina señales propietarias en una decisión estructurada única, entregada en una sola llamada a la API."
+      explore_cta: "Explorar sistema"
+      utilities_kicker: "Extras"
+      utilities_cta: "Ver utilidades"
+      apis_catalog_title: "Explorar el directorio completo de APIs"
+      apis_catalog_subtitle: "Cada endpoint activo y en beta en un catálogo buscable. La misma clave API, documentación coherente y ejemplos listos para copiar."
+      apis_catalog_cta: "Ver APIs"
       cards:
         identity_risk:
-          title: "TODO: translate"
-          blurb: "TODO: translate"
+          title: "Sistema de identidad y riesgo"
+          blurb: "Protege tu producto de usuarios falsos, fraude y datos incorrectos antes de que lleguen a tu base de datos."
           signals:
-            - "TODO: translate"
-            - "TODO: translate"
-            - "TODO: translate"
+            - "Puntuación de riesgo"
+            - "Inteligencia de correo, teléfono e IP"
+            - "Señales de dominio y comportamiento"
         payments_intelligence:
-          title: "TODO: translate"
-          blurb: "TODO: translate"
+          title: "Sistema de inteligencia de pagos"
+          blurb: "Valida y enriquece datos financieros para reducir pagos fallidos y detectar transacciones de riesgo."
           signals:
-            - "TODO: translate"
-            - "TODO: translate"
-            - "TODO: translate"
+            - "Validación BIN y de tarjeta"
+            - "Comprobaciones IBAN / SWIFT"
+            - "Señales de riesgo en transacciones"
         global_data:
-          title: "TODO: translate"
-          blurb: "TODO: translate"
+          title: "Sistema de datos globales"
+          blurb: "Impulsa productos internacionales con datos de ubicación precisos en tiempo real y listos para cumplimiento normativo."
           signals:
-            - "TODO: translate"
-            - "TODO: translate"
-            - "TODO: translate"
+            - "Geocodificación"
+            - "Zonas horarias y festivos"
+            - "Inteligencia de direcciones"
         data_integrity:
-          title: "TODO: translate"
-          blurb: "TODO: translate"
+          title: "Sistema de integridad de datos"
+          blurb: "Limpia, valida y estandariza la entrada del usuario en toda tu plataforma."
           signals:
-            - "TODO: translate"
-            - "TODO: translate"
-            - "TODO: translate"
+            - "Validación de entrada"
+            - "Normalización de texto"
+            - "Moderación de contenido"
         developer_utilities:
-          title: "TODO: translate"
-          blurb: "TODO: translate"
+          title: "Utilidades para desarrolladores"
+          blurb: "Herramientas útiles que no deberías tener que reconstruir: códigos QR, codificación, conversiones y más."
           signals:
-            - "TODO: translate"
-            - "TODO: translate"
-            - "TODO: translate"
+            - "Códigos QR"
+            - "Codificación y conversiones"
+            - "Utilidades varias"
+
     show:
-      back: "TODO: translate"
-      engine_label: "TODO: translate"
-      engine_subheading: "TODO: translate"
-      request_label: "TODO: translate"
-      response_label: "TODO: translate"
-      powered_by: "TODO: translate"
-      other_endpoints_heading: "TODO: translate"
-      signals_heading: "TODO: translate"
-      use_cases_heading: "TODO: translate"
-      get_started: "TODO: translate"
-      explore_divisions: "TODO: translate"
+      back: "Todos los sistemas"
+      engine_label: "Motor"
+      engine_subheading: "Un endpoint. Múltiples señales. Una decisión."
+      request_label: "Solicitud"
+      response_label: "Respuesta"
+      powered_by: "Impulsado por"
+      other_endpoints_heading: "Endpoints adicionales"
+      signals_heading: "Señales compuestas"
+      use_cases_heading: "Casos de uso"
+      get_started: "Obtener clave API"
+      explore_divisions: "Ver APIs subyacentes"
+
     identity-risk:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Sistema de identidad y riesgo | Requiems API"
+      kicker: "Sistema de identidad y riesgo"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-      purpose: "TODO: translate"
+        headline: "Determina si un usuario es real, seguro y confiable"
+        subheadline: "Combina señales de correo, teléfono, IP y comportamiento en una sola decisión de riesgo antes de que actores maliciosos lleguen a tu producto."
+        primary_cta: "Obtener clave API"
+      purpose: "Protege tu producto de registros falsos, bots, fraude y abuso de cuentas. En lugar de llamar por separado a APIs de validación, red y texto y construir tú la lógica de puntuación, el motor de identidad y riesgo devuelve una decisión estructurada única."
       engine:
-        name: "TODO: translate"
-        headline: "TODO: translate"
-        endpoint_method: "TODO: translate"
-        endpoint_path: "TODO: translate"
-        input: "TODO: translate"
-        output: "TODO: translate"
+        name: "Motor de identidad y riesgo"
+        headline: "Una llamada devuelve un panorama de riesgo completo: correo, IP, teléfono y señales de comportamiento compuestas en una sola decisión."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/signup/protect"
+        input: |
+          {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }
+        output: |
+          {
+            "risk_score": 0.87,
+            "is_safe": false,
+            "confidence": 0.94,
+            "flags": [
+              "disposable_email",
+              "vpn_detected"
+            ],
+            "signals": {
+              "email_valid": true,
+              "phone_valid": false,
+              "vpn_detected": true,
+              "disposable_email": true
+            }
+          }
       use_cases:
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
+        - title: "Protección de registro"
+          body: "Bloquea correos desechables, registros por VPN e IPs de alto riesgo al registrarse."
+        - title: "Detección de fraude"
+          body: "Puntúa usuarios antes de que realicen transacciones o accedan a funciones sensibles."
+        - title: "Detección de bots"
+          body: "Identifica tráfico automatizado mediante señales de red y comportamiento."
+        - title: "Puntuación de riesgo de cuenta"
+          body: "Reevalúa cuentas existentes cuando se detecta actividad anómala."
       endpoints:
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
+        - method: "POST"
+          path: "/v1/risk/score"
+          description: "Puntúa un usuario según correo, teléfono e IP. Devuelve risk_score y confidence sin el sobre completo de decisión."
+        - method: "POST"
+          path: "/v1/user/verify"
+          description: "Verifica señales de identidad y devuelve una puntuación de confianza. Menor latencia, adecuado para repuntuación en segundo plano."
       signals:
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
+        - "Validación de correo y detección de desechables"
+        - "Validación de teléfono y búsqueda de operador"
+        - "Geolocalización IP y detección VPN/proxy"
+        - "ASN e inteligencia de amenazas"
+        - "Señales de antigüedad y reputación de dominio"
+        - "Puntuación de riesgo de contenido de texto"
+
     payments-intelligence:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Sistema de inteligencia de pagos | Requiems API"
+      kicker: "Sistema de inteligencia de pagos"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-      purpose: "TODO: translate"
+        headline: "Reduce pagos fallidos y detecta transacciones de riesgo"
+        subheadline: "Valida BIN, IBAN y códigos SWIFT mientras contrastas IP y país de facturación antes de que el pago llegue a tu procesador."
+        primary_cta: "Obtener clave API"
+      purpose: "Los pagos fallidos cuestan ingresos y confianza a productos SaaS y fintech. El motor de inteligencia de pagos valida datos financieros y evalúa el riesgo de transacción en una sola llamada, combinando señales de finanzas y red sin que tengas que orquestarlas."
       engine:
-        name: "TODO: translate"
-        headline: "TODO: translate"
-        endpoint_method: "TODO: translate"
-        endpoint_path: "TODO: translate"
-        input: "TODO: translate"
-        output: "TODO: translate"
+        name: "Motor de inteligencia de pagos"
+        headline: "Valida datos financieros y evalúa el riesgo de transacción en una llamada. Señales BIN, IBAN, SWIFT e IP compuestas automáticamente."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/payment/validate"
+        input: |
+          {
+            "card_bin": "424242",
+            "iban": "DE89370400440532013000",
+            "ip_address": "92.168.1.1",
+            "billing_country": "DE"
+          }
+        output: |
+          {
+            "valid": true,
+            "risk_score": 0.14,
+            "country_mismatch": false,
+            "bank": {
+              "name": "Deutsche Bank",
+              "country": "DE",
+              "brand": "Visa"
+            },
+            "signals": {
+              "bin_valid": true,
+              "iban_valid": true,
+              "ip_country": "DE",
+              "billing_country": "DE"
+            }
+          }
       use_cases:
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
+        - title: "Validación en checkout"
+          body: "Verifica BIN, IBAN y SWIFT antes de enviar a tu procesador de pagos."
+        - title: "Detección de fraude"
+          body: "Marca transacciones cuando el país de facturación no coincide con la ubicación IP."
+        - title: "Onboarding fintech"
+          body: "Valida identificadores financieros durante flujos de alta de usuario."
+        - title: "Optimización de éxito de pago"
+          body: "Reduce rechazos prevalidando datos de pago antes del envío."
       endpoints:
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
+        - method: "POST"
+          path: "/v1/transaction/risk"
+          description: "Puntúa una transacción por riesgo de fraude y desajuste de país. Úsalo antes de autorizar acciones de alto valor."
       signals:
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
+        - "Consulta BIN y detección de marca de tarjeta"
+        - "Validación de formato y checksum IBAN"
+        - "Verificación de código SWIFT/BIC"
+        - "Geolocalización IP y coincidencia de país"
+        - "Detección VPN para anomalías de facturación"
+
     global-data:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Sistema de datos globales | Requiems API"
+      kicker: "Sistema de datos globales"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-      purpose: "TODO: translate"
+        headline: "Construye productos globales sin la infraestructura de datos"
+        subheadline: "Geocodificación precisa, resolución de zonas horarias, calendarios de festivos e inteligencia de direcciones. Un endpoint, todos los países."
+        primary_cta: "Obtener clave API"
+      purpose: "Los productos internacionales necesitan datos de ubicación y planificación fiables. El motor de datos globales combina geocodificación, zona horaria y calendario para que localices experiencias, programes tareas correctamente y cumplas requisitos en cada región sin unir múltiples llamadas."
       engine:
-        name: "TODO: translate"
-        headline: "TODO: translate"
-        endpoint_method: "TODO: translate"
-        endpoint_path: "TODO: translate"
-        input: "TODO: translate"
-        output: "TODO: translate"
+        name: "Motor de datos globales"
+        headline: "Resuelve cualquier dirección o coordenadas en un perfil de ubicación completo. Incluye zona horaria, días laborables y estado de festivo."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/location/resolve"
+        input: |
+          {
+            "address": "Alexanderplatz 1, Berlin",
+            "country_code": "DE"
+          }
+        output: |
+          {
+            "country": "DE",
+            "city": "Berlin",
+            "timezone": "Europe/Berlin",
+            "utc_offset": "+02:00",
+            "working_days_this_month": 21,
+            "is_holiday": false,
+            "coordinates": {
+              "lat": 52.52,
+              "lng": 13.405
+            }
+          }
       use_cases:
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
+        - title: "Localización de usuario"
+          body: "Detecta zona horaria y configuración regional desde IP o dirección para experiencias personalizadas."
+        - title: "Programación y recordatorios"
+          body: "Conoce qué días son laborables y cuáles festivos en cualquier país."
+        - title: "Validación de direcciones"
+          body: "Estandariza y valida direcciones de envío o facturación a nivel global."
+        - title: "Segmentación por cumplimiento"
+          body: "Identifica la jurisdicción del usuario para GDPR, impuestos y requisitos regulatorios."
       endpoints:
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
+        - method: "GET"
+          path: "/v1/timezone/resolve"
+          description: "Resuelve zona horaria y desfase UTC para cualquier ubicación o dirección IP."
+        - method: "GET"
+          path: "/v1/holidays"
+          description: "Lista festivos públicos por país y año (más de 100 países)."
       signals:
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
+        - "Geocodificación y geocodificación inversa"
+        - "Resolución de zona horaria por coordenadas o dirección"
+        - "Calendarios de festivos públicos (más de 100 países)"
+        - "Búsqueda y validación de códigos postales"
+        - "Cálculo de días laborables"
+
     data-integrity:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Sistema de integridad de datos | Requiems API"
+      kicker: "Sistema de integridad de datos"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-      purpose: "TODO: translate"
+        headline: "Limpia, valida y estandariza la entrada del usuario en el origen"
+        subheadline: "Evita datos incorrectos antes de que entren en tu base de datos. Normaliza texto, valida entradas y modera contenido en una sola llamada API."
+        primary_cta: "Obtener clave API"
+      purpose: "Los datos incorrectos se acumulan en silencio: correos rebotan, teléfonos fallan, contenido tóxico se cuela. El motor de integridad de datos detecta y normaliza entradas malas en el límite de tu producto, antes de la base de datos o servicios posteriores, sin llamadas separadas por tipo de campo."
       engine:
-        name: "TODO: translate"
-        headline: "TODO: translate"
-        endpoint_method: "TODO: translate"
-        endpoint_path: "TODO: translate"
-        input: "TODO: translate"
-        output: "TODO: translate"
+        name: "Motor de integridad de datos"
+        headline: "Valida, normaliza y comprueba seguridad de un conjunto completo de entradas en una llamada. Sin endpoints separados por tipo de campo."
+        endpoint_method: "POST"
+        endpoint_path: "/v1/input/validate"
+        input: |
+          {
+            "email": "  User@EXAMPLE.COM  ",
+            "phone": "004915123456789",
+            "text": "This is some user-generated content"
+          }
+        output: |
+          {
+            "email": {
+              "valid": true,
+              "normalized": "user@example.com",
+              "disposable": false
+            },
+            "phone": {
+              "valid": true,
+              "normalized": "+4915123456789",
+              "country": "DE"
+            },
+            "text": {
+              "is_safe": true,
+              "toxicity_score": 0.01,
+              "sentiment": "neutral"
+            }
+          }
       use_cases:
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
+        - title: "Validación de formularios"
+          body: "Valida y normaliza correo, teléfono y texto al enviar."
+        - title: "Moderación de contenido"
+          body: "Filtra profanidad, contenido tóxico y texto fuera de política generado por usuarios."
+        - title: "Limpieza de pipelines de datos"
+          body: "Normaliza y valida registros en importaciones masivas o migraciones."
+        - title: "Saneamiento de entrada para IA"
+          body: "Preprocesa y valida entrada de usuario antes de pasarla a flujos con LLM."
       endpoints:
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
+        - method: "POST"
+          path: "/v1/content/moderate"
+          description: "Comprueba texto por toxicidad, profanidad, sentimiento y violaciones de política."
+        - method: "POST"
+          path: "/v1/text/normalize"
+          description: "Limpia y estandariza una cadena: recorte, codificación, mayúsculas y unicode."
       signals:
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
+        - "Validación de formato y entregabilidad de correo"
+        - "Normalización de teléfono y comprobación de operador"
+        - "Detección de profanidad y toxicidad"
+        - "Análisis de sentimiento"
+        - "Detección de idioma"
+        - "Corrección ortográfica y normalización de texto"
+
     developer-utilities:
-      meta_title: "TODO: translate"
-      kicker: "TODO: translate"
+      meta_title: "Utilidades para desarrolladores | Requiems API"
+      kicker: "Utilidades para desarrolladores"
       hero:
-        headline: "TODO: translate"
-        subheadline: "TODO: translate"
-        primary_cta: "TODO: translate"
-      purpose: "TODO: translate"
+        headline: "Herramientas útiles que no deberías tener que reconstruir"
+        subheadline: "Códigos QR, codificación, conversiones y APIs de contenido. Extras que ahorran tiempo sin convertirse en infraestructura central."
+        primary_cta: "Obtener clave API"
+      purpose: "No toda API debe ser un sistema. Son utilidades que de otro modo reconstruirías o meterías en un paquete puntual: generación QR, codificación, contenido aleatorio y más. La misma clave API, la misma autenticación, cero configuración extra."
       engine:
-        name: "TODO: translate"
-        headline: "TODO: translate"
-        endpoint_method: "TODO: translate"
-        endpoint_path: "TODO: translate"
-        input: "TODO: translate"
-        output: "TODO: translate"
+        name: "Utilidades"
+        headline: "Herramientas habituales para desarrolladores, disponibles con la misma clave que tus sistemas de producción."
+        endpoint_method: "GET"
+        endpoint_path: "/v1/qr/base64"
+        input: |
+          {
+            "data": "https://requiems.xyz",
+            "size": 256,
+            "recovery": "medium"
+          }
+        output: |
+          {
+            "image": "iVBORw0KGgoAAAANSUhEUgAA...",
+            "width": 256,
+            "height": 256
+          }
       use_cases:
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
-        - title: "TODO: translate"
-          body: "TODO: translate"
+        - title: "Códigos QR"
+          body: "Genera códigos QR para URLs, enlaces de pago o identificadores de producto."
+        - title: "Codificación y decodificación"
+          body: "Base64, codificación URL y conversión de formato en una llamada."
+        - title: "Contenido aleatorio"
+          body: "Texto de relleno, palabras aleatorias y trivia para demos y pruebas."
+        - title: "APIs de entretenimiento"
+          body: "Citas, chistes y trivia para dar vida a las apps sin un equipo de contenido."
       endpoints:
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
-        - method: "TODO: translate"
-          path: "TODO: translate"
-          description: "TODO: translate"
+        - method: "POST"
+          path: "/v1/encoding/base64"
+          description: "Codifica o decodifica una cadena en Base64."
+        - method: "GET"
+          path: "/v1/words/random"
+          description: "Obtén palabras aleatorias con longitud y cantidad configurables."
       signals:
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
-        - "TODO: translate"
+        - "Generación de códigos QR (PNG, SVG)"
+        - "Codificación y decodificación Base64 y URL"
+        - "Generación de palabras aleatorias y lorem ipsum"
+        - "APIs de trivia, citas y chistes"
+        - "Utilidades de conversión de unidades"
