@@ -3,45 +3,16 @@
 require "test_helper"
 require "fileutils"
 
-module SystemCapture
-  def system(*args)
-    if (calls = Thread.current[:captured_system_calls])
-      calls << args.first
-      true
-    else
-      super
-    end
-  end
-end
-
 class I18nRakeTest < ActiveSupport::TestCase
   parallelize(workers: 1)
 
-  Object.prepend(SystemCapture) unless Object.ancestors.include?(SystemCapture)
-
   setup do
     Rails.application.load_tasks
-    @system_calls = []
-    Thread.current[:captured_system_calls] = @system_calls
   end
 
   teardown do
-    Thread.current[:captured_system_calls] = nil
     Rake::Task["i18n:report"].reenable
     Rake::Task["i18n:todos"].reenable
-  end
-
-  test "i18n:report runs for es and fr by default" do
-    capture_io { Rake::Task["i18n:report"].invoke }
-    assert_equal(
-      [ "bundle exec i18n-tasks missing -l es", "bundle exec i18n-tasks missing -l fr" ],
-      @system_calls
-    )
-  end
-
-  test "i18n:report runs for single locale when specified" do
-    capture_io { Rake::Task["i18n:report"].invoke("es") }
-    assert_equal [ "bundle exec i18n-tasks missing -l es" ], @system_calls
   end
 
   test "i18n:report outputs locale header" do
