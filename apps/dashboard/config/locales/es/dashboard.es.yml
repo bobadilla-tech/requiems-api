@@ -187,6 +187,14 @@ es:
     settings:
       title: "Ajustes"
       subtitle: "Gestiona tus preferencias de cuenta y configuración de seguridad"
+      flash:
+        email_confirm: "TODO: translate"
+        updated: "TODO: translate"
+        error: "TODO: translate"
+        reason_too_short: "TODO: translate"
+        deletion_email_sent: "TODO: translate"
+        invalid_token: "TODO: translate"
+        deleted: "TODO: translate"
       errors:
         one: "%{count} error impidió guardar estos ajustes:"
         other: "%{count} errores impidieron guardar estos ajustes:"
@@ -351,6 +359,22 @@ es:
         consequence_3: "Todos los datos de uso e historial serán eliminados permanentemente"
         ignore_notice: "Si no solicitaste esto, puedes ignorar este correo de forma segura. Tu cuenta no será eliminada."
         contact_notice_html: "Si tienes dudas, contáctanos en %{email_link}."
+      private_deployments:
+        request_received:
+          subject: "TODO: translate"
+          header_title: "TODO: translate"
+          header_subtitle: "TODO: translate"
+          greeting: "TODO: translate"
+          intro: "TODO: translate"
+          notify: "TODO: translate"
+          order_summary: "TODO: translate"
+          server_tier: "TODO: translate"
+          monthly_price: "TODO: translate"
+          selected_services: "TODO: translate"
+          what_next: "TODO: translate"
+          what_next_detail: "TODO: translate"
+          docs_notice_html: "TODO: translate"
+          questions: "TODO: translate"
 
     private_deployments:
       new:

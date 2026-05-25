@@ -16,7 +16,7 @@ ignore_unused: []
 search:
   paths:
     - app
-  include:
+  only:
     - "*.rb"
     - "*.erb"
     - "*.haml"

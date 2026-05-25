@@ -889,3 +889,30 @@ en:
         text: "Browse the full API catalog or download the complete documentation to get started."
         browse_apis: "Browse APIs"
         full_docs: "Download llms-full.txt"
+
+  sales_inquiries:
+    new:
+      description: "We're here to help you with your API needs. Please fill out the form and we'll get back to you as soon as possible!"
+    flash:
+      success: "Thank you! Our sales team will contact you within 24 hours."
+      missing_fields: "Please fill in all required fields."
+      error: "Sorry, there was an error submitting your inquiry. Please try again later."
+
+  suggestions:
+    flash:
+      success: "Thank you for your suggestion! We'll review it shortly and usually reply within 24 hours."
+      missing_fields: "Please fill in all required fields."
+      error: "Sorry, there was an error submitting your suggestion. Please try again later."
+
+  examples:
+    show:
+      tutorial_coming_soon: "Tutorial Coming Soon"
+      tutorial_description: "We're working on creating a detailed step-by-step tutorial for this example."
+      view_source: "View Source Code"
+      view_demo: "View Demo"
+      back: "Back to Examples"
+      in_the_meantime: "In the meantime:"
+      tip_github: "Check out the source code on GitHub to see how it's built"
+      tip_demo: "Try out the live demo to see it in action"
+      tip_docs_html: "Explore the %{docs_link} for the APIs used in this project"
+      api_documentation: "API documentation"

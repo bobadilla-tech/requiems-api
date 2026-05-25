@@ -777,3 +777,30 @@ fr:
         text: "Parcourez le catalogue complet ou téléchargez la documentation complète pour commencer."
         browse_apis: "Parcourir les APIs"
         full_docs: "Télécharger llms-full.txt"
+
+  sales_inquiries:
+    new:
+      description: "TODO: translate"
+    flash:
+      success: "TODO: translate"
+      missing_fields: "TODO: translate"
+      error: "TODO: translate"
+
+  suggestions:
+    flash:
+      success: "TODO: translate"
+      missing_fields: "TODO: translate"
+      error: "TODO: translate"
+
+  examples:
+    show:
+      tutorial_coming_soon: "TODO: translate"
+      tutorial_description: "TODO: translate"
+      view_source: "TODO: translate"
+      view_demo: "TODO: translate"
+      back: "TODO: translate"
+      in_the_meantime: "TODO: translate"
+      tip_github: "TODO: translate"
+      tip_demo: "TODO: translate"
+      tip_docs_html: "TODO: translate"
+      api_documentation: "TODO: translate"
