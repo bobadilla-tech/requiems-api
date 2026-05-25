@@ -2,12 +2,13 @@ package spellcheck
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
+
+	"requiems-api/platform/svcerr"
 )
 
 const defaultLanguageToolURL = "http://localhost:8010"
@@ -58,17 +59,17 @@ func (s *Service) Check(text string) (Result, error) {
 		strings.NewReader(form.Encode()),
 	)
 	if err != nil {
-		return Result{}, fmt.Errorf("spellcheck: languagetool unreachable: %w", err)
+		return Result{}, svcerr.Upstream("upstream_error", "spell-check service unavailable")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return Result{}, fmt.Errorf("spellcheck: languagetool returned status %d", resp.StatusCode)
+		return Result{}, svcerr.Upstream("upstream_error", "spell-check service unavailable")
 	}
 
 	var ltResp ltResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ltResp); err != nil {
-		return Result{}, fmt.Errorf("spellcheck: failed to decode response: %w", err)
+		return Result{}, svcerr.Upstream("upstream_error", "spell-check service unavailable")
 	}
 
 	return buildResult(text, ltResp.Matches), nil

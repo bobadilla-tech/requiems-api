@@ -28,17 +28,17 @@ class Admin::UsersController < ApplicationController
         key.revoke!(reason: "User suspended by admin")
       end
 
-      redirect_to admin_user_path(@user), notice: "User suspended successfully. All API keys have been revoked."
+      redirect_to admin_user_path(@user), notice: t("admin.users.suspend_success")
     else
-      redirect_to admin_user_path(@user), alert: "Failed to suspend user."
+      redirect_to admin_user_path(@user), alert: t("admin.users.suspend_error")
     end
   end
 
   def unsuspend
     if @user.update(status: "active", active: true)
-      redirect_to admin_user_path(@user), notice: "User unsuspended successfully."
+      redirect_to admin_user_path(@user), notice: t("admin.users.unsuspend_success")
     else
-      redirect_to admin_user_path(@user), alert: "Failed to unsuspend user."
+      redirect_to admin_user_path(@user), alert: t("admin.users.unsuspend_error")
     end
   end
 
@@ -57,30 +57,30 @@ class Admin::UsersController < ApplicationController
         )
       end
 
-      redirect_to admin_user_path(@user), notice: "User banned successfully. All API keys revoked and subscription canceled."
+      redirect_to admin_user_path(@user), notice: t("admin.users.ban_success")
     else
-      redirect_to admin_user_path(@user), alert: "Failed to ban user."
+      redirect_to admin_user_path(@user), alert: t("admin.users.ban_error")
     end
   end
 
   def make_admin
     if @user.update(admin: true)
-      redirect_to admin_user_path(@user), notice: "User granted admin privileges."
+      redirect_to admin_user_path(@user), notice: t("admin.users.make_admin_success")
     else
-      redirect_to admin_user_path(@user), alert: "Failed to grant admin privileges."
+      redirect_to admin_user_path(@user), alert: t("admin.users.make_admin_error")
     end
   end
 
   def remove_admin
     if @user.id == current_user.id
-      redirect_to admin_user_path(@user), alert: "You cannot remove your own admin privileges."
+      redirect_to admin_user_path(@user), alert: t("admin.users.remove_admin_self")
       return
     end
 
     if @user.update(admin: false)
-      redirect_to admin_user_path(@user), notice: "Admin privileges removed from user."
+      redirect_to admin_user_path(@user), notice: t("admin.users.remove_admin_success")
     else
-      redirect_to admin_user_path(@user), alert: "Failed to remove admin privileges."
+      redirect_to admin_user_path(@user), alert: t("admin.users.remove_admin_error")
     end
   end
 
@@ -88,14 +88,14 @@ class Admin::UsersController < ApplicationController
 
   def require_admin!
     unless current_user.admin?
-      redirect_to root_path, alert: "Access denied. Admin privileges required."
+      redirect_to root_path, alert: t("admin.access_denied")
     end
   end
 
   def set_user
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_users_path, alert: "User not found."
+    redirect_to admin_users_path, alert: t("admin.users.not_found")
   end
 
   def calculate_user_usage_stats

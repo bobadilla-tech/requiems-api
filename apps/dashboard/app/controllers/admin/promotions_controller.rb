@@ -14,15 +14,15 @@ class Admin::PromotionsController < ApplicationController
     reason = promotion_params[:reason]
 
     unless ALLOWED_PLANS.include?(plan_name)
-      redirect_to admin_user_path(@user), alert: "Invalid plan selected." and return
+      redirect_to admin_user_path(@user), alert: t("admin.promotions.invalid_plan") and return
     end
 
     if expires_at.nil? || expires_at <= Time.current
-      redirect_to admin_user_path(@user), alert: "Expiry date must be in the future." and return
+      redirect_to admin_user_path(@user), alert: t("admin.promotions.expiry_past") and return
     end
 
     if reason.blank?
-      redirect_to admin_user_path(@user), alert: "Reason is required." and return
+      redirect_to admin_user_path(@user), alert: t("admin.promotions.reason_required") and return
     end
 
     ActiveRecord::Base.transaction do
@@ -55,15 +55,16 @@ class Admin::PromotionsController < ApplicationController
     end
 
     redirect_to admin_user_path(@user),
-                notice: "#{@user.email} has been upgraded to the #{plan_name.titleize} plan until #{expires_at.strftime('%B %d, %Y')}."
+                notice: t("admin.promotions.upgrade_success", email: @user.email, plan: plan_name.titleize, date: expires_at.strftime("%B %d, %Y"))
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_user_path(@user), alert: "Failed to apply promotion: #{e.message}"
+    Rails.logger.error "[Admin::PromotionsController#create] #{e.class}: #{e.message}"
+    redirect_to admin_user_path(@user), alert: t("admin.promotions.upgrade_error")
   end
 
   def destroy
     subscription = @user.subscription
     unless subscription&.promoted?
-      redirect_to admin_user_path(@user), alert: "This user has no active promotion." and return
+      redirect_to admin_user_path(@user), alert: t("admin.promotions.no_active_promotion") and return
     end
 
     previous_plan = subscription.plan_name
@@ -87,23 +88,24 @@ class Admin::PromotionsController < ApplicationController
     end
 
     redirect_to admin_user_path(@user),
-                notice: "Promotion revoked. #{@user.email} has been returned to the free plan."
+                notice: t("admin.promotions.revoke_success", email: @user.email)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to admin_user_path(@user), alert: "Failed to revoke promotion: #{e.message}"
+    Rails.logger.error "[Admin::PromotionsController#destroy] #{e.class}: #{e.message}"
+    redirect_to admin_user_path(@user), alert: t("admin.promotions.revoke_error")
   end
 
   private
 
   def require_admin!
     unless current_user.admin?
-      redirect_to root_path, alert: "Access denied. Admin privileges required."
+      redirect_to root_path, alert: t("admin.access_denied")
     end
   end
 
   def set_user
     @user = User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_users_path, alert: "User not found."
+    redirect_to admin_users_path, alert: t("admin.users.not_found")
   end
 
   def promotion_params

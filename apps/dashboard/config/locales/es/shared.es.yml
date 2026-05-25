@@ -1,8 +1,12 @@
 es:
   shared:
     nav:
+      docs: "Documentación"
+      docs_apis_desc: "Explorar cada endpoint"
+      docs_examples_desc: "Integraciones listas para copiar"
+      docs_divisions_desc: "APIs por categoría"
       divisions: "Divisiones"
-      systems: "Systems"
+      systems: "Sistemas"
       divisions_hub: "Resumen de todas las divisiones"
       divisions_panel_heading: "Ir a una división"
       divisions_all: "Todas las divisiones"
@@ -29,7 +33,7 @@ es:
       search_try_different: "Prueba otras palabras"
       language: "Idioma"
     footer:
-      tagline: "Una clave API: validación, utilidades y más, sin dispersión de integraciones"
+      tagline: "Infraestructura backend para productos SaaS, entregada a través de una API unificada"
       copyright: "© %{year} Bobadilla Tech. Todos los derechos reservados."
       sections:
         get_started: "Comenzar"

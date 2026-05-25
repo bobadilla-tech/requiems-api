@@ -45,6 +45,13 @@ es:
     api_keys:
       title: "Claves API"
       subtitle: "Gestiona tus claves API y credenciales de acceso"
+      flash:
+        created: "Clave API creada correctamente. Cópiala ahora: no podrás verla de nuevo."
+        regenerated: "Clave API regenerada correctamente. Cópiala ahora: no podrás verla de nuevo."
+        cannot_regenerate_revoked: "No se puede regenerar una clave revocada. Crea una nueva."
+        revoked: "Clave API revocada correctamente."
+        revoke_error: "No se pudo revocar la clave API."
+        not_found: "Clave API no encontrada."
       create_btn: "Crear nueva clave"
       info_heading: "Información importante"
       info_shared_label: "Cuota compartida:"
@@ -119,6 +126,13 @@ es:
     billing:
       title: "Facturación y suscripción"
       subtitle: "Gestiona tu plan, método de pago e historial de facturación"
+      flash:
+        activated: "Suscripción activada correctamente. Tu nuevo plan ya está activo."
+        canceled: "El pago se canceló. Tu suscripción no ha cambiado."
+        invalid_plan: "Plan seleccionado no válido"
+        promotional_no_portal: "Los planes promocionales no tienen portal de cliente."
+        no_subscription: "No se encontró una suscripción activa"
+        no_subscription_to_cancel: "No hay suscripción activa que cancelar"
       plan_notice:
         heading: "¿Listo para actualizar a %{plan}?"
         body: "¡Desplázate hacia abajo para ver los detalles del plan %{plan} y comenzar tu prueba gratuita de 7 días!"
@@ -187,6 +201,14 @@ es:
     settings:
       title: "Ajustes"
       subtitle: "Gestiona tus preferencias de cuenta y configuración de seguridad"
+      flash:
+        email_confirm: "Ajustes actualizados. Revisa tu correo para confirmar la nueva dirección."
+        updated: "Ajustes actualizados correctamente."
+        error: "No se pudieron actualizar los ajustes. Revisa el formulario."
+        reason_too_short: "Indica un motivo (al menos 10 caracteres)."
+        deletion_email_sent: "Revisa tu correo: te enviamos un enlace de confirmación. Expira en 1 hora."
+        invalid_token: "Este enlace no es válido o ha expirado. Solicita uno nuevo."
+        deleted: "Tu cuenta se ha eliminado permanentemente. Lamentamos verte marchar."
       errors:
         one: "%{count} error impidió guardar estos ajustes:"
         other: "%{count} errores impidieron guardar estos ajustes:"
@@ -351,6 +373,24 @@ es:
         consequence_3: "Todos los datos de uso e historial serán eliminados permanentemente"
         ignore_notice: "Si no solicitaste esto, puedes ignorar este correo de forma segura. Tu cuenta no será eliminada."
         contact_notice_html: "Si tienes dudas, contáctanos en %{email_link}."
+      private_deployments:
+        request_received:
+          subject: "Solicitud recibida: despliegue privado de Requiems"
+          header_title: "Solicitud recibida"
+          header_subtitle: "Tu despliegue privado se está preparando"
+          greeting: "Hola %{name},"
+          intro: "Hemos recibido tu solicitud de despliegue privado para %{company}. Tu entorno API dedicado estará listo en un plazo de 24 a 48 horas."
+          notify: "Te enviaremos un correo en cuanto esté activo."
+          order_summary: "Resumen del pedido"
+          server_tier: "Nivel de servidor"
+          monthly_price: "Precio mensual"
+          selected_services: "Servicios seleccionados"
+          what_next: "Qué ocurre a continuación:"
+          what_next_detail: "Aprovisionaremos tu VPS en Hetzner, configuraremos tu API Go privada solo con los servicios elegidos y tu subdominio en yourcompany.requiems.xyz. Cuando esté activo recibirás un segundo correo con la URL y los datos de autenticación."
+          docs_notice_html: "Mientras tanto, puedes explorar nuestra documentación de API en %{docs_link}."
+          docs_notice: "Mientras tanto, puedes explorar nuestra documentación de API en %{docs_link}."
+          questions: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
+          questions_html: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
 
     private_deployments:
       new:

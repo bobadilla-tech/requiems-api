@@ -1,22 +1,16 @@
 <%
   example_data = local_assigns.fetch(:example, {})
   example_id = example_data["id"]
-  example_title = example_data["title"]
-  example_category = example_data["category"]
-  example_description = example_data["description"]
+  example_title = example_localized(example_data, "title")
+  example_category = example_category_label(example_data["category"])
+  example_description = example_localized(example_data, "description")
   example_difficulty = example_data["difficulty"]
   example_duration = example_data["duration"]
   example_technologies = example_data["technologies"] || []
   example_apis_used = example_data["apis_used"] || []
   example_github_url = example_data["github_url"]
   example_demo_url = example_data["demo_url"]
-
-  difficulty_color = case example_difficulty
-  when "Beginner" then "success"
-  when "Intermediate" then "warning"
-  when "Advanced" then "danger"
-  else "default"
-  end
+  difficulty_color = example_difficulty_variant(example_difficulty)
 %>
 
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
@@ -24,7 +18,7 @@
      data-clickable-card-url-value="<%= example_path(example_id) %>"
      data-action="click->clickable-card#navigate keydown->clickable-card#navigateOnKeydown"
      role="link" tabindex="0"
-     aria-label="<%= example_title %> - View Tutorial">
+     aria-label="<%= t("examples.index.view_tutorial_aria", title: example_title) %>">
   <!-- Thumbnail Placeholder -->
   <div class="bg-gradient-to-br from-blue-500 to-indigo-600 h-48 flex items-center justify-center">
     <div class="text-white text-center p-6">
@@ -41,7 +35,7 @@
       <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex-1">
         <%= example_title %>
       </h3>
-      <%= render "partials/shared/badge", text: example_difficulty, variant: difficulty_color, size: "sm" %>
+      <%= render "partials/shared/badge", text: example_difficulty_label(example_difficulty), variant: difficulty_color, size: "sm" %>
     </div>
 
     <!-- Description -->
@@ -61,7 +55,7 @@
         <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
         </svg>
-        <%= example_technologies.count %> <%= "tech".pluralize(example_technologies.count) %>
+        <%= t("examples.index.tech_count", count: example_technologies.count) %>
       </div>
     </div>
 
@@ -82,7 +76,7 @@
     <!-- APIs Used -->
     <% if example_apis_used.any? %>
       <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">APIs Used</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2"><%= t("examples.index.apis_used") %></p>
         <div class="flex flex-wrap gap-1">
           <% example_apis_used.each do |api| %>
             <span class="text-xs text-blue-600 dark:text-blue-400">• <%= api %></span>
@@ -97,7 +91,7 @@
         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        View Tutorial
+        <%= t("examples.index.view_tutorial") %>
       <% end %>
 
       <% if example_github_url.present? %>

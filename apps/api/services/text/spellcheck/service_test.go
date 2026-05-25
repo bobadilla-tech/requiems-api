@@ -8,6 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/svcerr"
 )
 
 // newMockLT starts a test HTTP server that returns the given matches,
@@ -90,7 +92,10 @@ func TestService_Check_Unreachable(t *testing.T) {
 	dead.Close()
 
 	_, err := NewService(dead.URL).Check("hello")
-	assert.Error(t, err)
+	var svcErr *svcerr.Error
+	require.ErrorAs(t, err, &svcErr)
+	assert.Equal(t, svcerr.KindUpstream, svcErr.Kind)
+	assert.Equal(t, "upstream_error", svcErr.Code)
 }
 
 func TestService_Check_PositionIsRuneOffset(t *testing.T) {
@@ -143,14 +148,17 @@ func TestService_Check_SuggestionsOnlyOne(t *testing.T) {
 
 func TestService_Check_LanguageToolNonOKStatus(t *testing.T) {
 	t.Parallel()
-	// Simulate LanguageTool returning a 500 — Check must propagate this as an error.
+	// Simulate LanguageTool returning a 500 — Check must propagate this as an upstream error.
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "internal error", http.StatusInternalServerError)
 	}))
 	defer srv.Close()
 
 	_, err := NewService(srv.URL).Check("hello")
-	assert.Error(t, err)
+	var svcErr *svcerr.Error
+	require.ErrorAs(t, err, &svcErr)
+	assert.Equal(t, svcerr.KindUpstream, svcErr.Kind)
+	assert.Equal(t, "upstream_error", svcErr.Code)
 }
 
 func TestService_Check_NegativeOffsetIgnored(t *testing.T) {

@@ -16,7 +16,7 @@ class ExamplesController < ApplicationController
     @example = find_example(params[:id])
 
     if @example.nil?
-      redirect_to examples_path, alert: "Example not found"
+      redirect_to examples_path, alert: t("examples.flash.not_found")
       return
     end
 
