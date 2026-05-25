@@ -18,9 +18,7 @@ decision. The caller decides what to do.
 - Content moderation: check user-generated text before persistence
 - Data pipeline quality gates: score import batches before writing to production
 
----
-
-## Conventions (same as systems spec)
+## Conventions
 
 - Base path: `/v1/`
 - All scores: `0.0` (no risk / highest quality) to `1.0` (certain risk / worst
@@ -30,8 +28,6 @@ decision. The caller decides what to do.
   `{"data": {...}, "metadata": {"timestamp": "...", "trace_id": "..."}}`
 - `flags` is always a `string[]` of machine-readable codes, never freeform text
 - Score 0-1, never 0-100
-
----
 
 ## Endpoints
 
@@ -47,7 +43,8 @@ All fields are optional but at least one must be present.
 
 - Email Validator (`services/validation/email`)
 - Phone Validation (`services/validation/phone`)
-- Profanity Filter (`services/text/profanity`) — only when `text` is provided
+- Profanity Filter (`services/validation/profanity`) — only when `text` is
+  provided
 - Sentiment Analysis (`services/text/sentiment`) — only when `text` is provided
 
 **Request**
@@ -263,9 +260,10 @@ persisting. Returns a structured breakdown across content categories.
 
 **Internal APIs composed:**
 
-- Profanity Filter (`services/text/profanity`)
+- Profanity Filter (`services/validation/profanity`)
 - Sentiment Analysis (`services/text/sentiment`)
-- Language Detection (`services/text/language`) — to gate on language support
+- Language Detection (`services/text/detectlanguage`) — to gate on language
+  support
 
 **Request**
 
@@ -354,11 +352,11 @@ apps/api/services/systems/
     │   ├── transport_http.go         # GET /v1/domain/trust/{domain}
     │   └── transport_http_test.go
     ├── content_moderate/
-    │   ├── service.go                # composes profanity + sentiment + language
+    │   ├── service.go                # composes validation/profanity + text/sentiment + text/detectlanguage
     │   ├── transport_http.go         # POST /v1/content/moderate
     │   └── transport_http_test.go
     └── text_normalize/
-        ├── service.go
+        ├── service.go                # wraps existing text/normalize service
         ├── transport_http.go         # POST /v1/text/normalize
         └── transport_http_test.go
 ```
@@ -438,14 +436,12 @@ One ticket per sub-service. Suggested implementation order (simple to complex):
 Each ticket should reference the relevant section of this document for request
 shape, response shape, score logic, flag constants, and test cases.
 
----
-
 ## Open questions for engineer
 
-1. **Language detection fallback** — if language detection fails in
+1. **Language detection fallback** — if `services/text/detectlanguage` fails in
    `/v1/content/moderate`, return `language: null` and
-   `language_confidence: null` rather than erroring, so callers can still get
-   the moderation result.
+   `language_confidence: null` rather than erroring, so callers still get the
+   moderation result.
 2. **WHOIS reliability** — WHOIS lookups can time out or return partial data for
    some TLDs. The domain trust endpoint should degrade gracefully: if WHOIS
    fails, omit `whois` from response and set a `whois_unavailable` flag rather
