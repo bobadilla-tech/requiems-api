@@ -3,6 +3,9 @@ package facts
 import (
 	"fmt"
 	"math/rand/v2"
+	"context"
+	
+	"requiems-api/platform/httpx"
 )
 
 type entry struct {
@@ -100,4 +103,32 @@ func (s *Service) Random(category string) (Fact, error) {
 		Category: e.category,
 		Source:   e.source,
 	}, nil
+}
+
+func (s *Service) RandomBatch(ctx context.Context, categories []string) httpx.BatchResponse[BatchItem] {
+	// Single pass over the database — equivalent to one batched DB query.
+	index := make(map[string][]entry, len(validCategories))
+	for _, e := range database {
+		index[e.category] = append(index[e.category], e)
+	}
+
+	results := make([]BatchItem, len(categories))
+	for i, cat := range categories {
+		pool, ok := index[cat]
+		if !ok || len(pool) == 0 {
+			results[i] = BatchItem{
+				Category: cat,
+				Error:    "no facts found for category: " + cat,
+			}
+			continue
+		}
+		e := pool[rand.IntN(len(pool))] //nolint:gosec
+		results[i] = BatchItem{
+			Category: e.category,
+			Fact:     e.fact,
+			Source:   e.source,
+		}
+	}
+
+	return httpx.BatchResponse[BatchItem]{Results: results}
 }

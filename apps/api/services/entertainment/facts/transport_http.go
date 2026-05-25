@@ -3,6 +3,7 @@ package facts
 import (
 	"net/http"
 	"strings"
+	"context"
 
 	"github.com/go-chi/chi/v5"
 
@@ -33,4 +34,14 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, fact)
 	})
+	r.Post("/facts/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
+			// Normalise to lowercase — consistent with GET /facts?category=
+			normalised := make([]string, len(req.Categories))
+			for i, c := range req.Categories {
+				normalised[i] = strings.ToLower(c)
+			}
+			return svc.RandomBatch(ctx, normalised), nil
+		},
+	))
 }
