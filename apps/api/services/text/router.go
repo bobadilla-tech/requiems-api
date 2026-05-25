@@ -4,6 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"requiems-api/platform/config"
 	"requiems-api/services/text/detectlanguage"
 	"requiems-api/services/text/lorem"
 	"requiems-api/services/text/normalize"
@@ -14,14 +15,14 @@ import (
 	"requiems-api/services/text/words"
 )
 
-func RegisterRoutes(r chi.Router, pool *pgxpool.Pool) {
+func RegisterRoutes(r chi.Router, pool *pgxpool.Pool, cfg config.Config) {
 	wordsSvc := words.NewService(pool)
 	words.RegisterRoutes(r, wordsSvc)
 
 	loremSvc := lorem.NewService()
 	lorem.RegisterRoutes(r, loremSvc)
 
-	spellcheckSvc := spellcheck.NewService()
+	spellcheckSvc := spellcheck.NewService(cfg.LanguageToolURL)
 	spellcheck.RegisterRoutes(r, spellcheckSvc)
 
 	thesaurusSvc := thesaurus.NewService()

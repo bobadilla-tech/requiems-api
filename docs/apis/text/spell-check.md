@@ -69,6 +69,86 @@ Each `corrections` entry:
   characters (accented letters, CJK, emoji, etc.) are passed through unchanged
   and do not affect position counting.
 
+---
+
+## Batch Endpoint
+
+`POST /v1/text/spellcheck/batch`
+
+Check spelling for multiple texts in a single request. Results are returned in the same order as the input array.
+
+### Request
+
+```json
+{
+  "texts": ["Ths is a tset", "Smiple example"]
+}
+```
+
+| Field   | Type             | Required | Description                                   |
+| ------- | ---------------- | -------- | --------------------------------------------- |
+| `texts` | array of strings | ✅       | Texts to spell-check. Between 1 and 50 items. |
+
+### Response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "corrected": "This is a test",
+        "corrections": [
+          { "original": "Ths", "suggested": "This", "position": 0 },
+          { "original": "tset", "suggested": "test", "position": 9 }
+        ]
+      },
+      {
+        "corrected": "Simple example",
+        "corrections": [
+          { "original": "Smiple", "suggested": "Simple", "position": 0 }
+        ]
+      }
+    ],
+    "total": 2
+  },
+  "metadata": {
+    "timestamp": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+| Field     | Type             | Description                                                                                                                     |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `results` | array of objects | One entry per input text, in input order. Each item has `corrected` and `corrections` (same shape as the single endpoint). |
+| `total`   | integer          | Number of texts processed.                                                                                                      |
+
+### Limits
+
+- Minimum **1** text per request, maximum **50**.
+- Request body capped at **1 MiB**.
+
+### Billing
+
+Each text in the batch counts as **1 unit** of quota. A request with 10 texts consumes 10 units.
+
+### Partial failure
+
+Once validation passes, this endpoint returns `200` with a result for every input
+text. Up to 10 texts are checked concurrently. If LanguageTool is unreachable for
+an individual text, that slot returns a zero-value result
+(`corrected: ""`, `corrections: null`) and the batch continues — the caller
+receives a full-length `results` array regardless of individual failures.
+
+### Batch Error Codes
+
+| Code                | Status | When                                                                         |
+| ------------------- | ------ | ---------------------------------------------------------------------------- |
+| `validation_failed` | 422    | `texts` is missing, empty, or contains more than 50 items                    |
+| `bad_request`       | 400    | Request body is missing or not JSON                                          |
+| `internal_error`    | 500    | Infrastructure-level failure before processing begins (e.g. handler error)  |
+
+---
+
 ## Error Codes
 
 | Code                | Status | When                                |

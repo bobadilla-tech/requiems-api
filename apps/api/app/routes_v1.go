@@ -75,7 +75,7 @@ func registerV1Routes(ctx context.Context, r chi.Router, pool *pgxpool.Pool, rdb
 
 	if serviceEnabled(cfg, "text") {
 		textRouter := chi.NewRouter()
-		text.RegisterRoutes(textRouter, pool)
+		text.RegisterRoutes(textRouter, pool, cfg)
 		r.Mount("/text", textRouter)
 	}
 

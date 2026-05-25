@@ -428,7 +428,7 @@ apis:
     categories:
       - text
     description: Check spelling and get correction suggestions for misspelled words
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
     documentation_url: /apis/spell-check
