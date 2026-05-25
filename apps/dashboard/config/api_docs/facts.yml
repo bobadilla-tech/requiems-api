@@ -91,6 +91,187 @@ endpoints:
 
         data = JSON.parse(response.body)['data']
         puts "[#{data['category']}] #{data['fact']} — #{data['source']}"
+  - name: Batch Random Facts
+    method: POST
+    path: /v1/entertainment/facts/batch
+    description: >
+      Returns one randomly selected fact per requested category, in the same
+      order as the input array. Invalid categories are returned with an error
+      field and do not fail the whole request. Billed as N units for N
+      categories submitted (see X-Usage-Count).
+    batch_size:
+      min: 1
+      max: 50
+    request_body:
+      content_type: application/json
+      fields:
+        - name: categories
+          type: "array of strings"
+          required: true
+          description: >
+            List of categories to retrieve facts for. Valid values: science,
+            history, technology, nature, space, food. Case-insensitive.
+            Duplicates are allowed — each slot is drawn independently.
+          constraints: "min 1 item, max 50 items"
+    request_example: |
+      {
+        "categories": ["science", "history", "dragons"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "category": "science",
+              "fact": "Octopuses have three hearts and blue blood.",
+              "source": "National Geographic"
+            },
+            {
+              "category": "history",
+              "fact": "Oxford University is older than the Aztec Empire.",
+              "source": "Oxford University"
+            },
+            {
+              "category": "dragons",
+              "error": "no facts found for category: dragons"
+            }
+          ]
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: One entry per requested category, in input order.
+
+      - name: results[].category
+        type: string
+        description: The category that was requested.
+
+      - name: results[].fact
+        type: string
+        description: The fact text. Empty when an error occurred for this item.
+
+      - name: results[].source
+        type: string
+        description: Source attribution. Empty when an error occurred for this item.
+
+      - name: results[].error
+        type: string
+        description: Present only when the item could not be fulfilled (e.g. unknown category).
+
+    headers:
+      response:
+        - name: X-Usage-Count
+          description: >
+            Set to the number of categories submitted. Used by the auth gateway
+            to bill N quota units for N items.
+
+    errors:
+      - code: 400
+        message: bad_request
+        description: Malformed JSON or invalid request body.
+
+      - code: 422
+        message: validation_failed
+        description: Validation failed (empty array or more than 50 categories).
+
+    notes:
+      - Results are always returned in the same order as the input array.
+      - Invalid or unknown categories are absorbed in-band (error field on that item) and do not affect other items.
+      - Category matching is case-insensitive; "SCIENCE" and "Science" both resolve to "science".
+      - Submitting the same category multiple times is valid; each slot draws an independent random fact.
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/entertainment/facts/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"categories": ["science", "history", "space"]}'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/entertainment/facts/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json",
+        }
+
+        payload = {
+            "categories": ["science", "history", "dragons"]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        results = response.json()["data"]["results"]
+
+        for item in results:
+            if item.get("error"):
+                print(f"[{item['category']}] ERROR: {item['error']}")
+            else:
+                print(f"[{item['category']}] {item['fact']} — {item['source']}")
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/entertainment/facts/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              categories: ['science', 'history', 'dragons']
+            }),
+          }
+        );
+
+        const { data } = await response.json();
+
+        for (const item of data.results) {
+          if (item.error) {
+            console.error(`[${item.category}] ${item.error}`);
+          } else {
+            console.log(
+              `[${item.category}] ${item.fact} — ${item.source}`
+            );
+          }
+        }
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/entertainment/facts/batch')
+
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          categories: ['science', 'history', 'dragons']
+        }.to_json
+
+        response = Net::HTTP.start(
+          uri.hostname,
+          uri.port,
+          use_ssl: true
+        ) do |http|
+          http.request(request)
+        end
+
+        results = JSON.parse(response.body)['data']['results']
+
+        results.each do |item|
+          if item['error']
+            puts "[#{item['category']}] ERROR: #{item['error']}"
+          else
+            puts "[#{item['category']}] #{item['fact']} — #{item['source']}"
+          end
+        end
+      
 faq:
   - question: What categories are available?
     answer: "There are six categories: science, history, technology, nature, space, and food."

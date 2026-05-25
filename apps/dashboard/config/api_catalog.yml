@@ -764,7 +764,7 @@ apis:
     categories:
       - entertainment
     description: Get random interesting facts from a curated database. Filter by category — science, history, technology, nature, space, or food. Includes source attribution.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/facts
