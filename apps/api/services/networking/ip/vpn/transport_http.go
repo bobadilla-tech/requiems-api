@@ -1,9 +1,9 @@
 package vpn
 
 import (
-	"encoding/json"
 	"net"
 	"net/http"
+	"context"
 	"requiems-api/platform/httpx"
 
 	"github.com/go-chi/chi/v5"
@@ -25,27 +25,18 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, result)
 	}))
-	r.Post("/ip/vpn/batch", httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
-		var req BatchRequest
+	r.Post("/ip/vpn/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[IPCheckResponse], error) {
+			resp, err := svc.CheckBatch(ctx, req.IPs)
+			if err != nil {
+				return httpx.BatchResponse[IPCheckResponse]{}, err
+			}
 
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", "invalid request body")
-			return
-		}
-
-		if len(req.IPs) == 0 {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", "ips are required")
-			return
-		}
-
-		result, err := svc.CheckBatch(r.Context(), req.IPs)
-		if err != nil {
-			httpx.Error(w, http.StatusInternalServerError, "internal_server_error", "failed to check IP addresses")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, result)
-	}))
+			return httpx.BatchResponse[IPCheckResponse]{
+				Results: resp.Results,
+			}, nil
+		},
+	))
 
 }
 
