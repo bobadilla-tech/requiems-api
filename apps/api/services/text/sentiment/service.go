@@ -215,6 +215,9 @@ func tokenize(text string) []string {
 	for _, r := range strings.ToLower(text) {
 		if unicode.IsLetter(r) || unicode.IsDigit(r) {
 			buf.WriteRune(r)
+		} else if r == '\'' || r == '’' {
+			// skip apostrophes so contractions stay intact: "don't" → "dont"
+			continue
 		} else if buf.Len() > 0 {
 			tokens = append(tokens, buf.String())
 			buf.Reset()

@@ -1,6 +1,4 @@
-# Skill: High-Quality Plane Ticket Writing
-
-## Purpose
+# High-Quality Ticket Creation 
 
 Create self-contained, implementation-ready Plane tickets with enough context
 that a developer can start work immediately without chat follow-up.
