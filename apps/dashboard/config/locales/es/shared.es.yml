@@ -1,6 +1,10 @@
 es:
   shared:
     nav:
+      docs: "Docs"
+      docs_apis_desc: "Explorar cada endpoint"
+      docs_examples_desc: "Integraciones listas para copiar"
+      docs_divisions_desc: "APIs por categoría"
       divisions: "Divisiones"
       systems: "Systems"
       divisions_hub: "Resumen de todas las divisiones"

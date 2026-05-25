@@ -10,10 +10,122 @@ es:
         cta_secondary: "Ver documentación de APIs"
         try_badge: "✨ Pruébalo ahora • Sin tarjeta de crédito"
         api_request: "Solicitud API"
+        proof_badges:
+          - "Pipelines de datos propietarios"
+          - "Procesamiento en tiempo real"
+          - "Construido para producción"
       trusted_by:
         label: "Equipos que llevan productos reales a producción"
       social_proof:
         label: "Impulsando productos en empresas como"
+      systems:
+        heading: "Sistemas de nivel producción"
+        subheading: "Cada sistema combina señales propietarias en una decisión estructurada única, entregada en una sola llamada a la API."
+        explore_cta: "Explorar sistema"
+        utilities_label: "Extras"
+        utilities_cta: "Ver utilidades"
+        cards:
+          identity_risk:
+            title: "Sistema de identidad y riesgo"
+            blurb: "Protege tu producto de usuarios falsos, fraude y datos incorrectos antes de que lleguen a tu base de datos."
+            signals:
+              - "Puntuación de riesgo"
+              - "Inteligencia de correo, teléfono e IP"
+              - "Señales de dominio y comportamiento"
+          payments_intelligence:
+            title: "Sistema de inteligencia de pagos"
+            blurb: "Valida y enriquece datos financieros para reducir pagos fallidos y detectar transacciones de riesgo."
+            signals:
+              - "Validación BIN y de tarjeta"
+              - "Comprobaciones IBAN / SWIFT"
+              - "Señales de riesgo en transacciones"
+          global_data:
+            title: "Sistema de datos globales"
+            blurb: "Impulsa productos internacionales con datos de ubicación precisos en tiempo real y listos para cumplimiento normativo."
+            signals:
+              - "Geocodificación"
+              - "Zonas horarias y festivos"
+              - "Inteligencia de direcciones"
+          data_integrity:
+            title: "Sistema de integridad de datos"
+            blurb: "Limpia, valida y estandariza la entrada del usuario en toda tu plataforma."
+            signals:
+              - "Validación de entrada"
+              - "Normalización de texto"
+              - "Moderación de contenido"
+          developer_utilities:
+            title: "Utilidades para desarrolladores"
+            blurb: "Herramientas útiles que no deberías tener que reconstruir."
+            signals:
+              - "Códigos QR"
+              - "Codificación y conversiones"
+              - "Utilidades varias"
+      how_it_works:
+        heading: "Cómo funciona"
+        step1_title: "Elige un sistema"
+        step1_body: "Selecciona el problema que quieres resolver: identidad, pagos, datos globales o integridad de datos."
+        step2_title: "Llama a un solo endpoint"
+        step2_body: "Usa endpoints de alto nivel o compón flujos según tus necesidades."
+        step3_title: "Obtén decisiones, no datos en bruto"
+        step3_body: "Recibe puntuaciones de riesgo, resultados de validación e información enriquecida, listos para usar en tu producto."
+      engine_spotlight:
+        kicker: "Motores"
+        heading: "Múltiples señales. Una decisión estructurada."
+        subheading: "Cada motor consulta en paralelo las APIs de validación, red e inteligencia, y devuelve una sola decisión estructurada. Sin lógica de puntuación que construir. Sin pipeline que mantener."
+        endpoint: "POST /v1/signup/protect"
+        request: |
+          {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }
+        response: |
+          {
+            "risk_score": 0.87,
+            "is_safe": false,
+            "confidence": 0.94,
+            "flags": ["disposable_email", "vpn_detected"],
+            "signals": {
+              "email_valid": true,
+              "phone_valid": false,
+              "vpn_detected": true,
+              "disposable_email": true
+            }
+          }
+        cta: "Explorar sistemas"
+        value_table_heading: "Qué significa cada campo"
+        value_table:
+          - field: "risk_score"
+            plain: "¿Qué tan arriesgado es este registro? 0 es limpio, 1 es alto riesgo."
+          - field: "is_safe"
+            plain: "Decisión única sí/no. Úsala para bloquear o permitir el registro."
+          - field: "confidence"
+            plain: "Qué tan seguro está el motor. Un valor más alto significa menos falsos positivos."
+          - field: "flags"
+            plain: "Las razones específicas por las que se marcó al usuario."
+          - field: "signals"
+            plain: "Resultados en bruto de cada comprobación ejecutada en segundo plano."
+      why_different:
+        heading: "Infraestructura, no pegamento de integraciones"
+        subheading: "La mayoría de agregadores de APIs revenden llamadas de terceros. Nosotros construimos pipelines propietarios."
+        points:
+          - "Sin dependencia de APIs de terceros"
+          - "Sistemas propietarios de puntuación y validación"
+          - "Esquema unificado en todos los endpoints"
+          - "Diseño de baja latencia y alto rendimiento"
+          - "Construido para desarrolladores que lanzan productos reales"
+      use_cases:
+        heading: "Hecho para productos reales"
+        subheading: "Problemas concretos, resueltos."
+        items:
+          - title: "Protección de registro en SaaS"
+            body: "Evita cuentas falsas, bots y abuso desde el primer día."
+          - title: "Onboarding fintech"
+            body: "Valida datos financieros y reduce la fricción en el alta."
+          - title: "Prevención de fraude en marketplaces"
+            body: "Detecta usuarios y transacciones de riesgo en tiempo real."
+          - title: "Soporte de productos globales"
+            body: "Atiende usuarios internacionales con datos precisos en todas partes."
       features:
         heading: "Diseñado para la experiencia del desarrollador"
         subheading: "Desde fundadores en solitario hasta agencias: documentación precisa, playgrounds en vivo y ejemplos listos para pegar. Integra en minutos, no en días."
@@ -662,6 +774,7 @@ es:
     faq:
       title: "Preguntas frecuentes - Requiems API"
       heading: "Preguntas frecuentes"
+      subheading: "Respuestas a preguntas frecuentes sobre facturación, autenticación, límites de tasa e integración."
       intro: "Facturación, autenticación, límites de tasa y cómo pasar del registro a producción con rapidez."
       getting_started:
         heading: "Primeros pasos"

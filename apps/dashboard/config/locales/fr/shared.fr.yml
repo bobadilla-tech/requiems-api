@@ -1,6 +1,10 @@
 fr:
   shared:
     nav:
+      docs: "Docs"
+      docs_apis_desc: "Parcourir chaque point de terminaison"
+      docs_examples_desc: "Intégrations prêtes à copier"
+      docs_divisions_desc: "APIs par catégorie"
       divisions: "Divisions"
       systems: "Systems"
       divisions_hub: "Vue d'ensemble de toutes les divisions"
