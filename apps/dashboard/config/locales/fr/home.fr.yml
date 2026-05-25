@@ -893,38 +893,38 @@ fr:
 
   sales_inquiries:
     new:
-      description: "TODO: translate"
+      description: "Nous sommes là pour vous aider avec vos besoins API. Remplissez le formulaire et nous vous recontacterons dès que possible."
     flash:
-      success: "TODO: translate"
-      missing_fields: "TODO: translate"
-      error: "TODO: translate"
+      success: "Merci ! Notre équipe commerciale vous contactera sous 24 heures."
+      missing_fields: "Veuillez remplir tous les champs obligatoires."
+      error: "Désolé, une erreur s'est produite lors de l'envoi de votre demande. Veuillez réessayer plus tard."
 
   suggestions:
     flash:
-      success: "TODO: translate"
-      missing_fields: "TODO: translate"
-      error: "TODO: translate"
+      success: "Merci pour votre suggestion ! Nous l'examinerons sous peu et répondons en général sous 24 heures."
+      missing_fields: "Veuillez remplir tous les champs obligatoires."
+      error: "Désolé, une erreur s'est produite lors de l'envoi de votre suggestion. Veuillez réessayer plus tard."
 
   examples:
     show:
-      tutorial_coming_soon: "TODO: translate"
-      tutorial_description: "TODO: translate"
-      view_source: "TODO: translate"
-      view_demo: "TODO: translate"
-      back: "TODO: translate"
-      in_the_meantime: "TODO: translate"
-      tip_github: "TODO: translate"
-      tip_demo: "TODO: translate"
-      tip_docs_html: "TODO: translate"
-      api_documentation: "TODO: translate"
+      tutorial_coming_soon: "Tutoriel à venir"
+      tutorial_description: "Nous préparons un tutoriel pas à pas détaillé pour cet exemple."
+      view_source: "Voir le code source"
+      view_demo: "Voir la démo"
+      back: "Retour aux exemples"
+      in_the_meantime: "En attendant :"
+      tip_github: "Consultez le code source sur GitHub pour voir comment c'est construit"
+      tip_demo: "Essayez la démo en direct pour le voir en action"
+      tip_docs_html: "Explorez la %{docs_link} des APIs utilisées dans ce projet"
+      api_documentation: "documentation API"
     flash:
-      not_found: "TODO: translate"
+      not_found: "Exemple introuvable"
 
   categories:
     flash:
-      not_found: "TODO: translate"
+      not_found: "Catégorie introuvable"
 
   apis:
     flash:
-      not_found: "TODO: translate"
-      no_documentation: "TODO: translate"
+      not_found: "API introuvable"
+      no_documentation: "La documentation n'est pas encore disponible pour cette API"
