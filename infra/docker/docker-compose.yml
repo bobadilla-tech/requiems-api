@@ -9,7 +9,7 @@ services:
         "CMD-SHELL",
         "wget -qO- http://localhost:8010/v2/languages > /dev/null 2>&1",
       ]
-      interval: 5s
+      interval: 30s
       timeout: 5s
       retries: 10
       start_period: 30s
