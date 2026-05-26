@@ -14,6 +14,7 @@ import (
 	"requiems-api/services/health"
 	"requiems-api/services/networking"
 	"requiems-api/services/places"
+	"requiems-api/services/systems"
 	"requiems-api/services/technology"
 	"requiems-api/services/text"
 	"requiems-api/services/validation"
@@ -83,5 +84,11 @@ func registerV1Routes(ctx context.Context, r chi.Router, pool *pgxpool.Pool, rdb
 		validationRouter := chi.NewRouter()
 		validation.RegisterRoutes(validationRouter)
 		r.Mount("/validation", validationRouter)
+	}
+
+	if serviceEnabled(cfg, "systems") {
+		systemsRouter := chi.NewRouter()
+		systems.RegisterRoutes(systemsRouter)
+		r.Mount("/systems", systemsRouter)
 	}
 }
