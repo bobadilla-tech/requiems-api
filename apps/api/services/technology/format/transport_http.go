@@ -8,7 +8,13 @@ import (
 	"requiems-api/platform/httpx"
 )
 
-// RegisterRoutes mounts the format conversion handler on the given router.
+// Request is the input for the format conversion endpoint.
+type Request struct {
+	From    string `json:"from"    validate:"required,oneof=json yaml csv xml toml"`
+	To      string `json:"to"      validate:"required,oneof=json yaml csv xml toml"`
+	Content string `json:"content" validate:"required"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/format", httpx.Handle(
 		func(_ context.Context, req Request) (Response, error) {

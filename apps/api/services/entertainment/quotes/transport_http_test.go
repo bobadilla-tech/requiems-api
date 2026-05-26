@@ -15,11 +15,13 @@ import (
 )
 
 type httpMockQuerier struct {
-	row pgx.Row
+	row  pgx.Row
+	rows *mockRows
 }
 
-func (m *httpMockQuerier) QueryRow(ctx context.Context, sql string, args ...any) pgx.Row {
-	return m.row
+func (m *httpMockQuerier) QueryRow(_ context.Context, _ string, _ ...any) pgx.Row { return m.row }
+func (m *httpMockQuerier) Query(_ context.Context, _ string, _ ...any) (pgx.Rows, error) {
+	return m.rows, nil
 }
 
 func TestTransport_HappyPath(t *testing.T) {
@@ -91,14 +93,15 @@ func TestTransport_MethodNotAllowed(t *testing.T) {
 func TestTransportBatch_HappyPath(t *testing.T) {
 	t.Parallel()
 	svc := &Service{
-		db: &httpMockQuerier{row: &mockRow{
-			scanFn: func(dest ...any) error {
-				*dest[0].(*int) = 1
-				*dest[1].(*string) = "Test quote."
-				*dest[2].(*string) = "Author"
-				return nil
+		db: &httpMockQuerier{
+			rows: &mockRows{
+				quotes: []Quote{
+					{ID: 1, Text: "Test quote.", Author: "Author"},
+					{ID: 2, Text: "Test quote.", Author: "Author"},
+					{ID: 3, Text: "Test quote.", Author: "Author"},
+				},
 			},
-		}},
+		},
 	}
 
 	r := chi.NewRouter()

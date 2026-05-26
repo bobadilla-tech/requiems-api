@@ -88,5 +88,4 @@ export default class extends Controller {
       dot.setAttribute("aria-selected", on ? "true" : "false");
     });
   }
-
 }

@@ -1,13 +1,17 @@
 package vpn
 
 import (
+	"context"
 	"net"
 	"net/http"
-	"context"
 	"requiems-api/platform/httpx"
 
 	"github.com/go-chi/chi/v5"
 )
+
+type BatchRequest struct {
+	IPs []string `json:"ips" validate:"required,min=1,max=50,dive"`
+}
 
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/ip/vpn/{ip}", httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {

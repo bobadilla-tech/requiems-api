@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Generates scaffold locale files from an English source file.
+# All leaf string values are replaced with "TODO: translate".
+# Usage: bin/scaffold_locales <source_en_file> <target_locale>
+#
+# Example:
+#   bin/scaffold_locales config/locales/en/systems.en.yml es
+#   bin/scaffold_locales config/locales/en/divisions.en.yml fr
+
+require "yaml"
+require "fileutils"
+
+source_file = ARGV[0]
+target_locale = ARGV[1]
+
+abort "Usage: bin/scaffold_locales <source_en_file> <target_locale>" unless source_file && target_locale
+abort "Source file not found: #{source_file}" unless File.exist?(source_file)
+
+def scaffold(value)
+  case value
+  when Hash
+    value.transform_values { |v| scaffold(v) }
+  when Array
+    value.map { |v| scaffold(v) }
+  when String
+    "TODO: translate"
+  else
+    value
+  end
+end
+
+data = YAML.load_file(source_file)
+abort "Could not parse YAML" unless data.is_a?(Hash)
+
+# Swap locale key (en -> target)
+scaffolded = data.transform_keys { |k| k.to_s == "en" ? target_locale : k }
+scaffolded = scaffolded.transform_values { |v| scaffold(v) }
+
+# Derive output path: en/systems.en.yml -> es/systems.es.yml
+source_basename = File.basename(source_file)                   # systems.en.yml
+target_basename = source_basename.gsub(/\.en\.yml$/, ".#{target_locale}.yml")
+target_dir      = File.join(File.dirname(source_file).gsub(/\/en$/, "/#{target_locale}"))
+target_file     = File.join(target_dir, target_basename)
+
+FileUtils.mkdir_p(target_dir)
+
+File.write(target_file, scaffolded.to_yaml(line_width: -1))
+puts "Written: #{target_file}"

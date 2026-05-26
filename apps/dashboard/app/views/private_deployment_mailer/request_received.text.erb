@@ -1,22 +1,19 @@
-Request Received: Requiems Private Deployment
+<%= t("dashboard.mailers.private_deployments.request_received.subject") %>
 
-Hi <%= @deployment_request.contact_name %>,
+<%= t("dashboard.mailers.private_deployments.request_received.greeting", name: @deployment_request.contact_name) %>
 
-We've received your private deployment request for <%= @deployment_request.company %>.
-Your dedicated API environment will be ready within 24–48 hours.
+<%= t("dashboard.mailers.private_deployments.request_received.intro", company: @deployment_request.company) %>
 
-ORDER SUMMARY
-  Server tier:       <%= @deployment_request.server_tier.capitalize %>
-  Monthly price:     $<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo
-  Selected services: <%= @deployment_request.selected_services.join(", ") %>
+<%= t("dashboard.mailers.private_deployments.request_received.order_summary").upcase %>
+  <%= t("dashboard.mailers.private_deployments.request_received.server_tier") %>:       <%= @deployment_request.server_tier.capitalize %>
+  <%= t("dashboard.mailers.private_deployments.request_received.monthly_price") %>:     $<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo
+  <%= t("dashboard.mailers.private_deployments.request_received.selected_services") %>: <%= @deployment_request.selected_services.join(", ") %>
 
-WHAT HAPPENS NEXT
-We'll provision your Hetzner VPS, deploy your private Go API with only the services
-you selected, and configure your subdomain at yourcompany.requiems.xyz.
-Once live you'll receive a second email with your URL and authentication details.
+<%= t("dashboard.mailers.private_deployments.request_received.what_next") %>
+<%= t("dashboard.mailers.private_deployments.request_received.what_next_detail") %>
 
-In the meantime, explore our API documentation at <%= @docs_url %>.
+<%= t("dashboard.mailers.private_deployments.request_received.docs_notice", docs_link: @docs_url) %>
 
-Questions? Reply to this email or reach us at eliaz@bobadilla.tech.
+<%= t("dashboard.mailers.private_deployments.request_received.questions", email: "eliaz@bobadilla.tech") %>
 
 The Requiems Team

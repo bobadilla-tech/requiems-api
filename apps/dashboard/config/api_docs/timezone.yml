@@ -123,6 +123,156 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['timezone']
 
+  - name: Batch Timezone Lookup
+    method: POST
+    path: /v1/places/timezone/batch
+    description: Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+    parameters:
+      - name: items
+        type: array of objects
+        required: true
+        location: body
+        description: List of timezone lookup requests (1–50 items).
+      - name: items[].timezone
+        type: string
+        required: false
+        location: body
+        description: "IANA timezone name (e.g. 'America/New_York'). Highest priority."
+      - name: items[].city
+        type: string
+        required: false
+        location: body
+        description: City name for city-based lookup. Used when timezone is not set.
+      - name: items[].lat
+        type: number
+        required: false
+        location: body
+        description: Latitude (-90 to 90). Used when neither timezone nor city is set.
+      - name: items[].lon
+        type: number
+        required: false
+        location: body
+        description: Longitude (-180 to 180). Used alongside lat for coordinate-based lookup.
+    request_example: |
+      {
+        "items": [
+          { "timezone": "America/New_York" },
+          { "city": "Tokyo" },
+          { "lat": 51.5, "lon": -0.1 }
+        ]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            { "info": { "timezone": "America/New_York", "offset": "-05:00", "current_time": "2026-01-01T09:00:00Z", "is_dst": false } },
+            { "info": { "timezone": "Asia/Tokyo",       "offset": "+09:00", "current_time": "2026-01-01T23:00:00Z", "is_dst": false } },
+            { "info": { "timezone": "Europe/London",    "offset": "+00:00", "current_time": "2026-01-01T14:00:00Z", "is_dst": false } }
+          ],
+          "total": 3
+        },
+        "metadata": { "timestamp": "2026-01-01T00:00:00Z" }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: Per-item results in input order.
+      - name: results[].info.timezone
+        type: string
+        description: IANA timezone identifier.
+      - name: results[].info.offset
+        type: string
+        description: UTC offset in +HH:MM or -HH:MM format.
+      - name: results[].info.current_time
+        type: string
+        description: Current time in UTC (RFC 3339).
+      - name: results[].info.is_dst
+        type: boolean
+        description: Whether daylight saving time is currently active.
+      - name: results[].error
+        type: string
+        description: Error message if this item failed (omitted on success).
+      - name: total
+        type: integer
+        description: Total number of items processed.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The items array is missing, empty, or exceeds 50 items.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/places/timezone/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"items": [{"timezone": "America/New_York"}, {"city": "Tokyo"}, {"lat": 51.5, "lon": -0.1}]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/places/timezone/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "items": [
+                {"timezone": "America/New_York"},
+                {"city": "Tokyo"},
+                {"lat": 51.5, "lon": -0.1}
+            ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        for item in response.json()["data"]["results"]:
+            if item.get("info"):
+                print(item["info"]["timezone"], item["info"]["offset"])
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/places/timezone/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [
+              { timezone: 'America/New_York' },
+              { city: 'Tokyo' },
+              { lat: 51.5, lon: -0.1 }
+            ]
+          })
+        });
+
+        const { data } = await response.json();
+        data.results.forEach(item => {
+          if (item.info) console.log(item.info.timezone, item.info.offset);
+        });
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/places/timezone/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          items: [
+            { timezone: 'America/New_York' },
+            { city: 'Tokyo' },
+            { lat: 51.5, lon: -0.1 }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+        data['results'].each do |item|
+          puts "#{item['info']['timezone']}: #{item['info']['offset']}" if item['info']
+        end
+
 faq:
   - question: Which lookup method should I use — coordinates or city name?
     answer: Use coordinates (lat/lon) for precise lookups anywhere in the world. Use the city name for a quick lookup when you have a well-known city name. Coordinate-based lookup works for any point on Earth, while city-based lookup is limited to the ~150+ cities in our database.

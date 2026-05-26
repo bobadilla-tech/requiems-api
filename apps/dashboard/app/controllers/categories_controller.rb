@@ -7,7 +7,7 @@ class CategoriesController < ApplicationController
     @category = find_category(params[:id])
 
     if @category.nil?
-      redirect_to apis_path, alert: "Category not found"
+      redirect_to apis_path, alert: t("categories.flash.not_found")
       return
     end
 

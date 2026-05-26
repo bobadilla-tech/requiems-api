@@ -32,9 +32,9 @@ class Dashboard::BillingController < ApplicationController
 
     # Handle success/cancel callbacks from LemonSqueezy
     if params[:success] == "true"
-      flash.now[:notice] = "Subscription activated successfully! Your new plan is now active."
+      flash.now[:notice] = t("dashboard.billing.flash.activated")
     elsif params[:canceled] == "true"
-      flash.now[:alert] = "Checkout was canceled. Your subscription was not changed."
+      flash.now[:alert] = t("dashboard.billing.flash.canceled")
     end
   end
 
@@ -43,7 +43,7 @@ class Dashboard::BillingController < ApplicationController
     plan = params[:plan]
 
     unless valid_plan?(plan)
-      redirect_to dashboard_billing_path, alert: "Invalid plan selected"
+      redirect_to dashboard_billing_path, alert: t("dashboard.billing.flash.invalid_plan")
       return
     end
 
@@ -56,12 +56,12 @@ class Dashboard::BillingController < ApplicationController
   def portal
     # Redirect to LemonSqueezy customer portal
     if current_user.subscription&.promoted?
-      redirect_to dashboard_billing_path, alert: "Promotional plans do not have a customer portal."
+      redirect_to dashboard_billing_path, alert: t("dashboard.billing.flash.promotional_no_portal")
       return
     end
 
     unless current_user.subscription&.lemonsqueezy_subscription_id
-      redirect_to dashboard_billing_path, alert: "No active subscription found"
+      redirect_to dashboard_billing_path, alert: t("dashboard.billing.flash.no_subscription")
       return
     end
 
@@ -75,7 +75,7 @@ class Dashboard::BillingController < ApplicationController
 
   def cancel_subscription
     unless current_user.subscription
-      redirect_to dashboard_billing_path, alert: "No active subscription to cancel"
+      redirect_to dashboard_billing_path, alert: t("dashboard.billing.flash.no_subscription_to_cancel")
       return
     end
 

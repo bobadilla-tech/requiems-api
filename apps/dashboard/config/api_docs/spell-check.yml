@@ -11,11 +11,11 @@ overview:
     - Form validation and input sanitisation
     - Educational platforms and grammar tools
   features:
-    - Detects misspelled words using an English dictionary
-    - Provides the best correction suggestion per misspelled word
+    - Detects misspelled words and grammar issues using LanguageTool
+    - Returns the best correction and up to 3 ranked alternative suggestions per misspelled word
     - Returns character positions for each correction
-    - Preserves original capitalisation in suggestions
-    - Only ASCII letter sequences are spell-checked; non-ASCII characters are passed through unchanged
+    - Supports full Unicode input including accented and non-Latin characters
+    - Batch endpoint processes up to 50 texts in a single request
 endpoints:
   - name: Check Spelling
     method: POST
@@ -37,9 +37,24 @@ endpoints:
         "data": {
           "corrected": "This is a simple test",
           "corrections": [
-            {"original": "Ths", "suggested": "This", "position": 0},
-            {"original": "smiple", "suggested": "simple", "position": 9},
-            {"original": "tset", "suggested": "test", "position": 16}
+            {
+              "original": "Ths",
+              "suggested": "This",
+              "suggestions": ["Th's", "Th", "This"],
+              "position": 0
+            },
+            {
+              "original": "smiple",
+              "suggested": "simple",
+              "suggestions": ["simple", "smile", "Siple"],
+              "position": 9
+            },
+            {
+              "original": "tset",
+              "suggested": "test",
+              "suggestions": ["set", "test", "stet"],
+              "position": 16
+            }
           ]
         },
         "metadata": {
@@ -49,12 +64,13 @@ endpoints:
     response_fields:
       - name: corrected
         type: string
-        description: The full input text with all misspelled words replaced by their suggested corrections
+        description: The full input text with all misspelled words replaced by the top-ranked suggestion
       - name: corrections
         type: array of objects
         description: >-
           List of individual corrections. Each item contains: original (the misspelled word), suggested (the
-          correction), and position (0-based character offset in the original text)
+          top-ranked replacement applied to corrected), suggestions (up to 3 ranked alternatives returned by
+          LanguageTool, from most to least likely), and position (0-based Unicode character offset in the original text)
     errors:
       - code: validation_failed
         status: 422
@@ -113,19 +129,143 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['corrected']
         data['data']['corrections'].each { |c| puts "#{c['original']} -> #{c['suggested']}" }
+  - name: Check Spelling (Batch)
+    method: POST
+    path: /v1/text/spellcheck/batch
+    description: Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+    parameters:
+      - name: texts
+        type: array
+        required: true
+        location: body
+        description: The list of texts to spell-check. Between 1 and 50 items.
+        example: '["Ths is a tset", "Smiple example"]'
+    request_example: |
+      {
+        "texts": ["Ths is a tset", "Smiple example"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "corrected": "This is a test",
+              "corrections": [
+                {
+                  "original": "Ths",
+                  "suggested": "This",
+                  "suggestions": ["Th's", "Th", "This"],
+                  "position": 0
+                },
+                {
+                  "original": "tset",
+                  "suggested": "test",
+                  "suggestions": ["set", "test", "stet"],
+                  "position": 9
+                }
+              ]
+            },
+            {
+              "corrected": "Simple example",
+              "corrections": [
+                {
+                  "original": "Smiple",
+                  "suggested": "Simple",
+                  "suggestions": ["Simple", "Smile", "Siple"],
+                  "position": 0
+                }
+              ]
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array of objects
+        description: >-
+          One entry per input text, in the same order as the input array. Each item contains corrected (the fixed
+          text) and corrections (list of individual corrections with original, suggested, suggestions, and position).
+      - name: total
+        type: integer
+        description: Number of texts processed. Equals the length of the input array.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The texts field is missing, empty, or exceeds 50 items.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+      - code: internal_error
+        status: 500
+        description: Unexpected server error.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/text/spellcheck/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"texts": ["Ths is a tset", "Smiple example"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/text/spellcheck/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"texts": ["Ths is a tset", "Smiple example"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        data = response.json()
+        for item in data["data"]["results"]:
+            print(item["corrected"])
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/text/spellcheck/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ texts: ['Ths is a tset', 'Smiple example'] })
+        });
+
+        const data = await response.json();
+        data.data.results.forEach(item => console.log(item.corrected));
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/text/spellcheck/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { texts: ['Ths is a tset', 'Smiple example'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)
+        data['data']['results'].each { |item| puts item['corrected'] }
 faq:
   - question: What language does spell check support?
-    answer: The spell checker currently supports English only.
+    answer: The spell checker currently processes text as English (en-US). Multi-language support is planned for a future release.
   - question: Are positions zero-indexed?
     answer: >-
       Yes. The position field is a 0-based Unicode character (rune) offset in the original input string. This matches
       how Python, JavaScript, and Ruby index strings.
   - question: What happens if the text has no spelling mistakes?
     answer: "The corrected field will equal the input text and corrections will be an empty array: []."
-  - question: Does capitalisation affect the correction?
+  - question: What is the difference between suggested and suggestions?
     answer: >-
-      No. Spell checking is case-insensitive. The suggested correction mirrors the capitalisation of the original word:
-      a capitalised misspelling produces a capitalised suggestion.
+      suggested is the single best replacement, already applied to the corrected text. suggestions is an ordered list
+      of up to 3 alternatives returned by LanguageTool (from most to least likely), which you can use to present a
+      correction picker to your users instead of applying the first option automatically.
+  - question: How many items can I send in a batch request?
+    answer: Between 1 and 50 texts per request. Requests with an empty array or more than 50 items return 422.
 performance:
   p50_ms: 807
   p95_ms: 1147

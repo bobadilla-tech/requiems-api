@@ -11,6 +11,10 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+type BatchRequest struct {
+	Items []string `json:"items" validate:"required,min=1,max=50,dive,required"`
+}
+
 // RegisterRoutes mounts words handlers on the given router.
 // Paths are relative to the parent mount point.
 func RegisterRoutes(r chi.Router, svc *Service) {

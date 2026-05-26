@@ -50,6 +50,18 @@ docker compose -f docker-compose.dev.yml up --build
 
 - Processes Rails jobs automatically
 
+### Optional: LanguageTool (spell-check)
+
+LanguageTool is **opt-in** — it's a large JVM service and not needed for most
+development work. Enable it with the `languagetool` profile:
+
+```bash
+docker compose -f docker-compose.dev.yml --profile languagetool up
+```
+
+Without this profile, the spell-check API endpoint returns `503 upstream_error`
+instead of results. All other endpoints are unaffected.
+
 ### First Time Setup:
 
 The dev images will automatically:
@@ -109,14 +121,15 @@ docker compose -f docker-compose.dev.yml down -v
 
 ### Accessing Services:
 
-| Service         | URL                   | Notes                                |
-| --------------- | --------------------- | ------------------------------------ |
-| Auth Gateway    | http://localhost:4455 | Public API entry point               |
-| API Management  | http://localhost:5544 | Internal management service          |
-| Rails Dashboard | http://localhost:3000 | Sign up, sign in, dashboard          |
-| Go API          | http://localhost:8080 | Internal API (gateway → backend)     |
-| PostgreSQL      | localhost:5432        | User: `requiem`, Password: `requiem` |
-| Redis           | localhost:6379        | For Sidekiq                          |
+| Service         | URL                   | Notes                                        |
+| --------------- | --------------------- | -------------------------------------------- |
+| Auth Gateway    | http://localhost:4455 | Public API entry point                       |
+| API Management  | http://localhost:5544 | Internal management service                  |
+| Rails Dashboard | http://localhost:3000 | Sign up, sign in, dashboard                  |
+| Go API          | http://localhost:8080 | Internal API (gateway → backend)             |
+| PostgreSQL      | localhost:5432        | User: `requiem`, Password: `requiem`         |
+| Redis           | localhost:6379        | For Sidekiq                                  |
+| LanguageTool    | http://localhost:8010 | Spell-check backend (profile: `languagetool`) |
 
 ### Hot Reloading:
 

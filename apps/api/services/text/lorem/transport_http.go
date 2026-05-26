@@ -1,7 +1,7 @@
 package lorem
 
 import (
-	"net/http"
+	"context"
 
 	"github.com/go-chi/chi/v5"
 
@@ -12,16 +12,51 @@ type Generator interface {
 	Generate(paragraphs, sentences int) Lorem
 }
 
-func RegisterRoutes(r chi.Router, svc Generator) {
-	r.Get("/lorem", func(w http.ResponseWriter, r *http.Request) {
-		// Set defaults before binding so unset params keep their default value.
-		req := Request{Paragraphs: 1, Sentences: 5}
+// Request defines the parameters for generating lorem ipsum text.
+// It is used both for the GET query parameters and the POST batch JSON items.
+type Request struct {
+	Paragraphs int `query:"paragraphs" json:"paragraphs" validate:"omitempty,min=1,max=20"`
+	Sentences  int `query:"sentences" json:"sentences" validate:"omitempty,min=1,max=20"`
+}
 
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
+// BatchRequest represents the incoming JSON body.
+type BatchRequest struct {
+	Items []Request `json:"items" validate:"required,min=1,max=50,dive"`
+}
+
+// BatchItemResponse represents the response for a single item.
+type BatchItemResponse struct {
+	Data  *Lorem  `json:"data,omitempty"`
+	Error *string `json:"error,omitempty"`
+}
+
+func RegisterRoutes(r chi.Router, svc Generator) {
+	r.Get("/lorem", httpx.HandleGet(func(ctx context.Context, req Request) (Lorem, error) {
+		return svc.Generate(req.Paragraphs, req.Sentences), nil
+	}, Request{Paragraphs: 1, Sentences: 5}))
+
+	r.Post("/lorem/batch", httpx.HandleBatch(func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItemResponse], error) {
+		var results []BatchItemResponse
+
+		for _, item := range req.Items {
+			p := item.Paragraphs
+			if p == 0 {
+				p = 1
+			}
+			s := item.Sentences
+			if s == 0 {
+				s = 5
+			}
+
+			lorem := svc.Generate(p, s)
+
+			results = append(results, BatchItemResponse{
+				Data: &lorem,
+			})
 		}
 
-		httpx.JSON(w, http.StatusOK, svc.Generate(req.Paragraphs, req.Sentences))
-	})
+		return httpx.BatchResponse[BatchItemResponse]{
+			Results: results,
+		}, nil
+	}))
 }

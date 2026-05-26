@@ -12,6 +12,27 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// LookupResponse is the response payload for GET /v1/finance/swift/:code.
+type LookupResponse struct {
+	SwiftCode    string `json:"swift_code"`
+	BankCode     string `json:"bank_code"`
+	CountryCode  string `json:"country_code"`
+	LocationCode string `json:"location_code"`
+	BranchCode   string `json:"branch_code"`
+	BankName     string `json:"bank_name"`
+	City         string `json:"city"`
+	CountryName  string `json:"country_name"`
+	IsPrimary    bool   `json:"is_primary"`
+}
+
+// ListResponse is the response payload for SWIFT listings.
+type ListResponse struct {
+	Items    []LookupResponse `json:"items"`
+	Limit    int              `json:"limit"`
+	Offset   int              `json:"offset"`
+	Returned int              `json:"returned"`
+}
+
 // Service provides SWIFT/BIC code lookup against the swift_codes PostgreSQL table.
 type Service struct {
 	db *pgxpool.Pool

@@ -4,24 +4,32 @@ import (
 	"context"
 	"errors"
 	"strings"
+	"sync"
 	"unicode"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"requiems-api/platform/db"
 )
 
-type querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+// ParseResponse is the response payload for GET /v1/finance/iban/{iban}.
+type ParseResponse struct {
+	IBAN     string `json:"iban"`
+	Valid    bool   `json:"valid"`
+	Country  string `json:"country"`
+	BankCode string `json:"bank_code"`
+	Account  string `json:"account"`
 }
 
 // Service provides IBAN validation and parsing against the iban_countries table.
 type Service struct {
-	db querier
+	db db.Querier
 }
 
 // NewService creates a new Service backed by the given connection pool.
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 // countryRow holds the format data for a single country from iban_countries.
@@ -178,14 +186,28 @@ func extract(s string, offset, length int) string {
 // Infrastructure failures for individual items are absorbed: the item is returned with Valid: false
 // rather than failing the entire batch.
 func (s *Service) ParseBatch(ctx context.Context, numbers []string) []ParseResponse {
+	const maxWorkers = 8
+
 	results := make([]ParseResponse, len(numbers))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
+
 	for i, n := range numbers {
-		result, err := s.Parse(ctx, n)
-		if err != nil {
-			results[i] = ParseResponse{IBAN: n, Valid: false}
-			continue
-		}
-		results[i] = result
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, n string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			result, err := s.Parse(ctx, n)
+			if err != nil {
+				results[i] = ParseResponse{IBAN: n, Valid: false}
+				return
+			}
+			results[i] = result
+		}(i, n)
 	}
+
+	wg.Wait()
 	return results
 }

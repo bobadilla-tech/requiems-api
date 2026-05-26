@@ -37,6 +37,25 @@ services:
       timeout: 5s
       retries: 5
 
+  languagetool:
+    image: erikvl87/languagetool
+    networks:
+      - stack
+    ports:
+      - "8010:8010"
+    restart: unless-stopped
+    profiles:
+      - languagetool
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "wget -qO- http://localhost:8010/v2/languages > /dev/null 2>&1",
+      ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
   api:
     build:
       context: ../../apps/api
@@ -57,6 +76,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      languagetool:
+        condition: service_healthy
+        required: false
 
   dashboard:
     build:

@@ -4,11 +4,36 @@ import (
 	"context"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"requiems-api/platform/svcerr"
 )
+
+// HistoricalRate is a single year's inflation rate.
+type HistoricalRate struct {
+	Period string  `json:"period"`
+	Rate   float64 `json:"rate"`
+}
+
+// Response is the response payload for GET /v1/finance/inflation.
+type Response struct {
+	Country    string           `json:"country"`
+	Rate       float64          `json:"rate"`
+	Period     string           `json:"period"`
+	Historical []HistoricalRate `json:"historical"`
+}
+
+// BatchItem holds the result for a single country in a batch request.
+// Found is false when no data exists for that country code.
+type BatchItem struct {
+	Country    string           `json:"country"`
+	Found      bool             `json:"found"`
+	Rate       float64          `json:"rate,omitempty"`
+	Period     string           `json:"period,omitempty"`
+	Historical []HistoricalRate `json:"historical,omitempty"`
+}
 
 const historyDepth = 11 // 1 current + 10 historical years
 
@@ -80,27 +105,34 @@ func (s *Service) GetInflation(ctx context.Context, rawCode string) (Response, e
 // GetInflationBatch returns inflation data for multiple countries in the same
 // order as the input slice. Countries with no data are returned with Found: false.
 func (s *Service) GetInflationBatch(ctx context.Context, countries []string) []BatchItem {
+	const maxWorkers = 8
+
 	results := make([]BatchItem, len(countries))
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
 
 	for i, c := range countries {
-		resp, err := s.GetInflation(ctx, c)
-		if err != nil {
-			// Country not found or unexpected error: return in-band with Found: false.
-			results[i] = BatchItem{
-				Country: strings.ToUpper(c),
-				Found:   false,
-			}
-			continue
-		}
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, c string) {
+			defer wg.Done()
+			defer func() { <-sem }()
 
-		results[i] = BatchItem{
-			Country:    resp.Country,
-			Found:      true,
-			Rate:       resp.Rate,
-			Period:     resp.Period,
-			Historical: resp.Historical,
-		}
+			resp, err := s.GetInflation(ctx, c)
+			if err != nil {
+				results[i] = BatchItem{Country: strings.ToUpper(c), Found: false}
+				return
+			}
+			results[i] = BatchItem{
+				Country:    resp.Country,
+				Found:      true,
+				Rate:       resp.Rate,
+				Period:     resp.Period,
+				Historical: resp.Historical,
+			}
+		}(i, c)
 	}
 
+	wg.Wait()
 	return results
 }

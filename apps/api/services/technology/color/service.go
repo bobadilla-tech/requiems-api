@@ -9,6 +9,21 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// Formats holds the color expressed in every supported format.
+type Formats struct {
+	Hex  string `json:"hex"`
+	RGB  string `json:"rgb"`
+	HSL  string `json:"hsl"`
+	CMYK string `json:"cmyk"`
+}
+
+// Response is the payload returned by GET /v1/convert/color.
+type Response struct {
+	Input   string  `json:"input"`
+	Result  string  `json:"result"`
+	Formats Formats `json:"formats"`
+}
+
 // Service provides color format conversion operations.
 type Service struct{}
 

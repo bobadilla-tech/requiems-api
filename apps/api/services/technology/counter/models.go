@@ -6,8 +6,6 @@ type Counter struct {
 	Value     int64  `json:"value"`
 }
 
-func (Counter) IsData() {}
-
 func redisKey(namespace string) string {
 	return "counter:" + namespace
 }

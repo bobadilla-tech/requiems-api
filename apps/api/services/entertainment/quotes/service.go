@@ -15,18 +15,17 @@ type Quote struct {
 	Author string `json:"author,omitempty"`
 }
 
-func (Quote) IsData() {}
-
-type querier interface {
+type quotesDB interface {
 	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
 }
 
 type Service struct {
-	db querier
+	db quotesDB
 }
 
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 func (s *Service) Random(ctx context.Context) (Quote, error) {
@@ -49,10 +48,7 @@ LIMIT 1;
 	return q, nil
 }
 
-// RandomBatch returns n random quotes in a single operation.
-// If an individual quote fails to scan (e.g. transient DB error), a zero-value
-// Quote is used for that slot so the batch always returns exactly n results.
-// The batch is aborted only if the context is cancelled or times out.
+// RandomBatch returns n random quotes in a single query.
 func (s *Service) RandomBatch(ctx context.Context, n int) ([]Quote, error) {
 	if n < 1 {
 		return nil, fmt.Errorf("count must be at least 1")
@@ -61,23 +57,28 @@ func (s *Service) RandomBatch(ctx context.Context, n int) ([]Quote, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	results := make([]Quote, n)
-	for i := 0; i < n; i++ {
-		row := s.db.QueryRow(ctx, `
+	rows, err := s.db.Query(ctx, `
 SELECT id, text, author
 FROM quotes
 ORDER BY random()
-LIMIT 1;
-`)
+LIMIT $1`, n)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	results := make([]Quote, 0, n)
+
+	for rows.Next() {
 		var q Quote
-		if err := row.Scan(&q.ID, &q.Text, &q.Author); err != nil {
-			if ctx.Err() != nil {
-				return nil, ctx.Err()
-			}
-			// Individual scan error: keep zero-value Quote and continue.
+		if err := rows.Scan(&q.ID, &q.Text, &q.Author); err != nil {
 			continue
 		}
-		results[i] = q
+
+		results = append(results, q)
 	}
-	return results, nil
+
+	return results, rows.Err()
 }

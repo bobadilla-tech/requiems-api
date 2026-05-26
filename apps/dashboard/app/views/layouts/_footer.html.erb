@@ -23,7 +23,7 @@
         </h3>
         <ul class="space-y-3">
           <% api_categories.reject { |c| c["coming_soon"] }.each do |cat| %>
-            <li><%= link_to cat["name"], category_path(cat["id"]), class: "text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %></li>
+            <li><%= link_to api_category_display_name(cat), category_path(cat["id"]), class: "text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" %></li>
           <% end %>
         </ul>
       </div>

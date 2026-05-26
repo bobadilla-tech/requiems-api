@@ -10,6 +10,7 @@ equipment requirements, and body part filters.
 | GET    | `/v1/health/exercises`        | Paginated list with optional filters  |
 | GET    | `/v1/health/exercises/{id}`   | Single exercise by ID                 |
 | GET    | `/v1/health/exercises/random` | Random exercise with optional filters |
+| POST   | `/v1/health/exercises/batch`  | Fetch up to 50 exercises by ID        |
 | GET    | `/v1/health/body-parts`       | All valid body part values            |
 | GET    | `/v1/health/equipment`        | All valid equipment values            |
 | GET    | `/v1/health/muscles`          | All valid muscle values               |
@@ -60,6 +61,60 @@ exercises match the given filters.
 curl "https://api.requiems.xyz/v1/health/exercises/random?body_part=back&equipment=body+weight" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
+
+## Batch Lookup
+
+`POST /v1/health/exercises/batch`
+
+Fetch up to 50 exercises in a single request. Results are returned in the same
+order as the input IDs. IDs that do not exist are silently skipped.
+
+```bash
+curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
+  -H "requiems-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"ids": [1, 7, 42]}'
+```
+
+**Request body:**
+
+| Field | Type             | Required | Constraints                  |
+| ----- | ---------------- | -------- | ---------------------------- |
+| `ids` | array of integer | yes      | 1–50 items, each must be ≥ 1 |
+
+**Response:**
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": 1,
+        "name": "Barbell Squat",
+        "body_parts": ["upper legs"],
+        "equipment": ["barbell"],
+        "target_muscles": ["quadriceps"],
+        "secondary_muscles": ["glutes", "hamstrings"],
+        "instructions": ["Stand with feet shoulder-width apart..."]
+      }
+    ],
+    "total": 1
+  },
+  "metadata": {
+    "timestamp": "2026-01-01T00:00:00Z"
+  }
+}
+```
+
+> **Note:** IDs 7 and 42 were not found and were silently skipped. Only existing
+> IDs appear in `results`.
+
+**Error codes:**
+
+| Code                | Status | When                                            |
+| ------------------- | ------ | ----------------------------------------------- |
+| `bad_request`       | 400    | Missing or malformed JSON body                  |
+| `validation_failed` | 422    | Empty list, more than 50 IDs, or any ID below 1 |
 
 ## Metadata Endpoints
 

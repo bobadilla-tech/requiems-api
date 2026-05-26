@@ -10,14 +10,14 @@ class SalesInquiriesController < ApplicationController
       # Send email to observers
       SalesMailer.enterprise_inquiry(inquiry_params).deliver_now
 
-      redirect_to root_path, notice: "Thank you! Our sales team will contact you within 24 hours."
+      redirect_to root_path, notice: t("sales_inquiries.flash.success")
     else
-      flash.now[:alert] = "Please fill in all required fields."
+      flash.now[:alert] = t("sales_inquiries.flash.missing_fields")
       render :new, status: :unprocessable_entity
     end
   rescue StandardError => e
     Rails.logger.error "Failed to send sales inquiry email: #{e.message}"
-    flash.now[:alert] = "Sorry, there was an error submitting your inquiry. Please try again later."
+    flash.now[:alert] = t("sales_inquiries.flash.error")
     render :new, status: :unprocessable_entity
   end
 

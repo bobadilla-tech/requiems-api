@@ -128,7 +128,7 @@ export default class extends Controller {
         encodeURIComponent(s).replace(/%3A/gi, ":");
       endpoint = endpoint.replace(
         `{${key}}`,
-        value.split("/").map(encodePathSegment).join("/"),
+        String(value).split("/").map(encodePathSegment).join("/"),
       );
     });
 

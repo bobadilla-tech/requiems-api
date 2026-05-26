@@ -92,6 +92,20 @@ var intensifiers = map[string]float64{
 	"most": 1.3,
 }
 
+// Breakdown contains the proportional score for each sentiment class.
+type Breakdown struct {
+	Positive float64 `json:"positive"`
+	Negative float64 `json:"negative"`
+	Neutral  float64 `json:"neutral"`
+}
+
+// Result is the response payload for the sentiment endpoint.
+type Result struct {
+	Sentiment string    `json:"sentiment"`
+	Score     float64   `json:"score"`
+	Breakdown Breakdown `json:"breakdown"`
+}
+
 // Service performs sentiment analysis.
 type Service struct{}
 
@@ -201,6 +215,9 @@ func tokenize(text string) []string {
 	for _, r := range strings.ToLower(text) {
 		if unicode.IsLetter(r) || unicode.IsDigit(r) {
 			buf.WriteRune(r)
+		} else if r == '\'' || r == '’' {
+			// skip apostrophes so contractions stay intact: "don't" → "dont"
+			continue
 		} else if buf.Len() > 0 {
 			tokens = append(tokens, buf.String())
 			buf.Reset()

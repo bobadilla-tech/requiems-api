@@ -11,6 +11,13 @@ var detector = lingua.NewLanguageDetectorBuilder().
 	FromAllLanguages().
 	Build()
 
+// Result is the response payload for the detect-language endpoint.
+type Result struct {
+	Language   string  `json:"language"`
+	Code       string  `json:"code"`
+	Confidence float64 `json:"confidence"`
+}
+
 // Service performs language detection.
 type Service struct{}
 
