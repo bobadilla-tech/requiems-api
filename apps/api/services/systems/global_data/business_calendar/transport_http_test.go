@@ -36,7 +36,7 @@ func setupRouter(h *stubHolidays, w *stubWorkingDays) chi.Router {
 
 func get(t *testing.T, r chi.Router, path string) *httptest.ResponseRecorder {
 	t.Helper()
-	req := httptest.NewRequest(http.MethodGet, path, nil)
+	req := httptest.NewRequest(http.MethodGet, path, http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w

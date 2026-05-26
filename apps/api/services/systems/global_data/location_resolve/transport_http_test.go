@@ -65,11 +65,11 @@ func setupLocationRouter(g *stubGeocoder, tz *stubTimezone, h *stubHolidays, w *
 	return r
 }
 
-func post(t *testing.T, r chi.Router, path string, body any) *httptest.ResponseRecorder {
+func post(t *testing.T, r chi.Router, body any) *httptest.ResponseRecorder {
 	t.Helper()
 	b, err := json.Marshal(body)
 	require.NoError(t, err)
-	req := httptest.NewRequest(http.MethodPost, path, bytes.NewReader(b))
+	req := httptest.NewRequest(http.MethodPost, "/location/resolve", bytes.NewReader(b))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -87,7 +87,7 @@ func TestLocationResolve_ByAddress(t *testing.T) {
 		&stubHolidays{r: holidays.HolidayList{Holidays: []holidays.Holiday{{Date: "2026-07-14", Name: "Bastille Day"}}}},
 		&stubWorkingDays{n: 21},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{"address": "Paris, France"})
+	w := post(t, r,map[string]any{"address": "Paris, France"})
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
@@ -110,7 +110,7 @@ func TestLocationResolve_ByCoordinates(t *testing.T) {
 		&stubHolidays{r: holidays.HolidayList{Holidays: []holidays.Holiday{}}},
 		&stubWorkingDays{n: 20},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{
+	w := post(t, r,map[string]any{
 		"coordinates": map[string]any{"lat": 40.71, "lng": -74.00},
 	})
 	require.Equal(t, http.StatusOK, w.Code)
@@ -130,7 +130,7 @@ func TestLocationResolve_MissingInput(t *testing.T) {
 		&stubHolidays{},
 		&stubWorkingDays{},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{})
+	w := post(t, r,map[string]any{})
 	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
@@ -144,7 +144,7 @@ func TestLocationResolve_TimezoneUnavailable(t *testing.T) {
 		&stubHolidays{r: holidays.HolidayList{Holidays: []holidays.Holiday{}}},
 		&stubWorkingDays{n: 22},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{"address": "Berlin, DE"})
+	w := post(t, r,map[string]any{"address": "Berlin, DE"})
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
@@ -163,7 +163,7 @@ func TestLocationResolve_CalendarUnavailable(t *testing.T) {
 		&stubHolidays{err: fmt.Errorf("holiday api down")},
 		&stubWorkingDays{n: 22},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{"address": "Berlin, DE"})
+	w := post(t, r,map[string]any{"address": "Berlin, DE"})
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
@@ -179,6 +179,6 @@ func TestLocationResolve_GeocodeFail(t *testing.T) {
 		&stubHolidays{},
 		&stubWorkingDays{},
 	)
-	w := post(t, r, "/location/resolve", map[string]any{"address": "nowhere xyz"})
+	w := post(t, r,map[string]any{"address": "nowhere xyz"})
 	assert.NotEqual(t, http.StatusOK, w.Code)
 }

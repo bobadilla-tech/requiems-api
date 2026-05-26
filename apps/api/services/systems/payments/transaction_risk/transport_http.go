@@ -2,10 +2,12 @@ package transactionrisk
 
 import (
 	"context"
+	"net"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 type Request struct {
@@ -18,6 +20,9 @@ type Request struct {
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/transaction/risk", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
+			if net.ParseIP(req.IPAddress) == nil {
+				return Result{}, svcerr.Unknown("validation_failed", "invalid ip_address format")
+			}
 			return svc.Score(ctx, req)
 		},
 	))

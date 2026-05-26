@@ -196,7 +196,7 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		Available:   available,
 	}
 
-	if !hasMX {
+	if mxResult.err == nil && !hasMX {
 		score += 0.30
 		flags = append(flags, "no_mx")
 	}

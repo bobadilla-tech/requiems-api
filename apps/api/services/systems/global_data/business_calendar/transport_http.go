@@ -1,7 +1,6 @@
 package businesscalendar
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 	"strings"
@@ -47,7 +46,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			req.Month = n
 		}
 
-		res, err := svc.Get(context.WithValue(r.Context(), struct{}{}, nil), req)
+		res, err := svc.Get(r.Context(), req)
 		if err != nil {
 			if se, ok := err.(*svcerr.Error); ok {
 				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)

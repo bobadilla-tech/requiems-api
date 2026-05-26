@@ -147,13 +147,19 @@ func (s *Service) Validate(ctx context.Context, req Request) (Result, error) {
 
 	if req.IBAN != "" {
 		if ibanResult.err == nil {
+			var ibanCC string
+			if len(ibanResult.r.IBAN) >= 2 {
+				ibanCC = strings.ToUpper(ibanResult.r.IBAN[:2])
+			} else if len(ibanResult.r.Country) >= 2 {
+				ibanCC = strings.ToUpper(ibanResult.r.Country[:2])
+			}
 			out.IBAN = &IBANResult{
 				Valid:       ibanResult.r.Valid,
-				CountryCode: ibanResult.r.Country[:2],
+				CountryCode: ibanCC,
 				BankCode:    ibanResult.r.BankCode,
 				Account:     ibanResult.r.Account,
 			}
-			ibanCountry = strings.ToUpper(ibanResult.r.IBAN[:2])
+			ibanCountry = ibanCC
 			ibanBankCode = strings.ToUpper(ibanResult.r.BankCode)
 		} else {
 			out.IBAN = &IBANResult{Valid: false}
