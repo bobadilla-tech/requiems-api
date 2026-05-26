@@ -10,7 +10,7 @@ All new endpoints share the following conventions:
 - Base path: `/v1/`
 - Authentication: `Authorization: Bearer <api_key>` (same key as existing APIs)
 - Content-Type: `application/json`
-- Standard wrapper fields on every response: `request_id`, `latency_ms`
+- Standard wrapper: `{"data": {...}, "metadata": {"timestamp": "..."}}`
 - Score fields always range `0 to 1` (0 = safe/low-risk, 1 = unsafe/high-risk)
 
 Each system section leads with its **Engine** — the primary composed endpoint
@@ -42,8 +42,6 @@ confidence.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 52,
   "risk_score": 0.87,
   "is_safe": false,
   "confidence": 0.94,
@@ -99,8 +97,6 @@ than `/signup/protect`.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 48,
   "risk_score": 0.87,
   "confidence": 0.94,
   "flags": ["disposable_email", "vpn_detected"],
@@ -136,8 +132,6 @@ users.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 38,
   "verified": true,
   "confidence": 0.91,
   "risk_score": 0.12,
@@ -171,8 +165,6 @@ Optional additional field: `"swift": "COBADEFFXXX"`
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 61,
   "valid": true,
   "risk_score": 0.14,
   "country_mismatch": false,
@@ -220,8 +212,6 @@ Score a transaction for fraud risk. Use before authorizing high-value actions.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 44,
   "risk_score": 0.71,
   "is_safe": false,
   "flags": ["country_mismatch", "high_value_vpn"],
@@ -264,8 +254,6 @@ OR
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 72,
   "country": "DE",
   "city": "Berlin",
   "timezone": "Europe/Berlin",
@@ -297,8 +285,6 @@ Resolve timezone from IP address or location string.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 29,
   "timezone": "America/New_York",
   "utc_offset": "-05:00",
   "dst_active": false,
@@ -318,8 +304,6 @@ List public holidays for a country and year.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 18,
   "country": "DE",
   "year": 2026,
   "holidays": [
@@ -351,8 +335,6 @@ Validate and normalize a set of user input fields in a single call.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 41,
   "email": {
     "valid": true,
     "normalized": "user@example.com",
@@ -396,8 +378,6 @@ Check a block of text for toxicity, profanity, and policy violations.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 55,
   "is_safe": true,
   "toxicity_score": 0.03,
   "sentiment": "neutral",
@@ -431,8 +411,6 @@ Clean and standardize a string: trim whitespace, fix encoding, normalize case.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 12,
   "original": "  héllo   WORLD  ",
   "normalized": "héllo world",
   "operations_applied": ["trim", "lowercase", "normalize_unicode"]
@@ -506,8 +484,6 @@ Encode or decode a Base64 string.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 5,
   "result": "SGVsbG8sIFdvcmxkIQ==",
   "operation": "encode"
 }
@@ -525,8 +501,6 @@ Get random words with configurable count and length constraints.
 
 ```json
 {
-  "request_id": "req_01HX...",
-  "latency_ms": 8,
   "words": ["harbor", "eclipse", "monarch", "syntax", "verdant"]
 }
 ```
@@ -539,7 +513,6 @@ All endpoints return errors in this shape:
 
 ```json
 {
-  "request_id": "req_01HX...",
   "error": {
     "code": "INVALID_INPUT",
     "message": "email is required when phone and ip_address are not provided",

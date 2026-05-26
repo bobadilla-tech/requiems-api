@@ -56,9 +56,9 @@ class Admin::AbuseReportsController < ApplicationController
 
   def investigate
     if @abuse_report.update(status: "investigating")
-      redirect_to admin_abuse_report_path(@abuse_report), notice: "Report marked as investigating."
+      redirect_to admin_abuse_report_path(@abuse_report), notice: t("admin.abuse_reports.investigate_success")
     else
-      redirect_to admin_abuse_report_path(@abuse_report), alert: "Failed to update report status."
+      redirect_to admin_abuse_report_path(@abuse_report), alert: t("admin.abuse_reports.investigate_error")
     end
   end
 
@@ -68,9 +68,9 @@ class Admin::AbuseReportsController < ApplicationController
       resolved_at: Time.current,
       resolved_by_id: current_user.id
     )
-      redirect_to admin_abuse_report_path(@abuse_report), notice: "Report resolved successfully."
+      redirect_to admin_abuse_report_path(@abuse_report), notice: t("admin.abuse_reports.resolve_success")
     else
-      redirect_to admin_abuse_report_path(@abuse_report), alert: "Failed to resolve report."
+      redirect_to admin_abuse_report_path(@abuse_report), alert: t("admin.abuse_reports.resolve_error")
     end
   end
 
@@ -78,14 +78,14 @@ class Admin::AbuseReportsController < ApplicationController
 
   def require_admin!
     unless current_user.admin?
-      redirect_to root_path, alert: "Access denied. Admin privileges required."
+      redirect_to root_path, alert: t("admin.access_denied")
     end
   end
 
   def set_abuse_report
     @abuse_report = AbuseReport.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_abuse_reports_path, alert: "Abuse report not found."
+    redirect_to admin_abuse_reports_path, alert: t("admin.abuse_reports.not_found")
   end
 
   def calculate_error_rate(user)

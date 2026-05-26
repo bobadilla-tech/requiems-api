@@ -84,7 +84,7 @@ func TestExchangeRate_LowercaseCodes_Normalized(t *testing.T) {
 	assert.Equal(t, "EUR", gotTo)
 }
 
-func TestExchangeRate_MissingFrom_Returns400(t *testing.T) {
+func TestExchangeRate_MissingFrom_Returns422(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
@@ -92,10 +92,10 @@ func TestExchangeRate_MissingFrom_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
-func TestExchangeRate_MissingTo_Returns400(t *testing.T) {
+func TestExchangeRate_MissingTo_Returns422(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
@@ -103,10 +103,10 @@ func TestExchangeRate_MissingTo_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
-func TestExchangeRate_InvalidCurrencyCode_Returns400(t *testing.T) {
+func TestExchangeRate_InvalidCurrencyCode_Returns422(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
@@ -114,7 +114,7 @@ func TestExchangeRate_InvalidCurrencyCode_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for 2-char code, got %d", w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, "expected 422 for 2-char code, got %d", w.Code)
 }
 
 func TestExchangeRate_UnknownCurrency_Returns422(t *testing.T) {
@@ -165,7 +165,7 @@ func TestConvert_HappyPath(t *testing.T) {
 	assert.Equal(t, 0.92, resp.Data.Rate)
 }
 
-func TestConvert_MissingAmount_Returns400(t *testing.T) {
+func TestConvert_MissingAmount_Returns422(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
@@ -173,10 +173,10 @@ func TestConvert_MissingAmount_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
-func TestConvert_ZeroAmount_Returns400(t *testing.T) {
+func TestConvert_ZeroAmount_Returns422(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(fixedRate(0.92))
 
@@ -184,7 +184,7 @@ func TestConvert_ZeroAmount_Returns400(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for amount=0, got %d", w.Code)
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code, "expected 422 for amount=0, got %d", w.Code)
 }
 
 func TestConvert_UnknownCurrency_Returns422(t *testing.T) {

@@ -183,7 +183,7 @@ endpoints:
             "rate": 5.2,
             "years": 30
           }
-        ] 
+        ]
       }
     response_example: |
       {

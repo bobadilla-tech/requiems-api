@@ -15,7 +15,6 @@ import (
 // and structured error responses. The request body is capped at 1 MB.
 //
 // Req is decoded from the JSON request body and validated via struct tags.
-// Res must implement Data (add an IsData() method to your response type).
 //
 // Error mapping:
 //   - *ValidationFailure  → 422 with {"error":"validation_failed","fields":[...]}
@@ -29,7 +28,7 @@ import (
 //	        return svc.CheckEmail(req.Email), nil
 //	    },
 //	))
-func Handle[Req any, Res Data](
+func Handle[Req any, Res any](
 	fn func(ctx context.Context, req Req) (Res, error),
 ) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -78,31 +77,92 @@ func HandleBatch[Req any, Item any](
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
 
 		var req Req
+
 		if err := BindAndValidate(r, &req); err != nil {
 			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
 				ValidationError(w, vf)
 				return
 			}
+
 			Error(w, http.StatusBadRequest, "bad_request", cleanDecodeError(err))
 			return
 		}
 
 		res, err := fn(r.Context(), req)
+
 		if err != nil {
 			if se, ok := errors.AsType[*svcerr.Error](err); ok {
 				if se.Kind == svcerr.KindUpstream {
 					sentry.CaptureException(err)
 				}
+
 				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
 				return
 			}
+
 			sentry.CaptureException(err)
+
 			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
 			return
 		}
 
 		res.Total = len(res.Results)
+
 		w.Header().Set("X-Usage-Count", strconv.Itoa(len(res.Results)))
+
+		JSON(w, http.StatusOK, res)
+	}
+}
+
+// HandleGet wraps a GET endpoint with automatic query-parameter binding,
+// validation, and structured error responses.
+//
+// Req is populated from URL query parameters using `query:"name"` struct tags
+// and validated via `validate:` tags. To apply defaults before binding, pass an
+// initialised Req value as the optional second argument — fields with no
+// matching query param keep their value from that initialiser.
+//
+// Error mapping is identical to Handle:
+//   - *ValidationFailure  → 422 with {"error":"validation_failed","fields":[...]}
+//   - *svcerr.Error       → mapped HTTP status with {"error":Code,"message":Message}
+//   - any other error     → 500 with {"error":"internal_error"}
+func HandleGet[Req any, Res any](
+	fn func(ctx context.Context, req Req) (Res, error),
+	defaults ...Req,
+) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req Req
+		if len(defaults) > 0 {
+			req = defaults[0]
+		}
+
+		if err := BindQuery(r, &req); err != nil {
+			if vf, ok := errors.AsType[*ValidationFailure](err); ok {
+				ValidationError(w, vf)
+				return
+			}
+
+			Error(w, http.StatusBadRequest, "bad_request", err.Error())
+			return
+		}
+
+		res, err := fn(r.Context(), req)
+
+		if err != nil {
+			if se, ok := errors.AsType[*svcerr.Error](err); ok {
+				if se.Kind == svcerr.KindUpstream {
+					sentry.CaptureException(err)
+				}
+
+				Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
+				return
+			}
+
+			sentry.CaptureException(err)
+			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
+			return
+		}
+
 		JSON(w, http.StatusOK, res)
 	}
 }
@@ -121,6 +181,7 @@ func Guard[S any](svc *S, h http.HandlerFunc) http.HandlerFunc {
 			Error(w, http.StatusInternalServerError, "internal_error", "service unavailable")
 		}
 	}
+
 	return h
 }
 

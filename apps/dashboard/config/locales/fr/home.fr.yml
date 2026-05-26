@@ -1,19 +1,131 @@
 fr:
   home:
     index:
-      title: "Requiems API — Déployez plus vite avec une clé : validation, utilitaires et plus"
+      title: "Requiems API : Backend tout-en-un pour produits SaaS"
       hero:
-        title_line1: "Déployez plus vite."
-        title_line2: "Une clé API. Tout le catalogue."
-        description: "Plus de cinquante APIs prêtes à l'emploi : validation, texte, finance, lieux et bien plus. Intégrez une fois au lieu d'empiler un nouveau fournisseur pour chaque fonctionnalité, que ce soit pour un MVP ou pour un client."
-        cta_primary: "Obtenir une clé API gratuite"
-        cta_secondary: "Parcourir la documentation des APIs"
+        title_line1: "Backend tout-en-un"
+        title_line2: "pour produits SaaS."
+        description: "Authentification, validation, détection de fraude, intelligence paiements et données mondiales, livrés via une API unifiée."
+        cta_primary: "Obtenir une clé API"
+        cta_secondary: "Explorer les systèmes"
         try_badge: "✨ Essayez maintenant • Sans carte bancaire"
         api_request: "Requête API"
+        proof_badges:
+          - "Pipelines de données propriétaires"
+          - "Traitement en temps réel"
+          - "Conçu pour la production"
       trusted_by:
         label: "Plébiscité par des équipes qui livrent de vrais produits"
       social_proof:
         label: "Derrière des produits dans des entreprises comme"
+      systems:
+        heading: "Systèmes de niveau production"
+        subheading: "Chaque système compose des signaux propriétaires en une décision structurée unique, livrée en un seul appel API."
+        explore_cta: "Explorer le système"
+        utilities_label: "Extras"
+        utilities_cta: "Parcourir les utilitaires"
+        cards:
+          identity_risk:
+            title: "Système identité et risque"
+            blurb: "Protégez votre produit des faux utilisateurs, de la fraude et des mauvaises données avant qu'elles n'atteignent votre base."
+            signals:
+              - "Score de risque"
+              - "Intelligence e-mail, téléphone et IP"
+              - "Signaux de domaine et comportementaux"
+          payments_intelligence:
+            title: "Système intelligence paiements"
+            blurb: "Validez et enrichissez les données financières pour réduire les échecs de paiement et détecter les transactions à risque."
+            signals:
+              - "Validation BIN et carte"
+              - "Contrôles IBAN / SWIFT"
+              - "Signaux de risque transactionnel"
+          global_data:
+            title: "Système données mondiales"
+            blurb: "Alimentez des produits internationaux avec des données de localisation précises en temps réel et conformes."
+            signals:
+              - "Géocodage"
+              - "Fuseaux horaires et jours fériés"
+              - "Intelligence d'adresse"
+          data_integrity:
+            title: "Système intégrité des données"
+            blurb: "Nettoyez, validez et standardisez les saisies utilisateur sur toute votre plateforme."
+            signals:
+              - "Validation des entrées"
+              - "Normalisation de texte"
+              - "Modération de contenu"
+          developer_utilities:
+            title: "Utilitaires développeur"
+            blurb: "Des outils utiles que vous ne devriez pas avoir à reconstruire."
+            signals:
+              - "Codes QR"
+              - "Encodage et conversions"
+              - "Utilitaires divers"
+      how_it_works:
+        heading: "Comment ça marche"
+        step1_title: "Choisir un système"
+        step1_body: "Choisissez le problème à résoudre : identité, paiements, données mondiales ou intégrité des données."
+        step2_title: "Appeler un seul point de terminaison"
+        step2_body: "Utilisez des points de terminaison de haut niveau ou composez des flux selon vos besoins."
+        step3_title: "Obtenir des décisions, pas des données brutes"
+        step3_body: "Recevez scores de risque, résultats de validation et informations enrichies, prêts pour votre produit."
+      engine_spotlight:
+        kicker: "Moteurs"
+        heading: "Plusieurs signaux. Une décision structurée."
+        subheading: "Chaque moteur interroge en parallèle les APIs de validation, réseau et intelligence, puis renvoie une décision structurée unique. Aucune logique de scoring à construire. Aucun pipeline à maintenir."
+        endpoint: "POST /v1/signup/protect"
+        request: |
+          {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }
+        response: |
+          {
+            "risk_score": 0.87,
+            "is_safe": false,
+            "confidence": 0.94,
+            "flags": ["disposable_email", "vpn_detected"],
+            "signals": {
+              "email_valid": true,
+              "phone_valid": false,
+              "vpn_detected": true,
+              "disposable_email": true
+            }
+          }
+        cta: "Explorer les systèmes"
+        value_table_heading: "Signification de chaque champ"
+        value_table:
+          - field: "risk_score"
+            plain: "Quel est le risque de cette inscription ? 0 est propre, 1 est à haut risque."
+          - field: "is_safe"
+            plain: "Décision unique oui/non. Utilisez-la pour bloquer ou autoriser l'inscription."
+          - field: "confidence"
+            plain: "Niveau de certitude du moteur. Plus élevé signifie moins de faux positifs."
+          - field: "flags"
+            plain: "Les raisons précises pour lesquelles l'utilisateur a été signalé."
+          - field: "signals"
+            plain: "Résultats bruts de chaque contrôle exécuté en arrière-plan."
+      why_different:
+        heading: "Infrastructure, pas de colle d'intégration"
+        subheading: "La plupart des agrégateurs d'API revendent des appels tiers. Nous construisons des pipelines propriétaires."
+        points:
+          - "Aucune dépendance aux APIs tierces"
+          - "Systèmes propriétaires de scoring et de validation"
+          - "Schéma unifié sur tous les points de terminaison"
+          - "Conception faible latence et haut débit"
+          - "Conçu pour les développeurs qui livrent de vrais produits"
+      use_cases:
+        heading: "Conçu pour de vrais produits"
+        subheading: "Des problèmes concrets, résolus."
+        items:
+          - title: "Protection d'inscription SaaS"
+            body: "Bloquez les faux comptes, les bots et les abus dès le premier jour."
+          - title: "Onboarding fintech"
+            body: "Validez les données financières et réduisez la friction à l'inscription."
+          - title: "Prévention de la fraude sur les marketplaces"
+            body: "Détectez les utilisateurs et transactions à risque en temps réel."
+          - title: "Support produit mondial"
+            body: "Servez des utilisateurs internationaux avec des données précises partout."
       features:
         heading: "Conçu pour l'expérience développeur"
         subheading: "Des fondateurs solo aux agences : documentation précise, playgrounds en ligne et exemples prêts à copier. Intégrez en minutes, pas en jours."
@@ -76,11 +188,11 @@ fr:
         still_questions: "Encore des questions ?"
         contact_link: "Contacter notre équipe support"
       cta:
-        heading: "Prêt à déployer plus vite ?"
-        subheading: "Startups, agences et équipes techniques utilisent une seule clé pour la validation, les utilitaires et plus, avec une offre gratuite incluse."
-        primary: "Commencer gratuitement"
-        secondary: "Voir les tarifs"
-        footer: "Sans carte bancaire • Gratuit pour commencer • Annulation à tout moment"
+        heading: "Arrêtez de reconstruire l'infrastructure backend. Livrez votre produit."
+        subheading: "Un abonnement débloque les quatre systèmes. Pas de patchwork de fournisseurs ni de dispersion des intégrations."
+        primary: "Obtenir une clé API"
+        secondary: "Parler aux ventes"
+        footer: "Sans carte bancaire • Résiliation à tout moment"
 
     blog:
       title: "Blog — Requiems API"
@@ -662,6 +774,7 @@ fr:
     faq:
       title: "FAQ — Requiems API"
       heading: "Questions fréquentes"
+      subheading: "Réponses aux questions courantes sur la facturation, l'authentification, les limites de débit et l'intégration."
       intro: "Facturation, authentification, limites de débit et passage de l'inscription à la production rapidement."
       getting_started:
         heading: "Pour commencer"
@@ -777,3 +890,43 @@ fr:
         text: "Parcourez le catalogue complet ou téléchargez la documentation complète pour commencer."
         browse_apis: "Parcourir les APIs"
         full_docs: "Télécharger llms-full.txt"
+
+  sales_inquiries:
+    new:
+      description: "Nous sommes là pour vous aider avec vos besoins API. Remplissez le formulaire et nous vous recontacterons dès que possible."
+    flash:
+      success: "Merci ! Notre équipe commerciale vous contactera sous 24 heures."
+      missing_fields: "Veuillez remplir tous les champs obligatoires."
+      error: "Désolé, une erreur s'est produite lors de l'envoi de votre demande. Veuillez réessayer plus tard."
+
+  suggestions:
+    flash:
+      success: "Merci pour votre suggestion ! Nous l'examinerons sous peu et répondons en général sous 24 heures."
+      missing_fields: "Veuillez remplir tous les champs obligatoires."
+      error: "Désolé, une erreur s'est produite lors de l'envoi de votre suggestion. Veuillez réessayer plus tard."
+
+  examples:
+    show:
+      breadcrumb_home: "Accueil"
+      breadcrumb_examples: "Exemples"
+      tutorial_coming_soon: "Tutoriel à venir"
+      tutorial_description: "Nous préparons un tutoriel pas à pas détaillé pour cet exemple."
+      view_source: "Voir le code source"
+      view_demo: "Voir la démo"
+      back: "Retour aux exemples"
+      in_the_meantime: "En attendant :"
+      tip_github: "Consultez le code source sur GitHub pour voir comment c'est construit"
+      tip_demo: "Essayez la démo en direct pour le voir en action"
+      tip_docs_html: "Explorez la %{docs_link} des APIs utilisées dans ce projet"
+      api_documentation: "documentation API"
+    flash:
+      not_found: "Exemple introuvable"
+
+  categories:
+    flash:
+      not_found: "Catégorie introuvable"
+
+  apis:
+    flash:
+      not_found: "API introuvable"
+      no_documentation: "La documentation n'est pas encore disponible pour cette API"

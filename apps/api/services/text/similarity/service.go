@@ -6,6 +6,12 @@ import (
 	"unicode"
 )
 
+// Result is the response payload for the text similarity endpoint.
+type Result struct {
+	Similarity float64 `json:"similarity"`
+	Method     string  `json:"method"`
+}
+
 // Service computes text similarity.
 type Service struct{}
 

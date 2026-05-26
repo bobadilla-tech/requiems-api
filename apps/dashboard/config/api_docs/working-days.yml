@@ -257,10 +257,10 @@ endpoints:
 
     errors:
       - code: 400
-        message: invalid_request
+        message: bad_request
         description: Invalid or malformed JSON body, items array is empty or missing, or items exceeds 50
       - code: 422
-        message: unprocessable_entity
+        message: validation_failed
         description: items is missing or empty, or exceeds 50 entries  
 
     code_examples:

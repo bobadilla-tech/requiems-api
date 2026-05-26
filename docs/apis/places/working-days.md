@@ -208,11 +208,11 @@ Calculate working days for multiple date ranges in a single request. Results pre
 
 ### Error Codes
 
-| Code              | Status | When                           |
-| ----------------- | ------ | ------------------------------ |
-| `invalid_request` | 400    | Invalid or malformed JSON body |
-| `invalid_request` | 422    | `items` is missing or empty    |
-| `invalid_request` | 422    | `items` exceeds 50 entries     |
+| Code                | Status | When                           |
+| ------------------- | ------ | ------------------------------ |
+| `bad_request`       | 400    | Invalid or malformed JSON body |
+| `validation_failed` | 422    | `items` is missing or empty    |
+| `validation_failed` | 422    | `items` exceeds 50 entries     |
 
 ### Code Examples
 

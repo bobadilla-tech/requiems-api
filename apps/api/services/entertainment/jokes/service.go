@@ -38,6 +38,12 @@ var dadJokes = []string{
 	"Why did the math book look so sad? Because it had too many problems.",
 }
 
+// DadJoke represents a single dad joke with its identifier.
+type DadJoke struct {
+	ID   string `json:"id"`
+	Joke string `json:"joke"`
+}
+
 // Service provides access to a collection of dad jokes.
 type Service struct{}
 

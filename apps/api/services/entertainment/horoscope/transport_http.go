@@ -1,6 +1,7 @@
 package horoscope
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -8,6 +9,11 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+
+// BatchRequest is the body for generating multiple horoscope readings in the same call.
+type BatchRequest struct {
+	Signs []string `json:"signs" validate:"required,min=1,max=12,dive,required,oneof=aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces"`
+}
 
 // RegisterRoutes mounts horoscope handlers on the given router.
 // Paths are relative to the parent mount point.
@@ -27,4 +33,13 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, h)
 	})
+	r.Post("/horoscope/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[Horoscope], error) {
+			results, err := svc.DailyBatch(req.Signs)
+			if err != nil {
+				return httpx.BatchResponse[Horoscope]{}, err
+			}
+			return httpx.BatchResponse[Horoscope]{Results: results}, nil
+		},
+	))
 }

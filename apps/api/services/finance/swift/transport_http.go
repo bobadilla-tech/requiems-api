@@ -1,6 +1,7 @@
 package swift
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -9,6 +10,21 @@ import (
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// ListFilter describes optional filters and pagination for SWIFT listings.
+type ListFilter struct {
+	CountryCode string `query:"country_code"`
+	BankCode    string `query:"bank_code"`
+	Query       string `query:"q"`
+	Limit       int    `query:"limit"  validate:"min=1,max=100"`
+	Offset      int    `query:"offset" validate:"min=0"`
+}
+
+// Looker is the interface used by the HTTP transport layer.
+type Looker interface {
+	Lookup(ctx context.Context, code string) (LookupResponse, error)
+	List(ctx context.Context, filter ListFilter) (ListResponse, error)
+}
 
 // RegisterRoutes mounts SWIFT/BIC lookup handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).
@@ -19,28 +35,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // registerSWIFTRoutes wires the Looker interface to the router. Kept unexported
 // so tests can inject a stub without going through the concrete *Service type.
 func registerSWIFTRoutes(r chi.Router, l Looker) {
-	// GET /swift — list SWIFT records with optional filters.
-	r.Get("/swift", func(w http.ResponseWriter, r *http.Request) {
-		filter := ListFilter{Limit: 50}
-		if err := httpx.BindQuery(r, &filter); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
+	r.Get("/swift", httpx.HandleGet(func(ctx context.Context, req ListFilter) (ListResponse, error) {
+		return l.List(ctx, req)
+	}, ListFilter{Limit: 50}))
 
-		result, err := l.List(r.Context(), filter)
-		if err != nil {
-			if se, ok := errors.AsType[*svcerr.Error](err); ok {
-				httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
-				return
-			}
-			httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, result)
-	})
-
-	// GET /swift/{code} — look up bank metadata for a SWIFT/BIC code
+	// GET /swift/{code} — look up bank metadata for a SWIFT/BIC code.
+	// Path param only, no query binding.
 	r.Get("/swift/{code}", func(w http.ResponseWriter, r *http.Request) {
 		rawCode := chi.URLParam(r, "code")
 

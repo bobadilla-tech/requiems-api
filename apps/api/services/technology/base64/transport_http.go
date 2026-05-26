@@ -8,6 +8,18 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// EncodeRequest is the request body for the Base64 encode endpoint.
+type EncodeRequest struct {
+	Value   string `json:"value"   validate:"required"`
+	Variant string `json:"variant" validate:"omitempty,oneof=standard url"`
+}
+
+// DecodeRequest is the request body for the Base64 decode endpoint.
+type DecodeRequest struct {
+	Value   string `json:"value"   validate:"required"`
+	Variant string `json:"variant" validate:"omitempty,oneof=standard url"`
+}
+
 // RegisterRoutes mounts Base64 encode and decode handlers on the given router.
 // Paths are relative to the parent mount point.
 func RegisterRoutes(r chi.Router, svc *Service) {

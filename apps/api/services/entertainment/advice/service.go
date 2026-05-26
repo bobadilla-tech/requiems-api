@@ -5,20 +5,22 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"requiems-api/platform/db"
 )
 
-type querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+type Advice struct {
+	ID   int    `json:"id"`
+	Text string `json:"advice"`
 }
 
 type Service struct {
-	db querier
+	db db.Querier
 }
 
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 func (s *Service) Random(ctx context.Context) (Advice, error) {

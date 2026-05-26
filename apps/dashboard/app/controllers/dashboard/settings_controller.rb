@@ -13,14 +13,14 @@ class Dashboard::SettingsController < ApplicationController
     if current_user.update(user_params)
       # If email was changed and Devise confirmable is enabled, send confirmation
       if user_params[:email].present? && current_user.email != current_user.email_was
-        flash[:notice] = "Settings updated. Please check your email to confirm your new address."
+        flash[:notice] = t("dashboard.settings.flash.email_confirm")
       else
-        flash[:notice] = "Settings updated successfully."
+        flash[:notice] = t("dashboard.settings.flash.updated")
       end
 
       redirect_to dashboard_settings_path
     else
-      flash.now[:alert] = "Failed to update settings. Please check the form for errors."
+      flash.now[:alert] = t("dashboard.settings.flash.error")
       render :show, status: :unprocessable_entity
     end
   end
@@ -29,7 +29,7 @@ class Dashboard::SettingsController < ApplicationController
     reason = params[:deletion_reason].to_s.strip
 
     if reason.length < 10
-      redirect_to dashboard_settings_path, alert: "Please provide a reason (at least 10 characters)."
+      redirect_to dashboard_settings_path, alert: t("dashboard.settings.flash.reason_too_short")
       return
     end
 
@@ -37,14 +37,14 @@ class Dashboard::SettingsController < ApplicationController
     AccountDeletionMailer.confirmation(current_user).deliver_later
 
     redirect_to dashboard_settings_path,
-      notice: "Check your email — we sent a confirmation link. It expires in 1 hour."
+      notice: t("dashboard.settings.flash.deletion_email_sent")
   end
 
   def confirm_deletion
     token = params[:token].to_s
 
     unless current_user.deletion_token_valid?(token)
-      redirect_to dashboard_settings_path, alert: "This link is invalid or has expired. Please request a new one."
+      redirect_to dashboard_settings_path, alert: t("dashboard.settings.flash.invalid_token")
       return
     end
 
@@ -56,7 +56,7 @@ class Dashboard::SettingsController < ApplicationController
     token = params[:token].to_s
 
     unless current_user.deletion_token_valid?(token)
-      redirect_to dashboard_settings_path, alert: "This link is invalid or has expired. Please request a new one."
+      redirect_to dashboard_settings_path, alert: t("dashboard.settings.flash.invalid_token")
       return
     end
 
@@ -76,7 +76,7 @@ class Dashboard::SettingsController < ApplicationController
     current_user.destroy!
     sign_out current_user
 
-    redirect_to root_path, notice: "Your account has been permanently deleted. We're sorry to see you go."
+    redirect_to root_path, notice: t("dashboard.settings.flash.deleted")
   end
 
   private

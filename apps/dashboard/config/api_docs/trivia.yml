@@ -125,6 +125,214 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts data['question']
         puts "Answer: #{data['answer']}"
+  - name: Get Batch Trivia Questions
+    method: POST
+    path: /v1/entertainment/trivia/batch
+    description: Returns up to 50 trivia questions in a single request.
+    parameters:
+      - name: filters
+        type: array
+        required: true
+        location: body
+        description: "Array of filters to get (min: 1, max: 50)."
+        example: |
+          [{"category": "sports", "difficulty": "easy"},{"category": "history", "difficulty": "medium"}]
+    request_example: |
+      {
+        "filters": [{"category": "sports", "difficulty": "easy"},{"category": "history", "difficulty": "medium"}]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "category": "sports",
+              "difficulty": "easy",
+              "data": {
+                "question": "In which country did the ancient Olympic Games originate?",
+                "options": [
+                  "Italy",
+                  "Turkey",
+                  "Greece",
+                  "Egypt"
+                ],
+                "answer": "Greece",
+                "category": "sports",
+                "difficulty": "easy"
+              }
+            },
+            {
+              "category": "history",
+              "difficulty": "medium",
+              "data": {
+                "question": "In what year was the Magna Carta signed?",
+                "options": [
+                  "1215",
+                  "1066",
+                  "1415",
+                  "1305"
+                ],
+                "answer": "1215",
+                "category": "history",
+                "difficulty": "medium"
+              }
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-05-22T22:27:35Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: List of trivia questions returned in the same order as the input filters.
+      - name: results[].category
+        type: string
+        description: The topic filter used to retrieve the trivia question.
+      - name: results[].difficulty
+        type: string
+        description: The complexity level filter used to retrieve the trivia question.
+      - name: results[].error
+        type: string
+        description: Describes why the question could not be retrieved for this filter. Omitted if the query was successful.
+      - name: results[].data
+        type: object
+        description: The trivia question returned for this filter. Empty if the query failed.
+      - name: results[].data.question
+        type: string
+        description: The trivia question text.
+      - name: results[].data.options
+        type: array
+        description: List of possible answers for the question.
+      - name: results[].data.answer
+        type: string
+        description: The correct answer to the trivia question.
+      - name: results[].data.category
+        type: string
+        description: The category the trivia question belongs to.
+      - name: results[].data.difficulty
+        type: string
+        description: The difficulty level of the trivia question.
+      - name: total
+        type: integer
+        description: Total number of trivia results returned.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The filters array is missing, empty, or contains more than 50 items.
+      - code: bad_request
+        status: 400
+        description: Invalid JSON, malformed request body, or unexpected field types.
+      - code: unauthorized
+        status: 401
+        description: Missing API key.
+      - code: forbidden
+        status: 403
+        description: Invalid or revoked API key.
+    code_examples:
+      curl: |
+        curl -X POST "https://api.requiems.xyz/v1/entertainment/trivia/batch" \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "filters": [
+              { "category": "sports", "difficulty": "easy" },
+              { "category": "history", "difficulty": "medium" }
+            ]
+          }'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/entertainment/trivia/batch"
+
+        headers = {
+          "requiems-api-key": "YOUR_API_KEY",
+          "Content-Type": "application/json"
+        }
+
+        payload = {
+          "filters": [
+            { "category": "sports", "difficulty": "easy" },
+            { "category": "history", "difficulty": "medium" }
+          ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+
+        for item in response.json()["data"]["results"]:
+          print(item["category"], "-", item["difficulty"])
+          if item.get("error"):
+            print("Error:", item["error"])
+          else:
+            print("Question:", item["data"]["question"])
+            print("Options:", item["data"]["options"])
+            print("Answer:", item["data"]["answer"])
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/entertainment/trivia/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              filters: [
+                { category: 'sports', difficulty: 'easy' },
+                { category: 'history', difficulty: 'medium' }
+              ]
+            })
+          }
+        );
+
+        const { data } = await response.json();
+
+        data.results.forEach(item => {
+          console.log(item.category, '-', item.difficulty);
+          if (item.error) {
+            console.log('Error:', item.error);
+          } else {
+            console.log('Question:', item.data.question);
+            console.log('Options:', item.data.options);
+            console.log('Answer:', item.data.answer);
+          }
+        });
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/entertainment/trivia/batch')
+
+        request = Net::HTTP::Post.new(uri)
+
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          filters: [
+            { category: 'sports', difficulty: 'easy' },
+            { category: 'history', difficulty: 'medium' }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        JSON.parse(response.body)['data']['results'].each do |item|
+          puts "#{item['category']} - #{item['difficulty']}"
+          if item['error']
+            puts "Error: #{item['error']}"
+          else
+            puts "Question: #{item['data']['question']}"
+            puts "Options: #{item['data']['options']}"
+            puts "Answer: #{item['data']['answer']}"
+          end
+        end
 faq:
   - question: What categories are available?
     answer: >-

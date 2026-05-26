@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import worker from "../index";
 import { authedRequest, makeBindings, makeCtx } from "./helpers";
-import type { EndpointStats, DateStats } from "../routes/analytics/types";
+import type { DateStats, EndpointStats } from "../routes/analytics/types";
 
 // ------------------------------------------------------------------
 // Shared DB factories
@@ -12,7 +12,11 @@ function makeDb(allResults: unknown[] = [], firstResult: unknown = null) {
   return {
     prepare: (_sql: string) => ({
       bind: (..._args: unknown[]) => ({
-        all: async <T>() => ({ success: true, results: allResults as T[], meta: {} }),
+        all: async <T>() => ({
+          success: true,
+          results: allResults as T[],
+          meta: {},
+        }),
         first: async <T>() => firstResult as T,
         run: async () => ({ success: true, meta: {} }),
       }),
@@ -72,7 +76,10 @@ describe("GET /analytics/summary", () => {
     const res = await worker.fetch(req, bindings, makeCtx());
 
     expect(res.status).toBe(200);
-    const body = (await res.json()) as { totalRequests: number; totalCredits: number };
+    const body = (await res.json()) as {
+      totalRequests: number;
+      totalCredits: number;
+    };
     expect(body.totalRequests).toBe(0);
     expect(body.totalCredits).toBe(0);
   });

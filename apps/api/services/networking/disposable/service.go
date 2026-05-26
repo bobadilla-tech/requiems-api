@@ -8,6 +8,33 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// CheckEmailResponse represents the response for a single email check.
+type CheckEmailResponse struct {
+	Email        string `json:"email"`
+	IsDisposable bool   `json:"is_disposable"`
+	Domain       string `json:"domain,omitempty"`
+}
+
+// DomainCheckResponse represents the response for a domain check.
+type DomainCheckResponse struct {
+	Domain       string `json:"domain"`
+	IsDisposable bool   `json:"is_disposable"`
+}
+
+// DomainsListResponse represents the response for listing all domains.
+type DomainsListResponse struct {
+	Domains []string `json:"domains"`
+	Total   int      `json:"total"`
+	Page    int      `json:"page"`
+	PerPage int      `json:"per_page"`
+	HasMore bool     `json:"has_more"`
+}
+
+// StatsResponse represents statistics about disposable domains.
+type StatsResponse struct {
+	TotalDomains int `json:"total_domains"`
+}
+
 type Service struct{}
 
 func NewService() *Service {

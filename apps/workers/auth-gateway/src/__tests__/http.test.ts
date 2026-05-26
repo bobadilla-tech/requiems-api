@@ -295,7 +295,13 @@ describe("HTTP Utilities", () => {
           }),
       );
 
-      const result = await fetchBackend("https://api.example.com", { method: "GET" }, 1);
+      const result = await fetchBackend(
+        "https://api.example.com",
+        {
+          method: "GET",
+        },
+        1,
+      );
 
       expect(result.ok).toBe(false);
       if (!result.ok) {

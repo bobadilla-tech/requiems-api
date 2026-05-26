@@ -58,7 +58,7 @@ func TestColor_MissingParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestColor_InvalidValue(t *testing.T) {

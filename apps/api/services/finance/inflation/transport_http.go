@@ -12,6 +12,22 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// Request holds the validated query parameters for the inflation endpoint.
+type Request struct {
+	Country string `query:"country" validate:"required,iso3166_1_alpha2"`
+}
+
+// BatchRequest is the body for fetching inflation data for multiple countries at once.
+type BatchRequest struct {
+	Countries []string `json:"countries" validate:"required,min=1,max=50,dive,iso3166_1_alpha2"`
+}
+
+// Getter is the interface used by the HTTP transport layer.
+type Getter interface {
+	GetInflation(ctx context.Context, countryCode string) (Response, error)
+	GetInflationBatch(ctx context.Context, countries []string) []BatchItem
+}
+
 // RegisterRoutes mounts inflation handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).
 func RegisterRoutes(r chi.Router, svc *Service) {

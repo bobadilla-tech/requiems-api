@@ -124,6 +124,144 @@ endpoints:
         data = JSON.parse(response.body)
         puts data['data']['city']
 
+  - name: Batch Lookup Postal Codes
+    method: POST
+    path: /v1/places/postal/batch
+    description: Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+    parameters:
+      - name: items
+        type: array of objects
+        required: true
+        location: body
+        description: List of postal code lookups (1–50 items).
+      - name: items[].code
+        type: string
+        required: true
+        location: body
+        description: The postal code to look up.
+      - name: items[].country
+        type: string
+        required: false
+        location: body
+        description: "ISO 3166-1 alpha-2 country code (default: US)."
+    request_example: |
+      {
+        "items": [
+          { "code": "10001", "country": "US" },
+          { "code": "SW1A1AA", "country": "GB" }
+        ]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "code": "10001", "country": "US", "found": true,
+              "result": { "postal_code": "10001", "city": "New York City", "state": "New York", "country": "US", "lat": 40.7484, "lon": -73.9967 }
+            },
+            {
+              "code": "SW1A1AA", "country": "GB", "found": true,
+              "result": { "postal_code": "SW1A 1AA", "city": "London", "state": "England", "country": "GB", "lat": 51.5010, "lon": -0.1247 }
+            }
+          ],
+          "total": 2
+        },
+        "metadata": { "timestamp": "2026-01-01T00:00:00Z" }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: Per-item results in input order.
+      - name: results[].code
+        type: string
+        description: The postal code as provided in the request.
+      - name: results[].country
+        type: string
+        description: The country code used for the lookup (defaulted to US when omitted).
+      - name: results[].found
+        type: boolean
+        description: Whether the postal code was found in the dataset.
+      - name: results[].result
+        type: object
+        description: Postal code details (omitted when found is false).
+      - name: total
+        type: integer
+        description: Total number of items processed.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The items array is missing, empty, or exceeds 50 items.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/places/postal/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"items": [{"code": "10001", "country": "US"}, {"code": "SW1A1AA", "country": "GB"}]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/places/postal/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "items": [
+                {"code": "10001", "country": "US"},
+                {"code": "SW1A1AA", "country": "GB"}
+            ]
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        for item in response.json()["data"]["results"]:
+            if item["found"]:
+                print(item["code"], item["result"]["city"])
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/places/postal/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [
+              { code: '10001', country: 'US' },
+              { code: 'SW1A1AA', country: 'GB' }
+            ]
+          })
+        });
+
+        const { data } = await response.json();
+        data.results.forEach(item => {
+          if (item.found) console.log(item.code, item.result.city);
+        });
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/places/postal/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          items: [
+            { code: '10001', country: 'US' },
+            { code: 'SW1A1AA', country: 'GB' }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+        data['results'].each do |item|
+          puts "#{item['code']}: #{item['result']['city']}" if item['found']
+        end
+
 faq:
   - question: Which countries are supported?
     answer: The API covers 100+ countries via the GeoNames postal code dataset, including US, CA, GB, DE, FR, AU, JP, BR, and many more.

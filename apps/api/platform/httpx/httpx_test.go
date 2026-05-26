@@ -16,8 +16,6 @@ type testData struct {
 	Value string `json:"value"`
 }
 
-func (testData) IsData() {}
-
 func TestJSON_WritesSuccessEnvelope(t *testing.T) {
 	t.Parallel()
 

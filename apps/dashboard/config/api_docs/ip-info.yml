@@ -173,6 +173,112 @@ endpoints:
         end
 
         puts JSON.parse(response.body)
+  - name: Batch IP Geolocation
+    method: POST
+    path: /v1/networking/ip/info/batch
+    description: Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+    parameters:
+      - name: ips
+        type: array of strings
+        required: true
+        location: body
+        description: List of IP addresses to look up (1–50 items, each must be a valid IPv4 or IPv6 address).
+    request_example: |
+      {
+        "ips": ["8.8.8.8", "1.1.1.1"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "ip": "8.8.8.8",
+              "result": { "ip": "8.8.8.8", "country": "United States", "country_code": "US", "city": "Mountain View", "isp": "Google Public DNS", "is_vpn": false }
+            },
+            {
+              "ip": "1.1.1.1",
+              "result": { "ip": "1.1.1.1", "country": "Australia", "country_code": "AU", "city": "Sydney", "isp": "Cloudflare", "is_vpn": false }
+            }
+          ],
+          "total": 2
+        },
+        "metadata": { "timestamp": "2026-01-01T00:00:00Z" }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: Per-item results in input order.
+      - name: results[].ip
+        type: string
+        description: The IP address that was looked up.
+      - name: results[].result
+        type: object
+        description: Geolocation data (omitted on error). Same fields as the single-item endpoint.
+      - name: results[].error
+        type: string
+        description: Error message if the lookup failed (omitted on success).
+      - name: total
+        type: integer
+        description: Total number of items processed.
+    errors:
+      - code: validation_failed
+        status: 422
+        description: The ips array is missing, empty, exceeds 50 items, or contains an invalid IP address.
+      - code: bad_request
+        status: 400
+        description: The request body is missing or malformed.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/networking/ip/info/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"ips": ["8.8.8.8", "1.1.1.1"]}'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/networking/ip/info/batch"
+        headers = {
+            "requiems-api-key": "YOUR_API_KEY",
+            "Content-Type": "application/json"
+        }
+        payload = {"ips": ["8.8.8.8", "1.1.1.1"]}
+
+        response = requests.post(url, headers=headers, json=payload)
+        for item in response.json()["data"]["results"]:
+            if item.get("result"):
+                print(item["ip"], item["result"]["country"])
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/info/batch', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ips: ['8.8.8.8', '1.1.1.1'] })
+        });
+
+        const { data } = await response.json();
+        data.results.forEach(item => {
+          if (item.result) console.log(item.ip, item.result.country);
+        });
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/networking/ip/info/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { ips: ['8.8.8.8', '1.1.1.1'] }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+        data['results'].each do |item|
+          puts "#{item['ip']}: #{item['result']['country']}" if item['result']
+        end
 faq:
   - question: How accurate is the geolocation data?
     answer: >-

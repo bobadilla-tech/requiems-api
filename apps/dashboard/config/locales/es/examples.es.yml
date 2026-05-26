@@ -1,0 +1,49 @@
+es:
+  examples:
+    index:
+      title: "Ejemplos de código | Requiems API"
+      description: "Ejemplos listos para ejecutar integraciones con Requiems API. Tutoriales para copiar y pegar: validación de correo, geolocalización IP, códigos QR y más."
+      heading: "Proyectos de ejemplo y tutoriales"
+      subheading: "Aprende a integrar las APIs de Requiems en tus proyectos con ejemplos prácticos y tutoriales paso a paso."
+      filter_all: "Todos los ejemplos"
+      empty_heading: "No se encontraron ejemplos"
+      empty_body: "Prueba con otra categoría."
+      cta_heading: "¿Quieres aportar un ejemplo?"
+      cta_body: "¡Comparte tu proyecto con la comunidad! Aceptamos contribuciones de todo tipo."
+      cta_github: "Enviar un ejemplo"
+      cta_contact: "Contáctanos"
+      view_tutorial: "Ver tutorial"
+      view_tutorial_aria: "%{title} - Ver tutorial"
+      apis_used: "APIs utilizadas"
+      tech_count:
+        one: "%{count} tecnología"
+        other: "%{count} tecnologías"
+    categories:
+      web_apps: "Aplicaciones web"
+      mobile_apps: "Aplicaciones móviles"
+      cli_tools: "Herramientas CLI"
+      bots_automation: "Bots y automatización"
+      backend: "Backend"
+    difficulties:
+      beginner: "Principiante"
+      intermediate: "Intermedio"
+      advanced: "Avanzado"
+    items:
+      email-validator-web-app:
+        title: "App web validadora de correo"
+        description: "Crea una aplicación web sencilla que valida direcciones de correo y detecta correos desechables con la API Disposable Email Checker."
+      random-quote-generator:
+        title: "Generador de citas aleatorias"
+        description: "Crea una app web de citas inspiradoras con opciones para compartir en redes, usando la API Random Quotes."
+      lorem-ipsum-generator:
+        title: "Generador de Lorem Ipsum"
+        description: "Construye un generador de texto de relleno personalizable para diseñadores y desarrolladores con la API Lorem Ipsum."
+      api-testing-cli:
+        title: "Herramienta CLI para probar APIs"
+        description: "Crea una herramienta de línea de comandos para probar y supervisar endpoints de Requiems API con informes detallados."
+      daily-advice-bot:
+        title: "Bot de Slack con consejo diario"
+        description: "Construye un bot de Slack que publica un consejo diario en tu canal de equipo con la API Random Advice."
+      email-validation-service:
+        title: "Microservicio de validación de correo"
+        description: "Crea un microservicio REST que valida y enriquece direcciones de correo usando varias APIs de Requiems."

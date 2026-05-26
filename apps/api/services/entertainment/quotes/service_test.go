@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -17,29 +18,60 @@ type mockRow struct {
 
 func (m *mockRow) Scan(dest ...any) error { return m.scanFn(dest...) }
 
-// mockQuerier implements querier, always returning the same row.
+// mockQuerier implements quotesDB for single-row tests.
 type mockQuerier struct {
 	row pgx.Row
 }
 
-func (m *mockQuerier) QueryRow(_ context.Context, _ string, _ ...any) pgx.Row {
-	return m.row
+func (m *mockQuerier) QueryRow(_ context.Context, _ string, _ ...any) pgx.Row { return m.row }
+func (m *mockQuerier) Query(_ context.Context, _ string, _ ...any) (pgx.Rows, error) {
+	return &mockRows{}, nil
 }
 
-// multiMockQuerier implements querier returning a different row on each call.
-// This allows testing that results are returned in the same order as requests.
-type multiMockQuerier struct {
-	rows  []pgx.Row
-	index int
+// mockRows implements pgx.Rows for batch tests.
+// Set quotes for happy-path rows; set total+scanErr to simulate scan failures.
+type mockRows struct {
+	quotes  []Quote
+	total   int // used when simulating scan errors (quotes is nil)
+	index   int
+	err     error
+	scanErr error
 }
 
-func (m *multiMockQuerier) QueryRow(_ context.Context, _ string, _ ...any) pgx.Row {
-	if m.index >= len(m.rows) {
-		return m.rows[len(m.rows)-1]
+func (m *mockRows) Close()                                       {}
+func (m *mockRows) Err() error                                   { return m.err }
+func (m *mockRows) CommandTag() pgconn.CommandTag                { return pgconn.CommandTag{} }
+func (m *mockRows) FieldDescriptions() []pgconn.FieldDescription { return nil }
+func (m *mockRows) Values() ([]any, error)                       { return nil, nil }
+func (m *mockRows) RawValues() [][]byte                          { return nil }
+func (m *mockRows) Conn() *pgx.Conn                              { return nil }
+func (m *mockRows) Next() bool {
+	if m.quotes != nil {
+		return m.index < len(m.quotes)
 	}
-	row := m.rows[m.index]
+	return m.index < m.total
+}
+func (m *mockRows) Scan(dest ...any) error {
 	m.index++
-	return row
+	if m.scanErr != nil {
+		return m.scanErr
+	}
+	q := m.quotes[m.index-1]
+	*dest[0].(*int) = q.ID
+	*dest[1].(*string) = q.Text
+	*dest[2].(*string) = q.Author
+	return nil
+}
+
+// batchQuerier returns fixed rows from Query and a fixed row from QueryRow.
+type batchQuerier struct {
+	row  pgx.Row
+	rows *mockRows
+}
+
+func (b *batchQuerier) QueryRow(_ context.Context, _ string, _ ...any) pgx.Row { return b.row }
+func (b *batchQuerier) Query(_ context.Context, _ string, _ ...any) (pgx.Rows, error) {
+	return b.rows, nil
 }
 
 func newTestService(row pgx.Row) *Service {
@@ -115,14 +147,15 @@ func TestRandom_EmptyAuthorAllowed(t *testing.T) {
 
 func TestRandomBatch_ReturnsNQuotes(t *testing.T) {
 	t.Parallel()
-	svc := newTestService(&mockRow{
-		scanFn: func(dest ...any) error {
-			*dest[0].(*int) = 1
-			*dest[1].(*string) = "Test quote."
-			*dest[2].(*string) = "Test Author"
-			return nil
+	svc := &Service{db: &batchQuerier{
+		rows: &mockRows{
+			quotes: []Quote{
+				{ID: 1, Text: "Test quote.", Author: "Test Author"},
+				{ID: 2, Text: "Test quote.", Author: "Test Author"},
+				{ID: 3, Text: "Test quote.", Author: "Test Author"},
+			},
 		},
-	})
+	}}
 
 	got, err := svc.RandomBatch(context.Background(), 3)
 	require.NoError(t, err)
@@ -133,29 +166,23 @@ func TestRandomBatch_ReturnsNQuotes(t *testing.T) {
 
 func TestRandomBatch_ContinuesOnItemError(t *testing.T) {
 	t.Parallel()
-	// When a single quote fails to scan, the batch must not abort:
-	// it returns n zero-value Quotes with no error.
-	svc := newTestService(&mockRow{
-		scanFn: func(_ ...any) error { return pgx.ErrNoRows },
-	})
+	// Scan errors are skipped; the batch returns only successfully scanned rows.
+	svc := &Service{db: &batchQuerier{
+		rows: &mockRows{total: 2, scanErr: pgx.ErrNoRows},
+	}}
 
 	results, err := svc.RandomBatch(context.Background(), 2)
 	assert.NoError(t, err)
-	assert.Len(t, results, 2)
-	assert.Equal(t, 0, results[0].ID)
-	assert.Equal(t, "", results[0].Text)
+	assert.Empty(t, results)
 }
 
 func TestRandomBatch_SingleItem(t *testing.T) {
 	t.Parallel()
-	svc := newTestService(&mockRow{
-		scanFn: func(dest ...any) error {
-			*dest[0].(*int) = 5
-			*dest[1].(*string) = "One is enough."
-			*dest[2].(*string) = "Someone"
-			return nil
+	svc := &Service{db: &batchQuerier{
+		rows: &mockRows{
+			quotes: []Quote{{ID: 5, Text: "One is enough.", Author: "Someone"}},
 		},
-	})
+	}}
 
 	got, err := svc.RandomBatch(context.Background(), 1)
 	require.NoError(t, err)
@@ -177,24 +204,13 @@ func TestRandomBatch_InvalidCount(t *testing.T) {
 
 func TestRandomBatch_ReturnsResultsInOrder(t *testing.T) {
 	t.Parallel()
-	// Each call to QueryRow should return a different quote.
-	// The batch must preserve the order: result[0] comes from the first call, etc.
-	makeRow := func(id int, text, author string) pgx.Row {
-		return &mockRow{
-			scanFn: func(dest ...any) error {
-				*dest[0].(*int) = id
-				*dest[1].(*string) = text
-				*dest[2].(*string) = author
-				return nil
+	svc := &Service{db: &batchQuerier{
+		rows: &mockRows{
+			quotes: []Quote{
+				{ID: 1, Text: "First quote.", Author: "Author A"},
+				{ID: 2, Text: "Second quote.", Author: "Author B"},
+				{ID: 3, Text: "Third quote.", Author: "Author C"},
 			},
-		}
-	}
-
-	svc := &Service{db: &multiMockQuerier{
-		rows: []pgx.Row{
-			makeRow(1, "First quote.", "Author A"),
-			makeRow(2, "Second quote.", "Author B"),
-			makeRow(3, "Third quote.", "Author C"),
 		},
 	}}
 
