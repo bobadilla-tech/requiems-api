@@ -47,11 +47,10 @@ func get(t *testing.T, r chi.Router, path string) *httptest.ResponseRecorder {
 }
 
 func deHolidays() holidays.HolidayList {
-	parsed, _ := time.Parse("2006-01-02", "2026-01-01")
 	return holidays.HolidayList{
 		Country:  "DE",
 		Year:     2026,
-		Holidays: []holidays.Holiday{{Name: "New Year", Date: parsed}},
+		Holidays: []holidays.Holiday{{Name: "New Year", Date: "2026-01-01"}},
 		Total:    1,
 	}
 }
@@ -87,9 +86,8 @@ func TestBusinessCalendar_YearScopeNoMonth(t *testing.T) {
 func TestBusinessCalendar_NoHolidaysThisMonth(t *testing.T) {
 	t.Parallel()
 	// holidays only in January, request for February
-	parsed, _ := time.Parse("2006-01-02", "2026-01-01")
 	list := holidays.HolidayList{Country: "DE", Year: 2026,
-		Holidays: []holidays.Holiday{{Name: "New Year", Date: parsed}}}
+		Holidays: []holidays.Holiday{{Name: "New Year", Date: "2026-01-01"}}}
 	r := setupRouter(&stubHolidays{r: list}, &stubWorkingDays{n: 20})
 	w := get(t, r, "/business-calendar/DE?year=2026&month=2")
 	require.Equal(t, http.StatusOK, w.Code)
@@ -117,9 +115,8 @@ func TestBusinessCalendar_MissingCountry(t *testing.T) {
 func TestBusinessCalendar_NextHolidayNull(t *testing.T) {
 	t.Parallel()
 	// past holiday only — next_holiday should be null
-	parsed, _ := time.Parse("2006-01-02", "2000-01-01")
 	list := holidays.HolidayList{Country: "DE", Year: 2000,
-		Holidays: []holidays.Holiday{{Name: "Old Year", Date: parsed}}}
+		Holidays: []holidays.Holiday{{Name: "Old Year", Date: "2000-01-01"}}}
 	r := setupRouter(&stubHolidays{r: list}, &stubWorkingDays{n: 20})
 	w := get(t, r, "/business-calendar/DE?year=2000")
 	require.Equal(t, http.StatusOK, w.Code)

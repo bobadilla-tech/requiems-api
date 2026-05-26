@@ -199,7 +199,7 @@ func (s *Service) Score(ctx context.Context, req Request) (Result, error) {
 
 	return Result{
 		RiskScore: score,
-		IsSafe:    score < 0.5,
+		IsSafe:    score < 0.5 && !torDetected && !proxyDetected,
 		Flags:     flags,
 		Signals: Signals{
 			IPCountry:       ipCountry,

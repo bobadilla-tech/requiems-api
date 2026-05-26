@@ -247,7 +247,7 @@ func Compute(s Signals) ScoreResult {
 	}
 	confidence := math.Round(float64(present)/float64(totalSignals)*100) / 100
 
-	isSafe := score < 0.5 && confidence > 0.6
+	isSafe := score < 0.5 && confidence > 0.6 && !s.IsTOR && !s.IsProxy
 
 	return ScoreResult{
 		RiskScore:  score,
