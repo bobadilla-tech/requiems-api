@@ -4,7 +4,7 @@
  * Auto-runs before dev and deploy via predev/predeploy hooks.
  */
 
-import { writeFileSync, mkdirSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { buildOperation, buildSpec, loadAPIDoc, loadAPIDocs, loadCatalog } from "./helpers";

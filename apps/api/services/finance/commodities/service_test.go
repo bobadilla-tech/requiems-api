@@ -36,13 +36,6 @@ func TestHistoricalPrice_FieldsPresent(t *testing.T) {
 
 // ---- CommodityPrice ----
 
-func TestCommodityPrice_IsData(t *testing.T) {
-	t.Parallel()
-	// IsData() must be callable — verifies the interface is satisfied.
-	var c CommodityPrice
-	c.IsData()
-}
-
 func TestCommodityPrice_FullResponse(t *testing.T) {
 	t.Parallel()
 	cp := CommodityPrice{

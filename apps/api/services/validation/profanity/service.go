@@ -10,11 +10,33 @@ import (
 // detector is the default profanity detector shared across all requests.
 var detector = goaway.NewProfanityDetector()
 
+// Result is the response payload for the profanity check endpoint.
+type Result struct {
+	HasProfanity bool     `json:"has_profanity"`
+	Censored     string   `json:"censored"`
+	FlaggedWords []string `json:"flagged_words"`
+}
+
 // Service performs profanity detection and censoring.
 type Service struct{}
 
 // NewService returns a new profanity Service.
 func NewService() *Service { return &Service{} }
+
+// BatchResult is the per-item result returned by CheckBatch.
+type BatchResult struct {
+	Text   string `json:"text"`
+	Result Result `json:"result"`
+}
+
+// CheckBatch runs Check on each text and returns results in input order.
+func (s *Service) CheckBatch(ctx context.Context, texts []string) []BatchResult {
+	results := make([]BatchResult, len(texts))
+	for i, t := range texts {
+		results[i] = BatchResult{Text: t, Result: s.Check(ctx, t)}
+	}
+	return results
+}
 
 // Check inspects text for profanity, returning a censored copy of the text
 // and the deduplicated list of flagged words found.

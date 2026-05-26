@@ -135,7 +135,8 @@ endpoints:
               "category": "dragons",
               "error": "no facts found for category: dragons"
             }
-          ]
+          ],
+          "total": 3
         },
         "metadata": {
           "timestamp": "2026-01-01T00:00:00Z"
@@ -145,6 +146,9 @@ endpoints:
       - name: results
         type: array
         description: One entry per requested category, in input order.
+      - name: total
+        type: integer
+        description: Number of entries in `results`.  
 
       - name: results[].category
         type: string

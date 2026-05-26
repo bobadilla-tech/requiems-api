@@ -1,6 +1,7 @@
 package timezone
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -8,6 +9,19 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+
+// Request holds the query parameters for the timezone endpoint.
+// Either lat+lon together, or city must be provided.
+type Request struct {
+	Lat  float64 `query:"lat" validate:"min=-90,max=90"`
+	Lon  float64 `query:"lon" validate:"min=-180,max=180"`
+	City string  `query:"city"`
+}
+
+// BatchTimezoneRequest is the input for the batch timezone endpoint.
+type BatchTimezoneRequest struct {
+	Items []Query `json:"items" validate:"required,min=1,max=50,dive"`
+}
 
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/time/*", httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
@@ -27,6 +41,12 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	}))
 
 	r.Get("/timezone", httpx.Guard(svc, handleGetTimezone(svc)))
+
+	r.Post("/timezone/batch", httpx.Guard(svc, httpx.HandleBatch(
+		func(_ context.Context, req BatchTimezoneRequest) (httpx.BatchResponse[BatchResult], error) {
+			return httpx.BatchResponse[BatchResult]{Results: svc.BatchLookup(req.Items)}, nil
+		},
+	)))
 }
 
 func handleGetTimezone(svc *Service) http.HandlerFunc {

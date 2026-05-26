@@ -52,13 +52,17 @@
     <% end %>
     <link rel="alternate" hreflang="x-default" href="https://requiems.xyz/<%= I18n.default_locale %><%= base_path %>">
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <%= favicon_link_tag "logo.png", rel: "icon", type: "image/png" %>
     <%= favicon_link_tag "logo.png", rel: "apple-touch-icon" %>
+    <link rel="shortcut icon" href="/favicon.ico">
 
     <script type="application/ld+json"><%= organization_json_ld.html_safe %></script>
+    <script type="application/ld+json"><%= website_json_ld.html_safe %></script>
+    <% if (bc = breadcrumb_json_ld) %>
+      <script type="application/ld+json"><%= bc.html_safe %></script>
+    <% end %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

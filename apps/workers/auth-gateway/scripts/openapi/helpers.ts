@@ -1,9 +1,9 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import yaml from "js-yaml";
 
-import type { YamlError, YamlEndpoint, CatalogEntry, YamlApiDoc } from "./types";
+import type { CatalogEntry, YamlApiDoc, YamlEndpoint, YamlError } from "./types";
 import { apiDocsDir, baseSpec, catalogPath, METHODS_WITH_BODY, TYPE_SCHEMAS } from "./constants";
 
 export function yamlTypeToSchema(type: string): Record<string, unknown> {

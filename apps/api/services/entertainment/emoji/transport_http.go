@@ -1,6 +1,7 @@
 package emoji
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -9,6 +10,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// SearchRequest holds the query parameter for emoji search.
+type SearchRequest struct {
+	Query string `query:"q" validate:"required,min=1,max=100"`
+}
+
 // RegisterRoutes mounts emoji handlers on the given router.
 // Paths are relative to the parent mount point (/v1/entertainment).
 func RegisterRoutes(r chi.Router, svc *Service) {
@@ -16,15 +22,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		httpx.JSON(w, http.StatusOK, svc.Random())
 	})
 
-	r.Get("/emoji/search", func(w http.ResponseWriter, r *http.Request) {
-		req := SearchRequest{}
-		if err := httpx.BindQuery(r, &req); err != nil {
-			httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-			return
-		}
-
-		httpx.JSON(w, http.StatusOK, svc.Search(req.Query))
-	})
+	r.Get("/emoji/search", httpx.HandleGet(func(ctx context.Context, req SearchRequest) (List, error) {
+		return svc.Search(req.Query), nil
+	}))
 
 	r.Get("/emoji/{name}", func(w http.ResponseWriter, r *http.Request) {
 		name := strings.ToLower(chi.URLParam(r, "name"))

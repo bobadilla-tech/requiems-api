@@ -66,6 +66,17 @@ func TestAnalyze_Negation(t *testing.T) {
 	assert.True(t, withNeg.Breakdown.Positive < withoutNeg.Breakdown.Positive, "negation should reduce positive score: negated=%.2f plain=%.2f", withNeg.Breakdown.Positive, withoutNeg.Breakdown.Positive)
 }
 
+func TestAnalyze_ContractionNegation(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	result := svc.Analyze("I don't like this product.")
+	assert.Equal(t, "negative", result.Sentiment)
+	assert.True(t, result.Breakdown.Negative > result.Breakdown.Positive,
+		"contraction negation should yield negative: neg=%.2f pos=%.2f",
+		result.Breakdown.Negative, result.Breakdown.Positive)
+}
+
 func TestAnalyze_Intensifier(t *testing.T) {
 	t.Parallel()
 	svc := NewService()

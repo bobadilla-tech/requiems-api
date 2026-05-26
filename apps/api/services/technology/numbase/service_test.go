@@ -8,6 +8,29 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestService_ConvertBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	items := []ConvertQuery{
+		{From: 10, To: 16, Value: "255"},
+		{From: 2, To: 10, Value: "11111111"},
+		{From: 10, To: 16, Value: "xyz"},
+	}
+	results := svc.ConvertBatch(items)
+
+	require.Len(t, results, 3)
+
+	assert.Equal(t, "ff", results[0].Result)
+	assert.Empty(t, results[0].Error)
+
+	assert.Equal(t, "255", results[1].Result)
+	assert.Empty(t, results[1].Error)
+
+	assert.Empty(t, results[2].Result)
+	assert.NotEmpty(t, results[2].Error)
+}
+
 func TestService_Convert(t *testing.T) {
 	t.Parallel()
 	svc := NewService()

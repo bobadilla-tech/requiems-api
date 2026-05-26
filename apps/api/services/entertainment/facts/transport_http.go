@@ -1,14 +1,24 @@
 package facts
 
 import (
+	"context"
 	"net/http"
 	"strings"
-	"context"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
 )
+
+// Request holds optional query parameters for the facts endpoint.
+type Request struct {
+	Category string `query:"category"`
+}
+
+// BatchRequest holds the request payload for the batch facts endpoint.
+type BatchRequest struct {
+	Categories []string `json:"categories" validate:"required,min=1,max=50,dive"`
+}
 
 // RegisterRoutes mounts facts handlers on the given router.
 // Paths are relative to the parent mount point (e.g. /v1/entertainment).

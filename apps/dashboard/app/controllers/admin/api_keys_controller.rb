@@ -28,25 +28,26 @@ class Admin::ApiKeysController < ApplicationController
 
   def revoke
     if @api_key.revoke!(reason: "Revoked by admin #{current_user.email}")
-      redirect_to admin_api_key_path(@api_key), notice: "API key revoked successfully."
+      redirect_to admin_api_key_path(@api_key), notice: t("admin.api_keys.revoke_success")
     else
-      redirect_to admin_api_key_path(@api_key), alert: "Failed to revoke API key."
+      redirect_to admin_api_key_path(@api_key), alert: t("admin.api_keys.revoke_error")
     end
   rescue StandardError => e
-    redirect_to admin_api_key_path(@api_key), alert: "Failed to revoke API key: #{e.message}"
+    Rails.logger.error "[Admin::ApiKeysController#revoke] #{e.class}: #{e.message}\n#{e.backtrace.first(5).join("\n")}"
+    redirect_to admin_api_key_path(@api_key), alert: t("admin.api_keys.revoke_error")
   end
 
   private
 
   def require_admin!
     unless current_user.admin?
-      redirect_to root_path, alert: "Access denied. Admin privileges required."
+      redirect_to root_path, alert: t("admin.access_denied")
     end
   end
 
   def set_api_key
     @api_key = ApiKey.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to admin_api_keys_path, alert: "API key not found."
+    redirect_to admin_api_keys_path, alert: t("admin.api_keys.not_found")
   end
 end

@@ -9,6 +9,17 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+// Request holds the query parameters for the sudoku endpoint.
+type Request struct {
+	Difficulty string `query:"difficulty" validate:"omitempty,oneof=easy medium hard"`
+}
+
+// BatchRequest is the body for generating multiple Sudoku puzzles in a single request.
+// Each element must be one of: easy, medium, hard.
+type BatchRequest struct {
+	Puzzles []string `json:"puzzles" validate:"required,min=1,max=20,dive,oneof=easy medium hard"`
+}
+
 // RegisterRoutes mounts sudoku handlers on the given router.
 // Paths are relative to the parent mount point (e.g. /v1/entertainment).
 func RegisterRoutes(r chi.Router, svc *Service) {

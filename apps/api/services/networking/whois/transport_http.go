@@ -12,6 +12,11 @@ import (
 	"requiems-api/platform/middleware"
 )
 
+// BatchLookupRequest is the body for looking up multiple domains at once.
+type BatchLookupRequest struct {
+	Domains []string `json:"domains" validate:"required,min=1,max=50,dive,required,hostname_rfc1123"`
+}
+
 // domainPattern matches valid domain names (e.g., "example.com", "sub.example.co.uk").
 var domainPattern = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)+$`)
 

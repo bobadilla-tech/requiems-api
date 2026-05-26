@@ -5,22 +5,47 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	"requiems-api/platform/db"
 	"requiems-api/platform/svcerr"
 )
 
-type querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+type Word struct {
+	ID           int    `json:"id"`
+	Word         string `json:"word"`
+	Definition   string `json:"definition"`
+	PartOfSpeech string `json:"part_of_speech,omitempty"`
+}
+
+// Definition represents a single definition entry for a word.
+type Definition struct {
+	PartOfSpeech string `json:"part_of_speech"`
+	Definition   string `json:"definition"`
+	Example      string `json:"example,omitempty"`
+}
+
+// DictionaryEntry is the response payload for the dictionary endpoint.
+type DictionaryEntry struct {
+	Word        string       `json:"word"`
+	Phonetic    string       `json:"phonetic,omitempty"`
+	Definitions []Definition `json:"definitions"`
+	Synonyms    []string     `json:"synonyms"`
+}
+
+type BatchItem struct {
+	Word  string           `json:"word"`
+	Found bool             `json:"found"`
+	Entry *DictionaryEntry `json:"entry,omitempty"`
+	Error string           `json:"error,omitempty"`
 }
 
 type Service struct {
-	db querier
+	db db.Querier
 }
 
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 func (s *Service) Random(ctx context.Context) (Word, error) {

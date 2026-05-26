@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -105,4 +106,86 @@ func TestHoroscope_DailyConsistency(t *testing.T) {
 	assert.Equal(t, h1.Horoscope, h2.Horoscope, "expected same horoscope for same sign on same day")
 	assert.Equal(t, h1.LuckyNumber, h2.LuckyNumber, "expected same lucky_number for same sign on same day")
 	assert.Equal(t, h1.Mood, h2.Mood, "expected same mood for same sign on same day")
+}
+
+func TestHoroscope_DailyBatch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	signs := []string{"taurus", "aries", "gemini", "cancer"}
+
+	bodyJSON, err := json.Marshal(BatchRequest{Signs: signs})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/horoscope/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Contains(t, w.Header().Get("Content-Type"), "application/json")
+
+	var resp httpx.Response[httpx.BatchResponse[Horoscope]]
+	err = json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	require.Equal(t, 4, resp.Data.Total)
+	require.Len(t, resp.Data.Results, 4)
+}
+
+func TestHoroscope_DailyBatch_EmptySigns(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	bodyJSON, err := json.Marshal(BatchRequest{Signs: []string{}})
+	require.NoError(t, err)
+	req := httptest.NewRequest(http.MethodPost, "/horoscope/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestHoroscope_DailyBatch_ExceedsLimit(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	signs := make([]string, 13)
+
+	for i := range signs {
+		signs[i] = "cancer"
+	}
+
+	signsJSON, err := json.Marshal(BatchRequest{
+		Signs: signs,
+	})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/horoscope/batch", strings.NewReader(string(signsJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+
+}
+
+func TestHoroscope_DailyBatch_SetUsageCountHeader(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	signs := []string{"taurus", "aries", "gemini", "cancer"}
+
+	bodyJSON, err := json.Marshal(BatchRequest{Signs: signs})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, "/horoscope/batch", strings.NewReader(string(bodyJSON)))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	require.Equal(t, "4", w.Header().Get("X-Usage-Count"))
 }

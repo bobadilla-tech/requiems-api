@@ -3,7 +3,19 @@ pages:
     description: Problem-first overviews of every API division—validation, finance, places, and more
     url: /divisions
     icon: "🧭"
-    tags: [divisions, overview, marketing, validation, finance, places, networking, text, tools, entertainment, health]
+    tags: [
+      divisions,
+      overview,
+      marketing,
+      validation,
+      finance,
+      places,
+      networking,
+      text,
+      tools,
+      entertainment,
+      health,
+    ]
 
   - title: Validation APIs (overview)
     description: Stop bad emails, phones, and toxic content with validation APIs explained for business readers

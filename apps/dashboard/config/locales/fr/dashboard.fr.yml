@@ -45,6 +45,13 @@ fr:
     api_keys:
       title: "Clés API"
       subtitle: "Gérez vos clés API et vos identifiants d'accès"
+      flash:
+        created: "Clé API créée avec succès. Copiez-la maintenant : vous ne pourrez plus la voir."
+        regenerated: "Clé API régénérée avec succès. Copiez-la maintenant : vous ne pourrez plus la voir."
+        cannot_regenerate_revoked: "Impossible de régénérer une clé révoquée. Veuillez en créer une nouvelle."
+        revoked: "Clé API révoquée avec succès."
+        revoke_error: "Échec de la révocation de la clé API."
+        not_found: "Clé API introuvable."
       create_btn: "Créer une clé"
       info_heading: "Informations importantes"
       info_shared_label: "Quota partagé :"
@@ -119,6 +126,13 @@ fr:
     billing:
       title: "Facturation et abonnement"
       subtitle: "Gérez votre formule, votre moyen de paiement et l'historique de facturation"
+      flash:
+        activated: "Abonnement activé avec succès. Votre nouvelle formule est maintenant active."
+        canceled: "Le paiement a été annulé. Votre abonnement n'a pas été modifié."
+        invalid_plan: "Formule sélectionnée invalide"
+        promotional_no_portal: "Les formules promotionnelles n'ont pas de portail client."
+        no_subscription: "Aucun abonnement actif trouvé"
+        no_subscription_to_cancel: "Aucun abonnement actif à annuler"
       plan_notice:
         heading: "Prêt pour %{plan} ?"
         body: "Faites défiler pour les détails de la formule %{plan} et démarrer votre essai gratuit de 7 jours !"
@@ -187,6 +201,14 @@ fr:
     settings:
       title: "Paramètres"
       subtitle: "Préférences de compte et sécurité"
+      flash:
+        email_confirm: "Paramètres mis à jour. Vérifiez votre e-mail pour confirmer la nouvelle adresse."
+        updated: "Paramètres mis à jour avec succès."
+        error: "Échec de la mise à jour des paramètres. Vérifiez le formulaire."
+        reason_too_short: "Veuillez indiquer un motif (au moins 10 caractères)."
+        deletion_email_sent: "Vérifiez votre e-mail : nous avons envoyé un lien de confirmation. Il expire dans 1 heure."
+        invalid_token: "Ce lien est invalide ou a expiré. Veuillez en demander un nouveau."
+        deleted: "Votre compte a été définitivement supprimé. Nous sommes désolés de vous voir partir."
       errors:
         one: "%{count} erreur a empêché l'enregistrement :"
         other: "%{count} erreurs ont empêché l'enregistrement :"
@@ -351,6 +373,24 @@ fr:
         consequence_3: "Toutes les données d'utilisation et l'historique seront définitivement supprimés"
         ignore_notice: "Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail : votre compte ne sera pas supprimé."
         contact_notice_html: "En cas de doute, contactez-nous à %{email_link}."
+      private_deployments:
+        request_received:
+          subject: "Demande reçue : déploiement privé Requiems"
+          header_title: "Demande reçue"
+          header_subtitle: "Votre déploiement privé est en préparation"
+          greeting: "Bonjour %{name},"
+          intro: "Nous avons reçu votre demande de déploiement privé pour %{company}. Votre environnement API dédié sera prêt sous 24 à 48 heures."
+          notify: "Nous vous enverrons un e-mail dès qu'il sera en ligne."
+          order_summary: "Récapitulatif de commande"
+          server_tier: "Niveau de serveur"
+          monthly_price: "Prix mensuel"
+          selected_services: "Services sélectionnés"
+          what_next: "Prochaines étapes :"
+          what_next_detail: "Nous provisionnerons votre VPS Hetzner, configurerons votre API Go privée avec uniquement les services choisis et votre sous-domaine sur yourcompany.requiems.xyz. Une fois en ligne, vous recevrez un second e-mail avec l'URL et les informations d'authentification."
+          docs_notice_html: "En attendant, explorez notre documentation API sur %{docs_link}."
+          docs_notice: "En attendant, explorez notre documentation API sur %{docs_link}."
+          questions: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
+          questions_html: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
 
     private_deployments:
       new:

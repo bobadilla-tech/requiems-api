@@ -42,7 +42,7 @@ gem "devise", "~> 5.0"
 gem "pundit", "~> 2.3"
 
 # HTTP client for Cloudflare API
-gem "faraday", "~> 2.7"
+gem "faraday", "~> 2.14"
 gem "faraday-retry", "~> 2.2"
 
 # API key generation
@@ -98,4 +98,5 @@ group :development do
   gem "web-console"
   gem "letter_opener_web", "~> 3.0"
   gem "ruby-lsp", require: false
+  gem "i18n-tasks", "~> 1.0"
 end

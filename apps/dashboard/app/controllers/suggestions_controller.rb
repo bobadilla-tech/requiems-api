@@ -10,14 +10,14 @@ class SuggestionsController < ApplicationController
       # Send email to observers
       SuggestionMailer.new_suggestion(suggestion_params).deliver_now
 
-      redirect_to root_path, notice: "Thank you for your suggestion! We'll review it shortly and usually reply within 24 hours."
+      redirect_to root_path, notice: t("suggestions.flash.success")
     else
-      flash.now[:alert] = "Please fill in all required fields."
+      flash.now[:alert] = t("suggestions.flash.missing_fields")
       render :new, status: :unprocessable_entity
     end
   rescue StandardError => e
     Rails.logger.error "Failed to send suggestion email: #{e.message}"
-    flash.now[:alert] = "Sorry, there was an error submitting your suggestion. Please try again later."
+    flash.now[:alert] = t("suggestions.flash.error")
     render :new, status: :unprocessable_entity
   end
 

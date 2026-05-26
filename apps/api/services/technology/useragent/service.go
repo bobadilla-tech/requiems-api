@@ -1,11 +1,22 @@
 package useragent
 
 import (
+	"context"
 	"regexp"
 	"strings"
 
 	ua "github.com/medama-io/go-useragent"
 )
+
+// Result holds parsed user agent information.
+type Result struct {
+	Browser        string `json:"browser"`
+	BrowserVersion string `json:"browser_version"`
+	OS             string `json:"os"`
+	OSVersion      string `json:"os_version"`
+	Device         string `json:"device"`
+	IsBot          bool   `json:"is_bot"`
+}
 
 // osVersionRegexes maps OS names (as returned by the library) to regexes that
 // extract the version string from the raw UA.
@@ -108,4 +119,18 @@ func extractOSVersion(uaStr, libOS string) string {
 		}
 	}
 	return v
+}
+
+// ParseBatch parses multiple user agents in a single call and returns the results in the same order as the input.
+func (s *Service) ParseBatch(ctx context.Context, uas []string) []BatchParseItem {
+	results := make([]BatchParseItem, len(uas))
+
+	for i, ua := range uas {
+		results[i] = BatchParseItem{
+			UserAgent: ua,
+			Data:      s.Parse(ua),
+		}
+	}
+
+	return results
 }

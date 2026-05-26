@@ -1,17 +1,32 @@
 package facts
 
 import (
+	"context"
 	"fmt"
 	"math/rand/v2"
-	"context"
-	
+
 	"requiems-api/platform/httpx"
 )
 
+// Fact is the response payload for a single random fact.
+type Fact struct {
+	Fact     string `json:"fact"`
+	Category string `json:"category"`
+	Source   string `json:"source"`
+}
 type entry struct {
 	fact     string
 	category string
 	source   string
+}
+
+// BatchItem is a single result in a batch response.
+// If a category is invalid or has no facts, Error is set and Fact is zero.
+type BatchItem struct {
+	Category string `json:"category"`
+	Fact     string `json:"fact,omitempty"`
+	Source   string `json:"source,omitempty"`
+	Error    string `json:"error,omitempty"`
 }
 
 var database = []entry{
@@ -97,7 +112,7 @@ func (s *Service) Random(category string) (Fact, error) {
 		}
 	}
 
-	e := pool[rand.IntN(len(pool))] //nolint:gosec // non-security random selection; crypto/rand not needed here
+	e := pool[rand.IntN(len(pool))] //nolint:gosec // non-cryptographic randomness is fine for fact selection
 	return Fact{
 		Fact:     e.fact,
 		Category: e.category,
@@ -122,7 +137,7 @@ func (s *Service) RandomBatch(ctx context.Context, categories []string) httpx.Ba
 			}
 			continue
 		}
-		e := pool[rand.IntN(len(pool))] //nolint:gosec
+		e := pool[rand.IntN(len(pool))] //nolint:gosec // non-cryptographic randomness is fine for fact selection
 		results[i] = BatchItem{
 			Category: e.category,
 			Fact:     e.fact,

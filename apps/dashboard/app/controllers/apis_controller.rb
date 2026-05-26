@@ -15,7 +15,7 @@ class ApisController < ApplicationController
     @api = find_api(params[:id])
 
     if @api.nil?
-      redirect_to apis_path, alert: "API not found"
+      redirect_to apis_path, alert: t("apis.flash.not_found")
       return
     end
 
@@ -24,7 +24,7 @@ class ApisController < ApplicationController
     @documentation = api_documentation(params[:id])
 
     if @documentation.nil?
-      redirect_to apis_path, alert: "Documentation not available for this API yet"
+      redirect_to apis_path, alert: t("apis.flash.no_documentation")
       nil
     end
   end

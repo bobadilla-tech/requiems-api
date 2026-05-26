@@ -61,6 +61,30 @@ var addrSpecRe = regexp.MustCompile(
 		`)$`,
 )
 
+// Validation is the full validation result for an email address.
+type Validation struct {
+	Email       *string `json:"email"`
+	Valid       bool    `json:"valid"`
+	SyntaxValid bool    `json:"syntax_valid"`
+	MxValid     bool    `json:"mx_valid"`
+	Disposable  bool    `json:"disposable"`
+	Normalized  *string `json:"normalized"`
+	Domain      *string `json:"domain"`
+	Suggestion  *string `json:"suggestion"`
+}
+
+// BatchItem holds the result for a single email in a batch request.
+type BatchItem struct {
+	Email       *string `json:"email"`
+	Valid       bool    `json:"valid"`
+	SyntaxValid bool    `json:"syntax_valid"`
+	MXValid     bool    `json:"mx_valid"`
+	Disposable  bool    `json:"disposable"`
+	Normalized  *string `json:"normalized,omitempty"`
+	Domain      *string `json:"domain,omitempty"`
+	Suggestion  *string `json:"suggestion,omitempty"`
+}
+
 // Service validates email addresses.
 type Service struct {
 	n *normalizer.Normalizer

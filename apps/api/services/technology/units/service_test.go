@@ -214,12 +214,6 @@ func TestService_Units(t *testing.T) {
 	}
 }
 
-func TestTypes_IsData(t *testing.T) {
-	t.Parallel()
-	Result{}.IsData()
-	Results{}.IsData()
-}
-
 func TestService_ConvertBatch(t *testing.T) {
 	t.Parallel()
 	svc := NewService()

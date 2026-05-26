@@ -12,12 +12,52 @@ const (
 	charsetSymbols = "!@#$%^&*()-_=+[]{}|;:,.<>?"
 )
 
+// Password is the response payload for the password generator.
+type Password struct {
+	Password string `json:"password"` //nolint:gosec // intentional: this is the generated password value, not a secret
+	Length   int    `json:"length"`
+	Strength string `json:"strength"`
+}
+
+// Query is the per-item input for the batch password endpoint.
+type Query struct {
+	Length    int  `json:"length"    validate:"omitempty,min=8,max=128"`
+	Uppercase bool `json:"uppercase"`
+	Numbers   bool `json:"numbers"`
+	Symbols   bool `json:"symbols"`
+}
+
+// BatchResult is the per-item result returned by GenerateBatch.
+type BatchResult struct {
+	Result *Password `json:"result,omitempty"`
+	Error  string    `json:"error,omitempty"`
+}
+
 // Service generates cryptographically secure passwords.
 type Service struct{}
 
 // NewService returns a new Service instance.
 func NewService() *Service {
 	return &Service{}
+}
+
+// GenerateBatch generates a password for each item and returns results in input order.
+// A Length of 0 defaults to 16. Per-item errors are absorbed in-band.
+func (s *Service) GenerateBatch(items []Query) []BatchResult {
+	results := make([]BatchResult, len(items))
+	for i, item := range items {
+		length := item.Length
+		if length == 0 {
+			length = 16
+		}
+		p, err := s.Generate(length, item.Uppercase, item.Numbers, item.Symbols)
+		if err != nil {
+			results[i] = BatchResult{Error: err.Error()}
+		} else {
+			results[i] = BatchResult{Result: &p}
+		}
+	}
+	return results
 }
 
 // Generate builds a random password from the requested character sets and
