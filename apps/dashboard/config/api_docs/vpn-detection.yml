@@ -142,9 +142,10 @@ endpoints:
           - 1.1.1.1
           - 2001:4860:4860::8888
 
-    response_example: |
+    response_example: 
       {
         "data": {
+          "total": 3,
           "results": [
             {
               "ip": "8.8.8.8",
@@ -187,6 +188,10 @@ endpoints:
       }
 
     response_fields:
+      - name: total
+        type: integer
+        description: Total number of processed IP results.
+        
       - name: results
         type: array
         description: List of IP detection results (preserves input order)

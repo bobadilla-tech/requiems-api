@@ -3,6 +3,7 @@ package vpn
 import (
 	"context"
 	"net"
+	"errors"
 
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 )
@@ -63,6 +64,13 @@ func (s *Service) CheckBatch(ctx context.Context, ips []string) (BatchResponse, 
 
 			result, err := s.CheckIP(ctx, ip)
 			if err != nil {
+				if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+					ch <- item{
+						index: index,
+						result: IPCheckResponse{}, // marker slot; handled after fan-in
+					}
+				return
+				}
 				ch <- item{
 					index: index,
 					result: IPCheckResponse{
