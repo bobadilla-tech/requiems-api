@@ -29,8 +29,10 @@ func RegisterRoutes(r chi.Router, deps Deps) {
 	validateSvc := paymentvalidate.NewService(binSvc, ibanSvc, swiftSvc)
 	paymentvalidate.RegisterRoutes(r, validateSvc)
 
-	vpnSvc := ipvpn.NewService(deps.IPIClient)
-	infoSvc := ipinfo.NewService(deps.IPIClient)
-	riskSvc := transactionrisk.NewService(binSvc, vpnSvc, infoSvc)
-	transactionrisk.RegisterRoutes(r, riskSvc)
+	if deps.IPIClient != nil {
+		vpnSvc := ipvpn.NewService(deps.IPIClient)
+		infoSvc := ipinfo.NewService(deps.IPIClient)
+		riskSvc := transactionrisk.NewService(binSvc, vpnSvc, infoSvc)
+		transactionrisk.RegisterRoutes(r, riskSvc)
+	}
 }

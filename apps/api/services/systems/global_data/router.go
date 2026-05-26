@@ -41,11 +41,15 @@ func RegisterRoutes(r chi.Router, deps Deps) {
 	calSvc := businesscalendar.NewService(holidaysSvc, workingDaysSvc)
 	businesscalendar.RegisterRoutes(r, calSvc)
 
-	infoSvc := ipinfo.NewService(deps.IPIClient)
-	tzIPSvc := timezoneip.NewService(infoSvc, timezoneSvc)
-	timezoneip.RegisterRoutes(r, tzIPSvc)
+	if deps.IPIClient != nil && timezoneSvc != nil {
+		infoSvc := ipinfo.NewService(deps.IPIClient)
+		tzIPSvc := timezoneip.NewService(infoSvc, timezoneSvc)
+		timezoneip.RegisterRoutes(r, tzIPSvc)
+	}
 
 	geocodeSvc := geocode.NewService(deps.Cfg.NominatimURL, &http.Client{Timeout: 10 * time.Second}, deps.RDB)
-	locSvc := locationresolve.NewService(geocodeSvc, timezoneSvc, holidaysSvc, workingDaysSvc)
-	locationresolve.RegisterRoutes(r, locSvc)
+	if timezoneSvc != nil {
+		locSvc := locationresolve.NewService(geocodeSvc, timezoneSvc, holidaysSvc, workingDaysSvc)
+		locationresolve.RegisterRoutes(r, locSvc)
+	}
 }

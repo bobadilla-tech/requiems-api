@@ -129,7 +129,7 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	}()
 
 	parsedIP := net.ParseIP(req.IPAddress)
-	if req.IPAddress != "" && parsedIP != nil {
+	if req.IPAddress != "" && parsedIP != nil && s.vpn != nil {
 		wg.Go(func() {
 			r, err := s.vpn.CheckIP(ctx, parsedIP)
 			vpnCh <- vpnOut{r, err}
@@ -149,7 +149,7 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	score := 0.0
 	servicesResolved := 2 // email + domain always count
 	servicesTotal := 2
-	if req.IPAddress != "" && parsedIP != nil {
+	if req.IPAddress != "" && parsedIP != nil && s.vpn != nil {
 		servicesTotal++
 	}
 

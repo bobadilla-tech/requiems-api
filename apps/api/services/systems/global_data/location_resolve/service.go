@@ -79,14 +79,15 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		lat = req.Coordinates.Lat
 		lon = req.Coordinates.Lng
 		rev, err := s.geocoder.ReverseGeocode(ctx, lat, lon)
-		if err == nil {
-			address = rev.Address
-			city = rev.City
-			country = rev.Country
-			countryCode = rev.Country // nominatim returns country_code in Country field (uppercase)
-			if req.CountryCode != "" {
-				countryCode = req.CountryCode
-			}
+		if err != nil {
+			return Result{}, err
+		}
+		address = rev.Address
+		city = rev.City
+		country = rev.Country
+		countryCode = rev.Country // nominatim returns country_code in Country field (uppercase)
+		if req.CountryCode != "" {
+			countryCode = req.CountryCode
 		}
 	case req.Address != "":
 		res, err := s.geocoder.Geocode(ctx, req.Address)

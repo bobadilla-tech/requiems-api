@@ -82,37 +82,36 @@ func Resolve(
 
 	parsedIP := net.ParseIP(ipAddr)
 	if ipAddr != "" && parsedIP != nil {
-		wg.Add(2)
-
-		go func() {
-			defer wg.Done()
-			r, err := vpnSvc.CheckIP(ctx, parsedIP)
-			if err != nil {
-				return
-			}
-			mu.Lock()
-			out.VPNResult = &r
-			out.Signals.IPPresent = true
-			out.Signals.IsTOR = r.IsTor
-			out.Signals.IsProxy = r.IsProxy
-			out.Signals.IsVPN = r.IsVPN
-			out.Signals.IsHosting = r.IsHosting
-			out.Signals.FraudScore = r.FraudScore
-			mu.Unlock()
-		}()
-
-		go func() {
-			defer wg.Done()
-			r, err := ipInfoSvc.CheckInfo(ctx, ipAddr)
-			if err != nil {
-				return
-			}
-			mu.Lock()
-			out.IPResult = &r
-			out.Signals.IPCountry = r.CountryCode
-			out.Signals.IPPresent = true
-			mu.Unlock()
-		}()
+		if vpnSvc != nil {
+			wg.Go(func() {
+				r, err := vpnSvc.CheckIP(ctx, parsedIP)
+				if err != nil {
+					return
+				}
+				mu.Lock()
+				out.VPNResult = &r
+				out.Signals.IPPresent = true
+				out.Signals.IsTOR = r.IsTor
+				out.Signals.IsProxy = r.IsProxy
+				out.Signals.IsVPN = r.IsVPN
+				out.Signals.IsHosting = r.IsHosting
+				out.Signals.FraudScore = r.FraudScore
+				mu.Unlock()
+			})
+		}
+		if ipInfoSvc != nil {
+			wg.Go(func() {
+				r, err := ipInfoSvc.CheckInfo(ctx, ipAddr)
+				if err != nil {
+					return
+				}
+				mu.Lock()
+				out.IPResult = &r
+				out.Signals.IPCountry = r.CountryCode
+				out.Signals.IPPresent = true
+				mu.Unlock()
+			})
+		}
 	}
 
 	wg.Wait()

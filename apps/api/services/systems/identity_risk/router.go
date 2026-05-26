@@ -10,9 +10,10 @@ import (
 	ipvpn "requiems-api/services/networking/ip/vpn"
 	"requiems-api/services/networking/mx"
 	"requiems-api/services/networking/whois"
-	"requiems-api/services/systems/identity_risk/risk_score"
-	"requiems-api/services/systems/identity_risk/signup_protect"
-	"requiems-api/services/systems/identity_risk/user_verify"
+	"requiems-api/services/systems/identity_risk/internal/scorer"
+	riskscore "requiems-api/services/systems/identity_risk/risk_score"
+	signupprotect "requiems-api/services/systems/identity_risk/signup_protect"
+	userverify "requiems-api/services/systems/identity_risk/user_verify"
 	"requiems-api/services/validation/email"
 	"requiems-api/services/validation/phone"
 )
@@ -28,8 +29,15 @@ func RegisterRoutes(r chi.Router, deps Deps) {
 	emailSvc := email.NewService()
 	phoneSvc := phone.NewService()
 
-	vpnSvc := ipvpn.NewService(deps.IPIClient)
-	infoSvc := ipinfo.NewService(deps.IPIClient)
+	// Use interface-typed vars so nil is a true nil interface (not a non-nil
+	// interface wrapping a nil concrete pointer), preventing panics in the
+	// scorer when an IP address is supplied but the IPI client is unavailable.
+	var vpnSvc scorer.VPNChecker
+	var infoSvc scorer.IPInfoChecker
+	if deps.IPIClient != nil {
+		vpnSvc = ipvpn.NewService(deps.IPIClient)
+		infoSvc = ipinfo.NewService(deps.IPIClient)
+	}
 
 	riskSvc := riskscore.NewService(emailSvc, phoneSvc, vpnSvc, infoSvc)
 	riskscore.RegisterRoutes(r, riskSvc)
