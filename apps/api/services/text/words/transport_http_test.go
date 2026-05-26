@@ -269,7 +269,7 @@ func TestWordsBatch_TooManyItems(t *testing.T) {
 	r := setupRouter()
 
 	items := make([]string, 51)
-	for i := 0; i < 51; i++ {
+	for i := range 51 {
 		items[i] = "ephemeral"
 	}
 

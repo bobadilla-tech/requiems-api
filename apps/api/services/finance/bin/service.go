@@ -246,7 +246,7 @@ func atoiN(s string, n int) int {
 		return 0
 	}
 	v := 0
-	for i := 0; i < n; i++ {
+	for i := range n {
 		b := s[i]
 		if b < '0' || b > '9' {
 			return 0

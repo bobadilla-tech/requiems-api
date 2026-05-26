@@ -90,34 +90,28 @@ func (s *Service) Validate(ctx context.Context, req Request) (Result, error) {
 	var wg sync.WaitGroup
 
 	if req.BIN != "" {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r, err := s.bin.Lookup(ctx, req.BIN)
 			binCh <- binOut{r, err}
-		}()
+		})
 	} else {
 		binCh <- binOut{}
 	}
 
 	if req.IBAN != "" {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r, err := s.iban.Parse(ctx, req.IBAN)
 			ibanCh <- ibanOut{r, err}
-		}()
+		})
 	} else {
 		ibanCh <- ibanOut{}
 	}
 
 	if req.SWIFT != "" {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r, err := s.swift.Lookup(ctx, req.SWIFT)
 			swiftCh <- swiftOut{r, err}
-		}()
+		})
 	} else {
 		swiftCh <- swiftOut{}
 	}

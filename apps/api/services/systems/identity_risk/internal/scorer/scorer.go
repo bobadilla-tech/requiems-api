@@ -52,9 +52,7 @@ func Resolve(
 	)
 
 	if emailAddr != "" {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r := emailSvc.ValidateEmail(ctx, emailAddr)
 			mu.Lock()
 			out.EmailResult = &r
@@ -63,13 +61,11 @@ func Resolve(
 			out.Signals.EmailInvalid = !r.Valid
 			out.Signals.EmailNoMX = !r.MxValid
 			mu.Unlock()
-		}()
+		})
 	}
 
 	if phoneNum != "" {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r := phoneSvc.Validate(phoneNum)
 			mu.Lock()
 			out.PhoneResult = &r
@@ -81,7 +77,7 @@ func Resolve(
 			}
 			out.Signals.PhoneCountry = r.Country
 			mu.Unlock()
-		}()
+		})
 	}
 
 	parsedIP := net.ParseIP(ipAddr)

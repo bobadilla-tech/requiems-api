@@ -31,7 +31,8 @@ func newTestService(srv *httptest.Server) *Service {
 	return NewService(srv.URL, srv.Client(), nil)
 }
 
-func ptrF(v float64) *float64 { return &v }
+//go:fix inline
+func ptrF(v float64) *float64 { return new(v) }
 
 // --- Geocode ---
 
@@ -258,7 +259,7 @@ func TestReverseGeocodeBatch_Service_HappyPath(t *testing.T) {
 	defer srv.Close()
 
 	svc := newTestService(srv)
-	items := []ReverseQuery{{Lat: ptrF(48.8584), Lon: ptrF(2.2945)}, {Lat: ptrF(51.5014), Lon: ptrF(-0.1419)}}
+	items := []ReverseQuery{{Lat: new(48.8584), Lon: new(2.2945)}, {Lat: new(51.5014), Lon: new(-0.1419)}}
 	results := svc.ReverseGeocodeBatch(t.Context(), items)
 
 	require.Len(t, results, 2)
@@ -284,7 +285,7 @@ func TestReverseGeocodeBatch_Service_PartialNotFound(t *testing.T) {
 	defer srv.Close()
 
 	svc := newTestService(srv)
-	items := []ReverseQuery{{Lat: ptrF(48.8584), Lon: ptrF(2.2945)}, {Lat: ptrF(0), Lon: ptrF(0)}}
+	items := []ReverseQuery{{Lat: new(48.8584), Lon: new(2.2945)}, {Lat: ptrF(0), Lon: ptrF(0)}}
 	results := svc.ReverseGeocodeBatch(t.Context(), items)
 
 	require.Len(t, results, 2)

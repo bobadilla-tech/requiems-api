@@ -25,7 +25,7 @@ type BatchLookupItem struct {
 	Domain string         `json:"domain"`
 	Found  bool           `json:"found"`
 	Error  string         `json:"error,omitempty"`
-	Data   LookupResponse `json:"data,omitempty"`
+	Data   LookupResponse `json:"data"`
 }
 
 // Service performs MX DNS record lookups.

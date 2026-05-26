@@ -130,12 +130,10 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 
 	parsedIP := net.ParseIP(req.IPAddress)
 	if req.IPAddress != "" && parsedIP != nil {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			r, err := s.vpn.CheckIP(ctx, parsedIP)
 			vpnCh <- vpnOut{r, err}
-		}()
+		})
 	} else {
 		vpnCh <- vpnOut{}
 	}
@@ -252,10 +250,7 @@ func parseDomainAge(dateStr string) (int, bool) {
 	}
 	for _, f := range formats {
 		if t, err := time.Parse(f, dateStr); err == nil {
-			days := int(time.Since(t).Hours() / 24)
-			if days < 0 {
-				days = 0
-			}
+			days := max(int(time.Since(t).Hours()/24), 0)
 			return days, true
 		}
 	}
