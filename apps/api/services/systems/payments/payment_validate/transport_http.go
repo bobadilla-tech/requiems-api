@@ -14,7 +14,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/payment/validate", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
 			if req.BIN == "" && req.IBAN == "" && req.SWIFT == "" {
-				return Result{}, svcerr.Invalid("validation_failed", "at least one of bin, iban, or swift is required")
+				return Result{}, svcerr.Unknown("validation_failed", "at least one of bin, iban, or swift is required")
 			}
 			return svc.Validate(ctx, req)
 		},

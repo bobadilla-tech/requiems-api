@@ -29,11 +29,13 @@ func serviceEnabled(cfg config.Config, key string) bool {
 	if strings.TrimSpace(cfg.EnabledServices) == "" {
 		return true
 	}
+
 	for s := range strings.SplitSeq(cfg.EnabledServices, ",") {
 		if strings.TrimSpace(s) == key {
 			return true
 		}
 	}
+
 	return false
 }
 

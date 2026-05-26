@@ -14,7 +14,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/signup/protect", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
 			if req.Email == "" && req.Phone == "" && req.IPAddress == "" {
-				return Result{}, svcerr.Invalid("validation_failed", "at least one of email, phone, or ip_address is required")
+				return Result{}, svcerr.Unknown("validation_failed", "at least one of email, phone, or ip_address is required")
 			}
 			return svc.Protect(ctx, req)
 		},
