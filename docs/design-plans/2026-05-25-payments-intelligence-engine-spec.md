@@ -28,7 +28,7 @@ call sites, different questions, different outputs.
 - Every response wrapped in
   `{"data": {...}, "metadata": {"timestamp": "...", "trace_id": "..."}}`
 - `risk_score`: `0.0` (no risk) to `1.0` (certain risk)
-- `is_safe` always derived: `risk_score < 0.5`
+- `is_safe` always derived: `risk_score < 0.5 && !tor_detected && !proxy_detected`
 - `flags` always `string[]` of machine-readable codes, never freeform
 - Score 0–1, never 0–100
 

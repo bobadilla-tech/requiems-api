@@ -84,8 +84,8 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		}
 		address = rev.Address
 		city = rev.City
-		country = rev.Country
-		countryCode = rev.Country // nominatim returns country_code in Country field (uppercase)
+		country = rev.CountryName
+		countryCode = rev.Country
 		if req.CountryCode != "" {
 			countryCode = req.CountryCode
 		}
@@ -98,7 +98,7 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		lon = res.Lon
 		address = res.Address
 		city = res.City
-		country = res.Country
+		country = res.CountryName
 		countryCode = res.Country
 		if req.CountryCode != "" {
 			countryCode = req.CountryCode

@@ -124,14 +124,12 @@ func TestTransactionRisk_TORDetected(t *testing.T) {
 
 func TestTransactionRisk_HighValueVPN(t *testing.T) {
 	t.Parallel()
-	amount := 600.0
 	r := setupRouter(
 		&stubBIN{r: bin.LookupResponse{CountryCode: "US"}},
 		&stubVPN{r: ipvpn.IPCheckResponse{IsVPN: true}},
 		&stubIPInfo{r: ipinfo.LookupResponse{CountryCode: "US"}},
 	)
 	body := `{"card_bin":"424242","ip_address":"1.2.3.4","billing_country":"US","amount_usd":600.0}`
-	_ = amount
 	w := post(t, r, body)
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]

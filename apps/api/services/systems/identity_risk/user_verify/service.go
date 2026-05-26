@@ -182,10 +182,9 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	} else if whoisResult.err != nil {
 		flags = append(flags, "whois_unavailable")
 		servicesResolved--
-		servicesResolved++
 	}
 
-	hasMX := mxResult.err == nil && len(mxResult.r.Records) > 0
+	hasMX := (mxResult.err == nil && len(mxResult.r.Records) > 0) || len(domainResult.r.DNS.MX) > 0
 	hasA := len(domainResult.r.DNS.A) > 0
 	available := domainResult.r.Available
 

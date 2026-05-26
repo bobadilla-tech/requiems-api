@@ -19,20 +19,22 @@ import (
 
 // GeocodeResponse is returned for address-to-coordinates lookups.
 type GeocodeResponse struct { //nolint:revive // established public API type name
-	Address string  `json:"address"`
-	City    string  `json:"city"`
-	Country string  `json:"country"`
-	Lat     float64 `json:"lat"`
-	Lon     float64 `json:"lon"`
+	Address     string  `json:"address"`
+	City        string  `json:"city"`
+	Country     string  `json:"country"`      // ISO alpha-2 country code (e.g. "DE")
+	CountryName string  `json:"country_name"` // human-readable country name (e.g. "Germany")
+	Lat         float64 `json:"lat"`
+	Lon         float64 `json:"lon"`
 }
 
 // ReverseGeocodeResponse is returned for coordinates-to-address lookups.
 type ReverseGeocodeResponse struct {
-	Lat     float64 `json:"lat"`
-	Lon     float64 `json:"lon"`
-	Address string  `json:"address"`
-	City    string  `json:"city"`
-	Country string  `json:"country"`
+	Lat         float64 `json:"lat"`
+	Lon         float64 `json:"lon"`
+	Address     string  `json:"address"`
+	City        string  `json:"city"`
+	Country     string  `json:"country"`      // ISO alpha-2 country code (e.g. "DE")
+	CountryName string  `json:"country_name"` // human-readable country name (e.g. "Germany")
 }
 
 const (
@@ -95,11 +97,12 @@ func (s *Service) Geocode(ctx context.Context, address string) (GeocodeResponse,
 	lon, _ := strconv.ParseFloat(first.Lon, 64)
 
 	resp := GeocodeResponse{
-		Address: first.DisplayName,
-		City:    first.Address.resolveCity(),
-		Country: strings.ToUpper(first.Address.CountryCode),
-		Lat:     lat,
-		Lon:     lon,
+		Address:     first.DisplayName,
+		City:        first.Address.resolveCity(),
+		Country:     strings.ToUpper(first.Address.CountryCode),
+		CountryName: first.Address.Country,
+		Lat:         lat,
+		Lon:         lon,
 	}
 
 	s.toCache(ctx, cacheKey, resp)
@@ -136,11 +139,12 @@ func (s *Service) ReverseGeocode(ctx context.Context, lat, lon float64) (Reverse
 	}
 
 	resp := ReverseGeocodeResponse{
-		Lat:     lat,
-		Lon:     lon,
-		Address: result.DisplayName,
-		City:    result.Address.resolveCity(),
-		Country: strings.ToUpper(result.Address.CountryCode),
+		Lat:         lat,
+		Lon:         lon,
+		Address:     result.DisplayName,
+		City:        result.Address.resolveCity(),
+		Country:     strings.ToUpper(result.Address.CountryCode),
+		CountryName: result.Address.Country,
 	}
 
 	s.toCache(ctx, cacheKey, resp)
@@ -280,7 +284,8 @@ type nominatimAddress struct {
 	Town        string `json:"town"`
 	Village     string `json:"village"`
 	County      string `json:"county"`
-	CountryCode string `json:"country_code"`
+	Country     string `json:"country"`      // human-readable country name from Nominatim
+	CountryCode string `json:"country_code"` // ISO alpha-2 code from Nominatim
 }
 
 // resolveCity returns the most specific city-level place name available.

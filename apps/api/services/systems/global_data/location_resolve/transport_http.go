@@ -27,6 +27,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 				if _, ok := err.(*missingInputError); ok {
 					return Result{}, svcerr.Unknown("validation_failed", err.Error())
 				}
+				if se, ok := err.(*svcerr.Error); ok {
+					return Result{}, se
+				}
 				return Result{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
 			}
 
