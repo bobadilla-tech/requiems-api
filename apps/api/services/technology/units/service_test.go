@@ -222,17 +222,17 @@ func TestService_ConvertBatch(t *testing.T) {
 		{
 			From:  "miles",
 			To:    "km",
-			Value: Ptr(10),
+			Value: new(float64(10)),
 		},
 		{
 			From:  "kg",
 			To:    "lb",
-			Value: Ptr(5),
+			Value: new(float64(5)),
 		},
 		{
 			From:  "c",
 			To:    "g",
-			Value: Ptr(25),
+			Value: new(float64(25)),
 		},
 	}
 
@@ -252,17 +252,17 @@ func TestService_ConvertBatch_PreservedOrder(t *testing.T) {
 		{
 			From:  "miles",
 			To:    "km",
-			Value: Ptr(10),
+			Value: new(float64(10)),
 		},
 		{
 			From:  "kg",
 			To:    "lb",
-			Value: Ptr(5),
+			Value: new(float64(5)),
 		},
 		{
 			From:  "c",
 			To:    "g",
-			Value: Ptr(25),
+			Value: new(float64(25)),
 		},
 	}
 

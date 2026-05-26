@@ -172,7 +172,7 @@ GET /v1/business-calendar/DE?year=2026&month=6
 `country` — ISO 3166-1 alpha-2 (path param, required)\
 `year` — optional, defaults to current year\
 `month` — optional, defaults to current month. When provided, `working_days`
-scoped to that month. When omitted, returns full year holidays + year working
+scoped to that month. When omitted, returns full-year holidays + year working
 day total.
 
 **Response (month scope)**

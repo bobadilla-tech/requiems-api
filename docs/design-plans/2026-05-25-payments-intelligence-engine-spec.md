@@ -185,7 +185,7 @@ Required: `card_bin` + `ip_address`. Optional: `billing_country`, `amount_usd`.
 
 ## Go package structure
 
-```
+```text
 apps/api/services/systems/
 └── payments/
     ├── router.go                         # mounts both sub-routers

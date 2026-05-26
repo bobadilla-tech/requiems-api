@@ -169,13 +169,14 @@ func Compute(s Signals) ScoreResult {
 	}
 
 	if s.PhonePresent {
-		if s.PhoneInvalid {
+		switch {
+		case s.PhoneInvalid:
 			score += 0.25
 			flags = append(flags, "phone_invalid")
-		} else if s.PhoneVoIP {
+		case s.PhoneVoIP:
 			score += 0.15
 			flags = append(flags, "phone_voip")
-		} else if s.PhoneVirtual {
+		case s.PhoneVirtual:
 			score += 0.15
 			flags = append(flags, "phone_virtual")
 		}

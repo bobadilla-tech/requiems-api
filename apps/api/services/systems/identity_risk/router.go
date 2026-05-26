@@ -1,7 +1,9 @@
 package identityrisk
 
 import (
+	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"requiems-api/services/networking/domain"
 	ipinfo "requiems-api/services/networking/ip/info"
@@ -13,9 +15,6 @@ import (
 	"requiems-api/services/systems/identity_risk/user_verify"
 	"requiems-api/services/validation/email"
 	"requiems-api/services/validation/phone"
-
-	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // Deps holds the external service clients needed by the identity risk system.

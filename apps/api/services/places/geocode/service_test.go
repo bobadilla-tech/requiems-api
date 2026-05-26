@@ -285,7 +285,7 @@ func TestReverseGeocodeBatch_Service_PartialNotFound(t *testing.T) {
 	defer srv.Close()
 
 	svc := newTestService(srv)
-	items := []ReverseQuery{{Lat: new(48.8584), Lon: new(2.2945)}, {Lat: ptrF(0), Lon: ptrF(0)}}
+	items := []ReverseQuery{{Lat: new(48.8584), Lon: new(2.2945)}, {Lat: new(float64(0)), Lon: new(float64(0))}}
 	results := svc.ReverseGeocodeBatch(t.Context(), items)
 
 	require.Len(t, results, 2)

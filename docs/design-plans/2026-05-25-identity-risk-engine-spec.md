@@ -230,7 +230,7 @@ domain.has_mx && !domain.available`
 
 ## Go package structure
 
-```
+```text
 apps/api/services/systems/
 └── identity_risk/
     ├── router.go                        # mounts all sub-routers

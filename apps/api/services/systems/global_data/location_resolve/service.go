@@ -74,7 +74,8 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		countryCode string
 	)
 
-	if req.Coordinates != nil {
+	switch {
+	case req.Coordinates != nil:
 		lat = req.Coordinates.Lat
 		lon = req.Coordinates.Lng
 		rev, err := s.geocoder.ReverseGeocode(ctx, lat, lon)
@@ -87,7 +88,7 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 				countryCode = req.CountryCode
 			}
 		}
-	} else if req.Address != "" {
+	case req.Address != "":
 		res, err := s.geocoder.Geocode(ctx, req.Address)
 		if err != nil {
 			return Result{}, err
@@ -101,7 +102,7 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		if req.CountryCode != "" {
 			countryCode = req.CountryCode
 		}
-	} else {
+	default:
 		return Result{}, &missingInputError{}
 	}
 
