@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"requiems-api/services/places/holidays"
-	workingdays "requiems-api/services/places/working-days"
 )
 
 // -- Dependency interfaces ---------------------------------------------------

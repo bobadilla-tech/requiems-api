@@ -8,7 +8,6 @@ import (
 	"requiems-api/services/places/geocode"
 	"requiems-api/services/places/holidays"
 	"requiems-api/services/places/timezone"
-	workingdays "requiems-api/services/places/working-days"
 )
 
 // -- Dependency interfaces ---------------------------------------------------

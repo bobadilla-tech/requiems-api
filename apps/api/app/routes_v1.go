@@ -88,7 +88,7 @@ func registerV1Routes(ctx context.Context, r chi.Router, pool *pgxpool.Pool, rdb
 
 	if serviceEnabled(cfg, "systems") {
 		systemsRouter := chi.NewRouter()
-		systems.RegisterRoutes(systemsRouter)
+		systems.RegisterRoutes(systemsRouter, pool, rdb, cfg)
 		r.Mount("/systems", systemsRouter)
 	}
 }
