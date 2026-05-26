@@ -8,8 +8,6 @@ import (
 	"requiems-api/services/places/holidays"
 )
 
-// -- Dependency interfaces ---------------------------------------------------
-
 type HolidaysGetter interface {
 	GetHolidays(country string, year int) (holidays.HolidayList, error)
 }
@@ -18,34 +16,21 @@ type WorkingDaysGetter interface {
 	GetWorkingDays(from, to time.Time, country, subdivision string) int
 }
 
-// -- Service -----------------------------------------------------------------
-
-// Service returns holiday and working-day data for a country/period.
 type Service struct {
 	holidays    HolidaysGetter
 	workingDays WorkingDaysGetter
 }
 
-// NewService returns a new business calendar Service.
 func NewService(h HolidaysGetter, w WorkingDaysGetter) *Service {
 	return &Service{holidays: h, workingDays: w}
 }
 
-// Request is the input for GET /business-calendar/{country}.
-type Request struct {
-	Country string `query:"country"` // set from path param by transport
-	Year    int    `query:"year"`
-	Month   int    `query:"month"` // 0 = full year scope
-}
-
-// Holiday is a single holiday entry.
 type Holiday struct {
 	Date string `json:"date"`
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
 
-// Result is the business calendar response.
 type Result struct {
 	CountryCode  string    `json:"country_code"`
 	Year         int       `json:"year"`
@@ -58,7 +43,6 @@ type Result struct {
 	NextHoliday  *Holiday  `json:"next_holiday"`
 }
 
-// Get returns business calendar data for the given country and period.
 func (s *Service) Get(_ context.Context, req Request) (Result, error) {
 	year := req.Year
 	if year == 0 {
@@ -74,7 +58,6 @@ func (s *Service) Get(_ context.Context, req Request) (Result, error) {
 	allHolidays := toHolidays(list.Holidays)
 
 	if req.Month != 0 {
-		// Month-scoped response.
 		monthStart := time.Date(year, time.Month(req.Month), 1, 0, 0, 0, 0, time.UTC)
 		monthEnd := monthStart.AddDate(0, 1, 0).Add(-time.Second)
 		totalDays := int(monthEnd.Sub(monthStart).Hours()/24) + 1
@@ -100,7 +83,6 @@ func (s *Service) Get(_ context.Context, req Request) (Result, error) {
 		}, nil
 	}
 
-	// Full-year scope.
 	yearStart := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
 	yearEnd := time.Date(year, 12, 31, 23, 59, 59, 0, time.UTC)
 	workDays := s.workingDays.GetWorkingDays(yearStart, yearEnd, req.Country, "")

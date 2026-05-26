@@ -9,7 +9,12 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
-// RegisterRoutes mounts POST /payment/validate on the given router.
+type Request struct {
+	BIN   string `json:"bin"`
+	IBAN  string `json:"iban"`
+	SWIFT string `json:"swift"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/payment/validate", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {

@@ -13,7 +13,12 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
-// RegisterRoutes mounts GET /business-calendar/{country} on the given router.
+type Request struct {
+	Country string
+	Year    int
+	Month   int // 0 = full year scope
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Get("/business-calendar/{country}", func(w http.ResponseWriter, r *http.Request) {
 		country := strings.ToUpper(chi.URLParam(r, "country"))

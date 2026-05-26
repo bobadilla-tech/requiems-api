@@ -9,7 +9,12 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
-// RegisterRoutes mounts POST /signup/protect on the given router.
+type Request struct {
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	IPAddress string `json:"ip_address"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/signup/protect", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {

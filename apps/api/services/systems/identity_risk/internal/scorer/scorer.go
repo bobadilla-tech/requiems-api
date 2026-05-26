@@ -1,6 +1,3 @@
-// Package scorer contains the shared risk-signal resolution and risk-score
-// computation used by both risk_score and signup_protect. Keeping the weight
-// table and fan-out logic here prevents drift between the two endpoints.
 package scorer
 
 import (
@@ -15,33 +12,22 @@ import (
 	"requiems-api/services/validation/phone"
 )
 
-// -- Dependency interfaces --------------------------------------------------
-
-// EmailChecker validates an email address.
 type EmailChecker interface {
 	ValidateEmail(ctx context.Context, addr string) email.Validation
 }
 
-// PhoneChecker validates a phone number.
 type PhoneChecker interface {
 	Validate(number string) phone.ValidateResponse
 }
 
-// VPNChecker checks an IP for VPN/proxy/TOR signals.
 type VPNChecker interface {
 	CheckIP(ctx context.Context, ip net.IP) (ipvpn.IPCheckResponse, error)
 }
 
-// IPInfoChecker looks up geolocation for an IP address.
 type IPInfoChecker interface {
 	CheckInfo(ctx context.Context, ip string) (ipinfo.LookupResponse, error)
 }
 
-// -- Resolution ---------------------------------------------------------------
-
-// Resolved holds the raw service results plus the derived Signals used for
-// scoring. signup_protect uses the raw fields for its signal breakdown;
-// risk_score only uses Signals.
 type Resolved struct {
 	Signals Signals
 
@@ -51,9 +37,6 @@ type Resolved struct {
 	IPResult    *ipinfo.LookupResponse
 }
 
-// Resolve fans out to whichever services correspond to the non-empty fields and
-// returns a Resolved bundle. An empty string for a field means "not provided".
-// Service errors are treated as "no signal" to keep the endpoint non-blocking.
 func Resolve(
 	ctx context.Context,
 	emailSvc EmailChecker,
@@ -140,9 +123,6 @@ func Resolve(
 	return out
 }
 
-// -- Scoring ------------------------------------------------------------------
-
-// Signals is the normalised boolean/numeric set fed into Compute.
 type Signals struct {
 	EmailPresent    bool
 	EmailDisposable bool
@@ -160,11 +140,10 @@ type Signals struct {
 	IsProxy    bool
 	IsVPN      bool
 	IsHosting  bool
-	FraudScore int // 0–100; Compute normalises to 0–1
+	FraudScore int
 	IPCountry  string
 }
 
-// ScoreResult is the computed output.
 type ScoreResult struct {
 	RiskScore  float64
 	Confidence float64
@@ -172,10 +151,8 @@ type ScoreResult struct {
 	Flags      []string
 }
 
-const totalSignals = 3 // email, phone, ip
+const totalSignals = 3
 
-// Compute calculates the risk score, confidence, and derived is_safe from the
-// provided signals. All weights are additive and capped at 1.0.
 func Compute(s Signals) ScoreResult {
 	score := 0.0
 	flags := make([]string, 0, 4)

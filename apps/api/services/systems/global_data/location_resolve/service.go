@@ -10,8 +10,6 @@ import (
 	"requiems-api/services/places/timezone"
 )
 
-// -- Dependency interfaces ---------------------------------------------------
-
 type Geocoder interface {
 	Geocode(ctx context.Context, address string) (geocode.GeocodeResponse, error)
 	ReverseGeocode(ctx context.Context, lat, lon float64) (geocode.ReverseGeocodeResponse, error)
@@ -29,9 +27,6 @@ type WorkingDaysGetter interface {
 	GetWorkingDays(from, to time.Time, country, subdivision string) int
 }
 
-// -- Service -----------------------------------------------------------------
-
-// Service resolves full location context from an address or coordinates.
 type Service struct {
 	geocoder    Geocoder
 	timezone    TimezoneGetter
@@ -39,32 +34,22 @@ type Service struct {
 	workingDays WorkingDaysGetter
 }
 
-// NewService returns a new location resolve Service.
 func NewService(g Geocoder, t TimezoneGetter, h HolidaysGetter, w WorkingDaysGetter) *Service {
 	return &Service{geocoder: g, timezone: t, holidays: h, workingDays: w}
 }
 
-// Coordinates holds lat/lon.
+// Coordinates is shared between Request and Result.
 type Coordinates struct {
 	Lat float64 `json:"lat"`
 	Lng float64 `json:"lng"`
 }
 
-// Request is the input for POST /location/resolve.
-type Request struct {
-	Address     string       `json:"address"`
-	Coordinates *Coordinates `json:"coordinates"`
-	CountryCode string       `json:"country_code"`
-}
-
-// NextHoliday is the next upcoming holiday within 90 days.
 type NextHoliday struct {
 	Date string `json:"date"`
 	Name string `json:"name"`
 	Type string `json:"type"`
 }
 
-// Result is the full location context response.
 type Result struct {
 	Address              string       `json:"address"`
 	City                 string       `json:"city"`
@@ -80,7 +65,6 @@ type Result struct {
 	Flags                []string     `json:"flags"`
 }
 
-// Resolve resolves the location context from address or coordinates.
 func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 	var (
 		lat, lon    float64
@@ -90,7 +74,6 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		countryCode string
 	)
 
-	// Phase 1: resolve coordinates (sequential).
 	if req.Coordinates != nil {
 		lat = req.Coordinates.Lat
 		lon = req.Coordinates.Lng
@@ -122,7 +105,6 @@ func (s *Service) Resolve(ctx context.Context, req Request) (Result, error) {
 		return Result{}, &missingInputError{}
 	}
 
-	// Phase 2: parallel fan-out — timezone + holidays + working-days.
 	now := time.Now()
 	year := now.Year()
 	month := now.Month()

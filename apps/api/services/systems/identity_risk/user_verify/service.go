@@ -15,8 +15,6 @@ import (
 	"requiems-api/services/validation/email"
 )
 
-// -- Dependency interfaces ---------------------------------------------------
-
 type EmailChecker interface {
 	ValidateEmail(ctx context.Context, addr string) email.Validation
 }
@@ -37,9 +35,6 @@ type VPNChecker interface {
 	CheckIP(ctx context.Context, ip net.IP) (ipvpn.IPCheckResponse, error)
 }
 
-// -- Service -----------------------------------------------------------------
-
-// Service verifies a user's identity signals.
 type Service struct {
 	email  EmailChecker
 	whois  WHOISLooker
@@ -48,25 +43,16 @@ type Service struct {
 	vpn    VPNChecker // optional; only used when ip_address provided
 }
 
-// NewService returns a new user verify Service.
 func NewService(e EmailChecker, w WHOISLooker, d DomainInfoGetter, m MXLooker, v VPNChecker) *Service {
 	return &Service{email: e, whois: w, domain: d, mx: m, vpn: v}
 }
 
-// Request is the input for POST /user/verify.
-type Request struct {
-	Email     string `json:"email" validate:"required"`
-	IPAddress string `json:"ip_address"`
-}
-
-// EmailSignal is the email signal breakdown.
 type EmailSignal struct {
 	Valid      bool `json:"valid"`
 	Disposable bool `json:"disposable"`
 	MXValid    bool `json:"mx_valid"`
 }
 
-// DomainSignal is the domain signal breakdown.
 type DomainSignal struct {
 	AgeDays     int  `json:"age_days"` // -1 if unknown
 	HasMX       bool `json:"has_mx"`
@@ -74,21 +60,18 @@ type DomainSignal struct {
 	Available   bool `json:"available"`
 }
 
-// IPSignal is the IP signal breakdown.
 type IPSignal struct {
 	IsVPN      bool    `json:"is_vpn"`
 	IsProxy    bool    `json:"is_proxy"`
-	FraudScore float64 `json:"fraud_score"` // normalised 0–1
+	FraudScore float64 `json:"fraud_score"`
 }
 
-// Signals groups the per-signal breakdowns.
 type Signals struct {
 	Email  EmailSignal  `json:"email"`
 	Domain DomainSignal `json:"domain"`
 	IP     *IPSignal    `json:"ip"`
 }
 
-// Result is the full user verification response.
 type Result struct {
 	Verified   bool     `json:"verified"`
 	Confidence float64  `json:"confidence"`
@@ -97,11 +80,9 @@ type Result struct {
 	Signals    Signals  `json:"signals"`
 }
 
-// Verify fans out to the relevant services and returns the verification result.
 func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	emailResult := s.email.ValidateEmail(ctx, req.Email)
 
-	// Extract domain from validated email.
 	emailDomain := ""
 	if emailResult.Domain != nil {
 		emailDomain = *emailResult.Domain
@@ -166,7 +147,6 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	mxResult := <-mxCh
 	vpnResult := <-vpnCh
 
-	// Build signals and compute risk score.
 	flags := make([]string, 0, 4)
 	score := 0.0
 	servicesResolved := 2 // email + domain always count
@@ -175,7 +155,6 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		servicesTotal++
 	}
 
-	// Email signals.
 	emailSig := EmailSignal{
 		Valid:      emailResult.Valid,
 		Disposable: emailResult.Disposable,
@@ -190,7 +169,6 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		flags = append(flags, "disposable_email")
 	}
 
-	// Domain signals from WHOIS + domain info + MX.
 	ageDays := -1
 	if whoisResult.err == nil && whoisResult.r.CreatedDate != "" {
 		if age, ok := parseDomainAge(whoisResult.r.CreatedDate); ok {
@@ -205,8 +183,8 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		}
 	} else if whoisResult.err != nil {
 		flags = append(flags, "whois_unavailable")
-		servicesResolved-- // WHOIS didn't resolve
-		servicesResolved++ // subtract from total later — don't penalise confidence
+		servicesResolved--
+		servicesResolved++
 	}
 
 	hasMX := mxResult.err == nil && len(mxResult.r.Records) > 0
@@ -229,7 +207,6 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		flags = append(flags, "domain_not_registered")
 	}
 
-	// IP signals.
 	var ipSig *IPSignal
 	if req.IPAddress != "" && parsedIP != nil && vpnResult.err == nil {
 		ipSig = &IPSignal{
@@ -263,7 +240,6 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	}, nil
 }
 
-// parseDomainAge parses common WHOIS date formats and returns age in days.
 func parseDomainAge(dateStr string) (int, bool) {
 	formats := []string{
 		time.RFC3339,

@@ -9,6 +9,12 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+type Request struct {
+	Address     string       `json:"address"`
+	Coordinates *Coordinates `json:"coordinates"`
+	CountryCode string       `json:"country_code"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/location/resolve", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
@@ -17,12 +23,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			}
 
 			res, err := svc.Resolve(ctx, req)
-
 			if err != nil {
 				if _, ok := err.(*missingInputError); ok {
 					return Result{}, svcerr.Unknown("validation_failed", err.Error())
 				}
-
 				return Result{}, svcerr.Upstream("upstream_error", "geocoding service unavailable")
 			}
 

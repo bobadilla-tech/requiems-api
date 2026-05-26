@@ -8,7 +8,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
-// RegisterRoutes mounts POST /user/verify on the given router.
+type Request struct {
+	Email     string `json:"email" validate:"required"`
+	IPAddress string `json:"ip_address"`
+}
+
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.Post("/user/verify", httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
