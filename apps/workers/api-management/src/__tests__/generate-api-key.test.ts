@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateApiKey } from "../lib/generate-api-key";
-import { isValidKeyFormat, extractKeyPrefix } from "@requiem/workers-shared";
+import { extractKeyPrefix, isValidKeyFormat } from "@requiem/workers-shared";
 
 describe("generateApiKey", () => {
   it("produces a key with the requiem_ prefix", () => {

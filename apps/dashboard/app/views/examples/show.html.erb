@@ -1,5 +1,5 @@
-<% content_for :title, "#{@example["title"]} | Requiems API" %>
-<% content_for :description, @example["description"] %>
+<% content_for :title, "#{example_localized(@example, "title")} | Requiems API" %>
+<% content_for :description, example_localized(@example, "description") %>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <!-- Header -->
   <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -8,19 +8,19 @@
       <nav class="flex mb-4" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-2 text-sm">
           <li>
-            <%= link_to "Home", root_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
+            <%= link_to t("examples.show.breadcrumb_home"), root_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
           </li>
           <li class="flex items-center">
             <svg class="h-4 w-4 text-gray-400 dark:text-gray-500 mx-2" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
-            <%= link_to "Examples", examples_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
+            <%= link_to t("examples.show.breadcrumb_examples"), examples_path, class: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" %>
           </li>
           <li class="flex items-center">
             <svg class="h-4 w-4 text-gray-400 dark:text-gray-500 mx-2" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
-            <span class="text-gray-900 dark:text-gray-100 font-medium"><%= @example["title"] %></span>
+            <span class="text-gray-900 dark:text-gray-100 font-medium"><%= example_localized(@example, "title") %></span>
           </li>
         </ol>
       </nav>
@@ -29,20 +29,15 @@
         <div class="flex-1 mb-6 lg:mb-0">
           <div class="flex items-center space-x-3 mb-3">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              <%= @example["title"] %>
+              <%= example_localized(@example, "title") %>
             </h1>
             <%= render "partials/shared/badge",
-              text: @example["difficulty"],
-              variant: case @example["difficulty"]
-                when "Beginner" then "success"
-                when "Intermediate" then "warning"
-                when "Advanced" then "danger"
-                else "default"
-              end %>
+              text: example_difficulty_label(@example["difficulty"]),
+              variant: example_difficulty_variant(@example["difficulty"]) %>
           </div>
 
           <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
-            <%= @example["description"] %>
+            <%= example_localized(@example, "description") %>
           </p>
 
           <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
@@ -57,7 +52,7 @@
               <svg class="h-5 w-5 mr-2 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
               </svg>
-              <span><%= @example["category"] %></span>
+              <span><%= example_category_label(@example["category"]) %></span>
             </div>
 
             <div class="flex items-center">
@@ -75,7 +70,7 @@
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
               </svg>
-              View Source Code
+              <%= t("examples.show.view_source") %>
             </a>
           <% end %>
 
@@ -84,7 +79,7 @@
               <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
               </svg>
-              View Demo
+              <%= t("examples.show.view_demo") %>
             </a>
           <% end %>
         </div>
@@ -100,33 +95,33 @@
         <svg class="mx-auto h-16 w-16 text-blue-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Tutorial Coming Soon</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("examples.show.tutorial_coming_soon") %></h2>
         <p class="text-gray-600 dark:text-gray-400 mb-6">
-          We're working on creating a detailed step-by-step tutorial for this example.
+          <%= t("examples.show.tutorial_description") %>
         </p>
 
         <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 max-w-2xl mx-auto text-left">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">In the meantime:</h3>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t("examples.show.in_the_meantime") %></h3>
           <ul class="space-y-2 text-gray-700 dark:text-gray-300">
             <li class="flex items-start">
               <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
-              <span>Check out the source code on GitHub to see how it's built</span>
+              <span><%= t("examples.show.tip_github") %></span>
             </li>
             <% if @example["demo_url"].present? %>
               <li class="flex items-start">
                 <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
-                <span>Try out the live demo to see it in action</span>
+                <span><%= t("examples.show.tip_demo") %></span>
               </li>
             <% end %>
             <li class="flex items-start">
               <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
-              <span>Explore the <%= link_to "API documentation", apis_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium" %> for the APIs used in this project</span>
+              <span><%= t("examples.show.tip_docs_html", docs_link: link_to(t("examples.show.api_documentation"), apis_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium")).html_safe %></span>
             </li>
           </ul>
         </div>
@@ -136,7 +131,7 @@
             <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            Back to Examples
+            <%= t("examples.show.back") %>
           <% end %>
         </div>
       </div>

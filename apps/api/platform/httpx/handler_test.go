@@ -26,8 +26,6 @@ type handleRes struct {
 	Greeting string `json:"greeting"`
 }
 
-func (handleRes) IsData() {}
-
 func TestHandle_HappyPath(t *testing.T) {
 	t.Parallel()
 
@@ -225,4 +223,153 @@ func TestHandle_BodyTooLarge_Returns400(t *testing.T) {
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
 	assert.Contains(t, resp.Message, "too large")
+}
+
+// ---- HandleGet tests ----
+
+type getReq struct {
+	Name string `query:"name" validate:"required"`
+}
+
+type getReqWithDefault struct {
+	Limit int `query:"limit" validate:"min=1,max=100"`
+}
+
+func TestHandleGet_HappyPath(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReq) (handleRes, error) {
+		return handleRes{Greeting: "hello " + req.Name}, nil
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/?name=world", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[handleRes]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "hello world", resp.Data.Greeting)
+}
+
+func TestHandleGet_DefaultApplied(t *testing.T) {
+	t.Parallel()
+
+	var gotLimit int
+	h := httpx.HandleGet(func(_ context.Context, req getReqWithDefault) (handleRes, error) {
+		gotLimit = req.Limit
+		return handleRes{}, nil
+	}, getReqWithDefault{Limit: 50})
+
+	r := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, 50, gotLimit)
+}
+
+func TestHandleGet_DefaultOverriddenByQuery(t *testing.T) {
+	t.Parallel()
+
+	var gotLimit int
+	h := httpx.HandleGet(func(_ context.Context, req getReqWithDefault) (handleRes, error) {
+		gotLimit = req.Limit
+		return handleRes{}, nil
+	}, getReqWithDefault{Limit: 50})
+
+	r := httptest.NewRequest(http.MethodGet, "/?limit=10", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, 10, gotLimit)
+}
+
+func TestHandleGet_ValidationFailure_Returns422(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReq) (handleRes, error) {
+		return handleRes{}, nil
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+
+	var resp httpx.ErrorResponse
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "validation_failed", resp.Error)
+	assert.NotEmpty(t, resp.Fields)
+}
+
+func TestHandleGet_ParseError_Returns400(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReqWithDefault) (handleRes, error) {
+		return handleRes{}, nil
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/?limit=notanumber", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestHandleGet_SvcError_MapsStatus(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReq) (handleRes, error) {
+		return handleRes{}, svcerr.NotFound("not_found", "not found")
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/?name=x", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+
+	var resp httpx.ErrorResponse
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "not_found", resp.Error)
+}
+
+func TestHandleGet_UpstreamSvcError_Returns503(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReq) (handleRes, error) {
+		return handleRes{}, svcerr.Upstream("upstream_error", "service unavailable")
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/?name=x", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
+}
+
+func TestHandleGet_InternalError_Returns500(t *testing.T) {
+	t.Parallel()
+
+	h := httpx.HandleGet(func(_ context.Context, req getReq) (handleRes, error) {
+		return handleRes{}, errors.New("unexpected")
+	})
+
+	r := httptest.NewRequest(http.MethodGet, "/?name=x", http.NoBody)
+	w := httptest.NewRecorder()
+	h(w, r)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+	var resp httpx.ErrorResponse
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Equal(t, "internal_error", resp.Error)
 }

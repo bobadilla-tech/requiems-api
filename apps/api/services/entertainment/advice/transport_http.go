@@ -1,13 +1,13 @@
 package advice
 
 import (
-	"net/http"
-	"fmt"
 	"context"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
+	"requiems-api/platform/svcerr"
 )
 
 // RegisterRoutes mounts advice handlers on the given router.
@@ -23,27 +23,27 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		httpx.JSON(w, http.StatusOK, a)
 	})
 	r.Post("/advice/batch", httpx.HandleBatch(
-	func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[Advice], error) {
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[Advice], error) {
 
-		if req.Count <= 0 {
-			return httpx.BatchResponse[Advice]{},
-				fmt.Errorf("count must be greater than zero")
-		}
+			if req.Count <= 0 {
+				return httpx.BatchResponse[Advice]{},
+					svcerr.Invalid("invalid_request", "count must be greater than zero")
+			}
 
-		if req.Count > 50 {
-			return httpx.BatchResponse[Advice]{},
-				fmt.Errorf("max 50 items allowed")
-		}
+			if req.Count > 50 {
+				return httpx.BatchResponse[Advice]{},
+					svcerr.Invalid("invalid_request", "max 50 items allowed")
+			}
 
-		results, err := svc.RandomBatch(ctx, req.Count)
-		if err != nil {
-			return httpx.BatchResponse[Advice]{},
-				fmt.Errorf("no advice available: %w", err)
-		}
+			results, err := svc.RandomBatch(ctx, req.Count)
+			if err != nil {
+				return httpx.BatchResponse[Advice]{},
+					svcerr.Upstream("service_unavailable", "no advice available")
+			}
 
-		return httpx.BatchResponse[Advice]{
-			Results: results,
-		}, nil
-	},
-))
+			return httpx.BatchResponse[Advice]{
+				Results: results,
+			}, nil
+		},
+	))
 }

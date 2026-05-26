@@ -7,7 +7,6 @@ type Advice struct {
 
 func (Advice) IsData() {}
 
-
 type BatchRequest struct {
 	Count int `json:"count" validate:"required,min=1,max=50"`
 }

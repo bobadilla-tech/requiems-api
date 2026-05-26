@@ -5,6 +5,16 @@ import (
 	"math/rand/v2"
 )
 
+// Grid is a 9×9 Sudoku board; 0 represents an empty cell.
+type Grid [9][9]int
+
+// Puzzle is the response returned by the sudoku endpoint.
+type Puzzle struct {
+	Difficulty string `json:"difficulty"`
+	Puzzle     Grid   `json:"puzzle"`
+	Solution   Grid   `json:"solution"`
+}
+
 // cellsToRemove maps a difficulty to the number of cells removed from the
 // solved board when constructing the puzzle. The remaining given cells are:
 //   - easy:   45 givens  (36 removed)

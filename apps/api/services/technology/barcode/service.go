@@ -18,6 +18,14 @@ const (
 	defaultHeight = 100
 )
 
+// Base64Response is the JSON response payload returned by GET /barcode/base64.
+type Base64Response struct {
+	Image  string `json:"image"`
+	Type   string `json:"type"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
+}
+
 // Service generates barcodes.
 type Service struct{}
 

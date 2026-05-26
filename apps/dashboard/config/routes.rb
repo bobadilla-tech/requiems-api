@@ -7,6 +7,7 @@ require "sidekiq/cron/web"
 Rails.application.routes.draw do
   # Non-locale routes: health check, sitemaps, webhooks, API proxy, dev tools
   get "up" => "rails/health#show", as: :rails_health_check
+  get "manifest" => "pwa#manifest", as: :pwa_manifest, defaults: { format: :json }
   get "llms.txt",      to: "sitemap#llms",      defaults: { format: :text }
   get "llms-full.txt", to: "sitemap#llms_full", defaults: { format: :text }
   get "apis/:id/index.md", to: "sitemap#api_doc", defaults: { format: :text }

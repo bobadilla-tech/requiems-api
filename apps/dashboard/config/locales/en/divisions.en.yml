@@ -35,6 +35,7 @@ en:
         secondary_cta: "View pricing"
       strategy_call:
         label: "Book a strategy call"
+      questions_intro: "Still have questions? Let's talk through your use case."
       view_division: "View division"
       apis_catalog_title: "Explore the full API directory"
       apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog—same API key, consistent docs, copy-ready examples."

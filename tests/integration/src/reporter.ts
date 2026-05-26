@@ -74,8 +74,7 @@ export default class PerformanceReporter implements Reporter {
     console.log();
 
     const now = new Date().toISOString();
-    const baseUrl =
-      process.env["API_BASE_URL"] ?? "https://api.requiems.xyz";
+    const baseUrl = process.env["API_BASE_URL"] ?? "https://api.requiems.xyz";
 
     // Write timestamped JSON report (always)
     try {
@@ -86,7 +85,11 @@ export default class PerformanceReporter implements Reporter {
       );
       fs.writeFileSync(
         reportPath,
-        JSON.stringify({ generatedAt: now, baseUrl, endpoints: summary }, null, 2) +
+        JSON.stringify(
+          { generatedAt: now, baseUrl, endpoints: summary },
+          null,
+          2,
+        ) +
           "\n",
         "utf8",
       );

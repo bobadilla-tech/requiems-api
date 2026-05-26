@@ -11,7 +11,7 @@
 
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync } from "fs";
-import { resolve, dirname } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -20,7 +20,7 @@ const ROOT = resolve(__dirname, "..");
 const W = 1200;
 const H = 630;
 const LOGO = resolve(ROOT, "apps/dashboard/app/assets/images/logo.png");
-const OUT  = resolve(ROOT, "apps/dashboard/public/og-image.png");
+const OUT = resolve(ROOT, "apps/dashboard/public/og-image.png");
 
 const canvas = createCanvas(W, H);
 const ctx = canvas.getContext("2d");
@@ -36,14 +36,27 @@ ctx.fillRect(0, 0, W, H);
 ctx.strokeStyle = "rgba(99,102,241,0.08)";
 ctx.lineWidth = 1;
 for (let x = 0; x <= W; x += 60) {
-  ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, 0);
+  ctx.lineTo(x, H);
+  ctx.stroke();
 }
 for (let y = 0; y <= H; y += 60) {
-  ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, y);
+  ctx.lineTo(W, y);
+  ctx.stroke();
 }
 
 // Accent glow
-const glow = ctx.createRadialGradient(W * 0.85, H * 0.2, 0, W * 0.85, H * 0.2, 280);
+const glow = ctx.createRadialGradient(
+  W * 0.85,
+  H * 0.2,
+  0,
+  W * 0.85,
+  H * 0.2,
+  280,
+);
 glow.addColorStop(0, "rgba(99,102,241,0.25)");
 glow.addColorStop(1, "rgba(99,102,241,0)");
 ctx.fillStyle = glow;
@@ -68,7 +81,9 @@ try {
   ctx.drawImage(logo, 80 + offset, 72 + offset, LOGO_SIZE, LOGO_SIZE);
 } catch {
   ctx.fillStyle = "#6366f1";
-  ctx.beginPath(); ctx.arc(CIRCLE_X, CIRCLE_Y, 36, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath();
+  ctx.arc(CIRCLE_X, CIRCLE_Y, 36, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 // Brand name — vertically centred next to logo circle
@@ -110,7 +125,9 @@ ctx.font = "20px sans-serif";
 ctx.fillText("requiems.xyz", 145, 523);
 
 ctx.fillStyle = "#6366f1";
-ctx.beginPath(); ctx.arc(118, 518, 7, 0, Math.PI * 2); ctx.fill();
+ctx.beginPath();
+ctx.arc(118, 518, 7, 0, Math.PI * 2);
+ctx.fill();
 
 writeFileSync(OUT, canvas.toBuffer("image/png"));
 console.log(`OG image written: ${OUT} (${W}x${H})`);

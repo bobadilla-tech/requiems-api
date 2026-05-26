@@ -170,19 +170,25 @@ func TestRandomBatch_ZeroCount(t *testing.T) {
 func TestRandomBatch_ReturnsPartialResultsOnFailure(t *testing.T) {
 	t.Parallel()
 
-	call := 0
+	var (
+		mu   sync.Mutex
+		call int
+	)
 	scanErr := errors.New("scan failed")
 
 	svc := newTestService(&mockRow{
 		scanFn: func(dest ...any) error {
+			mu.Lock()
+			c := call
 			call++
+			mu.Unlock()
 
-			if call == 3 {
+			if c == 3 {
 				return scanErr
 			}
 
-			*dest[0].(*int) = call
-			*dest[1].(*string) = fmt.Sprintf("Advice %d", call)
+			*dest[0].(*int) = c
+			*dest[1].(*string) = fmt.Sprintf("Advice %d", c)
 
 			return nil
 		},

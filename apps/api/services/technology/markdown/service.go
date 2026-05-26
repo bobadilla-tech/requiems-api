@@ -9,6 +9,11 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
+// Response holds the converted HTML output.
+type Response struct {
+	HTML string `json:"html"`
+}
+
 type Service struct{}
 
 func NewService() *Service {

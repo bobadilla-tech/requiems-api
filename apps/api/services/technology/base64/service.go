@@ -6,6 +6,11 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// Result is the response returned by both the encode and decode endpoints.
+type Result struct {
+	Result string `json:"result"`
+}
+
 // Service provides Base64 encode and decode operations.
 type Service struct{}
 

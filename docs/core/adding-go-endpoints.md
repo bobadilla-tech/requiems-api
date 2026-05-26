@@ -1,8 +1,9 @@
-# Adding a New Endpoint to the Go Backend
+# Adding a New Go Endpoint
 
 This guide walks through every step required to ship a new endpoint: from
 writing the Go code to updating the dashboard catalog and API documentation.
-Follow it in order — the checklist at the end maps to each section.
+
+Follow it in order: the checklist at the end maps to each section.
 
 ## Architecture Refresher
 
@@ -36,7 +37,6 @@ apps/api/
     └── {domain}/
         ├── router.go         # Wires services → chi.Router for this domain
         └── {feature}/
-            ├── type.go           # Request + response types
             ├── service.go        # Business logic
             └── transport_http.go # HTTP handlers
 ```
@@ -56,7 +56,7 @@ Existing top-level domains and their `/v1` prefixes:
 
 ---
 
-## Before Writing Any Code — Check for Existing Libraries
+## Before Writing Any Code: Check for Existing Libraries
 
 **Do not write a service from scratch if a battle-tested library already solves
 the problem.**
@@ -102,48 +102,46 @@ docker exec requiem-dev-api-1 go mod tidy
 
 Commit both `go.mod` and `go.sum`. Never edit them by hand.
 
----
-
 ## Step 1 — Write the Go Code
 
-Create four files in this order (each builds on the previous).
+Create files as needed for the feature. Define request/response structs in the
+file that owns them (typically `service.go` for business types or
+`transport_http.go` for request binding types).
 
-### 1a. `type.go` — Define Your Types
-
-Every response struct **must** implement the `IsData()` marker interface —
-`httpx.JSON` requires it.
+### 1a. Types — Define Your Types (in the owning file)
 
 > **Rule: always use `snake_case` for JSON field names.** Every `json:"..."` tag
-> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅
-> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌
+> in this codebase uses lower_snake_case. Never use camelCase or PascalCase. ✅:
+> `json:"has_profanity"` `json:"flagged_words"` `json:"browser_version"` ❌:
 > `json:"hasProfanity"` `json:"flaggedWords"` `json:"browserVersion"`
+
+Define request and response structs next to the code that owns them. Small
+features often keep types inside `service.go`; request-binding structs that only
+belong to the HTTP layer can live in `transport_http.go` alongside the handlers.
+
+Example (put this near `service.go` or `transport_http.go`):
 
 ```go
 package riddle
 
 // Request for POST endpoints with JSON body.
-// Use validate tags for automatic validation.
 type GenerateRequest struct {
-    Category string `json:"category" validate:"required,oneof=general science history"`
+  Category string `json:"category" validate:"required,oneof=general science history"`
 }
 
-// Response types — every one needs IsData().
+// Response types.
 type Riddle struct {
-    ID       int    `json:"id"`
-    Question string `json:"question"`
-    Answer   string `json:"answer"`
-    Category string `json:"category"`
+  ID       int    `json:"id"`
+  Question string `json:"question"`
+  Answer   string `json:"answer"`
+  Category string `json:"category"`
 }
-
-func (Riddle) IsData() {}
 
 // For collections or richer responses:
 type RiddleList struct {
-    Items []Riddle `json:"items"`
-    Total int      `json:"total"`
+  Items []Riddle `json:"items"`
+  Total int      `json:"total"`
 }
-
-func (RiddleList) IsData() {}
 ```
 
 **Validation tag reference** (from `go-playground/validator`):
@@ -208,8 +206,9 @@ HTTP concerns.
 | `svcerr.Unknown(code, msg)`  | 422         | Unprocessable but structurally valid input |
 | `svcerr.Upstream(code, msg)` | 503         | Third-party service / DB unavailable       |
 
-`httpx.Handle` and `httpx.HandleBatch` map `*svcerr.Error` to the correct HTTP
-response automatically. `KindUpstream` errors are also forwarded to Sentry.
+`httpx.Handle`, `httpx.HandleGet`, and `httpx.HandleBatch` map `*svcerr.Error`
+to the correct HTTP response automatically. `KindUpstream` errors are also
+forwarded to Sentry.
 
 ```go
 package riddle
@@ -298,53 +297,47 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 ---
 
-#### Pattern B: `httpx.BindQuery` — GET with query parameters
+#### Pattern B: `httpx.HandleGet` — GET with query parameters
 
-Use this when input comes from query string parameters. Set defaults **before**
-calling `BindQuery`. Always declare required fields and constraints using
-`validate` tags on the struct — do not add manual checks in the handler body.
+Use this when input comes from query string parameters. Pass an initialised
+`Req` value as the second argument to set defaults — `BindQuery` skips missing
+params, so the defaults remain in place. Always declare required fields and
+constraints using `validate` tags on the struct — do not add manual checks in
+the handler body.
 
 ```go
 package riddle
 
 import (
-    "errors"
-    "net/http"
+    "context"
 
     "github.com/go-chi/chi/v5"
     "requiems-api/platform/httpx"
-    "requiems-api/platform/svcerr"
 )
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-    r.Get("/riddles", func(w http.ResponseWriter, r *http.Request) {
-        // Always set defaults before binding.
-        req := ListRequest{Page: 1, PerPage: 20}
-
-        if err := httpx.BindQuery(r, &req); err != nil {
-            httpx.Error(w, http.StatusBadRequest, "bad_request", err.Error())
-            return
-        }
-
-        result, err := svc.List(r.Context(), req.Page, req.PerPage)
-        if err != nil {
-            if se, ok := errors.AsType[*svcerr.Error](err); ok {
-                httpx.Error(w, svcerr.HTTPStatus(se), se.Code, se.Message)
-                return
-            }
-            httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
-            return
-        }
-
-        httpx.JSON(w, http.StatusOK, result)
-    })
+    r.Get("/riddles", httpx.HandleGet(
+        func(ctx context.Context, req ListRequest) (RiddleList, error) {
+            return svc.List(ctx, req.Page, req.PerPage)
+        },
+        ListRequest{Page: 1, PerPage: 20}, // defaults applied before binding
+    ))
 }
 ```
 
-> **Never hardcode a status code based on a guess about what the service
-> returned.** Propagate the `*svcerr.Error` from the service — it carries the
-> correct status. Hardcoding `http.StatusInternalServerError` for all service
-> errors masks not-found and upstream failures behind a misleading 500.
+`httpx.HandleGet` automatically:
+
+- Binds query parameters to the struct (`query:` tags)
+- Runs struct validation; returns `422 Unprocessable Entity` with field-level
+  errors on failure (parse errors return `400`)
+- Unwraps `*svcerr.Error` and maps it to the appropriate HTTP status
+- Captures `KindUpstream` errors in Sentry before responding
+- Returns `500 Internal Server Error` for any other unhandled error
+
+> **Keep inline handlers** (`r.Get(...)` with manual `BindQuery`) only when
+> `HandleGet` cannot apply: path parameters via `chi.URLParam`, pre-bind URL
+> mutation (e.g. uppercasing a country code before binding), or non-JSON
+> responses (e.g. raw PNG output).
 
 ---
 
@@ -395,9 +388,9 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 | Third-party / DB unavailable | 503    | `upstream_error`     | `svcerr.Upstream(...)` |
 | Unexpected failure           | 500    | `internal_error`     | plain `error` from svc |
 
-`svcerr.Upstream` errors are captured in Sentry automatically by `httpx.Handle`
-and `httpx.HandleBatch`. `NotFound`, `Invalid`, and `Unknown` are not — they are
-expected outcomes, not bugs.
+`svcerr.Upstream` errors are captured in Sentry automatically by `httpx.Handle`,
+`httpx.HandleGet`, and `httpx.HandleBatch`. `NotFound`, `Invalid`, and `Unknown`
+are not — they are expected outcomes, not bugs.
 
 ### 1d. `router.go` — Wire the Domain
 
@@ -844,7 +837,7 @@ endpoints:
 
 faq:
   - question: Can I request riddles from multiple categories at once?
-    answer: Not currently — each request returns one riddle from one category. Batch support is planned.
+    answer: Not currently — each request returns one riddle from one category.
 
   - question: Are riddle IDs stable across requests?
     answer: Yes, IDs are stable database identifiers. You can use them to avoid showing a riddle twice.
@@ -1085,25 +1078,17 @@ parameters:
 Below is a complete minimal implementation for a riddle endpoint backed by an
 in-memory list (no database).
 
-**`apps/api/services/text/riddle/type.go`**
-
-```go
-package riddle
-
-type Riddle struct {
-    Question string `json:"question"`
-    Answer   string `json:"answer"`
-}
-
-func (Riddle) IsData() {}
-```
-
-**`apps/api/services/text/riddle/service.go`**
+**`apps/api/services/text/riddle/service.go`** (types included)
 
 ```go
 package riddle
 
 import "math/rand"
+
+type Riddle struct {
+  Question string `json:"question"`
+  Answer   string `json:"answer"`
+}
 
 var riddles = []Riddle{
     {Question: "What has keys but no locks?", Answer: "A keyboard"},

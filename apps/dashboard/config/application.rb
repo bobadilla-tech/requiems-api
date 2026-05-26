@@ -21,7 +21,9 @@ module Dashboard
 
     config.generators.system_tests = nil
 
+    require_relative "../app/middleware/encoding_error_handler"
     config.middleware.use Rack::Attack
+    config.middleware.insert_before Rack::MethodOverride, EncodingErrorHandler
 
     config.i18n.available_locales = %i[en es fr]
     config.i18n.default_locale = :en
@@ -62,6 +64,6 @@ module Dashboard
 
     # Fixed effective date for legal documents (Privacy Policy, Terms of Service).
     # Update this when the documents are materially revised.
-    config.x.legal_effective_date = Date.new(2026, 2, 17)
+    config.x.legal_effective_date = Date.new(2026, 5, 25)
   end
 end

@@ -57,7 +57,10 @@ describe("GET /usage/export", () => {
     const req = authedRequest(`/usage/export?since=${SINCE}&limit=100`);
     const res = await worker.fetch(req, bindings, makeCtx());
 
-    const body = (await res.json()) as { hasMore: boolean; nextCursor?: string };
+    const body = (await res.json()) as {
+      hasMore: boolean;
+      nextCursor?: string;
+    };
     expect(body.hasMore).toBe(false);
     expect(body.nextCursor).toBeUndefined();
   });
@@ -79,7 +82,10 @@ describe("GET /usage/export", () => {
     const req = authedRequest(`/usage/export?since=${SINCE}&limit=2`);
     const res = await worker.fetch(req, bindings, makeCtx());
 
-    const body = (await res.json()) as { hasMore: boolean; nextCursor?: string };
+    const body = (await res.json()) as {
+      hasMore: boolean;
+      nextCursor?: string;
+    };
     expect(body.hasMore).toBe(true);
     expect(body.nextCursor).toBe("2");
   });
@@ -98,7 +104,11 @@ function makeDbWithResults(results: unknown[]) {
   return {
     prepare: (_sql: string) => ({
       bind: (..._args: unknown[]) => ({
-        all: async <T>() => ({ success: true, results: results as T[], meta: {} }),
+        all: async <T>() => ({
+          success: true,
+          results: results as T[],
+          meta: {},
+        }),
         first: async <T>() => null as T,
         run: async () => ({ success: true, meta: {} }),
       }),

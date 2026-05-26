@@ -83,7 +83,10 @@ describe("POST /api-keys", () => {
     const res = await worker.fetch(req, bindings, makeCtx());
 
     expect(res.status).toBe(422);
-    const body = (await res.json()) as { error: string; fields: Array<{ field: string }> };
+    const body = (await res.json()) as {
+      error: string;
+      fields: Array<{ field: string }>;
+    };
     expect(body.error).toBe("validation_failed");
     expect(body.fields.length).toBeGreaterThan(0);
   });
@@ -106,7 +109,11 @@ describe("POST /api-keys", () => {
   it("returns 422 for an invalid plan value", async () => {
     const req = authedRequest("/api-keys", {
       method: "POST",
-      body: JSON.stringify({ userId: "u1", plan: "invalid-plan", name: "My Key" }),
+      body: JSON.stringify({
+        userId: "u1",
+        plan: "invalid-plan",
+        name: "My Key",
+      }),
       headers: { "Content-Type": "application/json" },
     });
     const res = await worker.fetch(req, bindings, makeCtx());
@@ -125,7 +132,9 @@ describe("POST /api-keys", () => {
     const res = await worker.fetch(req, bindings, makeCtx());
 
     expect(res.status).toBe(422);
-    const body = (await res.json()) as { fields: Array<{ field: string; message: string }> };
+    const body = (await res.json()) as {
+      fields: Array<{ field: string; message: string }>;
+    };
     const userIdIssue = body.fields.find((f) => f.field === "userId");
     expect(userIdIssue).toBeDefined();
     expect(userIdIssue?.message).toMatch(/empty|whitespace/i);
@@ -240,7 +249,11 @@ describe("POST /api-keys", () => {
   it("writes the key and prefix index to KV after creation", async () => {
     const req = authedRequest("/api-keys", {
       method: "POST",
-      body: JSON.stringify({ userId: "u2", plan: "developer", name: "Dev Key" }),
+      body: JSON.stringify({
+        userId: "u2",
+        plan: "developer",
+        name: "Dev Key",
+      }),
       headers: { "Content-Type": "application/json" },
     });
     const res = await worker.fetch(req, bindings, makeCtx());
@@ -275,7 +288,11 @@ describe("POST /api-keys", () => {
     const collisionBindings = makeBindings({ KV: collidingKV });
     const req = authedRequest("/api-keys", {
       method: "POST",
-      body: JSON.stringify({ userId: "u3", plan: "free", name: "Collision Key" }),
+      body: JSON.stringify({
+        userId: "u3",
+        plan: "free",
+        name: "Collision Key",
+      }),
       headers: { "Content-Type": "application/json" },
     });
     const res = await worker.fetch(req, collisionBindings, makeCtx());

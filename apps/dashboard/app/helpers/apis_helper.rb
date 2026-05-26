@@ -21,6 +21,15 @@ module ApisHelper
     api_categories.find { |cat| cat["id"] == category_id }
   end
 
+  def api_category_display_name(category)
+    id = category["id"]
+    if id.present? && DivisionSlugs::ALL.include?(id)
+      t("divisions.index.cards.#{id}.title", default: category["name"])
+    else
+      category["name"]
+    end
+  end
+
   def find_api(api_id)
     all_apis.find { |api| api["id"] == api_id }
   end

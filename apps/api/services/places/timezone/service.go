@@ -9,7 +9,30 @@ import (
 	"github.com/ringsaturn/tzf"
 )
 
+// Info represents the timezone response.
+type Info struct {
+	Timezone    string `json:"timezone"`
+	Offset      string `json:"offset"`
+	CurrentTime string `json:"current_time"`
+	IsDST       bool   `json:"is_dst"`
+}
+
 var locationCache sync.Map
+
+// Query is the per-item input for the batch timezone endpoint.
+// Priority order: Timezone name > City > lat+lon (non-zero coords).
+type Query struct {
+	Timezone string  `json:"timezone"`
+	City     string  `json:"city"`
+	Lat      float64 `json:"lat" validate:"min=-90,max=90"`
+	Lon      float64 `json:"lon" validate:"min=-180,max=180"`
+}
+
+// BatchResult is the per-item result returned by BatchLookup.
+type BatchResult struct {
+	Info  *Info  `json:"info,omitempty"`
+	Error string `json:"error,omitempty"`
+}
 
 // Service handles timezone lookups.
 type Service struct {
@@ -39,6 +62,34 @@ func (s *Service) GetTimezoneByCoords(lat, lon float64) (*Info, error) {
 // GetCurrentTime returns the current time information for the given IANA timezone name.
 func (s *Service) GetCurrentTime(tzName string) (*Info, error) {
 	return buildTimezoneInfo(tzName)
+}
+
+// BatchLookup resolves timezone info for each item in input order.
+// Per-item errors (unknown timezone, city, or coords) are absorbed in-band.
+func (s *Service) BatchLookup(items []Query) []BatchResult {
+	results := make([]BatchResult, len(items))
+	for i, item := range items {
+		var info *Info
+		var err error
+
+		switch {
+		case item.Timezone != "":
+			info, err = s.GetCurrentTime(item.Timezone)
+		case item.City != "":
+			info, err = s.GetTimezoneByCity(item.City)
+		case item.Lat != 0 && item.Lon != 0:
+			info, err = s.GetTimezoneByCoords(item.Lat, item.Lon)
+		default:
+			err = fmt.Errorf("provide timezone name, city, or lat+lon")
+		}
+
+		if err != nil {
+			results[i] = BatchResult{Error: err.Error()}
+		} else {
+			results[i] = BatchResult{Info: info}
+		}
+	}
+	return results
 }
 
 // GetTimezoneByCity looks up timezone info for the given city name.

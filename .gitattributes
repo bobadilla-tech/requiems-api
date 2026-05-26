@@ -1,3 +1,8 @@
+# Force LF line endings for Go and Go module files
+*.go text eol=lf
+*.mod text eol=lf
+*.sum text eol=lf
+
 # Exclude HTML from language statistics
 *.html linguist-detectable=false
 *.erb linguist-detectable=false

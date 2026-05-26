@@ -1,0 +1,43 @@
+es:
+  admin:
+    access_denied: "Acceso denegado. Se requieren privilegios de administrador."
+    abuse_reports:
+      investigate_success: "Informe marcado como en investigación."
+      investigate_error: "No se pudo actualizar el estado del informe."
+      resolve_success: "Informe resuelto correctamente."
+      resolve_error: "No se pudo resolver el informe."
+      not_found: "Informe de abuso no encontrado."
+    api_keys:
+      revoke_success: "Clave API revocada correctamente."
+      revoke_error: "No se pudo revocar la clave API."
+      not_found: "Clave API no encontrada."
+    private_deployments:
+      subdomain_required: "El slug del subdominio es obligatorio."
+      secret_required: "El secreto del tenant es obligatorio."
+      activate_success: "Despliegue marcado como activo. Correo de confirmación enviado a %{email}."
+      activate_error: "No se pudo activar el despliegue."
+      cancel_success: "Solicitud de despliegue cancelada."
+      cancel_error: "No se pudo cancelar el despliegue."
+      not_found: "Solicitud de despliegue no encontrada."
+    promotions:
+      invalid_plan: "Plan seleccionado no válido."
+      expiry_past: "La fecha de caducidad debe ser futura."
+      reason_required: "El motivo es obligatorio."
+      upgrade_success: "%{email} ha sido actualizado al plan %{plan} hasta el %{date}."
+      upgrade_error: "No se pudo aplicar la promoción."
+      no_active_promotion: "Este usuario no tiene una promoción activa."
+      revoke_success: "Promoción revocada. %{email} ha vuelto al plan gratuito."
+      revoke_error: "No se pudo revocar la promoción."
+    users:
+      not_found: "Usuario no encontrado."
+      suspend_success: "Usuario suspendido correctamente. Todas las claves API han sido revocadas."
+      suspend_error: "No se pudo suspender al usuario."
+      unsuspend_success: "Usuario reactivado correctamente."
+      unsuspend_error: "No se pudo reactivar al usuario."
+      ban_success: "Usuario bloqueado correctamente. Claves API revocadas y suscripción cancelada."
+      ban_error: "No se pudo bloquear al usuario."
+      make_admin_success: "Privilegios de administrador concedidos al usuario."
+      make_admin_error: "No se pudieron conceder los privilegios de administrador."
+      remove_admin_self: "No puedes quitarte tus propios privilegios de administrador."
+      remove_admin_success: "Privilegios de administrador eliminados del usuario."
+      remove_admin_error: "No se pudieron eliminar los privilegios de administrador."

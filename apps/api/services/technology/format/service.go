@@ -17,6 +17,11 @@ import (
 
 const maxContentSize = 512 * 1024 // 512 KB
 
+// Response holds the converted output.
+type Response struct {
+	Result string `json:"result"`
+}
+
 // Service converts content between supported data formats.
 type Service struct{}
 

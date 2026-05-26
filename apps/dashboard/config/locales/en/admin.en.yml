@@ -1,0 +1,43 @@
+en:
+  admin:
+    access_denied: "Access denied. Admin privileges required."
+    abuse_reports:
+      investigate_success: "Report marked as investigating."
+      investigate_error: "Failed to update report status."
+      resolve_success: "Report resolved successfully."
+      resolve_error: "Failed to resolve report."
+      not_found: "Abuse report not found."
+    api_keys:
+      revoke_success: "API key revoked successfully."
+      revoke_error: "Failed to revoke API key."
+      not_found: "API key not found."
+    private_deployments:
+      subdomain_required: "Subdomain slug is required."
+      secret_required: "Tenant secret is required."
+      activate_success: "Deployment marked as active. Confirmation email sent to %{email}."
+      activate_error: "Failed to activate deployment."
+      cancel_success: "Deployment request cancelled."
+      cancel_error: "Failed to cancel deployment."
+      not_found: "Deployment request not found."
+    promotions:
+      invalid_plan: "Invalid plan selected."
+      expiry_past: "Expiry date must be in the future."
+      reason_required: "Reason is required."
+      upgrade_success: "%{email} has been upgraded to the %{plan} plan until %{date}."
+      upgrade_error: "Failed to apply promotion."
+      no_active_promotion: "This user has no active promotion."
+      revoke_success: "Promotion revoked. %{email} has been returned to the free plan."
+      revoke_error: "Failed to revoke promotion."
+    users:
+      not_found: "User not found."
+      suspend_success: "User suspended successfully. All API keys have been revoked."
+      suspend_error: "Failed to suspend user."
+      unsuspend_success: "User unsuspended successfully."
+      unsuspend_error: "Failed to unsuspend user."
+      ban_success: "User banned successfully. All API keys revoked and subscription canceled."
+      ban_error: "Failed to ban user."
+      make_admin_success: "User granted admin privileges."
+      make_admin_error: "Failed to grant admin privileges."
+      remove_admin_self: "You cannot remove your own admin privileges."
+      remove_admin_success: "Admin privileges removed from user."
+      remove_admin_error: "Failed to remove admin privileges."

@@ -10,6 +10,23 @@ import (
 	"requiems-api/platform/svcerr"
 )
 
+// HistoricalPrice is a single year's average commodity price.
+type HistoricalPrice struct {
+	Period string  `json:"period"`
+	Price  float64 `json:"price"`
+}
+
+// CommodityPrice is the response payload for GET /v1/finance/commodities/:commodity.
+type CommodityPrice struct {
+	Commodity  string            `json:"commodity"`
+	Name       string            `json:"name"`
+	Price      float64           `json:"price"`
+	Unit       string            `json:"unit"`
+	Currency   string            `json:"currency"`
+	Change24h  float64           `json:"change_24h"`
+	Historical []HistoricalPrice `json:"historical"`
+}
+
 const historyDepth = 11 // 1 current + 10 historical years
 
 // Service provides commodity price lookups against the commodity_price_history PostgreSQL table.

@@ -1,6 +1,4 @@
-# Skill: High-Quality Plane Ticket Writing
-
-## Purpose
+# High-Quality Ticket Creation 
 
 Create self-contained, implementation-ready Plane tickets with enough context
 that a developer can start work immediately without chat follow-up.
@@ -99,7 +97,8 @@ evidence.
 4. Business impact is present and non-generic.
 5. No dates appear anywhere in the ticket body/title.
 6. No placeholder text remains.
-7. Ticket has enough implementation context (files/flows/data model) to start work immediately.
+7. Ticket has enough implementation context (files/flows/data model) to start
+   work immediately.
 8. Acceptance criteria are testable and specific.
 
 ## Guardrails
@@ -180,12 +179,12 @@ or a private `.env` that stays untracked.
 
 ### Identifiers (this workspace)
 
-| What | Value |
-|------|--------|
-| Host (UI + API) | `https://tasks.bobadilla.tech` |
-| API prefix | `/api/v1/` |
-| Workspace **slug** | `core` |
-| Project id (**UUID**) | `5da3caa1-cbba-4e0d-b9a9-0bcad39bba09` |
+| What                                      | Value                                  |
+| ----------------------------------------- | -------------------------------------- |
+| Host (UI + API)                           | `https://tasks.bobadilla.tech`         |
+| API prefix                                | `/api/v1/`                             |
+| Workspace **slug**                        | `core`                                 |
+| Project id (**UUID**)                     | `5da3caa1-cbba-4e0d-b9a9-0bcad39bba09` |
 | Example backlog **state** id (new issues) | `57725193-924f-4477-b9bc-b305e553efb9` |
 
 Re-check **state** and **project** ids in the Plane UI if workflows were
@@ -203,8 +202,8 @@ https://tasks.bobadilla.tech/api/v1/workspaces/core/projects/5da3caa1-cbba-4e0d-
 - **`X-API-Key`**: personal access token (Plane); not `Authorization: Bearer …`
   for PAT-based calls.
 - **`Content-Type: application/json`** and **`Accept: application/json`**
-- **`User-Agent`**: use a normal browser string. A generic script UA can
-  trigger Cloudflare **error 1010**; a desktop Chrome string is a safe default.
+- **`User-Agent`**: use a normal browser string. A generic script UA can trigger
+  Cloudflare **error 1010**; a desktop Chrome string is a safe default.
 
 Define once:
 

@@ -5,6 +5,13 @@ import (
 	"math/rand/v2"
 )
 
+// Fact is the response payload for a single random fact.
+type Fact struct {
+	Fact     string `json:"fact"`
+	Category string `json:"category"`
+	Source   string `json:"source"`
+}
+
 type entry struct {
 	fact     string
 	category string

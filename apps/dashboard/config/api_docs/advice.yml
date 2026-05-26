@@ -79,7 +79,7 @@ endpoints:
       - name: count
         type: integer
         required: true
-        description: Number of advice items to return. Must be greater than zero.
+        description: Number of advice items to return. Must be between 1 and 50.
     request_example: |
       {
         "count": 3
@@ -124,7 +124,7 @@ endpoints:
         status: 422
         when: count is zero or negative
       - code: service_unavailable
-        status: 503
+        status: 500
         when: No advice available in database
     code_examples:
       curl: |

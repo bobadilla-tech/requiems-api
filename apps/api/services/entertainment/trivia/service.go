@@ -5,6 +5,25 @@ import (
 	"math/rand/v2"
 )
 
+// Question is a trivia question with multiple-choice answers.
+type Question struct {
+	Question   string   `json:"question"`
+	Options    []string `json:"options"`
+	Answer     string   `json:"answer"`
+	Category   string   `json:"category"`
+	Difficulty string   `json:"difficulty"`
+}
+
+// BatchResponse represents the result of a single trivia query
+// within a batch request, pairing the original filter (category
+// and difficulty) with either a question or an error.
+type BatchResponse struct {
+	Category   string   `json:"category"`
+	Difficulty string   `json:"difficulty"`
+	Error      string   `json:"error,omitempty"`
+	Data       Question `json:"data"`
+}
+
 // questions is the in-memory trivia question database.
 var questions = []Question{
 	// --- science ---
@@ -504,4 +523,32 @@ func (s *Service) Random(category, difficulty string) (Question, error) {
 	}
 
 	return pool[rand.IntN(len(pool))], nil //nolint:gosec // Good enough for trivia selection.
+}
+
+// RandomBatch retrieves a random trivia question for each filter in the batch.
+// It applies partial failure — if a filter yields no results, that entry will
+// contain an error message while the rest of the results are still returned.
+// The order of results matches the order of the input filters.
+func (s *Service) RandomBatch(filters []Request) []BatchResponse {
+	results := make([]BatchResponse, len(filters))
+
+	for i, filter := range filters {
+		result, err := s.Random(filter.Category, filter.Difficulty)
+		if err != nil {
+			results[i] = BatchResponse{
+				Category:   filter.Category,
+				Difficulty: filter.Difficulty,
+				Error:      err.Error(),
+			}
+			continue
+		}
+
+		results[i] = BatchResponse{
+			Category:   filter.Category,
+			Difficulty: filter.Difficulty,
+			Data:       result,
+		}
+	}
+
+	return results
 }

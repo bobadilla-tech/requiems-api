@@ -207,7 +207,7 @@ apis:
       - validation
       - text
     description: Detect and censor profanity in text for content moderation
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
     documentation_url: /apis/profanity
@@ -222,7 +222,7 @@ apis:
     categories:
       - networking
     description: Get geolocation data for any IP address including country, city, ISP, and VPN detection.
-    endpoints_count: 1
+    endpoints_count: 3
     status: live
     popular: false
     documentation_url: /apis/ip-info
@@ -237,7 +237,7 @@ apis:
     categories:
       - networking
     description: Look up Autonomous System Number (ASN), organization, ISP, and network route information for any IP address.
-    endpoints_count: 1
+    endpoints_count: 3
     status: live
     popular: false
     documentation_url: /apis/ip-asn
@@ -330,7 +330,7 @@ apis:
     categories:
       - places
     description: Get timezone information for any location by coordinates or city name
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/timezone
@@ -385,7 +385,7 @@ apis:
     categories:
       - places
     description: Convert addresses to coordinates and coordinates back to addresses
-    endpoints_count: 2
+    endpoints_count: 4
     status: live
     popular: false
     documentation_url: /apis/geocode
@@ -399,7 +399,7 @@ apis:
     categories:
       - places
     description: Look up city, state, and coordinates for any postal code worldwide
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/postal-code
@@ -428,7 +428,7 @@ apis:
     categories:
       - text
     description: Check spelling and get correction suggestions for misspelled words
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
     documentation_url: /apis/spell-check
@@ -532,7 +532,7 @@ apis:
     categories:
       - text
     description: Generate placeholder text for design mockups and prototypes
-    endpoints_count: 3
+    endpoints_count: 4
     status: live
     popular: false
     documentation_url: /apis/lorem-ipsum
@@ -575,7 +575,7 @@ apis:
     categories:
       - technology
     description: Generate QR codes from any text or URL, returned as a PNG image or base64-encoded JSON
-    endpoints_count: 2
+    endpoints_count: 3
     status: live
     popular: true
     documentation_url: /apis/qr-code
@@ -603,7 +603,7 @@ apis:
     categories:
       - technology
     description: Generate cryptographically secure random passwords with customizable length and character sets
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/password-generator
@@ -617,7 +617,7 @@ apis:
     categories:
       - technology
     description: Parse user agent strings to extract browser, OS, device type, and bot detection
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/useragent
@@ -673,7 +673,7 @@ apis:
     categories:
       - technology
     description: Convert integers between binary, octal, decimal, and hexadecimal. Accepts optional 0x, 0b, and 0o prefixes.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/number-base-conversion
@@ -751,7 +751,7 @@ apis:
     categories:
       - entertainment
     description: Get random trivia questions with multiple-choice answers. Filter by category (science, history, geography, sports, music, movies, literature, math, technology, nature) and difficulty (easy, medium, hard).
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/trivia
@@ -793,7 +793,7 @@ apis:
     categories:
       - entertainment
     description: Get daily horoscope readings for all 12 zodiac signs
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
     documentation_url: /apis/horoscope
@@ -862,7 +862,7 @@ apis:
     categories:
       - health
     description: "Browse 1,500+ exercises with step-by-step instructions, target muscles, secondary muscles, equipment requirements, and body part filters."
-    endpoints_count: 6
+    endpoints_count: 7
     status: live
     popular: false
     documentation_url: /apis/fitness-exercises

@@ -1,6 +1,7 @@
 package qr
 
 import (
+	"encoding/base64"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -73,4 +74,29 @@ func TestService_Generate_EmptyData(t *testing.T) {
 
 	_, err := svc.Generate("", 256, "medium")
 	assert.Error(t, err)
+}
+
+func TestService_GenerateBatch(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+
+	items := []Query{
+		{Data: "https://example.com", Size: 256},
+		{Data: "hello world", Size: 128},
+	}
+	results := svc.GenerateBatch(items)
+
+	require.Len(t, results, 2)
+	for i, item := range results {
+		assert.NotEmpty(t, item.Image, "expected image at index %d", i)
+		assert.Empty(t, item.Error, "expected no error at index %d", i)
+
+		decoded, err := base64.StdEncoding.DecodeString(item.Image)
+		require.NoError(t, err, "expected valid base64 at index %d", i)
+		if len(decoded) < 4 || string(decoded[:4]) != "\x89PNG" {
+			t.Errorf("expected PNG signature at index %d", i)
+		}
+	}
+	assert.Equal(t, "https://example.com", results[0].Data)
+	assert.Equal(t, "hello world", results[1].Data)
 }

@@ -3,23 +3,20 @@ package advice
 import (
 	"context"
 	"fmt"
-	"time"
 	"sync"
+	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"requiems-api/platform/db"
 )
 
-type querier interface {
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-}
-
 type Service struct {
-	db querier
+	db db.Querier
 }
 
-func NewService(db *pgxpool.Pool) *Service {
-	return &Service{db: db}
+func NewService(pool *pgxpool.Pool) *Service {
+	return &Service{db: pool}
 }
 
 func (s *Service) Random(ctx context.Context) (Advice, error) {
@@ -41,6 +38,9 @@ func (s *Service) Random(ctx context.Context) (Advice, error) {
 }
 
 func (s *Service) RandomBatch(ctx context.Context, count int) ([]Advice, error) {
+	if count < 0 {
+		return nil, fmt.Errorf("count must be >= 0")
+	}
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 

@@ -16,6 +16,7 @@ type Config struct {
 	EnabledServices    string // comma-separated list of services to mount; empty = all
 	Environment        string // "development" | "staging" | "production"
 	SentryDSN          string
+	LanguageToolURL    string // base URL for LanguageTool spell-check service
 }
 
 func Load() Config {
@@ -33,6 +34,7 @@ func Load() Config {
 		EnabledServices:    envOrDefault("ENABLED_SERVICES", ""),
 		Environment:        envOrDefault("ENVIRONMENT", "development"),
 		SentryDSN:          envOrDefault("SENTRY_DSN", "https://df9023edf98442d4887d1040de81b768@issues.bobadilla.tech/1"),
+		LanguageToolURL:    envOrDefault("LANGUAGETOOL_URL", "http://localhost:8010"),
 	}
 }
 

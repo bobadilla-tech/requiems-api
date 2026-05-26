@@ -1,6 +1,7 @@
 package cryptocoin
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -10,6 +11,11 @@ import (
 	"requiems-api/platform/httpx"
 	"requiems-api/platform/svcerr"
 )
+
+// Getter is the interface used by the HTTP transport layer.
+type Getter interface {
+	GetPrice(ctx context.Context, symbol string) (Price, error)
+}
 
 // RegisterRoutes mounts crypto price handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).

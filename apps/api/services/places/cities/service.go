@@ -8,6 +8,15 @@ import (
 	"strings"
 )
 
+type City struct {
+	Name       string  `json:"name"`
+	Country    string  `json:"country"`
+	Population int64   `json:"population"`
+	Timezone   string  `json:"timezone"`
+	Lat        float64 `json:"lat"`
+	Lon        float64 `json:"lon"`
+}
+
 // Service looks up cities from the GeoNames cities15000 dataset.
 // The dataset is loaded once at startup and held in memory.
 type Service struct {
