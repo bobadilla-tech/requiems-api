@@ -10,8 +10,8 @@ import (
 	"requiems-api/services/finance/swift"
 	ipinfo "requiems-api/services/networking/ip/info"
 	ipvpn "requiems-api/services/networking/ip/vpn"
-	"requiems-api/services/systems/payments/payment_validate"
-	"requiems-api/services/systems/payments/transaction_risk"
+	paymentvalidate "requiems-api/services/systems/payments/payment_validate"
+	transactionrisk "requiems-api/services/systems/payments/transaction_risk"
 )
 
 // Deps holds the external clients needed by the payments system.

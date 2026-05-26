@@ -72,28 +72,34 @@ type riskLookups struct {
 	info infoOut
 }
 
+type networkSignals struct {
+	vpnDetected   bool
+	proxyDetected bool
+	torDetected   bool
+}
+
 func (s *Service) Score(ctx context.Context, req Request) (Result, error) {
 	lookups := s.runLookups(ctx, req)
 	countries := normalizeCountries(req, lookups)
 
-	vpnDetected, proxyDetected, torDetected := vpnSignals(lookups.vpn)
+	network := vpnSignals(lookups.vpn)
 
 	flags := make([]string, 0, 5)
 	countryScore, countryMismatch := scoreCountrySignals(countries, &flags)
-	networkScore := scoreNetworkSignals(lookups.vpn, vpnDetected, proxyDetected, torDetected, &flags)
-	score := roundRiskScore(countryScore + networkScore + scoreHighValueVPN(req, vpnDetected, &flags))
+	networkScore := scoreNetworkSignals(lookups.vpn, network, &flags)
+	score := roundRiskScore(countryScore + networkScore + scoreHighValueVPN(req, network.vpnDetected, &flags))
 
 	return Result{
 		RiskScore: score,
-		IsSafe:    score < 0.5 && !torDetected && !proxyDetected,
+		IsSafe:    score < 0.5 && !network.torDetected && !network.proxyDetected,
 		Flags:     flags,
 		Signals: Signals{
 			IPCountry:       countries.ip,
 			BillingCountry:  billingCountryPtr(req.BillingCountry),
 			BINCountry:      countries.bin,
-			VPNDetected:     vpnDetected,
-			IsProxy:         proxyDetected,
-			IsTOR:           torDetected,
+			VPNDetected:     network.vpnDetected,
+			IsProxy:         network.proxyDetected,
+			IsTOR:           network.torDetected,
 			CountryMismatch: countryMismatch,
 		},
 	}, nil
@@ -159,10 +165,12 @@ func normalizeCountries(req Request, lookups riskLookups) countries {
 	return out
 }
 
-func vpnSignals(vpnResult vpnOut) (bool, bool, bool) {
-	return vpnResult.err == nil && vpnResult.r.IsVPN,
-		vpnResult.err == nil && vpnResult.r.IsProxy,
-		vpnResult.err == nil && vpnResult.r.IsTor
+func vpnSignals(vpnResult vpnOut) networkSignals {
+	return networkSignals{
+		vpnDetected:   vpnResult.err == nil && vpnResult.r.IsVPN,
+		proxyDetected: vpnResult.err == nil && vpnResult.r.IsProxy,
+		torDetected:   vpnResult.err == nil && vpnResult.r.IsTor,
+	}
 }
 
 func scoreCountrySignals(c countries, flags *[]string) (float64, bool) {
@@ -191,21 +199,19 @@ func scoreCountrySignals(c countries, flags *[]string) (float64, bool) {
 
 func scoreNetworkSignals(
 	vpnResult vpnOut,
-	vpnDetected bool,
-	proxyDetected bool,
-	torDetected bool,
+	network networkSignals,
 	flags *[]string,
 ) float64 {
 	score := 0.0
-	if torDetected {
+	if network.torDetected {
 		score += 0.40
 		*flags = append(*flags, "tor_detected")
 	}
-	if proxyDetected {
+	if network.proxyDetected {
 		score += 0.30
 		*flags = append(*flags, "proxy_detected")
 	}
-	if vpnDetected {
+	if network.vpnDetected {
 		score += 0.20
 		*flags = append(*flags, "vpn_detected")
 	}

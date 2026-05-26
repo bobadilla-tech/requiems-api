@@ -104,6 +104,24 @@ type verificationChecks struct {
 	vpn    vpnOut
 }
 
+type emailScore struct {
+	signal EmailSignal
+	score  float64
+}
+
+type domainScore struct {
+	signal   DomainSignal
+	score    float64
+	resolved bool
+	hasMX    bool
+}
+
+type ipScore struct {
+	signal   *IPSignal
+	score    float64
+	resolved bool
+}
+
 func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	emailResult := s.email.ValidateEmail(ctx, req.Email)
 	emailDomain := domainFromEmail(req.Email, emailResult)
@@ -113,13 +131,13 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	checks := s.runVerificationChecks(ctx, emailDomain, parsedIP, includeIP)
 
 	flags := make([]string, 0, 4)
-	emailSig, emailScore := scoreEmail(emailResult, &flags)
-	domainSig, domainScore, domainResolved, hasMX := scoreDomain(checks.whois, checks.domain, checks.mx, &flags)
-	ipSig, ipScore, ipResolved := scoreIP(req.IPAddress, parsedIP, checks.vpn, &flags)
+	emailScored := scoreEmail(emailResult, &flags)
+	domainScored := scoreDomain(checks.whois, checks.domain, checks.mx, &flags)
+	ipScored := scoreIP(req.IPAddress, parsedIP, checks.vpn, &flags)
 
-	score := roundRiskScore(emailScore + domainScore + ipScore)
-	confidence := verificationConfidence(domainResolved, ipResolved, includeIP)
-	verified := score < 0.3 && confidence > 0.5 && emailResult.Valid && hasMX && !domainSig.Available
+	score := roundRiskScore(emailScored.score + domainScored.score + ipScored.score)
+	confidence := verificationConfidence(domainScored.resolved, ipScored.resolved, includeIP)
+	verified := score < 0.3 && confidence > 0.5 && emailResult.Valid && domainScored.hasMX && !domainScored.signal.Available
 
 	return Result{
 		Verified:   verified,
@@ -127,9 +145,9 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		RiskScore:  score,
 		Flags:      flags,
 		Signals: Signals{
-			Email:  emailSig,
-			Domain: domainSig,
-			IP:     ipSig,
+			Email:  emailScored.signal,
+			Domain: domainScored.signal,
+			IP:     ipScored.signal,
 		},
 	}, nil
 }
@@ -193,7 +211,7 @@ func (s *Service) runVerificationChecks(
 	}
 }
 
-func scoreEmail(emailResult email.Validation, flags *[]string) (EmailSignal, float64) {
+func scoreEmail(emailResult email.Validation, flags *[]string) emailScore {
 	score := 0.0
 	emailSig := EmailSignal{
 		Valid:      emailResult.Valid,
@@ -208,7 +226,7 @@ func scoreEmail(emailResult email.Validation, flags *[]string) (EmailSignal, flo
 		score += 0.30
 		*flags = append(*flags, "disposable_email")
 	}
-	return emailSig, score
+	return emailScore{signal: emailSig, score: score}
 }
 
 func scoreDomain(
@@ -216,7 +234,7 @@ func scoreDomain(
 	domainResult domainOut,
 	mxResult mxOut,
 	flags *[]string,
-) (DomainSignal, float64, bool, bool) {
+) domainScore {
 	score := 0.0
 	resolved := true
 	ageDays := -1
@@ -256,10 +274,15 @@ func scoreDomain(
 		*flags = append(*flags, "domain_not_registered")
 	}
 
-	return domainSig, score, resolved, hasMX
+	return domainScore{
+		signal:   domainSig,
+		score:    score,
+		resolved: resolved,
+		hasMX:    hasMX,
+	}
 }
 
-func scoreIP(ipAddress string, parsedIP net.IP, vpnResult vpnOut, flags *[]string) (*IPSignal, float64, bool) {
+func scoreIP(ipAddress string, parsedIP net.IP, vpnResult vpnOut, flags *[]string) ipScore {
 	var ipSig *IPSignal
 	if ipAddress != "" && parsedIP != nil && vpnResult.err == nil {
 		ipSig = &IPSignal{
@@ -269,11 +292,11 @@ func scoreIP(ipAddress string, parsedIP net.IP, vpnResult vpnOut, flags *[]strin
 		}
 		if vpnResult.r.IsVPN || vpnResult.r.IsProxy || vpnResult.r.IsTor {
 			*flags = append(*flags, "ip_risk")
-			return ipSig, 0.20, true
+			return ipScore{signal: ipSig, score: 0.20, resolved: true}
 		}
-		return ipSig, 0, true
+		return ipScore{signal: ipSig, resolved: true}
 	}
-	return nil, 0, false
+	return ipScore{}
 }
 
 func roundRiskScore(score float64) float64 {
