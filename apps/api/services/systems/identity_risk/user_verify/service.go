@@ -80,30 +80,76 @@ type Result struct {
 	Signals    Signals  `json:"signals"`
 }
 
+type whoisOut struct {
+	r   whois.LookupResponse
+	err error
+}
+
+type domainOut struct{ r domain.InfoResponse }
+
+type mxOut struct {
+	r   mx.LookupResponse
+	err error
+}
+
+type vpnOut struct {
+	r   ipvpn.IPCheckResponse
+	err error
+}
+
+type verificationChecks struct {
+	whois  whoisOut
+	domain domainOut
+	mx     mxOut
+	vpn    vpnOut
+}
+
 func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	emailResult := s.email.ValidateEmail(ctx, req.Email)
+	emailDomain := domainFromEmail(req.Email, emailResult)
+	parsedIP := net.ParseIP(req.IPAddress)
+	includeIP := req.IPAddress != "" && parsedIP != nil && s.vpn != nil
 
-	emailDomain := ""
-	if emailResult.Domain != nil {
-		emailDomain = *emailResult.Domain
-	} else if idx := strings.LastIndex(req.Email, "@"); idx >= 0 {
-		emailDomain = req.Email[idx+1:]
-	}
+	checks := s.runVerificationChecks(ctx, emailDomain, parsedIP, includeIP)
 
-	type whoisOut struct {
-		r   whois.LookupResponse
-		err error
-	}
-	type domainOut struct{ r domain.InfoResponse }
-	type mxOut struct {
-		r   mx.LookupResponse
-		err error
-	}
-	type vpnOut struct {
-		r   ipvpn.IPCheckResponse
-		err error
-	}
+	flags := make([]string, 0, 4)
+	emailSig, emailScore := scoreEmail(emailResult, &flags)
+	domainSig, domainScore, domainResolved, hasMX := scoreDomain(checks.whois, checks.domain, checks.mx, &flags)
+	ipSig, ipScore, ipResolved := scoreIP(req.IPAddress, parsedIP, checks.vpn, &flags)
 
+	score := roundRiskScore(emailScore + domainScore + ipScore)
+	confidence := verificationConfidence(domainResolved, ipResolved, includeIP)
+	verified := score < 0.3 && confidence > 0.5 && emailResult.Valid && hasMX && !domainSig.Available
+
+	return Result{
+		Verified:   verified,
+		Confidence: confidence,
+		RiskScore:  score,
+		Flags:      flags,
+		Signals: Signals{
+			Email:  emailSig,
+			Domain: domainSig,
+			IP:     ipSig,
+		},
+	}, nil
+}
+
+func domainFromEmail(addr string, result email.Validation) string {
+	if result.Domain != nil {
+		return *result.Domain
+	}
+	if idx := strings.LastIndex(addr, "@"); idx >= 0 {
+		return addr[idx+1:]
+	}
+	return ""
+}
+
+func (s *Service) runVerificationChecks(
+	ctx context.Context,
+	emailDomain string,
+	parsedIP net.IP,
+	includeIP bool,
+) verificationChecks {
 	whoisCh := make(chan whoisOut, 1)
 	domainCh := make(chan domainOut, 1)
 	mxCh := make(chan mxOut, 1)
@@ -128,8 +174,7 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 		mxCh <- mxOut{r, err}
 	}()
 
-	parsedIP := net.ParseIP(req.IPAddress)
-	if req.IPAddress != "" && parsedIP != nil && s.vpn != nil {
+	if includeIP {
 		wg.Go(func() {
 			r, err := s.vpn.CheckIP(ctx, parsedIP)
 			vpnCh <- vpnOut{r, err}
@@ -140,19 +185,16 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 
 	wg.Wait()
 
-	whoisResult := <-whoisCh
-	domainResult := <-domainCh
-	mxResult := <-mxCh
-	vpnResult := <-vpnCh
-
-	flags := make([]string, 0, 4)
-	score := 0.0
-	servicesResolved := 2 // email + domain always count
-	servicesTotal := 2
-	if req.IPAddress != "" && parsedIP != nil && s.vpn != nil {
-		servicesTotal++
+	return verificationChecks{
+		whois:  <-whoisCh,
+		domain: <-domainCh,
+		mx:     <-mxCh,
+		vpn:    <-vpnCh,
 	}
+}
 
+func scoreEmail(emailResult email.Validation, flags *[]string) (EmailSignal, float64) {
+	score := 0.0
 	emailSig := EmailSignal{
 		Valid:      emailResult.Valid,
 		Disposable: emailResult.Disposable,
@@ -160,28 +202,38 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 	}
 	if !emailResult.Valid {
 		score += 0.50
-		flags = append(flags, "email_invalid")
+		*flags = append(*flags, "email_invalid")
 	}
 	if emailResult.Disposable {
 		score += 0.30
-		flags = append(flags, "disposable_email")
+		*flags = append(*flags, "disposable_email")
 	}
+	return emailSig, score
+}
 
+func scoreDomain(
+	whoisResult whoisOut,
+	domainResult domainOut,
+	mxResult mxOut,
+	flags *[]string,
+) (DomainSignal, float64, bool, bool) {
+	score := 0.0
+	resolved := true
 	ageDays := -1
 	if whoisResult.err == nil && whoisResult.r.CreatedDate != "" {
 		if age, ok := parseDomainAge(whoisResult.r.CreatedDate); ok {
 			ageDays = age
 			if ageDays < 30 {
 				score += 0.25
-				flags = append(flags, "young_domain")
+				*flags = append(*flags, "young_domain")
 			} else if ageDays < 180 {
 				score += 0.10
-				flags = append(flags, "young_domain")
+				*flags = append(*flags, "young_domain")
 			}
 		}
 	} else if whoisResult.err != nil {
-		flags = append(flags, "whois_unavailable")
-		servicesResolved--
+		*flags = append(*flags, "whois_unavailable")
+		resolved = false
 	}
 
 	hasMX := (mxResult.err == nil && len(mxResult.r.Records) > 0) || len(domainResult.r.DNS.MX) > 0
@@ -197,44 +249,50 @@ func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
 
 	if mxResult.err == nil && !hasMX {
 		score += 0.30
-		flags = append(flags, "no_mx")
+		*flags = append(*flags, "no_mx")
 	}
 	if available {
 		score += 0.50
-		flags = append(flags, "domain_not_registered")
+		*flags = append(*flags, "domain_not_registered")
 	}
 
+	return domainSig, score, resolved, hasMX
+}
+
+func scoreIP(ipAddress string, parsedIP net.IP, vpnResult vpnOut, flags *[]string) (*IPSignal, float64, bool) {
 	var ipSig *IPSignal
-	if req.IPAddress != "" && parsedIP != nil && vpnResult.err == nil {
+	if ipAddress != "" && parsedIP != nil && vpnResult.err == nil {
 		ipSig = &IPSignal{
 			IsVPN:      vpnResult.r.IsVPN,
 			IsProxy:    vpnResult.r.IsProxy,
 			FraudScore: float64(vpnResult.r.FraudScore) / 100.0,
 		}
 		if vpnResult.r.IsVPN || vpnResult.r.IsProxy || vpnResult.r.IsTor {
-			score += 0.20
-			flags = append(flags, "ip_risk")
+			*flags = append(*flags, "ip_risk")
+			return ipSig, 0.20, true
 		}
+		return ipSig, 0, true
+	}
+	return nil, 0, false
+}
+
+func roundRiskScore(score float64) float64 {
+	return math.Round(math.Min(score, 1.0)*100) / 100
+}
+
+func verificationConfidence(domainResolved, ipResolved, includeIP bool) float64 {
+	servicesResolved := 1 // email validation always runs
+	servicesTotal := 2    // email + domain
+	if domainResolved {
 		servicesResolved++
 	}
-
-	score = math.Min(score, 1.0)
-	score = math.Round(score*100) / 100
-	confidence := math.Round(float64(servicesResolved)/float64(servicesTotal)*100) / 100
-
-	verified := score < 0.3 && confidence > 0.5 && emailResult.Valid && hasMX && !available
-
-	return Result{
-		Verified:   verified,
-		Confidence: confidence,
-		RiskScore:  score,
-		Flags:      flags,
-		Signals: Signals{
-			Email:  emailSig,
-			Domain: domainSig,
-			IP:     ipSig,
-		},
-	}, nil
+	if includeIP {
+		servicesTotal++
+		if ipResolved {
+			servicesResolved++
+		}
+	}
+	return math.Round(float64(servicesResolved)/float64(servicesTotal)*100) / 100
 }
 
 func parseDomainAge(dateStr string) (int, bool) {

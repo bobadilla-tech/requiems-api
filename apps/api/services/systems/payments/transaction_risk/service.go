@@ -51,20 +51,55 @@ type Result struct {
 	Signals   Signals  `json:"signals"`
 }
 
-func (s *Service) Score(ctx context.Context, req Request) (Result, error) {
-	type binOut struct {
-		r   bin.LookupResponse
-		err error
-	}
-	type vpnOut struct {
-		r   ipvpn.IPCheckResponse
-		err error
-	}
-	type infoOut struct {
-		r   ipinfo.LookupResponse
-		err error
-	}
+type binOut struct {
+	r   bin.LookupResponse
+	err error
+}
 
+type vpnOut struct {
+	r   ipvpn.IPCheckResponse
+	err error
+}
+
+type infoOut struct {
+	r   ipinfo.LookupResponse
+	err error
+}
+
+type riskLookups struct {
+	bin  binOut
+	vpn  vpnOut
+	info infoOut
+}
+
+func (s *Service) Score(ctx context.Context, req Request) (Result, error) {
+	lookups := s.runLookups(ctx, req)
+	countries := normalizeCountries(req, lookups)
+
+	vpnDetected, proxyDetected, torDetected := vpnSignals(lookups.vpn)
+
+	flags := make([]string, 0, 5)
+	countryScore, countryMismatch := scoreCountrySignals(countries, &flags)
+	networkScore := scoreNetworkSignals(lookups.vpn, vpnDetected, proxyDetected, torDetected, &flags)
+	score := roundRiskScore(countryScore + networkScore + scoreHighValueVPN(req, vpnDetected, &flags))
+
+	return Result{
+		RiskScore: score,
+		IsSafe:    score < 0.5 && !torDetected && !proxyDetected,
+		Flags:     flags,
+		Signals: Signals{
+			IPCountry:       countries.ip,
+			BillingCountry:  billingCountryPtr(req.BillingCountry),
+			BINCountry:      countries.bin,
+			VPNDetected:     vpnDetected,
+			IsProxy:         proxyDetected,
+			IsTOR:           torDetected,
+			CountryMismatch: countryMismatch,
+		},
+	}, nil
+}
+
+func (s *Service) runLookups(ctx context.Context, req Request) riskLookups {
 	binCh := make(chan binOut, 1)
 	vpnCh := make(chan vpnOut, 1)
 	infoCh := make(chan infoOut, 1)
@@ -97,95 +132,106 @@ func (s *Service) Score(ctx context.Context, req Request) (Result, error) {
 
 	wg.Wait()
 
-	binResult := <-binCh
-	vpnResult := <-vpnCh
-	infoResult := <-infoCh
-
-	score := 0.0
-	flags := make([]string, 0, 5)
-
-	ipCountry := ""
-	if infoResult.err == nil {
-		ipCountry = strings.ToUpper(infoResult.r.CountryCode)
+	return riskLookups{
+		bin:  <-binCh,
+		vpn:  <-vpnCh,
+		info: <-infoCh,
 	}
+}
 
-	binCountry := ""
-	if binResult.err == nil {
-		binCountry = strings.ToUpper(binResult.r.CountryCode)
+type countries struct {
+	ip      string
+	bin     string
+	billing string
+}
+
+func normalizeCountries(req Request, lookups riskLookups) countries {
+	out := countries{}
+	if lookups.info.err == nil {
+		out.ip = strings.ToUpper(lookups.info.r.CountryCode)
 	}
-
-	billingCC := ""
+	if lookups.bin.err == nil {
+		out.bin = strings.ToUpper(lookups.bin.r.CountryCode)
+	}
 	if req.BillingCountry != "" {
-		billingCC = strings.ToUpper(req.BillingCountry)
+		out.billing = strings.ToUpper(req.BillingCountry)
 	}
+	return out
+}
 
-	vpnDetected := vpnResult.err == nil && vpnResult.r.IsVPN
-	proxyDetected := vpnResult.err == nil && vpnResult.r.IsProxy
-	torDetected := vpnResult.err == nil && vpnResult.r.IsTor
+func vpnSignals(vpnResult vpnOut) (bool, bool, bool) {
+	return vpnResult.err == nil && vpnResult.r.IsVPN,
+		vpnResult.err == nil && vpnResult.r.IsProxy,
+		vpnResult.err == nil && vpnResult.r.IsTor
+}
 
+func scoreCountrySignals(c countries, flags *[]string) (float64, bool) {
+	score := 0.0
 	countryMismatch := false
-	if billingCC != "" {
-		if ipCountry != "" && ipCountry != billingCC {
+	if c.billing != "" {
+		if c.ip != "" && c.ip != c.billing {
 			score += 0.35
-			flags = append(flags, "ip_country_mismatch")
+			*flags = append(*flags, "ip_country_mismatch")
 			countryMismatch = true
 		}
-		if binCountry != "" && binCountry != billingCC {
+		if c.bin != "" && c.bin != c.billing {
 			score += 0.25
-			flags = append(flags, "bin_country_mismatch")
+			*flags = append(*flags, "bin_country_mismatch")
 			countryMismatch = true
 		}
-	} else if ipCountry != "" && binCountry != "" && ipCountry != binCountry {
+	} else if c.ip != "" && c.bin != "" && c.ip != c.bin {
 		countryMismatch = true
 	}
 
 	if countryMismatch {
-		flags = append(flags, "country_mismatch")
+		*flags = append(*flags, "country_mismatch")
 	}
+	return score, countryMismatch
+}
 
+func scoreNetworkSignals(
+	vpnResult vpnOut,
+	vpnDetected bool,
+	proxyDetected bool,
+	torDetected bool,
+	flags *[]string,
+) float64 {
+	score := 0.0
 	if torDetected {
 		score += 0.40
-		flags = append(flags, "tor_detected")
+		*flags = append(*flags, "tor_detected")
 	}
 	if proxyDetected {
 		score += 0.30
-		flags = append(flags, "proxy_detected")
+		*flags = append(*flags, "proxy_detected")
 	}
 	if vpnDetected {
 		score += 0.20
-		flags = append(flags, "vpn_detected")
+		*flags = append(*flags, "vpn_detected")
 	}
 
 	if vpnResult.err == nil {
 		score += float64(vpnResult.r.FraudScore) / 100.0 * 0.25
 	}
+	return score
+}
 
+func scoreHighValueVPN(req Request, vpnDetected bool, flags *[]string) float64 {
 	if vpnDetected && req.AmountUSD != nil && *req.AmountUSD > 500 {
-		score += 0.15
-		flags = append(flags, "high_value_vpn")
+		*flags = append(*flags, "high_value_vpn")
+		return 0.15
 	}
+	return 0
+}
 
-	score = math.Min(score, 1.0)
-	score = math.Round(score*100) / 100
+func roundRiskScore(score float64) float64 {
+	return math.Round(math.Min(score, 1.0)*100) / 100
+}
 
-	var billingPtr *string
-	if req.BillingCountry != "" {
-		b := strings.ToUpper(req.BillingCountry)
-		billingPtr = &b
+func billingCountryPtr(country string) *string {
+	if country == "" {
+		return nil
 	}
-
-	return Result{
-		RiskScore: score,
-		IsSafe:    score < 0.5 && !torDetected && !proxyDetected,
-		Flags:     flags,
-		Signals: Signals{
-			IPCountry:       ipCountry,
-			BillingCountry:  billingPtr,
-			BINCountry:      binCountry,
-			VPNDetected:     vpnDetected,
-			IsProxy:         proxyDetected,
-			IsTOR:           torDetected,
-			CountryMismatch: countryMismatch,
-		},
-	}, nil
+	normalized := strings.ToUpper(country)
+	return &normalized
 }

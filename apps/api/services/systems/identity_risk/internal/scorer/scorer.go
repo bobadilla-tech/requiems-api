@@ -149,65 +149,94 @@ type ScoreResult struct {
 const totalSignals = 3
 
 func Compute(s Signals) ScoreResult {
-	score := 0.0
 	flags := make([]string, 0, 4)
+	score := scoreEmail(s, &flags) + scorePhone(s, &flags) + scoreIP(s, &flags)
+	score = roundScore(score)
 
+	confidence := signalConfidence(s)
+	isSafe := score < 0.5 && confidence > 0.6 && !s.IsTOR && !s.IsProxy
+
+	return ScoreResult{
+		RiskScore:  score,
+		Confidence: confidence,
+		IsSafe:     isSafe,
+		Flags:      flags,
+	}
+}
+
+func scoreEmail(s Signals, flags *[]string) float64 {
 	if s.EmailPresent {
+		score := 0.0
 		if s.EmailInvalid {
 			score += 0.40
-			flags = append(flags, "email_invalid")
+			*flags = append(*flags, "email_invalid")
 		}
 		if s.EmailNoMX {
 			score += 0.25
-			flags = append(flags, "email_no_mx")
+			*flags = append(*flags, "email_no_mx")
 		}
 		if s.EmailDisposable {
 			score += 0.30
-			flags = append(flags, "disposable_email")
+			*flags = append(*flags, "disposable_email")
 		}
+		return score
 	}
+	return 0
+}
 
+func scorePhone(s Signals, flags *[]string) float64 {
 	if s.PhonePresent {
+		score := 0.0
 		switch {
 		case s.PhoneInvalid:
 			score += 0.25
-			flags = append(flags, "phone_invalid")
+			*flags = append(*flags, "phone_invalid")
 		case s.PhoneVoIP:
 			score += 0.15
-			flags = append(flags, "phone_voip")
+			*flags = append(*flags, "phone_voip")
 		case s.PhoneVirtual:
 			score += 0.15
-			flags = append(flags, "phone_virtual")
+			*flags = append(*flags, "phone_virtual")
 		}
 		if s.IPPresent && s.PhoneCountry != "" && s.IPCountry != "" && s.PhoneCountry != s.IPCountry {
 			score += 0.10
-			flags = append(flags, "geo_mismatch_phone_ip")
+			*flags = append(*flags, "geo_mismatch_phone_ip")
 		}
+		return score
 	}
+	return 0
+}
 
+func scoreIP(s Signals, flags *[]string) float64 {
 	if s.IPPresent {
+		score := 0.0
 		if s.IsTOR {
 			score += 0.40
-			flags = append(flags, "tor_detected")
+			*flags = append(*flags, "tor_detected")
 		}
 		if s.IsProxy {
 			score += 0.25
-			flags = append(flags, "proxy_detected")
+			*flags = append(*flags, "proxy_detected")
 		}
 		if s.IsVPN {
 			score += 0.20
-			flags = append(flags, "vpn_detected")
+			*flags = append(*flags, "vpn_detected")
 		}
 		if s.IsHosting {
 			score += 0.10
-			flags = append(flags, "hosting_ip")
+			*flags = append(*flags, "hosting_ip")
 		}
 		score += float64(s.FraudScore) / 100.0 * 0.30
+		return score
 	}
+	return 0
+}
 
-	score = math.Min(score, 1.0)
-	score = math.Round(score*100) / 100
+func roundScore(score float64) float64 {
+	return math.Round(math.Min(score, 1.0)*100) / 100
+}
 
+func signalConfidence(s Signals) float64 {
 	present := 0
 	if s.EmailPresent {
 		present++
@@ -218,14 +247,5 @@ func Compute(s Signals) ScoreResult {
 	if s.IPPresent {
 		present++
 	}
-	confidence := math.Round(float64(present)/float64(totalSignals)*100) / 100
-
-	isSafe := score < 0.5 && confidence > 0.6 && !s.IsTOR && !s.IsProxy
-
-	return ScoreResult{
-		RiskScore:  score,
-		Confidence: confidence,
-		IsSafe:     isSafe,
-		Flags:      flags,
-	}
+	return math.Round(float64(present)/float64(totalSignals)*100) / 100
 }

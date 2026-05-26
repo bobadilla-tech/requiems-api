@@ -10,9 +10,8 @@ import (
 )
 
 var (
-	reWhitespace  = regexp.MustCompile(`\s+`)
-	reHTMLTags    = regexp.MustCompile(`<[^>]+>`)
-	rePunctuation = regexp.MustCompile(`[^\p{L}\p{N}\s]`)
+	reWhitespace = regexp.MustCompile(`\s+`)
+	reHTMLTags   = regexp.MustCompile(`<[^>]+>`)
 )
 
 // Operation names accepted in the operations array.

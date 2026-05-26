@@ -31,9 +31,6 @@ func newTestService(srv *httptest.Server) *Service {
 	return NewService(srv.URL, srv.Client(), nil)
 }
 
-//go:fix inline
-func ptrF(v float64) *float64 { return new(v) }
-
 // --- Geocode ---
 
 func TestGeocodeService_HappyPath(t *testing.T) {
