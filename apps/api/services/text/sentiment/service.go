@@ -216,7 +216,7 @@ func tokenize(text string) []string {
 		switch {
 		case unicode.IsLetter(r) || unicode.IsDigit(r):
 			buf.WriteRune(r)
-		case r == ‘\’’ || r == ‘’’:
+		case r == '\'' || r == '\u2019':
 			// skip apostrophes so contractions stay intact: "don’t" → "dont"
 			continue
 		case buf.Len() > 0:

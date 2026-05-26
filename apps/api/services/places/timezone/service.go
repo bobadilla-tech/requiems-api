@@ -164,10 +164,7 @@ func isDST(t time.Time) bool {
 	}
 
 	// Standard time is the offset that is less positive (more negative) of the two.
-	standardOffset := offsetJan
-	if offsetJul < offsetJan {
-		standardOffset = offsetJul
-	}
+	standardOffset := min(offsetJul, offsetJan)
 
 	return offsetNow != standardOffset
 }

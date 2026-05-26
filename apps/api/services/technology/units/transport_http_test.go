@@ -72,7 +72,7 @@ func TestUnits_BatchConvert_ExceedsLimit(t *testing.T) {
 	operations := make([]BatchItem, 51)
 
 	for i := range operations {
-		operations[i] = BatchItem{From: "miles", To: "km", Value: Ptr(10)}
+		operations[i] = BatchItem{From: "miles", To: "km", Value: new(float64(10))}
 	}
 
 	body, _ := json.Marshal(BatchRequest{

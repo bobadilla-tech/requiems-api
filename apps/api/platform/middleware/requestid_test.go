@@ -53,7 +53,7 @@ func TestRequestID(t *testing.T) {
 		t.Parallel()
 
 		ids := make(map[string]struct{}, 100)
-		for i := 0; i < 100; i++ {
+		for range 100 {
 			var ctxID string
 			handler := RequestID(captureHandler(&ctxID))
 			req := httptest.NewRequest(http.MethodGet, "/", http.NoBody)

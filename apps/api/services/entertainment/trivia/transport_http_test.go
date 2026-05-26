@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"testing"
 
@@ -130,13 +131,7 @@ func TestTrivia_InvalidDifficulty(t *testing.T) {
 func TestTrivia_AnswerIsInOptions(t *testing.T) {
 	t.Parallel()
 	for _, q := range questions {
-		found := false
-		for _, opt := range q.Options {
-			if opt == q.Answer {
-				found = true
-				break
-			}
-		}
+		found := slices.Contains(q.Options, q.Answer)
 		assert.True(t, found, "question %q: answer %q is not in options %v", q.Question, q.Answer, q.Options)
 	}
 }

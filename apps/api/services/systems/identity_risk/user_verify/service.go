@@ -1,0 +1,338 @@
+package userverify
+
+import (
+	"context"
+	"math"
+	"net"
+	"strings"
+	"sync"
+	"time"
+
+	"requiems-api/services/networking/domain"
+	ipvpn "requiems-api/services/networking/ip/vpn"
+	"requiems-api/services/networking/mx"
+	"requiems-api/services/networking/whois"
+	"requiems-api/services/validation/email"
+)
+
+type EmailChecker interface {
+	ValidateEmail(ctx context.Context, addr string) email.Validation
+}
+
+type WHOISLooker interface {
+	Lookup(ctx context.Context, d string) (whois.LookupResponse, error)
+}
+
+type DomainInfoGetter interface {
+	GetInfo(ctx context.Context, d string) domain.InfoResponse
+}
+
+type MXLooker interface {
+	Lookup(ctx context.Context, d string) (mx.LookupResponse, error)
+}
+
+type VPNChecker interface {
+	CheckIP(ctx context.Context, ip net.IP) (ipvpn.IPCheckResponse, error)
+}
+
+type Service struct {
+	email  EmailChecker
+	whois  WHOISLooker
+	domain DomainInfoGetter
+	mx     MXLooker
+	vpn    VPNChecker // optional; only used when ip_address provided
+}
+
+func NewService(e EmailChecker, w WHOISLooker, d DomainInfoGetter, m MXLooker, v VPNChecker) *Service {
+	return &Service{email: e, whois: w, domain: d, mx: m, vpn: v}
+}
+
+type EmailSignal struct {
+	Valid      bool `json:"valid"`
+	Disposable bool `json:"disposable"`
+	MXValid    bool `json:"mx_valid"`
+}
+
+type DomainSignal struct {
+	AgeDays     int  `json:"age_days"` // -1 if unknown
+	HasMX       bool `json:"has_mx"`
+	HasARecords bool `json:"has_a_records"`
+	Available   bool `json:"available"`
+}
+
+type IPSignal struct {
+	IsVPN      bool    `json:"is_vpn"`
+	IsProxy    bool    `json:"is_proxy"`
+	FraudScore float64 `json:"fraud_score"`
+}
+
+type Signals struct {
+	Email  EmailSignal  `json:"email"`
+	Domain DomainSignal `json:"domain"`
+	IP     *IPSignal    `json:"ip"`
+}
+
+type Result struct {
+	Verified   bool     `json:"verified"`
+	Confidence float64  `json:"confidence"`
+	RiskScore  float64  `json:"risk_score"`
+	Flags      []string `json:"flags"`
+	Signals    Signals  `json:"signals"`
+}
+
+type whoisOut struct {
+	r   whois.LookupResponse
+	err error
+}
+
+type domainOut struct{ r domain.InfoResponse }
+
+type mxOut struct {
+	r   mx.LookupResponse
+	err error
+}
+
+type vpnOut struct {
+	r   ipvpn.IPCheckResponse
+	err error
+}
+
+type verificationChecks struct {
+	whois  whoisOut
+	domain domainOut
+	mx     mxOut
+	vpn    vpnOut
+}
+
+type emailScore struct {
+	signal EmailSignal
+	score  float64
+}
+
+type domainScore struct {
+	signal   DomainSignal
+	score    float64
+	resolved bool
+	hasMX    bool
+}
+
+type ipScore struct {
+	signal   *IPSignal
+	score    float64
+	resolved bool
+}
+
+func (s *Service) Verify(ctx context.Context, req Request) (Result, error) {
+	emailResult := s.email.ValidateEmail(ctx, req.Email)
+	emailDomain := domainFromEmail(req.Email, emailResult)
+	parsedIP := net.ParseIP(req.IPAddress)
+	includeIP := req.IPAddress != "" && parsedIP != nil && s.vpn != nil
+
+	checks := s.runVerificationChecks(ctx, emailDomain, parsedIP, includeIP)
+
+	flags := make([]string, 0, 4)
+	emailScored := scoreEmail(emailResult, &flags)
+	domainScored := scoreDomain(checks.whois, checks.domain, checks.mx, &flags)
+	ipScored := scoreIP(req.IPAddress, parsedIP, checks.vpn, &flags)
+
+	score := roundRiskScore(emailScored.score + domainScored.score + ipScored.score)
+	confidence := verificationConfidence(domainScored.resolved, ipScored.resolved, includeIP)
+	verified := score < 0.3 && confidence > 0.5 && emailResult.Valid && domainScored.hasMX && !domainScored.signal.Available
+
+	return Result{
+		Verified:   verified,
+		Confidence: confidence,
+		RiskScore:  score,
+		Flags:      flags,
+		Signals: Signals{
+			Email:  emailScored.signal,
+			Domain: domainScored.signal,
+			IP:     ipScored.signal,
+		},
+	}, nil
+}
+
+func domainFromEmail(addr string, result email.Validation) string {
+	if result.Domain != nil {
+		return *result.Domain
+	}
+	if idx := strings.LastIndex(addr, "@"); idx >= 0 {
+		return addr[idx+1:]
+	}
+	return ""
+}
+
+func (s *Service) runVerificationChecks(
+	ctx context.Context,
+	emailDomain string,
+	parsedIP net.IP,
+	includeIP bool,
+) verificationChecks {
+	whoisCh := make(chan whoisOut, 1)
+	domainCh := make(chan domainOut, 1)
+	mxCh := make(chan mxOut, 1)
+	vpnCh := make(chan vpnOut, 1)
+
+	var wg sync.WaitGroup
+
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		r, err := s.whois.Lookup(ctx, emailDomain)
+		whoisCh <- whoisOut{r, err}
+	}()
+	go func() {
+		defer wg.Done()
+		r := s.domain.GetInfo(ctx, emailDomain)
+		domainCh <- domainOut{r}
+	}()
+	go func() {
+		defer wg.Done()
+		r, err := s.mx.Lookup(ctx, emailDomain)
+		mxCh <- mxOut{r, err}
+	}()
+
+	if includeIP {
+		wg.Go(func() {
+			r, err := s.vpn.CheckIP(ctx, parsedIP)
+			vpnCh <- vpnOut{r, err}
+		})
+	} else {
+		vpnCh <- vpnOut{}
+	}
+
+	wg.Wait()
+
+	return verificationChecks{
+		whois:  <-whoisCh,
+		domain: <-domainCh,
+		mx:     <-mxCh,
+		vpn:    <-vpnCh,
+	}
+}
+
+func scoreEmail(emailResult email.Validation, flags *[]string) emailScore {
+	score := 0.0
+	emailSig := EmailSignal{
+		Valid:      emailResult.Valid,
+		Disposable: emailResult.Disposable,
+		MXValid:    emailResult.MxValid,
+	}
+	if !emailResult.Valid {
+		score += 0.50
+		*flags = append(*flags, "email_invalid")
+	}
+	if emailResult.Disposable {
+		score += 0.30
+		*flags = append(*flags, "disposable_email")
+	}
+	return emailScore{signal: emailSig, score: score}
+}
+
+func scoreDomain(
+	whoisResult whoisOut,
+	domainResult domainOut,
+	mxResult mxOut,
+	flags *[]string,
+) domainScore {
+	score := 0.0
+	resolved := true
+	ageDays := -1
+	if whoisResult.err == nil && whoisResult.r.CreatedDate != "" {
+		if age, ok := parseDomainAge(whoisResult.r.CreatedDate); ok {
+			ageDays = age
+			if ageDays < 30 {
+				score += 0.25
+				*flags = append(*flags, "young_domain")
+			} else if ageDays < 180 {
+				score += 0.10
+				*flags = append(*flags, "young_domain")
+			}
+		}
+	} else if whoisResult.err != nil {
+		*flags = append(*flags, "whois_unavailable")
+		resolved = false
+	}
+
+	hasMX := (mxResult.err == nil && len(mxResult.r.Records) > 0) || len(domainResult.r.DNS.MX) > 0
+	hasA := len(domainResult.r.DNS.A) > 0
+	available := domainResult.r.Available
+
+	domainSig := DomainSignal{
+		AgeDays:     ageDays,
+		HasMX:       hasMX,
+		HasARecords: hasA,
+		Available:   available,
+	}
+
+	if mxResult.err == nil && !hasMX {
+		score += 0.30
+		*flags = append(*flags, "no_mx")
+	}
+	if available {
+		score += 0.50
+		*flags = append(*flags, "domain_not_registered")
+	}
+
+	return domainScore{
+		signal:   domainSig,
+		score:    score,
+		resolved: resolved,
+		hasMX:    hasMX,
+	}
+}
+
+func scoreIP(ipAddress string, parsedIP net.IP, vpnResult vpnOut, flags *[]string) ipScore {
+	var ipSig *IPSignal
+	if ipAddress != "" && parsedIP != nil && vpnResult.err == nil {
+		ipSig = &IPSignal{
+			IsVPN:      vpnResult.r.IsVPN,
+			IsProxy:    vpnResult.r.IsProxy,
+			FraudScore: float64(vpnResult.r.FraudScore) / 100.0,
+		}
+		if vpnResult.r.IsVPN || vpnResult.r.IsProxy || vpnResult.r.IsTor {
+			*flags = append(*flags, "ip_risk")
+			return ipScore{signal: ipSig, score: 0.20, resolved: true}
+		}
+		return ipScore{signal: ipSig, resolved: true}
+	}
+	return ipScore{}
+}
+
+func roundRiskScore(score float64) float64 {
+	return math.Round(math.Min(score, 1.0)*100) / 100
+}
+
+func verificationConfidence(domainResolved, ipResolved, includeIP bool) float64 {
+	servicesResolved := 1 // email validation always runs
+	servicesTotal := 2    // email + domain
+	if domainResolved {
+		servicesResolved++
+	}
+	if includeIP {
+		servicesTotal++
+		if ipResolved {
+			servicesResolved++
+		}
+	}
+	return math.Round(float64(servicesResolved)/float64(servicesTotal)*100) / 100
+}
+
+func parseDomainAge(dateStr string) (int, bool) {
+	formats := []string{
+		time.RFC3339,
+		"2006-01-02T15:04:05Z",
+		"2006-01-02T15:04:05-07:00",
+		"2006-01-02",
+		"02-Jan-2006",
+		"January 2, 2006",
+		"2006.01.02",
+	}
+	for _, f := range formats {
+		if t, err := time.Parse(f, dateStr); err == nil {
+			days := max(int(time.Since(t).Hours()/24), 0)
+			return days, true
+		}
+	}
+	return -1, false
+}

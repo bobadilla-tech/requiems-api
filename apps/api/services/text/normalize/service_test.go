@@ -1,6 +1,7 @@
 package normalize
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,12 +12,7 @@ import (
 
 // containsChange reports whether target appears in the changes slice.
 func containsChange(changes []normalizer.Change, target normalizer.Change) bool {
-	for _, c := range changes {
-		if c == target {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(changes, target)
 }
 
 // --- Valid email tests ---

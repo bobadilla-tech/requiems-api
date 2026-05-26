@@ -95,10 +95,7 @@ func (s *Service) GetDomains(page, perPage int) (DomainsListResponse, error) {
 
 	start := (page - 1) * perPage
 
-	end := start + perPage
-	if end > total {
-		end = total
-	}
+	end := min(start+perPage, total)
 
 	return DomainsListResponse{
 		Domains: allDomains[start:end],

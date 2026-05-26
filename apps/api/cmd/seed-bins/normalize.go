@@ -194,10 +194,10 @@ func combineSources(a, b string) string {
 		return a
 	}
 	existing := make(map[string]bool)
-	for _, s := range strings.Split(a, ",") {
+	for s := range strings.SplitSeq(a, ",") {
 		existing[strings.TrimSpace(s)] = true
 	}
-	for _, s := range strings.Split(b, ",") {
+	for s := range strings.SplitSeq(b, ",") {
 		s = strings.TrimSpace(s)
 		if s != "" && !existing[s] {
 			existing[s] = true
@@ -302,7 +302,7 @@ func atoi6(s string) int {
 		return 0
 	}
 	v := 0
-	for i := 0; i < 6; i++ {
+	for i := range 6 {
 		v = v*10 + digitVal(s[i])
 	}
 	return v

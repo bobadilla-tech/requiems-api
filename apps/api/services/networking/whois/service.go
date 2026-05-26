@@ -27,7 +27,7 @@ type BatchLookupItem struct {
 	Domain string         `json:"domain"`
 	Found  bool           `json:"found"`
 	Error  string         `json:"error,omitempty"`
-	Data   LookupResponse `json:"data,omitempty"`
+	Data   LookupResponse `json:"data"`
 }
 
 // Does raw WHOIS queries.

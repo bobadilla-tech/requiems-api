@@ -82,7 +82,7 @@ func TestGetPrice_NoRedis_CallsUpstream(t *testing.T) {
 
 	svc := newServiceWithClient(srv.Client(), srv.URL)
 
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		_, err := svc.GetPrice(context.Background(), "BTC")
 		require.NoError(t, err, "call %d failed", i+1)
 	}

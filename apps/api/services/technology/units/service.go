@@ -295,4 +295,6 @@ func (s *Service) ConvertBatch(ctx context.Context, operations []BatchItem) []Ba
 }
 
 // Ptr returns a pointer to the given float64 value.
-func Ptr(v float64) *float64 { return &v }
+//
+//go:fix inline
+func Ptr(v float64) *float64 { return new(v) }

@@ -81,7 +81,7 @@ func TestPostBatchLorem(t *testing.T) {
 
 	// Generamos un JSON con 51 ítems para probar el límite máximo que exige el RFC
 	var oversizeItems []string
-	for i := 0; i < 51; i++ {
+	for range 51 {
 		oversizeItems = append(oversizeItems, `{"paragraphs": 1}`)
 	}
 	oversizeJSON := `{"items": [` + strings.Join(oversizeItems, ",") + `]}`
