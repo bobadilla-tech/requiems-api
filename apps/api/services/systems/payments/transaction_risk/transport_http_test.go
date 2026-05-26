@@ -13,10 +13,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ipinfo "requiems-api/services/networking/ip/info"
-	ipvpn "requiems-api/services/networking/ip/vpn"
 	"requiems-api/platform/httpx"
 	"requiems-api/services/finance/bin"
+	ipinfo "requiems-api/services/networking/ip/info"
+	ipvpn "requiems-api/services/networking/ip/vpn"
 )
 
 // -- stubs -------------------------------------------------------------------
