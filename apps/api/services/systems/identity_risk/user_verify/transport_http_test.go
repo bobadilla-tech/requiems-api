@@ -21,8 +21,6 @@ import (
 	"requiems-api/services/validation/email"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubEmail struct{ r email.Validation }
 
 func (s *stubEmail) ValidateEmail(_ context.Context, _ string) email.Validation { return s.r }
@@ -57,8 +55,6 @@ type stubVPN struct {
 func (s *stubVPN) CheckIP(_ context.Context, _ net.IP) (ipvpn.IPCheckResponse, error) {
 	return s.r, s.err
 }
-
-// -- helpers -----------------------------------------------------------------
 
 func validEmail() email.Validation {
 	norm := "alice@example.com"
@@ -107,8 +103,6 @@ func post(t *testing.T, r chi.Router, body string) *httptest.ResponseRecorder {
 	r.ServeHTTP(w, req)
 	return w
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestUserVerify_ValidEmailEstablishedDomain(t *testing.T) {
 	t.Parallel()

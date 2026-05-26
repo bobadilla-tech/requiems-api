@@ -15,8 +15,6 @@ import (
 	"requiems-api/services/places/holidays"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubHolidays struct {
 	r   holidays.HolidayList
 	err error
@@ -29,8 +27,6 @@ func (s *stubHolidays) GetHolidays(_ string, _ int) (holidays.HolidayList, error
 type stubWorkingDays struct{ n int }
 
 func (s *stubWorkingDays) GetWorkingDays(_, _ time.Time, _, _ string) int { return s.n }
-
-// -- helpers -----------------------------------------------------------------
 
 func setupRouter(h *stubHolidays, w *stubWorkingDays) chi.Router {
 	r := chi.NewRouter()
@@ -54,8 +50,6 @@ func deHolidays() holidays.HolidayList {
 		Total:    1,
 	}
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestBusinessCalendar_ValidCountryAndMonth(t *testing.T) {
 	t.Parallel()

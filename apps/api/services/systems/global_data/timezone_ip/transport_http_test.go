@@ -17,8 +17,6 @@ import (
 	"requiems-api/services/places/timezone"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubIPInfo struct {
 	r   ipinfo.LookupResponse
 	err error
@@ -36,8 +34,6 @@ type stubTimezone struct {
 func (s *stubTimezone) GetTimezoneByCoords(_, _ float64) (*timezone.Info, error) { return s.r, s.err }
 func (s *stubTimezone) GetTimezoneByCity(_ string) (*timezone.Info, error)       { return s.r, s.err }
 
-// -- helpers -----------------------------------------------------------------
-
 func setupRouter(i *stubIPInfo, t *stubTimezone) chi.Router {
 	r := chi.NewRouter()
 	RegisterRoutes(r, NewService(i, t))
@@ -51,8 +47,6 @@ func get(t *testing.T, r chi.Router, path string) *httptest.ResponseRecorder {
 	r.ServeHTTP(w, req)
 	return w
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestTimezoneIP_ValidPublicIP(t *testing.T) {
 	t.Parallel()

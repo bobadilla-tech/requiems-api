@@ -19,8 +19,6 @@ import (
 	ipvpn "requiems-api/services/networking/ip/vpn"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubBIN struct {
 	r   bin.LookupResponse
 	err error
@@ -48,8 +46,6 @@ func (s *stubIPInfo) CheckInfo(_ context.Context, _ string) (ipinfo.LookupRespon
 	return s.r, s.err
 }
 
-// -- helpers -----------------------------------------------------------------
-
 func setupRouter(b *stubBIN, v *stubVPN, i *stubIPInfo) chi.Router {
 	r := chi.NewRouter()
 	RegisterRoutes(r, NewService(b, v, i))
@@ -64,8 +60,6 @@ func post(t *testing.T, r chi.Router, body string) *httptest.ResponseRecorder {
 	r.ServeHTTP(w, req)
 	return w
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestTransactionRisk_CleanTransaction(t *testing.T) {
 	t.Parallel()

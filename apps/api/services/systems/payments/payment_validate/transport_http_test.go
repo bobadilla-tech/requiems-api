@@ -18,8 +18,6 @@ import (
 	"requiems-api/services/finance/swift"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubBIN struct {
 	r   bin.LookupResponse
 	err error
@@ -46,8 +44,6 @@ type stubSWIFT struct {
 func (s *stubSWIFT) Lookup(_ context.Context, _ string) (swift.LookupResponse, error) {
 	return s.r, s.err
 }
-
-// -- helpers -----------------------------------------------------------------
 
 func setupRouter(b *stubBIN, i *stubIBAN, s *stubSWIFT) chi.Router {
 	r := chi.NewRouter()
@@ -84,8 +80,6 @@ func gbSWIFT() swift.LookupResponse {
 		BankName: "NatWest", City: "London",
 	}
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestPaymentValidate_ValidBINOnly(t *testing.T) {
 	t.Parallel()

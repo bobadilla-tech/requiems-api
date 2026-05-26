@@ -20,8 +20,6 @@ import (
 	"requiems-api/services/places/timezone"
 )
 
-// -- stubs -------------------------------------------------------------------
-
 type stubGeocoder struct {
 	geocodeR   geocode.GeocodeResponse
 	geocodeErr error
@@ -57,8 +55,6 @@ type stubWorkingDays struct{ n int }
 
 func (s *stubWorkingDays) GetWorkingDays(_, _ time.Time, _, _ string) int { return s.n }
 
-// -- helpers -----------------------------------------------------------------
-
 func buildSvc(g *stubGeocoder, tz *stubTimezone, h *stubHolidays, w *stubWorkingDays) *Service {
 	return NewService(g, tz, h, w)
 }
@@ -79,8 +75,6 @@ func post(t *testing.T, r chi.Router, path string, body any) *httptest.ResponseR
 	r.ServeHTTP(w, req)
 	return w
 }
-
-// -- tests -------------------------------------------------------------------
 
 func TestLocationResolve_ByAddress(t *testing.T) {
 	t.Parallel()
