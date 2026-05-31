@@ -97,3 +97,119 @@ func TestService_CheckIP_ResponseFields(t *testing.T) {
 
 	assert.True(t, result.FraudScore >= 0 && result.FraudScore <= 100, "fraud_score out of range: %d", result.FraudScore)
 }
+
+func TestService_CheckBatch(t *testing.T) {
+	t.Parallel()
+
+	client, err := newTestClient()
+	if err != nil {
+		t.Skipf("VPN service not available: %v", err)
+	}
+
+	svc := NewService(client)
+
+	tests := []struct {
+		name        string
+		ips         []string
+		expectedLen int
+	}{
+		{
+			name: "multiple valid IPs",
+			ips: []string{
+				"8.8.8.8",
+				"1.1.1.1",
+				"2001:4860:4860::8888",
+			},
+			expectedLen: 3,
+		},
+		{
+			name: "includes invalid IP",
+			ips: []string{
+				"8.8.8.8",
+				"invalid-ip",
+				"1.1.1.1",
+			},
+			expectedLen: 3,
+		},
+		{
+			name:        "empty batch",
+			ips:         []string{},
+			expectedLen: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			results, err := svc.CheckBatch(context.Background(), tt.ips)
+
+			require.NoError(t, err)
+			require.Len(t, results, tt.expectedLen)
+
+			for i, res := range results {
+				assert.Equal(t, tt.ips[i], res.IP)
+			}
+		})
+	}
+}
+
+func TestService_CheckBatch_PreservesOrder(t *testing.T) {
+	t.Parallel()
+
+	client, err := newTestClient()
+	if err != nil {
+		t.Skipf("VPN service not available: %v", err)
+	}
+
+	svc := NewService(client)
+
+	ips := []string{
+		"8.8.8.8",
+		"1.1.1.1",
+		"2001:4860:4860::8888",
+	}
+
+	results, err := svc.CheckBatch(context.Background(), ips)
+
+	require.NoError(t, err)
+	require.Len(t, results, len(ips))
+
+	for i := range ips {
+		assert.Equal(t, ips[i], results[i].IP)
+	}
+}
+
+func TestService_CheckBatch_InvalidIPs(t *testing.T) {
+	t.Parallel()
+
+	client, err := newTestClient()
+	if err != nil {
+		t.Skipf("VPN service not available: %v", err)
+	}
+
+	svc := NewService(client)
+
+	ips := []string{
+		"invalid-ip",
+		"",
+		"999.999.999.999",
+	}
+
+	results, err := svc.CheckBatch(context.Background(), ips)
+
+	require.NoError(t, err)
+	require.Len(t, results, len(ips))
+
+	for i, res := range results {
+		assert.Equal(t, ips[i], res.IP)
+
+		assert.False(t, res.IsVPN)
+		assert.False(t, res.IsProxy)
+		assert.False(t, res.IsTor)
+		assert.False(t, res.IsHosting)
+		assert.Equal(t, 0, res.Score)
+	}
+}
