@@ -47,6 +47,10 @@ class ApiProxyController < ApplicationController
   end
 
   def make_api_request(endpoint, method, request_params)
+    # Enforce path allowlist here as well as in valid_endpoint? so SSRF guards are
+    # co-located with the HTTP call and visible to static analysis tools.
+    raise ArgumentError, "Invalid endpoint: #{endpoint}" unless endpoint&.match?(/\A\/v1\/[a-zA-Z0-9\/\-_.]+\z/) && !endpoint.include?("..")
+
     # Convert ActionController::Parameters to a plain hash
     request_params = request_params.to_unsafe_h if request_params.respond_to?(:to_unsafe_h)
 
@@ -90,7 +94,7 @@ class ApiProxyController < ApplicationController
 
     headers.each { |key, value| request[key] = value }
 
-    response = http.request(request)
+    response = http.request(request) # codeql[rb/request-forgery] host/port/scheme fixed from AppConfig; path validated by allowlist regex above
 
     {
       status_code: response.code.to_i,
