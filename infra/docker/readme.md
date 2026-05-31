@@ -193,6 +193,28 @@ docker compose -f docker-compose.dev.yml logs db
 docker compose -f docker-compose.dev.yml restart db
 ```
 
+**`could not translate host name "db"` or `"redis"` (DNS resolution failure):**
+
+Services `db` and `redis` are running and healthy but `dashboard`/`sidekiq`
+still can't resolve them. Root cause: containers joined the `requiem-dev_stack`
+network without DNS aliases — happens when containers were created before the
+`networks:` section existed in the compose file, or connected manually via
+`docker network connect` (which doesn't set service-name aliases).
+
+Verify with:
+
+```bash
+docker inspect requiem-dev-db-1 | grep -A5 '"requiem-dev_stack"'
+# Aliases should list "db" — if empty, that's the problem
+```
+
+Fix: recreate all containers (volumes persist, no data loss):
+
+```bash
+docker compose -f docker-compose.dev.yml down --remove-orphans
+docker compose -f docker-compose.dev.yml up
+```
+
 **Gem or bundle issues (Rails):**
 
 ```bash
