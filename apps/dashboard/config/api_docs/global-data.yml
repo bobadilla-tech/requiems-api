@@ -1,0 +1,369 @@
+api_id: global-data
+api_name: Global Data System
+description: Resolve addresses, coordinates, and IPs into complete location profiles. Timezone, UTC offset, public holidays, and working day counts included in every response.
+base_url: https://api.requiems.xyz
+overview:
+  use_cases:
+    - Detect timezone and locale from an address or coordinates for personalized UX
+    - Know exactly which days are working days in any country for scheduling
+    - Validate and standardize billing or shipping addresses globally
+    - Identify user jurisdiction for GDPR, tax, and regulatory requirements
+    - Show localized holiday calendars and working hour windows in your product
+  features:
+    - Geocoding and reverse geocoding for addresses and coordinates
+    - Timezone resolution with UTC offset and current local time
+    - Public holiday calendars covering 100+ countries
+    - Working day calculation for any month or year
+    - Next upcoming holiday within a 90-day window
+    - IP-to-timezone lookup without requiring an address
+endpoints:
+  - name: Resolve Location
+    method: POST
+    path: /v1/systems/location/resolve
+    description: Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+    parameters:
+      - name: address
+        type: string
+        required: false
+        location: body
+        description: Human-readable address string to geocode. Either address or coordinates is required.
+        example: Alexanderplatz 1, Berlin
+      - name: coordinates
+        type: object
+        required: false
+        location: body
+        description: "Coordinates object for reverse geocoding. Either address or coordinates is required. Shape: {lat: float, lng: float}"
+        example: '{"lat": 52.52, "lng": 13.405}'
+      - name: country_code
+        type: string
+        required: false
+        location: body
+        description: ISO 3166-1 alpha-2 country code hint. Overrides the geocoder-inferred country code when provided.
+        example: DE
+    request_example: |
+      {
+        "address": "Alexanderplatz 1, Berlin",
+        "country_code": "DE"
+      }
+    response_example: |
+      {
+        "data": {
+          "address": "Alexanderplatz 1, 10178 Berlin, Germany",
+          "city": "Berlin",
+          "country": "Germany",
+          "country_code": "DE",
+          "coordinates": {
+            "lat": 52.5219,
+            "lng": 13.4132
+          },
+          "timezone": "Europe/Berlin",
+          "utc_offset": "+02:00",
+          "current_time": "2026-06-15T14:32:00+02:00",
+          "is_holiday_today": false,
+          "working_days_this_month": 21,
+          "next_holiday": {
+            "date": "2026-10-03",
+            "name": "German Unity Day",
+            "type": "national"
+          },
+          "flags": []
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: address
+        type: string
+        description: Normalized full address returned by the geocoder
+      - name: city
+        type: string
+        description: City name
+      - name: country
+        type: string
+        description: Full country name
+      - name: country_code
+        type: string
+        description: ISO 3166-1 alpha-2 country code
+      - name: coordinates
+        type: object
+        description: Resolved lat/lng coordinates
+      - name: timezone
+        type: string or null
+        description: IANA timezone identifier (e.g. Europe/Berlin). Null when timezone resolution fails.
+      - name: utc_offset
+        type: string or null
+        description: UTC offset string (e.g. +02:00). Null when timezone resolution fails.
+      - name: current_time
+        type: string or null
+        description: Current local time in RFC3339 format. Null when timezone resolution fails.
+      - name: is_holiday_today
+        type: boolean
+        description: True when today is a public holiday in the resolved country
+      - name: working_days_this_month
+        type: integer
+        description: Number of working days (excluding weekends and public holidays) in the current calendar month
+      - name: next_holiday
+        type: object or null
+        description: "Next public holiday within 90 days. Shape: {date: YYYY-MM-DD, name: string, type: national}"
+      - name: flags
+        type: array
+        description: "Non-fatal warnings. Possible values: timezone_unavailable, calendar_unavailable"
+    errors:
+      - code: 422
+        message: validation_failed
+        description: Neither address nor coordinates was provided
+      - code: 422
+        message: upstream_error
+        description: Geocoding service was unavailable
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/location/resolve \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"address": "Alexanderplatz 1, Berlin", "country_code": "DE"}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/location/resolve",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"address": "Alexanderplatz 1, Berlin", "country_code": "DE"}
+        )
+        data = response.json()["data"]
+        print(f"Timezone: {data['timezone']}, Working days: {data['working_days_this_month']}")
+        if data["next_holiday"]:
+            print(f"Next holiday: {data['next_holiday']['name']} on {data['next_holiday']['date']}")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/location/resolve', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: 'Alexanderplatz 1, Berlin', country_code: 'DE' })
+        }).then(r => r.json());
+
+        console.log(data.timezone, data.working_days_this_month, data.next_holiday);
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/location/resolve')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { address: 'Alexanderplatz 1, Berlin', country_code: 'DE' }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+        puts "#{data['timezone']}, working days: #{data['working_days_this_month']}"
+
+  - name: Timezone from IP
+    method: GET
+    path: /v1/systems/timezone/from-ip/{ip}
+    description: Resolve the timezone, UTC offset, and DST status for any IPv4 or IPv6 address without needing an address string.
+    parameters:
+      - name: ip
+        type: string
+        required: true
+        location: path
+        description: IPv4 or IPv6 address to resolve
+        example: 92.168.1.1
+    request_example: |
+      GET /v1/systems/timezone/from-ip/92.168.1.1
+    response_example: |
+      {
+        "data": {
+          "ip": "92.168.1.1",
+          "city": "Berlin",
+          "country_code": "DE",
+          "timezone": "Europe/Berlin",
+          "utc_offset": "+02:00",
+          "dst_active": true,
+          "current_time": "2026-06-15T14:32:00+02:00"
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: ip
+        type: string
+        description: The IP address as provided
+      - name: city
+        type: string
+        description: City resolved from the IP
+      - name: country_code
+        type: string
+        description: ISO 3166-1 alpha-2 country code
+      - name: timezone
+        type: string or null
+        description: IANA timezone identifier. Null when timezone resolution fails.
+      - name: utc_offset
+        type: string or null
+        description: UTC offset string. Null when timezone resolution fails.
+      - name: dst_active
+        type: boolean or null
+        description: True when daylight saving time is currently active. Null when timezone resolution fails.
+      - name: current_time
+        type: string or null
+        description: Current local time in RFC3339 format
+    errors:
+      - code: 422
+        message: ip_not_found
+        description: The IP address could not be geolocated
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl https://api.requiems.xyz/v1/systems/timezone/from-ip/92.168.1.1 \
+          -H "requiems-api-key: YOUR_API_KEY"
+      python: |
+        import requests
+
+        ip = "92.168.1.1"
+        response = requests.get(
+            f"https://api.requiems.xyz/v1/systems/timezone/from-ip/{ip}",
+            headers={"requiems-api-key": "YOUR_API_KEY"}
+        )
+        data = response.json()["data"]
+        print(f"Timezone: {data['timezone']}, DST: {data['dst_active']}")
+      javascript: |
+        const ip = '92.168.1.1';
+        const { data } = await fetch(
+          `https://api.requiems.xyz/v1/systems/timezone/from-ip/${ip}`,
+          { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
+        ).then(r => r.json());
+
+        console.log(data.timezone, data.utc_offset);
+
+  - name: Business Calendar
+    method: GET
+    path: /v1/systems/business-calendar/{country}
+    description: Retrieve working days, public holidays, and next upcoming holiday for any country and optional year/month. Covers 100+ countries.
+    parameters:
+      - name: country
+        type: string
+        required: true
+        location: path
+        description: ISO 3166-1 alpha-2 country code (e.g. DE, US, FR)
+        example: DE
+      - name: year
+        type: integer
+        required: false
+        location: query
+        description: Year to retrieve the calendar for. Defaults to the current year.
+        example: 2026
+      - name: month
+        type: integer
+        required: false
+        location: query
+        description: Month (1–12). When provided, returns month-scoped working day count, total days, weekend days, and filtered holidays.
+        example: 6
+    request_example: |
+      GET /v1/systems/business-calendar/DE?year=2026&month=6
+    response_example: |
+      {
+        "data": {
+          "country_code": "DE",
+          "year": 2026,
+          "month": 6,
+          "working_days": 21,
+          "total_days": 30,
+          "weekend_days": 8,
+          "holidays": [],
+          "holiday_count": 0,
+          "next_holiday": {
+            "date": "2026-10-03",
+            "name": "German Unity Day",
+            "type": "national"
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: country_code
+        type: string
+        description: ISO 3166-1 alpha-2 country code echoed from the path parameter
+      - name: year
+        type: integer
+        description: Year the calendar covers
+      - name: month
+        type: integer or null
+        description: Month scope. Present only when the month query parameter was provided.
+      - name: working_days
+        type: integer
+        description: Number of working days (excluding weekends and public holidays) in the scope
+      - name: total_days
+        type: integer or null
+        description: Total calendar days in the month. Present only when month is provided.
+      - name: weekend_days
+        type: integer or null
+        description: Number of weekend days in the month. Present only when month is provided.
+      - name: holidays
+        type: array
+        description: "List of public holidays in the scope. Each item: {date: YYYY-MM-DD, name: string, type: national}"
+      - name: holiday_count
+        type: integer
+        description: Count of holidays in the holidays array
+      - name: next_holiday
+        type: object or null
+        description: "Next public holiday within 90 days from today. Shape: {date, name, type}"
+    errors:
+      - code: 422
+        message: validation_failed
+        description: Country is not a 2-letter ISO code, or year/month is out of the valid range
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl "https://api.requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6" \
+          -H "requiems-api-key: YOUR_API_KEY"
+      python: |
+        import requests
+
+        response = requests.get(
+            "https://api.requiems.xyz/v1/systems/business-calendar/DE",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            params={"year": 2026, "month": 6}
+        )
+        data = response.json()["data"]
+        print(f"Working days: {data['working_days']}, Holidays: {data['holiday_count']}")
+      javascript: |
+        const { data } = await fetch(
+          'https://api.requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6',
+          { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
+        ).then(r => r.json());
+
+        console.log(data.working_days, data.holidays);
+
+performance:
+  p50_ms: 62
+  p95_ms: 185
+  p99_ms: 380
+  samples: 60000
+  measured_at: "2026-04-01"
+
+faq:
+  - question: Which countries are supported for holidays?
+    answer: >-
+      The business calendar and holiday data covers 100+ countries including all EU member states, G20 nations, and
+      most of the Americas, Asia-Pacific, and Middle East. If a country is unsupported or has no holiday data,
+      the holidays array is returned empty rather than an error.
+  - question: Are regional holidays included?
+    answer: >-
+      The /business-calendar endpoint currently returns national public holidays only. Sub-national or state-level
+      holidays (e.g. German federal states, US state holidays) are not included.
+  - question: What timezone is used for working day calculations?
+    answer: >-
+      Working day counts are calendar-based and use UTC dates. The working_days_this_month field in /location/resolve
+      is calculated for the current UTC calendar month at the time of the request.
+  - question: Can I use coordinates instead of an address for /location/resolve?
+    answer: >-
+      Yes. Pass a coordinates object with lat and lng instead of address. The endpoint performs reverse geocoding
+      to resolve the address, city, and country, then continues with timezone and calendar lookups as usual.

@@ -1,0 +1,341 @@
+api_id: developer-utilities
+api_name: Developer Utilities
+description: Common developer tools available on the same API key as your production systems. QR codes, Base64 encoding, Markdown rendering, and more.
+base_url: https://api.requiems.xyz
+overview:
+  use_cases:
+    - Generate QR codes for URLs, payment links, or product identifiers
+    - Encode and decode Base64 strings for tokens, credentials, and data transfer
+    - Convert Markdown to HTML for rendered documentation or content previews
+    - Build demos and staging environments with placeholder content
+  features:
+    - QR code generation returning a base64-encoded PNG
+    - Standard and URL-safe Base64 encode and decode
+    - Markdown to HTML rendering
+    - Same API key as all other systems — no extra setup
+    - Deterministic outputs — same input always produces the same output
+endpoints:
+  - name: Generate QR Code
+    method: GET
+    path: /v1/technology/qr/base64
+    description: Generate a QR code for any string and return a base64-encoded PNG. Configurable size and error correction level.
+    parameters:
+      - name: data
+        type: string
+        required: true
+        location: query
+        description: The string to encode into the QR code (URL, text, or any string).
+        example: https://requiems.xyz
+      - name: size
+        type: integer
+        required: false
+        location: query
+        description: Output image size in pixels (width and height). Min 50, max 1000. Defaults to 256.
+        example: 256
+        default: "256"
+      - name: recovery
+        type: string
+        required: false
+        location: query
+        description: "Error correction level: low, medium, high, or highest. Higher levels allow more of the QR code to be damaged while still scanning."
+        example: medium
+        default: medium
+    request_example: |
+      GET /v1/technology/qr/base64?data=https%3A%2F%2Frequiems.xyz&size=256&recovery=medium
+    response_example: |
+      {
+        "data": {
+          "image": "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAA...",
+          "width": 256,
+          "height": 256
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: image
+        type: string
+        description: Base64-encoded PNG image of the QR code
+      - name: width
+        type: integer
+        description: Image width in pixels, equal to the requested size
+      - name: height
+        type: integer
+        description: Image height in pixels, equal to the requested size
+    errors:
+      - code: 400
+        message: bad_request
+        description: data query parameter is missing
+      - code: 422
+        message: validation_failed
+        description: size is outside 50–1000 or recovery is not one of the valid values
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl "https://api.requiems.xyz/v1/technology/qr/base64?data=https%3A%2F%2Frequiems.xyz&size=256" \
+          -H "requiems-api-key: YOUR_API_KEY"
+      python: |
+        import base64, requests
+
+        response = requests.get(
+            "https://api.requiems.xyz/v1/technology/qr/base64",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            params={"data": "https://requiems.xyz", "size": 256, "recovery": "medium"}
+        )
+        data = response.json()["data"]
+
+        # Decode and save as PNG
+        with open("qr.png", "wb") as f:
+            f.write(base64.b64decode(data["image"]))
+        print(f"QR saved: {data['width']}x{data['height']}px")
+      javascript: |
+        const { data } = await fetch(
+          'https://api.requiems.xyz/v1/technology/qr/base64?' +
+          new URLSearchParams({ data: 'https://requiems.xyz', size: 256, recovery: 'medium' }),
+          { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
+        ).then(r => r.json());
+
+        // Render inline in HTML
+        document.getElementById('qr').src = `data:image/png;base64,${data.image}`;
+      ruby: |
+        require 'net/http'
+        require 'json'
+        require 'base64'
+
+        uri = URI('https://api.requiems.xyz/v1/technology/qr/base64')
+        uri.query = URI.encode_www_form(data: 'https://requiems.xyz', size: 256)
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.get(uri.request_uri, 'requiems-api-key' => 'YOUR_API_KEY')
+        end
+
+        image_data = JSON.parse(response.body)['data']['image']
+        File.write('qr.png', Base64.decode64(image_data), mode: 'wb')
+
+  - name: Base64 Encode
+    method: POST
+    path: /v1/technology/base64/encode
+    description: Encode a plain-text string to Base64. Supports standard (RFC 4648) and URL-safe (base64url) variants.
+    parameters:
+      - name: value
+        type: string
+        required: true
+        location: body
+        description: The string to encode
+        example: Hello, world!
+      - name: variant
+        type: string
+        required: false
+        location: body
+        description: "Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5)"
+        example: standard
+        default: standard
+    request_example: |
+      {
+        "value": "Hello, world!",
+        "variant": "standard"
+      }
+    response_example: |
+      {
+        "data": {
+          "result": "SGVsbG8sIHdvcmxkIQ=="
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: result
+        type: string
+        description: The Base64-encoded output string
+    errors:
+      - code: 400
+        message: bad_request
+        description: value field is missing or empty
+      - code: 422
+        message: validation_failed
+        description: variant is not standard or url
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"value": "Hello, world!"}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/technology/base64/encode",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"value": "Hello, world!"}
+        )
+        print(response.json()["data"]["result"])  # SGVsbG8sIHdvcmxkIQ==
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/technology/base64/encode', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value: 'Hello, world!' })
+        }).then(r => r.json());
+
+        console.log(data.result); // SGVsbG8sIHdvcmxkIQ==
+
+  - name: Base64 Decode
+    method: POST
+    path: /v1/technology/base64/decode
+    description: Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+    parameters:
+      - name: value
+        type: string
+        required: true
+        location: body
+        description: The Base64-encoded string to decode
+        example: SGVsbG8sIHdvcmxkIQ==
+      - name: variant
+        type: string
+        required: false
+        location: body
+        description: "Encoding variant: standard (default) or url (URL-safe base64url)"
+        example: standard
+        default: standard
+    request_example: |
+      {
+        "value": "SGVsbG8sIHdvcmxkIQ==",
+        "variant": "standard"
+      }
+    response_example: |
+      {
+        "data": {
+          "result": "Hello, world!"
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: result
+        type: string
+        description: The decoded plain-text output
+    errors:
+      - code: 400
+        message: bad_request
+        description: value field is missing or empty
+      - code: 422
+        message: invalid_base64
+        description: The value is not valid Base64 and cannot be decoded
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"value": "SGVsbG8sIHdvcmxkIQ=="}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/technology/base64/decode",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"value": "SGVsbG8sIHdvcmxkIQ=="}
+        )
+        print(response.json()["data"]["result"])  # Hello, world!
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/technology/base64/decode', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ value: 'SGVsbG8sIHdvcmxkIQ==' })
+        }).then(r => r.json());
+
+        console.log(data.result); // Hello, world!
+
+  - name: Render Markdown
+    method: POST
+    path: /v1/technology/markdown
+    description: Convert a Markdown string to HTML. Useful for rendering user-submitted content, documentation previews, or README files.
+    parameters:
+      - name: text
+        type: string
+        required: true
+        location: body
+        description: Markdown string to render
+        example: "# Hello\n\nThis is **bold** text."
+    request_example: |
+      {
+        "text": "# Hello\n\nThis is **bold** text."
+      }
+    response_example: |
+      {
+        "data": {
+          "html": "<h1>Hello</h1>\n<p>This is <strong>bold</strong> text.</p>"
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: html
+        type: string
+        description: Rendered HTML output
+    errors:
+      - code: 400
+        message: bad_request
+        description: text field is missing or empty
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/markdown \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"text": "# Hello\n\nThis is **bold** text."}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/technology/markdown",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"text": "# Hello\n\nThis is **bold** text."}
+        )
+        print(response.json()["data"]["html"])
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/technology/markdown', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: '# Hello\n\nThis is **bold** text.' })
+        }).then(r => r.json());
+
+        document.getElementById('preview').innerHTML = data.html;
+
+performance:
+  p50_ms: 12
+  p95_ms: 35
+  p99_ms: 68
+  samples: 200000
+  measured_at: "2026-04-01"
+
+faq:
+  - question: Do these utilities share the same API key as the systems?
+    answer: >-
+      Yes. The same requiems-api-key header used for the Identity Risk, Payments Intelligence, and other systems
+      works for all developer utility endpoints. No separate key or plan is needed.
+  - question: Is there a limit on QR code size?
+    answer: >-
+      The size parameter is capped at 1000 pixels. The entire request body is subject to the platform-wide 1 MB
+      limit. For sizes of 256px and below the PNG output is well under 100 KB even for complex QR codes.
+  - question: What Base64 variant should I use for URL tokens?
+    answer: >-
+      Use variant: url (base64url). It replaces + with - and / with _ so the output can be safely embedded in
+      URLs, file names, and HTTP headers without percent-encoding.
+  - question: Does the Markdown endpoint sanitize HTML?
+    answer: >-
+      The endpoint renders Markdown to HTML but does not strip or sanitize the output. If you are rendering
+      user-submitted content in a browser, sanitize the HTML on your side before injecting it into the DOM
+      to prevent XSS.

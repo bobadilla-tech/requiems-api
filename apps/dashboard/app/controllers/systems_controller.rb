@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SystemsController < ApplicationController
+  include ApisHelper
+
   SYSTEMS = [
     {
       slug: "identity-risk",
@@ -38,6 +40,7 @@ class SystemsController < ApplicationController
   def show
     @slug = params[:system_slug]
     @system = SYSTEMS.find { |s| s[:slug] == @slug }
-    head :not_found unless @system
+    head :not_found and return unless @system
+    @documentation = api_documentation(@slug)
   end
 end

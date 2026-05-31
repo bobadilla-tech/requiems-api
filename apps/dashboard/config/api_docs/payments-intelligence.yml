@@ -1,0 +1,308 @@
+api_id: payments-intelligence
+api_name: Payments Intelligence System
+description: Validate financial identifiers and score transaction risk in a single call. Combines BIN lookup, IBAN parsing, SWIFT verification, and IP intelligence.
+base_url: https://api.requiems.xyz
+overview:
+  use_cases:
+    - Validate card BIN, IBAN, and SWIFT data before submitting to a payment processor
+    - Flag transactions where billing country mismatches IP geolocation
+    - Verify financial identifiers during fintech onboarding flows
+    - Reduce payment decline rates by pre-validating data before submission
+    - Detect VPN and TOR use on high-value transactions
+  features:
+    - BIN lookup with card scheme, type, level, and issuer details
+    - IBAN format and checksum validation with bank code extraction
+    - SWIFT/BIC code verification with institution and country
+    - Cross-field consistency check flags mismatches between BIN, IBAN, and SWIFT countries
+    - IP geolocation with VPN, proxy, and TOR detection for transaction risk
+    - Risk score from 0.0 to 1.0 with named flags
+endpoints:
+  - name: Validate Payment
+    method: POST
+    path: /v1/systems/payment/validate
+    description: Validate and cross-check BIN, IBAN, and SWIFT identifiers in one call. Returns per-field results and a consistency check that flags country and bank mismatches.
+    parameters:
+      - name: bin
+        type: string
+        required: false
+        location: body
+        description: Card BIN (first 6–8 digits). At least one of bin, iban, or swift is required.
+        example: "424242"
+      - name: iban
+        type: string
+        required: false
+        location: body
+        description: IBAN string to validate. Checksum and format are verified.
+        example: DE89370400440532013000
+      - name: swift
+        type: string
+        required: false
+        location: body
+        description: SWIFT/BIC code to look up institution and country.
+        example: DEUTDEDB
+    request_example: |
+      {
+        "bin": "424242",
+        "iban": "DE89370400440532013000",
+        "swift": "DEUTDEDB"
+      }
+    response_example: |
+      {
+        "data": {
+          "bin": {
+            "valid": true,
+            "scheme": "visa",
+            "card_type": "debit",
+            "card_level": "classic",
+            "country_code": "US",
+            "issuer": "JPMorgan Chase",
+            "prepaid": false,
+            "luhn": true
+          },
+          "iban": {
+            "valid": true,
+            "country_code": "DE",
+            "bank_code": "37040044",
+            "account_number": "0532013000"
+          },
+          "swift": {
+            "valid": true,
+            "institution": "Deutsche Bank",
+            "country": "DE",
+            "branch": "Frankfurt"
+          },
+          "consistency": {
+            "ok": false,
+            "flags": ["country_mismatch_bin_iban"]
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: bin
+        type: object or null
+        description: BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn.
+      - name: iban
+        type: object or null
+        description: IBAN result. Null when iban was not provided. Contains valid, country_code, bank_code, account_number.
+      - name: swift
+        type: object or null
+        description: SWIFT result. Null when swift was not provided. Contains valid, institution, country, branch.
+      - name: consistency.ok
+        type: boolean
+        description: True when no cross-field mismatches were detected
+      - name: consistency.flags
+        type: array
+        description: "Mismatch flags. Possible values: country_mismatch_bin_iban, country_mismatch_bin_swift, country_mismatch_iban_swift, bank_mismatch_iban_swift"
+    errors:
+      - code: 422
+        message: validation_failed
+        description: All of bin, iban, and swift were omitted. At least one is required.
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/payment/validate \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "bin": "424242",
+            "iban": "DE89370400440532013000",
+            "swift": "DEUTDEDB"
+          }'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/payment/validate",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"bin": "424242", "iban": "DE89370400440532013000", "swift": "DEUTDEDB"}
+        )
+        data = response.json()["data"]
+
+        if not data["consistency"]["ok"]:
+            print("Consistency flags:", data["consistency"]["flags"])
+        else:
+            print("All identifiers consistent")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/payment/validate', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bin: '424242', iban: 'DE89370400440532013000', swift: 'DEUTDEDB' })
+        }).then(r => r.json());
+
+        if (!data.consistency.ok) {
+          console.warn('Mismatch detected:', data.consistency.flags);
+        }
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/payment/validate')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { bin: '424242', iban: 'DE89370400440532013000', swift: 'DEUTDEDB' }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+        puts data['consistency']['ok'] ? 'Consistent' : data['consistency']['flags'].inspect
+
+  - name: Score Transaction Risk
+    method: POST
+    path: /v1/systems/transaction/risk
+    description: Score a transaction for fraud risk by cross-checking the card BIN country against IP geolocation and billing country. Detects VPN, proxy, and TOR use.
+    parameters:
+      - name: card_bin
+        type: string
+        required: true
+        location: body
+        description: Card BIN (first 6–8 digits) to look up card issuing country.
+        example: "424242"
+      - name: ip_address
+        type: string
+        required: true
+        location: body
+        description: Customer's IPv4 or IPv6 address. Must be a valid IP.
+        example: 92.168.1.1
+      - name: billing_country
+        type: string
+        required: false
+        location: body
+        description: ISO 3166-1 alpha-2 billing country code. When provided, country mismatch checks are more precise.
+        example: DE
+      - name: amount_usd
+        type: number
+        required: false
+        location: body
+        description: Transaction amount in USD. High-value transactions via VPN incur an additional risk score boost.
+        example: 250.00
+    request_example: |
+      {
+        "card_bin": "424242",
+        "ip_address": "92.168.1.1",
+        "billing_country": "DE",
+        "amount_usd": 250.00
+      }
+    response_example: |
+      {
+        "data": {
+          "risk_score": 0.55,
+          "is_safe": false,
+          "flags": ["ip_country_mismatch", "country_mismatch", "vpn_detected"],
+          "signals": {
+            "ip_country": "NL",
+            "billing_country": "DE",
+            "bin_country": "US",
+            "vpn_detected": true,
+            "is_proxy": false,
+            "is_tor": false,
+            "country_mismatch": true
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: risk_score
+        type: float
+        description: Transaction risk score from 0.0 to 1.0
+      - name: is_safe
+        type: boolean
+        description: True when score is below 0.5 and no TOR or proxy detected
+      - name: flags
+        type: array
+        description: "Triggered flags. Possible values: ip_country_mismatch, bin_country_mismatch, country_mismatch, vpn_detected, proxy_detected, tor_detected, high_value_vpn"
+      - name: signals.ip_country
+        type: string
+        description: Country code resolved from the IP address
+      - name: signals.billing_country
+        type: string or null
+        description: Billing country provided in the request, or null if omitted
+      - name: signals.bin_country
+        type: string
+        description: Country of the card issuer resolved from the BIN
+      - name: signals.country_mismatch
+        type: boolean
+        description: True when any country comparison produced a mismatch
+    errors:
+      - code: 422
+        message: validation_failed
+        description: ip_address is not a valid IPv4 or IPv6 address, or card_bin is missing
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/transaction/risk \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "card_bin": "424242",
+            "ip_address": "92.168.1.1",
+            "billing_country": "DE",
+            "amount_usd": 250.00
+          }'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/transaction/risk",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={
+                "card_bin": "424242",
+                "ip_address": "92.168.1.1",
+                "billing_country": "DE",
+                "amount_usd": 250.00
+            }
+        )
+        data = response.json()["data"]
+        print(f"risk_score={data['risk_score']}, is_safe={data['is_safe']}")
+        if data["flags"]:
+            print("Flags:", data["flags"])
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/transaction/risk', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            card_bin: '424242',
+            ip_address: '92.168.1.1',
+            billing_country: 'DE',
+            amount_usd: 250.00
+          })
+        }).then(r => r.json());
+
+        console.log(data.risk_score, data.is_safe, data.flags);
+
+performance:
+  p50_ms: 48
+  p95_ms: 125
+  p99_ms: 240
+  samples: 80000
+  measured_at: "2026-04-01"
+
+faq:
+  - question: What is the difference between /payment/validate and /transaction/risk?
+    answer: >-
+      /payment/validate verifies the format and authenticity of financial identifiers (BIN, IBAN, SWIFT) and checks
+      their cross-field consistency. Use it at form submission to catch invalid data before hitting your processor.
+      /transaction/risk scores a live transaction for fraud signals using the card BIN country, IP geolocation,
+      and billing country. Use it immediately before authorizing a payment.
+  - question: Does /payment/validate charge against the BIN or IBAN data on its own?
+    answer: >-
+      Each field you provide is looked up independently. You can pass only a BIN, only an IBAN, or any combination.
+      The consistency check only runs when two or more fields are provided.
+  - question: What does the consistency check actually verify?
+    answer: >-
+      The check compares the country implied by each identifier: the BIN-issuing country, the IBAN country prefix,
+      and the SWIFT country (characters 5–6 of the BIC). It also compares the IBAN bank code against the first 4
+      characters of the SWIFT BIC. Mismatches produce named flags in consistency.flags.
+  - question: How is the transaction risk score calculated?
+    answer: >-
+      Score components are additive (capped at 1.0): IP/billing country mismatch +0.35, BIN/billing mismatch +0.25,
+      TOR detection +0.40, proxy detection +0.30, VPN detection +0.20, and a VPN fraud score multiplier of up to
+      +0.25. High-value transactions (>$500 USD) with an active VPN add +0.15.

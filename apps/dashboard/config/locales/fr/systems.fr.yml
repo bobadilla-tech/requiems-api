@@ -79,7 +79,7 @@ fr:
         name: "Moteur identité et risque"
         headline: "Un appel renvoie une image de risque complète : e-mail, IP, téléphone et signaux comportementaux composés en une décision."
         endpoint_method: "POST"
-        endpoint_path: "/v1/signup/protect"
+        endpoint_path: "/v1/systems/signup/protect"
         input: |
           {
             "email": "user@tempmail.io",
@@ -138,7 +138,7 @@ fr:
         name: "Moteur intelligence paiements"
         headline: "Validez les données financières et évaluez le risque en un appel. Signaux BIN, IBAN, SWIFT et IP composés automatiquement."
         endpoint_method: "POST"
-        endpoint_path: "/v1/payment/validate"
+        endpoint_path: "/v1/systems/payment/validate"
         input: |
           {
             "card_bin": "424242",
@@ -195,7 +195,7 @@ fr:
         name: "Moteur données mondiales"
         headline: "Résolvez toute adresse ou coordonnées en profil de lieu complet. Fuseau, jours ouvrés et statut férié inclus."
         endpoint_method: "POST"
-        endpoint_path: "/v1/location/resolve"
+        endpoint_path: "/v1/systems/location/resolve"
         input: |
           {
             "address": "Alexanderplatz 1, Berlin",
@@ -249,7 +249,7 @@ fr:
         name: "Moteur intégrité des données"
         headline: "Validez, normalisez et contrôlez un jeu complet d'entrées en un appel. Pas d'endpoints séparés par champ."
         endpoint_method: "POST"
-        endpoint_path: "/v1/input/validate"
+        endpoint_path: "/v1/systems/content/moderate"
         input: |
           {
             "email": "  User@EXAMPLE.COM  ",
@@ -310,7 +310,7 @@ fr:
         name: "Utilitaires"
         headline: "Outils développeur courants, sur la même clé que vos systèmes de production."
         endpoint_method: "GET"
-        endpoint_path: "/v1/qr/base64"
+        endpoint_path: "/v1/technology/qr/base64"
         input: |
           {
             "data": "https://requiems.xyz",

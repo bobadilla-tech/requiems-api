@@ -79,7 +79,7 @@ es:
         name: "Motor de identidad y riesgo"
         headline: "Una llamada devuelve un panorama de riesgo completo: correo, IP, teléfono y señales de comportamiento compuestas en una sola decisión."
         endpoint_method: "POST"
-        endpoint_path: "/v1/signup/protect"
+        endpoint_path: "/v1/systems/signup/protect"
         input: |
           {
             "email": "user@tempmail.io",
@@ -138,7 +138,7 @@ es:
         name: "Motor de inteligencia de pagos"
         headline: "Valida datos financieros y evalúa el riesgo de transacción en una llamada. Señales BIN, IBAN, SWIFT e IP compuestas automáticamente."
         endpoint_method: "POST"
-        endpoint_path: "/v1/payment/validate"
+        endpoint_path: "/v1/systems/payment/validate"
         input: |
           {
             "card_bin": "424242",
@@ -195,7 +195,7 @@ es:
         name: "Motor de datos globales"
         headline: "Resuelve cualquier dirección o coordenadas en un perfil de ubicación completo. Incluye zona horaria, días laborables y estado de festivo."
         endpoint_method: "POST"
-        endpoint_path: "/v1/location/resolve"
+        endpoint_path: "/v1/systems/location/resolve"
         input: |
           {
             "address": "Alexanderplatz 1, Berlin",
@@ -249,7 +249,7 @@ es:
         name: "Motor de integridad de datos"
         headline: "Valida, normaliza y comprueba seguridad de un conjunto completo de entradas en una llamada. Sin endpoints separados por tipo de campo."
         endpoint_method: "POST"
-        endpoint_path: "/v1/input/validate"
+        endpoint_path: "/v1/systems/content/moderate"
         input: |
           {
             "email": "  User@EXAMPLE.COM  ",
@@ -310,7 +310,7 @@ es:
         name: "Utilidades"
         headline: "Herramientas habituales para desarrolladores, disponibles con la misma clave que tus sistemas de producción."
         endpoint_method: "GET"
-        endpoint_path: "/v1/qr/base64"
+        endpoint_path: "/v1/technology/qr/base64"
         input: |
           {
             "data": "https://requiems.xyz",

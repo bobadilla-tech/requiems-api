@@ -23,6 +23,8 @@
       </p>
     </div>
 
+    <%= render 'partials/apis_index/systems_section' %>
+
     <%= render 'partials/apis_index/most_popular', apis: @popular_apis %>
 
     <% @categories_with_apis.each do |category| %>
