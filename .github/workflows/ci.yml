@@ -86,6 +86,13 @@ jobs:
           go-version: "1.26"
           cache-dependency-path: apps/api/go.sum
 
+      - name: Cache Go build
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/go-build
+          key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
+          restore-keys: go-build-${{ runner.os }}-
+
       - name: Load env defaults
         working-directory: .
         run: grep -v '^#' infra/docker/.env.example | grep -v '^$' | grep -v '=\s*$' >> $GITHUB_ENV
@@ -107,7 +114,6 @@ jobs:
           files: apps/api/coverage.out
           flags: go
 
-  # Advisory: skipped for Dependabot PRs (dep updates don't change code style)
   go-lint:
     name: Go Lint (Advisory)
     runs-on: ubuntu-latest
@@ -123,6 +129,13 @@ jobs:
         with:
           go-version: "1.26"
           cache-dependency-path: apps/api/go.sum
+
+      - name: Cache Go build
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/go-build
+          key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
+          restore-keys: go-build-${{ runner.os }}-
 
       - name: Download dependencies
         working-directory: apps/api
@@ -176,6 +189,13 @@ jobs:
           bundler-cache: true
           working-directory: apps/dashboard
 
+      - name: Cache Rails bootsnap
+        uses: actions/cache@v5
+        with:
+          path: apps/dashboard/tmp/cache
+          key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
+          restore-keys: bootsnap-${{ runner.os }}-ruby3.4.8-
+
       - name: Load env defaults
         run: grep -v '^#' infra/docker/.env.example | grep -v '^$' | grep -v '=\s*$' >> $GITHUB_ENV
 
@@ -205,9 +225,6 @@ jobs:
           files: apps/dashboard/coverage/lcov/dashboard.lcov
           flags: rails
 
-  # Combines former rails-security + rails-lint into one runner.
-  # Saves one Ruby setup (~3 min) per Rails PR touch.
-  # Brakeman/audit are blocking; RuboCop is advisory (step-level continue-on-error).
   rails-checks:
     name: Rails Security & Lint
     runs-on: ubuntu-latest
@@ -226,6 +243,13 @@ jobs:
           ruby-version: "3.4.8"
           bundler-cache: true
           working-directory: apps/dashboard
+
+      - name: Cache Rails bootsnap
+        uses: actions/cache@v5
+        with:
+          path: apps/dashboard/tmp/cache
+          key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
+          restore-keys: bootsnap-${{ runner.os }}-ruby3.4.8-
 
       - name: Brakeman security scan
         working-directory: apps/dashboard
@@ -246,7 +270,6 @@ jobs:
         working-directory: apps/dashboard
         run: bin/importmap audit
 
-      # Advisory: skipped for Dependabot PRs (dep updates don't change code style)
       - name: Cache RuboCop
         if: github.actor != 'dependabot[bot]'
         uses: actions/cache@v5
@@ -262,136 +285,27 @@ jobs:
         continue-on-error: true # Non-blocking
         run: bundle exec rubocop
 
-  # Combines former worker-typecheck + worker-test + worker-lint into one runner.
-  # Saves 2× runner startup + pnpm install (~4 min) per auth-gateway PR touch.
-  # Typecheck runs first → fast failure on type errors before slow test suite.
-  # Biome lint is advisory (step-level continue-on-error), skipped for Dependabot.
-  # Bug fix: cache key now includes shared lockfile so shared dep changes invalidate cache.
   worker-test:
     name: Worker Tests
-    runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.auth-gateway == 'true'
-    timeout-minutes: 10
+    uses: ./.github/workflows/_worker-ci.yml
+    with:
+      app-path: apps/workers/auth-gateway
+      app-name: auth-gateway
+      has-lint: true
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: "10.26.0"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: "pnpm"
-          # Include shared lockfile: shared dep changes now correctly invalidate cache
-          cache-dependency-path: |
-            apps/workers/shared/pnpm-lock.yaml
-            apps/workers/auth-gateway/pnpm-lock.yaml
-
-      - name: Install shared dependencies
-        working-directory: apps/workers/shared
-        run: pnpm install --frozen-lockfile
-
-      - name: Install dependencies
-        working-directory: apps/workers/auth-gateway
-        run: pnpm install --frozen-lockfile
-
-      - name: TypeScript check
-        working-directory: apps/workers/auth-gateway
-        run: pnpm run typecheck
-
-      - name: Run tests with coverage
-        working-directory: apps/workers/auth-gateway
-        run: pnpm exec vitest run --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: apps/workers/auth-gateway/coverage/lcov.info
-          flags: auth-gateway
-
-      - name: Upload shared coverage to Codecov
-        uses: codecov/codecov-action@v6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: apps/workers/auth-gateway/coverage/lcov.info
-          flags: shared
-
-      # Advisory: skipped for Dependabot PRs
-      - name: Biome lint
-        if: github.actor != 'dependabot[bot]'
-        working-directory: apps/workers/auth-gateway
-        continue-on-error: true # Non-blocking
-        run: pnpm run lint
-
-      - name: Biome format check
-        if: github.actor != 'dependabot[bot]'
-        working-directory: apps/workers/auth-gateway
-        continue-on-error: true # Non-blocking
-        run: pnpm run format:check
-
-  # Combines former api-management-typecheck + api-management-test into one runner.
-  # Saves 1× runner startup + pnpm install (~2 min) per api-management PR touch.
-  # Bug fix: cache key now includes shared lockfile.
   api-management-test:
     name: API Management Tests
-    runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.api-management == 'true'
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: "10.26.0"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: "pnpm"
-          # Include shared lockfile: shared dep changes now correctly invalidate cache
-          cache-dependency-path: |
-            apps/workers/shared/pnpm-lock.yaml
-            apps/workers/api-management/pnpm-lock.yaml
-
-      - name: Install shared dependencies
-        working-directory: apps/workers/shared
-        run: pnpm install --frozen-lockfile
-
-      - name: Install dependencies
-        working-directory: apps/workers/api-management
-        run: pnpm install --frozen-lockfile
-
-      - name: TypeScript check
-        working-directory: apps/workers/api-management
-        run: pnpm run typecheck
-
-      - name: Run tests with coverage
-        working-directory: apps/workers/api-management
-        run: pnpm exec vitest run --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: apps/workers/api-management/coverage/lcov.info
-          flags: api-management
-
-      - name: Upload shared coverage to Codecov
-        uses: codecov/codecov-action@v6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: apps/workers/api-management/coverage/lcov.info
-          flags: shared
+    uses: ./.github/workflows/_worker-ci.yml
+    with:
+      app-path: apps/workers/api-management
+      app-name: api-management
+      has-lint: true
+    secrets: inherit
 
   ci-success:
     name: CI Success
