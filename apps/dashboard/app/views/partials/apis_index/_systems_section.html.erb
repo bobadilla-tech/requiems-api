@@ -1,20 +1,15 @@
 <%
   systems = SystemsController::SYSTEMS
-  color_map = {
+
+  color_defs = {
     "blue"   => { badge: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300", border: "hover:border-blue-300 dark:hover:border-blue-600", dot: "bg-blue-500" },
     "green"  => { badge: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300", border: "hover:border-green-300 dark:hover:border-green-600", dot: "bg-green-500" },
     "purple" => { badge: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300", border: "hover:border-purple-300 dark:hover:border-purple-600", dot: "bg-purple-500" },
     "indigo" => { badge: "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300", border: "hover:border-indigo-300 dark:hover:border-indigo-600", dot: "bg-indigo-500" },
     "gray"   => { badge: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300", border: "hover:border-gray-400 dark:hover:border-gray-500", dot: "bg-gray-500" }
   }
-
-  i18n_key_map = {
-    "identity-risk"          => :identity_risk,
-    "payments-intelligence"  => :payments_intelligence,
-    "global-data"            => :global_data,
-    "data-integrity"         => :data_integrity,
-    "developer-utilities"    => :developer_utilities
-  }
+  color_map = systems.each_with_object({}) { |s, h| h[s[:slug]] = color_defs[s[:color]] || color_defs["gray"] }
+  i18n_key_map = systems.each_with_object({}) { |s, h| h[s[:slug]] = s[:slug].tr("-", "_").to_sym }
 %>
 
 <div class="mb-12">
@@ -30,7 +25,7 @@
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <% systems.first(4).each do |system| %>
-      <% colors = color_map[system[:color]] || color_map["gray"] %>
+      <% colors = color_map[system[:slug]] %>
       <% card_key = i18n_key_map[system[:slug]] %>
       <%= link_to system_path(system[:slug]), class: "group block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 #{colors[:border]} transition-colors" do %>
         <div class="flex items-start justify-between mb-3">
@@ -63,7 +58,7 @@
 
     <%# Developer Utilities — spanning wider on larger screens %>
     <% dev = systems.last %>
-    <% dev_colors = color_map[dev[:color]] || color_map["gray"] %>
+    <% dev_colors = color_map[dev[:slug]] %>
     <%= link_to system_path(dev[:slug]), class: "group block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 #{dev_colors[:border]} transition-colors sm:col-span-2 lg:col-span-1" do %>
       <div class="flex items-start justify-between mb-3">
         <div class="flex items-center gap-2">
@@ -75,13 +70,13 @@
         </svg>
       </div>
       <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-        <%= t("systems.index.cards.developer_utilities.title") %>
+        <%= t("systems.index.cards.#{i18n_key_map[dev[:slug]]}.title") %>
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-        <%= t("systems.index.cards.developer_utilities.blurb") %>
+        <%= t("systems.index.cards.#{i18n_key_map[dev[:slug]]}.blurb") %>
       </p>
       <ul class="mt-3 space-y-1">
-        <% t("systems.index.cards.developer_utilities.signals").first(2).each do |sig| %>
+        <% t("systems.index.cards.#{i18n_key_map[dev[:slug]]}.signals").first(2).each do |sig| %>
           <li class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
             <svg class="h-3 w-3 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
