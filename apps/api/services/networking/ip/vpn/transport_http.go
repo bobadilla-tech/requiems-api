@@ -4,9 +4,10 @@ import (
 	"context"
 	"net"
 	"net/http"
-	"requiems-api/platform/httpx"
 
 	"github.com/go-chi/chi/v5"
+
+	"requiems-api/platform/httpx"
 )
 
 type BatchRequest struct {

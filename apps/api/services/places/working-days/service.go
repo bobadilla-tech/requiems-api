@@ -34,4 +34,3 @@ func (s *Service) GetWorkingDays(from, to time.Time, country, subdivision string
 	}
 	return businessdayscalculator.CountBusinessDaysWithHolidays(from, to, opts)
 }
-

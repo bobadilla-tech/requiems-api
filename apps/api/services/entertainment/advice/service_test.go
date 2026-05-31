@@ -29,10 +29,7 @@ func (m *mockRows) Close() {}
 func (m *mockRows) Err() error { return m.err }
 
 func (m *mockRows) Next() bool {
-	if m.pos < len(m.items) {
-		return true
-	}
-	return false
+	return m.pos < len(m.items)
 }
 
 func (m *mockRows) Scan(dest ...any) error {
