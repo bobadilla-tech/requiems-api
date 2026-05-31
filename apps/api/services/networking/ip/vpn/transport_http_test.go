@@ -189,7 +189,7 @@ func TestVPN_Batch_HappyPath(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[IPCheckResponse]]
 
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
@@ -293,7 +293,7 @@ func TestVPN_Batch_InvalidIPs(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[IPCheckResponse]]
 
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
@@ -335,7 +335,7 @@ func TestVPN_Batch_PreservesOrder(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 
-	var resp httpx.Response[BatchResponse]
+	var resp httpx.Response[httpx.BatchResponse[IPCheckResponse]]
 
 	err := json.NewDecoder(w.Body).Decode(&resp)
 	require.NoError(t, err)
