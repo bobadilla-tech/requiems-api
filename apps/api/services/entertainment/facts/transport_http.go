@@ -1,6 +1,7 @@
 package facts
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -12,6 +13,11 @@ import (
 // Request holds optional query parameters for the facts endpoint.
 type Request struct {
 	Category string `query:"category"`
+}
+
+// BatchRequest holds the request payload for the batch facts endpoint.
+type BatchRequest struct {
+	Categories []string `json:"categories" validate:"required,min=1,max=50,dive"`
 }
 
 // RegisterRoutes mounts facts handlers on the given router.
@@ -38,4 +44,14 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, fact)
 	})
+	r.Post("/facts/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
+			// Normalise to lowercase — consistent with GET /facts?category=
+			normalised := make([]string, len(req.Categories))
+			for i, c := range req.Categories {
+				normalised[i] = strings.ToLower(c)
+			}
+			return httpx.BatchResponse[BatchItem]{Results: svc.RandomBatch(ctx, normalised)}, nil
+		},
+	))
 }
