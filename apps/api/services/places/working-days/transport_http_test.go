@@ -11,6 +11,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"requiems-api/platform/httpx"
 )
 
 func newBatchRouter() chi.Router {
@@ -68,7 +70,7 @@ func TestWorkingDaysBatch_HappyPath(t *testing.T) {
 	require.Equal(t, http.StatusOK, rec.Code)
 
 	var got struct {
-		Data BatchResponse `json:"data"`
+		Data httpx.BatchResponse[WorkingDays] `json:"data"`
 	}
 
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&got))
@@ -210,7 +212,7 @@ func TestWorkingDaysBatch_MaxItems(t *testing.T) {
 	require.Equal(t, http.StatusOK, rec.Code)
 
 	var got struct {
-		Data BatchResponse `json:"data"`
+		Data httpx.BatchResponse[WorkingDays] `json:"data"`
 	}
 
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&got))
