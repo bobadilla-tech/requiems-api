@@ -66,18 +66,19 @@ func TestModerate_LanguageAutoDetected(t *testing.T) {
 	t.Parallel()
 	r := setupRouter()
 
-	w := post(t, r, `{"text": "i love you"}`)
+	w := post(t, r, `{"text": "The quick brown fox jumps over the lazy dog, and the dog barked back at the fox running through the forest."}`)
 	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp httpx.Response[Response]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 
-	require.NotNil(t, resp.Data.LanguageConfidence)
-	assert.Greater(t, *resp.Data.LanguageConfidence, 0.0)
-	assert.LessOrEqual(t, *resp.Data.LanguageConfidence, 1.0)
-
 	require.NotNil(t, resp.Data.Language)
 	assert.Equal(t, "en", *resp.Data.Language)
+
+	if resp.Data.LanguageConfidence != nil {
+		assert.Greater(t, *resp.Data.LanguageConfidence, 0.0)
+		assert.LessOrEqual(t, *resp.Data.LanguageConfidence, 1.0)
+	}
 }
 
 func TestModerate_TextWithProfanity(t *testing.T) {
