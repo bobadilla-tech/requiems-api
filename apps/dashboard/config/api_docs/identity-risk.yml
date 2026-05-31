@@ -1,0 +1,397 @@
+api_id: identity-risk
+api_name: Identity & Risk System
+description: Compose email, phone, IP, and behavioral signals into a single risk decision. One call returns whether a user is real, safe, and trustworthy.
+base_url: https://api.requiems.xyz
+overview:
+  use_cases:
+    - Block fake signups, disposable emails, and high-risk IPs at registration
+    - Score users before they transact or access sensitive features
+    - Identify automated traffic using behavioral and network signals
+    - Re-evaluate existing accounts when anomalous activity is detected
+    - Layer fraud signals without building scoring logic yourself
+  features:
+    - Email validation with disposable and MX record checks
+    - Phone number validation and carrier lookup
+    - IP geolocation, VPN, proxy, and TOR detection
+    - ASN and threat intelligence signals
+    - Domain age and reputation checks
+    - Single structured risk decision in one API call
+endpoints:
+  - name: Protect Signup
+    method: POST
+    path: /v1/systems/signup/protect
+    description: Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+    parameters:
+      - name: email
+        type: string
+        required: false
+        location: body
+        description: Email address to validate and score. At least one of email, phone, or ip_address is required.
+        example: user@tempmail.io
+      - name: phone
+        type: string
+        required: false
+        location: body
+        description: Phone number in E.164 format to validate and check for VoIP or virtual numbers.
+        example: "+14155552671"
+      - name: ip_address
+        type: string
+        required: false
+        location: body
+        description: IPv4 or IPv6 address to check for VPN, proxy, TOR, and hosting status.
+        example: 45.33.32.156
+    request_example: |
+      {
+        "email": "user@tempmail.io",
+        "ip_address": "45.33.32.156",
+        "phone": "+14155552671"
+      }
+    response_example: |
+      {
+        "data": {
+          "risk_score": 0.87,
+          "is_safe": false,
+          "confidence": 0.94,
+          "flags": ["disposable_email", "vpn_detected"],
+          "signals": {
+            "email": {
+              "valid": true,
+              "disposable": true,
+              "mx_valid": true,
+              "suggestion": null
+            },
+            "phone": {
+              "valid": false,
+              "country": "",
+              "is_voip": false,
+              "is_virtual": false
+            },
+            "ip": {
+              "country_code": "US",
+              "is_vpn": true,
+              "is_proxy": false,
+              "is_tor": false,
+              "is_hosting": true,
+              "fraud_score": 0.72
+            }
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: risk_score
+        type: float
+        description: Composite risk score from 0.0 (clean) to 1.0 (high risk)
+      - name: is_safe
+        type: boolean
+        description: True when risk_score is below the safety threshold with no critical flags
+      - name: confidence
+        type: float
+        description: Confidence in the decision from 0.0 to 1.0, based on which signals resolved successfully
+      - name: flags
+        type: array
+        description: "Array of triggered risk flags. Possible values: disposable_email, vpn_detected, proxy_detected, tor_detected, is_hosting"
+      - name: signals.email
+        type: object
+        description: Email validation result including disposable detection and MX check
+      - name: signals.phone
+        type: object
+        description: Phone number validation result with country code and VoIP/virtual detection
+      - name: signals.ip
+        type: object
+        description: IP intelligence including VPN/proxy/TOR status and fraud score
+    errors:
+      - code: 422
+        message: validation_failed
+        description: All of email, phone, and ip_address were omitted. At least one is required.
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key in the requiems-api-key header
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/signup/protect \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+          }'
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/systems/signup/protect"
+        headers = {"requiems-api-key": "YOUR_API_KEY"}
+        payload = {
+            "email": "user@tempmail.io",
+            "ip_address": "45.33.32.156",
+            "phone": "+14155552671"
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        data = response.json()["data"]
+
+        if not data["is_safe"]:
+            print(f"Blocked: risk_score={data['risk_score']}, flags={data['flags']}")
+        else:
+            print("User passed risk check")
+      javascript: |
+        const response = await fetch('https://api.requiems.xyz/v1/systems/signup/protect', {
+          method: 'POST',
+          headers: {
+            'requiems-api-key': 'YOUR_API_KEY',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: 'user@tempmail.io',
+            ip_address: '45.33.32.156',
+            phone: '+14155552671'
+          })
+        });
+
+        const { data } = await response.json();
+        if (!data.is_safe) {
+          console.log('Blocked:', data.flags);
+        }
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/signup/protect')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          email: 'user@tempmail.io',
+          ip_address: '45.33.32.156',
+          phone: '+14155552671'
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        data = JSON.parse(response.body)['data']
+        puts data['is_safe'] ? 'Passed' : "Blocked: #{data['flags'].join(', ')}"
+
+  - name: Score Risk
+    method: POST
+    path: /v1/systems/risk/score
+    description: Score a user for risk without the full signal breakdown. Lower latency than /signup/protect, suited for background re-scoring and rate limiting.
+    parameters:
+      - name: email
+        type: string
+        required: false
+        location: body
+        description: Email address to include in the risk score.
+        example: user@example.com
+      - name: phone
+        type: string
+        required: false
+        location: body
+        description: Phone number in E.164 format.
+        example: "+14155552671"
+      - name: ip_address
+        type: string
+        required: false
+        location: body
+        description: IPv4 or IPv6 address to check.
+        example: 45.33.32.156
+    request_example: |
+      {
+        "email": "user@example.com",
+        "ip_address": "45.33.32.156"
+      }
+    response_example: |
+      {
+        "data": {
+          "risk_score": 0.34,
+          "is_safe": true,
+          "confidence": 0.88,
+          "flags": []
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: risk_score
+        type: float
+        description: Composite risk score from 0.0 to 1.0
+      - name: is_safe
+        type: boolean
+        description: True when the risk score is below the safety threshold
+      - name: confidence
+        type: float
+        description: Confidence in the score based on resolved signals
+      - name: flags
+        type: array
+        description: Array of triggered risk flags
+    errors:
+      - code: 422
+        message: validation_failed
+        description: All of email, phone, and ip_address were omitted
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/risk/score \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"email": "user@example.com", "ip_address": "45.33.32.156"}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/risk/score",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"email": "user@example.com", "ip_address": "45.33.32.156"}
+        )
+        data = response.json()["data"]
+        print(f"risk_score={data['risk_score']}, is_safe={data['is_safe']}")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/risk/score', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'user@example.com', ip_address: '45.33.32.156' })
+        }).then(r => r.json());
+
+        console.log(data.risk_score, data.is_safe);
+
+  - name: Verify User
+    method: POST
+    path: /v1/systems/user/verify
+    description: Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+    parameters:
+      - name: email
+        type: string
+        required: true
+        location: body
+        description: Email address to verify. Domain-level WHOIS, MX, and DNS checks are run automatically.
+        example: user@example.com
+      - name: ip_address
+        type: string
+        required: false
+        location: body
+        description: Optional IPv4 or IPv6 address. When provided, VPN and proxy signals are added to the result.
+        example: 45.33.32.156
+    request_example: |
+      {
+        "email": "user@example.com",
+        "ip_address": "45.33.32.156"
+      }
+    response_example: |
+      {
+        "data": {
+          "verified": true,
+          "confidence": 0.92,
+          "risk_score": 0.08,
+          "flags": [],
+          "signals": {
+            "email": {
+              "valid": true,
+              "disposable": false,
+              "mx_valid": true
+            },
+            "domain": {
+              "age_days": 4521,
+              "has_mx": true,
+              "has_a_records": true,
+              "available": false
+            },
+            "ip": {
+              "is_vpn": false,
+              "is_proxy": false,
+              "fraud_score": 0.02
+            }
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: verified
+        type: boolean
+        description: True when risk score is below 0.3, confidence is above 0.5, email is valid, domain has MX, and domain is registered
+      - name: confidence
+        type: float
+        description: Confidence in the verification result, based on how many signals resolved
+      - name: risk_score
+        type: float
+        description: Composite risk score from 0.0 to 1.0
+      - name: flags
+        type: array
+        description: "Triggered risk flags. Possible values: email_invalid, disposable_email, no_mx, domain_not_registered, young_domain, whois_unavailable, ip_risk"
+      - name: signals.email
+        type: object
+        description: Email validation result
+      - name: signals.domain
+        type: object
+        description: Domain intelligence including WHOIS age, MX and A record presence, and registration status
+      - name: signals.ip
+        type: object or null
+        description: IP risk signals. Null when ip_address was not provided
+    errors:
+      - code: 422
+        message: validation_failed
+        description: email field is missing or empty
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/user/verify \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"email": "user@example.com", "ip_address": "45.33.32.156"}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/user/verify",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"email": "user@example.com", "ip_address": "45.33.32.156"}
+        )
+        data = response.json()["data"]
+        print(f"verified={data['verified']}, confidence={data['confidence']}")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/user/verify', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'user@example.com', ip_address: '45.33.32.156' })
+        }).then(r => r.json());
+
+        console.log(data.verified, data.confidence);
+
+performance:
+  p50_ms: 55
+  p95_ms: 140
+  p99_ms: 280
+  samples: 100000
+  measured_at: "2026-04-01"
+
+faq:
+  - question: What is the difference between /signup/protect and /risk/score?
+    answer: >-
+      /signup/protect returns the full signal breakdown — individual email, phone, and IP objects with all sub-fields.
+      /risk/score returns the same composite score and flags but omits the per-signal detail, making it faster and
+      smaller. Use /signup/protect when you need to surface the reason for a block to a human reviewer.
+      Use /risk/score for background re-scoring where only the score and flags matter.
+  - question: Is it safe to call this from the browser or mobile client?
+    answer: >-
+      No. Your API key must not be exposed in client-side code. Call this endpoint from your backend server immediately
+      after collecting the user's inputs. Pass the result back to the client if needed (e.g., to block the form
+      submission), but keep the key server-side.
+  - question: What counts as "high risk"?
+    answer: >-
+      A risk_score above 0.5 triggers is_safe: false. Specific thresholds: disposable email adds 0.30, invalid email
+      adds 0.50, VPN detection adds 0.20, TOR detection adds 0.40, and proxy detection adds 0.30. These are
+      additive and capped at 1.0.
+  - question: Can I pass only an IP address without email or phone?
+    answer: >-
+      Yes. Any combination of email, phone, and ip_address is accepted as long as at least one is provided.
+      The risk score and confidence will reflect which signals were available.

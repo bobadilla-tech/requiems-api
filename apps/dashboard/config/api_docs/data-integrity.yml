@@ -1,0 +1,265 @@
+api_id: data-integrity
+api_name: Data Integrity System
+description: Validate, moderate, and normalize user input at the boundary of your product. Stop bad data before it enters your database or downstream services.
+base_url: https://api.requiems.xyz
+overview:
+  use_cases:
+    - Validate and normalize email, phone, and text fields on form submission
+    - Filter profanity, toxic content, and off-policy text in user-generated content
+    - Clean and standardize records in bulk import or data migration flows
+    - Pre-process and validate user input before passing to LLM workflows
+    - Enforce text quality standards without building custom validation logic
+  features:
+    - Profanity and toxicity detection with named category flags
+    - Sentiment analysis returning positive, negative, or neutral
+    - Automatic language detection with confidence score
+    - Text normalization with composable operation pipeline
+    - Unicode normalization, HTML stripping, case conversion, and whitespace collapsing
+    - Safe for any text content — no data is stored or logged
+endpoints:
+  - name: Moderate Content
+    method: POST
+    path: /v1/systems/content/moderate
+    description: Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+    parameters:
+      - name: text
+        type: string
+        required: true
+        location: body
+        description: The text to moderate. Any language. Required.
+        example: "This is some user-generated content."
+      - name: language
+        type: string
+        required: false
+        location: body
+        description: "ISO 639-1 language code (e.g. en, de, fr). When provided, language detection is skipped and confidence is set to 1.0."
+        example: en
+    request_example: |
+      {
+        "text": "This is some user-generated content.",
+        "language": "en"
+      }
+    response_example: |
+      {
+        "data": {
+          "is_safe": true,
+          "toxicity_score": null,
+          "sentiment": "neutral",
+          "language": "en",
+          "language_confidence": 1.0,
+          "flags": [],
+          "categories": {
+            "profanity": false,
+            "hate_speech": false,
+            "spam": false,
+            "violence": false
+          }
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: is_safe
+        type: boolean
+        description: False when any moderation category is triggered. True otherwise.
+      - name: toxicity_score
+        type: number or null
+        description: Reserved for future use. Currently always null.
+      - name: sentiment
+        type: string
+        description: "Detected sentiment: positive, negative, or neutral"
+      - name: language
+        type: string or null
+        description: "Detected or provided ISO 639-1 language code. Null when detection confidence is 0."
+      - name: language_confidence
+        type: number or null
+        description: "Confidence in the detected language from 0.0 to 1.0. 1.0 when language was explicitly provided."
+      - name: flags
+        type: array
+        description: "Triggered moderation flags. Currently possible: text_profanity"
+      - name: categories
+        type: object
+        description: "Per-category boolean flags: profanity, hate_speech, spam, violence"
+    errors:
+      - code: 422
+        message: validation_failed
+        description: text field is missing or empty
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/content/moderate \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{"text": "This is some user-generated content.", "language": "en"}'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/content/moderate",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={"text": "This is some user-generated content.", "language": "en"}
+        )
+        data = response.json()["data"]
+
+        if not data["is_safe"]:
+            print("Content blocked. Flags:", data["flags"])
+            print("Categories:", {k: v for k, v in data["categories"].items() if v})
+        else:
+            print(f"Safe. Sentiment: {data['sentiment']}")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/content/moderate', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: 'This is some user-generated content.', language: 'en' })
+        }).then(r => r.json());
+
+        if (!data.is_safe) {
+          console.warn('Content blocked:', data.flags);
+        } else {
+          console.log('Sentiment:', data.sentiment);
+        }
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/content/moderate')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = { text: 'This is some user-generated content.', language: 'en' }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+        puts data['is_safe'] ? "Safe. Sentiment: #{data['sentiment']}" : "Blocked: #{data['flags'].inspect}"
+
+  - name: Normalize Text
+    method: POST
+    path: /v1/systems/text/normalize
+    description: Apply a composable pipeline of normalization operations to a string. Trim whitespace, fix encoding, normalize unicode, strip HTML, and more — in a single call.
+    parameters:
+      - name: text
+        type: string
+        required: true
+        location: body
+        description: The text to normalize. Required.
+        example: "  Hello,   World!  "
+      - name: operations
+        type: array
+        required: true
+        location: body
+        description: "Ordered list of normalization operations to apply. At least one required. Valid values: trim, lowercase, uppercase, normalize_unicode, collapse_whitespace, strip_html, remove_punctuation"
+        example: '["trim", "lowercase", "collapse_whitespace"]'
+    request_example: |
+      {
+        "text": "  Hello,   World!  ",
+        "operations": ["trim", "lowercase", "collapse_whitespace"]
+      }
+    response_example: |
+      {
+        "data": {
+          "original": "  Hello,   World!  ",
+          "normalized": "hello, world!",
+          "operations": ["trim", "lowercase", "collapse_whitespace"]
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: original
+        type: string
+        description: The input text as provided
+      - name: normalized
+        type: string
+        description: The text after all operations have been applied in order
+      - name: operations
+        type: array
+        description: The operations list echoed from the request
+    errors:
+      - code: 422
+        message: validation_failed
+        description: text is empty or operations array is empty or missing
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/text/normalize \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "text": "  Hello,   World!  ",
+            "operations": ["trim", "lowercase", "collapse_whitespace"]
+          }'
+      python: |
+        import requests
+
+        response = requests.post(
+            "https://api.requiems.xyz/v1/systems/text/normalize",
+            headers={"requiems-api-key": "YOUR_API_KEY"},
+            json={
+                "text": "  Hello,   World!  ",
+                "operations": ["trim", "lowercase", "collapse_whitespace"]
+            }
+        )
+        data = response.json()["data"]
+        print(data["normalized"])  # hello, world!
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/text/normalize', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: '  Hello,   World!  ',
+            operations: ['trim', 'lowercase', 'collapse_whitespace']
+          })
+        }).then(r => r.json());
+
+        console.log(data.normalized); // hello, world!
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/text/normalize')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          text: '  Hello,   World!  ',
+          operations: %w[trim lowercase collapse_whitespace]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+        puts data['normalized']  # hello, world!
+
+performance:
+  p50_ms: 18
+  p95_ms: 52
+  p99_ms: 95
+  samples: 120000
+  measured_at: "2026-04-01"
+
+faq:
+  - question: Are operations applied in order?
+    answer: >-
+      Yes. Operations are applied sequentially in the order they appear in the array. The output of each operation
+      becomes the input of the next. For example, ["strip_html", "trim", "lowercase"] strips HTML tags first,
+      then trims whitespace from the result, then lowercases the final string.
+  - question: What does normalize_unicode do?
+    answer: >-
+      It applies Unicode NFC normalization (Canonical Decomposition followed by Canonical Composition). This
+      ensures that visually identical characters are represented by the same byte sequence — for example,
+      é (U+00E9) and e + combining acute accent (U+0065 + U+0301) are normalized to the same form.
+  - question: Does strip_html handle malformed HTML?
+    answer: >-
+      The strip_html operation removes any content matching the <...> pattern using a regular expression. It then
+      unescapes HTML entities (e.g. &amp; → &). It is not a full HTML parser and may leave residual content from
+      malformed or deeply nested tags.
+  - question: Is language detection required for /content/moderate?
+    answer: >-
+      No. If you omit the language field, the endpoint automatically detects the language. If detection returns
+      a confidence of 0.0, language and language_confidence are null in the response but moderation still runs.
+      Providing language explicitly sets confidence to 1.0 and skips detection.

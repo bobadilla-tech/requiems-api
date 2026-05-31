@@ -2,6 +2,9 @@
 <% i18n = "systems.#{slug}" %>
 <% content_for :title, t("#{i18n}.meta_title") %>
 <% content_for :description, t("#{i18n}.hero.subheadline") %>
+<% content_for :head do %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<% end %>
 
 <%# Hero %>
 <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
@@ -32,7 +35,7 @@
   </div>
 </div>
 
-<%# Engine showcase — the centrepiece %>
+<%# Engine showcase %>
 <section style="background-color:#0a0f1a;" class="py-20 border-b border-white/5">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="mb-10">
@@ -93,81 +96,159 @@
   </div>
 </section>
 
-<%# Signals + Additional endpoints — two columns %>
-<section class="bg-gray-50 dark:bg-gray-950 py-16">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="grid lg:grid-cols-2 gap-12">
+<%# API Reference — full docs with sidebar %>
+<% if @documentation %>
+  <section id="api-reference" class="bg-gray-50 dark:bg-gray-950 py-12 border-t border-gray-100 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 max-w-5xl">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">API Reference</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Base URL: <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded"><%= @documentation["base_url"] %></code>
+        </p>
+      </div>
 
-      <%# Signals %>
-      <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-5">
-          <%= t("systems.show.signals_heading") %>
-        </h2>
-        <ul class="space-y-3">
-          <% t("#{i18n}.signals").each do |sig| %>
-            <li class="flex items-start gap-2.5 text-sm text-gray-700 dark:text-gray-300">
-              <svg class="h-4 w-4 mt-0.5 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-              </svg>
-              <%= sig %>
-            </li>
-          <% end %>
-        </ul>
-
-        <div class="mt-10">
-          <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-3">
-            <%= t("systems.show.powered_by") %>
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <% @system[:division_slugs].each do |div_slug| %>
-              <%= link_to division_path(div_slug), class: "inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-blue-300 dark:hover:border-blue-600 transition-colors" do %>
-                <%= t("divisions.index.cards.#{div_slug}.title") %>
+      <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+        <%# Sticky sidebar %>
+        <aside class="hidden lg:block lg:col-span-3">
+          <div class="sticky top-8">
+            <nav class="space-y-1" data-controller="scroll-spy">
+              <a href="#ref-overview" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">Overview</a>
+              <a href="#ref-endpoints" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">Endpoints</a>
+              <% @documentation["endpoints"]&.each_with_index do |endpoint, index| %>
+                <a href="#endpoint-<%= index %>" class="block pl-6 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
+                  <span class="inline-block text-xs font-bold font-mono mr-1.5 <%= endpoint["method"] == 'POST' ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400' %>"><%= endpoint["method"] %></span>
+                  <%= endpoint["name"] %>
+                </a>
               <% end %>
+              <% if @documentation["faq"].present? %>
+                <a href="#ref-faq" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">FAQ</a>
+              <% end %>
+            </nav>
+
+            <%# Powered by %>
+            <div class="mt-6">
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-3">
+                <%= t("systems.show.powered_by") %>
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <% @system[:division_slugs].each do |div_slug| %>
+                  <%= link_to division_path(div_slug), class: "inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:border-blue-300 dark:hover:border-blue-600 transition-colors" do %>
+                    <%= t("divisions.index.cards.#{div_slug}.title") %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+
+            <%# Performance %>
+            <% if @documentation["performance"].present? %>
+              <% perf = @documentation["performance"] %>
+              <div class="mt-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+                <div class="mb-3">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Performance</span>
+                </div>
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">p50 <span class="text-gray-400 dark:text-gray-500">&mdash; median</span></span>
+                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p50_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">p95</span>
+                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p95_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">p99 <span class="text-gray-400 dark:text-gray-500">&mdash; tail</span></span>
+                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p99_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
+                  </div>
+                </div>
+              </div>
             <% end %>
           </div>
-        </div>
-      </div>
+        </aside>
 
-      <%# Additional endpoints %>
-      <div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-5">
-          <%= t("systems.show.other_endpoints_heading") %>
-        </h2>
-        <div class="space-y-4">
-          <% t("#{i18n}.endpoints").each do |ep| %>
-            <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-4">
-              <div class="flex items-center gap-2 mb-1.5">
-                <span class="inline-block text-xs font-bold font-mono px-2 py-0.5 rounded <%= ep[:method] == 'POST' ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' %>">
-                  <%= ep[:method] %>
-                </span>
-                <code class="text-sm font-mono text-gray-800 dark:text-gray-200"><%= ep[:path] %></code>
-              </div>
-              <p class="text-sm text-gray-600 dark:text-gray-400"><%= ep[:description] %></p>
+        <%# Main content %>
+        <main class="lg:col-span-9 mt-8 lg:mt-0">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+
+            <%# Overview %>
+            <div id="ref-overview" class="p-8 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Overview</h3>
+
+              <% if @documentation.dig("overview", "use_cases").present? %>
+                <div class="mb-6">
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Use Cases</h4>
+                  <ul class="space-y-2">
+                    <% @documentation.dig("overview", "use_cases").each do |use_case| %>
+                      <li class="flex items-start">
+                        <svg class="h-5 w-5 text-green-500 mr-2 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300"><%= use_case %></span>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if @documentation.dig("overview", "features").present? %>
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Features</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <% @documentation.dig("overview", "features").each do |feature| %>
+                      <div class="flex items-start">
+                        <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300 text-sm"><%= feature %></span>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
             </div>
-          <% end %>
-        </div>
+
+            <%# Endpoints %>
+            <div id="ref-endpoints" class="p-8">
+              <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">API Endpoints</h3>
+
+              <% @documentation["endpoints"]&.each_with_index do |endpoint, index| %>
+                <%= render "partials/apis_show/endpoint_documentation",
+                    endpoint: endpoint,
+                    index: index,
+                    base_url: @documentation["base_url"] %>
+              <% end %>
+            </div>
+
+            <%# FAQ %>
+            <% if @documentation["faq"].present? %>
+              <div id="ref-faq" class="p-8 border-t border-gray-200 dark:border-gray-700">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Frequently Asked Questions</h3>
+                <div class="space-y-4" data-controller="faq-accordion">
+                  <% @documentation["faq"].each_with_index do |faq, index| %>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <button type="button"
+                              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                              data-action="click->faq-accordion#toggle"
+                              data-faq-accordion-target="button">
+                        <span class="font-medium text-gray-900 dark:text-gray-100"><%= faq["question"] %></span>
+                        <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </button>
+                      <div class="hidden px-6 pb-4 text-gray-700 dark:text-gray-300" data-faq-accordion-target="content">
+                        <%= faq["answer"] %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+        </main>
       </div>
-
     </div>
-  </div>
-</section>
-
-<%# Use Cases %>
-<section class="bg-white dark:bg-gray-900 py-16 border-t border-gray-100 dark:border-gray-800">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">
-      <%= t("systems.show.use_cases_heading") %>
-    </h2>
-    <div class="grid sm:grid-cols-2 gap-5">
-      <% t("#{i18n}.use_cases").each do |uc| %>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 px-6 py-5">
-          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-1.5"><%= uc[:title] %></h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400"><%= uc[:body] %></p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
+  </section>
+<% end %>
 
 <%# Final CTA %>
 <section class="bg-slate-900 py-16">
