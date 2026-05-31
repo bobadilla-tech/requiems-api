@@ -1,6 +1,7 @@
 package facts
 
 import (
+	"context"
 	"fmt"
 	"math/rand/v2"
 )
@@ -11,11 +12,19 @@ type Fact struct {
 	Category string `json:"category"`
 	Source   string `json:"source"`
 }
-
 type entry struct {
 	fact     string
 	category string
 	source   string
+}
+
+// BatchItem is a single result in a batch response.
+// If a category is invalid or has no facts, Error is set and Fact is zero.
+type BatchItem struct {
+	Category string `json:"category"`
+	Fact     string `json:"fact,omitempty"`
+	Source   string `json:"source,omitempty"`
+	Error    string `json:"error,omitempty"`
 }
 
 var database = []entry{
@@ -101,10 +110,38 @@ func (s *Service) Random(category string) (Fact, error) {
 		}
 	}
 
-	e := pool[rand.IntN(len(pool))] //nolint:gosec // non-security random selection; crypto/rand not needed here
+	e := pool[rand.IntN(len(pool))] //nolint:gosec // non-cryptographic randomness is fine for fact selection
 	return Fact{
 		Fact:     e.fact,
 		Category: e.category,
 		Source:   e.source,
 	}, nil
+}
+
+func (s *Service) RandomBatch(ctx context.Context, categories []string) []BatchItem {
+	// Single pass over the database — equivalent to one batched DB query.
+	index := make(map[string][]entry, len(validCategories))
+	for _, e := range database {
+		index[e.category] = append(index[e.category], e)
+	}
+
+	results := make([]BatchItem, len(categories))
+	for i, cat := range categories {
+		pool, ok := index[cat]
+		if !ok || len(pool) == 0 {
+			results[i] = BatchItem{
+				Category: cat,
+				Error:    "no facts found for category: " + cat,
+			}
+			continue
+		}
+		e := pool[rand.IntN(len(pool))] //nolint:gosec // non-cryptographic randomness is fine for fact selection
+		results[i] = BatchItem{
+			Category: e.category,
+			Fact:     e.fact,
+			Source:   e.source,
+		}
+	}
+
+	return results
 }
