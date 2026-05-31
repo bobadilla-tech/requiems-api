@@ -1,48 +1,71 @@
-name: "CodeQL Advanced"
+name: CodeQL
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
     paths:
-      - "apps/**"
-      - ".github/workflows/**"
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "go.mod"
-      - "go.sum"
-      - "**/Gemfile"
-      - "**/Gemfile.lock"
-      - "**/go.mod"
-      - "**/go.sum"
-      - "**/package.json"
-      - "**/pnpm-lock.yaml"
-      - "**/tsconfig.json"
+      - "apps/api/**"
+      - "apps/dashboard/**"
+      - "apps/workers/**"
+      - ".github/workflows/codeql.yml"
   pull_request:
-    branches: ["main"]
+    branches: [main]
     paths:
-      - "apps/**"
-      - ".github/workflows/**"
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "go.mod"
-      - "go.sum"
-      - "**/Gemfile"
-      - "**/Gemfile.lock"
-      - "**/go.mod"
-      - "**/go.sum"
-      - "**/package.json"
-      - "**/pnpm-lock.yaml"
-      - "**/tsconfig.json"
+      - "apps/api/**"
+      - "apps/dashboard/**"
+      - "apps/workers/**"
+      - ".github/workflows/codeql.yml"
   schedule:
-    - cron: "36 18 * * 3"
+    - cron: "00 12 * * 1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
+  detect-changes:
+    name: Detect Changed Languages
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    outputs:
+      go: ${{ steps.changes.outputs.go }}
+      ruby: ${{ steps.changes.outputs.ruby }}
+      workers: ${{ steps.changes.outputs.workers }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect changed paths
+        id: filter
+        if: github.event_name != 'schedule'
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            go:
+              - 'apps/api/**'
+            ruby:
+              - 'apps/dashboard/**'
+            workers:
+              - 'apps/workers/**'
+
+      - name: Set scan targets
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            # Weekly full scan: all languages regardless of what changed
+            echo "go=true" >> $GITHUB_OUTPUT
+            echo "ruby=true" >> $GITHUB_OUTPUT
+            echo "workers=true" >> $GITHUB_OUTPUT
+          else
+            echo "go=${{ steps.filter.outputs.go }}" >> $GITHUB_OUTPUT
+            echo "ruby=${{ steps.filter.outputs.ruby }}" >> $GITHUB_OUTPUT
+            echo "workers=${{ steps.filter.outputs.workers }}" >> $GITHUB_OUTPUT
+          fi
+
+  analyze-go:
+    name: Analyze (go)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.go == 'true'
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -50,29 +73,76 @@ jobs:
       actions: read
       contents: read
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - language: actions
-            build-mode: none
-          - language: go
-            build-mode: autobuild
-          - language: javascript-typescript
-            build-mode: none
-          - language: ruby
-            build-mode: none
+    concurrency:
+      group: codeql-go-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          languages: go
+          build-mode: autobuild
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:${{matrix.language}}"
+          category: "/language:go"
+
+  analyze-ruby:
+    name: Analyze (ruby)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.ruby == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    concurrency:
+      group: codeql-ruby-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ruby
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:ruby"
+
+  analyze-js:
+    name: Analyze (javascript-typescript)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.workers == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    concurrency:
+      group: codeql-js-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:javascript-typescript"
