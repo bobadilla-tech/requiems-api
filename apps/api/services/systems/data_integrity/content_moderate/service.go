@@ -60,20 +60,20 @@ type Service struct {
 
 // NewService returns a new Service.
 func NewService(
-	detectlanguage DetectLanguage,
-	profanity Profanity,
-	sentiment Sentiment,
+	dl DetectLanguage,
+	prof Profanity,
+	sent Sentiment,
 ) *Service {
 	return &Service{
-		detectlanguage: detectlanguage,
-		profanity:      profanity,
-		sentiment:      sentiment,
+		detectlanguage: dl,
+		profanity:      prof,
+		sentiment:      sent,
 	}
 }
 
 // Moderate runs profanity check, sentiment analysis, and language detection if needed
 // and returns a unified moderation result.
-func (s *Service) Moderate(ctx context.Context, text string, language string) Response {
+func (s *Service) Moderate(ctx context.Context, text, language string) Response {
 
 	// resolve language — use caller-provided value or detect automatically.
 	// if caller provides language, confidence is set to 1.0 (certain).
