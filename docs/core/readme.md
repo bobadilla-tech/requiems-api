@@ -17,4 +17,5 @@ This folder contains developer-focused documentation for Requiem API.
 9. [APIs](./apis/readme.md)
 10. [Infrastructure](./infrastructure.md)
 11. [Deployment](./deployment.md)
-12. [Local Payment Testing](./local-payment-testing.md)
+12. [Maintenance Tasks](./maintenance-tasks.md)
+13. [Local Payment Testing](./local-payment-testing.md)
