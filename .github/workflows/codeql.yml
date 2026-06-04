@@ -33,7 +33,7 @@ jobs:
       workers: ${{ steps.changes.outputs.workers }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Detect changed paths
         id: filter
