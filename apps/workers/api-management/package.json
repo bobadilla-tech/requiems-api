@@ -35,6 +35,7 @@
     "@standard-schema/spec": "^1.1.0",
     "@types/node": "^25.9.1",
     "@vitest/coverage-v8": "^4.1.8",
+    "vite": "^6.0.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8",
     "wrangler": "^4.95.0"
