@@ -235,6 +235,169 @@ endpoints:
         data = JSON.parse(response.body)['data']
         puts data['normalized']  # hello, world!
 
+  - name: Domain Trust
+    method: GET
+    path: /v1/systems/domain/trust/{domain}
+    description: Evaluate the trustworthiness of a domain by analyzing DNS records, WHOIS registration data, and MX configuration — in a single call.
+    parameters:
+      - name: domain
+        type: string
+        required: true
+        location: path
+        description: The domain name to evaluate for trust. Must be a valid domain format (e.g. github.com).
+        example: "github.com"
+    response_example: |
+      {
+        "data": {
+          "domain": "github.com",
+          "trust_score": 1,
+          "trust_level": "high",
+          "who_is": {
+            "registrar": "MarkMonitor Inc.",
+            "created_at": "2007-10-09T18:20:50Z",
+            "expires_at": "2026-10-09T18:20:50Z",
+            "age_days": 6814,
+            "status": [
+              "clientDeleteProhibited",
+              "clientTransferProhibited",
+              "clientUpdateProhibited"
+            ]
+          },
+          "dns": {
+            "has_a_records": true,
+            "has_mx_records": true,
+            "has_ns_records": true,
+            "available": false
+          },
+          "mx_records": [
+            {
+              "host_name": "github-com.mail.protection.outlook.com.",
+              "priority": 0
+            }
+          ],
+          "flags": []
+        },
+        "metadata": {
+          "timestamp": "2026-06-05T21:01:18Z"
+        }
+      }
+    response_fields:
+      - name: domain
+        type: string
+        description: The domain name that was evaluated.
+      - name: trust_score
+        type: float
+        description: Computed trust score between 0.0 and 1.0. Starts at 1.0 with penalties applied based on domain signals.
+      - name: trust_level
+        type: string
+        description: Coarse trust label derived from the score. Possible values are "high" (>= 0.75), "medium" (0.4 - 0.74), or "low" (< 0.4).
+      - name: who_is
+        type: object
+        description: WHOIS registration data for the domain. Omitted from the response if WHOIS is unavailable for the TLD or if the domain is not registered.
+      - name: who_is.registrar
+        type: string
+        description: The registrar where the domain was registered.
+      - name: who_is.created_at
+        type: string
+        description: The date the domain was first registered in RFC3339 format.
+      - name: who_is.expires_at
+        type: string
+        description: The date the domain registration expires in RFC3339 format.
+      - name: who_is.age_days
+        type: integer
+        description: Number of days since the domain was registered.
+      - name: who_is.status
+        type: array
+        description: WHOIS status codes indicating the domain transfer and update permissions.
+      - name: dns
+        type: object
+        description: DNS health check results for the domain. Fields default to false if the domain is not registered.
+      - name: dns.has_a_records
+        type: boolean
+        description: True if the domain has at least one A record pointing to an IP address.
+      - name: dns.has_mx_records
+        type: boolean
+        description: True if the domain has MX records configured for receiving email.
+      - name: dns.has_ns_records
+        type: boolean
+        description: True if the domain has NS records indicating it is delegated to a nameserver.
+      - name: dns.available
+        type: boolean
+        description: True if the domain is unregistered and available for purchase. When true, trust_score is 0.0 and evaluation stops immediately.
+      - name: mx_records
+        type: array
+        description: List of MX records found for the domain. Empty array if none exist or if the domain is not registered.
+      - name: mx_records[].host_name
+        type: string
+        description: The hostname of the mail server.
+      - name: mx_records[].priority
+        type: integer
+        description: Mail server priority. Lower value means higher priority.
+      - name: flags
+        type: array
+        description: List of signal flags raised during evaluation. Possible values are "new_domain", "young_domain", "no_mx", "no_a_records", "expiring_soon", "whois_unavailable", "domain_not_registered". Only "domain_not_registered" is returned when the domain is not registered.
+    errors:
+      - code: bad_request
+        status: 400
+        description: Invalid or malformed domain value in the request path.  
+    code_examples:
+      curl: |
+        curl -X GET https://api.requiems.xyz/v1/systems/domain/trust/github.com \
+          -H "requiems-api-key: YOUR_API_KEY"
+      python: |
+        import requests
+
+        response = requests.get(
+          "https://api.requiems.xyz/v1/systems/domain/trust/github.com",
+          headers={"requiems-api-key": "YOUR_API_KEY"}
+        )
+        data = response.json()["data"]
+
+        print(f"Domain: {data['domain']}")
+        print(f"Trust Score: {data['trust_score']} ({data['trust_level']})")
+
+        if data["flags"]:
+          print("Flags:", data["flags"])
+        else:
+          print("No issues found.")
+
+        if data["who_is"]:
+          print(f"Registrar: {data['who_is']['registrar']}")
+          print(f"Age: {data['who_is']['age_days']} days")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/domain/trust/github.com', {
+          headers: { 'requiems-api-key': 'YOUR_API_KEY' }
+        }).then(r => r.json());
+
+        console.log(`Domain: ${data.domain}`);
+        console.log(`Trust Score: ${data.trust_score} (${data.trust_level})`);
+
+        if (data.flags.length > 0) {
+          console.warn('Flags:', data.flags);
+        } else {
+          console.log('No issues found.');
+        }
+
+        if (data.who_is) {
+          console.log(`Registrar: ${data.who_is.registrar}`);
+          console.log(`Age: ${data.who_is.age_days} days`);
+        }
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/domain/trust/github.com')
+        request = Net::HTTP::Get.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+
+        puts "Domain: #{data['domain']}"
+        puts "Trust Score: #{data['trust_score']} (#{data['trust_level']})"
+        puts data['flags'].empty? ? "No issues found." : "Flags: #{data['flags'].inspect}"
+        puts "Registrar: #{data['who_is']['registrar']}, Age: #{data['who_is']['age_days']} days" if data['who_is']
+
 performance:
   p50_ms: 18
   p95_ms: 52
