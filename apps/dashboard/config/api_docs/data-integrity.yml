@@ -335,7 +335,7 @@ endpoints:
         description: Mail server priority. Lower value means higher priority.
       - name: flags
         type: array
-        description: List of signal flags raised during evaluation. Possible values are "new_domain", "young_domain", "no_mx", "no_a_records", "expiring_soon", "whois_unavailable", "domain_not_registered". Only "domain_not_registered" is returned when the domain is not registered.
+        description: List of signal flags raised during evaluation. Possible values are "new_domain", "young_domain", "no_mx", "no_a_records", "no_ns_records", "expiring_soon", "whois_unavailable", "domain_not_registered". Only "domain_not_registered" is returned when the domain is not registered.
     errors:
       - code: bad_request
         status: 400
