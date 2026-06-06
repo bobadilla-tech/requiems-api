@@ -50,9 +50,9 @@ type mockWhoIsService struct {
 	expiryDate  string
 }
 
-func (m *mockWhoIsService) Lookup(_ context.Context, domain string) (whois.LookupResponse, error) {
+func (m *mockWhoIsService) Lookup(_ context.Context, domainName string) (whois.LookupResponse, error) {
 	return whois.LookupResponse{
-		Domain:      domain,
+		Domain:      domainName,
 		Registrar:   "Mock Registrar",
 		NameServers: []string{"ns1.example.com", "ns2.example.com"},
 		Status:      []string{"clientTransferProhibited"},
@@ -63,10 +63,10 @@ func (m *mockWhoIsService) Lookup(_ context.Context, domain string) (whois.Looku
 	}, nil
 }
 
-func Get(t *testing.T, r chi.Router, domain string) *httptest.ResponseRecorder {
+func Get(t *testing.T, r chi.Router, domainName string) *httptest.ResponseRecorder {
 	t.Helper()
 
-	req := httptest.NewRequest(http.MethodGet, "/domain/trust/"+domain, http.NoBody)
+	req := httptest.NewRequest(http.MethodGet, "/domain/trust/"+domainName, http.NoBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w

@@ -19,9 +19,9 @@ type WhoIs struct {
 	Status    []string `json:"status"`
 }
 
-// Dns holds the result of the DNS health check for a domain.
+// DNS holds the result of the DNS health check for a domain.
 // Used to determine whether the domain is operational and resolves correctly.
-type Dns struct {
+type DNS struct {
 	HasARecords  bool `json:"has_a_records"`
 	HasMxRecords bool `json:"has_mx_records"`
 	HasNsRecords bool `json:"has_ns_records"`
@@ -42,7 +42,7 @@ type Response struct {
 	TrustScore float64     `json:"trust_score"`
 	TrustLevel string      `json:"trust_level"`
 	WhoIs      *WhoIs      `json:"who_is,omitempty"`
-	Dns        Dns         `json:"dns"`
+	Dns        DNS         `json:"dns"`
 	MxRecords  []MxRecords `json:"mx_records"`
 	Flags      []string    `json:"flags"`
 }
@@ -64,27 +64,27 @@ type Service struct {
 }
 
 // NewService returns a new Service.
-func NewService(whois WhoIsService, domain DomainService) *Service {
+func NewService(whoIsSvc WhoIsService, domainSvc DomainService) *Service {
 	return &Service{
-		whoIs:  whois,
-		domain: domain,
+		whoIs:  whoIsSvc,
+		domain: domainSvc,
 	}
 }
 
 // Evaluate analyzes a domain and returns a trust assessment based on DNS, WHOIS,
 // and MX record data. The trust score starts at 1.0 and is reduced by penalties
 // depending on the issues found during evaluation.
-func (s *Service) Evaluate(ctx context.Context, domain string) Response {
+func (s *Service) Evaluate(ctx context.Context, domainName string) Response {
 
 	// initialize response with default values.
 	var result Response
-	result.Domain = domain
+	result.Domain = domainName
 	result.TrustScore = 1.0
 	result.Flags = []string{}
 	result.MxRecords = []MxRecords{}
 
 	// fetch DNS and availability info for the domain.
-	domainResult := s.domain.GetInfo(ctx, domain)
+	domainResult := s.domain.GetInfo(ctx, domainName)
 
 	result.Dns.Available = domainResult.Available
 
@@ -128,7 +128,7 @@ func (s *Service) Evaluate(ctx context.Context, domain string) Response {
 	}
 
 	// fetch WHOIS registration data for the domain.
-	whoisResult, whoisErr := s.whoIs.Lookup(ctx, domain)
+	whoisResult, whoisErr := s.whoIs.Lookup(ctx, domainName)
 
 	// if WHOIS lookup fails, flag it and skip all WHOIS-based evaluations.
 	if whoisErr != nil {
