@@ -42,7 +42,7 @@ type Response struct {
 	TrustScore float64     `json:"trust_score"`
 	TrustLevel string      `json:"trust_level"`
 	WhoIs      *WhoIs      `json:"who_is,omitempty"`
-	Dns        DNS         `json:"dns"`
+	DNS        DNS         `json:"dns"`
 	MxRecords  []MxRecords `json:"mx_records"`
 	Flags      []string    `json:"flags"`
 }
@@ -86,7 +86,7 @@ func (s *Service) Evaluate(ctx context.Context, domainName string) Response {
 	// fetch DNS and availability info for the domain.
 	domainResult := s.domain.GetInfo(ctx, domainName)
 
-	result.Dns.Available = domainResult.Available
+	result.DNS.Available = domainResult.Available
 
 	// if the domain is not registered, return immediately with a zero trust score.
 	if domainResult.Available {
@@ -101,7 +101,7 @@ func (s *Service) Evaluate(ctx context.Context, domainName string) Response {
 		result.TrustScore -= 0.2
 		result.Flags = append(result.Flags, "no_a_records")
 	} else {
-		result.Dns.HasARecords = true
+		result.DNS.HasARecords = true
 	}
 
 	// penalize if no MX records are found — domain cannot receive emails.
@@ -109,7 +109,7 @@ func (s *Service) Evaluate(ctx context.Context, domainName string) Response {
 		result.TrustScore -= 0.35
 		result.Flags = append(result.Flags, "no_mx")
 	} else {
-		result.Dns.HasMxRecords = true
+		result.DNS.HasMxRecords = true
 
 		// map each MX record to the response structure.
 		for _, mx := range domainResult.DNS.MX {
@@ -124,7 +124,7 @@ func (s *Service) Evaluate(ctx context.Context, domainName string) Response {
 	if len(domainResult.DNS.NS) == 0 {
 		result.Flags = append(result.Flags, "no_ns_records")
 	} else {
-		result.Dns.HasNsRecords = true
+		result.DNS.HasNsRecords = true
 	}
 
 	// fetch WHOIS registration data for the domain.
