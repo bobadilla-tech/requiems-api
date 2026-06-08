@@ -318,6 +318,7 @@ apis:
     endpoints_count: 5
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/disposable-email
     tags:
       - Email
