@@ -1,7 +1,7 @@
 <%# locals: (feature:, ours:, theirs:) %>
-<tr class="border-t border-gray-100 dark:border-gray-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
   <td class="py-3 px-4 text-sm text-gray-700 dark:text-gray-300 font-medium"><%= feature %></td>
-  <td class="py-3 px-4 text-center">
+  <td class="py-3 px-4 text-center bg-blue-50/50 dark:bg-blue-900/10">
     <% if ours == true %>
       <svg class="h-5 w-5 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor" aria-label="Yes">
         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
