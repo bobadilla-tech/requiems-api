@@ -105,7 +105,7 @@ func TestWhois_InvalidDomainFormat(t *testing.T) {
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for %q, got %d: %s", tt.domain, w.Code, w.Body.String())
+			assert.Equal(t, http.StatusUnprocessableEntity, w.Code, "expected 422 for %q, got %d: %s", tt.domain, w.Code, w.Body.String())
 		})
 	}
 }

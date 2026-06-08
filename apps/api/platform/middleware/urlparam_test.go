@@ -38,7 +38,7 @@ func TestValidateURLParam(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
-	t.Run("invalid param returns 400", func(t *testing.T) {
+	t.Run("invalid param returns 422", func(t *testing.T) {
 		t.Parallel()
 
 		req := httptest.NewRequest(http.MethodGet, "/bad-param!", http.NoBody)
@@ -46,6 +46,6 @@ func TestValidateURLParam(t *testing.T) {
 
 		setupRouter().ServeHTTP(w, req)
 
-		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
 }

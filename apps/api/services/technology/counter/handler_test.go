@@ -63,7 +63,7 @@ func TestIncrementHandler(t *testing.T) {
 		assert.Equal(t, int64(5), got.Value)
 	})
 
-	t.Run("returns 400 for invalid namespace from URL param validation", func(t *testing.T) {
+	t.Run("returns 422 for invalid namespace from URL param validation", func(t *testing.T) {
 		t.Parallel()
 		svc := &mockService{
 			incrementFn: func(_ context.Context, ns string) (int64, error) {
@@ -76,7 +76,7 @@ func TestIncrementHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		require.Equal(t, http.StatusBadRequest, w.Code)
+		require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
 
 	t.Run("returns 500 for internal server error", func(t *testing.T) {
@@ -122,7 +122,7 @@ func TestGetHandler(t *testing.T) {
 		assert.Equal(t, int64(42), got.Value)
 	})
 
-	t.Run("returns 400 for invalid namespace from URL param validation", func(t *testing.T) {
+	t.Run("returns 422 for invalid namespace from URL param validation", func(t *testing.T) {
 		t.Parallel()
 		svc := &mockService{
 			getFn: func(_ context.Context, ns string) (int64, error) {
@@ -135,7 +135,7 @@ func TestGetHandler(t *testing.T) {
 
 		newTestRouter(svc).ServeHTTP(w, req)
 
-		require.Equal(t, http.StatusBadRequest, w.Code)
+		require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
 
 	t.Run("returns 500 for internal server error", func(t *testing.T) {

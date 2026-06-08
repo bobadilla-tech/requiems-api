@@ -42,7 +42,7 @@ func TestDomain_InvalidFormat(t *testing.T) {
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			assert.Equal(t, http.StatusBadRequest, w.Code)
+			assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 		})
 	}
 }
