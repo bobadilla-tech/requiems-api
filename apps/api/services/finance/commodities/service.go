@@ -103,3 +103,102 @@ func (s *Service) Get(ctx context.Context, slug string) (CommodityPrice, error) 
 		Historical: historical,
 	}, nil
 }
+
+// BatchCommodityItem is the result for a single item in a batch commodities request.
+type BatchCommodityItem struct {
+	Slug   string          `json:"slug"`
+	Found  bool            `json:"found"`
+	Result *CommodityPrice `json:"result,omitempty"`
+	Error  string          `json:"error,omitempty"`
+}
+
+// GetBatch returns price data for each slug in a single SQL query.
+// Slugs not found in the database return Found: false.
+func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodityItem {
+	results := make([]BatchCommodityItem, len(slugs))
+	// Pre-index slug → result position (last position wins for duplicates).
+	slugIndex := make(map[string]int, len(slugs))
+	for i, slug := range slugs {
+		slugIndex[slug] = i
+		results[i] = BatchCommodityItem{Slug: slug, Found: false}
+	}
+
+	rows, err := s.db.Query(ctx, `
+		SELECT slug, year, price, name, unit, currency
+		FROM commodity_price_history
+		WHERE slug = ANY($1::text[])
+		ORDER BY slug, year DESC
+	`, slugs)
+	if err != nil {
+		for i, slug := range slugs {
+			results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
+		}
+		return results
+	}
+	defer rows.Close()
+
+	type yearRow struct {
+		year     int16
+		price    float64
+		name     string
+		unit     string
+		currency string
+	}
+	type slugData struct {
+		rows []yearRow
+	}
+	bySlug := make(map[string]*slugData)
+
+	for rows.Next() {
+		var slug string
+		var r yearRow
+		if err := rows.Scan(&slug, &r.year, &r.price, &r.name, &r.unit, &r.currency); err != nil {
+			continue
+		}
+		if d, ok := bySlug[slug]; ok {
+			if len(d.rows) < historyDepth {
+				d.rows = append(d.rows, r)
+			}
+		} else {
+			bySlug[slug] = &slugData{rows: []yearRow{r}}
+		}
+	}
+	if err := rows.Err(); err != nil {
+		for i, slug := range slugs {
+			results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
+		}
+		return results
+	}
+
+	for slug, d := range bySlug {
+		idx, ok := slugIndex[slug]
+		if !ok || len(d.rows) == 0 {
+			continue
+		}
+		latest := d.rows[0]
+		var change float64
+		if len(d.rows) > 1 && d.rows[1].price != 0 {
+			raw := (latest.price - d.rows[1].price) / d.rows[1].price * 100
+			change = math.Round(raw*100) / 100
+		}
+		historical := make([]HistoricalPrice, 0, len(d.rows)-1)
+		for _, r := range d.rows[1:] {
+			historical = append(historical, HistoricalPrice{
+				Period: strconv.Itoa(int(r.year)),
+				Price:  r.price,
+			})
+		}
+		cp := CommodityPrice{
+			Commodity:  slug,
+			Name:       latest.name,
+			Price:      latest.price,
+			Unit:       latest.unit,
+			Currency:   latest.currency,
+			Change24h:  change,
+			Historical: historical,
+		}
+		results[idx] = BatchCommodityItem{Slug: slug, Found: true, Result: &cp}
+	}
+
+	return results
+}

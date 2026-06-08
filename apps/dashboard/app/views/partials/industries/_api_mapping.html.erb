@@ -1,0 +1,27 @@
+<%# locals: (i18n_scope:) %>
+<% apis = division_locale_array(i18n_scope, "api_mapping.apis") %>
+<% return if apis.empty? %>
+<section class="py-16 bg-white dark:bg-gray-900" aria-labelledby="industry-api-mapping-heading">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 id="industry-api-mapping-heading" class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-10">
+      <%= t("#{i18n_scope}.api_mapping.heading") %>
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% apis.each do |api| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6 flex flex-col">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2"><%= api[:title] %></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 flex-1"><%= api[:description] %></p>
+          <% if api[:division].present? %>
+            <%= link_to division_path(api[:division]),
+                class: "text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1" do %>
+              View APIs
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

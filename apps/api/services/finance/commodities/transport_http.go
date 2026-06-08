@@ -16,10 +16,21 @@ type Getter interface {
 	Get(ctx context.Context, slug string) (CommodityPrice, error)
 }
 
+// BatchSlugsRequest is the input for the commodities batch endpoint.
+type BatchSlugsRequest struct {
+	Slugs []string `json:"slugs" validate:"required,min=1,max=20,dive,required"`
+}
+
 // RegisterRoutes mounts commodity price handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).
 func RegisterRoutes(r chi.Router, svc *Service) {
 	registerCommodityRoutes(r, svc)
+
+	r.Post("/commodities/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchSlugsRequest) (httpx.BatchResponse[BatchCommodityItem], error) {
+			return httpx.BatchResponse[BatchCommodityItem]{Results: svc.GetBatch(ctx, req.Slugs)}, nil
+		},
+	))
 }
 
 // registerCommodityRoutes wires the Getter interface to the router. Kept

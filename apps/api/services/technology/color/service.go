@@ -53,6 +53,30 @@ func (s *Service) Convert(from, to, value string) (Response, error) {
 	}, nil
 }
 
+// BatchColorItem is the result for a single item in a batch color conversion request.
+type BatchColorItem struct {
+	From   string    `json:"from"`
+	To     string    `json:"to"`
+	Input  string    `json:"input"`
+	Result *Response `json:"result,omitempty"`
+	Error  string    `json:"error,omitempty"`
+}
+
+// ConvertBatch converts each item and returns results in input order.
+// Items that fail to parse return an in-band error.
+func (s *Service) ConvertBatch(items []ColorConvertQuery) []BatchColorItem {
+	results := make([]BatchColorItem, len(items))
+	for i, item := range items {
+		r, err := s.Convert(item.From, item.To, item.Value)
+		if err != nil {
+			results[i] = BatchColorItem{From: item.From, To: item.To, Input: item.Value, Error: err.Error()}
+		} else {
+			results[i] = BatchColorItem{From: item.From, To: item.To, Input: item.Value, Result: &r}
+		}
+	}
+	return results
+}
+
 // allFormats converts an rgb color into every supported string representation.
 func allFormats(c rgb) Formats {
 	return Formats{

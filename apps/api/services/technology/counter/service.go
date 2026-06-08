@@ -13,6 +13,7 @@ import (
 type Service interface {
 	Increment(ctx context.Context, namespace string) (int64, error)
 	Get(ctx context.Context, namespace string) (int64, error)
+	IncrementBatch(ctx context.Context, namespaces []string) []BatchCounterItem
 }
 
 type service struct {
@@ -77,4 +78,78 @@ func (s *service) Get(ctx context.Context, namespace string) (int64, error) {
 	}
 
 	return total, nil
+}
+
+// IncrementBatch increments multiple counters atomically.
+// Warm Redis keys are incremented via pipeline (one round-trip);
+// cold keys fall back to sequential Increment for PostgreSQL bootstrap.
+func (s *service) IncrementBatch(ctx context.Context, namespaces []string) []BatchCounterItem {
+	results := make([]BatchCounterItem, len(namespaces))
+
+	type validNS struct {
+		idx int
+		ns  string
+	}
+	var valid []validNS
+	for i, ns := range namespaces {
+		if !namespaceRe.MatchString(ns) {
+			results[i] = BatchCounterItem{Namespace: ns, Error: namespaceValidationErrorMessage}
+			continue
+		}
+		valid = append(valid, validNS{idx: i, ns: ns})
+	}
+
+	if len(valid) == 0 {
+		return results
+	}
+
+	// Single MGET to detect which keys are warm in Redis.
+	keys := make([]string, len(valid))
+	for i, v := range valid {
+		keys[i] = redisKey(v.ns)
+	}
+	vals, mgetErr := s.rdb.MGet(ctx, keys...).Result()
+
+	var warmNS, coldNS []validNS
+	if mgetErr == nil {
+		for i, v := range valid {
+			if vals[i] != nil {
+				warmNS = append(warmNS, v)
+			} else {
+				coldNS = append(coldNS, v)
+			}
+		}
+	} else {
+		coldNS = valid
+	}
+
+	// Warm path: pipeline INCR in one round-trip.
+	if len(warmNS) > 0 {
+		pipe := s.rdb.Pipeline()
+		cmds := make([]*redis.IntCmd, len(warmNS))
+		for i, v := range warmNS {
+			cmds[i] = pipe.Incr(ctx, redisKey(v.ns))
+		}
+		pipe.Exec(ctx) //nolint:errcheck // per-command results captured below
+		for i, v := range warmNS {
+			val, err := cmds[i].Result()
+			if err != nil {
+				results[v.idx] = BatchCounterItem{Namespace: v.ns, Error: "failed to increment counter"}
+			} else {
+				results[v.idx] = BatchCounterItem{Namespace: v.ns, Value: val}
+			}
+		}
+	}
+
+	// Cold path: sequential Increment handles PostgreSQL bootstrap.
+	for _, v := range coldNS {
+		val, err := s.Increment(ctx, v.ns)
+		if err != nil {
+			results[v.idx] = BatchCounterItem{Namespace: v.ns, Error: "failed to increment counter"}
+		} else {
+			results[v.idx] = BatchCounterItem{Namespace: v.ns, Value: val}
+		}
+	}
+
+	return results
 }

@@ -1,12 +1,18 @@
 package thesaurus
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/platform/httpx"
 )
+
+// BatchThesaurusRequest is the input for the thesaurus batch endpoint.
+type BatchThesaurusRequest struct {
+	Words []string `json:"words" validate:"required,min=1,max=50,dive,required"`
+}
 
 // RegisterRoutes mounts thesaurus handlers on the given router.
 // Paths are relative to the parent mount point.
@@ -26,4 +32,10 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 		httpx.JSON(w, http.StatusOK, result)
 	})
+
+	r.Post("/thesaurus/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchThesaurusRequest) (httpx.BatchResponse[BatchThesaurusItem], error) {
+			return httpx.BatchResponse[BatchThesaurusItem]{Results: svc.LookupBatch(req.Words)}, nil
+		},
+	))
 }

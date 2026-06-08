@@ -53,6 +53,29 @@ func (s *Service) Convert(req Request) (Response, error) {
 	return Response{Result: result}, nil
 }
 
+// BatchFormatItem is the result for a single item in a batch format conversion request.
+type BatchFormatItem struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Result string `json:"result,omitempty"`
+	Error  string `json:"error,omitempty"`
+}
+
+// ConvertBatch converts each item and returns results in input order.
+// Items that fail conversion return an in-band error.
+func (s *Service) ConvertBatch(items []Request) []BatchFormatItem {
+	results := make([]BatchFormatItem, len(items))
+	for i, item := range items {
+		r, err := s.Convert(item)
+		if err != nil {
+			results[i] = BatchFormatItem{From: item.From, To: item.To, Error: err.Error()}
+		} else {
+			results[i] = BatchFormatItem{From: item.From, To: item.To, Result: r.Result}
+		}
+	}
+	return results
+}
+
 // parseInput parses the content string from the given format into a generic
 // Go value (map, slice, or scalar).
 func parseInput(format, content string) (any, error) {

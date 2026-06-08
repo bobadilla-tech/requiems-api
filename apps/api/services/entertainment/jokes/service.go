@@ -60,3 +60,12 @@ func (s *Service) Random() DadJoke {
 		Joke: dadJokes[idx],
 	}
 }
+
+// RandomBatch returns n randomly selected dad jokes.
+func (s *Service) RandomBatch(n int) []DadJoke {
+	results := make([]DadJoke, n)
+	for i := range results {
+		results[i] = s.Random()
+	}
+	return results
+}
