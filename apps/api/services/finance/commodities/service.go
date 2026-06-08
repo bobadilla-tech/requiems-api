@@ -5,6 +5,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"requiems-api/platform/svcerr"
@@ -29,6 +30,18 @@ type CommodityPrice struct {
 
 const historyDepth = 11 // 1 current + 10 historical years
 
+type yearRow struct {
+	year     int16
+	price    float64
+	name     string
+	unit     string
+	currency string
+}
+
+type slugData struct {
+	rows []yearRow
+}
+
 // Service provides commodity price lookups against the commodity_price_history PostgreSQL table.
 type Service struct {
 	db *pgxpool.Pool
@@ -52,14 +65,6 @@ func (s *Service) Get(ctx context.Context, slug string) (CommodityPrice, error) 
 		return CommodityPrice{}, err
 	}
 	defer rows.Close()
-
-	type yearRow struct {
-		year     int16
-		price    float64
-		name     string
-		unit     string
-		currency string
-	}
 
 	var results []yearRow
 	for rows.Next() {
@@ -130,25 +135,40 @@ func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodity
 		ORDER BY slug, year DESC
 	`, slugs)
 	if err != nil {
-		for i, slug := range slugs {
-			results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
-		}
-		return results
+		return commodityBatchErrorResults(slugs)
 	}
 	defer rows.Close()
 
-	type yearRow struct {
-		year     int16
-		price    float64
-		name     string
-		unit     string
-		currency string
-	}
-	type slugData struct {
-		rows []yearRow
-	}
 	bySlug := make(map[string]*slugData)
 
+	collectCommodityRows(rows, bySlug)
+	if err := rows.Err(); err != nil {
+		return commodityBatchErrorResults(slugs)
+	}
+
+	for slug, d := range bySlug {
+		if item, ok := buildCommodityBatchItem(slug, slugIndex[slug], d); ok {
+			results[item.Index] = item.Item
+		}
+	}
+
+	return results
+}
+
+type commodityBatchResult struct {
+	Index int
+	Item  BatchCommodityItem
+}
+
+func commodityBatchErrorResults(slugs []string) []BatchCommodityItem {
+	results := make([]BatchCommodityItem, len(slugs))
+	for i, slug := range slugs {
+		results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
+	}
+	return results
+}
+
+func collectCommodityRows(rows pgx.Rows, bySlug map[string]*slugData) {
 	for rows.Next() {
 		var slug string
 		var r yearRow
@@ -159,48 +179,41 @@ func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodity
 			if len(d.rows) < historyDepth {
 				d.rows = append(d.rows, r)
 			}
-		} else {
-			bySlug[slug] = &slugData{rows: []yearRow{r}}
-		}
-	}
-	if err := rows.Err(); err != nil {
-		for i := range results {
-			if !results[i].Found {
-				results[i] = BatchCommodityItem{Slug: slugs[i], Error: "failed to fetch commodity data"}
-			}
-		}
-		return results
-	}
-
-	for slug, d := range bySlug {
-		idx, ok := slugIndex[slug]
-		if !ok || len(d.rows) == 0 {
 			continue
 		}
-		latest := d.rows[0]
-		var change float64
-		if len(d.rows) > 1 && d.rows[1].price != 0 {
-			raw := (latest.price - d.rows[1].price) / d.rows[1].price * 100
-			change = math.Round(raw*100) / 100
-		}
-		historical := make([]HistoricalPrice, 0, len(d.rows)-1)
-		for _, r := range d.rows[1:] {
-			historical = append(historical, HistoricalPrice{
-				Period: strconv.Itoa(int(r.year)),
-				Price:  r.price,
-			})
-		}
-		cp := CommodityPrice{
-			Commodity:  slug,
-			Name:       latest.name,
-			Price:      latest.price,
-			Unit:       latest.unit,
-			Currency:   latest.currency,
-			Change24h:  change,
-			Historical: historical,
-		}
-		results[idx] = BatchCommodityItem{Slug: slug, Found: true, Result: &cp}
+		bySlug[slug] = &slugData{rows: []yearRow{r}}
+	}
+}
+
+func buildCommodityBatchItem(slug string, idx int, d *slugData) (commodityBatchResult, bool) {
+	if idx < 0 || len(d.rows) == 0 {
+		return commodityBatchResult{}, false
 	}
 
-	return results
+	latest := d.rows[0]
+	var change float64
+	if len(d.rows) > 1 && d.rows[1].price != 0 {
+		raw := (latest.price - d.rows[1].price) / d.rows[1].price * 100
+		change = math.Round(raw*100) / 100
+	}
+	historical := make([]HistoricalPrice, 0, len(d.rows)-1)
+	for _, r := range d.rows[1:] {
+		historical = append(historical, HistoricalPrice{
+			Period: strconv.Itoa(int(r.year)),
+			Price:  r.price,
+		})
+	}
+	cp := CommodityPrice{
+		Commodity:  slug,
+		Name:       latest.name,
+		Price:      latest.price,
+		Unit:       latest.unit,
+		Currency:   latest.currency,
+		Change24h:  change,
+		Historical: historical,
+	}
+	return commodityBatchResult{
+		Index: idx,
+		Item:  BatchCommodityItem{Slug: slug, Found: true, Result: &cp},
+	}, true
 }

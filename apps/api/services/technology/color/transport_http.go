@@ -15,8 +15,8 @@ type Request struct {
 	Value string `query:"value" validate:"required"`
 }
 
-// ColorConvertQuery is a single conversion item in a batch request.
-type ColorConvertQuery struct {
+// ConvertQuery is a single conversion item in a batch request.
+type ConvertQuery struct {
 	From  string `json:"from"  validate:"required,oneof=hex rgb hsl cmyk"`
 	To    string `json:"to"    validate:"required,oneof=hex rgb hsl cmyk"`
 	Value string `json:"value" validate:"required"`
@@ -24,7 +24,7 @@ type ColorConvertQuery struct {
 
 // BatchColorRequest is the input for the color batch endpoint.
 type BatchColorRequest struct {
-	Items []ColorConvertQuery `json:"items" validate:"required,min=1,max=50,dive"`
+	Items []ConvertQuery `json:"items" validate:"required,min=1,max=50,dive"`
 }
 
 // RegisterRoutes mounts the color conversion handler on the given router.

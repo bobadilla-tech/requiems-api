@@ -128,24 +128,25 @@ type BatchBINItem struct {
 	Error  string          `json:"error,omitempty"`
 }
 
+type batchBINValid struct {
+	idx  int
+	bin  string
+	luhn bool
+}
+
 // LookupBatch validates and looks up each BIN in one or two SQL queries.
 // Invalid BINs and not-found BINs return in-band errors/found:false.
 func (s *Service) LookupBatch(ctx context.Context, rawBINs []string) []BatchBINItem {
 	results := make([]BatchBINItem, len(rawBINs))
 
-	type sanitized struct {
-		idx  int
-		bin  string
-		luhn bool
-	}
-	var valid []sanitized
+	var valid []batchBINValid
 	for i, raw := range rawBINs {
 		bin, err := sanitizeBIN(raw)
 		if err != nil {
 			results[i] = BatchBINItem{BIN: raw, Error: err.Error()}
 			continue
 		}
-		valid = append(valid, sanitized{idx: i, bin: bin, luhn: luhnValid(bin)})
+		valid = append(valid, batchBINValid{idx: i, bin: bin, luhn: luhnValid(bin)})
 	}
 
 	if len(valid) == 0 {
@@ -161,13 +162,12 @@ func (s *Service) LookupBatch(ctx context.Context, rawBINs []string) []BatchBINI
 
 	// Collect 8-digit BINs that had no exact match — need prefix-6 fallback.
 	type fallbackEntry struct {
-		orig sanitized
-		p6   string
+		p6 string
 	}
 	var fallbacks []fallbackEntry
 	for _, v := range valid {
 		if _, found := exactHits[v.bin]; !found && len(v.bin) == 8 {
-			fallbacks = append(fallbacks, fallbackEntry{orig: v, p6: v.bin[:6]})
+			fallbacks = append(fallbacks, fallbackEntry{p6: v.bin[:6]})
 		}
 	}
 
@@ -181,30 +181,35 @@ func (s *Service) LookupBatch(ctx context.Context, rawBINs []string) []BatchBINI
 	}
 
 	for _, v := range valid {
-		if r, ok := exactHits[v.bin]; ok {
-			if r.Scheme == "" {
-				r.Scheme = detectScheme(v.bin)
-			}
-			r.BIN = v.bin
-			r.Luhn = v.luhn
-			results[v.idx] = BatchBINItem{BIN: v.bin, Found: true, Result: &r}
-		} else if len(v.bin) == 8 {
-			if r, ok := fallbackHits[v.bin[:6]]; ok {
-				if r.Scheme == "" {
-					r.Scheme = detectScheme(v.bin)
-				}
-				r.BIN = v.bin
-				r.Luhn = v.luhn
-				results[v.idx] = BatchBINItem{BIN: v.bin, Found: true, Result: &r}
-			} else {
-				results[v.idx] = BatchBINItem{BIN: v.bin, Found: false}
-			}
-		} else {
-			results[v.idx] = BatchBINItem{BIN: v.bin, Found: false}
-		}
+		results[v.idx] = s.lookupBatchItem(v, exactHits, fallbackHits)
 	}
 
 	return results
+}
+
+func (s *Service) lookupBatchItem(v batchBINValid, exactHits, fallbackHits map[string]LookupResponse) BatchBINItem {
+	if r, ok := exactHits[v.bin]; ok {
+		return s.batchBINItem(v, r)
+	}
+
+	if len(v.bin) != 8 {
+		return BatchBINItem{BIN: v.bin, Found: false}
+	}
+
+	if r, ok := fallbackHits[v.bin[:6]]; ok {
+		return s.batchBINItem(v, r)
+	}
+
+	return BatchBINItem{BIN: v.bin, Found: false}
+}
+
+func (s *Service) batchBINItem(v batchBINValid, r LookupResponse) BatchBINItem {
+	if r.Scheme == "" {
+		r.Scheme = detectScheme(v.bin)
+	}
+	r.BIN = v.bin
+	r.Luhn = v.luhn
+	return BatchBINItem{BIN: v.bin, Found: true, Result: &r}
 }
 
 func (s *Service) queryBINBatch(ctx context.Context, prefixes []string) map[string]LookupResponse {

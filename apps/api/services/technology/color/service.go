@@ -64,7 +64,7 @@ type BatchColorItem struct {
 
 // ConvertBatch converts each item and returns results in input order.
 // Items that fail to parse return an in-band error.
-func (s *Service) ConvertBatch(items []ColorConvertQuery) []BatchColorItem {
+func (s *Service) ConvertBatch(items []ConvertQuery) []BatchColorItem {
 	results := make([]BatchColorItem, len(items))
 	for i, item := range items {
 		r, err := s.Convert(item.From, item.To, item.Value)
