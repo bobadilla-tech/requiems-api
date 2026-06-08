@@ -17,7 +17,7 @@ func ValidateURLParam(paramName string, pattern *regexp.Regexp, errorMsg string)
 			paramVal := chi.URLParam(r, paramName)
 
 			if !pattern.MatchString(paramVal) {
-				httpx.Error(w, http.StatusUnprocessableEntity, "validation_error", errorMsg)
+				httpx.Error(w, http.StatusUnprocessableEntity, "validation_failed", errorMsg)
 				return
 			}
 
