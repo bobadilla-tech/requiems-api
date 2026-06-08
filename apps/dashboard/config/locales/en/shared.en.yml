@@ -5,6 +5,8 @@ en:
       docs_apis_desc: "Browse every endpoint"
       docs_examples_desc: "Copy-paste integrations"
       docs_divisions_desc: "APIs by category"
+      compare: "Compare"
+      docs_compare_desc: "Requiems API vs competitors"
       divisions: "Divisions"
       systems: "Systems"
       divisions_hub: "Overview of all divisions"

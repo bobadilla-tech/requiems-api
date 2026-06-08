@@ -5,6 +5,8 @@ fr:
       docs_apis_desc: "Parcourir chaque point de terminaison"
       docs_examples_desc: "Intégrations prêtes à copier"
       docs_divisions_desc: "APIs par catégorie"
+      compare: "Comparer"
+      docs_compare_desc: "Requiems API vs concurrents"
       divisions: "Divisions"
       systems: "Systèmes"
       divisions_hub: "Vue d'ensemble de toutes les divisions"
