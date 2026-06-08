@@ -168,5 +168,5 @@ func TestDomainTrust_InvalidFormat(t *testing.T) {
 	r := setupRouter(&mockWhoIsService{}, &mockDomainService{})
 	w := Get(t, r, "not_a_valid_domain")
 
-	require.Equal(t, http.StatusBadRequest, w.Code)
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
