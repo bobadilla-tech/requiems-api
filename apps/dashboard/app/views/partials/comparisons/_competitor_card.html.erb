@@ -6,19 +6,18 @@
   display_name   = t("comparisons.competitors.#{slug.gsub("-", "_") rescue slug}.display_name")
   blurb          = t("comparisons.competitors.#{slug.gsub("-", "_") rescue slug}.card_blurb")
 
-  badge_color = case category
-                when :email_verification then "blue"
-                when :ip_geolocation     then "purple"
-                when :phone_validation   then "green"
-                else "gray"
-                end
+  badge_classes = {
+    email_verification: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
+    ip_geolocation:     "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300",
+    phone_validation:   "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300",
+    multi_purpose:      "bg-gray-100 dark:bg-gray-900/40 text-gray-700 dark:text-gray-300"
+  }
+  badge_cls = badge_classes.fetch(category, badge_classes[:multi_purpose])
 %>
 <%= link_to comparison_path(slug),
             class: "group flex flex-col rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all" do %>
   <div class="flex items-center justify-between mb-4">
-    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                 bg-<%= badge_color %>-100 dark:bg-<%= badge_color %>-900/40
-                 text-<%= badge_color %>-700 dark:text-<%= badge_color %>-300">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= badge_cls %>">
       <%= category_label %>
     </span>
   </div>

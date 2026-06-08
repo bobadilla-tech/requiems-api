@@ -73,6 +73,15 @@ en:
       migration_body: "Swap your base URL, update your auth header, adjust field names. Most integrations migrate in under an hour. Full migration guides in our docs."
       migration_cta: "Read Migration Docs"
 
+    show:
+      cta_primary: "Start Free"
+      cta_secondary: "View API Docs"
+      features_feature_label: "Feature"
+      migration_read_docs: "Read full migration docs"
+      cta_see_all: "See All Comparisons"
+      cta_headline: "Ready to switch from %{competitor}?"
+      cta_body: "500 free API calls per month, no credit card required. Migration takes under an hour."
+
     competitors:
       zerobounce:
         display_name: "ZeroBounce"
@@ -651,7 +660,7 @@ en:
             - "Swap user-id + api-key combo for `Authorization: Bearer <key>` header"
             - "Map credit-based rate limits to per-call metering in your Requiems dashboard"
 
-      api-ninjas:
+      api_ninjas:
         display_name: "API Ninjas"
         category: "Multi-Purpose"
         card_blurb: "API Ninjas provides 135+ production-ready APIs covering finance, AI/vision, health, entertainment, transportation, and more — used by 600,000+ developers including Fortune 500 companies. Zero data storage policy."
