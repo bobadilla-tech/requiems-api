@@ -127,7 +127,7 @@ func (s *Service) GetPriceBatch(ctx context.Context, symbols []string) []BatchPr
 		upper := strings.ToUpper(sym)
 		coin, ok := coinMap[upper]
 		if !ok {
-			results[i] = BatchPriceItem{Symbol: upper, Error: fmt.Sprintf("unsupported symbol: %s", upper)}
+			results[i] = BatchPriceItem{Symbol: sym, Error: fmt.Sprintf("unsupported symbol: %s", sym)}
 			continue
 		}
 		valid = append(valid, validSym{idx: i, upper: upper, coinID: coin.id, name: coin.name})

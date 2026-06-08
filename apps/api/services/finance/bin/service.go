@@ -106,6 +106,7 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 			prepaid, confidence
 		FROM bin_data
 		WHERE LEFT(bin_prefix, 6) = $1
+		ORDER BY LENGTH(bin_prefix) DESC, bin_prefix ASC
 		LIMIT 1
 	`, prefix6)
 
@@ -246,7 +247,7 @@ func (s *Service) queryBINByPrefix6Batch(ctx context.Context, prefixes6 []string
 			prepaid, confidence
 		FROM bin_data
 		WHERE LEFT(bin_prefix, 6) = ANY($1::text[])
-		ORDER BY LEFT(bin_prefix, 6)
+		ORDER BY LEFT(bin_prefix, 6), LENGTH(bin_prefix) DESC, bin_prefix ASC
 	`, prefixes6)
 	if err != nil {
 		return map[string]LookupResponse{}

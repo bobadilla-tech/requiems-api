@@ -129,6 +129,7 @@ func (s *service) IncrementBatch(ctx context.Context, namespaces []string) []Bat
 		cmds := make([]*redis.IntCmd, len(warmNS))
 		for i, v := range warmNS {
 			cmds[i] = pipe.Incr(ctx, redisKey(v.ns))
+			pipe.SAdd(ctx, dirtySetKey, v.ns)
 		}
 		pipe.Exec(ctx) //nolint:errcheck // per-command results captured below
 		for i, v := range warmNS {

@@ -14,6 +14,7 @@ import (
 // Looker is the interface used by the HTTP transport layer.
 type Looker interface {
 	Lookup(ctx context.Context, bin string) (LookupResponse, error)
+	LookupBatch(ctx context.Context, rawBINs []string) []BatchBINItem
 }
 
 // BatchBINRequest is the input for the BIN batch endpoint.
@@ -23,12 +24,12 @@ type BatchBINRequest struct {
 
 // RegisterRoutes mounts BIN lookup handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).
-func RegisterRoutes(r chi.Router, svc *Service) {
+func RegisterRoutes(r chi.Router, svc Looker) {
 	registerBINRoutes(r, svc)
 }
 
 // registerBINRoutes wires the Service to the router.
-func registerBINRoutes(r chi.Router, svc *Service) {
+func registerBINRoutes(r chi.Router, svc Looker) {
 	r.Get("/bin/{bin}", func(w http.ResponseWriter, r *http.Request) {
 		rawBIN := chi.URLParam(r, "bin")
 

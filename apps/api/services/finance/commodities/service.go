@@ -164,8 +164,10 @@ func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodity
 		}
 	}
 	if err := rows.Err(); err != nil {
-		for i, slug := range slugs {
-			results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
+		for i := range results {
+			if !results[i].Found {
+				results[i] = BatchCommodityItem{Slug: slugs[i], Error: "failed to fetch commodity data"}
+			}
 		}
 		return results
 	}

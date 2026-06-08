@@ -20,6 +20,7 @@ var errRedisDown = errors.New("connection refused")
 type mockService struct {
 	incrementFn func(ctx context.Context, namespace string) (int64, error)
 	getFn       func(ctx context.Context, namespace string) (int64, error)
+	batchFn     func(ctx context.Context, namespaces []string) []BatchCounterItem
 }
 
 func (m *mockService) Increment(ctx context.Context, namespace string) (int64, error) {
@@ -28,6 +29,10 @@ func (m *mockService) Increment(ctx context.Context, namespace string) (int64, e
 
 func (m *mockService) Get(ctx context.Context, namespace string) (int64, error) {
 	return m.getFn(ctx, namespace)
+}
+
+func (m *mockService) IncrementBatch(ctx context.Context, namespaces []string) []BatchCounterItem {
+	return m.batchFn(ctx, namespaces)
 }
 
 func newTestRouter(svc Service) http.Handler {

@@ -31,6 +31,14 @@ func (s *stubService) Lookup(_ context.Context, bin string) (LookupResponse, err
 	return r, nil
 }
 
+func (s *stubService) LookupBatch(_ context.Context, bins []string) []BatchBINItem {
+	results := make([]BatchBINItem, len(bins))
+	for i, bin := range bins {
+		results[i] = BatchBINItem{BIN: bin, Found: false}
+	}
+	return results
+}
+
 // setupRouter wires up a stub service into a chi router for handler testing.
 func setupRouter(svc Looker) chi.Router {
 	r := chi.NewRouter()
