@@ -1,0 +1,233 @@
+<%
+  key          = @slug.gsub("-", "_")
+  display_name = t("comparisons.competitors.#{key}.display_name")
+  category     = t("comparisons.competitors.#{key}.category")
+  comp         = t("comparisons.competitors.#{key}")
+%>
+<% content_for :title, t("comparisons.competitors.#{key}.meta_title") %>
+<% content_for :description, t("comparisons.competitors.#{key}.meta_description") %>
+
+<%# Hero %>
+<section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <p class="text-sm font-medium text-blue-300 uppercase tracking-widest mb-3"><%= category %></p>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+      <%= t("comparisons.competitors.#{key}.hero_headline") %>
+    </h1>
+    <p class="text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed mb-8">
+      <%= t("comparisons.competitors.#{key}.card_blurb") %>
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <%= link_to new_user_registration_path,
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-slate-900 bg-white hover:bg-blue-50 shadow-lg transition-colors w-full sm:w-auto" do %>
+        Start Free
+        <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+      <%= link_to api_reference_path,
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-colors w-full sm:w-auto" do %>
+        View API Docs
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# TL;DR — 3 differentiators %>
+<section class="py-12 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% t("comparisons.competitors.#{key}.tldr").each do |item| %>
+        <div class="flex flex-col p-6 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700">
+          <div class="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mb-3">
+            <svg class="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2 text-sm"><%= item[:title] %></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed"><%= item[:body] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# Feature matrix table %>
+<section class="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
+      <%= t("comparisons.competitors.#{key}.features.heading") %>
+    </h2>
+
+    <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="py-3.5 px-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">Feature</th>
+            <th class="py-3.5 px-4 text-center text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 w-32">Requiems API</th>
+            <th class="py-3.5 px-4 text-center text-sm font-semibold text-gray-700 dark:text-gray-300 w-32"><%= display_name %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <% t("comparisons.competitors.#{key}.features.rows").each do |row| %>
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+              <td class="py-3 px-4 text-sm text-gray-700 dark:text-gray-300 font-medium"><%= row[:feature] %></td>
+              <td class="py-3 px-4 text-center bg-blue-50/50 dark:bg-blue-900/10">
+                <% if row[:ours] == true %>
+                  <svg class="h-5 w-5 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor" aria-label="Yes">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                <% elsif row[:ours] == false %>
+                  <svg class="h-5 w-5 text-gray-300 dark:text-gray-600 mx-auto" viewBox="0 0 20 20" fill="currentColor" aria-label="No">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                <% else %>
+                  <span class="text-xs text-gray-600 dark:text-gray-400"><%= row[:ours] %></span>
+                <% end %>
+              </td>
+              <td class="py-3 px-4 text-center">
+                <% if row[:theirs] == true %>
+                  <svg class="h-5 w-5 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor" aria-label="Yes">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                <% elsif row[:theirs] == false %>
+                  <svg class="h-5 w-5 text-gray-300 dark:text-gray-600 mx-auto" viewBox="0 0 20 20" fill="currentColor" aria-label="No">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                <% else %>
+                  <span class="text-xs text-gray-600 dark:text-gray-400"><%= row[:theirs] %></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<%# Benchmarks %>
+<section class="py-14 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
+      <%= t("comparisons.competitors.#{key}.benchmarks.heading") %>
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <%# Requiems API card %>
+      <div class="rounded-xl border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-600 text-white">Requiems API</span>
+        </div>
+        <dl class="space-y-3">
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Latency (p50)</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.latency") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Uptime SLA</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.uptime") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">API coverage</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.coverage") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Free tier</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.free_tier") %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <%# Competitor card %>
+      <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/40 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"><%= display_name %></span>
+        </div>
+        <dl class="space-y-3">
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Latency (p50)</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.their_latency") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Uptime SLA</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.their_uptime") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">API coverage</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.their_coverage") %></dd>
+          </div>
+          <div class="flex justify-between text-sm">
+            <dt class="text-gray-600 dark:text-gray-400">Free tier</dt>
+            <dd class="font-semibold text-gray-900 dark:text-gray-100"><%= t("comparisons.competitors.#{key}.benchmarks.their_free_tier") %></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# Philosophy %>
+<section class="py-14 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      <%= t("comparisons.competitors.#{key}.philosophy.heading") %>
+    </h2>
+    <p class="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+      <%= t("comparisons.competitors.#{key}.philosophy.body") %>
+    </p>
+  </div>
+</section>
+
+<%# Migration guide %>
+<section class="py-14 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+      <%= t("comparisons.competitors.#{key}.migration.heading") %>
+    </h2>
+
+    <ol class="space-y-4 mb-8">
+      <% t("comparisons.competitors.#{key}.migration.steps").each_with_index do |step, i| %>
+        <li class="flex gap-4">
+          <span class="flex-none h-7 w-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-sm font-bold flex items-center justify-center mt-0.5">
+            <%= i + 1 %>
+          </span>
+          <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed pt-0.5"><%= step %></p>
+        </li>
+      <% end %>
+    </ol>
+
+    <%= link_to docs_path,
+                class: "inline-flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" do %>
+      Read full migration docs
+      <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    <% end %>
+  </div>
+</section>
+
+<%# CTA %>
+<section class="py-16 bg-gray-50 dark:bg-gray-950">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      Ready to switch from <%= display_name %>?
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+      500 free API calls per month, no credit card required. Migration takes under an hour.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <%= link_to new_user_registration_path,
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg transition-colors w-full sm:w-auto" do %>
+        Start Free
+        <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+      <%= link_to comparisons_path,
+                  class: "inline-flex items-center justify-center px-8 py-3.5 rounded-lg font-semibold border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto" do %>
+        See All Comparisons
+      <% end %>
+    </div>
+  </div>
+</section>

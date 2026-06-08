@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../lib/division_slugs.rb"
+require_relative "../lib/comparison_slugs.rb"
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
@@ -158,6 +159,10 @@ Rails.application.routes.draw do
 
     get "case-studies", to: "case_studies#index", as: :case_studies
     get "case-studies/:slug", to: "case_studies#show", as: :case_study
+
+    get "compare", to: "comparisons#index", as: :comparisons
+    get "compare/:slug", to: "comparisons#show", as: :comparison,
+        constraints: { slug: Regexp.union(*ComparisonSlugs::ALL) }
 
     get ":division_slug", to: "divisions#show",
                          constraints: { division_slug: Regexp.union(*DivisionSlugs::ALL) },

@@ -1,0 +1,40 @@
+<%
+  slug     = competitor[:slug]
+  category = competitor[:category]
+
+  category_label = t("comparisons.competitors.#{slug.gsub("-", "_") rescue slug}.category")
+  display_name   = t("comparisons.competitors.#{slug.gsub("-", "_") rescue slug}.display_name")
+  blurb          = t("comparisons.competitors.#{slug.gsub("-", "_") rescue slug}.card_blurb")
+
+  badge_color = case category
+                when :email_verification then "blue"
+                when :ip_geolocation     then "purple"
+                when :phone_validation   then "green"
+                else "gray"
+                end
+%>
+<%= link_to comparison_path(slug),
+            class: "group flex flex-col rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all" do %>
+  <div class="flex items-center justify-between mb-4">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                 bg-<%= badge_color %>-100 dark:bg-<%= badge_color %>-900/40
+                 text-<%= badge_color %>-700 dark:text-<%= badge_color %>-300">
+      <%= category_label %>
+    </span>
+  </div>
+
+  <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+    Requiems API vs <%= display_name %>
+  </h3>
+
+  <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed flex-1 mb-5 line-clamp-3">
+    <%= blurb %>
+  </p>
+
+  <span class="text-sm font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center">
+    <%= t("comparisons.hub.card_cta") %>
+    <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+    </svg>
+  </span>
+<% end %>
