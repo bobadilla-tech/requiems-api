@@ -129,3 +129,134 @@ func TestService_Decode(t *testing.T) {
 		})
 	}
 }
+
+func TestService_EncodeBatch(t *testing.T) {
+	t.Parallel()
+
+	svc := NewService()
+
+	tests := []struct {
+		name    string
+		values  []string
+		variant string
+		want    []string
+	}{
+		{
+			name:   "standard encoding",
+			values: []string{"Hello", "World"},
+			want: []string{
+				"SGVsbG8=",
+				"V29ybGQ=",
+			},
+		},
+		{
+			name:    "url encoding",
+			values:  []string{"\xfb\xff\xfe"},
+			variant: "url",
+			want: []string{
+				"-__-",
+			},
+		},
+		{
+			name:   "empty batch",
+			values: []string{},
+			want:   []string{},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := svc.EncodeBatch(tt.values, tt.variant)
+
+			assert.Equal(t, tt.want, got.Results)
+			assert.Equal(t, len(tt.want), got.Total)
+		})
+	}
+}
+
+func TestService_DecodeBatch(t *testing.T) {
+	t.Parallel()
+
+	svc := NewService()
+
+	tests := []struct {
+		name    string
+		values  []string
+		variant string
+		want    []string
+	}{
+		{
+			name: "standard decoding",
+			values: []string{
+				"SGVsbG8=",
+				"V29ybGQ=",
+			},
+			want: []string{
+				"Hello",
+				"World",
+			},
+		},
+		{
+			name:    "url decoding",
+			values:  []string{"-__-"},
+			variant: "url",
+			want: []string{
+				"\xfb\xff\xfe",
+			},
+		},
+		{
+			name: "partial failure",
+			values: []string{
+				"SGVsbG8=",
+				"not-valid-base64!!!",
+				"V29ybGQ=",
+			},
+			want: []string{
+				"Hello",
+				"",
+				"World",
+			},
+		},
+		{
+			name:   "empty batch",
+			values: []string{},
+			want:   []string{},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := svc.DecodeBatch(tt.values, tt.variant)
+
+			assert.Equal(t, tt.want, got.Results)
+			assert.Equal(t, len(tt.want), got.Total)
+		})
+	}
+}
+func TestService_DecodeBatch_PartialFailure(t *testing.T) {
+	t.Parallel()
+
+	svc := NewService()
+
+	got := svc.DecodeBatch([]string{
+		"SGVsbG8=",
+		"not-valid-base64!!!",
+		"V29ybGQ=",
+	}, "")
+
+	assert.Equal(t, []string{
+		"Hello",
+		"",
+		"World",
+	}, got.Results)
+
+	assert.Equal(t, 3, got.Total)
+}

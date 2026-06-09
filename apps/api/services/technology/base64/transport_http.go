@@ -34,4 +34,38 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return svc.Decode(req.Value, req.Variant)
 		},
 	))
+	r.Post("/base64/encode/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Result], error) {
+			results := make([]Result, len(req.Values))
+
+			for i, value := range req.Values {
+				results[i] = svc.Encode(value, req.Variant)
+			}
+
+			return httpx.BatchResponse[Result]{
+				Results: results,
+			}, nil
+		},
+	))
+
+	r.Post("/base64/decode/batch", httpx.HandleBatch(
+		func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Result], error) {
+			results := make([]Result, len(req.Values))
+
+			for i, value := range req.Values {
+				res, err := svc.Decode(value, req.Variant)
+
+				if err != nil {
+					results[i] = Result{}
+					continue
+				}
+
+				results[i] = res
+			}
+
+			return httpx.BatchResponse[Result]{
+				Results: results,
+			}, nil
+		},
+	))
 }
