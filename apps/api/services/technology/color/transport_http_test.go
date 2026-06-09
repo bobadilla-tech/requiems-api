@@ -99,3 +99,58 @@ func TestColor_ServiceError(t *testing.T) {
 
 	assert.Equal(t, "invalid_color", resp.Error)
 }
+
+func TestColor_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"from":"hex","to":"rgb","value":"#ffffff"},{"from":"rgb","to":"hex","value":"0,0,0"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/color/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[color.BatchColorItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.Empty(t, resp.Data.Results[0].Error)
+}
+
+func TestColor_Batch_InvalidItem_InBandError(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"from":"hex","to":"rgb","value":"#ffffff"},{"from":"hex","to":"rgb","value":"notahex"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/color/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[color.BatchColorItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.Data.Results, 2)
+	assert.NotNil(t, resp.Data.Results[0].Result, "valid item should have result")
+	assert.NotEmpty(t, resp.Data.Results[1].Error, "invalid item should have in-band error")
+}
+
+func TestColor_Batch_EmptyItems422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/color/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}

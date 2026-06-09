@@ -43,3 +43,25 @@ func (s *Service) Detect(text string) Result {
 		Confidence: confidence,
 	}
 }
+
+// BatchDetectItem is the result for a single item in a batch language detection request.
+type BatchDetectItem struct {
+	Text   string  `json:"text"`
+	Result *Result `json:"result,omitempty"`
+	Error  string  `json:"error,omitempty"`
+}
+
+// DetectBatch detects the language for each text in the slice.
+// Empty texts return an in-band error; all other items are processed.
+func (s *Service) DetectBatch(texts []string) []BatchDetectItem {
+	results := make([]BatchDetectItem, len(texts))
+	for i, text := range texts {
+		if strings.TrimSpace(text) == "" {
+			results[i] = BatchDetectItem{Text: text, Error: "text is required"}
+			continue
+		}
+		r := s.Detect(text)
+		results[i] = BatchDetectItem{Text: text, Result: &r}
+	}
+	return results
+}

@@ -6,6 +6,12 @@
 requiems.xyz {
   encode gzip
 
+  # Locale root paths without trailing slash: /en → /en/, /es → /es/, /fr → /fr/
+  @locale_bare {
+    path_regexp ^/(en|es|fr)$
+  }
+  redir @locale_bare {uri}/ 301
+
   reverse_proxy dashboard:80
 }
 

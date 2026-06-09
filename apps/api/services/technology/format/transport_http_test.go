@@ -115,3 +115,37 @@ func TestFormat_MissingFields(t *testing.T) {
 
 	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
+
+func TestFormat_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"items":[{"from":"json","to":"yaml","content":"{\"name\":\"Alice\"}"},{"from":"yaml","to":"json","content":"name: Bob\n"}]}`
+	req := httptest.NewRequest(http.MethodPost, "/format/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[convformat.BatchFormatItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.True(t, strings.Contains(resp.Data.Results[0].Result, "Alice"), "expected YAML with 'Alice'")
+	assert.Empty(t, resp.Data.Results[0].Error)
+}
+
+func TestFormat_Batch_EmptyItems422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/format/batch", strings.NewReader(`{"items":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}

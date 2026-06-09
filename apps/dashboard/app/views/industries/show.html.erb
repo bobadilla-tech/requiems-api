@@ -1,0 +1,9 @@
+<% i18n_key = @slug.gsub("-", "_") %>
+<% i18n_scope = "industries.#{i18n_key}" %>
+<% content_for :title, t("#{i18n_scope}.meta_title") %>
+<% content_for :description, t("#{i18n_scope}.hero.subheadline") %>
+
+<%= render "partials/industries/hero", i18n_scope: i18n_scope %>
+<%= render "partials/industries/api_mapping", i18n_scope: i18n_scope %>
+<%= render "partials/industries/proof_points", i18n_scope: i18n_scope %>
+<%= render "partials/industries/final_cta", i18n_scope: i18n_scope %>

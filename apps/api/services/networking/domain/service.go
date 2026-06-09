@@ -5,6 +5,7 @@ import (
 	"net"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MXRecord holds an MX record entry.
@@ -165,6 +166,47 @@ func (s *Service) GetInfo(ctx context.Context, domainName string) InfoResponse {
 	resp.DNS.CNAME = (<-cnameCh).cname
 
 	return resp
+}
+
+// BatchDomainItem is the result for a single domain in a batch info request.
+type BatchDomainItem struct {
+	Domain string        `json:"domain"`
+	Result *InfoResponse `json:"result,omitempty"`
+	Error  string        `json:"error,omitempty"`
+}
+
+// GetInfoBatch performs DNS lookups for multiple domains concurrently.
+// Domains that fail format validation return an in-band error.
+// Max concurrency is 5 — each domain already fans out 5 DNS queries internally.
+func (s *Service) GetInfoBatch(ctx context.Context, domains []string) []BatchDomainItem {
+	const maxWorkers = 5
+	results := make([]BatchDomainItem, len(domains))
+
+	sem := make(chan struct{}, maxWorkers)
+	var wg sync.WaitGroup
+
+	for i, d := range domains {
+		if !domainRe.MatchString(d) {
+			results[i] = BatchDomainItem{Domain: d, Error: "invalid domain format"}
+			continue
+		}
+
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(i int, domain string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			itemCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+			defer cancel()
+
+			info := s.GetInfo(itemCtx, domain)
+			results[i] = BatchDomainItem{Domain: domain, Result: &info}
+		}(i, d)
+	}
+
+	wg.Wait()
+	return results
 }
 
 // isNXDomain reports whether err is a DNS "domain not found" error.

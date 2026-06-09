@@ -106,6 +106,7 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 			prepaid, confidence
 		FROM bin_data
 		WHERE LEFT(bin_prefix, 6) = $1
+		ORDER BY LENGTH(bin_prefix) DESC, bin_prefix ASC
 		LIMIT 1
 	`, prefix6)
 
@@ -117,6 +118,165 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 		&r.Prepaid, &r.Confidence,
 	)
 	return r, err
+}
+
+// BatchBINItem is the result for a single item in a batch BIN lookup request.
+type BatchBINItem struct {
+	BIN    string          `json:"bin"`
+	Found  bool            `json:"found"`
+	Result *LookupResponse `json:"result,omitempty"`
+	Error  string          `json:"error,omitempty"`
+}
+
+type batchBINValid struct {
+	idx  int
+	bin  string
+	luhn bool
+}
+
+// LookupBatch validates and looks up each BIN in one or two SQL queries.
+// Invalid BINs and not-found BINs return in-band errors/found:false.
+func (s *Service) LookupBatch(ctx context.Context, rawBINs []string) []BatchBINItem {
+	results := make([]BatchBINItem, len(rawBINs))
+
+	var valid []batchBINValid
+	for i, raw := range rawBINs {
+		bin, err := sanitizeBIN(raw)
+		if err != nil {
+			results[i] = BatchBINItem{BIN: raw, Error: err.Error()}
+			continue
+		}
+		valid = append(valid, batchBINValid{idx: i, bin: bin, luhn: luhnValid(bin)})
+	}
+
+	if len(valid) == 0 {
+		return results
+	}
+
+	// Exact-match query for all valid BINs in a single round-trip.
+	prefixes := make([]string, len(valid))
+	for i, v := range valid {
+		prefixes[i] = v.bin
+	}
+	exactHits := s.queryBINBatch(ctx, prefixes)
+
+	// Collect 8-digit BINs that had no exact match — need prefix-6 fallback.
+	type fallbackEntry struct {
+		p6 string
+	}
+	var fallbacks []fallbackEntry
+	for _, v := range valid {
+		if _, found := exactHits[v.bin]; !found && len(v.bin) == 8 {
+			fallbacks = append(fallbacks, fallbackEntry{p6: v.bin[:6]})
+		}
+	}
+
+	var fallbackHits map[string]LookupResponse
+	if len(fallbacks) > 0 {
+		p6s := make([]string, len(fallbacks))
+		for i, f := range fallbacks {
+			p6s[i] = f.p6
+		}
+		fallbackHits = s.queryBINByPrefix6Batch(ctx, p6s)
+	}
+
+	for _, v := range valid {
+		results[v.idx] = s.lookupBatchItem(v, exactHits, fallbackHits)
+	}
+
+	return results
+}
+
+func (s *Service) lookupBatchItem(v batchBINValid, exactHits, fallbackHits map[string]LookupResponse) BatchBINItem {
+	if r, ok := exactHits[v.bin]; ok {
+		return s.batchBINItem(v, r)
+	}
+
+	if len(v.bin) != 8 {
+		return BatchBINItem{BIN: v.bin, Found: false}
+	}
+
+	if r, ok := fallbackHits[v.bin[:6]]; ok {
+		return s.batchBINItem(v, r)
+	}
+
+	return BatchBINItem{BIN: v.bin, Found: false}
+}
+
+func (s *Service) batchBINItem(v batchBINValid, r LookupResponse) BatchBINItem {
+	if r.Scheme == "" {
+		r.Scheme = detectScheme(v.bin)
+	}
+	r.BIN = v.bin
+	r.Luhn = v.luhn
+	return BatchBINItem{BIN: v.bin, Found: true, Result: &r}
+}
+
+func (s *Service) queryBINBatch(ctx context.Context, prefixes []string) map[string]LookupResponse {
+	rows, err := s.db.Query(ctx, `
+		SELECT
+			bin_prefix, scheme, card_type, card_level,
+			issuer_name, issuer_url, issuer_phone,
+			country_code, country_name,
+			prepaid, confidence
+		FROM bin_data
+		WHERE bin_prefix = ANY($1::text[])
+	`, prefixes)
+	if err != nil {
+		return map[string]LookupResponse{}
+	}
+	defer rows.Close()
+
+	hits := make(map[string]LookupResponse)
+	for rows.Next() {
+		var r LookupResponse
+		if err := rows.Scan(
+			&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
+			&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
+			&r.CountryCode, &r.CountryName,
+			&r.Prepaid, &r.Confidence,
+		); err != nil {
+			continue
+		}
+		hits[r.BIN] = r
+	}
+	return hits
+}
+
+func (s *Service) queryBINByPrefix6Batch(ctx context.Context, prefixes6 []string) map[string]LookupResponse {
+	rows, err := s.db.Query(ctx, `
+		SELECT DISTINCT ON (LEFT(bin_prefix, 6))
+			bin_prefix, scheme, card_type, card_level,
+			issuer_name, issuer_url, issuer_phone,
+			country_code, country_name,
+			prepaid, confidence
+		FROM bin_data
+		WHERE LEFT(bin_prefix, 6) = ANY($1::text[])
+		ORDER BY LEFT(bin_prefix, 6), LENGTH(bin_prefix) DESC, bin_prefix ASC
+	`, prefixes6)
+	if err != nil {
+		return map[string]LookupResponse{}
+	}
+	defer rows.Close()
+
+	hits := make(map[string]LookupResponse)
+	for rows.Next() {
+		var r LookupResponse
+		if err := rows.Scan(
+			&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
+			&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
+			&r.CountryCode, &r.CountryName,
+			&r.Prepaid, &r.Confidence,
+		); err != nil {
+			continue
+		}
+		prefix6 := r.BIN
+		if len(r.BIN) > 6 {
+			prefix6 = r.BIN[:6]
+		}
+		hits[prefix6] = r
+	}
+	return hits
 }
 
 // sanitizeBIN strips common separators and validates that the result is 6–8

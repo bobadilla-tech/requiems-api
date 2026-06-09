@@ -44,3 +44,25 @@ func (s *Service) Lookup(word string) (Result, error) {
 		Antonyms: antonyms,
 	}, nil
 }
+
+// BatchThesaurusItem is the result for a single item in a batch thesaurus request.
+type BatchThesaurusItem struct {
+	Word   string  `json:"word"`
+	Result *Result `json:"result,omitempty"`
+	Error  string  `json:"error,omitempty"`
+}
+
+// LookupBatch returns synonyms and antonyms for each word in the slice.
+// Words not found in the dataset return an in-band error.
+func (s *Service) LookupBatch(words []string) []BatchThesaurusItem {
+	results := make([]BatchThesaurusItem, len(words))
+	for i, word := range words {
+		r, err := s.Lookup(word)
+		if err != nil {
+			results[i] = BatchThesaurusItem{Word: word, Error: "word not found"}
+		} else {
+			results[i] = BatchThesaurusItem{Word: word, Result: &r}
+		}
+	}
+	return results
+}

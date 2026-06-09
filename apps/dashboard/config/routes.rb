@@ -2,6 +2,7 @@
 
 require_relative "../lib/division_slugs.rb"
 require_relative "../lib/comparison_slugs.rb"
+require_relative "../lib/industry_slugs.rb"
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
@@ -163,6 +164,10 @@ Rails.application.routes.draw do
     get "compare", to: "comparisons#index", as: :comparisons
     get "compare/:slug", to: "comparisons#show", as: :comparison,
         constraints: { slug: Regexp.union(*ComparisonSlugs::ALL) }
+
+    get "industries", to: "industries#index", as: :industries
+    get "industries/:industry_slug", to: "industries#show", as: :industry,
+        constraints: { industry_slug: Regexp.union(*IndustrySlugs::ALL) }
 
     get ":division_slug", to: "divisions#show",
                          constraints: { division_slug: Regexp.union(*DivisionSlugs::ALL) },

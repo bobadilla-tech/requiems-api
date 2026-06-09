@@ -17,10 +17,21 @@ type Getter interface {
 	GetPrice(ctx context.Context, symbol string) (Price, error)
 }
 
+// BatchSymbolsRequest is the input for the crypto batch endpoint.
+type BatchSymbolsRequest struct {
+	Symbols []string `json:"symbols" validate:"required,min=1,max=20,dive,required"`
+}
+
 // RegisterRoutes mounts crypto price handlers on the given router.
 // Paths are relative to the parent mount point (/v1/finance).
 func RegisterRoutes(r chi.Router, svc *Service) {
 	registerCryptoRoutes(r, svc)
+
+	r.Post("/crypto/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchSymbolsRequest) (httpx.BatchResponse[BatchPriceItem], error) {
+			return httpx.BatchResponse[BatchPriceItem]{Results: svc.GetPriceBatch(ctx, req.Symbols)}, nil
+		},
+	))
 }
 
 // registerCryptoRoutes wires the Getter interface to the router. Kept

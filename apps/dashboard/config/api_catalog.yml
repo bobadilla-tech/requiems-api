@@ -70,9 +70,10 @@ apis:
     categories:
       - finance
     description: "Get live cryptocurrency prices, 24h change, market cap, and trading volume for 20+ major coins including BTC, ETH, SOL, and more."
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/crypto
     tags:
       - Crypto
@@ -85,9 +86,10 @@ apis:
     categories:
       - finance
     description: Pass the first 6–8 digits of any payment card and get back the issuing bank, card network, type, and country
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: true
+    batch_eligible: true
     documentation_url: /apis/bin-lookup
     tags:
       - BIN
@@ -145,9 +147,10 @@ apis:
     categories:
       - finance
     description: Historical and current annual average prices for 16 major commodities — precious metals, energy, and agricultural goods. Sourced from FRED (Federal Reserve Economic Data).
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/commodities
     tags:
       - Commodities
@@ -284,9 +287,10 @@ apis:
     categories:
       - networking
     description: Look up DNS records and check domain availability. Returns A, AAAA, MX, NS, TXT, and CNAME records alongside a registration availability flag.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/domain-info
     tags:
       - Domain
@@ -318,6 +322,7 @@ apis:
     endpoints_count: 5
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/disposable-email
     tags:
       - Email
@@ -413,9 +418,10 @@ apis:
     categories:
       - places
     description: Look up city metadata including population, timezone, and coordinates
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/cities
     tags:
       - Cities
@@ -441,9 +447,10 @@ apis:
     categories:
       - text
     description: Find synonyms and antonyms for any word to enhance vocabulary and writing
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/thesaurus
     tags:
       - Synonyms
@@ -488,9 +495,10 @@ apis:
     categories:
       - text
     description: Detect the language of any text with confidence scoring
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/detect-language
     tags:
       - Language Detection
@@ -631,9 +639,10 @@ apis:
     categories:
       - technology
     description: Atomic, namespace-isolated hit counter
-    endpoints_count: 2
+    endpoints_count: 3
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/counter
     tags:
       - Counter
@@ -687,9 +696,10 @@ apis:
     categories:
       - technology
     description: Convert color values between HEX, RGB, HSL, and CMYK. Every response includes all four representations.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/color-conversion
     tags:
       - Color
@@ -717,9 +727,10 @@ apis:
     categories:
       - technology
     description: Convert structured data between JSON, YAML, CSV, XML, and TOML in a single API call.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/data-format-conversion
     tags:
       - JSON
@@ -820,9 +831,10 @@ apis:
     categories:
       - entertainment
     description: Get a random dad joke. Classic groan-worthy puns and wholesome humor, served one at a time.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/dad-jokes
     tags:
       - Jokes
@@ -834,9 +846,10 @@ apis:
     categories:
       - entertainment
     description: Get a random Chuck Norris fact from a curated built-in database. Every call returns a different fact with a stable unique ID.
-    endpoints_count: 1
+    endpoints_count: 2
     status: live
     popular: false
+    batch_eligible: true
     documentation_url: /apis/chuck-norris
     tags:
       - Jokes

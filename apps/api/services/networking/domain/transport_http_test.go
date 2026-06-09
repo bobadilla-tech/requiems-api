@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -13,6 +14,20 @@ import (
 
 	"requiems-api/platform/httpx"
 )
+
+type stubInfoBatcher struct {
+	fn func([]string) []BatchDomainItem
+}
+
+func (s *stubInfoBatcher) GetInfoBatch(_ context.Context, domains []string) []BatchDomainItem {
+	return s.fn(domains)
+}
+
+func setupBatchRouter(b InfoBatcher) chi.Router {
+	r := chi.NewRouter()
+	registerDomainBatchRoutes(r, b)
+	return r
+}
 
 func setupRouter() chi.Router {
 	r := chi.NewRouter()
@@ -102,6 +117,68 @@ func TestDomain_ResponseShape(t *testing.T) {
 		_, exists := dns[key]
 		assert.True(t, exists, "expected key %q in dns", key)
 	}
+}
+
+func TestDomainBatch_EmptyDomains422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/domain/batch", strings.NewReader(`{"domains":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestDomainBatch_InvalidDomain_InBandError(t *testing.T) {
+	t.Parallel()
+	stub := &stubInfoBatcher{fn: func(domains []string) []BatchDomainItem {
+		results := make([]BatchDomainItem, len(domains))
+		for i, d := range domains {
+			results[i] = BatchDomainItem{Domain: d, Error: "invalid domain format"}
+		}
+		return results
+	}}
+	r := setupBatchRouter(stub)
+
+	req := httptest.NewRequest(http.MethodPost, "/domain/batch", strings.NewReader(`{"domains":["not-a-domain","also-invalid"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchDomainItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	for _, item := range resp.Data.Results {
+		assert.NotEmpty(t, item.Error)
+	}
+}
+
+func TestDomainBatch_ResponseShape(t *testing.T) {
+	t.Parallel()
+	info := InfoResponse{Domain: "example.com", Available: false}
+	stub := &stubInfoBatcher{fn: func(domains []string) []BatchDomainItem {
+		return []BatchDomainItem{{Domain: "example.com", Result: &info}}
+	}}
+	r := setupBatchRouter(stub)
+
+	req := httptest.NewRequest(http.MethodPost, "/domain/batch", strings.NewReader(`{"domains":["example.com"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchDomainItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 1)
+	assert.Equal(t, "example.com", resp.Data.Results[0].Domain)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.Empty(t, resp.Data.Results[0].Error)
 }
 
 func TestService_IsNXDomain(t *testing.T) {

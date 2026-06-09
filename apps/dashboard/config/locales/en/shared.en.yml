@@ -7,6 +7,8 @@ en:
       docs_divisions_desc: "APIs by category"
       compare: "Compare"
       docs_compare_desc: "Requiems API vs competitors"
+      industries: "Industries"
+      docs_industries_desc: "APIs mapped to your vertical"
       divisions: "Divisions"
       systems: "Systems"
       divisions_hub: "Overview of all divisions"

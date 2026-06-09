@@ -1,0 +1,52 @@
+<%
+  # Toast-style flash notifications — fixed top-right, auto-dismiss after 5 s.
+  # Reads notice/alert directly from the flash hash; renders nothing when both are blank.
+  # Uses the `flash` Stimulus controller (app/javascript/controllers/flash_controller.js).
+  #
+  # Variants:
+  #   notice → green success toast
+  #   alert  → red error toast
+  #
+  # Usage (layouts only): <%= render "partials/shared/flash_toast" %>
+%>
+<% if notice.present? || alert.present? %>
+  <div class="fixed top-20 right-4 z-50 space-y-2 max-w-md">
+    <% if notice.present? %>
+      <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400 dark:border-green-600 p-4 shadow-md rounded-md"
+           data-controller="flash" data-flash-delay-value="5000">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-green-700 dark:text-green-300"><%= notice %></p>
+          </div>
+          <button type="button" class="ml-auto" data-action="click->flash#close">
+            <span class="text-green-500 hover:text-green-700">×</span>
+          </button>
+        </div>
+      </div>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 dark:border-red-600 p-4 shadow-md rounded-md"
+           data-controller="flash" data-flash-delay-value="5000">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700 dark:text-red-300"><%= alert %></p>
+          </div>
+          <button type="button" class="ml-auto" data-action="click->flash#close">
+            <span class="text-red-500 hover:text-red-700">×</span>
+          </button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

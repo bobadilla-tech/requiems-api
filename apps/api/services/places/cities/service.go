@@ -114,3 +114,25 @@ func (s *Service) Find(name string) (City, bool) {
 	city, ok := s.index[key]
 	return city, ok
 }
+
+// BatchCityItem is the result for a single item in a batch cities request.
+type BatchCityItem struct {
+	Name   string `json:"name"`
+	Found  bool   `json:"found"`
+	Result *City  `json:"result,omitempty"`
+}
+
+// FindBatch looks up each city name and returns results in input order.
+// Names that are not found return Found: false with no error.
+func (s *Service) FindBatch(names []string) []BatchCityItem {
+	results := make([]BatchCityItem, len(names))
+	for i, name := range names {
+		city, ok := s.Find(name)
+		if ok {
+			results[i] = BatchCityItem{Name: name, Found: true, Result: &city}
+		} else {
+			results[i] = BatchCityItem{Name: name, Found: false}
+		}
+	}
+	return results
+}

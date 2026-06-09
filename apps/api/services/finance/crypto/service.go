@@ -104,6 +104,121 @@ func (s *Service) GetPrice(ctx context.Context, symbol string) (Price, error) {
 	return price, nil
 }
 
+// BatchPriceItem is the result for a single item in a batch crypto price request.
+type BatchPriceItem struct {
+	Symbol string `json:"symbol"`
+	Result *Price `json:"result,omitempty"`
+	Error  string `json:"error,omitempty"`
+}
+
+// GetPriceBatch returns prices for each symbol. Redis cache is checked per symbol;
+// all cache misses are resolved with a single CoinGecko call.
+func (s *Service) GetPriceBatch(ctx context.Context, symbols []string) []BatchPriceItem {
+	results := make([]BatchPriceItem, len(symbols))
+
+	type validSym struct {
+		idx    int
+		upper  string
+		coinID string
+		name   string
+	}
+	var valid []validSym
+	for i, sym := range symbols {
+		upper := strings.ToUpper(sym)
+		coin, ok := coinMap[upper]
+		if !ok {
+			results[i] = BatchPriceItem{Symbol: sym, Error: fmt.Sprintf("unsupported symbol: %s", sym)}
+			continue
+		}
+		valid = append(valid, validSym{idx: i, upper: upper, coinID: coin.id, name: coin.name})
+	}
+
+	if len(valid) == 0 {
+		return results
+	}
+
+	// Check Redis cache for each valid symbol; collect misses.
+	var cacheMisses []validSym
+	for _, v := range valid {
+		if s.rdb != nil {
+			if p, ok := s.fromCache(ctx, v.upper); ok {
+				results[v.idx] = BatchPriceItem{Symbol: v.upper, Result: &p}
+				continue
+			}
+		}
+		cacheMisses = append(cacheMisses, v)
+	}
+
+	if len(cacheMisses) == 0 {
+		return results
+	}
+
+	// Single CoinGecko call for all cache misses.
+	ids := make([]string, len(cacheMisses))
+	for i, v := range cacheMisses {
+		ids[i] = v.coinID
+	}
+	prices, err := s.fetchPriceBatch(ctx, ids)
+	if err != nil {
+		for _, v := range cacheMisses {
+			results[v.idx] = BatchPriceItem{Symbol: v.upper, Error: "crypto price service unavailable"}
+		}
+		return results
+	}
+
+	for _, v := range cacheMisses {
+		data, ok := prices[v.coinID]
+		if !ok {
+			results[v.idx] = BatchPriceItem{Symbol: v.upper, Error: "price not available"}
+			continue
+		}
+		p := Price{
+			Symbol:    v.upper,
+			Name:      v.name,
+			PriceUSD:  data.USD,
+			Change24h: data.USD24hChange,
+			MarketCap: data.USDMarketCap,
+			Volume24h: data.USD24hVol,
+		}
+		if s.rdb != nil {
+			s.toCache(ctx, v.upper, p)
+		}
+		results[v.idx] = BatchPriceItem{Symbol: v.upper, Result: &p}
+	}
+
+	return results
+}
+
+// fetchPriceBatch fetches prices for multiple coin IDs in a single CoinGecko call.
+func (s *Service) fetchPriceBatch(ctx context.Context, coinIDs []string) (coinGeckoResponse, error) {
+	url := fmt.Sprintf( //nolint:gosec // URL built from hardcoded base and coin IDs from coinMap
+		"%s/simple/price?ids=%s&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true",
+		s.baseURL, strings.Join(coinIDs, ","),
+	)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
+	if err != nil {
+		return nil, svcerr.Upstream("upstream_error", "crypto price service unavailable")
+	}
+
+	resp, err := s.httpClient.Do(req) //nolint:gosec // same URL, already validated above
+	if err != nil {
+		return nil, svcerr.Upstream("upstream_error", "crypto price service unavailable")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, svcerr.Upstream("upstream_error", "crypto price service unavailable")
+	}
+
+	var body coinGeckoResponse
+	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
+		return nil, svcerr.Upstream("upstream_error", "crypto price service unavailable")
+	}
+
+	return body, nil
+}
+
 func (s *Service) fromCache(ctx context.Context, symbol string) (Price, bool) {
 	val, err := s.rdb.Get(ctx, cacheKey(symbol)).Result()
 	if err != nil {

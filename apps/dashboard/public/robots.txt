@@ -6,4 +6,3 @@ Disallow: /*/admin/
 Disallow: /*/users/
 
 Sitemap: https://requiems.xyz/sitemap.xml
-Sitemap: https://requiems.xyz/core-sitemap.xml

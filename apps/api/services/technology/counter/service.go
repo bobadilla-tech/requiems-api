@@ -13,6 +13,7 @@ import (
 type Service interface {
 	Increment(ctx context.Context, namespace string) (int64, error)
 	Get(ctx context.Context, namespace string) (int64, error)
+	IncrementBatch(ctx context.Context, namespaces []string) []BatchCounterItem
 }
 
 type service struct {
@@ -77,4 +78,25 @@ func (s *service) Get(ctx context.Context, namespace string) (int64, error) {
 	}
 
 	return total, nil
+}
+
+// IncrementBatch increments multiple counters, delegating each to Increment so
+// the dirty-set is always marked and PostgreSQL bootstrap is handled correctly.
+func (s *service) IncrementBatch(ctx context.Context, namespaces []string) []BatchCounterItem {
+	results := make([]BatchCounterItem, len(namespaces))
+
+	for i, ns := range namespaces {
+		if !namespaceRe.MatchString(ns) {
+			results[i] = BatchCounterItem{Namespace: ns, Error: namespaceValidationErrorMessage}
+			continue
+		}
+		val, err := s.Increment(ctx, ns)
+		if err != nil {
+			results[i] = BatchCounterItem{Namespace: ns, Error: "failed to increment counter"}
+		} else {
+			results[i] = BatchCounterItem{Namespace: ns, Value: val}
+		}
+	}
+
+	return results
 }

@@ -32,3 +32,12 @@ func (s *Service) Random() Fact {
 		Fact: facts[idx],
 	}
 }
+
+// RandomBatch returns n randomly selected Chuck Norris facts.
+func (s *Service) RandomBatch(n int) []Fact {
+	results := make([]Fact, n)
+	for i := range results {
+		results[i] = s.Random()
+	}
+	return results
+}

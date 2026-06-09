@@ -2,9 +2,11 @@ package commodities
 
 import (
 	"context"
+	"log"
 	"math"
 	"strconv"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"requiems-api/platform/svcerr"
@@ -29,6 +31,18 @@ type CommodityPrice struct {
 
 const historyDepth = 11 // 1 current + 10 historical years
 
+type yearRow struct {
+	year     int16
+	price    float64
+	name     string
+	unit     string
+	currency string
+}
+
+type slugData struct {
+	rows []yearRow
+}
+
 // Service provides commodity price lookups against the commodity_price_history PostgreSQL table.
 type Service struct {
 	db *pgxpool.Pool
@@ -52,14 +66,6 @@ func (s *Service) Get(ctx context.Context, slug string) (CommodityPrice, error) 
 		return CommodityPrice{}, err
 	}
 	defer rows.Close()
-
-	type yearRow struct {
-		year     int16
-		price    float64
-		name     string
-		unit     string
-		currency string
-	}
 
 	var results []yearRow
 	for rows.Next() {
@@ -102,4 +108,106 @@ func (s *Service) Get(ctx context.Context, slug string) (CommodityPrice, error) 
 		Change24h:  change,
 		Historical: historical,
 	}, nil
+}
+
+// BatchCommodityItem is the result for a single item in a batch commodities request.
+type BatchCommodityItem struct {
+	Slug   string          `json:"slug"`
+	Found  bool            `json:"found"`
+	Result *CommodityPrice `json:"result,omitempty"`
+	Error  string          `json:"error,omitempty"`
+}
+
+// GetBatch returns price data for each slug in a single SQL query.
+// Slugs not found in the database return Found: false.
+// Duplicate slugs in the input each get a result at their respective positions.
+func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodityItem {
+	results := make([]BatchCommodityItem, len(slugs))
+	slugIndex := make(map[string][]int, len(slugs))
+	for i, slug := range slugs {
+		slugIndex[slug] = append(slugIndex[slug], i)
+		results[i] = BatchCommodityItem{Slug: slug, Found: false}
+	}
+
+	rows, err := s.db.Query(ctx, `
+		SELECT slug, year, price, name, unit, currency
+		FROM commodity_price_history
+		WHERE slug = ANY($1::text[])
+		ORDER BY slug, year DESC
+	`, slugs)
+	if err != nil {
+		return commodityBatchErrorResults(slugs)
+	}
+	defer rows.Close()
+
+	bySlug := make(map[string]*slugData)
+	collectCommodityRows(rows, bySlug)
+	if err := rows.Err(); err != nil {
+		log.Printf("commodities batch: partial scan error, returning partial results: %v", err)
+		// Fall through: assemble whatever bySlug collected; unmatched positions stay Found: false.
+	}
+
+	for slug, d := range bySlug {
+		idxs, ok := slugIndex[slug]
+		if !ok || len(d.rows) == 0 {
+			continue
+		}
+		cp := buildCommodityPrice(slug, d)
+		for _, idx := range idxs {
+			cpy := cp
+			results[idx] = BatchCommodityItem{Slug: slug, Found: true, Result: &cpy}
+		}
+	}
+
+	return results
+}
+
+func commodityBatchErrorResults(slugs []string) []BatchCommodityItem {
+	results := make([]BatchCommodityItem, len(slugs))
+	for i, slug := range slugs {
+		results[i] = BatchCommodityItem{Slug: slug, Error: "failed to fetch commodity data"}
+	}
+	return results
+}
+
+func collectCommodityRows(rows pgx.Rows, bySlug map[string]*slugData) {
+	for rows.Next() {
+		var slug string
+		var r yearRow
+		if err := rows.Scan(&slug, &r.year, &r.price, &r.name, &r.unit, &r.currency); err != nil {
+			continue
+		}
+		if d, ok := bySlug[slug]; ok {
+			if len(d.rows) < historyDepth {
+				d.rows = append(d.rows, r)
+			}
+			continue
+		}
+		bySlug[slug] = &slugData{rows: []yearRow{r}}
+	}
+}
+
+func buildCommodityPrice(slug string, d *slugData) CommodityPrice {
+	latest := d.rows[0]
+	var change float64
+	if len(d.rows) > 1 && d.rows[1].price != 0 {
+		raw := (latest.price - d.rows[1].price) / d.rows[1].price * 100
+		change = math.Round(raw*100) / 100
+	}
+	historical := make([]HistoricalPrice, 0, len(d.rows)-1)
+	for _, r := range d.rows[1:] {
+		historical = append(historical, HistoricalPrice{
+			Period: strconv.Itoa(int(r.year)),
+			Price:  r.price,
+		})
+	}
+	return CommodityPrice{
+		Commodity:  slug,
+		Name:       latest.name,
+		Price:      latest.price,
+		Unit:       latest.unit,
+		Currency:   latest.currency,
+		Change24h:  change,
+		Historical: historical,
+	}
 }
