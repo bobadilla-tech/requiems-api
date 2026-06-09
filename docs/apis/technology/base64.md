@@ -103,6 +103,141 @@ curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
 
 ---
 
+### 3. Encode Batch
+
+Encode multiple strings to Base64 in a single request.
+
+**Endpoint:** `POST /v1/technology/base64/encode/batch`
+
+**Request body:**
+
+```json
+{
+  "values": ["Hello", "World"],
+  "variant": "standard"
+}
+```
+
+| Field     | Type     | Required | Description                           |
+| --------- | -------- | -------- | ------------------------------------- |
+| `values`  | string[] | ✅       | List of values to encode (1-50 items) |
+| `variant` | string   | ❌       | `standard` (default) or `url`         |
+
+**Response:** `200 OK`
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "result": "SGVsbG8="
+      },
+      {
+        "result": "V29ybGQ="
+      }
+    ],
+    "total": 2
+  }
+}
+```
+
+**Response headers**
+
+| Header          | Description               |
+| --------------- | ------------------------- |
+| `X-Usage-Count` | Number of processed items |
+
+**Example**
+
+```bash
+curl -X POST https://api.requiems.xyz/v1/technology/base64/encode/batch \
+  -H "requiems-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "values":["Hello","World"]
+      }'
+```
+
+---
+
+### 4. Decode Batch
+
+Decode multiple Base64 strings in a single request.
+
+**Endpoint:** `POST /v1/technology/base64/decode/batch`
+
+**Request body:**
+
+```json
+{
+  "values": ["SGVsbG8=", "V29ybGQ="],
+  "variant": "standard"
+}
+```
+
+| Field     | Type     | Required | Description                           |
+| --------- | -------- | -------- | ------------------------------------- |
+| `values`  | string[] | ✅       | List of values to decode (1-50 items) |
+| `variant` | string   | ❌       | `standard` (default) or `url`         |
+
+**Response:** `200 OK`
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "result": "Hello"
+      },
+      {
+        "result": "World"
+      }
+    ],
+    "total": 2
+  }
+}
+```
+
+#### Partial Success
+
+Invalid Base64 values do not fail the request.
+
+Example request:
+
+```json
+{
+  "values": ["SGVsbG8=", "not-valid-base64!!!"]
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "result": "Hello"
+      },
+      {
+        "result": ""
+      }
+    ],
+    "total": 2
+  }
+}
+```
+
+The second entry is returned as an empty string because the value could not be decoded.
+
+**Response headers**
+
+| Header          | Description               |
+| --------------- | ------------------------- |
+| `X-Usage-Count` | Number of processed items |
+
+---
+
 ## Variants
 
 | Variant  | Key        | Alphabet                                          | Padding |
