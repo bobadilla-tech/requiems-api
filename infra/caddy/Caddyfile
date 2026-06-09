@@ -4,7 +4,12 @@
 
 # Main application (landing page, dashboard, admin, docs)
 requiems.xyz {
-  encode gzip
+  # Exclude sitemaps from gzip — Googlebot HEAD requests fail when the gzip
+  # Content-Length doesn't match, causing "Couldn't fetch" in Search Console.
+  @compressible {
+    not path /sitemap*.xml
+  }
+  encode @compressible gzip
 
   # Locale root paths without trailing slash: /en → /en/, /es → /es/, /fr → /fr/
   @locale_bare {
