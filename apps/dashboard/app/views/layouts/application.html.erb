@@ -25,30 +25,15 @@
       })();
     </script>
 
-    <title><%= content_for(:title) || "Requiems API" %></title>
+    <title><%= page_title %></title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Requiems API">
     <meta name="mobile-web-app-capable" content="yes">
-    
-    <% _page_title = content_for?(:title) ? content_for(:title) : "Requiems API: All-in-one backend for SaaS products" %>
-    <% _page_description = content_for?(:description) ? content_for(:description) : "Authentication, validation, fraud detection, payments intelligence, and global data — one API key for your entire SaaS stack." %>
-    
-    <meta name="description" content="<%= _page_description %>">
+    <meta name="description" content="<%= page_description %>">
 
-    <meta property="og:site_name" content="Requiems API">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://requiems.xyz<%= request.path %>">
-    <meta property="og:title" content="<%= content_for?(:og_title) ? content_for(:og_title) : _page_title %>">
-    <meta property="og:description" content="<%= content_for?(:og_description) ? content_for(:og_description) : _page_description %>">
-    <meta property="og:image" content="https://requiems.xyz/og-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<%= content_for?(:og_title) ? content_for(:og_title) : _page_title %>">
-    <meta name="twitter:description" content="<%= content_for?(:og_description) ? content_for(:og_description) : _page_description %>">
-    <meta name="twitter:image" content="https://requiems.xyz/og-image.png">
+    <%= og_meta_tags %>
     
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -63,11 +48,7 @@
     <%= favicon_link_tag "logo.png", rel: "apple-touch-icon" %>
     <link rel="shortcut icon" href="/favicon.ico">
 
-    <script type="application/ld+json"><%= organization_json_ld.html_safe %></script>
-    <script type="application/ld+json"><%= website_json_ld.html_safe %></script>
-    <% if (bc = breadcrumb_json_ld) %>
-      <script type="application/ld+json"><%= bc.html_safe %></script>
-    <% end %>
+    <%= json_ld_tags %>
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">

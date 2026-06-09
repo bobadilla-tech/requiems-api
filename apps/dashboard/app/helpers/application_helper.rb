@@ -224,6 +224,55 @@ module ApplicationHelper
     pages_data["pages"].map { |page| page.merge("type" => "page") }
   end
 
+  # Resolves the page title: page-specific override first, then locale-aware site default.
+  def page_title
+    content_for?(:title) ? content_for(:title) : t("home.index.title")
+  end
+
+  # Resolves the page description: page-specific override first, then locale-aware site default.
+  def page_description
+    content_for?(:description) ? content_for(:description) : t("home.index.hero.description")
+  end
+
+  # Renders Open Graph and Twitter Card meta tags.
+  # og:title / twitter:title honour the :og_title content_for slot so individual pages
+  # can set a custom social title without affecting the <title> element.
+  def og_meta_tags
+    title       = content_for?(:og_title)       ? content_for(:og_title)       : page_title
+    description = content_for?(:og_description) ? content_for(:og_description) : page_description
+    url         = request.base_url + request.path
+    image       = "#{request.base_url}/og-image.png"
+
+    tags = [
+      tag.meta(property: "og:site_name",   content: "Requiems API"),
+      tag.meta(property: "og:type",        content: "website"),
+      tag.meta(property: "og:url",         content: url),
+      tag.meta(property: "og:title",       content: title),
+      tag.meta(property: "og:description", content: description),
+      tag.meta(property: "og:image",       content: image),
+      tag.meta(property: "og:image:width", content: "1200"),
+      tag.meta(property: "og:image:height",content: "630"),
+      tag.meta(name: "twitter:card",        content: "summary_large_image"),
+      tag.meta(name: "twitter:title",       content: title),
+      tag.meta(name: "twitter:description", content: description),
+      tag.meta(name: "twitter:image",       content: image)
+    ]
+
+    safe_join(tags, "\n    ")
+  end
+
+  # Renders all JSON-LD structured data scripts for the current page:
+  # Organization, Website (with SearchAction), and BreadcrumbList (when available).
+  def json_ld_tags
+    tags = [
+      content_tag(:script, organization_json_ld.html_safe, type: "application/ld+json"),
+      content_tag(:script, website_json_ld.html_safe,      type: "application/ld+json")
+    ]
+    bc = breadcrumb_json_ld
+    tags << content_tag(:script, bc.html_safe, type: "application/ld+json") if bc
+    safe_join(tags, "\n    ")
+  end
+
   # Renders the <link rel="canonical"> and all <link rel="alternate" hreflang="...">
   # tags for the current page.
   #
