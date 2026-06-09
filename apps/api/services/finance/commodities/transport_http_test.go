@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -29,6 +30,20 @@ func (s *stubGetterHTTP) Get(_ context.Context, slug string) (CommodityPrice, er
 	r := s.result
 	r.Commodity = slug
 	return r, nil
+}
+
+type stubBatcherHTTP struct {
+	fn func([]string) []BatchCommodityItem
+}
+
+func (s *stubBatcherHTTP) GetBatch(_ context.Context, slugs []string) []BatchCommodityItem {
+	return s.fn(slugs)
+}
+
+func setupBatchRouter(b Batcher) chi.Router {
+	r := chi.NewRouter()
+	registerCommodityBatchRoutes(r, b)
+	return r
 }
 
 func setupRouter(g Getter) chi.Router {
@@ -113,6 +128,74 @@ func TestCommodity_InternalError_Returns500(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	require.Equal(t, http.StatusInternalServerError, w.Code, "expected 500, got %d: %s", w.Code, w.Body.String())
+}
+
+func TestCommodityBatch_Found(t *testing.T) {
+	t.Parallel()
+	gold := CommodityPrice{Commodity: "gold", Name: "Gold", Price: 2386.33, Unit: "oz", Currency: "USD"}
+	stub := &stubBatcherHTTP{fn: func(slugs []string) []BatchCommodityItem {
+		results := make([]BatchCommodityItem, len(slugs))
+		for i, s := range slugs {
+			if s == "gold" {
+				cp := gold
+				results[i] = BatchCommodityItem{Slug: "gold", Found: true, Result: &cp}
+			} else {
+				results[i] = BatchCommodityItem{Slug: s, Found: false}
+			}
+		}
+		return results
+	}}
+
+	req := httptest.NewRequest(http.MethodPost, "/commodities/batch", strings.NewReader(`{"slugs":["gold","unobtainium"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupBatchRouter(stub).ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchCommodityItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.True(t, resp.Data.Results[0].Found)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.False(t, resp.Data.Results[1].Found)
+	assert.Nil(t, resp.Data.Results[1].Result)
+}
+
+func TestCommodityBatch_NotFound(t *testing.T) {
+	t.Parallel()
+	stub := &stubBatcherHTTP{fn: func(slugs []string) []BatchCommodityItem {
+		results := make([]BatchCommodityItem, len(slugs))
+		for i, s := range slugs {
+			results[i] = BatchCommodityItem{Slug: s, Found: false}
+		}
+		return results
+	}}
+
+	req := httptest.NewRequest(http.MethodPost, "/commodities/batch", strings.NewReader(`{"slugs":["unobtainium"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupBatchRouter(stub).ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchCommodityItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 1)
+	assert.False(t, resp.Data.Results[0].Found)
+}
+
+func TestCommodityBatch_EmptySlugs422(t *testing.T) {
+	t.Parallel()
+	stub := &stubBatcherHTTP{fn: func(slugs []string) []BatchCommodityItem { return nil }}
+
+	req := httptest.NewRequest(http.MethodPost, "/commodities/batch", strings.NewReader(`{"slugs":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	setupBatchRouter(stub).ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestCommodity_HistoricalFieldPresent(t *testing.T) {

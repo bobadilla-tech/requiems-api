@@ -63,3 +63,38 @@ func TestChuckNorris_FactsNonEmpty(t *testing.T) {
 		assert.NotEmpty(t, f.ID, "call %d: expected non-empty ID", i)
 	}
 }
+
+func TestChuckNorris_Batch_ReturnsCount(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/chuck-norris/batch", strings.NewReader(`{"count":3}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[Fact]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.Data.Results, 3)
+	assert.Equal(t, 3, resp.Data.Total)
+	for _, f := range resp.Data.Results {
+		assert.NotEmpty(t, f.Fact)
+		assert.True(t, strings.HasPrefix(f.ID, "cn_"), "expected ID prefix 'cn_', got %q", f.ID)
+	}
+}
+
+func TestChuckNorris_Batch_ValidationError(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/chuck-norris/batch", strings.NewReader(`{"count":0}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}

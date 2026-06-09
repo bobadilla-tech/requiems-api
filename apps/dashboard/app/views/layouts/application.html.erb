@@ -3,29 +3,40 @@
   <head>
     <% if !user_signed_in? && ENV["GA4_MEASUREMENT_ID"].present? %>
       <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA4_MEASUREMENT_ID"] %>"></script>
+    
       <script>
         window.dataLayer = window.dataLayer || [];
+      
         function gtag(){dataLayer.push(arguments);}
+      
         gtag('js', new Date());
         gtag('config', '<%= ENV["GA4_MEASUREMENT_ID"] %>');
       </script>
     <% end %>
+
     <script>
       (function() {
         var theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        var colorSchema = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (theme === 'dark' || (!theme && colorSchema)) {
           document.documentElement.classList.add('dark');
         }
       })();
     </script>
+
     <title><%= content_for(:title) || "Requiems API" %></title>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Requiems API">
     <meta name="mobile-web-app-capable" content="yes">
+    
     <% _page_title = content_for?(:title) ? content_for(:title) : "Requiems API: All-in-one backend for SaaS products" %>
     <% _page_description = content_for?(:description) ? content_for(:description) : "Authentication, validation, fraud detection, payments intelligence, and global data — one API key for your entire SaaS stack." %>
+    
     <meta name="description" content="<%= _page_description %>">
+
     <meta property="og:site_name" content="Requiems API">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://requiems.xyz<%= request.path %>">
@@ -38,19 +49,13 @@
     <meta name="twitter:title" content="<%= content_for?(:og_title) ? content_for(:og_title) : _page_title %>">
     <meta name="twitter:description" content="<%= content_for?(:og_description) ? content_for(:og_description) : _page_description %>">
     <meta name="twitter:image" content="https://requiems.xyz/og-image.png">
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <% locale_prefix_re = Regexp.new("\\A/(#{I18n.available_locales.map { |l| Regexp.escape(l.to_s) }.join('|')})(?=/|\\z)") %>
-    <% base_path = request.path.sub(locale_prefix_re, "") %>
-    <% base_path = "/" if base_path.blank? %>
-    <link rel="canonical" href="https://requiems.xyz<%= request.path %>">
-    <% I18n.available_locales.each do |loc| %>
-      <link rel="alternate" hreflang="<%= loc %>" href="https://requiems.xyz/<%= loc %><%= base_path %>">
-    <% end %>
-    <link rel="alternate" hreflang="x-default" href="https://requiems.xyz/<%= I18n.default_locale %><%= base_path %>">
+    <%= seo_head_tags %>
 
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
@@ -68,6 +73,7 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
     <%= javascript_importmap_tags %>
+    
   </head>
 
   <body class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-screen" data-controller="search-shortcut">

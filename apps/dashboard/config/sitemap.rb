@@ -4,9 +4,9 @@ require "yaml"
 require_relative "../lib/division_slugs.rb"
 
 SitemapGenerator::Sitemap.default_host = "https://requiems.xyz"
-SitemapGenerator::Sitemap.compress      = false # write sitemap.xml, not sitemap.xml.gz
+SitemapGenerator::Sitemap.compress      = false # write .xml, not .xml.gz
 SitemapGenerator::Sitemap.include_root  = false # all pages added manually
-SitemapGenerator::Sitemap.include_index = false # single file, no index needed
+SitemapGenerator::Sitemap.include_index = true  # emit sitemap.xml as index
 
 catalog     = YAML.load_file(Rails.root.join("config", "api_catalog.yml"))
 live_apis   = catalog["apis"].select { |api| api["status"] == "live" }
@@ -60,90 +60,105 @@ DIVISION_MARKETING_PAGES = [
 locales = Rails.application.config.i18n.available_locales.map(&:to_s)
 
 SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
-  STATIC_PAGES.each do |page|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
-    alts << { href: "https://requiems.xyz/en#{page[:path]}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
-      add "/#{locale}#{page[:path]}",
-        changefreq: page[:changefreq],
-        priority:   locale_priority,
-        alternates: alts
+  # Static pages, case studies, and division marketing pages
+  group(filename: :sitemap_static) do
+    STATIC_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
+    CASE_STUDY_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
+    DIVISION_MARKETING_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
     end
   end
 
-  DIVISION_MARKETING_PAGES.each do |page|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
-    alts << { href: "https://requiems.xyz/en#{page[:path]}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
-      add "/#{locale}#{page[:path]}",
-        changefreq: page[:changefreq],
-        priority:   locale_priority,
-        alternates: alts
+  # System / engine pages
+  group(filename: :sitemap_engines) do
+    SYSTEM_SLUGS.each do |slug|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/systems/#{slug}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en/systems/#{slug}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? 0.8 : 0.3
+        add "/#{locale}/systems/#{slug}/",
+          changefreq: "monthly",
+          priority:   locale_priority,
+          alternates: alts
+      end
     end
   end
 
-  CASE_STUDY_PAGES.each do |page|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}", lang: l } }
-    alts << { href: "https://requiems.xyz/en#{page[:path]}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
-      add "/#{locale}#{page[:path]}",
-        changefreq: page[:changefreq],
-        priority:   locale_priority,
-        alternates: alts
+  # Industry / category pages
+  group(filename: :sitemap_categories) do
+    categories.each do |cat_id|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/categories/#{cat_id}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en/categories/#{cat_id}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? 0.75 : 0.3
+        add "/#{locale}/categories/#{cat_id}/",
+          changefreq: "weekly",
+          priority:   locale_priority,
+          alternates: alts
+      end
     end
   end
 
-  SYSTEM_SLUGS.each do |slug|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/systems/#{slug}", lang: l } }
-    alts << { href: "https://requiems.xyz/en/systems/#{slug}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? 0.8 : 0.3
-      add "/#{locale}/systems/#{slug}",
-        changefreq: "monthly",
-        priority:   locale_priority,
-        alternates: alts
+  # Example pages
+  group(filename: :sitemap_examples) do
+    examples.each do |example_id|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/examples/#{example_id}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en/examples/#{example_id}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? 0.6 : 0.2
+        add "/#{locale}/examples/#{example_id}/",
+          changefreq: "monthly",
+          priority:   locale_priority,
+          alternates: alts
+      end
     end
   end
 
-  categories.each do |cat_id|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/categories/#{cat_id}", lang: l } }
-    alts << { href: "https://requiems.xyz/en/categories/#{cat_id}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? 0.75 : 0.3
-      add "/#{locale}/categories/#{cat_id}",
-        changefreq: "weekly",
-        priority:   locale_priority,
-        alternates: alts
-    end
-  end
+  # Individual API pages (largest group)
+  group(filename: :sitemap_apis) do
+    last_modified = Date.today
 
-  examples.each do |example_id|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/examples/#{example_id}", lang: l } }
-    alts << { href: "https://requiems.xyz/en/examples/#{example_id}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? 0.6 : 0.2
-      add "/#{locale}/examples/#{example_id}",
-        changefreq: "monthly",
-        priority:   locale_priority,
-        alternates: alts
-    end
-  end
-
-  last_modified = Date.today
-
-  live_apis.each do |api|
-    alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/apis/#{api["id"]}", lang: l } }
-    alts << { href: "https://requiems.xyz/en/apis/#{api["id"]}", lang: "x-default" }
-    locales.each do |locale|
-      locale_priority = locale == "en" ? 0.8 : 0.3
-      add "/#{locale}/apis/#{api["id"]}",
-        changefreq: "monthly",
-        priority:   locale_priority,
-        lastmod:    last_modified,
-        alternates: alts
+    live_apis.each do |api|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/apis/#{api["id"]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en/apis/#{api["id"]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? 0.8 : 0.3
+        add "/#{locale}/apis/#{api["id"]}/",
+          changefreq: "monthly",
+          priority:   locale_priority,
+          lastmod:    last_modified,
+          alternates: alts
+      end
     end
   end
 end

@@ -223,4 +223,52 @@ module ApplicationHelper
     pages_data = YAML.load_file(Rails.root.join("config", "searchable_pages.yml"))
     pages_data["pages"].map { |page| page.merge("type" => "page") }
   end
+
+  # Renders the <link rel="canonical"> and all <link rel="alternate" hreflang="...">
+  # tags for the current page.
+  #
+  # Strategy:
+  #   - Canonical always ends with "/" so /en and /en/ are treated as one URL by Google.
+  #   - Canonical is derived from request.path (no query string) so UTM params don't
+  #     create duplicate index entries.
+  #   - hreflang alternates are built from the locale-stripped base path so every locale
+  #     version points at the same content node. Each alternate also ends with "/" for
+  #     consistency with the canonical.
+  #   - x-default points at the English version (site default locale).
+  #   - request.base_url is used instead of a hardcoded host so staging/dev environments
+  #     emit correct self-referential URLs automatically.
+  def seo_head_tags
+    # Regex that matches a leading locale segment, e.g. /en, /es, /fr.
+    # The lookahead (?=/|\z) ensures we only strip a full segment, not a prefix of a word.
+    locale_re = Regexp.new(
+      "\\A/(#{I18n.available_locales.map { |l| Regexp.escape(l.to_s) }.join('|')})(?=/|\\z)"
+    )
+
+    # Strip the locale prefix to get the language-neutral path ("/", "/pricing", etc.).
+    base_path = request.path.sub(locale_re, "")
+    base_path = "/" if base_path.blank?
+
+    # For hreflang hrefs we want no trailing slash on non-root paths ("/pricing", not
+    # "/pricing/"), then append "/" after the locale — giving "/en/pricing/" uniformly.
+    normalized = base_path == "/" ? "" : base_path.chomp("/")
+
+    # Canonical: always trailing slash, never query params.
+    # e.g. /en?utm=x → /en/  |  /en/pricing → /en/pricing/
+    canonical_path = request.path.chomp("/") + "/"
+
+    tags = []
+
+    tags << tag.link(rel: "canonical", href: request.base_url + canonical_path)
+
+    I18n.available_locales.each do |loc|
+      tags << tag.link(rel: "alternate", hreflang: loc.to_s,
+                       href: "#{request.base_url}/#{loc}#{normalized}/")
+    end
+
+    # x-default signals the preferred URL for users whose language isn't listed.
+    tags << tag.link(rel: "alternate", hreflang: "x-default",
+                     href: "#{request.base_url}/#{I18n.default_locale}#{normalized}/")
+
+    safe_join(tags, "\n    ")
+  end
 end

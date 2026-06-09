@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -18,8 +19,9 @@ import (
 // stubService implements Looker for transport tests. It returns a fixed result
 // or a fixed error on every call, keeping tests DB-free and fast.
 type stubService struct {
-	result LookupResponse
-	err    error
+	result  LookupResponse
+	err     error
+	batchFn func([]string) []BatchBINItem
 }
 
 func (s *stubService) Lookup(_ context.Context, bin string) (LookupResponse, error) {
@@ -32,6 +34,9 @@ func (s *stubService) Lookup(_ context.Context, bin string) (LookupResponse, err
 }
 
 func (s *stubService) LookupBatch(_ context.Context, bins []string) []BatchBINItem {
+	if s.batchFn != nil {
+		return s.batchFn(bins)
+	}
 	results := make([]BatchBINItem, len(bins))
 	for i, bin := range bins {
 		results[i] = BatchBINItem{BIN: bin, Found: false}
@@ -216,6 +221,73 @@ func TestBINLookup_8DigitBIN(t *testing.T) {
 
 	resp := decodeResponse(t, w)
 	assert.Equal(t, "42424242", resp.Data.BIN)
+}
+
+func TestBINBatch_Found(t *testing.T) {
+	t.Parallel()
+	hit := LookupResponse{Scheme: "visa", CardType: "credit", CountryCode: "US", Luhn: true, Confidence: 0.95}
+	svc := &stubService{
+		batchFn: func(bins []string) []BatchBINItem {
+			results := make([]BatchBINItem, len(bins))
+			for i, bin := range bins {
+				if bin == "424242" {
+					r := hit
+					results[i] = BatchBINItem{BIN: bin, Found: true, Result: &r}
+				} else {
+					results[i] = BatchBINItem{BIN: bin, Found: false}
+				}
+			}
+			return results
+		},
+	}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/bin/batch", strings.NewReader(`{"bins":["424242","999999"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchBINItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.True(t, resp.Data.Results[0].Found)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.False(t, resp.Data.Results[1].Found)
+}
+
+func TestBINBatch_NotFound(t *testing.T) {
+	t.Parallel()
+	svc := &stubService{}
+	r := setupRouter(svc)
+
+	req := httptest.NewRequest(http.MethodPost, "/bin/batch", strings.NewReader(`{"bins":["999999","888888"]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+	var resp httpx.Response[httpx.BatchResponse[BatchBINItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+	assert.Len(t, resp.Data.Results, 2)
+	for _, item := range resp.Data.Results {
+		assert.False(t, item.Found)
+	}
+}
+
+func TestBINBatch_EmptyBINs422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter(&stubService{})
+
+	req := httptest.NewRequest(http.MethodPost, "/bin/batch", strings.NewReader(`{"bins":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
 
 func TestBINLookup_AllResponseFieldsPresent(t *testing.T) {

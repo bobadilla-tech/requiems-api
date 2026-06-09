@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/go-chi/chi/v5"
@@ -98,6 +99,68 @@ func TestIncrementHandler(t *testing.T) {
 		newTestRouter(svc).ServeHTTP(w, req)
 
 		require.Equal(t, http.StatusInternalServerError, w.Code)
+	})
+}
+
+func TestIncrementBatchHandler(t *testing.T) {
+	t.Parallel()
+	t.Run("happy path", func(t *testing.T) {
+		t.Parallel()
+		svc := &mockService{
+			batchFn: func(_ context.Context, _ []string) []BatchCounterItem {
+				return []BatchCounterItem{
+					{Namespace: "hits", Value: 10},
+					{Namespace: "page-views", Value: 5},
+				}
+			},
+		}
+		req := httptest.NewRequest(http.MethodPost, "/counter/batch", strings.NewReader(`{"namespaces":["hits","page-views"]}`))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		newTestRouter(svc).ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		var resp httpx.Response[httpx.BatchResponse[BatchCounterItem]]
+		err := json.NewDecoder(w.Body).Decode(&resp)
+		require.NoError(t, err)
+		assert.Len(t, resp.Data.Results, 2)
+		assert.Equal(t, 2, resp.Data.Total)
+		assert.Equal(t, "hits", resp.Data.Results[0].Namespace)
+		assert.Equal(t, int64(10), resp.Data.Results[0].Value)
+		assert.Empty(t, resp.Data.Results[0].Error)
+	})
+
+	t.Run("invalid namespace in-band error", func(t *testing.T) {
+		t.Parallel()
+		svc := &mockService{
+			batchFn: func(_ context.Context, _ []string) []BatchCounterItem {
+				return []BatchCounterItem{
+					{Namespace: "hits", Value: 1},
+					{Namespace: "!!!bad!!!", Error: "invalid namespace"},
+				}
+			},
+		}
+		req := httptest.NewRequest(http.MethodPost, "/counter/batch", strings.NewReader(`{"namespaces":["hits","!!!bad!!!"]}`))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		newTestRouter(svc).ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		var resp httpx.Response[httpx.BatchResponse[BatchCounterItem]]
+		err := json.NewDecoder(w.Body).Decode(&resp)
+		require.NoError(t, err)
+		assert.Len(t, resp.Data.Results, 2)
+		assert.Empty(t, resp.Data.Results[0].Error, "valid ns should have no error")
+		assert.NotEmpty(t, resp.Data.Results[1].Error, "invalid ns should have in-band error")
+	})
+
+	t.Run("empty namespaces returns 422", func(t *testing.T) {
+		t.Parallel()
+		req := httptest.NewRequest(http.MethodPost, "/counter/batch", strings.NewReader(`{"namespaces":[]}`))
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		newTestRouter(&mockService{}).ServeHTTP(w, req)
+		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
 }
 

@@ -88,3 +88,51 @@ func TestDetectLanguage_MissingBody(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
+
+func TestDetectLanguage_Batch_HappyPath(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	body := `{"texts":["The quick brown fox","Bonjour le monde"]}`
+	req := httptest.NewRequest(http.MethodPost, "/detect-language/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[httpx.BatchResponse[BatchDetectItem]]
+	err := json.NewDecoder(w.Body).Decode(&resp)
+	require.NoError(t, err)
+
+	assert.Len(t, resp.Data.Results, 2)
+	assert.Equal(t, 2, resp.Data.Total)
+	assert.NotNil(t, resp.Data.Results[0].Result)
+	assert.Empty(t, resp.Data.Results[0].Error)
+}
+
+func TestDetectLanguage_Batch_EmptyText_Returns422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	// dive,required rejects empty strings at the HTTP layer — 422, not in-band error
+	body := `{"texts":["Hello world",""]}`
+	req := httptest.NewRequest(http.MethodPost, "/detect-language/batch", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestDetectLanguage_Batch_MissingTexts422(t *testing.T) {
+	t.Parallel()
+	r := setupRouter()
+
+	req := httptest.NewRequest(http.MethodPost, "/detect-language/batch", strings.NewReader(`{"texts":[]}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}

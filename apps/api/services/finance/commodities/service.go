@@ -2,6 +2,7 @@ package commodities
 
 import (
 	"context"
+	"log"
 	"math"
 	"strconv"
 
@@ -119,12 +120,12 @@ type BatchCommodityItem struct {
 
 // GetBatch returns price data for each slug in a single SQL query.
 // Slugs not found in the database return Found: false.
+// Duplicate slugs in the input each get a result at their respective positions.
 func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodityItem {
 	results := make([]BatchCommodityItem, len(slugs))
-	// Pre-index slug → result position (last position wins for duplicates).
-	slugIndex := make(map[string]int, len(slugs))
+	slugIndex := make(map[string][]int, len(slugs))
 	for i, slug := range slugs {
-		slugIndex[slug] = i
+		slugIndex[slug] = append(slugIndex[slug], i)
 		results[i] = BatchCommodityItem{Slug: slug, Found: false}
 	}
 
@@ -140,24 +141,25 @@ func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodity
 	defer rows.Close()
 
 	bySlug := make(map[string]*slugData)
-
 	collectCommodityRows(rows, bySlug)
 	if err := rows.Err(); err != nil {
-		return commodityBatchErrorResults(slugs)
+		log.Printf("commodities batch: partial scan error, returning partial results: %v", err)
+		// Fall through: assemble whatever bySlug collected; unmatched positions stay Found: false.
 	}
 
 	for slug, d := range bySlug {
-		if item, ok := buildCommodityBatchItem(slug, slugIndex[slug], d); ok {
-			results[item.Index] = item.Item
+		idxs, ok := slugIndex[slug]
+		if !ok || len(d.rows) == 0 {
+			continue
+		}
+		cp := buildCommodityPrice(slug, d)
+		for _, idx := range idxs {
+			cpy := cp
+			results[idx] = BatchCommodityItem{Slug: slug, Found: true, Result: &cpy}
 		}
 	}
 
 	return results
-}
-
-type commodityBatchResult struct {
-	Index int
-	Item  BatchCommodityItem
 }
 
 func commodityBatchErrorResults(slugs []string) []BatchCommodityItem {
@@ -185,11 +187,7 @@ func collectCommodityRows(rows pgx.Rows, bySlug map[string]*slugData) {
 	}
 }
 
-func buildCommodityBatchItem(slug string, idx int, d *slugData) (commodityBatchResult, bool) {
-	if idx < 0 || len(d.rows) == 0 {
-		return commodityBatchResult{}, false
-	}
-
+func buildCommodityPrice(slug string, d *slugData) CommodityPrice {
 	latest := d.rows[0]
 	var change float64
 	if len(d.rows) > 1 && d.rows[1].price != 0 {
@@ -203,7 +201,7 @@ func buildCommodityBatchItem(slug string, idx int, d *slugData) (commodityBatchR
 			Price:  r.price,
 		})
 	}
-	cp := CommodityPrice{
+	return CommodityPrice{
 		Commodity:  slug,
 		Name:       latest.name,
 		Price:      latest.price,
@@ -212,8 +210,4 @@ func buildCommodityBatchItem(slug string, idx int, d *slugData) (commodityBatchR
 		Change24h:  change,
 		Historical: historical,
 	}
-	return commodityBatchResult{
-		Index: idx,
-		Item:  BatchCommodityItem{Slug: slug, Found: true, Result: &cp},
-	}, true
 }

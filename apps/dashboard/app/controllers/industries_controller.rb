@@ -7,6 +7,6 @@ class IndustriesController < ApplicationController
 
   def show
     @slug = params[:industry_slug].to_s
-    head :not_found unless IndustrySlugs::ALL.include?(@slug)
+    return head :not_found unless IndustrySlugs::ALL.include?(@slug)
   end
 end
