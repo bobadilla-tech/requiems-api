@@ -668,7 +668,7 @@ apis:
     categories:
       - technology
     description: Encode strings to Base64 and decode Base64 back to plain text. Supports standard and URL-safe (base64url) variants.
-    endpoints_count: 2
+    endpoints_count: 4
     status: live
     popular: false
     documentation_url: /apis/base64

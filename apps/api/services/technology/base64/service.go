@@ -47,3 +47,29 @@ func (s *Service) Decode(value, variant string) (Result, error) {
 
 	return Result{Result: string(decoded)}, nil
 }
+
+type BatchRequest struct {
+	Values  []string `json:"values" validate:"required,min=1,max=50,dive,required"`
+	Variant string   `json:"variant" validate:"omitempty,oneof=standard url"`
+}
+
+func (s *Service) EncodeBatch(values []string, variant string) []Result {
+	results := make([]Result, len(values))
+	for i, value := range values {
+		results[i] = s.Encode(value, variant)
+	}
+	return results
+}
+
+func (s *Service) DecodeBatch(values []string, variant string) []Result {
+	results := make([]Result, len(values))
+	for i, value := range values {
+		res, err := s.Decode(value, variant)
+		if err != nil {
+			results[i] = Result{}
+			continue
+		}
+		results[i] = res
+	}
+	return results
+}
