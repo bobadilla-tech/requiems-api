@@ -280,19 +280,15 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 	}
 
 	// --- Text scoring ---
-	// Weight: 0.1. Score = 1.0 - toxicity_score (inverse of toxicity).
-	// ToxicityScore on the result remains nil until the sentiment service exposes it directly.
+	// Weight: 0.1. Scoring is deferred until ToxicityScore is available from the sentiment service.
+	// text validation runs but does not contribute to overall_quality_score yet.
 	if text != "" {
-		//textScore := 1.0 // TODO: replace with 1.0 - profanityResult.ToxicityScore once the field is available.
 		textFinalResult.IsSafe = true
 		if profanityResult.HasProfanity {
 			textFinalResult.IsSafe = false
 			textFinalResult.Flags = append(textFinalResult.Flags, "text_profanity")
 		}
 		textFinalResult.Sentiment = sentimentResult.Sentiment
-
-		//weightedSum += textScore * 0.1 // ← missing
-		//totalWeight += 0.1  //← missing
 	}
 
 	// Normalize weighted sum by total active weight.
