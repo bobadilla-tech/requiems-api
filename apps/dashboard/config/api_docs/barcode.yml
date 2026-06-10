@@ -206,7 +206,211 @@ endpoints:
         end
         data = JSON.parse(response.body)['data']
         puts data['image'][0..39] + '...'
+  - name: Generate Barcodes (Batch)
+    method: POST
+    path: /v1/technology/barcode/batch
+    description: >-
+      Generate up to 20 barcodes in a single request. Each barcode is processed
+      independently and results are returned in the same order as the input.
+      Invalid items do not fail the entire request.
 
+    parameters:
+      - name: items
+        type: array
+        required: true
+        location: body
+        description: "Array of barcode generation requests. Min: 1, Max: 20."
+
+    request_example: |
+      {
+        "items": [
+          {
+            "data": "123456789",
+            "type": "code128"
+          },
+          {
+            "data": "1234567",
+            "type": "ean8"
+          }
+        ]
+      }
+
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "image": "iVBORw0KGgoAAAANSUhEUgAA...",
+              "type": "code128",
+              "width": 300,
+              "height": 100,
+              "success": true,
+              "error": ""
+            },
+            {
+              "image": "iVBORw0KGgoAAAANSUhEUgAA...",
+              "type": "ean8",
+              "width": 300,
+              "height": 100,
+              "success": true,
+              "error": ""
+            }
+          ],
+          "total": 2
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+
+    response_fields:
+      - name: results
+        type: array
+        description: List of barcode generation results preserving input order
+
+      - name: results[].image
+        type: string
+        description: Base64-encoded PNG image
+
+      - name: results[].type
+        type: string
+        description: Barcode format used
+
+      - name: results[].width
+        type: integer
+        description: Image width in pixels
+
+      - name: results[].height
+        type: integer
+        description: Image height in pixels
+
+      - name: results[].success
+        type: boolean
+        description: Whether barcode generation succeeded
+
+      - name: results[].error
+        type: string
+        description: Error message when generation fails
+
+      - name: total
+        type: integer
+        description: Number of items processed
+
+    errors:
+      - code: validation_failed
+        status: 422
+        description: >-
+          Valid request body that fails validation (empty items array, more than
+          20 items, missing data field, or unsupported barcode type).
+
+      - code: bad_request
+        status: 400
+        description: Invalid JSON or malformed request body.
+
+      - code: internal_error
+        status: 500
+        description: Unexpected server error.
+
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/technology/barcode/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "items": [
+              {
+                "data": "123456789",
+                "type": "code128"
+              },
+              {
+                "data": "HELLO",
+                "type": "code93"
+              }
+            ]
+          }'
+
+      python: |
+        import requests
+
+        url = "https://api.requiems.xyz/v1/technology/barcode/batch"
+
+        response = requests.post(
+            url,
+            headers={
+                "requiems-api-key": "YOUR_API_KEY",
+                "Content-Type": "application/json"
+            },
+            json={
+                "items": [
+                    {
+                        "data": "123456789",
+                        "type": "code128"
+                    },
+                    {
+                        "data": "HELLO",
+                        "type": "code93"
+                    }
+                ]
+            }
+        )
+
+        print(response.json())
+
+      javascript: |
+        const response = await fetch(
+          'https://api.requiems.xyz/v1/technology/barcode/batch',
+          {
+            method: 'POST',
+            headers: {
+              'requiems-api-key': 'YOUR_API_KEY',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              items: [
+                {
+                  data: '123456789',
+                  type: 'code128'
+                },
+                {
+                  data: 'HELLO',
+                  type: 'code93'
+                }
+              ]
+            })
+          }
+        );
+
+        const { data } = await response.json();
+        console.log(data.results);
+
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/technology/barcode/batch')
+
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+
+        request.body = {
+          items: [
+            {
+              data: '123456789',
+              type: 'code128'
+            },
+            {
+              data: 'HELLO',
+              type: 'code93'
+            }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
+        end
+
+        puts response.body
 faq:
   - question: Which barcode formats are supported?
     answer: "Code 128 (alphanumeric, any length), Code 93 (alphanumeric, compact), Code 39 (alphanumeric, legacy), EAN-8 (7 or 8 digits), and EAN-13 (12 or 13 digits)."

@@ -2,8 +2,11 @@ package barcode
 
 import (
 	"bytes"
+	"context"
+	"encoding/base64"
 	"errors"
 	"image/png"
+	"sync"
 	"unicode"
 
 	bcode "github.com/boombuler/barcode"
@@ -16,6 +19,9 @@ import (
 const (
 	defaultWidth  = 300
 	defaultHeight = 100
+
+	maxBatchSize    = 20
+	maxBatchWorkers = 10
 )
 
 // Base64Response is the JSON response payload returned by GET /barcode/base64.
@@ -94,4 +100,67 @@ func isNumeric(s string) bool {
 		}
 	}
 	return true
+}
+
+// BatchItem is a single barcode request within a batch.
+type BatchItem struct {
+	Data string `json:"data" validate:"required"`
+	Type string `json:"type" validate:"required,oneof=code128 code93 code39 ean8 ean13"`
+}
+
+// BatchRequest is the JSON body for POST /barcode/batch.
+type BatchRequest struct {
+	Items []BatchItem `json:"items" validate:"required,min=1,max=20,dive"`
+}
+
+// BatchResultItem is the result for a single item in a batch.
+type BatchResultItem struct {
+	Image   string `json:"image"`
+	Type    string `json:"type"`
+	Width   int    `json:"width"`
+	Height  int    `json:"height"`
+	Success bool   `json:"success"`
+	Error   string `json:"error"`
+}
+
+// GenerateBatch encodes multiple barcodes concurrently. Results are returned
+// in the same order as the input slice. Per-item errors are absorbed in-band
+// (Success: false, Error: <reason>) so a single bad item never blocks the rest.
+func (s *Service) GenerateBatch(ctx context.Context, items []BatchItem) []BatchResultItem {
+	results := make([]BatchResultItem, len(items))
+
+	sem := make(chan struct{}, maxBatchWorkers)
+	var wg sync.WaitGroup
+
+	for i, item := range items {
+		wg.Add(1)
+		sem <- struct{}{}
+
+		go func(i int, item BatchItem) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			pngData, width, height, err := s.Generate(item.Data, item.Type)
+			if err != nil {
+				results[i] = BatchResultItem{
+					Type:    item.Type,
+					Success: false,
+					Error:   err.Error(),
+				}
+				return
+			}
+
+			results[i] = BatchResultItem{
+				Image:   base64.StdEncoding.EncodeToString(pngData),
+				Type:    item.Type,
+				Width:   width,
+				Height:  height,
+				Success: true,
+			}
+		}(i, item)
+	}
+
+	wg.Wait()
+
+	return results
 }

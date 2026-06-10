@@ -1,6 +1,7 @@
 package barcode
 
 import (
+	"context"
 	"encoding/base64"
 	"net/http"
 
@@ -58,4 +59,15 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			Height: height,
 		})
 	})
+
+	// POST /barcode/batch — encodes up to maxBatchSize barcodes in one request.
+	// httpx.HandleBatch sets X-Usage-Count = len(items) and wraps the slice
+	// in the standard httpx.BatchResponse envelope automatically.
+	r.Post("/barcode/batch", httpx.HandleBatch(
+		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchResultItem], error) {
+			results := svc.GenerateBatch(ctx, req.Items)
+			return httpx.BatchResponse[BatchResultItem]{Results: results}, nil
+		},
+	))
+
 }
