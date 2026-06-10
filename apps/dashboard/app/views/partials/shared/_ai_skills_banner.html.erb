@@ -1,0 +1,29 @@
+<div id="ai-skills-banner"
+     data-controller="ai-skills-banner"
+     class="relative text-white" style="background: radial-gradient(ellipse at center, #c084fc 0%, #6d28d9 40%, #0ea5e9 100%)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+    <div class="flex items-center justify-center gap-x-3 text-sm">
+      <span class="flex-shrink-0 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold tracking-wide uppercase">
+        New
+      </span>
+      <a href="https://github.com/bobadilla-tech/requiems-api-skills"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="flex items-center gap-1.5 font-medium hover:underline">
+        Build with Requiems API faster — install the AI Skills package for Claude, Gemini, and more
+        <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <button type="button"
+          data-action="click->ai-skills-banner#dismiss"
+          class="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-white/20 transition-colors"
+          aria-label="Dismiss banner">
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>
