@@ -52,7 +52,7 @@ type PhoneResult struct {
 	Country      string       `json:"country,omitempty"`
 	Type         string       `json:"type,omitempty"`
 	Carrier      *CarrierInfo `json:"carrier"`
-	Risk         PhoneRisk    `json:"risk"`
+	Risk         *PhoneRisk   `json:"risk"`
 	Flags        []string     `json:"flags"`
 	QualityScore float64      `json:"quality_score"`
 }
@@ -186,7 +186,7 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 			emailFinalResult.Flags = append(emailFinalResult.Flags, "email_syntax_invalid")
 			emailScore -= 1.0
 		} else {
-			if emailResult.MxValid == false {
+			if !emailResult.MxValid {
 				// Domain has no mail server — email is undeliverable.
 				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_mx_invalid")
 				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_invalid")
@@ -199,7 +199,7 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 				emailScore -= 0.5
 			}
 
-			if emailResult.Suggestion != nil && len(*emailResult.Suggestion) > 0 {
+			if emailResult.Suggestion != nil && *emailResult.Suggestion != "" {
 				// Likely typo in domain (e.g. gmial.com) — low confidence signal.
 				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_has_suggestion")
 				emailScore -= 0.1
@@ -260,8 +260,7 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 				phoneFinalResult.Carrier = &CarrierInfo{Name: phoneResult.Carrier.Name}
 			}
 			if phoneResult.Risk != nil {
-				phoneFinalResult.Risk.IsVirtual = phoneResult.Risk.IsVirtual
-				phoneFinalResult.Risk.IsVoIP = phoneResult.Risk.IsVoIP
+				phoneFinalResult.Risk = &PhoneRisk{IsVoIP: phoneResult.Risk.IsVoIP, IsVirtual: phoneResult.Risk.IsVirtual}
 			}
 
 		} else {
@@ -282,6 +281,7 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 	// --- Text scoring ---
 	// Weight: 0.1. Scoring is deferred until ToxicityScore is available from the sentiment service.
 	// text validation runs but does not contribute to overall_quality_score yet.
+	// Note: text-only requests will return overall_quality_score of 0.0 until scoring is enabled.
 	if text != "" {
 		textFinalResult.IsSafe = true
 		if profanityResult.HasProfanity {

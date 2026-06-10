@@ -112,7 +112,7 @@ endpoints:
         description: Suggested correction when a typo is detected in the domain (e.g. gmial.com → gmail.com). Null otherwise.
       - name: email.flags
         type: array or null
-        description: "Triggered flags. Possible values: email_invalid, email_mx_invalid, email_disposable, email_has_suggestion."
+        description: "Triggered flags. Possible values: email_syntax_invalid, email_mx_invalid, email_disposable, email_has_suggestion."
       - name: email.quality_score
         type: number
         description: Email quality score from 0.0 to 1.0. Penalized by invalidity, disposable domain, and suggestions.
@@ -123,8 +123,8 @@ endpoints:
         type: boolean
         description: True when the phone number is valid and dialable.
       - name: phone.normalized
-        type: string or null
-        description: Normalized phone number in international format. Null when invalid.
+        type: string
+        description: Normalized phone number in international format. Omitted when invalid.
       - name: phone.country
         type: string or null
         description: ISO 3166-1 alpha-2 country code detected from the number (e.g. US, CO).
@@ -139,13 +139,13 @@ endpoints:
         description: Name of the carrier or operator associated with the number.
       - name: phone.risk
         type: object or null
-        description: Risk signals associated with the phone number. Null when not available.
+        description: Risk signals associated with the phone number. Null when the validator could not determine risk information.
       - name: phone.risk.is_voip
         type: boolean
-        description: True when the number is identified as a VoIP line.
+        description: True when the number is confirmed as a VoIP line. False when explicitly confirmed as non-VoIP.
       - name: phone.risk.is_virtual
         type: boolean
-        description: True when the number is identified as a virtual number.
+        description: True when the number is confirmed as a virtual number. False when explicitly confirmed as non-virtual.
       - name: phone.flags
         type: array or null
         description: "Triggered flags. Possible values: phone_invalid, phone_voip, phone_virtual, phone_unknown_type, phone_landline."
@@ -162,14 +162,19 @@ endpoints:
         type: number or null
         description: Reserved for future use. Currently always null.
       - name: text.sentiment
-        type: string or null
+        type: string
         description: "Detected sentiment: positive, negative, or neutral."
       - name: text.flags
         type: array or null
         description: "Triggered moderation flags. Possible values: text_profanity."
       - name: overall_quality_score
         type: number
-        description: Weighted quality score from 0.0 to 1.0 combining all provided fields. Weights are email 0.5, phone 0.4, text 0.1. Adjusted proportionally when one or more fields are absent.
+        description: >-
+          Weighted quality score from 0.0 to 1.0 combining email and phone fields only.
+          Weights are email 0.5 and phone 0.4, adjusted proportionally when one field is absent.
+          Text does not currently contribute to this score — scoring will be enabled once
+          toxicity_score is available from the sentiment service.
+          Returns 0.0 when only text is provided.
     errors:
       - code: 422
         message: validation_failed
