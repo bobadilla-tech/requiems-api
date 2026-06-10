@@ -53,42 +53,23 @@ type BatchRequest struct {
 	Variant string   `json:"variant" validate:"omitempty,oneof=standard url"`
 }
 
-// BatchResult is the response for batch operations.
-type BatchResult struct {
-	Results []string `json:"results"`
-	Total   int      `json:"total"`
-}
-
-func (s *Service) EncodeBatch(values []string, variant string) BatchResult {
-	results := make([]string, len(values))
-
+func (s *Service) EncodeBatch(values []string, variant string) []Result {
+	results := make([]Result, len(values))
 	for i, value := range values {
-		results[i] = s.Encode(value, variant).Result
+		results[i] = s.Encode(value, variant)
 	}
-
-	return BatchResult{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }
 
-func (s *Service) DecodeBatch(values []string, variant string) BatchResult {
-	results := make([]string, len(values))
-
+func (s *Service) DecodeBatch(values []string, variant string) []Result {
+	results := make([]Result, len(values))
 	for i, value := range values {
 		res, err := s.Decode(value, variant)
-
-		// Partial success per batch API standard.
 		if err != nil {
-			results[i] = ""
+			results[i] = Result{}
 			continue
 		}
-
-		results[i] = res.Result
+		results[i] = res
 	}
-
-	return BatchResult{
-		Results: results,
-		Total:   len(results),
-	}
+	return results
 }

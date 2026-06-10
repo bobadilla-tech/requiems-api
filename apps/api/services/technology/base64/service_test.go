@@ -139,28 +139,23 @@ func TestService_EncodeBatch(t *testing.T) {
 		name    string
 		values  []string
 		variant string
-		want    []string
+		want    []Result
 	}{
 		{
 			name:   "standard encoding",
 			values: []string{"Hello", "World"},
-			want: []string{
-				"SGVsbG8=",
-				"V29ybGQ=",
-			},
+			want:   []Result{{Result: "SGVsbG8="}, {Result: "V29ybGQ="}},
 		},
 		{
 			name:    "url encoding",
 			values:  []string{"\xfb\xff\xfe"},
 			variant: "url",
-			want: []string{
-				"-__-",
-			},
+			want:    []Result{{Result: "-__-"}},
 		},
 		{
 			name:   "empty batch",
 			values: []string{},
-			want:   []string{},
+			want:   []Result{},
 		},
 	}
 
@@ -172,8 +167,7 @@ func TestService_EncodeBatch(t *testing.T) {
 
 			got := svc.EncodeBatch(tt.values, tt.variant)
 
-			assert.Equal(t, tt.want, got.Results)
-			assert.Equal(t, len(tt.want), got.Total)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
@@ -187,26 +181,18 @@ func TestService_DecodeBatch(t *testing.T) {
 		name    string
 		values  []string
 		variant string
-		want    []string
+		want    []Result
 	}{
 		{
-			name: "standard decoding",
-			values: []string{
-				"SGVsbG8=",
-				"V29ybGQ=",
-			},
-			want: []string{
-				"Hello",
-				"World",
-			},
+			name:   "standard decoding",
+			values: []string{"SGVsbG8=", "V29ybGQ="},
+			want:   []Result{{Result: "Hello"}, {Result: "World"}},
 		},
 		{
 			name:    "url decoding",
 			values:  []string{"-__-"},
 			variant: "url",
-			want: []string{
-				"\xfb\xff\xfe",
-			},
+			want:    []Result{{Result: "\xfb\xff\xfe"}},
 		},
 		{
 			name: "partial failure",
@@ -215,16 +201,12 @@ func TestService_DecodeBatch(t *testing.T) {
 				"not-valid-base64!!!",
 				"V29ybGQ=",
 			},
-			want: []string{
-				"Hello",
-				"",
-				"World",
-			},
+			want: []Result{{Result: "Hello"}, {Result: ""}, {Result: "World"}},
 		},
 		{
 			name:   "empty batch",
 			values: []string{},
-			want:   []string{},
+			want:   []Result{},
 		},
 	}
 
@@ -236,27 +218,7 @@ func TestService_DecodeBatch(t *testing.T) {
 
 			got := svc.DecodeBatch(tt.values, tt.variant)
 
-			assert.Equal(t, tt.want, got.Results)
-			assert.Equal(t, len(tt.want), got.Total)
+			assert.Equal(t, tt.want, got)
 		})
 	}
-}
-func TestService_DecodeBatch_PartialFailure(t *testing.T) {
-	t.Parallel()
-
-	svc := NewService()
-
-	got := svc.DecodeBatch([]string{
-		"SGVsbG8=",
-		"not-valid-base64!!!",
-		"V29ybGQ=",
-	}, "")
-
-	assert.Equal(t, []string{
-		"Hello",
-		"",
-		"World",
-	}, got.Results)
-
-	assert.Equal(t, 3, got.Total)
 }
