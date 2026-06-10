@@ -219,7 +219,7 @@ endpoints:
         type: array
         required: true
         location: body
-        description: Array of barcode generation requests. Min: 1, Max: 20.
+        description: "Array of barcode generation requests. Min: 1, Max: 20."
 
     request_example: |
       {
