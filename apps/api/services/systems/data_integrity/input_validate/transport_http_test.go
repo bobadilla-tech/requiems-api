@@ -36,7 +36,7 @@ type stubEmailService struct {
 	emailResult email.Validation
 }
 
-func (s *stubEmailService) ValidateEmail(ctx context.Context, email string) email.Validation {
+func (s *stubEmailService) ValidateEmail(ctx context.Context, emailAddress string) email.Validation {
 	return s.emailResult
 }
 
