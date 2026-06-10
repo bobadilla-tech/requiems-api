@@ -257,3 +257,20 @@ func TestInputValidate_Validate_NoFieldsPresent_Returns422(t *testing.T) {
 
 	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
+
+func TestInputValidate_Validate_TextOnly_OverallScoreIsZero(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(&stubEmailService{}, &stubPhoneService{}, &stubProfanityService{}, &stubSentimentService{})
+	w := post(t, r, `{"text": "I just wanted to say that your customer service team was incredibly helpful."}`)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[Response]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+
+	assert.Nil(t, resp.Data.Email)
+	assert.Nil(t, resp.Data.Phone)
+	assert.NotNil(t, resp.Data.Text)
+	assert.Equal(t, 0.0, resp.Data.OverallQualityScore)
+}
