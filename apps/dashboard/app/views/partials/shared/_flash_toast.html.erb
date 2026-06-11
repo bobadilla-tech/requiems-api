@@ -8,8 +8,8 @@
   #   alert  → red error toast
   #
   # Usage (layouts only): render "partials/shared/flash_toast"
-%>
-<% if notice.present? || alert.present? %>
+-%>
+<% if notice.present? || alert.present? -%>
   <div class="fixed top-20 right-4 z-50 space-y-2 max-w-md">
     <% if notice.present? %>
       <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400 dark:border-green-600 p-4 shadow-md rounded-md"
@@ -49,4 +49,4 @@
       </div>
     <% end %>
   </div>
-<% end %>
+<% end -%>
