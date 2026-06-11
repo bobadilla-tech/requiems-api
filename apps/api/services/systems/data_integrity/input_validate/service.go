@@ -123,16 +123,7 @@ func NewService(
 // The overall_quality_score is a weighted mean of the present signals only,
 // so the denominator adjusts based on which fields were provided.
 func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text string) Response {
-
-	var emailFinalResult EmailResult
-	var phoneFinalResult PhoneResult
-	var textFinalResult TextResult
-
-	overallScore := 0.0
-	weightedSum := 0.0
-	totalWeight := 0.0
 	var wg sync.WaitGroup
-
 	// Raw results from each composed service, populated concurrently.
 	var (
 		emailResult     email.Validation
@@ -174,108 +165,28 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 
 	wg.Wait()
 
-	// --- Email scoring ---
+	weightedSum := 0.0
+	totalWeight := 0.0
+
+	var emailFinalResult *EmailResult
+	var phoneFinalResult *PhoneResult
+	var textFinalResult *TextResult
+
 	// Weight: 0.5. Deductions applied for each quality signal.
 	// Floor at 0.0 — score cannot go negative.
 	if emailAddress != "" {
-
-		emailScore := 1.0
-
-		if !emailResult.SyntaxValid {
-			// Invalid syntax is disqualifying — full deduction, skip remaining checks.
-			emailFinalResult.Flags = append(emailFinalResult.Flags, "email_syntax_invalid")
-			emailScore -= 1.0
-		} else {
-			if !emailResult.MxValid {
-				// Domain has no mail server — email is undeliverable.
-				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_mx_invalid")
-				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_invalid")
-				emailScore -= 0.6
-			}
-
-			if emailResult.Disposable {
-				// Disposable/temporary address — high fraud signal.
-				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_disposable")
-				emailScore -= 0.5
-			}
-
-			if emailResult.Suggestion != nil && *emailResult.Suggestion != "" {
-				// Likely typo in domain (e.g. gmial.com) — low confidence signal.
-				emailFinalResult.Flags = append(emailFinalResult.Flags, "email_has_suggestion")
-				emailScore -= 0.1
-			}
-		}
-
-		emailScore = math.Max(0, emailScore)
-
-		emailFinalResult.Valid = emailResult.Valid
-		emailFinalResult.Normalized = emailResult.Normalized
-		emailFinalResult.Original = emailAddress
-		emailFinalResult.SyntaxValid = emailResult.SyntaxValid
-		emailFinalResult.MXValid = emailResult.MxValid
-		emailFinalResult.Disposable = emailResult.Disposable
-		emailFinalResult.Suggestion = emailResult.Suggestion
-		emailFinalResult.QualityScore = emailScore
-
-		weightedSum += emailScore * 0.5
+		result, score := buildEmailResult(emailAddress, emailResult)
+		emailFinalResult = &result
+		weightedSum += score * 0.5
 		totalWeight += 0.5
 	}
 
 	// --- Phone scoring ---
 	if phoneNumber != "" {
-		phoneScore := 1.0
-
-		if phoneResult.Valid {
-
-			if phoneResult.Risk != nil {
-				if phoneResult.Risk.IsVirtual || phoneResult.Risk.IsVoIP {
-					// VoIP and virtual share a single deduction — apply once.
-					if phoneResult.Risk.IsVirtual {
-						phoneFinalResult.Flags = append(phoneFinalResult.Flags, "phone_virtual")
-					}
-
-					if phoneResult.Risk.IsVoIP {
-						phoneFinalResult.Flags = append(phoneFinalResult.Flags, "phone_voip")
-					}
-					phoneScore -= 0.3
-				}
-			}
-
-			if phoneResult.Type == "unknown" {
-				// Cannot determine line type — minor confidence penalty.
-				phoneFinalResult.Flags = append(phoneFinalResult.Flags, "phone_unknown_type")
-				phoneScore -= 0.1
-
-			}
-
-			if phoneResult.Type == "landline" {
-				// Landline is less common for contact forms — slight penalty.
-				phoneScore -= 0.05
-			}
-
-			phoneFinalResult.Normalized = phoneResult.Formatted
-			phoneFinalResult.Country = phoneResult.Country
-			phoneFinalResult.Type = phoneResult.Type
-			if phoneResult.Carrier != nil && phoneResult.Carrier.Name != "" {
-				phoneFinalResult.Carrier = &CarrierInfo{Name: phoneResult.Carrier.Name}
-			}
-			if phoneResult.Risk != nil {
-				phoneFinalResult.Risk = &PhoneRisk{IsVoIP: phoneResult.Risk.IsVoIP, IsVirtual: phoneResult.Risk.IsVirtual}
-			}
-
-		} else {
-			// Invalid number — full deduction.
-			phoneFinalResult.Flags = append(phoneFinalResult.Flags, "phone_invalid")
-			phoneScore -= 1.0
-		}
-
-		phoneScore = math.Max(0, phoneScore)
-
-		phoneFinalResult.Valid = phoneResult.Valid
-		phoneFinalResult.QualityScore = phoneScore
-
+		result, score := buildPhoneResult(phoneResult)
+		phoneFinalResult = &result
 		totalWeight += 0.4
-		weightedSum += phoneScore * 0.4
+		weightedSum += score * 0.4
 	}
 
 	// --- Text scoring ---
@@ -283,13 +194,11 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 	// text validation runs but does not contribute to overall_quality_score yet.
 	// Note: text-only requests will return overall_quality_score of 0.0 until scoring is enabled.
 	if text != "" {
-		textFinalResult.IsSafe = true
-		if profanityResult.HasProfanity {
-			textFinalResult.IsSafe = false
-			textFinalResult.Flags = append(textFinalResult.Flags, "text_profanity")
-		}
-		textFinalResult.Sentiment = sentimentResult.Sentiment
+		result := buildTextResult(profanityResult, sentimentResult)
+		textFinalResult = &result
 	}
+
+	overallScore := 0.0
 
 	// Normalize weighted sum by total active weight.
 	// Denominator adjusts based on which fields were present,
@@ -299,24 +208,119 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 
 	// Return nil for absent fields — null in JSON signals "not requested",
 	return Response{
-		Email: func() *EmailResult {
-			if emailAddress != "" {
-				return &emailFinalResult
-			}
-			return nil
-		}(),
-		Phone: func() *PhoneResult {
-			if phoneNumber != "" {
-				return &phoneFinalResult
-			}
-			return nil
-		}(),
-		Text: func() *TextResult {
-			if text != "" {
-				return &textFinalResult
-			}
-			return nil
-		}(),
+		Email:               emailFinalResult,
+		Phone:               phoneFinalResult,
+		Text:                textFinalResult,
 		OverallQualityScore: overallScore,
 	}
+}
+
+func buildEmailResult(emailAddress string, e email.Validation) (EmailResult, float64) {
+
+	score := 1.0
+	var flags []string
+
+	if !e.SyntaxValid {
+		// Invalid syntax is disqualifying — full deduction, skip remaining checks.
+		flags = append(flags, "email_syntax_invalid")
+		score -= 1.0
+	} else {
+		if !e.MxValid {
+			// Domain has no mail server — email is undeliverable.
+			flags = append(flags, "email_mx_invalid")
+			flags = append(flags, "email_invalid")
+			score -= 0.6
+		}
+
+		if e.Disposable {
+			// Disposable/temporary address — high fraud signal.
+			flags = append(flags, "email_disposable")
+			score -= 0.5
+		}
+
+		if e.Suggestion != nil && *e.Suggestion != "" {
+			// Likely typo in domain (e.g. gmial.com) — low confidence signal.
+			flags = append(flags, "email_has_suggestion")
+			score -= 0.1
+		}
+	}
+
+	return EmailResult{
+		Valid:        e.Valid,
+		Normalized:   e.Normalized,
+		Original:     emailAddress,
+		SyntaxValid:  e.SyntaxValid,
+		MXValid:      e.MxValid,
+		Disposable:   e.Disposable,
+		Suggestion:   e.Suggestion,
+		Flags:        flags,
+		QualityScore: math.Max(0, score),
+	}, math.Max(0, score)
+
+}
+
+func buildPhoneResult(p phone.ValidateResponse) (PhoneResult, float64) {
+	score := 1.0
+	var flags []string
+	result := PhoneResult{Valid: p.Valid}
+
+	if p.Valid {
+
+		if p.Risk != nil {
+			if p.Risk.IsVirtual || p.Risk.IsVoIP {
+				// VoIP and virtual share a single deduction — apply once.
+				if p.Risk.IsVirtual {
+					flags = append(flags, "phone_virtual")
+				}
+
+				if p.Risk.IsVoIP {
+					flags = append(flags, "phone_voip")
+				}
+				score -= 0.3
+			}
+
+			result.Risk = &PhoneRisk{IsVoIP: p.Risk.IsVoIP, IsVirtual: p.Risk.IsVirtual}
+		}
+
+		if p.Type == "unknown" {
+			// Cannot determine line type — minor confidence penalty.
+			flags = append(flags, "phone_unknown_type")
+			score -= 0.1
+
+		}
+
+		if p.Type == "landline" {
+			// Landline is less common for contact forms — slight penalty.
+			score -= 0.05
+		}
+
+		result.Normalized = p.Formatted
+		result.Country = p.Country
+		result.Type = p.Type
+		if p.Carrier != nil && p.Carrier.Name != "" {
+			result.Carrier = &CarrierInfo{Name: p.Carrier.Name}
+		}
+
+	} else {
+		// Invalid number — full deduction.
+		flags = append(flags, "phone_invalid")
+		score -= 1.0
+	}
+
+	result.Flags = flags
+	result.QualityScore = math.Max(0, score)
+	return result, math.Max(0, score)
+}
+
+func buildTextResult(p profanity.Result, sent sentiment.Result) TextResult {
+	result := TextResult{
+		IsSafe:    true,
+		Sentiment: sent.Sentiment,
+	}
+	if p.HasProfanity {
+		result.IsSafe = false
+		result.Flags = append(result.Flags, "text_profanity")
+	}
+
+	return result
 }
