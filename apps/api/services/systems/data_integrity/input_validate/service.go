@@ -215,9 +215,9 @@ func (s *Service) Validate(ctx context.Context, emailAddress, phoneNumber, text 
 	}
 }
 
-func buildEmailResult(emailAddress string, e email.Validation) (EmailResult, float64) {
+func buildEmailResult(emailAddress string, e email.Validation) (result EmailResult, score float64) {
 
-	score := 1.0
+	score = 1.0
 	var flags []string
 
 	if !e.SyntaxValid {
@@ -259,10 +259,10 @@ func buildEmailResult(emailAddress string, e email.Validation) (EmailResult, flo
 
 }
 
-func buildPhoneResult(p phone.ValidateResponse) (PhoneResult, float64) {
-	score := 1.0
+func buildPhoneResult(p phone.ValidateResponse) (result PhoneResult, score float64) {
+	score = 1.0
 	var flags []string
-	result := PhoneResult{Valid: p.Valid}
+	result = PhoneResult{Valid: p.Valid}
 
 	if p.Valid {
 
