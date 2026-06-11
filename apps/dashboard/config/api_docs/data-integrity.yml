@@ -123,14 +123,14 @@ endpoints:
         type: boolean
         description: True when the phone number is valid and dialable.
       - name: phone.normalized
-        type: string
-        description: Normalized phone number in international format. Omitted when invalid.
+        type: string or null
+        description: Normalized phone number in international format. Null when the number is invalid.
       - name: phone.country
         type: string or null
-        description: ISO 3166-1 alpha-2 country code detected from the number (e.g. US, CO).
+        description: ISO 3166-1 alpha-2 country code detected from the number (e.g. US, CO). Null when the number is invalid.
       - name: phone.type
         type: string or null
-        description: "Line type. Possible values: mobile, landline, voip, toll_free, unknown."
+        description: "Line type. Null when the number is invalid. Possible values: mobile, landline, voip, toll_free, unknown."
       - name: phone.carrier
         type: object or null
         description: Carrier information. Null when not available.

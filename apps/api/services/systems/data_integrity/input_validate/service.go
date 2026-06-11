@@ -48,9 +48,9 @@ type EmailResult struct {
 // enriched with quality signals and flags computed by this system.
 type PhoneResult struct {
 	Valid        bool         `json:"valid"`
-	Normalized   string       `json:"normalized,omitempty"`
-	Country      string       `json:"country,omitempty"`
-	Type         string       `json:"type,omitempty"`
+	Normalized   *string      `json:"normalized"`
+	Country      *string      `json:"country"`
+	Type         *string      `json:"type"`
 	Carrier      *CarrierInfo `json:"carrier"`
 	Risk         *PhoneRisk   `json:"risk"`
 	Flags        []string     `json:"flags"`
@@ -294,9 +294,9 @@ func buildPhoneResult(p phone.ValidateResponse) (result PhoneResult, score float
 			score -= 0.05
 		}
 
-		result.Normalized = p.Formatted
-		result.Country = p.Country
-		result.Type = p.Type
+		result.Normalized = &p.Formatted
+		result.Country = &p.Country
+		result.Type = &p.Type
 		if p.Carrier != nil && p.Carrier.Name != "" {
 			result.Carrier = &CarrierInfo{Name: p.Carrier.Name}
 		}
