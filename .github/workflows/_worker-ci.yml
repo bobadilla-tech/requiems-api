@@ -66,14 +66,14 @@ jobs:
         run: pnpm exec vitest run --coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ inputs.app-path }}/coverage/lcov.info
           flags: ${{ inputs.app-name }}
 
       - name: Upload shared coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ inputs.app-path }}/coverage/lcov.info
