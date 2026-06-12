@@ -1,0 +1,70 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      Know how your text lands.
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      Classify any text as positive, negative, or neutral — with a confidence score and full breakdown, in a single API call.
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= link_to new_user_registration_path,
+            class: "inline-flex items-center px-6 py-3 rounded-lg text-white font-semibold text-base shadow-sm transition-colors",
+            style: "background-color:#1D9E75;" do %>
+        Get API Key
+        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+      <%= link_to api_path("sentiment"),
+            class: "inline-flex items-center px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" do %>
+        Read the docs
+      <% end %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="sentiment-demo">
+
+      <form data-action="submit->sentiment-demo#analyze" novalidate>
+        <textarea
+          data-sentiment-demo-target="input"
+          aria-label="Text to analyze"
+          placeholder="Paste any text, review, comment, or feedback..."
+          rows="3"
+          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent text-sm resize-none"
+          style="focus-ring-color:#1D9E75;"
+        ></textarea>
+
+        <div class="mt-2 flex items-center justify-between">
+          <p class="text-xs text-gray-400 dark:text-gray-500">No account required for the demo.</p>
+          <button
+            type="submit"
+            data-sentiment-demo-target="button"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold text-sm transition-colors disabled:opacity-60"
+            style="background-color:#1D9E75;"
+          >
+            <span data-sentiment-demo-target="spinner" class="hidden">
+              <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </span>
+            Analyze
+          </button>
+        </div>
+
+        <p data-sentiment-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <div data-sentiment-demo-target="result"
+           class="hidden mt-4 text-left">
+      </div>
+    </div>
+
+  </div>
+</section>
