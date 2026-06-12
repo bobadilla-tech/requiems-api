@@ -298,7 +298,7 @@ func buildPhoneResult(p phone.ValidateResponse) (result PhoneResult, score float
 		result.Normalized = &p.Formatted
 		result.Country = &p.Country
 		result.Type = &p.Type
-		
+
 		if p.Carrier != nil && p.Carrier.Name != "" {
 			result.Carrier = &CarrierInfo{Name: p.Carrier.Name}
 		}
