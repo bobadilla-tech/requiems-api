@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -26,6 +27,8 @@ func BindAndValidate(r *http.Request, dst any) error {
 	if err := dec.Decode(dst); err != nil {
 		return fmt.Errorf("invalid JSON: %w", err)
 	}
+
+	normalizeStruct(dst)
 
 	return validateStruct(dst)
 }
@@ -62,7 +65,62 @@ func BindQuery(r *http.Request, dst any) error {
 		}
 	}
 
+	normalizeStruct(dst)
+
 	return validateStruct(dst)
+}
+
+// normalizeStruct applies opt-in field normalization rules before validation.
+// Currently supported rules:
+//   - normalize:"trim" for string fields
+func normalizeStruct(dst any) {
+	v := reflect.ValueOf(dst)
+	if v.Kind() != reflect.Pointer || v.IsNil() {
+		return
+	}
+
+	normalizeValue(v.Elem())
+}
+
+func normalizeValue(v reflect.Value) {
+	switch v.Kind() {
+	case reflect.Pointer:
+		if v.IsNil() {
+			return
+		}
+		normalizeValue(v.Elem())
+
+	case reflect.Struct:
+		t := v.Type()
+		for i := range t.NumField() {
+			field := t.Field(i)
+			fv := v.Field(i)
+
+			if fv.Kind() == reflect.String && hasNormalizeTrim(field.Tag.Get("normalize")) {
+				if fv.CanSet() {
+					fv.SetString(strings.TrimSpace(fv.String()))
+				}
+				continue
+			}
+
+			normalizeValue(fv)
+		}
+
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			normalizeValue(v.Index(i))
+		}
+	}
+}
+
+func hasNormalizeTrim(tag string) bool {
+	for _, part := range strings.Split(tag, ",") {
+		if strings.TrimSpace(part) == "trim" {
+			return true
+		}
+	}
+
+	return false
 }
 
 // setFieldValue sets a struct field from a raw string value, converting to the

@@ -249,11 +249,46 @@ func TestInputValidate_Validate_VoIPPhone_ReturnsVoIPFlagAndReducedScore(t *test
 	assert.Equal(t, 0.7, resp.Data.Phone.QualityScore) // 1.0 - 0.3 voip deduction
 }
 
+func TestInputValidate_Validate_LandlinePhone_ReturnsLandlineFlagAndReducedScore(t *testing.T) {
+	t.Parallel()
+	phoneSvc := &stubPhoneService{
+		phoneResult: phone.ValidateResponse{
+			Valid:     true,
+			Formatted: "+12015551234",
+			Country:   "US",
+			Type:      "landline",
+			Carrier:   nil,
+			Risk:      &phone.Risk{IsVoIP: false, IsVirtual: false},
+		},
+	}
+
+	r := setupRouter(&stubEmailService{}, phoneSvc, &stubProfanityService{}, &stubSentimentService{})
+	w := post(t, r, `{"phone": "+12015551234"}`)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[Response]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+
+	assert.Equal(t, "landline", *resp.Data.Phone.Type)
+	assert.Contains(t, resp.Data.Phone.Flags, "phone_landline")
+	assert.Equal(t, 0.95, resp.Data.Phone.QualityScore) // 1.0 - 0.05 landline deduction
+}
+
 func TestInputValidate_Validate_NoFieldsPresent_Returns422(t *testing.T) {
 	t.Parallel()
 
 	r := setupRouter(&stubEmailService{}, &stubPhoneService{}, &stubProfanityService{}, &stubSentimentService{})
 	w := post(t, r, `{}`)
+
+	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
+}
+
+func TestInputValidate_Validate_WhitespaceOnlyFields_Returns422(t *testing.T) {
+	t.Parallel()
+
+	r := setupRouter(&stubEmailService{}, &stubPhoneService{}, &stubProfanityService{}, &stubSentimentService{})
+	w := post(t, r, `{"email":"   ","phone":"\t\n","text":"   "}`)
 
 	require.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }

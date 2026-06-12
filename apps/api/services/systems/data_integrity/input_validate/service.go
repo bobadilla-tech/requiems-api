@@ -14,9 +14,9 @@ import (
 // Request defines the input for the validate endpoint.
 // At least one of Email, Phone, or Text must be present.
 type Request struct {
-	Email string `json:"email" validate:"required_without_all=Phone Text"`
-	Phone string `json:"phone" validate:"required_without_all=Email Text"`
-	Text  string `json:"text"  validate:"required_without_all=Email Phone"`
+	Email string `json:"email" validate:"required_without_all=Phone Text" normalize:"trim"`
+	Phone string `json:"phone" validate:"required_without_all=Email Text" normalize:"trim"`
+	Text  string `json:"text"  validate:"required_without_all=Email Phone" normalize:"trim"`
 }
 
 // CarrierInfo holds the name of the carrier associated with a phone number.
@@ -291,12 +291,14 @@ func buildPhoneResult(p phone.ValidateResponse) (result PhoneResult, score float
 
 		if p.Type == "landline" {
 			// Landline is less common for contact forms — slight penalty.
+			flags = append(flags, "phone_landline")
 			score -= 0.05
 		}
 
 		result.Normalized = &p.Formatted
 		result.Country = &p.Country
 		result.Type = &p.Type
+		
 		if p.Carrier != nil && p.Carrier.Name != "" {
 			result.Carrier = &CarrierInfo{Name: p.Carrier.Name}
 		}
@@ -317,6 +319,7 @@ func buildTextResult(p profanity.Result, sent sentiment.Result) TextResult {
 		IsSafe:    true,
 		Sentiment: sent.Sentiment,
 	}
+
 	if p.HasProfanity {
 		result.IsSafe = false
 		result.Flags = append(result.Flags, "text_profanity")
