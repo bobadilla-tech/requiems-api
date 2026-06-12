@@ -1,52 +1,54 @@
 # Batch APIs Expansion — Wave 2
 
-Twelve existing single-item endpoints have no batch equivalent. One API (dictionary) is deferred
-pending single-item implementation.
+Twelve existing single-item endpoints have no batch equivalent. One API
+(dictionary) is deferred pending single-item implementation.
 
-All twelve services exist and are wired into their domain routers. No new domains, new top-level
-routes, or new dependencies are required. Every change is additive: new types, a new `BatchXxx`
-service method, and a new `httpx.HandleBatch` registration in each service's existing
-`transport_http.go`.
+All twelve services exist and are wired into their domain routers. No new
+domains, new top-level routes, or new dependencies are required. Every change is
+additive: new types, a new `BatchXxx` service method, and a new
+`httpx.HandleBatch` registration in each service's existing `transport_http.go`.
 
 ---
 
 ## Standards Applied
 
-All batch endpoints in this expansion follow `docs/core/batch-apis.md` without exception:
+All batch endpoints in this expansion follow `docs/core/batch-apis.md` without
+exception:
 
-| Topic                                  | Standard                                                         |
-| -------------------------------------- | ---------------------------------------------------------------- |
-| HTTP method                            | `POST`                                                           |
-| Path                                   | `/resource/batch` under the same prefix as the single-item route |
-| Go handler                             | `httpx.HandleBatch` — sets `X-Usage-Count` automatically         |
-| Max items (in-memory / local)          | 50                                                               |
-| Max items (outbound HTTP)              | 20                                                               |
-| Max items (domain-info DNS)            | 10 — each domain fans out 5 DNS queries internally               |
-| Error model                            | Partial success: per-item `error` field; top-level 200           |
-| Service layer                          | Real batch method — no loop over single-item method for I/O      |
-| Result ordering                        | Same order as input array                                        |
+| Topic                         | Standard                                                         |
+| ----------------------------- | ---------------------------------------------------------------- |
+| HTTP method                   | `POST`                                                           |
+| Path                          | `/resource/batch` under the same prefix as the single-item route |
+| Go handler                    | `httpx.HandleBatch` — sets `X-Usage-Count` automatically         |
+| Max items (in-memory / local) | 50                                                               |
+| Max items (outbound HTTP)     | 20                                                               |
+| Max items (domain-info DNS)   | 10 — each domain fans out 5 DNS queries internally               |
+| Error model                   | Partial success: per-item `error` field; top-level 200           |
+| Service layer                 | Real batch method — no loop over single-item method for I/O      |
+| Result ordering               | Same order as input array                                        |
 
 ---
 
 ## Endpoint Inventory
 
-| API                    | New endpoint                             | Domain         | Batch strategy                                    |
-| ---------------------- | ---------------------------------------- | -------------- | ------------------------------------------------- |
-| Color Conversion       | `POST /v1/technology/color/batch`        | `technology`   | Sequential (pure in-memory math)                  |
-| Data Format Conversion | `POST /v1/technology/format/batch`       | `technology`   | Sequential (in-memory encoding libs); max 20      |
-| Language Detection     | `POST /v1/text/detect-language/batch`    | `text`         | Sequential (in-memory `lingua-go`)                |
-| Thesaurus              | `POST /v1/text/thesaurus/batch`          | `text`         | Sequential (in-memory `thesaurusData` map)        |
-| Cities                 | `POST /v1/places/cities/batch`           | `places`       | Sequential (in-memory GeoNames map)               |
-| Chuck Norris Facts     | `POST /v1/entertainment/chuck-norris/batch` | `entertainment` | Sequential N random draws (`crypto/rand`)       |
-| Dad Jokes              | `POST /v1/entertainment/jokes/dad/batch` | `entertainment` | Sequential N random draws (`math/rand/v2`)       |
-| BIN Lookup             | `POST /v1/finance/bin/batch`             | `finance`      | Single `WHERE bin_prefix = ANY($1)` DB query      |
-| Commodity Prices       | `POST /v1/finance/commodities/batch`     | `finance`      | Single `WHERE slug = ANY($1)` DB query; max 20    |
-| Crypto Prices          | `POST /v1/finance/crypto/batch`          | `finance`      | Redis cache check + single CoinGecko call; max 20 |
-| Domain Info            | `POST /v1/networking/domain/batch`       | `networking`   | Goroutines + semaphore (DNS); max 10              |
-| Counter                | `POST /v1/technology/counter/batch`      | `technology`   | Redis pipeline (INCR per namespace)               |
+| API                    | New endpoint                                | Domain          | Batch strategy                                    |
+| ---------------------- | ------------------------------------------- | --------------- | ------------------------------------------------- |
+| Color Conversion       | `POST /v1/technology/color/batch`           | `technology`    | Sequential (pure in-memory math)                  |
+| Data Format Conversion | `POST /v1/technology/format/batch`          | `technology`    | Sequential (in-memory encoding libs); max 20      |
+| Language Detection     | `POST /v1/text/detect-language/batch`       | `text`          | Sequential (in-memory `lingua-go`)                |
+| Thesaurus              | `POST /v1/text/thesaurus/batch`             | `text`          | Sequential (in-memory `thesaurusData` map)        |
+| Cities                 | `POST /v1/places/cities/batch`              | `places`        | Sequential (in-memory GeoNames map)               |
+| Chuck Norris Facts     | `POST /v1/entertainment/chuck-norris/batch` | `entertainment` | Sequential N random draws (`crypto/rand`)         |
+| Dad Jokes              | `POST /v1/entertainment/jokes/dad/batch`    | `entertainment` | Sequential N random draws (`math/rand/v2`)        |
+| BIN Lookup             | `POST /v1/finance/bin/batch`                | `finance`       | Single `WHERE bin_prefix = ANY($1)` DB query      |
+| Commodity Prices       | `POST /v1/finance/commodities/batch`        | `finance`       | Single `WHERE slug = ANY($1)` DB query; max 20    |
+| Crypto Prices          | `POST /v1/finance/crypto/batch`             | `finance`       | Redis cache check + single CoinGecko call; max 20 |
+| Domain Info            | `POST /v1/networking/domain/batch`          | `networking`    | Goroutines + semaphore (DNS); max 10              |
+| Counter                | `POST /v1/technology/counter/batch`         | `technology`    | Redis pipeline (INCR per namespace)               |
 
-> **Dictionary** (`/v1/text/dictionary/batch`) is deferred — `apps/api/services/text/dictionary/`
-> does not exist. Spec this endpoint only after single-item service is live.
+> **Dictionary** (`/v1/text/dictionary/batch`) is deferred —
+> `apps/api/services/text/dictionary/` does not exist. Spec this endpoint only
+> after single-item service is live.
 
 ---
 
@@ -118,9 +120,10 @@ func (s *Service) ConvertBatch(items []ColorQuery) []BatchColorItem
 
 **Files:** `apps/api/services/technology/format/`
 
-Stateless in-memory encoding. Sequential loop. Max **20** — each item may be up to 512 KB;
-total body must stay ≤ 1 MiB (`http.MaxBytesReader`). Enforce per-item 512 KB limit in service and
-return in-band error if exceeded (do not reject the whole batch).
+Stateless in-memory encoding. Sequential loop. Max **20** — each item may be up
+to 512 KB; total body must stay ≤ 1 MiB (`http.MaxBytesReader`). Enforce
+per-item 512 KB limit in service and return in-band error if exceeded (do not
+reject the whole batch).
 
 **Request / Response:**
 
@@ -280,8 +283,8 @@ func (s *Service) LookupBatch(words []string) []BatchThesaurusItem
 
 **Files:** `apps/api/services/places/cities/`
 
-In-memory GeoNames map. O(1) per lookup. Sequential loop. "Not found" is a valid outcome —
-`found: false`, not an error.
+In-memory GeoNames map. O(1) per lookup. Sequential loop. "Not found" is a valid
+outcome — `found: false`, not an error.
 
 **Request / Response:**
 
@@ -333,7 +336,8 @@ func (s *Service) FindBatch(names []string) []BatchCityItem
 
 **Files:** `apps/api/services/entertainment/chucknorris/`
 
-In-memory facts slice. No per-item input — caller requests N random facts. Repeats are allowed.
+In-memory facts slice. No per-item input — caller requests N random facts.
+Repeats are allowed.
 
 **Request / Response:**
 
@@ -378,7 +382,8 @@ func (s *Service) RandomBatch(n int) []Fact
 
 **Files:** `apps/api/services/entertainment/jokes/`
 
-In-memory jokes slice. No per-item input — caller requests N random jokes. Repeats are allowed.
+In-memory jokes slice. No per-item input — caller requests N random jokes.
+Repeats are allowed.
 
 **Request / Response:**
 
@@ -423,8 +428,8 @@ func (s *Service) RandomBatch(n int) []DadJoke
 
 **Files:** `apps/api/services/finance/bin/`
 
-PostgreSQL `bin_data` table. Single query fetches all matching rows; re-apply exact-match vs.
-prefix fallback logic in-memory per row after fetch.
+PostgreSQL `bin_data` table. Single query fetches all matching rows; re-apply
+exact-match vs. prefix fallback logic in-memory per row after fetch.
 
 **Request / Response:**
 
@@ -477,8 +482,9 @@ func (s *Service) LookupBatch(ctx context.Context, bins []string) []BatchBINItem
 
 **Files:** `apps/api/services/finance/commodities/`
 
-PostgreSQL `commodity_price_history` table. Single query with `WHERE slug = ANY($1)`.
-Max **20** — each commodity returns up to 11 years of history (historyDepth = 11).
+PostgreSQL `commodity_price_history` table. Single query with
+`WHERE slug = ANY($1)`. Max **20** — each commodity returns up to 11 years of
+history (historyDepth = 11).
 
 **Request / Response:**
 
@@ -535,9 +541,9 @@ func (s *Service) GetBatch(ctx context.Context, slugs []string) []BatchCommodity
 
 **Files:** `apps/api/services/finance/crypto/`
 
-CoinGecko HTTP API + Redis cache (5-min TTL). CoinGecko's `/simple/price` endpoint accepts a
-comma-separated `ids` param, so cache misses collapse to **one outbound HTTP call**.
-Max **20** — CoinGecko free-tier rate-limit caution.
+CoinGecko HTTP API + Redis cache (5-min TTL). CoinGecko's `/simple/price`
+endpoint accepts a comma-separated `ids` param, so cache misses collapse to
+**one outbound HTTP call**. Max **20** — CoinGecko free-tier rate-limit caution.
 
 **Request / Response:**
 
@@ -592,11 +598,12 @@ func (s *Service) GetPriceBatch(ctx context.Context, symbols []string) []BatchCr
 
 **Files:** `apps/api/services/networking/domain/`
 
-Live DNS lookups. The existing `GetInfo()` already fans out 5 parallel DNS queries per domain
-via `sync.WaitGroup`. Max **10** — 10 domains × 5 DNS queries = up to 50 concurrent lookups.
+Live DNS lookups. The existing `GetInfo()` already fans out 5 parallel DNS
+queries per domain via `sync.WaitGroup`. Max **10** — 10 domains × 5 DNS queries
+= up to 50 concurrent lookups.
 
-Validate domain format against existing regex before dispatching goroutines; mark invalid domains
-in-band without dispatching a goroutine.
+Validate domain format against existing regex before dispatching goroutines;
+mark invalid domains in-band without dispatching a goroutine.
 
 **Request / Response:**
 
@@ -651,12 +658,13 @@ func (s *Service) GetInfoBatch(ctx context.Context, domains []string) []BatchDom
 
 **Files:** `apps/api/services/technology/counter/`
 
-Redis (hot) + PostgreSQL (cold). Batch increments all namespaces by 1 each, matching
-single-item `POST /counter/{namespace}` semantics. Redis pipeline reduces N INCR calls to
-one round-trip. Validate each namespace against existing regex `^[a-zA-Z0-9_-]{1,64}$`
-in-band before pipeline dispatch.
+Redis (hot) + PostgreSQL (cold). Batch increments all namespaces by 1 each,
+matching single-item `POST /counter/{namespace}` semantics. Redis pipeline
+reduces N INCR calls to one round-trip. Validate each namespace against existing
+regex `^[a-zA-Z0-9_-]{1,64}$` in-band before pipeline dispatch.
 
-> `UpsertBatch()` in `repository.go` is an internal sync-worker method — do **not** reuse it here.
+> `UpsertBatch()` in `repository.go` is an internal sync-worker method — do
+> **not** reuse it here.
 
 **Request / Response:**
 
@@ -707,41 +715,45 @@ func (s *service) IncrementBatch(ctx context.Context, namespaces []string) []Bat
 
 ## Implementation Order
 
-| Step | Service                     | Reason                                                            |
-| ---- | --------------------------- | ----------------------------------------------------------------- |
-| 1    | Chuck Norris Facts          | Simplest: `count` only, no per-item fields, no failure cases      |
-| 2    | Dad Jokes                   | Same pattern; validates entertainment domain wiring               |
-| 3    | Language Detection          | Single string slice, in-band error for empty text                 |
-| 4    | Thesaurus                   | Introduces `found`-equivalent via error field                     |
-| 5    | Cities                      | Introduces explicit `found: bool` pattern                         |
-| 6    | Color Conversion            | Per-item fields, in-band error on bad value                       |
-| 7    | Data Format Conversion      | Per-item fields + per-item size enforcement                       |
-| 8    | BIN Lookup                  | First DB batch query; validates `WHERE ... ANY($1)` pattern       |
-| 9    | Commodity Prices            | DB batch with in-memory grouping + depth cap                      |
-| 10   | Crypto Prices               | Cache-aware batch + single outbound HTTP consolidation            |
-| 11   | Counter                     | Redis pipeline; validates stateful batch semantics                |
-| 12   | Domain Info                 | Most complex; goroutines + semaphore + nested concurrency in GetInfo |
+| Step | Service                | Reason                                                               |
+| ---- | ---------------------- | -------------------------------------------------------------------- |
+| 1    | Chuck Norris Facts     | Simplest: `count` only, no per-item fields, no failure cases         |
+| 2    | Dad Jokes              | Same pattern; validates entertainment domain wiring                  |
+| 3    | Language Detection     | Single string slice, in-band error for empty text                    |
+| 4    | Thesaurus              | Introduces `found`-equivalent via error field                        |
+| 5    | Cities                 | Introduces explicit `found: bool` pattern                            |
+| 6    | Color Conversion       | Per-item fields, in-band error on bad value                          |
+| 7    | Data Format Conversion | Per-item fields + per-item size enforcement                          |
+| 8    | BIN Lookup             | First DB batch query; validates `WHERE ... ANY($1)` pattern          |
+| 9    | Commodity Prices       | DB batch with in-memory grouping + depth cap                         |
+| 10   | Crypto Prices          | Cache-aware batch + single outbound HTTP consolidation               |
+| 11   | Counter                | Redis pipeline; validates stateful batch semantics                   |
+| 12   | Domain Info            | Most complex; goroutines + semaphore + nested concurrency in GetInfo |
 
 ---
 
 ## Documentation Requirements (per endpoint)
 
-- [ ] Batch types + service method added to existing `service.go` and `transport_http.go`
-- [ ] Route registered in existing `RegisterRoutes()` — no `router.go` changes needed
+- [ ] Batch types + service method added to existing `service.go` and
+      `transport_http.go`
+- [ ] Route registered in existing `RegisterRoutes()` — no `router.go` changes
+      needed
 - [ ] `transport_http_test.go` covers: happy path (N items), empty array → 422,
       oversize → 422, mixed valid/invalid → 200 partial
 - [ ] `service_test.go` covers `BatchXxx` method when non-trivial logic exists
-- [ ] `apps/dashboard/config/api_docs/{name}.yml` — batch endpoint section added:
+- [ ] `apps/dashboard/config/api_docs/{name}.yml` — batch endpoint section
+      added:
   - Correct `method: POST` and path
   - `request_example` and `response_example` with `data/metadata` wrapper
   - Parameters with `min=1,max=N` documented
   - Error table: `validation_failed` (422), `internal_error` (500)
-  - Code examples in curl, Python, JavaScript, Ruby using `requiems-api-key` header
-- [ ] `apps/dashboard/config/api_catalog.yml` — `batch_eligible: true` and `endpoints_count`
-      incremented for each affected API
+  - Code examples in curl, Python, JavaScript, Ruby using `requiems-api-key`
+    header
+- [ ] `apps/dashboard/config/api_catalog.yml` — `batch_eligible: true` and
+      `endpoints_count` incremented for each affected API
 - [ ] `docs/apis/{category}/{name}.md` — batch endpoint section added
-- [ ] `apps/workers/shared/src/config.ts` — no changes; `HandleBatch` sets `X-Usage-Count`
-      dynamically
+- [ ] `apps/workers/shared/src/config.ts` — no changes; `HandleBatch` sets
+      `X-Usage-Count` dynamically
 
 ---
 
