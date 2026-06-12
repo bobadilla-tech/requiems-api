@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@sentry/cloudflare':
-        specifier: ^10.55.0
-        version: 10.55.0(@cloudflare/workers-types@4.20260611.1)
+        specifier: ^10.57.0
+        version: 10.57.0(@cloudflare/workers-types@4.20260611.1)
       hono:
         specifier: ^4.12.25
         version: 4.12.25
@@ -927,8 +927,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@sentry/cloudflare@10.55.0':
-    resolution: {integrity: sha512-1FcCtbQb60bKJGQuxtTzqicolRea9SK8DdwZKMKjBNjuqsSDf48jh//nE05/qX0NIj7NxsmsLeTtxchMIrz6AQ==}
+  '@sentry/cloudflare@10.57.0':
+    resolution: {integrity: sha512-LDKk177la/uG92ILNozcwQR7+4/pizPu01Y7M7l9J7o1uwAi9WjElafh/HU2Jqw+vST1BKknw/tQB1pnsnkDlA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cloudflare/workers-types': ^4.x
@@ -936,8 +936,8 @@ packages:
       '@cloudflare/workers-types':
         optional: true
 
-  '@sentry/core@10.55.0':
-    resolution: {integrity: sha512-XUyoNtDSYCvgJnoNzlh+YeAXfIPhCRIXbhWqqM3GQ3AFtZICi85lkyfsrwXEl9wzlPGYnU+Eg8F4tOfScx+FcQ==}
+  '@sentry/core@10.57.0':
+    resolution: {integrity: sha512-kntItTA2kiT0YpL7encXaF6mkdZMB+y48lwj8w1wkfBpfJAC7sifdgrzLQZqmsqVNE3crg9VfufaAGA+78uFMg==}
     engines: {node: '>=18'}
 
   '@sindresorhus/is@7.2.0':
@@ -1870,14 +1870,14 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.61.1':
     optional: true
 
-  '@sentry/cloudflare@10.55.0(@cloudflare/workers-types@4.20260611.1)':
+  '@sentry/cloudflare@10.57.0(@cloudflare/workers-types@4.20260611.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@sentry/core': 10.55.0
+      '@sentry/core': 10.57.0
     optionalDependencies:
       '@cloudflare/workers-types': 4.20260611.1
 
-  '@sentry/core@10.55.0': {}
+  '@sentry/core@10.57.0': {}
 
   '@sindresorhus/is@7.2.0': {}
 
