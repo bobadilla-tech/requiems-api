@@ -16,7 +16,7 @@
   reverse     = local_assigns.fetch(:reverse, false)
   speed       = local_assigns.fetch(:speed, "32s")
   bg_class    = local_assigns.fetch(:bg_class,    "bg-white dark:bg-gray-950 border-y border-gray-100 dark:border-gray-800")
-  label_class = local_assigns.fetch(:label_class, "text-gray-400 dark:text-gray-500")
+  label_class = local_assigns.fetch(:label_class, "text-gray-500 dark:text-gray-400")
   logo_class  = local_assigns.fetch(:logo_class,  "opacity-60 hover:opacity-100 hover:brightness-110 transition-all duration-300")
 
   anim_name   = reverse ? "lm-reverse-#{speed.gsub(/\W/,'')}" : "lm-forward-#{speed.gsub(/\W/,'')}"
