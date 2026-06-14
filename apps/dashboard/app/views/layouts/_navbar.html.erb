@@ -7,7 +7,7 @@
       <div class="flex-shrink-0 pl-2 sm:pl-4">
         <%= link_to root_path, class: "flex items-center space-x-2" do %>
           <span class="logo-circle">
-            <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-6 w-auto" %>
+            <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-6 w-auto", width: "23", height: "24" %>
           </span>
           <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Requiems</span>
           <span class="text-sm font-medium text-gray-500 dark:text-gray-400">API</span>
@@ -24,7 +24,7 @@
           <button type="button"
                   data-action="click->theme#toggle"
                   class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  aria-label="Toggle dark mode">
+                  aria-label="<%= t('shared.nav.toggle_dark_mode') %>">
             <span data-theme-target="moon">
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -174,6 +174,7 @@
 
                   <!-- Clear Button -->
                   <button type="button"
+                          aria-label="<%= t('shared.nav.clear_search') %>"
                           data-action="click->navbar-search#clear"
                           class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,6 +216,7 @@
                 <div class="mt-1 space-y-1 px-1 pb-1">
                   <%= link_to t("shared.nav.apis"), apis_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
                   <%= link_to t("shared.nav.examples"), examples_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
+                  <%= link_to t("shared.nav.tools"), tools_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
                   <%= link_to t("shared.nav.divisions"), divisions_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
                   <%= link_to t("shared.nav.compare"), comparisons_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>
                   <%= link_to t("shared.nav.industries"), industries_path, class: "block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700" %>

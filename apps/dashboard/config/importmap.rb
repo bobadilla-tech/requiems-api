@@ -11,4 +11,4 @@ pin "Chart.bundle", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/+esm"
 
 pin "highlight.js", to: "https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/+esm"
 
-pin "flatpickr", to: "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/+esm"
+pin "flatpickr", to: "https://esm.sh/flatpickr@4.6.13?target=es2020"
