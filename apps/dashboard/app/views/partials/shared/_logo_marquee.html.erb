@@ -71,7 +71,7 @@
       <% 2.times do %>
         <% logos.each do |logo| %>
           <div class="lm-slot">
-            <%= image_tag logo[:file], alt: logo[:alt], class: logo_class %>
+            <%= image_tag logo[:file], alt: logo[:alt], class: logo_class, width: "172", height: "40" %>
           </div>
         <% end %>
       <% end %>
