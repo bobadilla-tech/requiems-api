@@ -1,0 +1,60 @@
+<% faqs = [
+  {
+    q: "What does 'valid: true' mean exactly?",
+    a: "It means the address passes RFC 5322 syntax validation and the domain has at least one MX record — confirming it can receive mail."
+  },
+  {
+    q: "Does it check if the specific mailbox exists?",
+    a: "No. MX lookup verifies that the domain is configured to receive email, but it cannot confirm whether the specific inbox exists without attempting delivery. For most signup and data-quality use cases, MX validation is sufficient."
+  },
+  {
+    q: "How does typo suggestion work?",
+    a: "The API compares the domain against a curated list of well-known providers (Gmail, Yahoo, Outlook, iCloud, ProtonMail, and others) using Levenshtein edit distance. A suggestion is returned only when the domain is 1–2 characters off."
+  },
+  {
+    q: "Can I validate multiple emails at once?",
+    a: "Yes. The batch endpoint accepts up to 50 emails per request. Each address is validated independently and results preserve the input order."
+  },
+  {
+    q: "Is it free to use?",
+    a: "The demo above works without an account. Paid plans are available for production scale with higher rate limits and full API access."
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Frequently asked questions</h2>
+    </div>
+
+    <div class="space-y-3" data-controller="faq-accordion">
+      <% faqs.each_with_index do |faq, i| %>
+        <% panel_id = "email-validator-faq-#{i}" %>
+        <% button_id = "#{panel_id}-button" %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <button type="button"
+                  id="<%= button_id %>"
+                  class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  data-action="click->faq-accordion#toggle"
+                  data-faq-accordion-target="button"
+                  aria-expanded="false"
+                  aria-controls="<%= panel_id %>">
+            <span class="font-medium text-gray-900 dark:text-gray-100"><%= faq[:q] %></span>
+            <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="<%= panel_id %>"
+               class="hidden px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+               role="region"
+               aria-labelledby="<%= button_id %>"
+               data-faq-accordion-target="content">
+            <%= faq[:a] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
