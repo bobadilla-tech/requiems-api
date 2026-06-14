@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis].freeze
 
   def show
     @tool_id = params[:id]

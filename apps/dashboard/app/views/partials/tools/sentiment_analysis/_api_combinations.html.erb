@@ -1,0 +1,50 @@
+<% combos = [
+  {
+    title: "Sentiment + Spell Check",
+    body: "Run spell check first to clean up noisy user input, then analyze sentiment on the corrected text for more accurate results.",
+    link_text: "Spell Check API",
+    link_id: "spell-check"
+  },
+  {
+    title: "Sentiment + Language Detection",
+    body: "Detect the language before routing text to the right sentiment model. Useful for multilingual support queues and global review platforms.",
+    link_text: "Language Detection API",
+    link_id: "language-detection"
+  },
+  {
+    title: "Sentiment + Email Validator",
+    body: "Validate the sender's email and analyze the tone of their message in one pass — before storing feedback or opening a support ticket.",
+    link_text: "Email Validator API",
+    link_id: "email-validate"
+  }
+] %>
+
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-14">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Pair it with other APIs</h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        Sentiment works best as part of a pipeline. Here are three natural combinations.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <% combos.each do |combo| %>
+        <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 flex flex-col">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= combo[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 flex-1"><%= combo[:body] %></p>
+          <%= link_to api_path(combo[:link_id]),
+                class: "mt-4 text-sm font-medium inline-flex items-center gap-1",
+                style: "color:#1D9E75;" do %>
+            <%= combo[:link_text] %>
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

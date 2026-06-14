@@ -19,6 +19,10 @@ type bindReq struct {
 	Count int    `json:"count" validate:"min=1"`
 }
 
+type bindTrimReq struct {
+	Email string `json:"email" validate:"required,email" normalize:"trim"`
+}
+
 func TestBindAndValidate_ValidJSON(t *testing.T) {
 	t.Parallel()
 
@@ -70,6 +74,18 @@ func TestBindAndValidate_ValidationFailure(t *testing.T) {
 	assert.NotEmpty(t, vf.Fields)
 }
 
+func TestBindAndValidate_NormalizeTrim(t *testing.T) {
+	t.Parallel()
+
+	body := strings.NewReader(`{"email":"  user@example.com  "}`)
+	r := httptest.NewRequest("POST", "/", body)
+
+	var req bindTrimReq
+	err := httpx.BindAndValidate(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, "user@example.com", req.Email)
+}
+
 // queryReq is used to exercise BindQuery with several field types.
 type queryReq struct {
 	Name    string    `query:"name"    validate:"required"`
@@ -78,6 +94,10 @@ type queryReq struct {
 	Active  bool      `query:"active"`
 	Since   time.Time `query:"since"`
 	Ignored string    // no query tag – must be skipped
+}
+
+type queryTrimReq struct {
+	Name string `query:"name" validate:"required" normalize:"trim"`
 }
 
 func TestBindQuery_StringField(t *testing.T) {
@@ -199,4 +219,15 @@ func TestBindQuery_NonPointerDst(t *testing.T) {
 	var req queryReq
 	err := httpx.BindQuery(r, req)
 	require.Error(t, err)
+}
+
+func TestBindQuery_NormalizeTrim(t *testing.T) {
+	t.Parallel()
+
+	r := httptest.NewRequest("GET", "/?name=%20%20alice%20%20", http.NoBody)
+
+	var req queryTrimReq
+	err := httpx.BindQuery(r, &req)
+	require.NoError(t, err)
+	assert.Equal(t, "alice", req.Name)
 }

@@ -6,6 +6,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
   test "email validator tool page renders successfully" do
     get "/en/tools/email-validator"
     assert_response :success
+  test "sentiment analysis tool page renders successfully" do
+    get "/en/tools/sentiment-analysis"
+    assert_response :success
   end
 
   test "unknown tool id redirects to root with alert" do

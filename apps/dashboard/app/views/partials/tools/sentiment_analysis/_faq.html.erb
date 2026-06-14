@@ -1,0 +1,55 @@
+<% faqs = [
+  {
+    q: "What are the possible sentiment values?",
+    a: "The sentiment field returns one of three values — positive, negative, or neutral — based on whichever class has the highest confidence score."
+  },
+  {
+    q: "What does the breakdown represent?",
+    a: "The three breakdown values (positive, negative, neutral) always sum to 1.0. They show the proportional confidence across all classes, not just the dominant one. A score of 0.97 positive means the model is highly certain; 0.51 means it's leaning positive but the text is ambiguous."
+  },
+  {
+    q: "How long can the input text be?",
+    a: "There is no strict character limit enforced at the API level, but very long inputs may be truncated by the underlying model. Aim for inputs under 512 tokens (roughly 400 words) for best accuracy."
+  },
+  {
+    q: "Can I analyze multiple texts at once?",
+    a: "Yes. The batch endpoint (POST /v1/text/sentiment/batch) accepts up to 50 texts per request. Results are returned in the same order as the input and each text counts as one unit of usage."
+  },
+  {
+    q: "Is it free to use?",
+    a: "The demo above works without an account. Paid plans offer higher rate limits and full API access for production use."
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Frequently asked questions</h2>
+    </div>
+
+    <div class="space-y-3" data-controller="faq-accordion">
+      <% faqs.each_with_index do |faq, i| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <button type="button"
+                  class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  data-action="click->faq-accordion#toggle"
+                  data-faq-accordion-target="button"
+                  aria-expanded="false"
+                  aria-controls="faq-sentiment-<%= i %>">
+            <span class="font-medium text-gray-900 dark:text-gray-100"><%= faq[:q] %></span>
+            <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="faq-sentiment-<%= i %>"
+               class="hidden px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+               data-faq-accordion-target="content">
+            <%= faq[:a] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
