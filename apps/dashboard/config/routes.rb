@@ -150,7 +150,7 @@ Rails.application.routes.draw do
     get "examples", to: "examples#index"
     get "apis/:id/index.md", to: "sitemap#api_doc", defaults: { format: :text }
     resources :apis, only: [ :index, :show ]
-    resources :tools, only: [ :show ]
+    resources :tools, only: [ :index, :show ]
     resources :categories, only: [ :show ]
     resources :examples, only: [ :show ]
 

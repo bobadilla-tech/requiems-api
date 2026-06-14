@@ -6,6 +6,7 @@ module.exports = {
     "./public/*.html",
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
+    "./app/controllers/**/*.rb",
     "./app/views/**/*.{erb,haml,html,slim}",
   ],
   safelist: [
@@ -28,6 +29,9 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        brand: { primary: "#1D9E75" },
       },
     },
   },

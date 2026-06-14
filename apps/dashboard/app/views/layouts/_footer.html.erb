@@ -78,7 +78,10 @@
         <div class="flex flex-col items-center md:items-start">
           <div class="flex items-center space-x-2">
             <span class="logo-circle">
-              <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-4 w-auto" %>
+              <picture>
+                <source srcset="<%= asset_path 'logo.webp' %>" type="image/webp">
+                <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-4 w-auto", width: "15", height: "16" %>
+              </picture>
             </span>
             <span class="text-xl font-bold text-blue-600">Requiems API</span>
           </div>
@@ -115,7 +118,7 @@
         </div>
 
         <!-- Copyright -->
-        <p class="text-sm text-gray-400 dark:text-gray-500">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
           <%= t("shared.footer.copyright", year: Time.current.year) %>
         </p>
       </div>

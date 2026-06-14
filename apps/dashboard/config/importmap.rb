@@ -6,9 +6,9 @@ pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 
-pin "chartkick", to: "https://cdn.jsdelivr.net/npm/chartkick@5.0.1/dist/chartkick.esm.js"
-pin "Chart.bundle", to: "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/+esm"
+pin "chartkick", to: "https://esm.sh/chartkick@5.0.1?target=es2020"
+pin "Chart.bundle", to: "https://esm.sh/chart.js@4.4.1?bundle&target=es2020"
 
-pin "highlight.js", to: "https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/+esm"
+pin "highlight.js", to: "https://esm.sh/highlight.js@11.9.0?target=es2020"
 
-pin "flatpickr", to: "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/+esm"
+pin "flatpickr", to: "https://esm.sh/flatpickr@4.6.13?target=es2020"
