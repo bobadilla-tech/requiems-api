@@ -71,7 +71,10 @@
       <% 2.times do %>
         <% logos.each do |logo| %>
           <div class="lm-slot">
-            <%= image_tag logo[:file], alt: logo[:alt], class: logo_class, width: "172", height: "40" %>
+            <picture>
+              <source srcset="<%= asset_path logo[:file].sub(/\.(png|jpe?g)$/, '.webp') %>" type="image/webp">
+              <%= image_tag logo[:file], alt: logo[:alt], class: logo_class, width: "172", height: "40" %>
+            </picture>
           </div>
         <% end %>
       <% end %>

@@ -7,7 +7,10 @@
       <div class="flex-shrink-0 pl-2 sm:pl-4">
         <%= link_to root_path, class: "flex items-center space-x-2" do %>
           <span class="logo-circle">
-            <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-6 w-auto", width: "23", height: "24" %>
+            <picture>
+              <source srcset="<%= asset_path 'logo.webp' %>" type="image/webp">
+              <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-6 w-auto", width: "23", height: "24" %>
+            </picture>
           </span>
           <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Requiems</span>
           <span class="text-sm font-medium text-gray-500 dark:text-gray-400">API</span>
