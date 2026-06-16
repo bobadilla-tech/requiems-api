@@ -1,0 +1,70 @@
+<section class="relative overflow-hidden py-20 px-4"
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-sm font-medium"
+         style="background-color:rgba(29,158,117,0.15); color:#1D9E75;">
+      🎯 Random Quotes API — Live Demo
+    </div>
+
+    <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
+      Random Quote Generator
+    </h1>
+    <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-10">
+      Instantly fetch inspirational quotes from famous thinkers, leaders, and
+      innovators. One API call — quote + author attribution, ready to use.
+    </p>
+
+    <%# Live demo widget %>
+    <div data-controller="quotes-demo"
+         data-quotes-demo-error-rate-limit-value="<%= t('tools.quotes.demo.error_rate_limit') %>"
+         data-quotes-demo-error-generic-value="<%= t('tools.quotes.demo.error_generic') %>"
+         data-quotes-demo-error-unexpected-value="<%= t('tools.quotes.demo.error_unexpected') %>"
+         data-quotes-demo-error-network-value="<%= t('tools.quotes.demo.error_network') %>"
+         data-quotes-demo-error-security-token-value="<%= t('tools.quotes.demo.error_security_token') %>"
+         class="bg-gray-900 border border-gray-700 rounded-2xl p-8 max-w-xl mx-auto text-left">
+
+      <div class="flex items-center gap-2 mb-6">
+        <span class="text-xs font-mono px-2 py-0.5 rounded"
+              style="background-color:#14532d; color:#86efac;">GET</span>
+        <span class="text-xs font-mono text-gray-400">/v1/entertainment/quotes/random</span>
+      </div>
+
+      <%# Result area %>
+      <div data-quotes-demo-target="result"
+           class="hidden mb-6 p-4 rounded-xl bg-gray-800 border border-gray-700">
+        <p class="text-xl text-white italic leading-relaxed mb-3"
+           data-quotes-demo-text></p>
+        <p class="text-sm font-semibold"
+           style="color:#1D9E75;"
+           data-quotes-demo-author></p>
+      </div>
+
+      <%# Error message %>
+      <p data-quotes-demo-target="errorMessage"
+         class="hidden mb-4 text-sm text-red-400 text-center"></p>
+
+      <%# Fetch button %>
+      <button data-quotes-demo-target="button"
+              data-action="click->quotes-demo#fetch"
+              type="button"
+              class="w-full flex items-center justify-center gap-2 rounded-xl py-3 px-6 text-sm font-semibold text-white transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-[#1D9E75] disabled:opacity-50"
+              style="background-color:#1D9E75;">
+        <span data-quotes-demo-target="spinner"
+              class="hidden h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+        Get a Random Quote
+      </button>
+    </div>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm">
+      <%= link_to api_path("quotes"),
+            class: "text-gray-300 hover:text-white underline underline-offset-2" do %>
+        View full API docs →
+      <% end %>
+      <%= link_to new_user_registration_path,
+            class: "font-semibold hover:opacity-90",
+            style: "color:#1D9E75;" do %>
+        Get your free API key →
+      <% end %>
+    </div>
+  </div>
+</section>
