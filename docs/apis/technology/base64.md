@@ -228,7 +228,8 @@ Response:
 }
 ```
 
-The second entry is returned as an empty string because the value could not be decoded.
+The second entry is returned as an empty string because the value could not be
+decoded.
 
 **Response headers**
 
