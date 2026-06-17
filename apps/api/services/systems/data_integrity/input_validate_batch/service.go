@@ -101,6 +101,7 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 	var (
 		mu                  sync.Mutex
 		wg                  sync.WaitGroup
+		processedCount      int
 		validCount          int
 		invalidCount        int
 		sumQualityScore     float64
@@ -154,9 +155,10 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 				}
 
 				mu.Lock()
+				processedCount++
+				sumQualityScore += result.OverallQualityScore
 				if result.Email.Valid && result.Phone.Valid {
 					validCount++
-					sumQualityScore += result.OverallQualityScore
 				} else {
 					invalidCount++
 				}
@@ -185,8 +187,8 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 
 	wg.Wait()
 
-	if validCount > 0 {
-		averageQualityScore = sumQualityScore / float64(validCount)
+	if processedCount > 0 {
+		averageQualityScore = sumQualityScore / float64(processedCount)
 	}
 
 	return BatchResponse{
