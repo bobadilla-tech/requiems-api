@@ -11,6 +11,7 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
   test "unit conversion tool page renders successfully" do
     get "/en/tools/unit-conversion"
     assert_response :success
+    assert_select "[data-controller='unit-conversion-demo']"
   end
 
   test "sentiment analysis tool page renders successfully" do

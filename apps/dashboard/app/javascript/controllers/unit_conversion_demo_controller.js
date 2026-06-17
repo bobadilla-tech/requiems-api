@@ -60,18 +60,19 @@ export default class extends Controller {
         return;
       }
 
-      const json = await response.json();
-
       if (!response.ok) {
-        this._renderError(
-          json.data?.message ||
-          json.message ||
-          json.error ||
-          `Request failed (${response.status})`
-        );
+        let message = `Request failed (${response.status})`;
+        try {
+          const errJson = await response.json();
+          message = errJson.data?.message || errJson.message || errJson.error || message;
+        } catch {
+          // non-JSON error body (e.g. HTML 500 page) — fall back to status message
+        }
+        this._renderError(message);
         return;
       }
 
+      const json = await response.json();
       this._renderResult(json.data?.data ?? json.data);
     } catch (_err) {
       this._showError("Could not reach the API. Check your connection.");
