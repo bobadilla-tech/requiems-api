@@ -17,6 +17,233 @@ overview:
     - Unicode normalization, HTML stripping, case conversion, and whitespace collapsing
     - Safe for any text content — no data is stored or logged
 endpoints:
+  - name: Batch Input Validate
+    method: POST
+    path: /v1/systems/input/validate/batch
+    description: Validates and scores a batch of up to 50 contact records in a single request. Each record is processed independently — one item failing does not affect others. Returns per-item email, phone, and text validation results with quality scores, normalized values, plus batch-level aggregates including total, valid_count, invalid_count, and average_quality_score.
+    parameters:
+      - name: items
+        type: array
+        required: true
+        location: body
+        description: "Array of contact records to validate. Each item must include email and phone. Text is optional. Min: 1, Max: 50."
+        example: '[{"email":"alice@example.com","phone":"+14155550001"},{"email":"bob@example.com","phone":"+14155550002"}]'
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "index": 0,
+              "email": {
+                "valid": true,
+                "normalized": "alice@example.com",
+                "quality_score": 1,
+                "disposable": false
+              },
+              "phone": {
+                "valid": true,
+                "normalized": "+1 415-555-0001",
+                "quality_score": 1
+              },
+                "text": null,
+                "overall_quality_score": 1,
+                "error": null
+              },
+              {
+              "index": 1,
+              "email": {
+                "valid": true,
+                "normalized": "bob@example.com",
+                "quality_score": 1,
+                "disposable": false
+              },
+              "phone": {
+                "valid": true,
+                "normalized": "+1 415-555-0002",
+                "quality_score": 1
+              },
+              "text": null,
+              "overall_quality_score": 1,
+              "error": null
+            }
+          ],
+          "total": 2,
+          "valid_count": 2,
+          "invalid_count": 0,
+          "average_quality_score": 1
+        },
+        "metadata": {
+          "timestamp": "2026-06-16T21:28:14Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array
+        description: List of validation results, one per input item. Preserves the original submission order via the index field.
+      - name: results[].index
+        type: integer
+        description: Zero-based position of the item in the original request array.
+      - name: results[].email
+        type: object or null
+        description: Email validation result. Null when email was not provided for this item.
+      - name: results[].email.valid
+        type: boolean
+        description: True when the email passes syntax and MX validation.
+      - name: results[].email.normalized
+        type: string or null
+        description: Normalized form of the email address. Null when syntax is invalid.
+      - name: results[].email.quality_score
+        type: number
+        description: Email quality score from 0.0 to 1.0. Penalized by invalidity, disposable domain, and suggestions.
+      - name: results[].email.disposable
+        type: boolean
+        description: True when the email domain is a known disposable or temporary provider.
+      - name: results[].phone
+        type: object or null
+        description: Phone validation result. Null when phone was not provided for this item.
+      - name: results[].phone.valid
+        type: boolean
+        description: True when the phone number is valid and dialable.
+      - name: results[].phone.normalized
+        type: string or null
+        description: Normalized phone number in international format. Null when the number is invalid.
+      - name: results[].phone.quality_score
+        type: number
+        description: Phone quality score from 0.0 to 1.0. Penalized by invalidity, VoIP, virtual, landline, and unknown type.
+      - name: results[].text
+        type: object or null
+        description: Text analysis result. Null when text was not provided for this item.
+      - name: results[].overall_quality_score
+        type: number
+        description: >-
+          Weighted quality score from 0.0 to 1.0 combining email and phone fields only.
+          Weights are email 0.5 and phone 0.4, adjusted proportionally when one field is absent.
+          Text does not currently contribute to this score — scoring will be enabled once
+          toxicity_score is available from the sentiment service.
+          Returns 0.0 when only text is provided.
+      - name: results[].error
+        type: string or null
+        description: >-
+          Error message when this item could not be processed due to an unexpected failure,
+          such as a service timeout or malformed input. Null when the item was processed
+          successfully, regardless of whether the fields passed validation or not.
+      - name: total
+        type: integer
+        description: Total number of items in the batch.
+      - name: valid_count
+        type: integer
+        description: Number of items where all provided fields have valid set to true.
+      - name: invalid_count
+        type: integer
+        description: Number of items where at least one provided field has valid set to false.
+      - name: average_quality_score
+        type: number
+        description: Average of overall_quality_score across all items in the batch.
+    errors:
+      - code: 422
+        message: validation_failed
+        description: The request body is invalid.
+      - code: 401
+        message: unauthorized
+        description: Missing or invalid API key.
+    code_examples:
+      curl: |
+        curl -X POST https://api.requiems.xyz/v1/systems/input/validate/batch \
+          -H "requiems-api-key: YOUR_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "items": [
+              {"email": "alice@example.com", "phone": "+12015551001"},
+              {"email": "bob@example.com", "phone": "+12015551002"},
+              {"email": "carol@example.com", "phone": "+12015551003"}
+            ]
+          }'
+      python: |
+        import requests
+
+        response = requests.post(
+          "https://api.requiems.xyz/v1/systems/input/validate/batch",
+          headers={"requiems-api-key": "YOUR_API_KEY"},
+          json={
+            "items": [
+              {"email": "alice@example.com", "phone": "+12015551001"},
+              {"email": "bob@example.com", "phone": "+12015551002"},
+              {"email": "carol@example.com", "phone": "+12015551003"}
+            ]
+          }
+        )
+
+        data = response.json()["data"]
+
+        print(f"Total: {data['total']} | Valid: {data['valid_count']} | Invalid: {data['invalid_count']}")
+        print(f"Average quality score: {data['average_quality_score']}")
+
+        for item in data["results"]:
+          print(f"\n[{item['index']}]")
+          if item.get("error"):
+            print(f"  Error: {item['error']}")
+            continue
+          if item.get("email"):
+            print(f"  Email valid: {item['email']['valid']} | Score: {item['email']['quality_score']}")
+          if item.get("phone"):
+            print(f"  Phone valid: {item['phone']['valid']} | Score: {item['phone']['quality_score']}")
+          print(f"  Overall quality score: {item['overall_quality_score']}")
+      javascript: |
+        const { data } = await fetch('https://api.requiems.xyz/v1/systems/input/validate/batch', {
+          method: 'POST',
+          headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: [
+              { email: 'alice@example.com', phone: '+12015551001' },
+              { email: 'bob@example.com', phone: '+12015551002' },
+              { email: 'carol@example.com', phone: '+12015551003' }
+            ]
+          })
+        }).then(r => r.json());
+
+        console.log(`Total: ${data.total} | Valid: ${data.valid_count} | Invalid: ${data.invalid_count}`);
+        console.log(`Average quality score: ${data.average_quality_score}`);
+
+        for (const item of data.results) {
+          console.log(`\n[${item.index}]`);
+          if (item.error) { console.log(`  Error: ${item.error}`); continue; }
+          if (item.email) console.log(`  Email valid: ${item.email.valid} | Score: ${item.email.quality_score}`);
+          if (item.phone) console.log(`  Phone valid: ${item.phone.valid} | Score: ${item.phone.quality_score}`);
+          console.log(`  Overall quality score: ${item.overall_quality_score}`);
+        }
+      ruby: |
+        require 'net/http'
+        require 'json'
+
+        uri = URI('https://api.requiems.xyz/v1/systems/input/validate/batch')
+        request = Net::HTTP::Post.new(uri)
+        request['requiems-api-key'] = 'YOUR_API_KEY'
+        request['Content-Type'] = 'application/json'
+        request.body = {
+          items: [
+            { email: 'alice@example.com', phone: '+12015551001' },
+            { email: 'bob@example.com', phone: '+12015551002' },
+            { email: 'carol@example.com', phone: '+12015551003' }
+          ]
+        }.to_json
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(request) }
+        data = JSON.parse(response.body)['data']
+
+        puts "Total: #{data['total']} | Valid: #{data['valid_count']} | Invalid: #{data['invalid_count']}"
+        puts "Average quality score: #{data['average_quality_score']}"
+
+        data['results'].each do |item|
+          puts "\n[#{item['index']}]"
+          if item['error']
+            puts "  Error: #{item['error']}"
+            next
+          end
+          puts "  Email valid: #{item['email']['valid']} | Score: #{item['email']['quality_score']}" if item['email']
+          puts "  Phone valid: #{item['phone']['valid']} | Score: #{item['phone']['quality_score']}" if item['phone']
+          puts "  Overall quality score: #{item['overall_quality_score']}"
+        end
+
   - name: Input Validate
     method: POST
     path: /v1/systems/input/validate
