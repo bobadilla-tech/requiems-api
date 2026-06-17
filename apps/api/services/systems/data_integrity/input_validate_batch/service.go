@@ -99,13 +99,12 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 	results := make([]ItemResult, len(items))
 
 	var (
-		mu                  sync.Mutex
-		wg                  sync.WaitGroup
-		processedCount      int
-		validCount          int
-		invalidCount        int
-		sumQualityScore     float64
-		averageQualityScore float64
+		mu              sync.Mutex
+		wg              sync.WaitGroup
+		processedCount  int
+		validCount      int
+		invalidCount    int
+		sumQualityScore float64
 	)
 
 	for i, item := range items {
@@ -118,14 +117,33 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 			itemCtx, cancel := context.WithTimeout(ctx, perItemTimeout)
 			defer cancel()
 
-			ch := make(chan inputvalidate.Response, 1)
+			type validateOutcome struct {
+				res      inputvalidate.Response
+				panicMsg *string
+			}
+			ch := make(chan validateOutcome, 1)
 
 			go func() {
-				ch <- s.InputValidateSvc.Validate(itemCtx, item.Email, item.Phone, item.Text)
+				defer func() {
+					if r := recover(); r != nil {
+						msg := "panic: validation worker failed"
+						ch <- validateOutcome{panicMsg: &msg}
+					}
+				}()
+				ch <- validateOutcome{res: s.InputValidateSvc.Validate(itemCtx, item.Email, item.Phone, item.Text)}
 			}()
 
 			select {
-			case result := <-ch:
+			case out := <-ch:
+				if out.panicMsg != nil {
+					mu.Lock()
+					invalidCount++
+					mu.Unlock()
+					results[i] = ItemResult{Index: i, Error: out.panicMsg}
+					return
+				}
+				result := out.res
+
 				emailResult := EmailResult{
 					Valid:        result.Email.Valid,
 					QualityScore: result.Email.QualityScore,
@@ -187,6 +205,7 @@ func (s *Service) ValidateBatch(ctx context.Context, items []Item) BatchResponse
 
 	wg.Wait()
 
+	var averageQualityScore float64
 	if processedCount > 0 {
 		averageQualityScore = sumQualityScore / float64(processedCount)
 	}
