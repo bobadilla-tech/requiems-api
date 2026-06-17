@@ -60,7 +60,6 @@ export default class extends Controller {
         return;
       }
 
-
       const json = await response.json();
 
       if (!response.ok) {

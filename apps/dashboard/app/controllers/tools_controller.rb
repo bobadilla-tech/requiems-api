@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-
   SUPPORTED_TOOLS = %w[email-validator sentiment-analysis quotes unit-conversion].freeze
 
   TOOLS_METADATA = {
