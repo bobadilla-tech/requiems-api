@@ -1,0 +1,20 @@
+<% content_for :title, "Free Unit Conversion API — Miles to KM, KG to LB, Celsius to Fahrenheit | Requiems API" %>
+<% content_for :description, "Convert miles to kilometers, kilograms to pounds, Celsius to Fahrenheit, liters to gallons, and more. Accurate unit conversion API with formulas included in every response." %>
+
+
+<%= render "partials/tools/unit_conversion/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: "Trusted by teams at",
+      speed: "34s" %>
+<%= render "partials/tools/unit_conversion/what_it_does" %>
+<%= render "partials/tools/unit_conversion/use_cases" %>
+<%= render "partials/tools/unit_conversion/api_combinations" %>
+<%= render "partials/tools/unit_conversion/faq" %>
+<%= render "partials/tools/unit_conversion/cta" %>

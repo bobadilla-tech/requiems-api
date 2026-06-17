@@ -8,6 +8,11 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "unit conversion tool page renders successfully" do
+    get "/en/tools/unit-conversion"
+    assert_response :success
+  end
+
   test "sentiment analysis tool page renders successfully" do
     get "/en/tools/sentiment-analysis"
     assert_response :success
@@ -19,3 +24,4 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Tool not found.", flash[:alert]
   end
 end
+
