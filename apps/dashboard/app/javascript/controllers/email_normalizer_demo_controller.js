@@ -71,7 +71,7 @@ export default class extends Controller {
     // Strip Gmail dots.
     if (domain === "gmail.com") {
       local = local.replace(/\./g, "");
-      if (raw.toLowerCase().slice(0, atIndex).includes(".")) {
+      if (trimmed.slice(0, atIndex).includes(".")) {
         notes.push("dots removed");
       }
     }
