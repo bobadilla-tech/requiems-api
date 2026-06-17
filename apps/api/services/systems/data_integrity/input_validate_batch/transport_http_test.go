@@ -31,10 +31,6 @@ func (s *stubInputValidateService) Validate(ctx context.Context, email, phone, t
 	return s.responses[email]
 }
 
-func strPtr(s string) *string {
-	return &s
-}
-
 type stubInputValidateServiceWithTimeout struct {
 	responses map[string]inputvalidate.Response
 	blockOn   string // email que va a causar timeout
