@@ -1,40 +1,37 @@
 <% combinations = [
   {
     pair:    "Email Normalizer + Email Validator",
-    benefit: "Normalize first, then validate for the cleanest address pipeline — one flow, zero bad data.",
-    href:    "/apis/email-validate"
+    benefit: "Normalize then validate for complete email hygiene.",
+    outcome: "Clean, canonical email that is also confirmed deliverable — ideal for signup and import flows."
   },
   {
-    pair:    "Email Normalizer + Disposable Domain Checker",
-    benefit: "Normalize and catch throwaway domains in the same signup flow.",
-    href:    "/apis/disposable-email"
+    pair:    "Email Normalizer + Phone Validator",
+    benefit: "Normalize email and validate phone at the same step.",
+    outcome: "Consistent, verified contact data across both channels from a single onboarding call."
   },
   {
-    pair:    "Email Normalizer + Phone Validation",
-    benefit: "Normalize email and verify phone numbers together for stronger contact quality.",
-    href:    "/apis/phone-validation"
+    pair:    "Email Normalizer + Domain Checker",
+    benefit: "Normalize email and verify its domain health together.",
+    outcome: "Canonical email paired with domain trust score — higher confidence before outreach."
   }
 ] %>
 
-<section class="bg-gray-50 dark:bg-gray-800 py-20">
+<section class="bg-gray-50 dark:bg-gray-900 py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <div class="text-center mb-12">
       <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Use together with complementary APIs.</h2>
       <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-        Email Normalizer works even better when paired with other Requiems APIs.
+        Requiems APIs are designed to compose. Combine Email Normalizer with other endpoints to build a complete contact validation pipeline with a single API key.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <% combinations.each do |c| %>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
-          <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
-            <%= c[:pair] %>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            <%= c[:benefit] %>
-          </p>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+          <p class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-2"><%= c[:benefit] %></p>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"><%= c[:outcome] %></p>
         </div>
       <% end %>
     </div>
