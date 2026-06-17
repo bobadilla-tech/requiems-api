@@ -1,23 +1,23 @@
 <% faqs = [
   {
-    q: "What does normalization do exactly?",
-    a: "It cleans formatting, lowercases the address, trims whitespace, and applies provider-specific rules — like resolving Googlemail.com to gmail.com — to return a canonical address."
+    q: "What does Email Normalizer actually do?",
+    a: "It strips tags (e.g. +label), lowercases the address, and removes provider-specific formatting quirks so variants of the same address map to one canonical form."
   },
   {
-    q: "Will it change every email?",
-    a: "Only when the address has spaces, uppercase letters, or provider-specific alias rules. If the email is already canonical, the normalized value will match the input."
+    q: "Does it normalize the domain and local part?",
+    a: "Yes. Both are normalized. The local part is lowercased and cleaned of provider-specific suffixes. The domain is lowercased and alias-resolved where possible."
   },
   {
-    q: "Can this fix typos?",
-    a: "It normalizes formatting but does not validate mailbox deliverability or suggest typo corrections. Use Email Validator to check if the address is real and catch common misspellings."
+    q: "Can it correct capitalization and spacing?",
+    a: "Capitalization is corrected by lowercasing. Spaces are not valid in email addresses per RFC 5321 and are stripped if present."
   },
   {
-    q: "Is there a batch option?",
-    a: "Yes — the batch endpoint supports up to 50 emails per request. Results preserve the input order."
+    q: "Does it work with international emails?",
+    a: "Yes. Unicode email addresses in internationalized domains are supported. The normalized form follows IDNA encoding for domain parts."
   },
   {
-    q: "Is it free to try?",
-    a: "The demo above works without an account. Paid plans are available for production scale with higher rate limits and full API access."
+    q: "Is it free to use the demo?",
+    a: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
   }
 ] %>
 
