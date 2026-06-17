@@ -11,14 +11,15 @@
 
     <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
       <%= link_to new_user_registration_path,
-            class: "inline-flex items-center px-6 py-3 rounded-lg bg-brand-primary text-white font-semibold text-base shadow-sm transition-colors" do %>
+            class: "inline-flex items-center px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2",
+            style: "background-color:#1D9E75; color:white;" do %>
         Get your free API key
         <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
         </svg>
       <% end %>
       <%= link_to api_path("email-normalize"),
-            class: "inline-flex items-center px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" do %>
+            class: "inline-flex items-center px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2" do %>
         Read the docs
       <% end %>
     </div>
@@ -41,7 +42,7 @@
           <button
             type="submit"
             data-email-normalizer-demo-target="button"
-            class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2"
           >
             <span data-email-normalizer-demo-target="spinner" class="hidden">
               <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
