@@ -1,33 +1,33 @@
 <% use_cases = [
   {
-    title: "Reduce duplicate accounts",
-    desc:  "Normalize emails on signup to avoid multiple accounts for the same user.",
-    tags:  ["User onboarding", "Identity"]
+    title:   "Standardize email data before import",
+    desc:    "Normalize emails before bulk import into your database. Prevent format variations from creating duplicate records.",
+    context: "Data Import"
   },
   {
-    title: "Improve mailing list quality",
-    desc:  "Standardize email addresses before adding them to campaigns.",
-    tags:  ["Marketing", "Email lists"]
+    title:   "Merge duplicate accounts with normalized emails",
+    desc:    "Use the normalized form as a deduplication key. Identify accounts that belong to the same person across different email formats.",
+    context: "CRM / Data"
   },
   {
-    title: "Protect customer data",
-    desc:  "Clean contact records before saving them in your CRM.",
-    tags:  ["Operations", "CRM"]
+    title:   "Improve email matching across systems",
+    desc:    "Normalize before cross-system lookups. Ensure User.Name@Gmail.com and username@gmail.com match as the same identity.",
+    context: "Integrations"
   },
   {
-    title: "Sync customer profiles",
-    desc:  "Match users across systems using canonical email values.",
-    tags:  ["Product", "Data sync"]
+    title:   "Normalize signup emails for analytics",
+    desc:    "Standardize at point of capture. Keep analytics and segmentation consistent regardless of how users type their address.",
+    context: "Analytics"
   },
   {
-    title: "Lower failed sends",
-    desc:  "Fix common email formatting issues before sending mail.",
-    tags:  ["Deliverability", "Email"]
+    title:   "Reduce false duplicates in CRM",
+    desc:    "Stop treating email variants as separate contacts. Normalization reduces bloated contact counts and improves list hygiene.",
+    context: "CRM / Data"
   },
   {
-    title: "Make analytics accurate",
-    desc:  "Normalize email data so usage metrics are not split by formatting variants.",
-    tags:  ["Analytics", "Customer data"]
+    title:   "Clean email records before outreach",
+    desc:    "Run your list through the normalizer before a send. Catch variation-caused bounces before they affect sender reputation.",
+    context: "Email Marketing"
   }
 ] %>
 
@@ -41,18 +41,12 @@
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% use_cases.each do |uc| %>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color:#1D9E75;"><%= uc[:context] %></p>
           <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4"><%= uc[:desc] %></p>
-          <div class="flex flex-wrap gap-2">
-            <% uc[:tags].each do |tag| %>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                <%= tag %>
-              </span>
-            <% end %>
-          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed"><%= uc[:desc] %></p>
         </div>
       <% end %>
     </div>
