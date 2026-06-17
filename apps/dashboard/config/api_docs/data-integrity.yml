@@ -135,10 +135,14 @@ endpoints:
         description: Number of items where all provided fields have valid set to true.
       - name: invalid_count
         type: integer
-        description: Number of items where at least one provided field has valid set to false.
+        description: >-
+          Number of items where at least one provided field has valid set to false,
+          or where processing failed due to a timeout or unexpected error.
       - name: average_quality_score
         type: number
-        description: Average of overall_quality_score across all items in the batch.
+        description: >-
+          Average of overall_quality_score across all successfully processed items.
+          Items that failed due to a timeout or unexpected error are excluded from this average.
     errors:
       - code: 422
         message: validation_failed
