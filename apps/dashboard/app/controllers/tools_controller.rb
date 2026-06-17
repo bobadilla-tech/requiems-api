@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis unit-conversion].freeze
+
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis quotes unit-conversion].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -18,7 +19,12 @@ class ToolsController < ApplicationController
       name: "Unit Conversion",
       description: "Convert length, weight, volume, temperature and other units instantly.",
       icon_classes: "bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400"
-}
+    },
+    "quotes" => {
+      name: "Random Quotes",
+      description: "Fetch random inspirational quotes with author attribution in a single API call.",
+      icon_classes: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
+    }
   }.freeze
 
   def index

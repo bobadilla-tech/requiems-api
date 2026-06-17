@@ -2,7 +2,6 @@ name: Worker CI (Reusable)
 
 # Reusable workflow for Cloudflare Worker apps.
 # Callers pass app-path and app-name; this handles setup, typecheck, tests, lint.
-# Deduplicates 3 near-identical setup blocks across worker-test and api-management-test.
 
 on:
   workflow_call:
@@ -56,7 +55,6 @@ jobs:
         working-directory: ${{ inputs.app-path }}
         run: pnpm install --frozen-lockfile
 
-      # Typecheck runs before tests: fast type errors surface without waiting for test suite
       - name: TypeScript check
         working-directory: ${{ inputs.app-path }}
         run: pnpm run typecheck
@@ -79,7 +77,6 @@ jobs:
           files: ${{ inputs.app-path }}/coverage/lcov.info
           flags: shared
 
-      # Advisory lint: skipped for Dependabot (dep updates don't affect code style)
       - name: Biome lint
         if: inputs.has-lint && github.actor != 'dependabot[bot]'
         working-directory: ${{ inputs.app-path }}

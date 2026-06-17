@@ -1,0 +1,9 @@
+en:
+  tools:
+    quotes:
+      demo:
+        error_rate_limit: "Rate limit reached. Please wait a moment and try again."
+        error_generic: "Something went wrong. Please try again."
+        error_unexpected: "Unexpected response from the API."
+        error_network: "Network error. Please check your connection."
+        error_security_token: "Security token missing. Please refresh the page."
