@@ -3,7 +3,7 @@ es:
   divisions:
     carousel:
       heading: Casos destacados
-      subtitle: 'Compuestos ilustrativos: asigne el patrón a sus propios KPI y puntos finales.'
+      subtitle: "Compuestos ilustrativos: asigne el patrón a sus propios KPI y puntos finales."
       pagination_label: Diapositivas de carrusel
       previous: Diapositiva anterior
       next: Siguiente diapositiva
@@ -38,7 +38,7 @@ es:
       questions_intro: "¿Aún tienes preguntas? Hablemos de tu caso de uso."
       view_division: Ver división
       apis_catalog_title: Explora el directorio API completo
-      apis_catalog_subtitle: 'Cada punto final activo y beta en un catálogo con capacidad de búsqueda: la misma clave API, documentos consistentes, ejemplos listos para copiar.'
+      apis_catalog_subtitle: "Cada punto final activo y beta en un catálogo con capacidad de búsqueda: la misma clave API, documentos consistentes, ejemplos listos para copiar."
       apis_catalog_cta: Explorar API
       cards:
         finance:
@@ -75,94 +75,94 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre datos incorrectos antes de que se agraven: registros falsos, números incorrectos y textos riesgosos. Están escritos para equipos que necesitan un camino rápido y creíble hacia aportes más limpios.'
+      tagline: "Estas historias tratan sobre datos incorrectos antes de que se agraven: registros falsos, números incorrectos y textos riesgosos. Están escritos para equipos que necesitan un camino rápido y creíble hacia aportes más limpios."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: validador de correo electrónico
-        label: Validador de correo electrónico
-      - key: validación_del_teléfono
-        label: Validación telefónica
-      - key: filtro_blasfemias
-        label: Filtro de malas palabras
+        - key: todo
+          label: Todos los casos
+        - key: validador de correo electrónico
+          label: Validador de correo electrónico
+        - key: validación_del_teléfono
+          label: Validación telefónica
+        - key: filtro_blasfemias
+          label: Filtro de malas palabras
       featured_cases: []
       use_cases:
-      - filter_key: validador de correo electrónico
-        endpoint: POST /v1/validation/email
-        title: Detecte direcciones incorrectas antes de las campañas y la sincronización de CRM
-        description: Evite que correos electrónicos no válidos ingresen a su base de datos. Las listas más limpias significan una mejor capacidad de entrega y menos gastos desperdiciados.
-        tag_problem: Validación de correo electrónico
-        tag_industry: Marketing
-        case_anchor: rebotes-de-correo-electrónico-de-casos
-        example: Un flujo de registro de SaaS solicita la validación del correo electrónico después del desenfoque. Los dominios desechables y los errores tipográficos se rechazan antes de enviar el correo electrónico de bienvenida; el soporte técnico deja de corregir direcciones con "una letra incorrecta".
-      - filter_key: validación_del_teléfono
-        endpoint: GET /v1/validation/phone
-        title: Llegue a cifras reales en flujos de SMS y OTP
-        description: Validar números de teléfono para campañas de SMS. Llegue a usuarios reales y elimine los envíos fallidos.
-        tag_problem: Validación telefónica
-        tag_industry: Comercio electrónico
-        case_anchor: entrega-de-caso-sms
-        example: Una marca de comercio electrónico valida E.164 y el tipo de línea en el paso OTP. Los números de teléfono fijo o no válidos nunca llegan a la puerta de enlace de SMS, lo que reduce el costo de OTP y los tickets de entrega fallida.
-      - filter_key: filtro_blasfemias
-        endpoint: POST /v1/validation/profanity
-        title: Mantenga los feeds públicos y los foros civiles a escala
-        description: Filtre malas palabras en el contenido generado por el usuario. Mantenga las comunidades seguras sin revisión manual de cada publicación.
-        tag_problem: Moderación de contenido
-        tag_industry: redes sociales
-        case_anchor: comentarios-case-toxic
-        example: Una aplicación comunitaria ejecuta el texto de los comentarios a través de un filtro de malas palabras en el lado del servidor. Se bloquea el abuso obvio; Las publicaciones dudosas se ponen en cola para revisión del moderador en lugar de publicarse.
-      - filter_key: validador de correo electrónico
-        endpoint: POST /v1/validation/email
-        title: Registro corporativo más rápido con menos reintentos de TI
-        description: Optimice la incorporación con comprobaciones de correo electrónico en el borde. Menos reintentos, menos tickets de soporte.
-        tag_problem: Experiencia de usuario
-        tag_industry: SaaS
-        case_anchor: rebotes-de-correo-electrónico-de-casos
-        example: El autoservicio empresarial comprueba el dominio y MX antes de enviar invitaciones de SSO. Los hosts muertos y los errores tipográficos fallan rápidamente, por lo que TI no está esperando rebotes que nunca aparecen en la interfaz de usuario.
-      - filter_key: validación_del_teléfono
-        endpoint: GET /v1/validation/phone
-        title: Validar los datos del suscriptor antes de la portabilidad y los boletos.
-        description: Detecte los errores del teléfono antes de que causen problemas posteriores. El soporte dedica tiempo a problemas reales.
-        tag_problem: Calidad de datos
-        tag_industry: telecomunicaciones
-        case_anchor: entrega-de-caso-sms
-        example: Un portal de operador valida los números de suscriptores cuando un cliente presenta una solicitud de portabilidad. Las malas entradas regresan el mismo día en lugar de después de una semana de abandono de "número no encontrado".
-      - filter_key: filtro_blasfemias
-        endpoint: POST /v1/validation/profanity
-        title: Moderación del chat en el juego sin enormes listas de bloqueo de clientes
-        description: Modere el texto automáticamente para plataformas más seguras. Aumente la confianza y la seguridad con su producto.
-        tag_problem: Seguridad del contenido
-        tag_industry: Juego de azar
-        case_anchor: comentarios-case-toxic
-        example: El chat del juego se comprueba al enviar. Las cadenas de alto riesgo se omiten o se enmascaran; los remitentes repetidos obtienen un tiempo de reutilización sin enviar una enorme lista de bloqueo en el paquete del cliente.
+        - filter_key: validador de correo electrónico
+          endpoint: POST /v1/validation/email
+          title: Detecte direcciones incorrectas antes de las campañas y la sincronización de CRM
+          description: Evite que correos electrónicos no válidos ingresen a su base de datos. Las listas más limpias significan una mejor capacidad de entrega y menos gastos desperdiciados.
+          tag_problem: Validación de correo electrónico
+          tag_industry: Marketing
+          case_anchor: rebotes-de-correo-electrónico-de-casos
+          example: Un flujo de registro de SaaS solicita la validación del correo electrónico después del desenfoque. Los dominios desechables y los errores tipográficos se rechazan antes de enviar el correo electrónico de bienvenida; el soporte técnico deja de corregir direcciones con "una letra incorrecta".
+        - filter_key: validación_del_teléfono
+          endpoint: GET /v1/validation/phone
+          title: Llegue a cifras reales en flujos de SMS y OTP
+          description: Validar números de teléfono para campañas de SMS. Llegue a usuarios reales y elimine los envíos fallidos.
+          tag_problem: Validación telefónica
+          tag_industry: Comercio electrónico
+          case_anchor: entrega-de-caso-sms
+          example: Una marca de comercio electrónico valida E.164 y el tipo de línea en el paso OTP. Los números de teléfono fijo o no válidos nunca llegan a la puerta de enlace de SMS, lo que reduce el costo de OTP y los tickets de entrega fallida.
+        - filter_key: filtro_blasfemias
+          endpoint: POST /v1/validation/profanity
+          title: Mantenga los feeds públicos y los foros civiles a escala
+          description: Filtre malas palabras en el contenido generado por el usuario. Mantenga las comunidades seguras sin revisión manual de cada publicación.
+          tag_problem: Moderación de contenido
+          tag_industry: redes sociales
+          case_anchor: comentarios-case-toxic
+          example: Una aplicación comunitaria ejecuta el texto de los comentarios a través de un filtro de malas palabras en el lado del servidor. Se bloquea el abuso obvio; Las publicaciones dudosas se ponen en cola para revisión del moderador en lugar de publicarse.
+        - filter_key: validador de correo electrónico
+          endpoint: POST /v1/validation/email
+          title: Registro corporativo más rápido con menos reintentos de TI
+          description: Optimice la incorporación con comprobaciones de correo electrónico en el borde. Menos reintentos, menos tickets de soporte.
+          tag_problem: Experiencia de usuario
+          tag_industry: SaaS
+          case_anchor: rebotes-de-correo-electrónico-de-casos
+          example: El autoservicio empresarial comprueba el dominio y MX antes de enviar invitaciones de SSO. Los hosts muertos y los errores tipográficos fallan rápidamente, por lo que TI no está esperando rebotes que nunca aparecen en la interfaz de usuario.
+        - filter_key: validación_del_teléfono
+          endpoint: GET /v1/validation/phone
+          title: Validar los datos del suscriptor antes de la portabilidad y los boletos.
+          description: Detecte los errores del teléfono antes de que causen problemas posteriores. El soporte dedica tiempo a problemas reales.
+          tag_problem: Calidad de datos
+          tag_industry: telecomunicaciones
+          case_anchor: entrega-de-caso-sms
+          example: Un portal de operador valida los números de suscriptores cuando un cliente presenta una solicitud de portabilidad. Las malas entradas regresan el mismo día en lugar de después de una semana de abandono de "número no encontrado".
+        - filter_key: filtro_blasfemias
+          endpoint: POST /v1/validation/profanity
+          title: Moderación del chat en el juego sin enormes listas de bloqueo de clientes
+          description: Modere el texto automáticamente para plataformas más seguras. Aumente la confianza y la seguridad con su producto.
+          tag_problem: Seguridad del contenido
+          tag_industry: Juego de azar
+          case_anchor: comentarios-case-toxic
+          example: El chat del juego se comprueba al enviar. Las cadenas de alto riesgo se omiten o se enmascaran; los remitentes repetidos obtienen un tiempo de reutilización sin enviar una enorme lista de bloqueo en el paquete del cliente.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: 10,000+
-        label: Validaciones máximas por minuto (según el nivel)
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: 10,000+
+          label: Validaciones máximas por minuto (según el nivel)
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje dónde pierde tiempo hoy (rebotes, fallas de SMS o UGC ruidoso). Cada resultado se asigna a puntos finales que puede probar con un pequeño cambio en su formulario o canalización.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - SaaS y nuevas empresas
-      - Comercio electrónico
-      - equipos de marketing
-      - Social y comunitario
-      - Juego de azar
-      - telecomunicaciones
+        - SaaS y nuevas empresas
+        - Comercio electrónico
+        - equipos de marketing
+        - Social y comunitario
+        - Juego de azar
+        - telecomunicaciones
       testimonials:
-      - name: Verigeo
-        role: verigeo.pe
-        quote: Los registros falsos fueron un verdadero problema para nosotros. Las API de validación de Requiems detuvieron los datos incorrectos en la puerta sin agregar fricción a los usuarios reales.
-      - name: Fuerza de compilación
-        role: compilastrength.com
-        quote: Confiamos en la validación de Requiems para mantener limpia nuestra base de datos de usuarios y sus servicios de reconocimiento para brindar una experiencia personalizada a cada atleta.
+        - name: Verigeo
+          role: verigeo.pe
+          quote: Los registros falsos fueron un verdadero problema para nosotros. Las API de validación de Requiems detuvieron los datos incorrectos en la puerta sin agregar fricción a los usuarios reales.
+        - name: Fuerza de compilación
+          role: compilastrength.com
+          quote: Confiamos en la validación de Requiems para mantener limpia nuestra base de datos de usuarios y sus servicios de reconocimiento para brindar una experiencia personalizada a cada atleta.
       final_cta:
         headline: Comience a validar datos hoy.
         subheadline: Integra en minutos. Detecte los problemas antes de que le cuesten.
@@ -178,95 +178,95 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre lo que sucede en el borde de su red: sesiones riesgosas, geografía poco clara y trabajo de dominio frágil. Destacan las API que puede integrar más rápido de lo que puede dotar de personal a un equipo de señales completo.'
+      tagline: "Estas historias tratan sobre lo que sucede en el borde de su red: sesiones riesgosas, geografía poco clara y trabajo de dominio frágil. Destacan las API que puede integrar más rápido de lo que puede dotar de personal a un equipo de señales completo."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: ip_geo
-        label: Geolocalización de IP
-      - key: asn
-        label: búsqueda de ASN
-      - key: VPN
-        label: Detección de VPN y proxy
-      - key: quién es
-        label: búsqueda de WHOIS
-      - key: dominio
-        label: información de dominio
-      - key: mx
-        label: búsqueda MX
-      - key: desechable
-        label: Comprobador de dominio desechable
+        - key: todo
+          label: Todos los casos
+        - key: ip_geo
+          label: Geolocalización de IP
+        - key: asn
+          label: búsqueda de ASN
+        - key: VPN
+          label: Detección de VPN y proxy
+        - key: quién es
+          label: búsqueda de WHOIS
+        - key: dominio
+          label: información de dominio
+        - key: mx
+          label: búsqueda MX
+        - key: desechable
+          label: Comprobador de dominio desechable
       featured_cases: []
       use_cases:
-      - filter_key: VPN
-        endpoint: GET /v1/networking/ip/vpn/{ip}
-        title: Marcar sesiones de inicio de sesión riesgosas detrás de VPN y servidores proxy
-        description: Detecta VPN y servidores proxy para inicios de sesión seguros. Detenga los ataques programados antes de que lleguen a su aplicación.
-        tag_problem: Detección de amenazas
-        tag_industry: Ciberseguridad
-        case_anchor: caso-fraude
-        example: En cada inicio de sesión, la API califica la IP del cliente para las señales de VPN, Tor y del centro de datos. Las sesiones de alto riesgo obtienen MFA intensificada; el tráfico residencial limpio se mantiene sin fricciones.
-      - filter_key: ip_geo
-        endpoint: GET /v1/networking/ip/{ip}
-        title: Personaliza por país sin pedir GPS
-        description: Diríjase a los usuarios por ubicación para obtener servicios personalizados. Menos ofertas no coincidentes y análisis más claros.
-        tag_problem: inteligencia de propiedad intelectual
-        tag_industry: Comercio electrónico
-        case_anchor: caso-geo
-        example: Un escaparate resuelve el país y la región desde la IP del navegador para mostrar estimaciones de envío y copia de impuestos sin solicitar GPS. Las pruebas A/B utilizan la misma señal para la conversión geográfica.
-      - filter_key: dominio
-        endpoint: GET /v1/networking/domain/{domain}
-        title: Automatizar las comprobaciones de dominio en los flujos de registro
-        description: Verifique dominios al instante para plataformas de registro. Muévase más rápido que las búsquedas manuales.
-        tag_problem: búsqueda de dominio
-        tag_industry: SaaS
-        case_anchor: dominio de caso
-        example: Un flujo de trabajo de registrador solicita información del dominio antes de cargar la tarjeta. Los patrones estacionados, suspendidos o con errores tipográficos fallan temprano en lugar de hacerlo después de que se ejecuta la cola de cumplimiento.
-      - filter_key: asn
-        endpoint: GET /v1/networking/ip/asn/{ip}
-        title: Enriquezca los boletos de NOC con ASN y contexto ascendente
-        description: Optimice el rendimiento de la red con datos de enrutamiento. Depure problemas de emparejamiento y ruta con confianza.
-        tag_problem: Análisis de red
-        tag_industry: telecomunicaciones
-        case_anchor: caso-fraude
-        example: Cuando traceroute parece incorrecto, operaciones pega el ASN de la IP sospechosa en una herramienta interna. El nombre de la organización y los flujos ascendentes aparecen en el ticket para que los pares respondan con contexto, no con capturas de pantalla.
-      - filter_key: quién es
-        endpoint: GET /v1/networking/whois/{domain}
-        title: Historial de WHOIS exportable para auditorías legales y de marca
-        description: Automatice las auditorías de dominio para los requisitos reglamentarios. Mantenga registros consistentes y con capacidad de búsqueda.
-        tag_problem: Gestión de dominios
-        tag_industry: Legal
-        case_anchor: dominio de caso
-        example: 'La protección de marca realiza un trabajo semanal en los dominios de AbuseDB: los campos de WHOIS se normalizan y almacenan para que el departamento legal pueda exportar un CSV fechado como evidencia de eliminación.'
-      - filter_key: mx
-        endpoint: GET /v1/networking/mx/{domain}
-        title: Valide los servidores de correo antes de grandes envíos
-        description: Garantice la capacidad de entrega del correo electrónico con comprobaciones del servidor. Capture el correo mal configurado antes de enviarlo.
-        tag_problem: Infraestructura de correo electrónico
-        tag_industry: Marketing
-        case_anchor: dominio de caso
-        example: Antes de una campaña de envío de 50 000, el marketing valida que cada dominio de destinatario tenga hosts MX activos. Las filas a las que les falta intercambio de correo se ponen en cuarentena para que la reputación de ESP no se deteriore.
+        - filter_key: VPN
+          endpoint: GET /v1/networking/ip/vpn/{ip}
+          title: Marcar sesiones de inicio de sesión riesgosas detrás de VPN y servidores proxy
+          description: Detecta VPN y servidores proxy para inicios de sesión seguros. Detenga los ataques programados antes de que lleguen a su aplicación.
+          tag_problem: Detección de amenazas
+          tag_industry: Ciberseguridad
+          case_anchor: caso-fraude
+          example: En cada inicio de sesión, la API califica la IP del cliente para las señales de VPN, Tor y del centro de datos. Las sesiones de alto riesgo obtienen MFA intensificada; el tráfico residencial limpio se mantiene sin fricciones.
+        - filter_key: ip_geo
+          endpoint: GET /v1/networking/ip/{ip}
+          title: Personaliza por país sin pedir GPS
+          description: Diríjase a los usuarios por ubicación para obtener servicios personalizados. Menos ofertas no coincidentes y análisis más claros.
+          tag_problem: inteligencia de propiedad intelectual
+          tag_industry: Comercio electrónico
+          case_anchor: caso-geo
+          example: Un escaparate resuelve el país y la región desde la IP del navegador para mostrar estimaciones de envío y copia de impuestos sin solicitar GPS. Las pruebas A/B utilizan la misma señal para la conversión geográfica.
+        - filter_key: dominio
+          endpoint: GET /v1/networking/domain/{domain}
+          title: Automatizar las comprobaciones de dominio en los flujos de registro
+          description: Verifique dominios al instante para plataformas de registro. Muévase más rápido que las búsquedas manuales.
+          tag_problem: búsqueda de dominio
+          tag_industry: SaaS
+          case_anchor: dominio de caso
+          example: Un flujo de trabajo de registrador solicita información del dominio antes de cargar la tarjeta. Los patrones estacionados, suspendidos o con errores tipográficos fallan temprano en lugar de hacerlo después de que se ejecuta la cola de cumplimiento.
+        - filter_key: asn
+          endpoint: GET /v1/networking/ip/asn/{ip}
+          title: Enriquezca los boletos de NOC con ASN y contexto ascendente
+          description: Optimice el rendimiento de la red con datos de enrutamiento. Depure problemas de emparejamiento y ruta con confianza.
+          tag_problem: Análisis de red
+          tag_industry: telecomunicaciones
+          case_anchor: caso-fraude
+          example: Cuando traceroute parece incorrecto, operaciones pega el ASN de la IP sospechosa en una herramienta interna. El nombre de la organización y los flujos ascendentes aparecen en el ticket para que los pares respondan con contexto, no con capturas de pantalla.
+        - filter_key: quién es
+          endpoint: GET /v1/networking/whois/{domain}
+          title: Historial de WHOIS exportable para auditorías legales y de marca
+          description: Automatice las auditorías de dominio para los requisitos reglamentarios. Mantenga registros consistentes y con capacidad de búsqueda.
+          tag_problem: Gestión de dominios
+          tag_industry: Legal
+          case_anchor: dominio de caso
+          example: "La protección de marca realiza un trabajo semanal en los dominios de AbuseDB: los campos de WHOIS se normalizan y almacenan para que el departamento legal pueda exportar un CSV fechado como evidencia de eliminación."
+        - filter_key: mx
+          endpoint: GET /v1/networking/mx/{domain}
+          title: Valide los servidores de correo antes de grandes envíos
+          description: Garantice la capacidad de entrega del correo electrónico con comprobaciones del servidor. Capture el correo mal configurado antes de enviarlo.
+          tag_problem: Infraestructura de correo electrónico
+          tag_industry: Marketing
+          case_anchor: dominio de caso
+          example: Antes de una campaña de envío de 50 000, el marketing valida que cada dominio de destinatario tenga hosts MX activos. Las filas a las que les falta intercambio de correo se ponen en cuarentena para que la reputación de ESP no se deteriore.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: 200+
-        label: Países y territorios en el directorio
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: 200+
+          label: Países y territorios en el directorio
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje cómo el tráfico llega a su ventaja (señales de fraude, contexto del país o comprobaciones de dominio). Cada resultado se asigna a puntos finales que son más fáciles de ejecutar aquí que de poseer a largo plazo.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Ciberseguridad
-      - Comercio electrónico
-      - Plataformas SaaS
-      - Marketing y correo electrónico
-      - telecomunicaciones
-      - Legal y cumplimiento
+        - Ciberseguridad
+        - Comercio electrónico
+        - Plataformas SaaS
+        - Marketing y correo electrónico
+        - telecomunicaciones
+        - Legal y cumplimiento
       testimonials: []
       final_cta:
         headline: Asegure su red hoy.
@@ -285,93 +285,93 @@ es:
         label: Reserve una llamada de estrategia
       tagline: Estas historias tratan sobre relojes, calendarios y direcciones que se estropean cuando te globalizas. Destacan las API que tienen matices regionales para que su producto no tenga que tenerlos.
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: zona horaria
-        label: Zona horaria
-      - key: hora_mundial
-        label: hora mundial
-      - key: días_laborables
-        label: calculadora de días laborables
-      - key: vacaciones
-        label: Vacaciones
-      - key: geocodificar
-        label: Geocodificar
-      - key: postal
-        label: Código Postal
-      - key: ciudades
-        label: Ciudades
+        - key: todo
+          label: Todos los casos
+        - key: zona horaria
+          label: Zona horaria
+        - key: hora_mundial
+          label: hora mundial
+        - key: días_laborables
+          label: calculadora de días laborables
+        - key: vacaciones
+          label: Vacaciones
+        - key: geocodificar
+          label: Geocodificar
+        - key: postal
+          label: Código Postal
+        - key: ciudades
+          label: Ciudades
       featured_cases: []
       use_cases:
-      - filter_key: zona horaria
-        endpoint: GET /v1/places/timezone
-        title: Registro local y recordatorios que coinciden con la hora de la propiedad
-        description: Alinee los horarios con las zonas horarias locales. Reduzca la confusión para los viajeros y los equipos distribuidos.
-        tag_problem: Gestión del tiempo
-        tag_industry: Viajar
-        case_anchor: zona horaria del caso
-        example: Un alquiler vacacional almacena cada propiedad en una zona horaria de la IANA. Los correos electrónicos y SMS de confirmación utilizan conversión del lado del servidor, por lo que “check-in a las 4:00 p. m.” siempre significa reloj de pared local.
-      - filter_key: geocodificar
-        endpoint: GET /v1/places/geocode
-        title: Convierta las direcciones en pines a los que el envío puede enrutarse
-        description: Convierta direcciones en coordenadas al instante. Acelere mapas, entrega y búsqueda.
-        tag_problem: Geocodificación
-        tag_industry: Logística
-        case_anchor: caso-geo
-        example: El despacho recibe "123 Main St, Austin". Geocode devuelve latitud/lng y dirección normalizada; la aplicación del conductor dirige al pin en lugar del ambiguo centro de la ciudad.
-      - filter_key: postal
-        endpoint: GET /v1/places/postal/{code}
-        title: Bloquee códigos postales incorrectos antes de que se impriman las etiquetas
-        description: Validar códigos postales para envíos globales. Detecte direcciones incorrectas antes de que salgan del almacén.
-        tag_problem: Validación de dirección
-        tag_industry: Comercio electrónico
-        case_anchor: caso-geo
-        example: El proceso de pago valida el formato postal con el país seleccionado antes de la compra de la etiqueta. Las discrepancias del PLZ alemán de 5 dígitos bloquean el pedido con un error a nivel de campo en lugar de una etiqueta de devolución.
-      - filter_key: vacaciones
-        endpoint: GET /v1/places/holidays
-        title: Envío y soporte cuando cada mercado esté realmente abierto
-        description: Evite los días festivos en todos los mercados con reglas de fechas. Realice envíos con confianza a través de regiones.
-        tag_problem: Localización
-        tag_industry: SaaS global
-        case_anchor: vacaciones-caso
-        example: La automatización de versiones comprueba los días festivos para DE, BR y JP. Las implementaciones que aterrizarían en un día festivo se posponen al siguiente día hábil con un resumen de Slack para los PM.
-      - filter_key: días_laborables
-        endpoint: GET /v1/places/working-days
-        title: Fechas de SLA que respetan los fines de semana y feriados regionales
-        description: Calcular los días laborables en todos los países. Recursos humanos y operaciones detienen la gimnasia con hojas de cálculo.
-        tag_problem: programación de trabajo
-        tag_industry: HORA
-        case_anchor: zona horaria del caso
-        example: HRIS calcula las fechas de vencimiento de los SLA de los casos, excluyendo fines de semana y días festivos específicos del país para el sitio de cada empleado. Los representantes obtienen el mismo número en la interfaz de usuario y en el registro de auditoría exportado.
-      - filter_key: hora_mundial
-        endpoint: GET /v1/places/time/{timezone}
-        title: Relojes de mercado que sobreviven al horario de verano sin revisiones
-        description: Muestra relojes precisos para cada ciudad. Genere confianza en las IU comerciales, de soporte y de programación.
-        tag_problem: hora mundial
-        tag_industry: tecnología financiera
-        case_anchor: zona horaria del caso
-        example: Un pie de página del panel de operaciones indica la hora mundial para los códigos de sede de Nueva York, Londres y Tokio. El horario de verano cambia de pista automáticamente; Los ingenieros no envían revisiones de emergencia dos veces al año.
+        - filter_key: zona horaria
+          endpoint: GET /v1/places/timezone
+          title: Registro local y recordatorios que coinciden con la hora de la propiedad
+          description: Alinee los horarios con las zonas horarias locales. Reduzca la confusión para los viajeros y los equipos distribuidos.
+          tag_problem: Gestión del tiempo
+          tag_industry: Viajar
+          case_anchor: zona horaria del caso
+          example: Un alquiler vacacional almacena cada propiedad en una zona horaria de la IANA. Los correos electrónicos y SMS de confirmación utilizan conversión del lado del servidor, por lo que “check-in a las 4:00 p. m.” siempre significa reloj de pared local.
+        - filter_key: geocodificar
+          endpoint: GET /v1/places/geocode
+          title: Convierta las direcciones en pines a los que el envío puede enrutarse
+          description: Convierta direcciones en coordenadas al instante. Acelere mapas, entrega y búsqueda.
+          tag_problem: Geocodificación
+          tag_industry: Logística
+          case_anchor: caso-geo
+          example: El despacho recibe "123 Main St, Austin". Geocode devuelve latitud/lng y dirección normalizada; la aplicación del conductor dirige al pin en lugar del ambiguo centro de la ciudad.
+        - filter_key: postal
+          endpoint: GET /v1/places/postal/{code}
+          title: Bloquee códigos postales incorrectos antes de que se impriman las etiquetas
+          description: Validar códigos postales para envíos globales. Detecte direcciones incorrectas antes de que salgan del almacén.
+          tag_problem: Validación de dirección
+          tag_industry: Comercio electrónico
+          case_anchor: caso-geo
+          example: El proceso de pago valida el formato postal con el país seleccionado antes de la compra de la etiqueta. Las discrepancias del PLZ alemán de 5 dígitos bloquean el pedido con un error a nivel de campo en lugar de una etiqueta de devolución.
+        - filter_key: vacaciones
+          endpoint: GET /v1/places/holidays
+          title: Envío y soporte cuando cada mercado esté realmente abierto
+          description: Evite los días festivos en todos los mercados con reglas de fechas. Realice envíos con confianza a través de regiones.
+          tag_problem: Localización
+          tag_industry: SaaS global
+          case_anchor: vacaciones-caso
+          example: La automatización de versiones comprueba los días festivos para DE, BR y JP. Las implementaciones que aterrizarían en un día festivo se posponen al siguiente día hábil con un resumen de Slack para los PM.
+        - filter_key: días_laborables
+          endpoint: GET /v1/places/working-days
+          title: Fechas de SLA que respetan los fines de semana y feriados regionales
+          description: Calcular los días laborables en todos los países. Recursos humanos y operaciones detienen la gimnasia con hojas de cálculo.
+          tag_problem: programación de trabajo
+          tag_industry: HORA
+          case_anchor: zona horaria del caso
+          example: HRIS calcula las fechas de vencimiento de los SLA de los casos, excluyendo fines de semana y días festivos específicos del país para el sitio de cada empleado. Los representantes obtienen el mismo número en la interfaz de usuario y en el registro de auditoría exportado.
+        - filter_key: hora_mundial
+          endpoint: GET /v1/places/time/{timezone}
+          title: Relojes de mercado que sobreviven al horario de verano sin revisiones
+          description: Muestra relojes precisos para cada ciudad. Genere confianza en las IU comerciales, de soporte y de programación.
+          tag_problem: hora mundial
+          tag_industry: tecnología financiera
+          case_anchor: zona horaria del caso
+          example: Un pie de página del panel de operaciones indica la hora mundial para los códigos de sede de Nueva York, Londres y Tokio. El horario de verano cambia de pista automáticamente; Los ingenieros no envían revisiones de emergencia dos veces al año.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: 250+
-        label: Países y regiones en productos de datos
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: 250+
+          label: Países y regiones en productos de datos
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje dónde le perjudican la logística o los calendarios (zonas horarias, direcciones o ventanas de lanzamiento). Cada resultado se asigna a puntos finales que incorporan reglas regionales.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Viajes y hospitalidad
-      - Logística
-      - Comercio electrónico
-      - SaaS global
-      - tecnología de recursos humanos
-      - tecnología financiera
+        - Viajes y hospitalidad
+        - Logística
+        - Comercio electrónico
+        - SaaS global
+        - tecnología de recursos humanos
+        - tecnología financiera
       testimonials: []
       final_cta:
         headline: Cree aplicaciones listas para el mundo hoy.
@@ -388,103 +388,103 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre el trabajo lingüístico que no debería convertirse en un proyecto científico: barreras de seguridad, calidad, detección y ayudantes. Destacan las API que puede conectar junto a sus editores y colas existentes.'
+      tagline: "Estas historias tratan sobre el trabajo lingüístico que no debería convertirse en un proyecto científico: barreras de seguridad, calidad, detección y ayudantes. Destacan las API que puede conectar junto a sus editores y colas existentes."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: blasfemia
-        label: Filtro de malas palabras
-      - key: deletrear
-        label: revisión ortográfica
-      - key: tesauro
-        label: Tesauro
-      - key: diccionario
-        label: Diccionario
-      - key: sentimiento
-        label: Análisis de sentimiento
-      - key: idioma
-        label: Detección de idioma
-      - key: semejanza
-        label: Similitud de texto
-      - key: reducción
-        label: Rebaja a HTML
-      - key: lorem
-        label: lorem ipsum
-      - key: palabras_aleatorias
-        label: palabras aleatorias
-      - key: correo electrónico_normalizar
-        label: normalizar el correo electrónico
+        - key: todo
+          label: Todos los casos
+        - key: blasfemia
+          label: Filtro de malas palabras
+        - key: deletrear
+          label: revisión ortográfica
+        - key: tesauro
+          label: Tesauro
+        - key: diccionario
+          label: Diccionario
+        - key: sentimiento
+          label: Análisis de sentimiento
+        - key: idioma
+          label: Detección de idioma
+        - key: semejanza
+          label: Similitud de texto
+        - key: reducción
+          label: Rebaja a HTML
+        - key: lorem
+          label: lorem ipsum
+        - key: palabras_aleatorias
+          label: palabras aleatorias
+        - key: correo electrónico_normalizar
+          label: normalizar el correo electrónico
       featured_cases: []
       use_cases:
-      - filter_key: blasfemia
-        endpoint: POST /v1/validation/profanity
-        title: Modere los envíos antes de que se hagan públicos.
-        description: Modera el texto del usuario automáticamente. Mantenga las comunidades saludables sin aumentar la plantilla de forma lineal.
-        tag_problem: Moderación de contenido
-        tag_industry: redes sociales
-        case_anchor: moderación de casos
-        example: Las publicaciones del foro se ejecutan a través de una API de malas palabras al enviarlas. Las publicaciones bloqueadas devuelven un motivo en línea; los moderadores solo revisan la cola marcada en lugar de cada hilo.
-      - filter_key: deletrear
-        endpoint: POST /v1/text/spellcheck
-        title: Detecte errores tipográficos en el momento de la publicación en documentos y CMS
-        description: Corrija los errores tipográficos antes de publicar. Reduzca el riesgo de marca en correos electrónicos, documentos y textos en aplicaciones.
-        tag_problem: Calidad de escritura
-        tag_industry: SaaS
-        case_anchor: hechizo de caso
-        example: El centro de ayuda "Publicar" ejecuta el corrector ortográfico en Markdown. Los editores ven las correcciones sugeridas en la barra lateral antes de que el artículo se haga público y se indexe.
-      - filter_key: semejanza
-        endpoint: POST /v1/text/similarity
-        title: Deduplicación de macros y conocimiento casi duplicado
-        description: Relaciona contenido similar con similitud de texto. Mejorar las recomendaciones y la deduplicación.
-        tag_problem: Relevancia de búsqueda
-        tag_industry: Comercio electrónico
-        case_anchor: lenguaje de caso
-        example: El soporte ingiere nuevas macros y las compara con las existentes. Los duplicados por encima de 0,9 coseno se fusionan automáticamente para que los agentes dejen de seleccionar fragmentos casi idénticos.
-      - filter_key: idioma
-        endpoint: POST /v1/text/detect-language
-        title: Enrutar el contenido pegado al canal de configuración regional correcto
-        description: Identifique el idioma automáticamente para la localización. Dirige a los usuarios a la experiencia adecuada más rápido.
-        tag_problem: Localización
-        tag_industry: Aplicaciones globales
-        case_anchor: lenguaje de caso
-        example: Un sitio de documentos detecta el idioma desde el primer párrafo pegado. El origen que no está en inglés se dirige a la cola del proveedor de traducción con metadatos locales adjuntos.
-      - filter_key: tesauro
-        endpoint: GET /v1/text/thesaurus/{word}
-        title: Titulares y textos más potentes sin cambiar de pestaña
-        description: Encuentre sinónimos más fuertes al instante. Ayude al marketing y a los productos a ofrecer textos más nítidos.
-        tag_problem: Redacción
-        tag_industry: Marketing
-        case_anchor: hechizo de caso
-        example: 'El creador de páginas de destino ofrece tres variantes de títulos: cada palabra marcada como débil recibe sugerencias de sinónimos de la API del diccionario de sinónimos antes de la asignación A/B.'
-      - filter_key: diccionario
-        endpoint: GET /v1/text/dictionary/{word}
-        title: Una definición canónica en el centro de ayuda y el chat
-        description: Validar términos y definiciones para contenido de soporte. Reducir la confusión en los centros de ayuda.
-        tag_problem: base de conocimientos
-        tag_industry: Atención al cliente
-        case_anchor: hechizo de caso
-        example: La información sobre herramientas del glosario resuelve los términos legales en entradas del diccionario al pasar el mouse. Los chats de CSR vinculan la misma definición para que clientes y agentes compartan una redacción canónica.
+        - filter_key: blasfemia
+          endpoint: POST /v1/validation/profanity
+          title: Modere los envíos antes de que se hagan públicos.
+          description: Modera el texto del usuario automáticamente. Mantenga las comunidades saludables sin aumentar la plantilla de forma lineal.
+          tag_problem: Moderación de contenido
+          tag_industry: redes sociales
+          case_anchor: moderación de casos
+          example: Las publicaciones del foro se ejecutan a través de una API de malas palabras al enviarlas. Las publicaciones bloqueadas devuelven un motivo en línea; los moderadores solo revisan la cola marcada en lugar de cada hilo.
+        - filter_key: deletrear
+          endpoint: POST /v1/text/spellcheck
+          title: Detecte errores tipográficos en el momento de la publicación en documentos y CMS
+          description: Corrija los errores tipográficos antes de publicar. Reduzca el riesgo de marca en correos electrónicos, documentos y textos en aplicaciones.
+          tag_problem: Calidad de escritura
+          tag_industry: SaaS
+          case_anchor: hechizo de caso
+          example: El centro de ayuda "Publicar" ejecuta el corrector ortográfico en Markdown. Los editores ven las correcciones sugeridas en la barra lateral antes de que el artículo se haga público y se indexe.
+        - filter_key: semejanza
+          endpoint: POST /v1/text/similarity
+          title: Deduplicación de macros y conocimiento casi duplicado
+          description: Relaciona contenido similar con similitud de texto. Mejorar las recomendaciones y la deduplicación.
+          tag_problem: Relevancia de búsqueda
+          tag_industry: Comercio electrónico
+          case_anchor: lenguaje de caso
+          example: El soporte ingiere nuevas macros y las compara con las existentes. Los duplicados por encima de 0,9 coseno se fusionan automáticamente para que los agentes dejen de seleccionar fragmentos casi idénticos.
+        - filter_key: idioma
+          endpoint: POST /v1/text/detect-language
+          title: Enrutar el contenido pegado al canal de configuración regional correcto
+          description: Identifique el idioma automáticamente para la localización. Dirige a los usuarios a la experiencia adecuada más rápido.
+          tag_problem: Localización
+          tag_industry: Aplicaciones globales
+          case_anchor: lenguaje de caso
+          example: Un sitio de documentos detecta el idioma desde el primer párrafo pegado. El origen que no está en inglés se dirige a la cola del proveedor de traducción con metadatos locales adjuntos.
+        - filter_key: tesauro
+          endpoint: GET /v1/text/thesaurus/{word}
+          title: Titulares y textos más potentes sin cambiar de pestaña
+          description: Encuentre sinónimos más fuertes al instante. Ayude al marketing y a los productos a ofrecer textos más nítidos.
+          tag_problem: Redacción
+          tag_industry: Marketing
+          case_anchor: hechizo de caso
+          example: "El creador de páginas de destino ofrece tres variantes de títulos: cada palabra marcada como débil recibe sugerencias de sinónimos de la API del diccionario de sinónimos antes de la asignación A/B."
+        - filter_key: diccionario
+          endpoint: GET /v1/text/dictionary/{word}
+          title: Una definición canónica en el centro de ayuda y el chat
+          description: Validar términos y definiciones para contenido de soporte. Reducir la confusión en los centros de ayuda.
+          tag_problem: base de conocimientos
+          tag_industry: Atención al cliente
+          case_anchor: hechizo de caso
+          example: La información sobre herramientas del glosario resuelve los términos legales en entradas del diccionario al pasar el mouse. Los chats de CSR vinculan la misma definición para que clientes y agentes compartan una redacción canónica.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: Millones
-        label: Operaciones de texto por día (escala de plataforma)
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: Millones
+          label: Operaciones de texto por día (escala de plataforma)
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje dónde el lenguaje perjudica la calidad o la confianza (moderación, ortografía, detección o sinónimos). Cada resultado se asigna a puntos finales que puede superponer en editores o colas.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Publicaciones y medios
-      - SaaS
-      - Comercio electrónico
-      - Aplicaciones globales
-      - Marketing
-      - Atención al cliente
+        - Publicaciones y medios
+        - SaaS
+        - Comercio electrónico
+        - Aplicaciones globales
+        - Marketing
+        - Atención al cliente
       testimonials: []
       final_cta:
         headline: Convierta el texto en mejores experiencias hoy.
@@ -501,109 +501,109 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre las pequeñas utilidades que aún roban tiempo: codificaciones, conversiones y enlaces para compartir. Destacan las API que existen para que puedas seguir construyendo tu diferenciador.'
+      tagline: "Estas historias tratan sobre las pequeñas utilidades que aún roban tiempo: codificaciones, conversiones y enlaces para compartir. Destacan las API que existen para que puedas seguir construyendo tu diferenciador."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: reducción
-        label: Rebaja a HTML
-      - key: qr
-        label: generador de códigos QR
-      - key: código de barras
-        label: generador de código de barras
-      - key: contraseña
-        label: Generador de contraseñas
-      - key: agente_usuario
-        label: Analizador de agente de usuario
-      - key: encimera
-        label: Encimera
-      - key: usuario_aleatorio
-        label: Usuario aleatorio
-      - key: base64
-        label: Codificación/decodificación Base64
-      - key: base_numérica
-        label: Conversión de base numérica
-      - key: color
-        label: Conversión de formato de color
-      - key: unidad
-        label: Conversión de unidades
-      - key: conversión_formato
-        label: Conversión de formato de datos
+        - key: todo
+          label: Todos los casos
+        - key: reducción
+          label: Rebaja a HTML
+        - key: qr
+          label: generador de códigos QR
+        - key: código de barras
+          label: generador de código de barras
+        - key: contraseña
+          label: Generador de contraseñas
+        - key: agente_usuario
+          label: Analizador de agente de usuario
+        - key: encimera
+          label: Encimera
+        - key: usuario_aleatorio
+          label: Usuario aleatorio
+        - key: base64
+          label: Codificación/decodificación Base64
+        - key: base_numérica
+          label: Conversión de base numérica
+        - key: color
+          label: Conversión de formato de color
+        - key: unidad
+          label: Conversión de unidades
+        - key: conversión_formato
+          label: Conversión de formato de datos
       featured_cases: []
       use_cases:
-      - filter_key: conversión_formato
-        endpoint: POST /v1/technology/format
-        title: Normalice CSV, JSON y XML en canalizaciones sin analizadores únicos
-        description: Convierta formatos de datos de manera confiable entre servicios. Deje de enviar analizadores únicos por integración.
-        tag_problem: Flujos de trabajo de datos
-        tag_industry: SaaS
-        case_anchor: formatos de casos
-        example: Un proveedor descarta CSV con cotizaciones impares; un trabajador llama a la conversión de formato a JSON normalizado antes de cargar el almacén. BI deja de fallar a mitad del lote en casos extremos de delimitador.
-      - filter_key: contraseña
-        endpoint: GET /v1/technology/password
-        title: Contraseñas generadas que cumplen con la política en el primer intento
-        description: Elimine la generación manual de contraseñas de la incorporación. Envíe los valores predeterminados de seguridad sin reinventar las utilidades criptográficas.
-        tag_problem: Seguridad
-        tag_industry: Herramientas de desarrollador
-        case_anchor: caso-ua
-        example: El administrador de inquilinos "restablecer cuenta de servicio" accede a una API que devuelve una contraseña de 24 caracteres que cumple con las reglas de complejidad. El secreto se muestra una vez en la interfaz de usuario; el usuario nunca inventa “¡Verano2024!”.
-      - filter_key: base64
-        endpoint: POST /v1/technology/base64/encode
-        title: Decodifica cargas útiles de fotografías móviles antes de almacenarlas
-        description: Admite cargas útiles Base64 sin código personalizado. Reduzca los errores de codificación sutiles en todos los equipos.
-        tag_problem: Integración
-        tag_industry: API
-        case_anchor: formatos de casos
-        example: El móvil sube una foto de perfil como Base64 en JSON. La API decodifica, ejecuta un análisis de virus y luego escribe en el almacenamiento de objetos, sin corrección binaria multiparte personalizada en el nivel medio.
-      - filter_key: agente_usuario
-        endpoint: GET /v1/technology/useragent
-        title: Campos estables de navegador y sistema operativo para análisis y embudos
-        description: Detecta el navegador, el sistema operativo y el dispositivo con precisión. Mejore los análisis y las señales de fraude.
-        tag_problem: Analítica
-        tag_industry: SaaS
-        case_anchor: caso-ua
-        example: El SDK web publica cadenas de User-Agent sin procesar con cada evento. El analizador almacena la familia de navegadores, la versión principal y el sistema operativo para los paneles; Las variantes de Safari dejan de colapsar en "Otros".
-      - filter_key: qr
-        endpoint: GET /v1/technology/qr
-        title: Enlaces de menú y check-in escaneables desde una URL
-        description: Convierta enlaces en códigos listos para dispositivos móviles con una sola llamada. Perfecto para eventos, menús y pagos.
-        tag_problem: Comercio
-        tag_industry: Minorista
-        case_anchor: caso-qr
-        example: El registro de eventos genera un QR PNG a partir de una URL de ticket firmada. El personal de la puerta escanea con la aplicación de cámara existente; La validación resuelve la identificación del asistente en un viaje de ida y vuelta.
-      - filter_key: unidad
-        endpoint: GET /v1/technology/convert/units
-        title: Una fuente de verdad para kg frente a lb en catálogo y PDP
-        description: Evite errores de falta de coincidencia de unidades en los datos del producto. Mantenga alineados los catálogos y las cargas útiles de IoT.
-        tag_problem: Ingeniería
-        tag_industry: IoT
-        case_anchor: formatos de casos
-        example: El maestro de productos almacena el peso en kilogramos. El escaparate de EE. UU. se convierte a libras en el momento del procesamiento con reglas de redondeo compartidas para que las API de PDP, carrito y etiquetas nunca estén en desacuerdo.
+        - filter_key: conversión_formato
+          endpoint: POST /v1/technology/format
+          title: Normalice CSV, JSON y XML en canalizaciones sin analizadores únicos
+          description: Convierta formatos de datos de manera confiable entre servicios. Deje de enviar analizadores únicos por integración.
+          tag_problem: Flujos de trabajo de datos
+          tag_industry: SaaS
+          case_anchor: formatos de casos
+          example: Un proveedor descarta CSV con cotizaciones impares; un trabajador llama a la conversión de formato a JSON normalizado antes de cargar el almacén. BI deja de fallar a mitad del lote en casos extremos de delimitador.
+        - filter_key: contraseña
+          endpoint: GET /v1/technology/password
+          title: Contraseñas generadas que cumplen con la política en el primer intento
+          description: Elimine la generación manual de contraseñas de la incorporación. Envíe los valores predeterminados de seguridad sin reinventar las utilidades criptográficas.
+          tag_problem: Seguridad
+          tag_industry: Herramientas de desarrollador
+          case_anchor: caso-ua
+          example: El administrador de inquilinos "restablecer cuenta de servicio" accede a una API que devuelve una contraseña de 24 caracteres que cumple con las reglas de complejidad. El secreto se muestra una vez en la interfaz de usuario; el usuario nunca inventa “¡Verano2024!”.
+        - filter_key: base64
+          endpoint: POST /v1/technology/base64/encode
+          title: Decodifica cargas útiles de fotografías móviles antes de almacenarlas
+          description: Admite cargas útiles Base64 sin código personalizado. Reduzca los errores de codificación sutiles en todos los equipos.
+          tag_problem: Integración
+          tag_industry: API
+          case_anchor: formatos de casos
+          example: El móvil sube una foto de perfil como Base64 en JSON. La API decodifica, ejecuta un análisis de virus y luego escribe en el almacenamiento de objetos, sin corrección binaria multiparte personalizada en el nivel medio.
+        - filter_key: agente_usuario
+          endpoint: GET /v1/technology/useragent
+          title: Campos estables de navegador y sistema operativo para análisis y embudos
+          description: Detecta el navegador, el sistema operativo y el dispositivo con precisión. Mejore los análisis y las señales de fraude.
+          tag_problem: Analítica
+          tag_industry: SaaS
+          case_anchor: caso-ua
+          example: El SDK web publica cadenas de User-Agent sin procesar con cada evento. El analizador almacena la familia de navegadores, la versión principal y el sistema operativo para los paneles; Las variantes de Safari dejan de colapsar en "Otros".
+        - filter_key: qr
+          endpoint: GET /v1/technology/qr
+          title: Enlaces de menú y check-in escaneables desde una URL
+          description: Convierta enlaces en códigos listos para dispositivos móviles con una sola llamada. Perfecto para eventos, menús y pagos.
+          tag_problem: Comercio
+          tag_industry: Minorista
+          case_anchor: caso-qr
+          example: El registro de eventos genera un QR PNG a partir de una URL de ticket firmada. El personal de la puerta escanea con la aplicación de cámara existente; La validación resuelve la identificación del asistente en un viaje de ida y vuelta.
+        - filter_key: unidad
+          endpoint: GET /v1/technology/convert/units
+          title: Una fuente de verdad para kg frente a lb en catálogo y PDP
+          description: Evite errores de falta de coincidencia de unidades en los datos del producto. Mantenga alineados los catálogos y las cargas útiles de IoT.
+          tag_problem: Ingeniería
+          tag_industry: IoT
+          case_anchor: formatos de casos
+          example: El maestro de productos almacena el peso en kilogramos. El escaparate de EE. UU. se convierte a libras en el momento del procesamiento con reglas de redondeo compartidas para que las API de PDP, carrito y etiquetas nunca estén en desacuerdo.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: Millones
-        label: Conversiones de servicios públicos por mes (escala de plataforma)
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: Millones
+          label: Conversiones de servicios públicos por mes (escala de plataforma)
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje las tareas que su equipo sigue posponiendo (conversión de formato, códigos QR, análisis de agentes de usuario). Cada resultado se asigna a puntos finales de servicios públicos que siguen siendo aburridos a propósito.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Ingeniería SaaS
-      - DevOps y plataforma
-      - Agencias
-      - Comercio minorista y eventos
-      - Analítica
-      - IoT
+        - Ingeniería SaaS
+        - DevOps y plataforma
+        - Agencias
+        - Comercio minorista y eventos
+        - Analítica
+        - IoT
       testimonials:
-      - name: Franzúa
-        role: Fundador, Flyver
-        quote: 'Construimos herramientas digitales que funcionan. Requiems es parte de ese conjunto de herramientas: confiable, rápido y fuera de nuestro camino.'
+        - name: Franzúa
+          role: Fundador, Flyver
+          quote: "Construimos herramientas digitales que funcionan. Requiems es parte de ese conjunto de herramientas: confiable, rápido y fuera de nuestro camino."
       final_cta:
         headline: Envíe funciones de desarrollador más rápido hoy.
         subheadline: Integra en minutos. Convierta las utilidades de rutina en API listas para producción.
@@ -619,99 +619,99 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre delicias ligeras que aún necesitan tiempo de actividad: juegos, citas y contenido para picar. Destacan las API que hacen que la participación sea tangible sin una organización de contenido.'
+      tagline: "Estas historias tratan sobre delicias ligeras que aún necesitan tiempo de actividad: juegos, citas y contenido para picar. Destacan las API que hacen que la participación sea tangible sin una organización de contenido."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: citas
-        label: citas aleatorias
-      - key: trivialidades
-        label: Trivialidades
-      - key: hechos
-        label: hechos aleatorios
-      - key: emojis
-        label: emojis
-      - key: horóscopo
-        label: Horóscopo
-      - key: sudokus
-        label: Sudokus
-      - key: chistes_papá
-        label: chistes de papá
-      - key: arrojar
-        label: Datos de Chuck Norris
-      - key: consejo
-        label: Consejos aleatorios
+        - key: todo
+          label: Todos los casos
+        - key: citas
+          label: citas aleatorias
+        - key: trivialidades
+          label: Trivialidades
+        - key: hechos
+          label: hechos aleatorios
+        - key: emojis
+          label: emojis
+        - key: horóscopo
+          label: Horóscopo
+        - key: sudokus
+          label: Sudokus
+        - key: chistes_papá
+          label: chistes de papá
+        - key: arrojar
+          label: Datos de Chuck Norris
+        - key: consejo
+          label: Consejos aleatorios
       featured_cases: []
       use_cases:
-      - filter_key: trivialidades
-        endpoint: GET /v1/entertainment/trivia
-        title: Preguntas diarias que devuelven a los usuarios entre las tareas principales
-        description: Agregue trivia diaria para aumentar la participación. Ofrezca a los usuarios una razón ligera para regresar.
-        tag_problem: Compromiso
-        tag_industry: Medios de comunicación
-        case_anchor: trivia de casos
-        example: La pantalla de inicio muestra una pregunta de trivia sobre el inicio en frío, dificultad basada en la racha de ayer. Responder registros localmente; las respuestas incorrectas desbloquean una llamada API de sugerencia, aún por debajo del mismo límite de velocidad.
-      - filter_key: citas
-        endpoint: GET /v1/entertainment/quotes/random
-        title: Cotizaciones listas para compartir sin un copista
-        description: Genere citas divertidas para compartir en redes sociales. Reducir la carga creativa para los equipos de crecimiento.
-        tag_problem: Contenido social
-        tag_industry: Aplicaciones
-        case_anchor: citas de casos
-        example: La hoja para compartir extrae una cita aleatoria etiquetada como "motivación", completa previamente la atribución y abre el cuadro de diálogo nativo para compartir. Marketing deja de pegar texto manualmente en Figma todos los lunes.
-      - filter_key: chistes_papá
-        endpoint: GET /v1/entertainment/jokes/dad
-        title: Risas ligeras al cargar o entre capítulos.
-        description: Ofrezca nuevos chistes en cada visita. Mantenga las aplicaciones ligeras frescas sin un equipo de contenido.
-        tag_problem: Retención
-        tag_industry: Entretenimiento
-        case_anchor: trivia de casos
-        example: Una aplicación de lectura para niños muestra un chiste de papá en la pantalla de carga entre capítulos. El TTL de caché es de 6 horas, por lo que las aperturas repetidas en la misma tarde no afectan la API.
-      - filter_key: emojis
-        endpoint: GET /v1/entertainment/emoji/random
-        title: Nuevas reacciones por canal sin nuevos paquetes de recursos
-        description: Mantenga a los usuarios en el chat con reacciones emoji. Haga que las conversaciones se sientan humanas.
-        tag_problem: experiencia de usuario
-        tag_industry: Mensajería
-        case_anchor: caso-emoji
-        example: La barra de reacciones solicita "reacciones de tendencia" para el tema del canal. El servidor devuelve 12 identificadores de emoji; El cliente se asigna a sprites locales para que los chats se sientan frescos sin enviar paquetes de recursos.
-      - filter_key: hechos
-        endpoint: GET /v1/entertainment/facts
-        title: Modales de celebración que enseñan algo en una sola llamada
-        description: Agregue hechos aleatorios al aprendizaje gamificado. Convierta las pausas del estudio en ciclos de hábitos.
-        tag_problem: Educación
-        tag_industry: Juegos
-        case_anchor: trivia de casos
-        example: Después de cada nivel de prueba, el cliente busca un hecho científico para el modo de celebración. Los padres ven "aprendieron algo nuevo" en las repeticiones de sesiones sin un CMS.
-      - filter_key: horóscopo
-        endpoint: GET /v1/entertainment/horoscope/{sign}
-        title: Copia matutina personalizada del signo solar y la fecha.
-        description: Crea horóscopos personalizados para usuarios diarios. Agregue ganchos de estilo de vida sin operaciones de contenido pesado.
-        tag_problem: Estilo de vida
-        tag_industry: Bienestar
-        case_anchor: citas de casos
-        example: El trabajo de inserción matutina lee el signo solar del usuario desde el perfil, solicita la copia del horóscopo de hoy y almacena el párrafo renderizado en la carga útil de notificación, sin necesidad de copiar manualmente.
+        - filter_key: trivialidades
+          endpoint: GET /v1/entertainment/trivia
+          title: Preguntas diarias que devuelven a los usuarios entre las tareas principales
+          description: Agregue trivia diaria para aumentar la participación. Ofrezca a los usuarios una razón ligera para regresar.
+          tag_problem: Compromiso
+          tag_industry: Medios de comunicación
+          case_anchor: trivia de casos
+          example: La pantalla de inicio muestra una pregunta de trivia sobre el inicio en frío, dificultad basada en la racha de ayer. Responder registros localmente; las respuestas incorrectas desbloquean una llamada API de sugerencia, aún por debajo del mismo límite de velocidad.
+        - filter_key: citas
+          endpoint: GET /v1/entertainment/quotes/random
+          title: Cotizaciones listas para compartir sin un copista
+          description: Genere citas divertidas para compartir en redes sociales. Reducir la carga creativa para los equipos de crecimiento.
+          tag_problem: Contenido social
+          tag_industry: Aplicaciones
+          case_anchor: citas de casos
+          example: La hoja para compartir extrae una cita aleatoria etiquetada como "motivación", completa previamente la atribución y abre el cuadro de diálogo nativo para compartir. Marketing deja de pegar texto manualmente en Figma todos los lunes.
+        - filter_key: chistes_papá
+          endpoint: GET /v1/entertainment/jokes/dad
+          title: Risas ligeras al cargar o entre capítulos.
+          description: Ofrezca nuevos chistes en cada visita. Mantenga las aplicaciones ligeras frescas sin un equipo de contenido.
+          tag_problem: Retención
+          tag_industry: Entretenimiento
+          case_anchor: trivia de casos
+          example: Una aplicación de lectura para niños muestra un chiste de papá en la pantalla de carga entre capítulos. El TTL de caché es de 6 horas, por lo que las aperturas repetidas en la misma tarde no afectan la API.
+        - filter_key: emojis
+          endpoint: GET /v1/entertainment/emoji/random
+          title: Nuevas reacciones por canal sin nuevos paquetes de recursos
+          description: Mantenga a los usuarios en el chat con reacciones emoji. Haga que las conversaciones se sientan humanas.
+          tag_problem: experiencia de usuario
+          tag_industry: Mensajería
+          case_anchor: caso-emoji
+          example: La barra de reacciones solicita "reacciones de tendencia" para el tema del canal. El servidor devuelve 12 identificadores de emoji; El cliente se asigna a sprites locales para que los chats se sientan frescos sin enviar paquetes de recursos.
+        - filter_key: hechos
+          endpoint: GET /v1/entertainment/facts
+          title: Modales de celebración que enseñan algo en una sola llamada
+          description: Agregue hechos aleatorios al aprendizaje gamificado. Convierta las pausas del estudio en ciclos de hábitos.
+          tag_problem: Educación
+          tag_industry: Juegos
+          case_anchor: trivia de casos
+          example: Después de cada nivel de prueba, el cliente busca un hecho científico para el modo de celebración. Los padres ven "aprendieron algo nuevo" en las repeticiones de sesiones sin un CMS.
+        - filter_key: horóscopo
+          endpoint: GET /v1/entertainment/horoscope/{sign}
+          title: Copia matutina personalizada del signo solar y la fecha.
+          description: Crea horóscopos personalizados para usuarios diarios. Agregue ganchos de estilo de vida sin operaciones de contenido pesado.
+          tag_problem: Estilo de vida
+          tag_industry: Bienestar
+          case_anchor: citas de casos
+          example: El trabajo de inserción matutina lee el signo solar del usuario desde el perfil, solicita la copia del horóscopo de hoy y almacena el párrafo renderizado en la carga útil de notificación, sin necesidad de copiar manualmente.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: Miles
-        label: Respuestas de contenido servidas diariamente (escala de plataforma)
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: Miles
+          label: Respuestas de contenido servidas diariamente (escala de plataforma)
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje cómo desea que se sienta la retención (trivia, citas, reacciones). Cada resultado se asigna a puntos finales de contenido liviano que puede intercambiar rápidamente.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Aplicaciones de consumo
-      - Medios de comunicación
-      - Mensajería
-      - Juegos
-      - Bienestar
-      - Equipos de crecimiento
+        - Aplicaciones de consumo
+        - Medios de comunicación
+        - Mensajería
+        - Juegos
+        - Bienestar
+        - Equipos de crecimiento
       testimonials: []
       final_cta:
         headline: Agregue entretenimiento instantáneo a su aplicación hoy.
@@ -728,87 +728,87 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'Estas historias tratan sobre cómo ayudar a las personas a terminar rutinas: entrenamientos, momentos de planificación y responsabilidad amable. Destacan las API de salud que se combinan con su historia de entrenamiento o beneficios.'
+      tagline: "Estas historias tratan sobre cómo ayudar a las personas a terminar rutinas: entrenamientos, momentos de planificación y responsabilidad amable. Destacan las API de salud que se combinan con su historia de entrenamiento o beneficios."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: aptitud física
-        label: ejercicios de acondicionamiento físico
+        - key: todo
+          label: Todos los casos
+        - key: aptitud física
+          label: ejercicios de acondicionamiento físico
       featured_cases: []
       use_cases:
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises
-        title: Listas de entrenamiento filtradas por equipo, duración y objetivo.
-        description: Ofrezca rutinas de ejercicio personalizadas al instante. Ayude a los usuarios a progresar sin programación manual.
-        tag_problem: Aptitud física
-        tag_industry: Bienestar
-        case_anchor: caso-fitness
-        example: El usuario elige la duración, el equipo "solo mancuernas" y el objetivo "fuerza". API devuelve ejercicios ordenados con series y descanso; el conjunto de registros de la aplicación completado vuelve a su base de datos.
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises/random
-        title: Sesiones sorpresa para planificar y variar las comidas.
-        description: Genere información nutricional y sugerencias de comidas automáticamente. Reducir la fricción en los viajes de salud.
-        tag_problem: Nutrición
-        tag_industry: Salud
-        case_anchor: caso-nutricion
-        example: El paso del plan de alimentación envía las calorías objetivo más "vegetariano". La respuesta enumera tres ideas para cenar con resúmenes macro; el usuario cambia un espacio y vuelve a buscarlo para el mismo día.
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises/random
-        title: Microentrenamientos cuando se rompen las rachas
-        description: Mantenga a los usuarios interesados ​​con recordatorios de seguimiento de objetivos. Haga que los hábitos se mantengan con indicaciones oportunas.
-        tag_problem: Retención
-        tag_industry: Aptitud física
-        case_anchor: hábitos de caso
-        example: El widget Streak detecta dos días perdidos y solicita un “micro” entrenamiento de 7 minutos. La copia push utiliza la propaganda de API para que los mensajes sean consistentes con el entrenamiento en la aplicación.
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises
-        title: Flujos de incorporación respaldados por datos reales del catálogo de ejercicios
-        description: Proporcione cálculos de bienestar confiables para cada usuario. Reduzca las conjeturas en los paneles.
-        tag_problem: Métricas de salud
-        tag_industry: Aplicaciones
-        case_anchor: caso-fitness
-        example: La incorporación recoge la altura en cm y el peso en kg; El IMC se transmite al gráfico con una cadena de exención de responsabilidad estándar del producto legal. Los puntos históricos almacenan entradas sin procesar para auditoría.
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises/random
-        title: Ideas para cambios más saludables al finalizar la compra
-        description: Recomendar información nutricional durante el pago. Impulsar mejores decisiones en el punto de venta.
-        tag_problem: tecnología alimentaria
-        tag_industry: Nutrición
-        case_anchor: caso-nutricion
-        example: El escaneo del código de barras devuelve azúcar por porción; la compra sugiere un intercambio bajo en azúcar de la misma categoría del pasillo utilizando el bloque de sugerencias nutricionales en la respuesta.
-      - filter_key: aptitud física
-        endpoint: GET /v1/health/exercises
-        title: Consejos diarios ligados a tu catálogo de ejercicios
-        description: Descubra breves consejos de salud que los usuarios realmente siguen. Cree rutinas sin contenido pesado.
-        tag_problem: Bienestar
-        tag_industry: Estilo de vida
-        case_anchor: hábitos de caso
-        example: La notificación local diaria a las 7 a. m. muestra el “consejo del día”, almacena la clave de idempotencia por usuario+fecha y omite el envío si el usuario ya completó un entrenamiento registrado.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises
+          title: Listas de entrenamiento filtradas por equipo, duración y objetivo.
+          description: Ofrezca rutinas de ejercicio personalizadas al instante. Ayude a los usuarios a progresar sin programación manual.
+          tag_problem: Aptitud física
+          tag_industry: Bienestar
+          case_anchor: caso-fitness
+          example: El usuario elige la duración, el equipo "solo mancuernas" y el objetivo "fuerza". API devuelve ejercicios ordenados con series y descanso; el conjunto de registros de la aplicación completado vuelve a su base de datos.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises/random
+          title: Sesiones sorpresa para planificar y variar las comidas.
+          description: Genere información nutricional y sugerencias de comidas automáticamente. Reducir la fricción en los viajes de salud.
+          tag_problem: Nutrición
+          tag_industry: Salud
+          case_anchor: caso-nutricion
+          example: El paso del plan de alimentación envía las calorías objetivo más "vegetariano". La respuesta enumera tres ideas para cenar con resúmenes macro; el usuario cambia un espacio y vuelve a buscarlo para el mismo día.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises/random
+          title: Microentrenamientos cuando se rompen las rachas
+          description: Mantenga a los usuarios interesados ​​con recordatorios de seguimiento de objetivos. Haga que los hábitos se mantengan con indicaciones oportunas.
+          tag_problem: Retención
+          tag_industry: Aptitud física
+          case_anchor: hábitos de caso
+          example: El widget Streak detecta dos días perdidos y solicita un “micro” entrenamiento de 7 minutos. La copia push utiliza la propaganda de API para que los mensajes sean consistentes con el entrenamiento en la aplicación.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises
+          title: Flujos de incorporación respaldados por datos reales del catálogo de ejercicios
+          description: Proporcione cálculos de bienestar confiables para cada usuario. Reduzca las conjeturas en los paneles.
+          tag_problem: Métricas de salud
+          tag_industry: Aplicaciones
+          case_anchor: caso-fitness
+          example: La incorporación recoge la altura en cm y el peso en kg; El IMC se transmite al gráfico con una cadena de exención de responsabilidad estándar del producto legal. Los puntos históricos almacenan entradas sin procesar para auditoría.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises/random
+          title: Ideas para cambios más saludables al finalizar la compra
+          description: Recomendar información nutricional durante el pago. Impulsar mejores decisiones en el punto de venta.
+          tag_problem: tecnología alimentaria
+          tag_industry: Nutrición
+          case_anchor: caso-nutricion
+          example: El escaneo del código de barras devuelve azúcar por porción; la compra sugiere un intercambio bajo en azúcar de la misma categoría del pasillo utilizando el bloque de sugerencias nutricionales en la respuesta.
+        - filter_key: aptitud física
+          endpoint: GET /v1/health/exercises
+          title: Consejos diarios ligados a tu catálogo de ejercicios
+          description: Descubra breves consejos de salud que los usuarios realmente siguen. Cree rutinas sin contenido pesado.
+          tag_problem: Bienestar
+          tag_industry: Estilo de vida
+          case_anchor: hábitos de caso
+          example: La notificación local diaria a las 7 a. m. muestra el “consejo del día”, almacena la clave de idempotencia por usuario+fecha y omite el envío si el usuario ya completó un entrenamiento registrado.
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: Miles
-        label: Planes de salud generados diariamente (escala de plataforma)
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: Miles
+          label: Planes de salud generados diariamente (escala de plataforma)
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje cómo las personas siguen su producto (entrenamientos, consejos nutricionales, hábitos). Cada resultado se asigna a puntos finales de salud que puede combinar con su propia experiencia de usuario de entrenamiento.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - Fitness y entrenamiento
-      - Aplicaciones de bienestar
-      - Nutrición
-      - Plataformas sanitarias
-      - Bienestar del empleador
-      - Marcas de estilo de vida
+        - Fitness y entrenamiento
+        - Aplicaciones de bienestar
+        - Nutrición
+        - Plataformas sanitarias
+        - Bienestar del empleador
+        - Marcas de estilo de vida
       testimonials:
-      - name: Fuerza de compilación
-        role: compilastrength.com
-        quote: Los datos de fitness de Requiems potencian nuestras funciones principales. No tuvimos que construir ni mantener nada de esa infraestructura.
+        - name: Fuerza de compilación
+          role: compilastrength.com
+          quote: Los datos de fitness de Requiems potencian nuestras funciones principales. No tuvimos que construir ni mantener nada de esa infraestructura.
       final_cta:
         headline: Lanza experiencias de salud más inteligentes hoy.
         subheadline: Integra en minutos. Ayude a los usuarios a mantenerse saludables con un conjunto de API.
@@ -824,101 +824,101 @@ es:
         secondary_cta: Empieza gratis
       strategy_call:
         label: Reserve una llamada de estrategia
-      tagline: 'El titular cubre lo que puedes integrar. Los siguientes ejemplos son pago, pago y FX: situaciones breves en las que la validación o los datos de referencia cambiaron el resultado.'
+      tagline: "El titular cubre lo que puedes integrar. Los siguientes ejemplos son pago, pago y FX: situaciones breves en las que la validación o los datos de referencia cambiaron el resultado."
       filters:
-      - key: todo
-        label: Todos los casos
-      - key: papelera
-        label: búsqueda de BIN
-      - key: iban
-        label: validador de IBAN
-      - key: rápido
-        label: Código SWIFT
-      - key: cripto
-        label: Precios de las criptomonedas
-      - key: fx
-        label: Tipos de cambio
-      - key: inflación
-        label: Inflación
-      - key: productos básicos
-        label: Materias primas
-      - key: hipoteca
-        label: Hipoteca
+        - key: todo
+          label: Todos los casos
+        - key: papelera
+          label: búsqueda de BIN
+        - key: iban
+          label: validador de IBAN
+        - key: rápido
+          label: Código SWIFT
+        - key: cripto
+          label: Precios de las criptomonedas
+        - key: fx
+          label: Tipos de cambio
+        - key: inflación
+          label: Inflación
+        - key: productos básicos
+          label: Materias primas
+        - key: hipoteca
+          label: Hipoteca
       featured_cases: []
       use_cases:
-      - filter_key: papelera
-        endpoint: GET /v1/finance/bin/{bin}
-        title: Menos rechazos falsos al finalizar la compra
-        description: Enriquezca los metadatos de la tarjeta para riesgo y enrutamiento. Reduzca la fricción con el buen cliente sin dejar de cumplir con las normas.
-        tag_problem: Pagos
-        tag_industry: tecnología financiera
-        case_anchor: contenedor de cajas
-        example: La autorización envía los primeros 8 dígitos PAN (o el equivalente del token) a la búsqueda de BIN; El país emisor y el tipo de producto alimentan su motor de reglas para que el débito nacional deje de calificarse como el crédito transfronterizo.
-      - filter_key: iban
-        endpoint: GET /v1/finance/iban/{iban}
-        title: Pagos más limpios con validación de IBAN
-        description: Valide las cuentas bancarias antes de que se mueva el dinero. Detenga los costosos ciclos de reparación a posteriori.
-        tag_problem: Pagos
-        tag_industry: Mercados
-        case_anchor: caso-iban
-        example: La incorporación del vendedor valida la suma de verificación y la longitud del IBAN para el país seleccionado antes de crear un perfil de pago. Las cuentas no válidas devuelven errores de campo en lugar de archivos por lotes fallidos del banco.
-      - filter_key: rápido
-        endpoint: GET /v1/finance/swift/{code}
-        title: Enrutamiento bancario más rápido con búsquedas SWIFT
-        description: Confirme los metadatos de la institución para transferencias y cumplimiento. Reducir la investigación manual para los equipos financieros.
-        tag_problem: Datos bancarios
-        tag_industry: Operaciones financieras
-        case_anchor: caso-rápido
-        example: El analista pega BIC en las herramientas de operaciones; La búsqueda devuelve metadatos del nombre de la institución, la ciudad y la sucursal para el PDF de confirmación de la transferencia. Las exportaciones CSV incluyen los mismos campos para los auditores.
-      - filter_key: cripto
-        endpoint: GET /v1/finance/crypto/{symbol}
-        title: Precios en tiempo real para activos digitales
-        description: Muestre precios criptográficos confiables en la aplicación. Mantenga las cotizaciones alineadas con lo que esperan los usuarios.
-        tag_problem: Precios
-        tag_industry: Aplicaciones criptográficas
-        case_anchor: caso-fx
-        example: Las encuestas domésticas de Wallet indican precios spot para BTC y ETH cada 30 segundos con claves de caché compartidas. La revisión comercial muestra la misma identificación instantánea que el mosaico de la cartera para que los usuarios no vean dos números diferentes.
-      - filter_key: fx
-        endpoint: GET /v1/finance/exchange-rate
-        title: Totales de pago más justos en todo el mundo
-        description: Convierta con tarifas transparentes. Reduzca las disputas y los carritos abandonados en pedidos internacionales.
-        tag_problem: Multidivisa
-        tag_industry: Comercio electrónico
-        case_anchor: caso-fx
-        example: El subtotal del carrito se almacena en EUR del comerciante; La actualización del botón de pago obtiene la tasa media del mercado en USD más su regla de redondeo. El recibo por correo electrónico incluye la marca de tiempo de la tarifa para que CS coincida con el monto cobrado.
-      - filter_key: inflación
-        endpoint: GET /v1/finance/inflation
-        title: Mejores datos de planificación para los equipos financieros
-        description: Inflación y datos de referencia para modelos y divulgaciones. Envíe conocimientos sin crear canales de datos.
-        tag_problem: Analítica
-        tag_industry: Finanzas
-        case_anchor: caso-fx
-        example: 'La hoja de FP&A se publica el lunes en el cron: extraiga el IPC interanual para EE. UU. y la UE, escriba las celdas utilizadas por las macros de pronóstico. Los mazos citan la misma identificación de serie que la wiki interna sin copiar y pegar de sitios de noticias aleatorios.'
+        - filter_key: papelera
+          endpoint: GET /v1/finance/bin/{bin}
+          title: Menos rechazos falsos al finalizar la compra
+          description: Enriquezca los metadatos de la tarjeta para riesgo y enrutamiento. Reduzca la fricción con el buen cliente sin dejar de cumplir con las normas.
+          tag_problem: Pagos
+          tag_industry: tecnología financiera
+          case_anchor: contenedor de cajas
+          example: La autorización envía los primeros 8 dígitos PAN (o el equivalente del token) a la búsqueda de BIN; El país emisor y el tipo de producto alimentan su motor de reglas para que el débito nacional deje de calificarse como el crédito transfronterizo.
+        - filter_key: iban
+          endpoint: GET /v1/finance/iban/{iban}
+          title: Pagos más limpios con validación de IBAN
+          description: Valide las cuentas bancarias antes de que se mueva el dinero. Detenga los costosos ciclos de reparación a posteriori.
+          tag_problem: Pagos
+          tag_industry: Mercados
+          case_anchor: caso-iban
+          example: La incorporación del vendedor valida la suma de verificación y la longitud del IBAN para el país seleccionado antes de crear un perfil de pago. Las cuentas no válidas devuelven errores de campo en lugar de archivos por lotes fallidos del banco.
+        - filter_key: rápido
+          endpoint: GET /v1/finance/swift/{code}
+          title: Enrutamiento bancario más rápido con búsquedas SWIFT
+          description: Confirme los metadatos de la institución para transferencias y cumplimiento. Reducir la investigación manual para los equipos financieros.
+          tag_problem: Datos bancarios
+          tag_industry: Operaciones financieras
+          case_anchor: caso-rápido
+          example: El analista pega BIC en las herramientas de operaciones; La búsqueda devuelve metadatos del nombre de la institución, la ciudad y la sucursal para el PDF de confirmación de la transferencia. Las exportaciones CSV incluyen los mismos campos para los auditores.
+        - filter_key: cripto
+          endpoint: GET /v1/finance/crypto/{symbol}
+          title: Precios en tiempo real para activos digitales
+          description: Muestre precios criptográficos confiables en la aplicación. Mantenga las cotizaciones alineadas con lo que esperan los usuarios.
+          tag_problem: Precios
+          tag_industry: Aplicaciones criptográficas
+          case_anchor: caso-fx
+          example: Las encuestas domésticas de Wallet indican precios spot para BTC y ETH cada 30 segundos con claves de caché compartidas. La revisión comercial muestra la misma identificación instantánea que el mosaico de la cartera para que los usuarios no vean dos números diferentes.
+        - filter_key: fx
+          endpoint: GET /v1/finance/exchange-rate
+          title: Totales de pago más justos en todo el mundo
+          description: Convierta con tarifas transparentes. Reduzca las disputas y los carritos abandonados en pedidos internacionales.
+          tag_problem: Multidivisa
+          tag_industry: Comercio electrónico
+          case_anchor: caso-fx
+          example: El subtotal del carrito se almacena en EUR del comerciante; La actualización del botón de pago obtiene la tasa media del mercado en USD más su regla de redondeo. El recibo por correo electrónico incluye la marca de tiempo de la tarifa para que CS coincida con el monto cobrado.
+        - filter_key: inflación
+          endpoint: GET /v1/finance/inflation
+          title: Mejores datos de planificación para los equipos financieros
+          description: Inflación y datos de referencia para modelos y divulgaciones. Envíe conocimientos sin crear canales de datos.
+          tag_problem: Analítica
+          tag_industry: Finanzas
+          case_anchor: caso-fx
+          example: "La hoja de FP&A se publica el lunes en el cron: extraiga el IPC interanual para EE. UU. y la UE, escriba las celdas utilizadas por las macros de pronóstico. Los mazos citan la misma identificación de serie que la wiki interna sin copiar y pegar de sitios de noticias aleatorios."
       scale_metrics:
-      - value: 99,99%
-        label: Objetivo de tiempo de actividad de la plataforma
-      - value: ~500ms
-        label: Tiempo promedio de respuesta de API
-      - value: Global
-        label: Principales esquemas de pago y referencia en el catálogo.
+        - value: 99,99%
+          label: Objetivo de tiempo de actividad de la plataforma
+        - value: ~500ms
+          label: Tiempo promedio de respuesta de API
+        - value: Global
+          label: Principales esquemas de pago y referencia en el catálogo.
       how_it_works:
         step1_title: Elige un patrón que te suene familiar
         step1_body: Elija una tarjeta que refleje cómo se mueve el dinero a través de su producto (tarjetas, rieles bancarios, FX). Cada resultado se asigna a los puntos finales financieros que usted valida antes de que los fondos abandonen el edificio.
         step2_title: Conéctelo a su pila
         step2_body: Utilice los ejemplos de referencia, agregue su clave API y llame a los puntos finales HTTPS desde su backend o borde. La mayoría de los equipos envían la primera versión la misma semana en que leen los documentos.
         step3_title: Demuéstralo con tus propias métricas
-        step3_body: 'Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse.'
+        step3_body: "Compare el antes y el después en paneles en los que ya confía: menos fallas, colas más cortas, soporte más tranquilo o páginas más rápidas una vez que las malas entradas dejan de propagarse."
       industries:
-      - tecnología financiera
-      - Comercio electrónico
-      - Mercados
-      - Banca y pagos
-      - Aplicaciones criptográficas
-      - Operaciones financieras
+        - tecnología financiera
+        - Comercio electrónico
+        - Mercados
+        - Banca y pagos
+        - Aplicaciones criptográficas
+        - Operaciones financieras
       testimonials:
-      - name: Verigeo
-        role: verigeo.pe
-        quote: Usamos Requiems para datos financieros en nuestros widgets y para bloquear registros falsos en el momento del registro. La capa de reconocimiento nos ayudó a personalizar el marketing sin tener que crear nada desde cero.
+        - name: Verigeo
+          role: verigeo.pe
+          quote: Usamos Requiems para datos financieros en nuestros widgets y para bloquear registros falsos en el momento del registro. La capa de reconocimiento nos ayudó a personalizar el marketing sin tener que crear nada desde cero.
       final_cta:
         headline: Envíe datos de pagos en los que pueda confiar hoy.
         subheadline: Integra en minutos. Reduzca el fraude, los rechazos y las correcciones manuales.

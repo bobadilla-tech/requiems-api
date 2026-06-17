@@ -295,7 +295,7 @@ endpoints:
     errors:
       - code: 422
         message: validation_failed
-        description: Invalid variant or values list size outside 1-50      
+        description: Invalid variant or values list size outside 1-50
 faq:
   - question: What is the difference between standard and url variants?
     answer: >-

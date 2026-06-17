@@ -1,0 +1,61 @@
+<% use_cases = [
+  {
+    title: "Reduce duplicate accounts",
+    desc:  "Normalize emails on signup to avoid multiple accounts for the same user.",
+    tags:  ["User onboarding", "Identity"]
+  },
+  {
+    title: "Improve mailing list quality",
+    desc:  "Standardize email addresses before adding them to campaigns.",
+    tags:  ["Marketing", "Email lists"]
+  },
+  {
+    title: "Protect customer data",
+    desc:  "Clean contact records before saving them in your CRM.",
+    tags:  ["Operations", "CRM"]
+  },
+  {
+    title: "Sync customer profiles",
+    desc:  "Match users across systems using canonical email values.",
+    tags:  ["Product", "Data sync"]
+  },
+  {
+    title: "Lower failed sends",
+    desc:  "Fix common email formatting issues before sending mail.",
+    tags:  ["Deliverability", "Email"]
+  },
+  {
+    title: "Make analytics accurate",
+    desc:  "Normalize email data so usage metrics are not split by formatting variants.",
+    tags:  ["Analytics", "Customer data"]
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Real problems, real users.</h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        Email Normalizer fits wherever contact data quality matters.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% use_cases.each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4"><%= uc[:desc] %></p>
+          <div class="flex flex-wrap gap-2">
+            <% uc[:tags].each do |tag| %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <%= tag %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
