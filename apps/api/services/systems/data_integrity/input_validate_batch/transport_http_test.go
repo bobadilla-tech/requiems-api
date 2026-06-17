@@ -25,21 +25,17 @@ func setupRouter(inputValidateSvc InputValidateService) chi.Router {
 
 type stubInputValidateService struct {
 	responses map[string]inputvalidate.Response
+	blockOn   string
+	panicOn   string
 }
 
 func (s *stubInputValidateService) Validate(ctx context.Context, email, phone, text string) inputvalidate.Response {
-	return s.responses[email]
-}
-
-type stubInputValidateServiceWithTimeout struct {
-	responses map[string]inputvalidate.Response
-	blockOn   string // email que va a causar timeout
-}
-
-func (s *stubInputValidateServiceWithTimeout) Validate(ctx context.Context, email, phone, text string) inputvalidate.Response {
 	if email == s.blockOn {
 		<-ctx.Done()
 		return inputvalidate.Response{}
+	}
+	if email == s.panicOn {
+		panic("simulated panic")
 	}
 	return s.responses[email]
 }
@@ -167,12 +163,16 @@ func TestValidateBatch_MixValidAndInvalid(t *testing.T) {
 	// per-item valid differs
 	assert.True(t, resp.Data.Results[0].Email.Valid)
 	assert.False(t, resp.Data.Results[1].Email.Valid)
+
+	// average includes both valid and invalid processed items
+	// alice: 0.97, invalid-email: 0.0 → average = 0.485
+	assert.InDelta(t, 0.485, resp.Data.AverageQualityScore, 0.01)
 }
 
 func TestValidateBatch_OneItemTimeout(t *testing.T) {
 	t.Parallel()
 
-	stub := &stubInputValidateServiceWithTimeout{
+	stub := &stubInputValidateService{
 		blockOn: "slow@example.com",
 		responses: map[string]inputvalidate.Response{
 			"alice@example.com": validEmailResult("alice@example.com"),
@@ -203,6 +203,9 @@ func TestValidateBatch_OneItemTimeout(t *testing.T) {
 
 	assert.Nil(t, resp.Data.Results[0].Error)
 	assert.Nil(t, resp.Data.Results[2].Error)
+
+	// only alice and bob are included in average, slow@example.com timed out
+	assert.InDelta(t, 0.97, resp.Data.AverageQualityScore, 0.01)
 }
 
 func TestValidateBatch_Over50Items(t *testing.T) {
@@ -269,4 +272,43 @@ func TestValidateBatch_SetsUsageCountHeader(t *testing.T) {
 	if got := w.Header().Get("X-Usage-Count"); got != "2" {
 		t.Errorf("Expected X-Usage-Count: 2, got %q", got)
 	}
+}
+
+func TestValidateBatch_OneItemPanic(t *testing.T) {
+	t.Parallel()
+
+	stub := &stubInputValidateService{
+		panicOn: "panic@example.com",
+		responses: map[string]inputvalidate.Response{
+			"alice@example.com": validEmailResult("alice@example.com"),
+			"bob@example.com":   validEmailResult("bob@example.com"),
+		},
+	}
+
+	r := setupRouter(stub)
+
+	w := post(t, r, `{
+        "items": [
+            { "email": "alice@example.com", "phone": "+14155550001" },
+            { "email": "panic@example.com", "phone": "+14155550002" },
+            { "email": "bob@example.com",   "phone": "+14155550003" }
+        ]
+    }`)
+
+	require.Equal(t, http.StatusOK, w.Code)
+
+	var resp httpx.Response[BatchResponse]
+	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
+
+	assert.Equal(t, 3, resp.Data.Total)
+	assert.Equal(t, 2, resp.Data.ValidCount)
+	assert.Equal(t, 1, resp.Data.InvalidCount)
+
+	// panic item has error, others don't
+	assert.Nil(t, resp.Data.Results[0].Error)
+	assert.NotNil(t, resp.Data.Results[1].Error)
+	assert.Nil(t, resp.Data.Results[2].Error)
+
+	// panic item is excluded from average
+	assert.InDelta(t, 0.97, resp.Data.AverageQualityScore, 0.01)
 }
