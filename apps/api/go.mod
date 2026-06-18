@@ -28,7 +28,6 @@ require (
 	github.com/paulmach/orb v0.13.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ringsaturn/tzf-dist v0.0.2026-b-fix1 // indirect
-	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tidwall/geoindex v1.7.0 // indirect
@@ -50,7 +49,7 @@ require (
 	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
 	github.com/boombuler/barcode v1.1.0
-	github.com/getsentry/sentry-go v0.46.2
+	github.com/getsentry/sentry-go v0.47.0
 	github.com/jaswdr/faker/v2 v2.9.1
 	github.com/likexian/whois v1.15.7
 	github.com/likexian/whois-parser v1.24.21
