@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::AnalyticsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
-  layout "admin"
+class Admin::AnalyticsController < Admin::BaseController
 
   def usage
     @date_range = params[:date_range] || "30"
@@ -172,9 +169,4 @@ class Admin::AnalyticsController < ApplicationController
     end
   end
 
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 end

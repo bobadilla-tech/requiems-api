@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::ApiKeysController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
+class Admin::ApiKeysController < Admin::BaseController
   before_action :set_api_key, only: [ :show, :revoke ]
-  layout "admin"
 
   def index
     @api_keys = ApiKey.includes(:user).order(created_at: :desc)
@@ -38,12 +35,6 @@ class Admin::ApiKeysController < ApplicationController
   end
 
   private
-
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 
   def set_api_key
     @api_key = ApiKey.find(params[:id])

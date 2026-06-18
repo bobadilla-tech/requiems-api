@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::PrivateDeploymentsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
+class Admin::PrivateDeploymentsController < Admin::BaseController
   before_action :set_deployment_request, only: [ :show, :activate, :cancel ]
-  layout "admin"
 
   def index
     @deployment_requests = PrivateDeploymentRequest.includes(:user)
@@ -67,12 +64,6 @@ class Admin::PrivateDeploymentsController < ApplicationController
   end
 
   private
-
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 
   def set_deployment_request
     @deployment_request = PrivateDeploymentRequest.find(params[:id])
