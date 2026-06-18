@@ -1,0 +1,24 @@
+<turbo-frame id="unit_conversion-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900">
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">
+        <%= t("tools.unit_conversion.demo.result_heading") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <% [
+        [t("tools.unit_conversion.demo.label_from"),    data["from"]],
+        [t("tools.unit_conversion.demo.label_to"),      data["to"]],
+        [t("tools.unit_conversion.demo.label_input"),   data["input"]],
+        [t("tools.unit_conversion.demo.label_result"),  data["result"]],
+        [t("tools.unit_conversion.demo.label_formula"), data["formula"]],
+      ].each do |label, value| %>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+          <span class="text-sm text-gray-500 dark:text-gray-400"><%= label %></span>
+          <span class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= value.presence || "—" %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>
