@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::OverviewController < ApplicationController
-  before_action :authenticate_user!
-  layout "dashboard"
+class Dashboard::OverviewController < Dashboard::BaseController
 
   def index
     @current_plan = current_user.current_plan

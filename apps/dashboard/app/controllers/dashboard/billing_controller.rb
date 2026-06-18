@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::BillingController < ApplicationController
-  before_action :authenticate_user!
-  layout "dashboard"
+class Dashboard::BillingController < Dashboard::BaseController
 
   helper_method :valid_plan?
 
