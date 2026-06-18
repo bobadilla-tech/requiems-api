@@ -1,0 +1,51 @@
+<%
+  VALID_SENTIMENTS = %w[positive negative neutral].freeze
+  sentiment = VALID_SENTIMENTS.include?(data["sentiment"]) ? data["sentiment"] : "neutral"
+  score     = ((data["score"] || 0) * 100).round
+  breakdown = data["breakdown"] || {}
+
+  color_map = {
+    "positive" => { badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300", bar: "bg-emerald-500" },
+    "negative" => { badge: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",                bar: "bg-red-500" },
+    "neutral"  => { badge: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300",            bar: "bg-gray-400" },
+  }
+  colors = color_map[sentiment]
+
+  label_keys = {
+    "positive" => "label_positive",
+    "negative" => "label_negative",
+    "neutral"  => "label_neutral",
+  }
+%>
+<turbo-frame id="sentiment_analysis-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-5 py-4 flex items-center gap-3 bg-gray-50 dark:bg-gray-900">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold <%= colors[:badge] %>">
+        <%= t("tools.sentiment_analysis.demo.#{label_keys[sentiment]}") %>
+      </span>
+      <span class="text-sm text-gray-500 dark:text-gray-400">
+        <%= score %>% <%= t("tools.sentiment_analysis.demo.label_confident") %>
+      </span>
+    </div>
+
+    <div class="px-5 py-4">
+      <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
+        <%= t("tools.sentiment_analysis.demo.label_breakdown") %>
+      </p>
+
+      <% %w[positive negative neutral].each do |key| %>
+        <% pct = ((breakdown[key] || 0) * 100).round %>
+        <% bar_colors = color_map[key] %>
+        <div class="flex items-center gap-3 py-1">
+          <span class="w-16 text-xs text-gray-500 dark:text-gray-400 capitalize">
+            <%= t("tools.sentiment_analysis.demo.#{label_keys[key]}") %>
+          </span>
+          <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+            <div class="h-1.5 rounded-full <%= bar_colors[:bar] %>" style="width:<%= pct %>%"></div>
+          </div>
+          <span class="w-8 text-xs text-right font-medium text-gray-700 dark:text-gray-300"><%= pct %>%</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::ReferralsController < Dashboard::BaseController
-  before_action :authenticate_user!
-  layout "dashboard"
 
   def show
     @referral_link = new_user_registration_url(

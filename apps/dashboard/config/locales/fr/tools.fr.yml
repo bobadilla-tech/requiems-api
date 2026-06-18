@@ -1,0 +1,57 @@
+fr:
+  tools:
+    quotes:
+      demo:
+        error_rate_limit: "TODO: translate"
+        error_generic: "TODO: translate"
+        error_unexpected: "TODO: translate"
+        error_network: "TODO: translate"
+        error_security_token: "TODO: translate"
+    unit_conversion:
+      demo:
+        error_fill_all_fields: "TODO: translate"
+        error_rate_limit: "TODO: translate"
+        error_network: "TODO: translate"
+        error_no_data: "TODO: translate"
+        error_generic: "TODO: translate"
+        result_heading: "TODO: translate"
+        result_failed_heading: "TODO: translate"
+        label_from: "TODO: translate"
+        label_to: "TODO: translate"
+        label_input: "TODO: translate"
+        label_result: "TODO: translate"
+        label_formula: "TODO: translate"
+    sentiment_analysis:
+      demo:
+        error_empty: "TODO: translate"
+        error_rate_limit: "TODO: translate"
+        error_generic: "TODO: translate"
+        error_network: "TODO: translate"
+        error_no_data: "TODO: translate"
+        result_heading: "TODO: translate"
+        label_breakdown: "TODO: translate"
+        label_confident: "TODO: translate"
+        label_positive: "TODO: translate"
+        label_negative: "TODO: translate"
+        label_neutral: "TODO: translate"
+    email_validator:
+      demo:
+        error_empty: "TODO: translate"
+        error_rate_limit: "TODO: translate"
+        error_generic: "TODO: translate"
+        error_network: "TODO: translate"
+        error_no_data: "TODO: translate"
+        label_syntax: "TODO: translate"
+        label_mx_record: "TODO: translate"
+        label_disposable: "TODO: translate"
+        label_valid: "TODO: translate"
+        label_normalized: "TODO: translate"
+        label_domain: "TODO: translate"
+        label_suggestion: "TODO: translate"
+        badge_valid: "TODO: translate"
+        badge_invalid: "TODO: translate"
+        badge_yes: "TODO: translate"
+        badge_no: "TODO: translate"
+        badge_disposable: "TODO: translate"
+        badge_not_disposable: "TODO: translate"
+        suggestion_prefix: "TODO: translate"

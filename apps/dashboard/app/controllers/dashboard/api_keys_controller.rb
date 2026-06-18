@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-class Dashboard::ApiKeysController < ApplicationController
-  before_action :authenticate_user!
+class Dashboard::ApiKeysController < Dashboard::BaseController
   before_action :set_api_key, only: [ :regenerate, :revoke ]
-  layout "dashboard"
 
   def index
     @api_keys = current_user.api_keys.order(created_at: :desc)

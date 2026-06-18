@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::DashboardController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
-  layout "admin"
+class Admin::DashboardController < Admin::BaseController
 
   STATS_CACHE_TTL = 5.minutes
 
@@ -62,12 +59,6 @@ class Admin::DashboardController < ApplicationController
   end
 
   private
-
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 
   def calculate_mrr
     # Calculate Monthly Recurring Revenue

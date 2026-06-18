@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::PromotionsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
+class Admin::PromotionsController < Admin::BaseController
   before_action :set_user
-  layout "admin"
 
   ALLOWED_PLANS = %w[developer business professional].freeze
 
@@ -95,12 +92,6 @@ class Admin::PromotionsController < ApplicationController
   end
 
   private
-
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 
   def set_user
     @user = User.find(params[:user_id])

@@ -1,0 +1,12 @@
+<turbo-frame id="<%= tool %>-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900">
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">
+        <%= t("tools.#{tool}.demo.result_failed_heading", default: "Request Failed") %>
+      </span>
+    </div>
+    <div class="px-4 py-4">
+      <p class="text-sm text-red-600 dark:text-red-400"><%= message %></p>
+    </div>
+  </div>
+</turbo-frame>

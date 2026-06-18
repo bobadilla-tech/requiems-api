@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::UsageController < ApplicationController
-  before_action :authenticate_user!
-  layout "dashboard"
+class Dashboard::UsageController < Dashboard::BaseController
 
   def show
     set_date_range

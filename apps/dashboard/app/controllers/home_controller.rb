@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
+  API_CATALOG = YAML.load_file(Rails.root.join("config", "api_catalog.yml")).freeze
+
   def index
-    categories = YAML.load_file(Rails.root.join("config", "api_catalog.yml"))["categories"]
+    categories = API_CATALOG["categories"]
 
     # Sort categories by priority: live first, then most important coming soon
     priority_order = %w[

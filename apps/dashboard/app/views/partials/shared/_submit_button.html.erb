@@ -1,0 +1,20 @@
+<%
+  btn_text      = local_assigns.fetch(:text, "Submit")
+  stimulus_ctrl = local_assigns.fetch(:controller)         # e.g. "sentiment-demo"
+  btn_disabled  = local_assigns.fetch(:disabled, false)
+  btn_classes   = "inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60 #{local_assigns.fetch(:class_names, "")}"
+%>
+<%= tag.button(
+      type: "submit",
+      class: btn_classes.strip,
+      disabled: btn_disabled,
+      data: { "#{stimulus_ctrl}-target" => "button" }
+    ) do %>
+  <%= tag.span(class: "hidden", data: { "#{stimulus_ctrl}-target" => "spinner" }) do %>
+    <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+  <% end %>
+  <%= btn_text %>
+<% end %>
