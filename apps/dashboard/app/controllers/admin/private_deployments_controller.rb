@@ -20,9 +20,10 @@ class Admin::PrivateDeploymentsController < Admin::BaseController
   end
 
   def activate
-    subdomain_slug = params[:subdomain_slug].to_s.strip.downcase
-    tenant_secret  = params[:tenant_secret].to_s.strip
-    admin_notes    = params[:admin_notes].to_s.strip
+    p = deployment_activation_params
+    subdomain_slug = p[:subdomain_slug].to_s.strip.downcase
+    tenant_secret  = p[:tenant_secret].to_s.strip
+    admin_notes    = p[:admin_notes].to_s.strip
 
     if subdomain_slug.blank?
       redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.subdomain_required") and return
@@ -64,6 +65,10 @@ class Admin::PrivateDeploymentsController < Admin::BaseController
   end
 
   private
+
+  def deployment_activation_params
+    params.permit(:subdomain_slug, :tenant_secret, :admin_notes)
+  end
 
   def set_deployment_request
     @deployment_request = PrivateDeploymentRequest.find(params[:id])

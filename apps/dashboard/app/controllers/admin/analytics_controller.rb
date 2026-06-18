@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::AnalyticsController < Admin::BaseController
+  VALID_TRUNC_UNITS = { "1h" => "minute", "24h" => "hour" }.freeze
 
   def usage
     @date_range = params[:date_range] || "30"
@@ -142,11 +143,7 @@ class Admin::AnalyticsController < Admin::BaseController
   private
 
   def build_error_rate_trend(start_time, time_range)
-    trunc_unit = case time_range
-    when "1h"  then "minute"
-    when "24h" then "hour"
-    else             "day"
-    end
+    trunc_unit = VALID_TRUNC_UNITS.fetch(time_range, "day")
 
     rows = UsageLog
       .where(used_at: start_time..Time.current)

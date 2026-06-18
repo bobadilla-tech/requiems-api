@@ -100,10 +100,12 @@ class Webhooks::LemonsqueezyController < ApplicationController
 
       # Mark referral as converted on first paid subscription — idempotent via pending? check
       user.referral_received&.mark_converted!(subscription) if plan_name != "free"
-
-      # Sync to Cloudflare KV — inside transaction so a failure rolls back the DB save
-      Cloudflare::ApiManagementService.new.sync_user_plan(user, plan_name)
     end
+
+    # Cloudflare sync after transaction commits — keeps the transaction free of HTTP I/O.
+    # A Cloudflare failure here does not roll back the subscription record; the customer
+    # already paid and the DB is the source of truth.
+    Cloudflare::ApiManagementService.new.sync_user_plan(user, plan_name)
 
     SubscriptionMailer.upgrade_notification(user, plan_name).deliver_later if plan_name != "free"
 
@@ -153,10 +155,9 @@ class Webhooks::LemonsqueezyController < ApplicationController
         current_period_end: data[:renews_at],
         cancel_at_period_end: data[:ends_at].present?
       )
-
-      # Sync to Cloudflare KV — inside transaction so a failure rolls back the DB save
-      Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
     end
+
+    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
 
     if plan_name != "free" && plan_name != previous_plan
       SubscriptionMailer.upgrade_notification(subscription.user, plan_name).deliver_later
@@ -180,10 +181,9 @@ class Webhooks::LemonsqueezyController < ApplicationController
         cancel_at_period_end: true,
         plan_name: "free"
       )
-
-      # Downgrade to free plan in Cloudflare KV — inside transaction so a failure rolls back the DB save
-      Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, "free")
     end
+
+    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, "free")
 
     Rails.logger.info "[LemonSqueezy] Subscription cancelled: #{subscription.id}"
   end
@@ -205,10 +205,9 @@ class Webhooks::LemonsqueezyController < ApplicationController
         plan_name: plan_name,
         cancel_at_period_end: false
       )
-
-      # Restore plan in Cloudflare KV — inside transaction so a failure rolls back the DB save
-      Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
     end
+
+    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
 
     Rails.logger.info "[LemonSqueezy] Subscription resumed: #{subscription.id}"
   end
