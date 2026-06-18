@@ -166,19 +166,7 @@
 
           <div class="flex justify-between">
             <p class="mt-2 flex text-xs text-gray-400 dark:text-gray-500 text-left">No account required for the demo.</p>
-            <button
-              type="submit"
-              data-unit-conversion-demo-target="button"
-              class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60"
-            >
-              <span data-unit-conversion-demo-target="spinner" class="hidden">
-                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
-              </span>
-              Convert
-            </button>
+            <%= render "partials/shared/submit_button", text: "Convert", controller: "unit-conversion-demo" %>
           </div>
         </div>
 

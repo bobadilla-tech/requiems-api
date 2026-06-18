@@ -44,19 +44,7 @@
 
         <div class="mt-2 flex items-center justify-between">
           <p class="text-xs text-gray-400 dark:text-gray-500">No account required for the demo.</p>
-          <button
-            type="submit"
-            data-sentiment-demo-target="button"
-            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60"
-          >
-            <span data-sentiment-demo-target="spinner" class="hidden">
-              <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-            </span>
-            Analyze
-          </button>
+          <%= render "partials/shared/submit_button", text: "Analyze", controller: "sentiment-demo" %>
         </div>
 
         <p data-sentiment-demo-target="errorMessage"
