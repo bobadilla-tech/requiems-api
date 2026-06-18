@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-primary: #1D9E75;
+}
+
 /* Date Picker */
 @import "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css";
 
