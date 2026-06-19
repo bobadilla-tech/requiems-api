@@ -1,0 +1,81 @@
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid md:grid-cols-2 gap-12">
+
+      <!-- Block A: Accuracy -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">Accuracy</span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            Reliable conversions with transparent formulas.
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            Convert between length, weight, volume, temperature, area, and speed units with consistent results. Every response includes the converted value and a human-readable formula so you can verify exactly how the calculation was performed.
+          </p>
+        </div>
+
+        <!-- Mock response card -->
+        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
+          <div class="text-gray-500 mb-2 text-[11px]">GET /v1/technology/convert → 200 OK</div>
+          <div>
+            <span class="text-gray-500">{</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"from"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"miles"</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"to"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"km"</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"input"</span><span class="text-gray-500">:</span> <span class="text-purple-400">10</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"result"</span><span class="text-gray-500">:</span> <span class="text-purple-400">16.09344</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"formula"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"10 × 1.609344"</span><br>
+            <span class="text-gray-500">}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block B: Simplicity -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">Simplicity</span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            Simple API requests, instant results.
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            Pass a source unit, target unit, and numeric value in a simple JSON payload.
+            No configuration, no external dependencies, and no lookup tables required.
+            The API returns the converted value and the conversion formula in a single response.
+          </p>
+        </div>
+
+        <!-- Mock request card -->
+        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
+          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
+
+          <div>
+            <span class="text-sky-300">POST</span>
+            <span class="text-gray-300">/v1/technology/convert</span>
+            <br><br>
+
+            <span class="text-gray-500"># Headers</span><br>
+            <span class="text-sky-300">requiems-api-key</span><span class="text-gray-500">:</span>
+            <span class="text-amber-300">YOUR_API_KEY</span><br>
+
+            <span class="text-sky-300">Content-Type</span><span class="text-gray-500">:</span>
+            <span class="text-amber-300">application/json</span><br><br>
+
+            <span class="text-gray-500"># Body</span><br>
+            <span class="text-gray-500">{</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"from"</span><span class="text-gray-500">:</span>
+            <span class="text-amber-300">"miles"</span><span class="text-gray-500">,</span><br>
+
+            &nbsp;&nbsp;<span class="text-sky-300">"to"</span><span class="text-gray-500">:</span>
+            <span class="text-amber-300">"km"</span><span class="text-gray-500">,</span><br>
+
+            &nbsp;&nbsp;<span class="text-sky-300">"value"</span><span class="text-gray-500">:</span>
+            <span class="text-purple-400">10</span><br>
+            <span class="text-gray-500">}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

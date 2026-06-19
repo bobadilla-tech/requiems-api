@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
+class Admin::UsersController < Admin::BaseController
   before_action :set_user, only: [ :show, :suspend, :unsuspend, :ban, :make_admin, :remove_admin ]
-  layout "admin"
 
   def index
     @users = User.all
@@ -85,12 +82,6 @@ class Admin::UsersController < ApplicationController
   end
 
   private
-
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
-  end
 
   def set_user
     @user = User.find(params[:id])

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Dashboard::SettingsController < ApplicationController
-  before_action :authenticate_user!
-  layout "dashboard"
+class Dashboard::SettingsController < Dashboard::BaseController
 
   def show
     # Settings page - view current settings

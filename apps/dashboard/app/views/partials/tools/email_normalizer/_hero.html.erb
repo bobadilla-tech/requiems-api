@@ -24,15 +24,22 @@
       <% end %>
     </div>
 
-    <!-- Live demo — wired in T2 -->
+    <!-- Live demo -->
     <div class="mt-12 max-w-xl mx-auto"
-         data-controller="email-normalizer-demo">
+         data-controller="email-normalizer-demo"
+         data-email-normalizer-demo-error-empty-value="<%= t('tools.email_normalizer.demo.error_empty') %>">
 
-      <form data-action="submit->email-normalizer-demo#normalize" novalidate>
+      <form data-action="submit->email-normalizer-demo#beforeSubmit turbo:submit-start->email-normalizer-demo#onSubmitStart turbo:submit-end->email-normalizer-demo#onSubmitEnd"
+            action="<%= tool_demo_email_normalizer_path %>"
+            method="post"
+            data-turbo-frame="email_normalizer-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <div class="flex gap-2">
           <label for="email-normalizer-demo-input" class="sr-only">Email address</label>
           <input
             id="email-normalizer-demo-input"
+            name="email"
             type="email"
             data-email-normalizer-demo-target="input"
             placeholder="Enter any email address"
@@ -42,7 +49,8 @@
           <button
             type="submit"
             data-email-normalizer-demo-target="button"
-            class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-primary text-white font-semibold text-sm transition-colors disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2"
+            style="background-color:#1D9E75; color:white;"
           >
             <span data-email-normalizer-demo-target="spinner" class="hidden">
               <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -61,9 +69,7 @@
            role="alert"></p>
       </form>
 
-      <div data-email-normalizer-demo-target="result"
-           class="hidden mt-4 text-left">
-      </div>
+      <turbo-frame id="email_normalizer-demo-result"></turbo-frame>
     </div>
 
   </div>

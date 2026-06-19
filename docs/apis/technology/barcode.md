@@ -76,21 +76,21 @@ request. Results are returned in the same order as the input.
 
 ## Response Fields
 
-| Field | Type | Description |
-| ------- | ------ | ----------- |
-| `results` | array | Batch results preserving input order |
-| `results[].image` | string | Base64-encoded PNG image |
-| `results[].type` | string | Barcode format used |
-| `results[].width` | integer | Image width in pixels |
-| `results[].height` | integer | Image height in pixels |
+| Field               | Type    | Description                          |
+| ------------------- | ------- | ------------------------------------ |
+| `results`           | array   | Batch results preserving input order |
+| `results[].image`   | string  | Base64-encoded PNG image             |
+| `results[].type`    | string  | Barcode format used                  |
+| `results[].width`   | integer | Image width in pixels                |
+| `results[].height`  | integer | Image height in pixels               |
 | `results[].success` | boolean | Whether barcode generation succeeded |
-| `results[].error` | string | Error message when generation fails |
-| `total` | integer | Number of items processed |
+| `results[].error`   | string  | Error message when generation fails  |
+| `total`             | integer | Number of items processed            |
 
 ## Response Headers
 
-| Header | Description |
-| ---------- | ----------- |
+| Header          | Description                               |
+| --------------- | ----------------------------------------- |
 | `X-Usage-Count` | Number of barcodes processed in the batch |
 
 ## Examples

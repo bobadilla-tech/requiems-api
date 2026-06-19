@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::PrivateDeploymentsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_admin!
+class Admin::PrivateDeploymentsController < Admin::BaseController
   before_action :set_deployment_request, only: [ :show, :activate, :cancel ]
-  layout "admin"
 
   def index
     @deployment_requests = PrivateDeploymentRequest.includes(:user)
@@ -23,9 +20,10 @@ class Admin::PrivateDeploymentsController < ApplicationController
   end
 
   def activate
-    subdomain_slug = params[:subdomain_slug].to_s.strip.downcase
-    tenant_secret  = params[:tenant_secret].to_s.strip
-    admin_notes    = params[:admin_notes].to_s.strip
+    p = deployment_activation_params
+    subdomain_slug = p[:subdomain_slug].to_s.strip.downcase
+    tenant_secret  = p[:tenant_secret].to_s.strip
+    admin_notes    = p[:admin_notes].to_s.strip
 
     if subdomain_slug.blank?
       redirect_to admin_private_deployment_path(@deployment_request), alert: t("admin.private_deployments.subdomain_required") and return
@@ -68,10 +66,8 @@ class Admin::PrivateDeploymentsController < ApplicationController
 
   private
 
-  def require_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: t("admin.access_denied")
-    end
+  def deployment_activation_params
+    params.permit(:subdomain_slug, :tenant_secret, :admin_notes)
   end
 
   def set_deployment_request

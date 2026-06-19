@@ -1,0 +1,45 @@
+<%
+  changed = data["original"] != data["normalized"]
+
+  changes_label = ->(change) {
+    key = "label_change_#{change}"
+    t("tools.email_normalizer.demo.#{key}", default: change.tr("_", " "))
+  }
+%>
+<turbo-frame id="email_normalizer-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= data["original"] %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= changed ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" %>">
+        <%= changed ? t("tools.email_normalizer.demo.badge_normalized") : t("tools.email_normalizer.demo.badge_canonical") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.email_normalizer.demo.label_normalized") %></span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200 font-mono"><%= data["normalized"] %></span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.email_normalizer.demo.label_local") %></span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200"><%= data["local"] %></span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.email_normalizer.demo.label_domain") %></span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200"><%= data["domain"] %></span>
+      </div>
+      <div class="flex items-start justify-between py-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.email_normalizer.demo.label_changes") %></span>
+        <span class="text-sm font-medium text-right">
+          <% if data["changes"].blank? %>
+            <span class="text-gray-400 dark:text-gray-500"><%= t("tools.email_normalizer.demo.no_changes") %></span>
+          <% else %>
+            <% data["changes"].each do |change| %>
+              <span class="inline-block px-2 py-0.5 rounded text-xs bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300 mr-1 mb-1"><%= changes_label.call(change) %></span>
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

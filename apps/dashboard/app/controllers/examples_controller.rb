@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ExamplesController < ApplicationController
+  EXAMPLES_CONFIG = YAML.load_file(Rails.root.join("config", "examples.yml")).freeze
+
   def index
     @examples = examples_config["examples"]
     @categories = examples_config["categories"]
@@ -26,7 +28,7 @@ class ExamplesController < ApplicationController
   private
 
   def examples_config
-    @examples_config ||= YAML.load_file(Rails.root.join("config", "examples.yml"))
+    EXAMPLES_CONFIG
   end
 
   def find_example(id)

@@ -1,27 +1,4 @@
-<section class="bg-gray-900 dark:bg-gray-950 py-20">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-    <h2 class="text-3xl sm:text-4xl font-bold text-white">
-      Automate this with Requiems.
-    </h2>
-    <p class="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
-      One API key. Sentiment analysis, plus 50+ other APIs across validation, finance, networking, and more.
-    </p>
-
-    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-      <%= link_to new_user_registration_path,
-            class: "inline-flex items-center px-7 py-3 rounded-lg bg-brand-primary text-white font-semibold text-base shadow-sm transition-opacity hover:opacity-90" do %>
-        Get your free API key
-      <% end %>
-
-      <%= link_to api_path("sentiment"),
-            class: "inline-flex items-center px-7 py-3 rounded-lg border border-gray-600 text-gray-300 font-semibold text-base hover:bg-gray-800 transition-colors" do %>
-        Read the docs
-        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-        </svg>
-      <% end %>
-    </div>
-
-  </div>
-</section>
+<%= render "partials/tools/shared/cta",
+      heading:  "Automate this with Requiems.",
+      body:     "One API key. Sentiment analysis, plus 50+ other APIs across validation, finance, networking, and more.",
+      docs_url: api_path("sentiment") %>

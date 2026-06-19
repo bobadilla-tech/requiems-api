@@ -28,6 +28,13 @@ import (
 //	        return svc.CheckEmail(req.Email), nil
 //	    },
 //	))
+
+// UsageCounter is implemented by responses that report a usage count.
+// When implemented, Handle automatically sets the X-Usage-Count response header.
+type UsageCounter interface {
+	UsageCount() int
+}
+
 func Handle[Req any, Res any](
 	fn func(ctx context.Context, req Req) (Res, error),
 ) http.HandlerFunc {
@@ -61,6 +68,10 @@ func Handle[Req any, Res any](
 			sentry.CaptureException(err)
 			Error(w, http.StatusInternalServerError, "internal_error", "internal server error")
 			return
+		}
+
+		if uc, ok := any(res).(UsageCounter); ok {
+			w.Header().Set("X-Usage-Count", strconv.Itoa(uc.UsageCount()))
 		}
 
 		JSON(w, http.StatusOK, res)

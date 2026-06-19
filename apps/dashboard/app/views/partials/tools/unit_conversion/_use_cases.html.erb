@@ -1,0 +1,63 @@
+<% use_cases = [
+  {
+    title: "Scientific and engineering calculations",
+    desc: "Convert measurements between compatible units with consistent precision for technical, laboratory, and engineering workflows.",
+    tags: ["Science", "Engineering"]
+  },
+  {
+    title: "Travel and distance planning",
+    desc: "Convert miles to kilometers, kilometers to miles, and other distance units for navigation, logistics, and international travel.",
+    tags: ["Travel", "Logistics"]
+  },
+  {
+    title: "Recipe scaling and cooking",
+    desc: "Switch between metric and imperial measurements when adapting recipes for different regions or serving sizes.",
+    tags: ["Food", "Cooking"]
+  },
+  {
+    title: "Fitness and health tracking",
+    desc: "Convert weight, distance, and speed units across fitness apps, workout plans, and health dashboards.",
+    tags: ["Fitness", "Health"]
+  },
+  {
+    title: "Educational applications",
+    desc: "Help students learn measurement systems and unit conversions with clear formulas and accurate results.",
+    tags: ["Education", "Learning"]
+  },
+  {
+    title: "Build dynamic unit selectors",
+    desc: "Use the available units endpoint to populate dropdowns and conversion tools in web and mobile applications.",
+    tags: ["Development", "UI"]
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+        Real problems, real conversions.
+      </h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        Unit Conversion fits anywhere measurements need to be translated accurately and instantly.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% use_cases.each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4"><%= uc[:desc] %></p>
+          <div class="flex flex-wrap gap-2">
+            <% uc[:tags].each do |tag| %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <%= tag %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
