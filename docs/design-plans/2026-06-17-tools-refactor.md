@@ -1,13 +1,5 @@
 # Tools Refactor — Audit, Fix, and Guide
 
-**Date:** 2026-06-17\
-**Author:** Engineering\
-**Status:** Planning
-
----
-
-## Context
-
 The dashboard has 4 tool pages (Unit Conversion, Sentiment Analysis, Email
 Validator, Quotes). A code audit revealed 6 recurring pitfalls introduced during
 AI-assisted development. This plan documents the pitfalls, fixes each tool, then
