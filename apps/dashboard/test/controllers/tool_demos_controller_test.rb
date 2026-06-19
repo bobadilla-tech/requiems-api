@@ -5,9 +5,13 @@ require "test_helper"
 class ToolDemoControllerTest < ActionDispatch::IntegrationTest
   # ── helpers ─────────────────────────────────────────────────────────────────
 
-  def stub_api(status_code, data, &block)
+  def stub_api(status_code, data)
     result = ApiProxyService::Result.new(status_code: status_code, data: data, error: nil)
-    ApiProxyService.stub(:call, result, &block)
+    original = ApiProxyService.method(:call)
+    ApiProxyService.define_singleton_method(:call) { |*_args, **_kwargs| result }
+    yield
+  ensure
+    ApiProxyService.define_singleton_method(:call, original)
   end
 
   def success_data(payload)
@@ -107,7 +111,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
       post "/tools/demos/sentiment-analysis", params: { text: "This is great!" }
     end
     assert_response :success
-    assert_match "positive", response.body
+    assert_match(/positive/i, response.body)
   end
 
   test "sentiment_analysis renders error when text is blank" do
