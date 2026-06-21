@@ -1,34 +1,46 @@
-<div class="bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+<section class="bg-white dark:bg-gray-950 py-16 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
         Pair It With Other APIs
       </h2>
-      <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-        Domain Checker works best as part of a chain. Here are the most common combinations.
+      <p class="mt-3 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        Domain Checker is more powerful combined. Stack it with other Requiems APIs to build multi-point validation into a single workflow.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <% [
-        { api: "Email Validator",
-          slug: "email-validator",
-          body: "Check if a domain has valid MX records and can receive email — before you send a welcome message to a new user." },
-        { api: "IP Geolocation",
-          slug: "ip-geolocation",
-          body: "Resolve the domain to an IP and geolocate it. Useful for fraud detection and content personalization." },
-        { api: "SSL Checker",
-          slug: "ssl-checker",
-          body: "After confirming a domain is registered, verify that its SSL certificate is valid and not about to expire." },
+        {
+          name:    "Domain Checker + Email Validator",
+          benefit: "Validate both the domain and specific email address.",
+          outcome: "Full email deliverability confidence: domain health plus mailbox-level checks."
+        },
+        {
+          name:    "Domain Checker + IP Reputation",
+          benefit: "Check domain reputation alongside the sender IP.",
+          outcome: "Layered trust signal: clean domain from clean IP indicates legitimate traffic."
+        },
+        {
+          name:    "Domain Checker + Address Formatter",
+          benefit: "Verify domain alongside a physical address during business onboarding.",
+          outcome: "Multi-point onboarding validation covering digital and physical contact data."
+        },
       ].each do |combo| %>
-        <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-gray-900">
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
-            <%= link_to combo[:api], api_path(combo[:slug]),
-                  class: "hover:underline", style: "color:#1D9E75;" %>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3">
+            <%= combo[:name] %>
           </h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400"><%= combo[:body] %></p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <span class="font-medium text-gray-700 dark:text-gray-300">Benefit:</span>
+            <%= combo[:benefit] %>
+          </p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <span class="font-medium text-gray-700 dark:text-gray-300">Outcome:</span>
+            <%= combo[:outcome] %>
+          </p>
         </div>
       <% end %>
     </div>
   </div>
-</div>
+</section>
