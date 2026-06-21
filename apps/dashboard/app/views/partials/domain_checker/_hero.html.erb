@@ -52,8 +52,11 @@
         </div>
       </div>
 
-      <!-- Right: Static API response preview -->
-      <div class="w-full min-w-0">
+      <!-- Right: Interactive demo -->
+      <div class="w-full min-w-0"
+           data-controller="domain-checker-demo"
+           data-domain-checker-demo-error-empty-value="Please enter a domain name">
+
         <div class="rounded-2xl overflow-hidden w-full"
              style="background-color: #0d1117; border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px rgba(29,158,117,0.1);">
 
@@ -65,34 +68,62 @@
               <div class="w-3 h-3 rounded-full" style="background-color: #febc2e;"></div>
               <div class="w-3 h-3 rounded-full" style="background-color: #28c840;"></div>
             </div>
-            <span class="flex-1 text-center text-xs font-mono" style="color: #e2e8f0;">Domain Checker API</span>
+            <span class="flex-1 text-center text-xs font-mono" style="color: #e2e8f0;">Try it live</span>
             <div class="shrink-0 w-14"></div>
           </div>
 
-          <!-- URL bar -->
-          <div class="px-4 pt-4 pb-3">
-            <div class="flex items-center gap-2 rounded-xl px-3 py-2"
-                 style="background-color: #0d1117; border: 1px solid rgba(255,255,255,0.06);">
-              <span class="text-xs font-mono px-2 py-0.5 rounded" style="background-color: #1D9E75; color: white;">GET</span>
-              <span class="flex-1 text-xs font-mono truncate" style="color: #e2e8f0;">api.requiems.xyz/v1/domain-checker?domain=example.com</span>
+          <!-- Form -->
+          <div class="px-5 pt-5 pb-4">
+            <label for="domain-checker-demo-input" class="sr-only">Domain name</label>
+            <div class="flex gap-2">
+              <input id="domain-checker-demo-input"
+                     type="text"
+                     placeholder="e.g. example.com"
+                     autocomplete="off"
+                     data-domain-checker-demo-target="input"
+                     data-action="keydown.enter->domain-checker-demo#check"
+                     class="flex-1 block w-full rounded-lg border px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
+                     style="background-color: #161b22; border-color: rgba(255,255,255,0.1); color: #e2e8f0; focus-ring-color: #1D9E75;">
+              <%= render "partials/shared/button",
+                    text:    "Check",
+                    variant: "brand",
+                    size:    "md",
+                    type:    "button",
+                    data:    { action: "click->domain-checker-demo#check",
+                               "domain-checker-demo-target": "button" } %>
             </div>
+
+            <p data-domain-checker-demo-target="errorMessage"
+               class="hidden mt-2 text-xs"
+               style="color: #f87171;"
+               role="alert"></p>
+
+            <p class="mt-2 text-xs" style="color: rgba(255,255,255,0.4);">No account required</p>
           </div>
 
-          <!-- Response JSON -->
-          <div class="px-4 pt-2 pb-5">
-            <pre class="text-xs font-mono overflow-x-auto" style="color: #a3e635; line-height: 1.6;"><span style="color: #7c3aed;">{</span>
-  <span style="color: #60a5fa;">"available"</span>: <span style="color: #f87171;">false</span>,
-  <span style="color: #60a5fa;">"domain"</span>: <span style="color: #34d399;">"example.com"</span>,
-  <span style="color: #60a5fa;">"registrar"</span>: <span style="color: #34d399;">"IANA"</span>,
-  <span style="color: #60a5fa;">"created_at"</span>: <span style="color: #34d399;">"1995-08-14"</span>,
-  <span style="color: #60a5fa;">"expires_at"</span>: <span style="color: #34d399;">"2026-08-13"</span>,
-  <span style="color: #60a5fa;">"name_servers"</span>: [
-    <span style="color: #34d399;">"a.iana-servers.net"</span>,
-    <span style="color: #34d399;">"b.iana-servers.net"</span>
-  ],
-  <span style="color: #60a5fa;">"status"</span>: <span style="color: #34d399;">"clientDeleteProhibited"</span>
-<span style="color: #7c3aed;">}</span></pre>
+          <!-- Result panel -->
+          <div data-domain-checker-demo-target="result"
+               class="hidden px-5 pb-5">
+            <div style="height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 1rem;"></div>
+            <dl class="space-y-2">
+              <% {
+                "Domain"       => "domain",
+                "Status"       => "status",
+                "DNS records"  => "dns",
+                "SSL status"   => "ssl",
+                "MX records"   => "mx",
+                "Reputation"   => "reputation"
+              }.each do |label, key| %>
+                <div class="flex justify-between items-center text-sm">
+                  <dt style="color: rgba(255,255,255,0.5);"><%= label %></dt>
+                  <dd class="font-mono font-medium"
+                      style="color: #34d399;"
+                      data-domain-checker-demo-<%= key %>></dd>
+                </div>
+              <% end %>
+            </dl>
           </div>
+
         </div>
       </div>
     </div>
