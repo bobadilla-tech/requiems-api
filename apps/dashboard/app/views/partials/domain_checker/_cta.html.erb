@@ -1,4 +1,23 @@
-<%= render "partials/tools/shared/cta",
-      heading:  "Start checking domains today.",
-      body:     "One API key. Domain availability, WHOIS data, and 50+ other APIs across validation, networking, finance, and more.",
-      docs_url: api_path("domain-checker") %>
+<section class="bg-gray-900 text-white py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-white">
+      Automate this with Requiems.
+    </h2>
+    <p class="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
+      One API key. Domain availability, WHOIS data, and 50+ other APIs across validation, networking, finance, and more.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+      <%= link_to new_user_registration_path,
+            class: "text-white font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90",
+            style: "background-color: #1D9E75;" do %>
+        Get your free API key
+      <% end %>
+
+      <%= link_to api_path("domain-checker"),
+            class: "border border-white text-white hover:bg-white hover:text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors" do %>
+        Read the docs →
+      <% end %>
+    </div>
+  </div>
+</section>
