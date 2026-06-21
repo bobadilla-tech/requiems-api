@@ -8,14 +8,14 @@
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-      <%= link_to new_user_registration_path,
-            class: "text-white font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90",
-            style: "background-color: #1D9E75;" do %>
-        Get your free API key
-      <% end %>
+      <%= render "partials/shared/button",
+            text:    "Get your free API key",
+            variant: "brand",
+            href:    new_user_registration_path,
+            size:    "lg" %>
 
       <%= link_to api_path("domain-checker"),
-            class: "border border-white text-white hover:bg-white hover:text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors" do %>
+            class: "border border-white text-white hover:bg-white hover:text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900" do %>
         Read the docs →
       <% end %>
     </div>
