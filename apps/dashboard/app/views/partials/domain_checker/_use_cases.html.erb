@@ -1,34 +1,59 @@
-<div class="bg-gray-50 dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="bg-gray-50 dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
         Built for Every Domain Workflow
       </h2>
-      <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-        From SaaS onboarding to domain brokerage — if it touches a domain name, this API has you covered.
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        From fraud prevention to onboarding — if it touches a domain name, this API has you covered.
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% [
-        { title: "SaaS Subdomain Setup",
-          body: "Let users pick a custom subdomain during onboarding. Check availability before letting them claim it, and reject conflicts in real time." },
-        { title: "Domain Marketplace Search",
-          body: "Power search UIs on domain registrar and marketplace platforms. Return live availability data as users type, without hammering WHOIS directly." },
-        { title: "Brand Protection Monitoring",
-          body: "Track whether look-alike or typo-squat domains have been registered. Alert your security team when a suspicious domain goes live." },
-        { title: "Expiry Alerts & Auto-Renewal",
-          body: "Poll expiry dates for a portfolio of domains and trigger email alerts — or auto-renewal flows — before they lapse." },
-        { title: "Lead Generation Tools",
-          body: "Build tools that check if a prospect's preferred domain is taken, then suggest alternatives — a great hook for domain brokers." },
-        { title: "Internal IT Asset Tracking",
-          body: "Keep an inventory of all company-owned domains with their registrars and renewal dates, queried programmatically rather than manually logged." },
-      ].each do |use_case| %>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-7 py-6">
-          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-1"><%= use_case[:title] %></h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400"><%= use_case[:body] %></p>
+        {
+          context: "Auth / Signup",
+          title:   "Avoid risky domains before signup",
+          body:    "Check domain health before accepting it as a user-provided business domain. Reject expired, parked, or flagged domains."
+        },
+        {
+          context: "Fraud Prevention",
+          title:   "Block malicious or expired domains",
+          body:    "Detect domains flagged for spam or phishing, or those with lapsed registrations. Prevent bad actors from abusing your platform."
+        },
+        {
+          context: "Integrations",
+          title:   "Verify partner domains in workflows",
+          body:    "Validate that partner or vendor domains are live and properly configured before integrating them into automated workflows."
+        },
+        {
+          context: "Email Marketing",
+          title:   "Inspect domain health before email campaigns",
+          body:    "Check MX records and domain reputation before targeting an address list. Reduce bounce risk from entire sending domains."
+        },
+        {
+          context: "DevOps / Monitoring",
+          title:   "Detect missing DNS or SSL issues",
+          body:    "Surface missing DNS records or expired SSL certificates before they cause downtime or user-facing errors."
+        },
+        {
+          context: "Onboarding",
+          title:   "Secure onboarding with trusted domains",
+          body:    "Allow only domains with verified DNS, active MX, and clean reputation during business onboarding. Block throwaway or newly registered domains."
+        },
+      ].each do |card| %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color: #1D9E75;">
+            <%= card[:context] %>
+          </p>
+          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <%= card[:title] %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <%= card[:body] %>
+          </p>
         </div>
       <% end %>
     </div>
   </div>
-</div>
+</section>
