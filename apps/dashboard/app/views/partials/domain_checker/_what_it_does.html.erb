@@ -1,68 +1,48 @@
-<div class="bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+<section class="bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16">
+    <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
         What the Domain Checker API Does
       </h2>
-      <p class="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
         One endpoint. Everything you need to know about a domain — availability, ownership, and registration history.
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8 mb-16">
-      <% [
-        { icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-          title: "Availability Check",
-          body: "Instantly know if a domain is registered or free to claim. Supports .com, .net, .org, .io, and hundreds more TLDs." },
-        { icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
-          title: "WHOIS Data",
-          body: "Get registrar, creation date, expiry date, and name servers — all parsed and normalized into clean JSON." },
-        { icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
-          title: "Expiry Monitoring",
-          body: "Check when a domain expires so you can alert users before their site goes dark or grab a dropping domain." },
-      ].each do |feature| %>
-        <div class="text-center">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl mb-5" style="background-color: #d1fae5;">
-            <svg class="h-7 w-7" style="color: #1D9E75;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= feature[:icon] %>" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= feature[:title] %></h3>
-          <p class="text-gray-600 dark:text-gray-400"><%= feature[:body] %></p>
-        </div>
-      <% end %>
-    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-    <!-- Request / Response example -->
-    <div class="grid lg:grid-cols-2 gap-6">
-      <!-- Request -->
-      <div class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-        <div class="px-4 py-3 flex items-center gap-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <span class="text-xs font-mono font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">HTTP Request</span>
-        </div>
-        <pre class="p-4 text-sm font-mono overflow-x-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200"><span class="font-bold" style="color: #1D9E75;">GET</span> /v1/domain-checker?domain=startup.io
-Host: api.requiems.xyz
-X-API-Key: <span class="text-gray-500">&lt;your-key&gt;</span></pre>
-      </div>
-
-      <!-- Response -->
-      <div class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-        <div class="px-4 py-3 flex items-center gap-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <span class="text-xs font-mono font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">JSON Response</span>
-          <span class="ml-auto text-xs font-mono font-semibold" style="color: #1D9E75;">200 OK</span>
-        </div>
-        <pre class="p-4 text-sm font-mono overflow-x-auto bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">{
-  "data": {
-    "available": true,
-    "domain": "startup.io",
-    "registrar": null,
-    "created_at": null,
-    "expires_at": null,
-    "name_servers": [],
-    "status": "free"
-  }
+      <!-- Accuracy block -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Accuracy</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          Every response includes parsed WHOIS data, DNS status, SSL validity, MX records, and a reputation score — all normalized into a consistent JSON structure.
+        </p>
+        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">{
+  "domain":      "example.com",
+  "status":      "active",
+  "dns_records": true,
+  "ssl_valid":   true,
+  "mx_valid":    true,
+  "reputation":  "clean"
 }</pre>
       </div>
+
+      <!-- Simplicity block -->
+      <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Simplicity</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          A single POST request with your API key is all it takes. No SDK, no configuration, no setup — just an HTTP call and a JSON response.
+        </p>
+        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">POST /api/v1/domain-checker
+Host: api.requiems.xyz
+X-API-Key: your_key
+Content-Type: application/json
+
+{
+  "domain": "example.com"
+}</pre>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
