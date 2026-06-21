@@ -1,0 +1,34 @@
+<div class="bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        Pair It With Other APIs
+      </h2>
+      <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">
+        Domain Checker works best as part of a chain. Here are the most common combinations.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-5">
+      <% [
+        { api: "Email Validator",
+          slug: "email-validator",
+          body: "Check if a domain has valid MX records and can receive email — before you send a welcome message to a new user." },
+        { api: "IP Geolocation",
+          slug: "ip-geolocation",
+          body: "Resolve the domain to an IP and geolocate it. Useful for fraud detection and content personalization." },
+        { api: "SSL Checker",
+          slug: "ssl-checker",
+          body: "After confirming a domain is registered, verify that its SSL certificate is valid and not about to expire." },
+      ].each do |combo| %>
+        <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-gray-900">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
+            <%= link_to combo[:api], api_path(combo[:slug]),
+                  class: "hover:underline", style: "color:#1D9E75;" %>
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400"><%= combo[:body] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

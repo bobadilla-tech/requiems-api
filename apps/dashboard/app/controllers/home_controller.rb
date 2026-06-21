@@ -44,4 +44,7 @@ class HomeController < ApplicationController
 
   def for_llms
   end
+
+  def domain_checker
+  end
 end

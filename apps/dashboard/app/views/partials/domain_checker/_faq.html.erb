@@ -1,0 +1,56 @@
+<div class="bg-gray-50 dark:bg-gray-900 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100">
+        Frequently Asked Questions
+      </h2>
+      <p class="mt-4 text-xl text-gray-600 dark:text-gray-400">
+        Common questions about the Domain Checker API.
+      </p>
+    </div>
+
+    <div class="space-y-4" data-controller="tabs">
+      <% [
+        { q: "Which TLDs are supported?",
+          a: "We support the most common generic TLDs (.com, .net, .org, .io, .co, .app, .dev) plus a growing list of country-code TLDs. Check the API reference for the full list. If a TLD you need is missing, open a support ticket and we'll prioritize it." },
+        { q: "What happens when a domain doesn't exist in WHOIS?",
+          a: "If a domain is unregistered, the API returns `available: true` and nulls for all registrar fields. No error is thrown — you always get a 200 with a consistent structure." },
+        { q: "How fresh is the availability data?",
+          a: "Results are cached for up to 60 seconds to protect against WHOIS rate limits. For freshly dropped or newly registered domains, there may be a brief lag. For real-time registration workflows, we recommend verifying once before checkout and once after." },
+        { q: "Is there a batch endpoint?",
+          a: "Yes — POST /v1/domain-checker/batch accepts up to 50 domains per request and returns results in the same order. This is the recommended approach for bulk availability checks." },
+      ].each_with_index do |item, i| %>
+        <%= render "partials/shared/card", padding: true do %>
+          <button id="faq-btn-<%= i %>"
+                  class="w-full flex justify-between items-center text-left"
+                  aria-expanded="false"
+                  aria-controls="faq-panel-<%= i %>"
+                  data-action="click->tabs#select"
+                  data-tabs-index-param="<%= i %>">
+            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= item[:q] %></span>
+            <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="faq-panel-<%= i %>"
+               role="region"
+               aria-labelledby="faq-btn-<%= i %>"
+               class="mt-4 text-gray-600 dark:text-gray-400 hidden"
+               data-tabs-target="panel">
+            <%= item[:a] %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-12 text-center">
+      <p class="text-gray-600 dark:text-gray-400 mb-4">Still have questions?</p>
+      <%= link_to contact_path, class: "inline-flex items-center font-medium hover:underline", style: "color: #1D9E75;" do %>
+        Contact support
+        <svg class="ml-1 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      <% end %>
+    </div>
+  </div>
+</div>
