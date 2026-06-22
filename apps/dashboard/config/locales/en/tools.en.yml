@@ -34,8 +34,24 @@ en:
         label_positive: "Positive"
         label_negative: "Negative"
         label_neutral: "Neutral"
+    domain_checker:
+      demo:
+        error_empty: "Please enter a domain name."
+        submit: "Check"
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No data returned."
+        result_heading: "Domain Check Result"
+        result_failed_heading: "Domain Check Failed"
+        label_domain: "Domain"
+        label_status: "Status"
+        label_dns: "DNS records"
+        label_ssl: "SSL status"
+        label_mx: "MX records"
+        label_reputation: "Reputation"
     email_normalizer:
       demo:
+        submit: "Normalize"
         error_empty: "Enter an email address to normalize."
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_generic: "Something went wrong. Try again."
