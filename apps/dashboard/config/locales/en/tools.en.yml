@@ -34,6 +34,24 @@ en:
         label_positive: "Positive"
         label_negative: "Negative"
         label_neutral: "Neutral"
+    email_normalizer:
+      demo:
+        error_empty: "Enter an email address to normalize."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No data returned."
+        label_normalized: "Normalized"
+        label_local: "Local part"
+        label_domain: "Domain"
+        label_changes: "Changes"
+        no_changes: "none"
+        badge_normalized: "Normalized"
+        badge_canonical: "Already canonical"
+        label_change_lowercased: "lowercased"
+        label_change_trimmed_whitespace: "whitespace trimmed"
+        label_change_removed_dots: "dots removed"
+        label_change_removed_plus_tag: "tag removed"
+        label_change_canonicalised_domain: "alias resolved"
     email_validator:
       demo:
         error_empty: "Enter an email address to verify."

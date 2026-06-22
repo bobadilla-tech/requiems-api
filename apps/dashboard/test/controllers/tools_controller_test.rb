@@ -19,6 +19,11 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "email normalizer tool page renders successfully" do
+    get "/en/tools/email-normalizer"
+    assert_response :success
+  end
+
   test "quotes tool page renders successfully" do
     get "/en/tools/quotes"
     assert_response :success

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis quotes unit-conversion].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer quotes unit-conversion].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -13,6 +13,11 @@ class ToolsController < ApplicationController
       name: "Sentiment Analysis",
       description: "Classify text as positive, negative, or neutral with a confidence score.",
       icon_classes: "bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400"
+    },
+    "email-normalizer" => {
+      name: "Email Normalizer",
+      description: "Normalize, lowercase, trim, and canonicalize email addresses in one API call.",
+      icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
     },
     "unit-conversion" => {
       name: "Unit Conversion",

@@ -1,0 +1,55 @@
+<% use_cases = [
+  {
+    title:   "Standardize email data before import",
+    desc:    "Normalize emails before bulk import into your database. Prevent format variations from creating duplicate records.",
+    context: "Data Import"
+  },
+  {
+    title:   "Merge duplicate accounts with normalized emails",
+    desc:    "Use the normalized form as a deduplication key. Identify accounts that belong to the same person across different email formats.",
+    context: "CRM / Data"
+  },
+  {
+    title:   "Improve email matching across systems",
+    desc:    "Normalize before cross-system lookups. Ensure User.Name@Gmail.com and username@gmail.com match as the same identity.",
+    context: "Integrations"
+  },
+  {
+    title:   "Normalize signup emails for analytics",
+    desc:    "Standardize at point of capture. Keep analytics and segmentation consistent regardless of how users type their address.",
+    context: "Analytics"
+  },
+  {
+    title:   "Reduce false duplicates in CRM",
+    desc:    "Stop treating email variants as separate contacts. Normalization reduces bloated contact counts and improves list hygiene.",
+    context: "CRM / Data"
+  },
+  {
+    title:   "Clean email records before outreach",
+    desc:    "Run your list through the normalizer before a send. Catch variation-caused bounces before they affect sender reputation.",
+    context: "Email Marketing"
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Real problems, real users.</h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        Email Normalizer fits wherever contact data quality matters.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% use_cases.each do |uc| %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color:#1D9E75;"><%= uc[:context] %></p>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed"><%= uc[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

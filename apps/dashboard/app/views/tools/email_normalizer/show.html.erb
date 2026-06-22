@@ -1,0 +1,19 @@
+<% content_for :title, "Free Email Normalizer — Lowercase, Trim & Canonicalize Email Addresses | Requiems API" %>
+<% content_for :description, "Normalize any email address instantly. Lowercase, trim whitespace, resolve provider aliases, and return a canonical address — free, no account required." %>
+
+<%= render "partials/tools/email_normalizer/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: "Trusted by teams at",
+      speed: "34s" %>
+<%= render "partials/tools/email_normalizer/what_it_does" %>
+<%= render "partials/tools/email_normalizer/use_cases" %>
+<%= render "partials/tools/email_normalizer/api_combinations" %>
+<%= render "partials/tools/email_normalizer/faq" %>
+<%= render "partials/tools/email_normalizer/cta" %>

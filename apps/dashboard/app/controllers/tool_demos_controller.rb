@@ -58,6 +58,29 @@ class ToolDemosController < ApplicationController
     render "tool_demos/sentiment_analysis", locals: { data: data }
   end
 
+  def email_normalizer
+    email = params[:email].to_s.strip
+
+    if email.blank?
+      return render_demo_error("email_normalizer", t("tools.email_normalizer.demo.error_empty"))
+    end
+
+    result = api_call(endpoint: "/v1/text/normalize", method: "POST", params: { email: email })
+
+    if result.status_code == 429
+      return render_demo_error("email_normalizer", t("tools.email_normalizer.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("email_normalizer", t("tools.email_normalizer.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("email_normalizer", t("tools.email_normalizer.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/email_normalizer", locals: { data: data }
+  end
+
   def email_validator
     email = params[:email].to_s.strip
 

@@ -34,6 +34,24 @@ fr:
         label_positive: "TODO: translate"
         label_negative: "TODO: translate"
         label_neutral: "TODO: translate"
+    email_normalizer:
+      demo:
+        error_empty: "TODO: translate"
+        error_rate_limit: "TODO: translate"
+        error_generic: "TODO: translate"
+        error_no_data: "TODO: translate"
+        label_normalized: "TODO: translate"
+        label_local: "TODO: translate"
+        label_domain: "TODO: translate"
+        label_changes: "TODO: translate"
+        no_changes: "TODO: translate"
+        badge_normalized: "TODO: translate"
+        badge_canonical: "TODO: translate"
+        label_change_lowercased: "TODO: translate"
+        label_change_trimmed_whitespace: "TODO: translate"
+        label_change_removed_dots: "TODO: translate"
+        label_change_removed_plus_tag: "TODO: translate"
+        label_change_canonicalised_domain: "TODO: translate"
     email_validator:
       demo:
         error_empty: "TODO: translate"

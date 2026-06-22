@@ -1,0 +1,76 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      Clean email addresses automatically,<br class="hidden sm:block"> every time.
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      Normalize, lowercase, trim, and canonicalize email addresses in one API call.
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= link_to new_user_registration_path,
+            class: "inline-flex items-center px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2",
+            style: "background-color:#1D9E75; color:white;" do %>
+        Get your free API key
+        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      <% end %>
+      <%= link_to api_path("email-normalize"),
+            class: "inline-flex items-center px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2" do %>
+        Read the docs
+      <% end %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="email-normalizer-demo"
+         data-email-normalizer-demo-error-empty-value="<%= t('tools.email_normalizer.demo.error_empty') %>">
+
+      <form data-action="submit->email-normalizer-demo#beforeSubmit turbo:submit-start->email-normalizer-demo#onSubmitStart turbo:submit-end->email-normalizer-demo#onSubmitEnd"
+            action="<%= tool_demo_email_normalizer_path %>"
+            method="post"
+            data-turbo-frame="email_normalizer-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="flex gap-2">
+          <label for="email-normalizer-demo-input" class="sr-only">Email address</label>
+          <input
+            id="email-normalizer-demo-input"
+            name="email"
+            type="email"
+            data-email-normalizer-demo-target="input"
+            placeholder="Enter any email address"
+            autocomplete="off"
+            class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:border-transparent text-sm"
+          >
+          <button
+            type="submit"
+            data-email-normalizer-demo-target="button"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#1D9E75] focus:ring-offset-2"
+            style="background-color:#1D9E75; color:white;"
+          >
+            <span data-email-normalizer-demo-target="spinner" class="hidden">
+              <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </span>
+            Normalize
+          </button>
+        </div>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left">No account required for the demo.</p>
+
+        <p data-email-normalizer-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="email_normalizer-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

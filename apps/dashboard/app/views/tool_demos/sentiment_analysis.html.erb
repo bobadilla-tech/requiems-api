@@ -1,6 +1,6 @@
 <%
-  VALID_SENTIMENTS = %w[positive negative neutral].freeze
-  sentiment = VALID_SENTIMENTS.include?(data["sentiment"]) ? data["sentiment"] : "neutral"
+  valid_sentiments = %w[positive negative neutral].freeze
+  sentiment = valid_sentiments.include?(data["sentiment"]) ? data["sentiment"] : "neutral"
   score     = ((data["score"] || 0) * 100).round
   breakdown = data["breakdown"] || {}
 
