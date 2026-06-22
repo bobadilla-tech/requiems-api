@@ -144,6 +144,54 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("tools.sentiment_analysis.demo.error_no_data"), response.body
   end
 
+  # ── domain_checker ───────────────────────────────────────────────────────────
+
+  test "domain_checker renders result on success" do
+    payload = { "domain" => "example.com", "available" => false,
+                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/domain-checker", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match "example.com", response.body
+  end
+
+  test "domain_checker renders error when domain is blank" do
+    post "/tools/demos/domain-checker", params: { domain: "" }
+    assert_response :success
+    assert_match I18n.t("tools.domain_checker.demo.error_empty"), response.body
+  end
+
+  test "domain_checker renders error when domain format is invalid" do
+    post "/tools/demos/domain-checker", params: { domain: "not-a-domain" }
+    assert_response :success
+    assert_match I18n.t("tools.domain_checker.demo.error_invalid"), response.body
+  end
+
+  test "domain_checker renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/domain-checker", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.domain_checker.demo.error_rate_limit"), response.body
+  end
+
+  test "domain_checker renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/domain-checker", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.domain_checker.demo.error_generic"), response.body
+  end
+
+  test "domain_checker renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/domain-checker", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.domain_checker.demo.error_no_data"), response.body
+  end
+
   # ── unit_conversion ──────────────────────────────────────────────────────────
 
   test "unit_conversion renders result on success" do
