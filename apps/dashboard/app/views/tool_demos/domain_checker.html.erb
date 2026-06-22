@@ -1,0 +1,44 @@
+<%
+  dns        = data["dns"] || {}
+  a_records  = dns["a"].presence || []
+  mx_records = dns["mx"].presence || []
+  ns_records = dns["ns"].presence || []
+  available  = data["available"]
+%>
+<turbo-frame id="domain_checker-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= data["domain"] %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= available ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" : "bg-sky-100 text-sky-700 dark:bg-sky-900 dark:text-sky-300" %>">
+        <%= t("tools.domain_checker.demo.result_heading") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.domain_checker.demo.label_available") %></span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= available ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" %>">
+          <%= available ? t("tools.domain_checker.demo.badge_available") : t("tools.domain_checker.demo.badge_registered") %>
+        </span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.domain_checker.demo.label_dns_a") %></span>
+        <span class="text-sm font-medium <%= a_records.any? ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400 dark:text-gray-500" %>">
+          <%= a_records.any? ? t("tools.domain_checker.demo.badge_present") : t("tools.domain_checker.demo.badge_none") %>
+        </span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.domain_checker.demo.label_dns_mx") %></span>
+        <span class="text-sm font-medium <%= mx_records.any? ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400 dark:text-gray-500" %>">
+          <%= mx_records.any? ? t("tools.domain_checker.demo.badge_present") : t("tools.domain_checker.demo.badge_none") %>
+        </span>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.domain_checker.demo.label_dns_ns") %></span>
+        <span class="text-sm font-medium <%= ns_records.any? ? "text-emerald-600 dark:text-emerald-400" : "text-gray-400 dark:text-gray-500" %>">
+          <%= ns_records.any? ? t("tools.domain_checker.demo.badge_present") : t("tools.domain_checker.demo.badge_none") %>
+        </span>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

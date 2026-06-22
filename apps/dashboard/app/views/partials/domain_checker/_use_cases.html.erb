@@ -2,45 +2,33 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-        Built for Every Domain Workflow
+        <%= t("tools.domain_checker.use_cases.heading") %>
       </h2>
       <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        From fraud prevention to onboarding — if it touches a domain name, this API has you covered.
+        <%= t("tools.domain_checker.use_cases.subheading") %>
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% [
-        {
-          context: "Auth / Signup",
-          title:   "Avoid risky domains before signup",
-          body:    "Check domain health before accepting it as a user-provided business domain. Reject expired, parked, or flagged domains."
-        },
-        {
-          context: "Fraud Prevention",
-          title:   "Block malicious or expired domains",
-          body:    "Detect domains flagged for spam or phishing, or those with lapsed registrations. Prevent bad actors from abusing your platform."
-        },
-        {
-          context: "Integrations",
-          title:   "Verify partner domains in workflows",
-          body:    "Validate that partner or vendor domains are live and properly configured before integrating them into automated workflows."
-        },
-        {
-          context: "Email Marketing",
-          title:   "Inspect domain health before email campaigns",
-          body:    "Check MX records and domain reputation before targeting an address list. Reduce bounce risk from entire sending domains."
-        },
-        {
-          context: "DevOps / Monitoring",
-          title:   "Detect missing DNS or SSL issues",
-          body:    "Surface missing DNS records or expired SSL certificates before they cause downtime or user-facing errors."
-        },
-        {
-          context: "Onboarding",
-          title:   "Secure onboarding with trusted domains",
-          body:    "Allow only domains with verified DNS, active MX, and clean reputation during business onboarding. Block throwaway or newly registered domains."
-        },
+        { context: t("tools.domain_checker.use_cases.auth_context"),
+          title:   t("tools.domain_checker.use_cases.auth_title"),
+          body:    t("tools.domain_checker.use_cases.auth_body") },
+        { context: t("tools.domain_checker.use_cases.fraud_context"),
+          title:   t("tools.domain_checker.use_cases.fraud_title"),
+          body:    t("tools.domain_checker.use_cases.fraud_body") },
+        { context: t("tools.domain_checker.use_cases.integrations_context"),
+          title:   t("tools.domain_checker.use_cases.integrations_title"),
+          body:    t("tools.domain_checker.use_cases.integrations_body") },
+        { context: t("tools.domain_checker.use_cases.email_marketing_context"),
+          title:   t("tools.domain_checker.use_cases.email_marketing_title"),
+          body:    t("tools.domain_checker.use_cases.email_marketing_body") },
+        { context: t("tools.domain_checker.use_cases.devops_context"),
+          title:   t("tools.domain_checker.use_cases.devops_title"),
+          body:    t("tools.domain_checker.use_cases.devops_body") },
+        { context: t("tools.domain_checker.use_cases.onboarding_context"),
+          title:   t("tools.domain_checker.use_cases.onboarding_title"),
+          body:    t("tools.domain_checker.use_cases.onboarding_body") },
       ].each do |card| %>
         <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color: #1D9E75;">

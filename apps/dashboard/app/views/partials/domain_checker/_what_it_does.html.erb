@@ -2,10 +2,10 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-        What the Domain Checker API Does
+        <%= t("tools.domain_checker.what_it_does.heading") %>
       </h2>
       <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        One endpoint. Everything you need to know about a domain — availability, ownership, and registration history.
+        <%= t("tools.domain_checker.what_it_does.subheading") %>
       </p>
     </div>
 
@@ -13,34 +13,30 @@
 
       <!-- Accuracy block -->
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Accuracy</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.domain_checker.what_it_does.accuracy_heading") %></h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-          Every response includes parsed WHOIS data (domain ownership and registration records), DNS status (whether traffic-routing records exist), SSL validity (active HTTPS certificate), MX records (mail server configuration), and a reputation score — all normalized into a consistent JSON structure.
+          <%= t("tools.domain_checker.what_it_does.accuracy_body") %>
         </p>
         <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">{
-  "domain":      "example.com",
-  "status":      "active",
-  "dns_records": true,
-  "ssl_valid":   true,
-  "mx_valid":    true,
-  "reputation":  "clean"
+  "domain":    "example.com",
+  "available": false,
+  "dns": {
+    "a":  ["93.184.216.34"],
+    "mx": ["mail.example.com"],
+    "ns": ["ns1.example.com"]
+  }
 }</pre>
       </div>
 
       <!-- Simplicity block -->
       <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Simplicity</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.domain_checker.what_it_does.simplicity_heading") %></h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-          A single POST request with your API key is all it takes. No SDK, no configuration, no setup — just an HTTP call and a JSON response.
+          <%= t("tools.domain_checker.what_it_does.simplicity_body") %>
         </p>
-        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">POST /api/v1/domain-checker
+        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">GET /v1/networking/domain/example.com
 Host: api.requiems.xyz
-X-API-Key: your_key
-Content-Type: application/json
-
-{
-  "domain": "example.com"
-}</pre>
+X-API-Key: your_key</pre>
       </div>
 
     </div>

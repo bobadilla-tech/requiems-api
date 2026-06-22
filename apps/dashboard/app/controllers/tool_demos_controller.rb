@@ -81,6 +81,25 @@ class ToolDemosController < ApplicationController
     render "tool_demos/email_normalizer", locals: { data: data }
   end
 
+  def domain_checker
+    domain = params[:domain].to_s.strip.downcase
+    return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_empty")) if domain.blank?
+
+    unless domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/)
+      return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/networking/domain/#{domain}", method: "GET", params: {})
+
+    return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/domain_checker", locals: { data: data }
+  end
+
   def email_validator
     email = params[:email].to_s.strip
 

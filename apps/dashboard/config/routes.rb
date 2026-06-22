@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   post "tools/demos/sentiment-analysis", to: "tool_demos#sentiment_analysis", as: :tool_demo_sentiment_analysis
   post "tools/demos/email-validator",    to: "tool_demos#email_validator",    as: :tool_demo_email_validator
   post "tools/demos/email-normalizer",  to: "tool_demos#email_normalizer",  as: :tool_demo_email_normalizer
+  post "tools/demos/domain-checker",   to: "tool_demos#domain_checker",   as: :tool_demo_domain_checker
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

@@ -2,21 +2,21 @@
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
     <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-      Clean email addresses automatically,<br class="hidden sm:block"> every time.
+      <%= t("tools.email_normalizer.hero.title") %>
     </h1>
 
     <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-      Normalize, lowercase, trim, and canonicalize email addresses in one API call.
+      <%= t("tools.email_normalizer.hero.subtitle") %>
     </p>
 
     <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
       <%= render "partials/shared/button",
-            text:    "Get your free API key",
+            text:    t("tools.email_normalizer.cta.cta_primary"),
             variant: "brand",
             href:    new_user_registration_path,
             size:    "lg" %>
       <%= render "partials/shared/button",
-            text:    "Read the docs",
+            text:    t("tools.email_normalizer.cta.cta_docs"),
             variant: "outline",
             href:    api_path("email-normalize"),
             size:    "lg" %>

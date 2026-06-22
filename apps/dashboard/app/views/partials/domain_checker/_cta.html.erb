@@ -1,21 +1,21 @@
 <section class="bg-gray-900 text-white py-20">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-3xl font-bold text-white">
-      Automate this with Requiems.
+      <%= t("tools.domain_checker.cta.heading") %>
     </h2>
     <p class="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
-      One API key. Domain availability, WHOIS data, and 50+ other APIs across validation, networking, finance, and more.
+      <%= t("tools.domain_checker.cta.body") %>
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
       <%= render "partials/shared/button",
-            text:    "Get your free API key",
+            text:    t("tools.domain_checker.cta.cta_primary"),
             variant: "brand",
             href:    new_user_registration_path,
             size:    "lg" %>
 
       <%= render "partials/shared/button",
-            text:    "Read the docs →",
+            text:    t("tools.domain_checker.cta.cta_docs"),
             variant: "outline-white",
             href:    api_path("domain-checker"),
             size:    "lg" %>
