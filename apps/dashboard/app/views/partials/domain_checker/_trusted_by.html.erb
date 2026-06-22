@@ -1,0 +1,14 @@
+<% logos = [
+  { file: "companies/bobadilla-tech.png",    alt: "Bobadilla Tech"   },
+  { file: "companies/compile-strength.png",  alt: "Compile Strength" },
+  { file: "companies/flyver.jpeg",            alt: "Flyver"           },
+  { file: "companies/flyver-docs.png",        alt: "Flyver Docs"      },
+  { file: "companies/korealexa-whitebg.jpeg", alt: "Korealexa"        },
+  { file: "companies/shareweave.jpeg",        alt: "Shareweave"       },
+  { file: "companies/verigeo.png",            alt: "Verigeo"          },
+] %>
+
+<%= render "partials/shared/logo_marquee",
+      logos:  logos,
+      label:  "Trusted by teams at",
+      speed:  "34s" %>

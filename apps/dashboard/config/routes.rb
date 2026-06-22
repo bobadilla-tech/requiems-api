@@ -146,6 +146,7 @@ Rails.application.routes.draw do
     get "error_codes", to: "home#error_codes"
     get "faq", to: "home#faq"
     get "for-llms", to: "home#for_llms"
+    get "domain-checker", to: "home#domain_checker"
 
     get "suggest-an-api", to: "suggestions#new", as: "suggest_api"
     post "suggest-an-api", to: "suggestions#create"
