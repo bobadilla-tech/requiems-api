@@ -162,6 +162,16 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("tools.domain_checker.demo.error_empty"), response.body
   end
 
+  test "domain_checker normalizes URL input" do
+    payload = { "domain" => "example.com", "available" => false,
+                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/domain-checker", params: { domain: "https://example.com/some/path?q=1" }
+    end
+    assert_response :success
+    assert_match "example.com", response.body
+  end
+
   test "domain_checker renders error when domain format is invalid" do
     post "/tools/demos/domain-checker", params: { domain: "not-a-domain" }
     assert_response :success

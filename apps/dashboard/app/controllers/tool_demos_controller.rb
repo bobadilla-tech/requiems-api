@@ -83,6 +83,12 @@ class ToolDemosController < ApplicationController
 
   def domain_checker
     domain = params[:domain].to_s.strip.downcase
+    domain = domain.sub(/\Ahttps?:\/\//, "")  # strip protocol
+    domain = domain.split("/", 2).first.to_s   # strip path
+    domain = domain.split("?", 2).first.to_s   # strip query
+    domain = domain.split("#", 2).first.to_s   # strip fragment
+    domain = domain.split(":", 2).first.to_s   # strip port
+    domain = domain.strip
     return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_empty")) if domain.blank?
 
     unless domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/)
