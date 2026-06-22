@@ -17,14 +17,14 @@
           outcome: "Full email deliverability confidence: domain health plus mailbox-level checks."
         },
         {
-          name:    "Domain Checker + IP Reputation",
-          benefit: "Check domain reputation alongside the sender IP.",
-          outcome: "Layered trust signal: clean domain from clean IP indicates legitimate traffic."
+          name:    "Domain Checker + VPN Detection",
+          benefit: "Check domain health while identifying VPN or proxy traffic from the same request.",
+          outcome: "Double-layered fraud signal: a flagged domain combined with anonymized traffic is a strong block trigger."
         },
         {
-          name:    "Domain Checker + Address Formatter",
-          benefit: "Verify domain alongside a physical address during business onboarding.",
-          outcome: "Multi-point onboarding validation covering digital and physical contact data."
+          name:    "Domain Checker + Phone Validator",
+          benefit: "Verify domain health and phone number at the same onboarding step.",
+          outcome: "Multi-point contact validation — confirmed digital presence and reachable phone — before granting access."
         },
       ].each do |combo| %>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
