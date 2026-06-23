@@ -1,0 +1,47 @@
+<section class="bg-gray-50 dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        Built for Every Phone Number Workflow
+      </h2>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        From fraud prevention to onboarding — if it touches a phone number, this API has you covered.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% [
+        { context: "Auth / Signup",
+          title:   "Verify phone numbers at registration",
+          body:    "Ensure every phone number is real, reachable, and correctly formatted before accepting it during user signup." },
+        { context: "Fraud Prevention",
+          title:   "Detect VoIP and virtual numbers",
+          body:    "Flag disposable or virtual phone numbers used by bad actors. Block high-risk line types during sensitive operations." },
+        { context: "Integrations",
+          title:   "Validate phone data in workflows",
+          body:    "Normalize and validate partner-provided phone numbers before they enter your CRM, billing, or support systems." },
+        { context: "SMS Marketing",
+          title:   "Confirm mobile numbers for campaigns",
+          body:    "Filter for mobile-only line types before sending SMS. Reduce undelivered messages and protect sender reputation." },
+        { context: "Onboarding",
+          title:   "Standardize international numbers",
+          body:    "Convert phone numbers from any country into E.164 format automatically. One consistent format across your entire user base." },
+        { context: "Support",
+          title:   "Look up caller info in real time",
+          body:    "Identify carrier and country from an incoming phone number during support calls. Route to the right team instantly." },
+      ].each do |card| %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color: #1D9E75;">
+            <%= card[:context] %>
+          </p>
+          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <%= card[:title] %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <%= card[:body] %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
