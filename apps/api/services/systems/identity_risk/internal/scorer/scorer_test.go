@@ -23,7 +23,7 @@ func TestSignalConfidence_SingleHighQualitySignal(t *testing.T) {
 
 	got := signalConfidence(s)
 
-	assert.Greater(t, got, 0.7)
+	assert.Equal(t, 1.0, got)
 }
 
 func TestSignalConfidence_EmailAllRisk(t *testing.T) {
