@@ -101,6 +101,7 @@ func Resolve(
 				mu.Lock()
 				out.VPNResult = &r
 				out.Signals.IPPresent = true
+				out.Signals.IPRiskChecked = true
 				out.Signals.IsTOR = r.IsTor
 				out.Signals.IsProxy = r.IsProxy
 				out.Signals.IsVPN = r.IsVPN
@@ -140,13 +141,14 @@ type Signals struct {
 	PhoneVirtual bool
 	PhoneCountry string
 
-	IPPresent  bool
-	IsTOR      bool
-	IsProxy    bool
-	IsVPN      bool
-	IsHosting  bool
-	FraudScore int
-	IPCountry  string
+	IPPresent     bool
+	IPRiskChecked bool
+	IsTOR         bool
+	IsProxy       bool
+	IsVPN         bool
+	IsHosting     bool
+	FraudScore    int
+	IPCountry     string
 }
 
 type ScoreResult struct {
@@ -271,7 +273,7 @@ func signalConfidence(s Signals) float64 {
 			numerator += vitualWeight
 		}
 	}
-	if s.IPPresent {
+	if s.IPRiskChecked {
 		denominator += ipFraudWeight + torWeight + proxyWeight
 
 		if !s.IsProxy {
