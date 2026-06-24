@@ -22,7 +22,7 @@
         <%= render "partials/shared/card", padding: true do %>
           <div data-controller="faq-accordion">
             <button id="faq-pv-btn-<%= i %>"
-                    class="w-full flex justify-between items-center text-left gap-4"
+                    class="w-full flex justify-between items-center text-left gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-primary rounded-lg"
                     aria-expanded="false"
                     aria-controls="faq-pv-panel-<%= i %>"
                     data-action="click->faq-accordion#toggle">
@@ -48,7 +48,7 @@
 
     <div class="mt-10 text-center">
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">Still have questions?</p>
-      <%= link_to contact_path, class: "inline-flex items-center text-sm font-medium hover:underline", style: "color: #1D9E75;" do %>
+      <%= link_to contact_path, class: "inline-flex items-center text-sm font-medium hover:underline text-brand-primary" do %>
         Contact support
         <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
