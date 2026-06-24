@@ -47,7 +47,8 @@
         </div>
       </div>
 
-      <div class="w-full min-w-0">
+      <div class="w-full min-w-0"
+           data-controller="phone-validator-demo">
         <div class="rounded-2xl overflow-hidden w-full"
              style="background-color: #0d1117; border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px rgba(29,158,117,0.1);">
           <div class="px-4 py-3 flex items-center gap-3"
@@ -62,26 +63,42 @@
           </div>
 
           <div class="px-5 pt-5 pb-5">
-            <div class="flex gap-2">
-              <input type="text"
-                     placeholder="+14155552671"
-                     disabled
-                     class="flex-1 block w-full rounded-lg border px-4 py-2.5 text-sm"
-                     style="background-color: #161b22; border-color: rgba(255,255,255,0.1); color: #e2e8f0; opacity: 0.6;">
-              <button type="button"
-                      disabled
-                      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm opacity-60"
-                      style="background-color: #1D9E75; color: white;">
-                Validate
-              </button>
-            </div>
-            <pre class="mt-4 bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">{
-  "valid":      true,
-  "country":    "US",
-  "carrier":    "Verizon",
-  "line_type":  "mobile",
-  "e164":       "+14155552671"
-}</pre>
+            <form data-action="submit->phone-validator-demo#validate" novalidate>
+              <label for="pv-demo-input" class="sr-only">Phone number</label>
+              <div class="flex gap-2">
+                <input id="pv-demo-input"
+                       type="tel"
+                       name="phone"
+                       placeholder="+14155552671"
+                       autocomplete="off"
+                       data-phone-validator-demo-target="input"
+                       class="flex-1 block w-full rounded-lg border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                       style="background-color: #161b22; border-color: rgba(255,255,255,0.1); color: #e2e8f0;">
+                <button type="submit"
+                        data-phone-validator-demo-target="button"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-colors disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 shrink-0"
+                        style="background-color: #1D9E75; color: white;">
+                  <span data-phone-validator-demo-target="spinner" class="hidden">
+                    <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                  </span>
+                  Validate
+                </button>
+              </div>
+
+              <p data-phone-validator-demo-target="errorMessage"
+                 class="hidden mt-2 text-xs"
+                 style="color: #f87171;"
+                 role="alert"></p>
+
+              <p class="mt-2 text-xs" style="color: rgba(255,255,255,0.4);">No account required</p>
+
+              <div data-phone-validator-demo-target="result"
+                   class="hidden mt-4 bg-gray-900 rounded-lg p-4 border"
+                   style="border-color: rgba(255,255,255,0.06);"></div>
+            </form>
           </div>
         </div>
       </div>
