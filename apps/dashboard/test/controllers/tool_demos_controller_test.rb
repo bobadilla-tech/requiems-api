@@ -202,6 +202,51 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("tools.domain_checker.demo.error_no_data"), response.body
   end
 
+  # ── phone_validator ──────────────────────────────────────────────────────────
+
+  test "phone_validator renders result on success" do
+    payload = { "number" => "+14155552671", "valid" => true, "country" => "US",
+                "type" => "mobile", "formatted" => "+1 415-555-2671",
+                "carrier" => { "name" => "T-Mobile", "source" => "metadata" },
+                "risk" => { "is_voip" => false, "is_virtual" => false } }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/phone-validator", params: { phone: "+14155552671" }
+    end
+    assert_response :success
+    assert_match "+14155552671", response.body
+    assert_match "Valid", response.body
+  end
+
+  test "phone_validator renders error when phone is blank" do
+    post "/tools/demos/phone-validator", params: { phone: "" }
+    assert_response :success
+    assert_match "Enter a phone number to validate.", response.body
+  end
+
+  test "phone_validator renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/phone-validator", params: { phone: "+14155552671" }
+    end
+    assert_response :success
+    assert_match "Rate limit reached. Wait a moment and try again.", response.body
+  end
+
+  test "phone_validator renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/phone-validator", params: { phone: "+14155552671" }
+    end
+    assert_response :success
+    assert_match "Something went wrong. Try again.", response.body
+  end
+
+  test "phone_validator renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/phone-validator", params: { phone: "+14155552671" }
+    end
+    assert_response :success
+    assert_match "No data returned.", response.body
+  end
+
   # ── unit_conversion ──────────────────────────────────────────────────────────
 
   test "unit_conversion renders result on success" do

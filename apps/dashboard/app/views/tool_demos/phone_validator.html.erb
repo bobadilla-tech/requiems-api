@@ -1,0 +1,38 @@
+<turbo-frame id="phone_validator-demo-result">
+  <div class="mt-4 text-left rounded-xl border overflow-hidden"
+       style="background-color: #0d1117; border-color: rgba(255,255,255,0.06);">
+    <div class="px-4 py-3 flex items-center gap-2"
+         style="background-color: #161b22; border-bottom: 1px solid rgba(255,255,255,0.05);">
+      <span class="text-xs font-mono truncate" style="color: #e2e8f0;"><%= number %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= data["valid"] ? "bg-green-900 text-green-300" : "bg-red-900 text-red-300" %>">
+        <%= data["valid"] ? t("tools.phone_validator.demo.badge_valid") : t("tools.phone_validator.demo.badge_invalid") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <% fields = [
+        { label: t("tools.phone_validator.demo.label_country"),        value: data["country"],      color: data["country"].present? ? "text-green-400" : "text-gray-500" },
+        { label: t("tools.phone_validator.demo.label_line_type"),      value: data["type"],         color: data["type"].present?    ? "text-white" : "text-gray-500" },
+        { label: t("tools.phone_validator.demo.label_formatted"),      value: data["formatted"],    color: data["formatted"].present? ? "text-white" : "text-gray-500" },
+        { label: t("tools.phone_validator.demo.label_carrier"),        value: data.dig("carrier", "name"), color: data.dig("carrier", "name").present? ? "text-white" : "text-gray-500" },
+        { label: t("tools.phone_validator.demo.label_voip"),           value: data.dig("risk", "is_voip"),  color: data.dig("risk", "is_voip") ? "text-red-400" : "text-green-400" },
+        { label: t("tools.phone_validator.demo.label_virtual_number"), value: data.dig("risk", "is_virtual"), color: data.dig("risk", "is_virtual") ? "text-red-400" : "text-green-400" },
+      ] %>
+      <% fields.each_with_index do |field, i| %>
+        <div class="flex items-center justify-between py-2 <%= i < fields.length - 1 ? 'border-b' : '' %>"
+             style="border-color: rgba(255,255,255,0.04);">
+          <span class="text-sm" style="color: rgba(255,255,255,0.5);"><%= field[:label] %></span>
+          <span class="text-sm font-mono <%= field[:color] %>">
+            <% if field[:value] == true %>
+              <%= t("tools.phone_validator.demo.badge_yes") %>
+            <% elsif field[:value] == false %>
+              <%= t("tools.phone_validator.demo.badge_no") %>
+            <% else %>
+              <%= field[:value] || "—" %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

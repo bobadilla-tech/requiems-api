@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -23,6 +23,11 @@ class ToolsController < ApplicationController
       name: "Domain Checker",
       description: "Check domain availability, DNS records (A, MX, NS), and WHOIS data in one API call.",
       icon_classes: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400"
+    },
+    "phone-validator" => {
+      name: "Phone Validator",
+      description: "Validate phone numbers with carrier lookup, line type detection, and format normalization in one API call.",
+      icon_classes: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400"
     },
     "unit-conversion" => {
       name: "Unit Conversion",
