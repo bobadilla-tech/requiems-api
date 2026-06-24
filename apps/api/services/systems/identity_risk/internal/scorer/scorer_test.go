@@ -65,6 +65,23 @@ func TestResolve_CleanEmail_SetsExpectedSignals(t *testing.T) {
 	assert.False(t, resolved.Signals.IPRiskChecked)
 }
 
+func TestResolve_PhonePresent_SetsExpectedSignals(t *testing.T) {
+	ctx := context.Background()
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{r: phone.ValidateResponse{Valid: true, Country: "US"}},
+		nil,
+		nil,
+		"user@example.com", "+13235551234", "",
+	)
+
+	assert.True(t, resolved.Signals.PhonePresent)
+	assert.False(t, resolved.Signals.PhoneInvalid)
+	assert.Equal(t, "US", resolved.Signals.PhoneCountry)
+}
+
 func TestResolve_IPRiskChecked_WhenVPNSucceeds(t *testing.T) {
 	ctx := context.Background()
 
@@ -204,4 +221,32 @@ func TestCompute_IsSafe_FalseWhenTOROrProxy(t *testing.T) {
 
 	assert.False(t, Compute(tor).IsSafe)
 	assert.False(t, Compute(proxy).IsSafe)
+}
+
+func TestSignalConfidence_IPAllClean(t *testing.T) {
+	s := Signals{
+		IPPresent:     true,
+		IPRiskChecked: true,
+		IsProxy:       false,
+		IsTOR:         false,
+		FraudScore:    0,
+	}
+
+	got := signalConfidence(s)
+
+	assert.Equal(t, 1.0, got)
+}
+
+func TestSignalConfidence_IPAllRisk(t *testing.T) {
+	s := Signals{
+		IPPresent:     true,
+		IPRiskChecked: true,
+		IsProxy:       true,
+		IsTOR:         true,
+		FraudScore:    100,
+	}
+
+	got := signalConfidence(s)
+
+	assert.Equal(t, 0.0, got)
 }
