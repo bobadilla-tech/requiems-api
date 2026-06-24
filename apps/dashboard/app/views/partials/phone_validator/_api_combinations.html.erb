@@ -2,35 +2,35 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-10">
       <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
-        Pair It With Other APIs
+        <%= t("tools.phone_validator.api_combinations.heading") %>
       </h2>
       <p class="mt-3 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        Combine Phone Validator with other Requiems APIs to build multi-point validation into a single workflow.
+        <%= t("tools.phone_validator.api_combinations.subheading") %>
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <% [
-        { name:    "Phone Validator + Email Validator",
-          benefit: "Validate phone and email in the same onboarding step.",
-          outcome: "Complete contact verification — reachable phone and deliverable email — before granting access." },
-        { name:    "Phone Validator + Email Normalizer",
-          benefit: "Normalize email and validate phone together.",
-          outcome: "Consistent, verified contact data across both channels from a single API call." },
-        { name:    "Phone Validator + Domain Checker",
-          benefit: "Verify phone number and check domain reputation at once.",
-          outcome: "Multi-point identity confidence — confirmed phone, healthy domain — for high-risk signups." },
+        { name:    t("tools.phone_validator.api_combinations.email_validator_name"),
+          benefit: t("tools.phone_validator.api_combinations.email_validator_benefit"),
+          outcome: t("tools.phone_validator.api_combinations.email_validator_outcome") },
+        { name:    t("tools.phone_validator.api_combinations.email_normalizer_name"),
+          benefit: t("tools.phone_validator.api_combinations.email_normalizer_benefit"),
+          outcome: t("tools.phone_validator.api_combinations.email_normalizer_outcome") },
+        { name:    t("tools.phone_validator.api_combinations.domain_checker_name"),
+          benefit: t("tools.phone_validator.api_combinations.domain_checker_benefit"),
+          outcome: t("tools.phone_validator.api_combinations.domain_checker_outcome") },
       ].each do |combo| %>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
           <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3">
             <%= combo[:name] %>
           </h3>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            <span class="font-medium text-gray-700 dark:text-gray-300">Benefit:</span>
+            <span class="font-medium text-gray-700 dark:text-gray-300"><%= t("tools.phone_validator.api_combinations.label_benefit") %></span>
             <%= combo[:benefit] %>
           </p>
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            <span class="font-medium text-gray-700 dark:text-gray-300">Outcome:</span>
+            <span class="font-medium text-gray-700 dark:text-gray-300"><%= t("tools.phone_validator.api_combinations.label_outcome") %></span>
             <%= combo[:outcome] %>
           </p>
         </div>

@@ -8,7 +8,7 @@ export default class extends Controller {
     this._clearError();
     if (!this.inputTarget.value.trim()) {
       event.preventDefault();
-      this._showError(this.errorEmptyValue || "Enter a phone number to validate.");
+      this._showError(this.errorEmptyValue);
     }
   }
 

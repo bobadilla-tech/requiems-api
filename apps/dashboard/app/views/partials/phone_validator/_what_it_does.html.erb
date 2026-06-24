@@ -2,20 +2,21 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-        What the Phone Validation API Does
+        <%= t("tools.phone_validator.what_it_does.heading") %>
       </h2>
       <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-        One endpoint. Everything you need to know about a phone number — validity, carrier, line type, and normalized format.
+        <%= t("tools.phone_validator.what_it_does.subheading") %>
       </p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Accuracy</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.phone_validator.what_it_does.accuracy_heading") %></h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-          Every response includes country and region detection, carrier name, line type classification (mobile, landline, VoIP), and the phone number formatted to E.164 international standard — all normalized into a consistent JSON structure.
+          <%= t("tools.phone_validator.what_it_does.accuracy_body") %>
         </p>
-        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">{
+        <div data-controller="highlight">
+          <pre><code class="language-json">{
   "valid":       true,
   "country":     "US",
   "country_code": 1,
@@ -23,17 +24,20 @@
   "line_type":   "mobile",
   "e164":        "+14155552671",
   "local":       "(415) 555-2671"
-}</pre>
+}</code></pre>
+        </div>
       </div>
 
       <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Simplicity</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.phone_validator.what_it_does.simplicity_heading") %></h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-          A single GET request with your API key is all it takes. No SDK, no configuration, no setup — just an HTTP call and a JSON response.
+          <%= t("tools.phone_validator.what_it_does.simplicity_body") %>
         </p>
-        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">GET /v1/validation/phone/%2B14155552671
+        <div data-controller="highlight">
+          <pre><code class="language-http">GET /v1/validation/phone/%2B14155552671
 Host: api.requiems.xyz
-X-API-Key: your_key</pre>
+X-API-Key: your_key</code></pre>
+        </div>
       </div>
     </div>
   </div>

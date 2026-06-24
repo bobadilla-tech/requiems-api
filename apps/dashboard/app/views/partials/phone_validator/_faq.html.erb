@@ -2,22 +2,17 @@
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-        Frequently Asked Questions
+        <%= t("tools.phone_validator.faq.heading") %>
       </h2>
     </div>
 
     <div class="space-y-3">
       <% [
-        { q: "What information does Phone Validator return?",
-          a: "It returns whether the number is valid and reachable, the country and country code, the carrier name, the line type (mobile, landline, VoIP, toll-free, or premium), and the number formatted to E.164 and local standards." },
-        { q: "Does it work with international phone numbers?",
-          a: "Yes. It supports phone numbers from 200+ countries and territories. Pass the number in E.164 format with the country code, or let the API detect the country from the number pattern." },
-        { q: "Can it detect VoIP and virtual numbers?",
-          a: "Yes. The line_type field distinguishes mobile, landline, VoIP, toll-free, and premium-rate numbers. Use this to flag virtual or disposable numbers for fraud screening." },
-        { q: "How accurate is the carrier detection?",
-          a: "Carrier detection is sourced from global carrier databases and is accurate for most major carriers across North America, Europe, and Asia. Accuracy may vary for MVNOs and smaller regional carriers." },
-        { q: "Is it free to try?",
-          a: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits." },
+        { q: t("tools.phone_validator.faq.q1"), a: t("tools.phone_validator.faq.a1") },
+        { q: t("tools.phone_validator.faq.q2"), a: t("tools.phone_validator.faq.a2") },
+        { q: t("tools.phone_validator.faq.q3"), a: t("tools.phone_validator.faq.a3") },
+        { q: t("tools.phone_validator.faq.q4"), a: t("tools.phone_validator.faq.a4") },
+        { q: t("tools.phone_validator.faq.q5"), a: t("tools.phone_validator.faq.a5") },
       ].each_with_index do |item, i| %>
         <%= render "partials/shared/card", padding: true do %>
           <div data-controller="faq-accordion">
@@ -47,9 +42,9 @@
     </div>
 
     <div class="mt-10 text-center">
-      <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">Still have questions?</p>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-3"><%= t("tools.phone_validator.faq.support_prompt") %></p>
       <%= link_to contact_path, class: "inline-flex items-center text-sm font-medium hover:underline text-brand-primary" do %>
-        Contact support
+        <%= t("tools.phone_validator.faq.support_link") %>
         <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
