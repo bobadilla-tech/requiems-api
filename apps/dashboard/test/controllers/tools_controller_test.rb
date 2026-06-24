@@ -29,6 +29,11 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "bin lookup tool page renders successfully" do
+    get "/en/tools/bin-lookup"
+    assert_response :success
+  end
+
   test "unknown tool id redirects to root with alert" do
     get "/en/tools/not-a-real-tool"
     assert_redirected_to root_path
