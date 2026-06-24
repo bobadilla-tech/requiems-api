@@ -1,10 +1,87 @@
 package scorer
 
 import (
+	"context"
+	"net"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	ipinfo "requiems-api/services/networking/ip/info"
+	ipvpn "requiems-api/services/networking/ip/vpn"
+	"requiems-api/services/validation/email"
+	"requiems-api/services/validation/phone"
 )
+
+type stubEmail struct{ r email.Validation }
+
+func (s *stubEmail) ValidateEmail(_ context.Context, _ string) email.Validation { return s.r }
+
+type stubPhone struct{ r phone.ValidateResponse }
+
+func (s *stubPhone) Validate(_ string) phone.ValidateResponse { return s.r }
+
+type stubVPN struct {
+	r   ipvpn.IPCheckResponse
+	err error
+}
+
+func (s *stubVPN) CheckIP(_ context.Context, _ net.IP) (ipvpn.IPCheckResponse, error) {
+	return s.r, s.err
+}
+
+type stubIPInfo struct {
+	r   ipinfo.LookupResponse
+	err error
+}
+
+func (s *stubIPInfo) CheckInfo(_ context.Context, _ string) (ipinfo.LookupResponse, error) {
+	return s.r, s.err
+}
+
+func cleanEmail() email.Validation {
+	v, mx := true, true
+	normalized := "user@example.com"
+	domain := "example.com"
+	return email.Validation{Valid: v, SyntaxValid: true, MxValid: mx, Disposable: false, Normalized: &normalized, Domain: &domain}
+}
+
+func TestResolve_CleanEmail_SetsExpectedSignals(t *testing.T) {
+	ctx := context.Background()
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{},
+		nil,
+		nil,
+		"user@example.com", "", "",
+	)
+
+	assert.True(t, resolved.Signals.EmailPresent)
+	assert.False(t, resolved.Signals.EmailNoMX)
+	assert.False(t, resolved.Signals.EmailDisposable)
+	assert.False(t, resolved.Signals.EmailInvalid)
+	assert.False(t, resolved.Signals.IPRiskChecked)
+}
+
+func TestResolve_IPRiskChecked_WhenVPNSucceeds(t *testing.T) {
+	ctx := context.Background()
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{},
+		&stubVPN{r: ipvpn.IPCheckResponse{IsProxy: false, IsTor: false, FraudScore: 0}},
+		&stubIPInfo{},
+		"user@example.com", "", "8.8.8.8",
+	)
+
+	assert.True(t, resolved.Signals.IPRiskChecked)
+	assert.False(t, resolved.Signals.IsProxy)
+	assert.False(t, resolved.Signals.IsTOR)
+	assert.Equal(t, 0, resolved.Signals.FraudScore)
+}
 
 func TestSignalConfidence_NoSignals(t *testing.T) {
 	s := Signals{}
