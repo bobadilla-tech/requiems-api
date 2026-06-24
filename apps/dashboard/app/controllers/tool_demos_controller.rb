@@ -106,6 +106,24 @@ class ToolDemosController < ApplicationController
     render "tool_demos/domain_checker", locals: { data: data }
   end
 
+  def phone_validator
+    number = params[:phone].to_s.strip
+
+    if number.blank?
+      return render_demo_error("phone_validator", "Enter a phone number to validate.")
+    end
+
+    result = api_call(endpoint: "/v1/validation/phone", method: "GET", params: { number: number })
+
+    return render_demo_error("phone_validator", "Rate limit reached. Wait a moment and try again.") if result.status_code == 429
+    return render_demo_error("phone_validator", "Something went wrong. Try again.") unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("phone_validator", "No data returned.") if data.nil?
+
+    render "tool_demos/phone_validator", locals: { data: data, number: number }
+  end
+
   def email_validator
     email = params[:email].to_s.strip
 

@@ -48,7 +48,8 @@
       </div>
 
       <div class="w-full min-w-0"
-           data-controller="phone-validator-demo">
+           data-controller="phone-validator-demo"
+           data-phone-validator-demo-error-empty-value="Enter a phone number to validate.">
         <div class="rounded-2xl overflow-hidden w-full"
              style="background-color: #0d1117; border: 1px solid rgba(255,255,255,0.07); box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px rgba(29,158,117,0.1);">
           <div class="px-4 py-3 flex items-center gap-3"
@@ -63,7 +64,13 @@
           </div>
 
           <div class="px-5 pt-5 pb-5">
-            <form data-action="submit->phone-validator-demo#validate" novalidate>
+            <form data-action="submit->phone-validator-demo#beforeSubmit turbo:submit-start->phone-validator-demo#onSubmitStart turbo:submit-end->phone-validator-demo#onSubmitEnd"
+                  action="<%= tool_demo_phone_validator_path %>"
+                  method="post"
+                  data-turbo-frame="phone_validator-demo-result"
+                  novalidate>
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
               <label for="pv-demo-input" class="sr-only">Phone number</label>
               <div class="flex gap-2">
                 <input id="pv-demo-input"
@@ -94,11 +101,9 @@
                  role="alert"></p>
 
               <p class="mt-2 text-xs" style="color: rgba(255,255,255,0.4);">No account required</p>
-
-              <div data-phone-validator-demo-target="result"
-                   class="hidden mt-4 bg-gray-900 rounded-lg p-4 border"
-                   style="border-color: rgba(255,255,255,0.06);"></div>
             </form>
+
+            <turbo-frame id="phone_validator-demo-result"></turbo-frame>
           </div>
         </div>
       </div>
