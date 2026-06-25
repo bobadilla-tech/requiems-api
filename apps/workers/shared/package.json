@@ -17,13 +17,13 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "hono": "^4.12.26",
+    "hono": "^4.12.27",
     "nanoid": "^5.1.11"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260625.1",
     "@biomejs/biome": "^2.5.0",
-    "hono": "^4.12.26",
+    "hono": "^4.12.27",
     "nanoid": "^5.1.11",
     "typescript": "^6.0.3"
   }
