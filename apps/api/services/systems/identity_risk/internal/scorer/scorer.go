@@ -37,6 +37,16 @@ type Resolved struct {
 	IPResult    *ipinfo.LookupResponse
 }
 
+const (
+	emailMXWeight         = 0.95 // emailMXWeight reflects ~95% reliability of MX record validation.
+	emailDisposableWeight = 0.85 // emailDisposableWeight is slightly lower as some disposable providers use legitimate domains.
+	voipWeight            = 0.70 // voipWeight is lower due to inconsistent detection across carriers and regions.
+	vitualWeight          = 0.70 // virtualWeight mirrors voipWeight — virtual numbers share similar detection uncertainty.
+	ipFraudWeight         = 0.80 // ipFraudWeight reflects external provider accuracy, which varies by data freshness.
+	proxyWeight           = 0.90 // proxyWeight is high — proxy detection is well-established and reliable.
+	torWeight             = 0.90 // torWeight is high — TOR exit node lists are maintained and highly accurate.
+)
+
 func Resolve(
 	ctx context.Context,
 	emailSvc EmailChecker,
@@ -91,6 +101,7 @@ func Resolve(
 				mu.Lock()
 				out.VPNResult = &r
 				out.Signals.IPPresent = true
+				out.Signals.IPRiskChecked = true
 				out.Signals.IsTOR = r.IsTor
 				out.Signals.IsProxy = r.IsProxy
 				out.Signals.IsVPN = r.IsVPN
@@ -130,13 +141,14 @@ type Signals struct {
 	PhoneVirtual bool
 	PhoneCountry string
 
-	IPPresent  bool
-	IsTOR      bool
-	IsProxy    bool
-	IsVPN      bool
-	IsHosting  bool
-	FraudScore int
-	IPCountry  string
+	IPPresent     bool
+	IPRiskChecked bool
+	IsTOR         bool
+	IsProxy       bool
+	IsVPN         bool
+	IsHosting     bool
+	FraudScore    int
+	IPCountry     string
 }
 
 type ScoreResult struct {
@@ -145,8 +157,6 @@ type ScoreResult struct {
 	IsSafe     bool
 	Flags      []string
 }
-
-const totalSignals = 3
 
 func Compute(s Signals) ScoreResult {
 	flags := make([]string, 0, 4)
@@ -237,15 +247,52 @@ func roundScore(score float64) float64 {
 }
 
 func signalConfidence(s Signals) float64 {
-	present := 0
+	numerator := 0.0
+	denominator := 0.0
+
 	if s.EmailPresent {
-		present++
+		denominator += emailMXWeight + emailDisposableWeight
+
+		if !s.EmailNoMX {
+			numerator += emailMXWeight
+		}
+
+		if !s.EmailDisposable {
+			numerator += emailDisposableWeight
+		}
 	}
 	if s.PhonePresent {
-		present++
+
+		denominator += voipWeight + vitualWeight
+
+		if !s.PhoneVoIP {
+			numerator += voipWeight
+		}
+
+		if !s.PhoneVirtual {
+			numerator += vitualWeight
+		}
 	}
-	if s.IPPresent {
-		present++
+	if s.IPRiskChecked {
+		denominator += ipFraudWeight + torWeight + proxyWeight
+
+		if !s.IsProxy {
+			numerator += proxyWeight
+		}
+
+		if !s.IsTOR {
+			numerator += torWeight
+		}
+
+		if s.FraudScore == 0 {
+			numerator += ipFraudWeight
+		}
+
 	}
-	return math.Round(float64(present)/float64(totalSignals)*100) / 100
+
+	if denominator == 0 {
+		return 0
+	}
+
+	return math.Round(numerator/denominator*100) / 100
 }
