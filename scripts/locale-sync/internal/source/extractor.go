@@ -218,6 +218,7 @@ func scanFile(path, root string) []HardcodedString {
 		if isERB {
 			results = append(results, scanAttrPatterns(line, trimmed, short, lineNum)...)
 			results = append(results, scanTagContent(line, trimmed, short, lineNum)...)
+			results = append(results, scanBareTextNodes(line, trimmed, short, lineNum)...)
 		}
 
 		// Skip lines already calling t() / I18n.t — applies to both Ruby and ERB.
@@ -406,6 +407,54 @@ func looksLikeCode(s string) bool {
 		}
 	}
 	return matches >= 2
+}
+
+// scanBareTextNodes detects user-facing text mixed inline with ERB output tags on
+// the same line — e.g. "Have questions? <%= link_to 'FAQ', ... %> or ...".
+// scanTagContent explicitly skips lines containing <%= to avoid orphaned fragments
+// like "Hello !"; this pass fills that gap by examining only the text PREFIX before
+// the first ERB tag, which is the cleanest extractable fragment.
+//
+// Findings are report-only (category "text_node") — auto-fixing split-sentence lines
+// requires human judgement and is not safe to automate.
+func scanBareTextNodes(line, trimmed, short string, lineNum int) []HardcodedString {
+	if !erbOutputRe.MatchString(line) {
+		return nil
+	}
+	// HTML tag lines are handled by scanTagContent / scanMultiLineTagContent.
+	if strings.HasPrefix(trimmed, "<") {
+		return nil
+	}
+	// Extract the text before the first ERB tag.
+	firstERB := strings.Index(line, "<%")
+	if firstERB <= 0 {
+		return nil
+	}
+	prefix := strings.TrimSpace(line[:firstERB])
+	if prefix == "" {
+		return nil
+	}
+	// Reject attribute fragments: end with ="  ='  =  (  "  '  {
+	// These indicate the ERB tag is inside an HTML attribute value or a JS/Ruby string.
+	for _, bad := range []string{`="`, `='`, `=`, `(`, `"`, `'`, `{`} {
+		if strings.HasSuffix(prefix, bad) {
+			return nil
+		}
+	}
+	// Reject if prefix itself contains HTML tags (text is not pure text node).
+	if strings.Contains(prefix, "<") {
+		return nil
+	}
+	if !looksUserFacing(prefix) || looksLikeCode(prefix) {
+		return nil
+	}
+	return []HardcodedString{{
+		File:     short,
+		Line:     lineNum,
+		Text:     prefix,
+		Context:  trimmed,
+		Category: "text_node",
+	}}
 }
 
 // blockTagOpenRe matches a block-level opening tag that has NO inline content

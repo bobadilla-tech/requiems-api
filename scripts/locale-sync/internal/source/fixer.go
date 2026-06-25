@@ -79,6 +79,11 @@ func BuildFixPlan(
 		}
 
 		for _, h := range items {
+			// text_node: bare text mixed with ERB on one line — report-only, cannot auto-fix.
+			if h.Category == "text_node" {
+				continue
+			}
+
 			idx := h.Line - 1
 			if idx < 0 || idx >= len(lines) {
 				continue
