@@ -34,5 +34,10 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal "Tool not found.", flash[:alert]
   end
+
+  test "inflation tool page renders successfully" do
+    get "/en/tools/inflation"
+    assert_response :success
+  end
 end
 

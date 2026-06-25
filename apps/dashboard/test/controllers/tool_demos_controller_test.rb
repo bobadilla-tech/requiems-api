@@ -288,4 +288,86 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.unit_conversion.demo.error_no_data"), response.body
   end
+
+  # ── inflation ────────────────────────────────────────────────────────────────
+
+  test "inflation renders result on success" do
+    payload = {
+      "country" => "US", "rate" => 2.9495, "period" => "2024",
+      "historical" => [
+        { "period" => "2023", "rate" => 4.1163 },
+        { "period" => "2022", "rate" => 8.0028 }
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/inflation", params: { country: "US" }
+    end
+    assert_response :success
+    assert_match "2.95", response.body
+    assert_match "2024", response.body
+  end
+
+  test "inflation renders error when country is blank" do
+    post "/tools/demos/inflation", params: { country: "" }
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_empty"), response.body
+  end
+
+  test "inflation renders error when country code is invalid" do
+    post "/tools/demos/inflation", params: { country: "123" }
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_invalid"), response.body
+  end
+
+  test "inflation renders error on 400 bad request" do
+    stub_api(400, nil) do
+      post "/tools/demos/inflation", params: { country: "ZZ" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_invalid"), response.body
+  end
+
+  test "inflation renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/inflation", params: { country: "ZZ" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_no_data"), response.body
+  end
+
+  test "inflation renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/inflation", params: { country: "US" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_rate_limit"), response.body
+  end
+
+  test "inflation renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/inflation", params: { country: "US" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_generic"), response.body
+  end
+
+  test "inflation renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/inflation", params: { country: "US" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.inflation.demo.error_no_data"), response.body
+  end
+
+  test "inflation normalizes lowercase country code" do
+    payload = {
+      "country" => "US", "rate" => 2.9495, "period" => "2024",
+      "historical" => []
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/inflation", params: { country: "us" }
+    end
+    assert_response :success
+    assert_match "2.95", response.body
+  end
 end

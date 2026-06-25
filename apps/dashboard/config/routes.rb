@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   post "tools/demos/email-normalizer",  to: "tool_demos#email_normalizer",  as: :tool_demo_email_normalizer
   post "tools/demos/domain-checker",   to: "tool_demos#domain_checker",   as: :tool_demo_domain_checker
   post "tools/demos/phone-validator",  to: "tool_demos#phone_validator",  as: :tool_demo_phone_validator
+  post "tools/demos/inflation",         to: "tool_demos#inflation",         as: :tool_demo_inflation
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

@@ -147,6 +147,41 @@ class ToolDemosController < ApplicationController
     render "tool_demos/email_validator", locals: { data: data, email: email }
   end
 
+  def inflation
+    country = params[:country].to_s.strip.upcase
+
+    if country.blank?
+      return render_demo_error("inflation", t("tools.inflation.demo.error_empty"))
+    end
+
+    unless country.match?(/\A[A-Z]{2}\z/)
+      return render_demo_error("inflation", t("tools.inflation.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/finance/inflation", method: "GET", params: { country: country })
+
+    if result.status_code == 429
+      return render_demo_error("inflation", t("tools.inflation.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 400
+      return render_demo_error("inflation", t("tools.inflation.demo.error_invalid"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("inflation", t("tools.inflation.demo.error_no_data"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("inflation", t("tools.inflation.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("inflation", t("tools.inflation.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/inflation", locals: { data: data }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)
