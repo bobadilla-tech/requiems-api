@@ -9,6 +9,7 @@ en:
         error_security_token: "Security token missing. Please refresh the page."
     unit_conversion:
       demo:
+        input_placeholder: "Enter a value"
         error_fill_all_fields: "Fill in all fields."
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_network: "Could not reach the API. Check your connection."
@@ -23,6 +24,7 @@ en:
         label_formula: "Formula"
     sentiment_analysis:
       demo:
+        input_placeholder: "Paste any text, review, comment, or feedback..."
         error_empty: "Enter some text to analyze."
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_generic: "Something went wrong. Try again."

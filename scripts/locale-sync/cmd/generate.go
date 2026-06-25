@@ -16,6 +16,9 @@ var (
 	overwrite   bool
 	noShared    bool
 	noSkeleton  bool
+	fixSource   bool
+	erbOnly     bool
+	safeOnly    bool
 )
 
 var generateCmd = &cobra.Command{
@@ -24,7 +27,8 @@ var generateCmd = &cobra.Command{
 	Long: `generate does everything analyze does, then:
   - Writes duplicate keys with identical values into shared.{lang}.yml
   - Creates skeleton locale files for each --languages value (empty strings)
-  - Prints a migration plan showing which t() keys to use`,
+  - Prints a migration plan showing which t() keys to use
+  - (with --fix) Replaces hardcoded strings in ERB/Ruby source with t() calls`,
 	RunE: runGenerate,
 }
 
@@ -41,11 +45,21 @@ func init() {
 	generateCmd.Flags().BoolVar(&noShared, "no-shared", false, "Skip writing the shared YAML file")
 	generateCmd.Flags().BoolVar(&noSkeleton, "no-skeleton", false, "Skip generating language skeletons")
 	generateCmd.Flags().BoolVar(&scanSource, "source", false,
-		"Also scan Ruby/ERB source for hardcoded strings")
+		"Scan Ruby/ERB source for hardcoded strings (report only)")
+	generateCmd.Flags().BoolVar(&fixSource, "fix", false,
+		"Auto-replace hardcoded strings in ERB/Ruby source with t() calls and add keys to YAML")
+	generateCmd.Flags().BoolVar(&erbOnly, "erb-only", false,
+		"With --fix: only rewrite .erb/.haml/.slim files, skip Ruby .rb files")
+	generateCmd.Flags().BoolVar(&safeOnly, "safe-only", false,
+		"With --fix: only apply replacements that reuse an existing YAML key (no new keys generated)")
 	rootCmd.AddCommand(generateCmd)
 }
 
 func runGenerate(cmd *cobra.Command, _ []string) error {
+	if fixSource {
+		scanSource = true
+	}
+
 	fmt.Printf("Scanning %s locale files in %s...\n\n", lang, rootPath)
 
 	entries, err := locale.Scan(rootPath, lang)
@@ -124,25 +138,146 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 		fmt.Println()
 	}
 
-	// --- Source scan ---
-	if scanSource {
-		fmt.Println("=== Scanning Source Files for Hardcoded Strings ===")
+	// --- Source scan / fix ---
+	if scanSource || fixSource {
 		found, err := source.Extract(rootPath)
 		if err != nil {
 			return fmt.Errorf("source scan: %w", err)
 		}
+
 		if len(found) == 0 {
 			fmt.Println("No hardcoded user-facing strings detected.")
-		} else {
-			fmt.Printf("Found %d hardcoded strings to extract:\n\n", len(found))
+			return nil
+		}
+
+		if !fixSource {
+			// Report-only mode.
+			fmt.Printf("=== Hardcoded Strings Found (%d) ===\n\n", len(found))
 			for _, s := range found {
-				fmt.Printf("  %s:%d  %q\n", s.File, s.Line, s.Text)
+				fmt.Printf("  [%s] %s:%d\n", s.Category, s.File, s.Line)
+				fmt.Printf("    %q\n\n", s.Text)
+			}
+			return nil
+		}
+
+		// Fix mode: optionally scope to ERB files only.
+		if erbOnly {
+			filtered := found[:0]
+			for _, h := range found {
+				if strings.HasSuffix(h.File, ".erb") ||
+					strings.HasSuffix(h.File, ".haml") ||
+					strings.HasSuffix(h.File, ".slim") {
+					filtered = append(filtered, h)
+				}
+			}
+			found = filtered
+		}
+
+		// Build value→key index from current YAML.
+		valueToKey := buildValueToKey(entries)
+
+		plan := source.BuildFixPlan(found, valueToKey, lang, rootPath)
+
+		// --safe-only: drop any fix that would add a new YAML key.
+		if safeOnly {
+			kept := plan.Fixes[:0]
+			for _, f := range plan.Fixes {
+				if !f.NewInYAML {
+					kept = append(kept, f)
+				}
+			}
+			plan.Fixes = kept
+			plan.YAMLAdds = nil
+		}
+
+		fmt.Printf("=== Source Auto-Fix (%d replacements planned) ===\n\n", len(plan.Fixes))
+
+		for _, fix := range plan.Fixes {
+			status := "~"
+			if fix.NewInYAML {
+				status = "+"
+			}
+			fmt.Printf("  [%s] %s:%d\n", status, fix.File, fix.Line)
+			fmt.Printf("    before: %s\n", strings.TrimSpace(fix.Original))
+			fmt.Printf("    after:  %s\n", strings.TrimSpace(fix.Patched))
+			fmt.Printf("    key:    t('%s')\n\n", fix.YAMLKey)
+		}
+
+		if len(plan.YAMLAdds) > 0 {
+			fmt.Printf("=== New YAML Keys to Add (%d) ===\n\n", len(plan.YAMLAdds))
+			for _, k := range locale.SortedKeys(plan.YAMLAdds) {
+				fmt.Printf("  %s: %q\n", k, plan.YAMLAdds[k])
+			}
+			fmt.Println()
+		}
+
+		if dryRun {
+			fmt.Println("[dry-run] No files written.")
+			return nil
+		}
+
+		// Apply YAML additions.
+		if len(plan.YAMLAdds) > 0 {
+			yamlCandidates := yamlAddsToMergeCandidates(plan.YAMLAdds, lang)
+			sharedPath, changed, err := locale.UpsertShared(rootPath, lang, yamlCandidates)
+			if err != nil {
+				return fmt.Errorf("write YAML: %w", err)
+			}
+			if changed {
+				fmt.Printf("YAML: wrote %d new keys to %s\n", len(plan.YAMLAdds), sharedPath)
 			}
 		}
-		fmt.Println()
+
+		// Apply source file fixes.
+		writtenFiles, err := source.ApplyFixes(plan, rootPath)
+		if err != nil {
+			return fmt.Errorf("apply fixes: %w", err)
+		}
+		fmt.Printf("Source: rewrote %d files (%d replacements).\n",
+			len(writtenFiles), len(plan.Fixes))
 	}
 
 	return nil
+}
+
+// buildValueToKey inverts the locale entries into a value → full YAML key map.
+// When a value appears under multiple keys, we prefer keys in shared files.
+func buildValueToKey(entries []locale.Entry) map[string]string {
+	m := make(map[string]string)
+	for _, e := range entries {
+		if e.Value == "" {
+			continue
+		}
+		existing, has := m[e.Value]
+		if !has {
+			m[e.Value] = e.Key
+			continue
+		}
+		// Prefer shared keys over per-topic keys.
+		if strings.Contains(e.Key, ".shared.") && !strings.Contains(existing, ".shared.") {
+			m[e.Value] = e.Key
+		}
+	}
+	return m
+}
+
+// yamlAddsToMergeCandidates converts the plan's YAMLAdds into MergeCandidate
+// objects that can be passed to UpsertShared. New keys go under shared.generated.
+func yamlAddsToMergeCandidates(adds map[string]string, lang string) []locale.MergeCandidate {
+	var out []locale.MergeCandidate
+	for fullKey, value := range adds {
+		parts := strings.SplitN(fullKey, ".", 2)
+		tKey := fullKey
+		if len(parts) == 2 {
+			tKey = parts[1]
+		}
+		out = append(out, locale.MergeCandidate{
+			KeyName:      tKey,
+			Value:        value,
+			SuggestedKey: fullKey,
+		})
+	}
+	return out
 }
 
 func sourceFiles(entries []locale.Entry) []string {

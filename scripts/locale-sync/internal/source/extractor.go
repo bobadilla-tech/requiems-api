@@ -14,10 +14,11 @@ import (
 // HardcodedString is a string literal found in Ruby/ERB source that is not
 // wrapped in a Rails i18n call.
 type HardcodedString struct {
-	File    string
-	Line    int
-	Text    string
-	Context string // surrounding code for display
+	File     string
+	Line     int
+	Text     string
+	Context  string // surrounding code for display
+	Category string // "placeholder", "tag_content", "erb_output", "ruby", "attribute"
 }
 
 // Extensions scanned for hardcoded strings.
@@ -28,25 +29,113 @@ var sourceExts = map[string]bool{
 	".slim": true,
 }
 
-// Patterns that already wrap strings in i18n — skip these lines.
+// pathSkipPrefixes — directories that have their own i18n conventions or are
+// intentionally not translated.
+var pathSkipPrefixes = []string{
+	"app/views/devise/",          // Devise gem handles its own i18n
+	"app/views/devise/mailer/",   // Devise mailers
+}
+
+// brandNames — proper nouns / brand names used standalone that should never be
+// extracted as translation keys.
+var brandNames = map[string]bool{
+	"Requiems API": true,
+	"ChatGPT":      true,
+	"Claude":       true,
+	"GitHub":       true,
+	"Stripe":       true,
+	"LemonSqueezy": true,
+	"JSON":         true,
+	"API":          true,
+}
+
+// technicalPhrases — strings that look like UI text but are technical labels
+// specific to this codebase that should stay in English.
+var technicalPhraseSkips = []string{
+	// HTTP protocol terms
+	"Base URL",
+	"HTTP Status",
+	"Status Code",
+	"Rate Limit",
+	"Bearer ",
+	"API Key",
+	"API key",
+	"Enter JSON",
+	"JSON object",
+	"Send Request",
+	"Waiting for response",
+	// Code/playground UI — defined elsewhere or intentionally English
+	"Copy code",
+	"Copy URL",
+	"Copy response",
+	"Copy to clipboard",
+	"Copy as Markdown",
+	"Copy page link",
+	"Open in ChatGPT",
+	"Open in Claude",
+	"View on GitHub",
+	"View Demo",
+	// Admin-specific monitoring labels (internal tooling, English-only)
+	"Excellent uptime",
+	"Good uptime",
+	"Low uptime",
+	"Fast response times",
+	"Slow response times",
+	"Acceptable performance",
+	"Normal security activity",
+	"High failed auth",
+	// Admin panel section headers that mirror Rails admin convention
+	"Admin Panel",
+	"Action Required",
+	"Mounted Services",
+	"Your Endpoint",
+	"Deployment Spec",
+	"Mark as Deployed",
+	"Customer Notes",
+	"Granted by",
+	"AI Tooling",
+}
+
+// Patterns that already use i18n helpers — skip lines containing these.
 var i18nCallRe = regexp.MustCompile(`\bI18n\.t\b|\bt\s*[("']|\btranslate\s*[("']`)
 
-// Patterns for likely user-facing string literals in Ruby/ERB.
-// We match: double-quoted strings after common display/error patterns.
-var displayPatterns = []*regexp.Regexp{
-	// ERB output: <%= "text" %> or <%= 'text' %>
-	regexp.MustCompile(`<%=\s*["']([^"'%]{4,})["']\s*%>`),
-	// flash[:x] = "text" or flash.now[:x] = "text"
-	regexp.MustCompile(`flash(?:\.now)?\[:\w+\]\s*=\s*["']([^"']{4,})["']`),
-	// errors.add(:base, "message")
-	regexp.MustCompile(`errors\.add\(:\w+,\s*["']([^"']{4,})["']\)`),
-	// render plain: "text"
-	regexp.MustCompile(`render\s+plain:\s*["']([^"']{4,})["']`),
-	// raise "error message" or raise SomeError, "message"
-	regexp.MustCompile(`raise(?:\s+\w+,)?\s*["']([^"']{6,})["']`),
-	// notice: "text" or alert: "text"
-	regexp.MustCompile(`(?:notice|alert):\s*["']([^"']{4,})["']`),
-	// logger.error "message" / logger.warn / logger.info — skip (not user-facing)
+// erbPattern matches a complete ERB expression tag.
+var erbTagRe = regexp.MustCompile(`<%=.*?%>`)
+
+// --- ERB-specific patterns ---
+
+// HTML attributes with user-facing text that should be i18n'd.
+var attrPatterns = []struct {
+	re       *regexp.Regexp
+	category string
+}{
+	// placeholder="text" not preceded by <%=
+	{regexp.MustCompile(`\bplaceholder="([^"<]{4,})"`), "placeholder"},
+	// alt="text" on images (skip icon/logo alts)
+	{regexp.MustCompile(`\balt="([A-Z][^"<]{4,})"`), "attribute"},
+	// title="text" on elements
+	{regexp.MustCompile(`\btitle="([A-Z][^"<]{4,})"`), "attribute"},
+	// aria-label="text" — but only when not already <%= t(...) %>
+	{regexp.MustCompile(`\baria-label="([A-Z][^"<]{4,})"`), "attribute"},
+}
+
+// HTML tag content: text between a closing > and the next open <
+// Matches things like:  <h2>Some Title</h2>  or  <option value="x">Label</option>
+var tagContentRe = regexp.MustCompile(`>([A-Z][A-Za-z ,.'!?-]{4,})<`)
+
+// Ruby display patterns.
+var rubyPatterns = []struct {
+	re       *regexp.Regexp
+	category string
+}{
+	{regexp.MustCompile(`<%=\s*["']([^"'%]{4,})["']\s*%>`), "erb_output"},
+	{regexp.MustCompile(`flash(?:\.now)?\[:\w+\]\s*=\s*["']([^"']{4,})["']`), "ruby"},
+	{regexp.MustCompile(`errors\.add\(:\w+,\s*["']([^"']{4,})["']\)`), "ruby"},
+	{regexp.MustCompile(`render\s+plain:\s*["']([^"']{4,})["']`), "ruby"},
+	{regexp.MustCompile(`raise(?:\s+\w+,)?\s*["']([^"']{6,})["']`), "ruby"},
+	{regexp.MustCompile(`(?:notice|alert):\s*["']([^"']{4,})["']`), "ruby"},
+	// content_for :title only — :description holds long SEO copy, not UI labels.
+	{regexp.MustCompile(`content_for\s+:title,\s*["']([^"']{4,}["'])`), "ruby"},
 }
 
 // Extract concurrently scans all .rb/.erb/.haml/.slim files under root/app/
@@ -54,7 +143,7 @@ var displayPatterns = []*regexp.Regexp{
 func Extract(root string) ([]HardcodedString, error) {
 	appDir := filepath.Join(root, "app")
 	if _, err := os.Stat(appDir); os.IsNotExist(err) {
-		appDir = root // fallback: scan from root
+		appDir = root
 	}
 
 	fileCh := make(chan string, 128)
@@ -108,25 +197,43 @@ func scanFile(path, root string) []HardcodedString {
 
 	short, _ := filepath.Rel(root, path)
 
+	// Skip paths with their own i18n convention.
+	for _, prefix := range pathSkipPrefixes {
+		if strings.HasPrefix(short, prefix) {
+			return nil
+		}
+	}
+
+	isERB := strings.HasSuffix(path, ".erb") || strings.HasSuffix(path, ".haml") || strings.HasSuffix(path, ".slim")
+
 	var results []HardcodedString
 	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 1<<20), 1<<20)
 	lineNum := 0
+
 	for scanner.Scan() {
 		lineNum++
 		line := scanner.Text()
 		trimmed := strings.TrimSpace(line)
 
-		// Skip comments
-		if strings.HasPrefix(trimmed, "#") || strings.HasPrefix(trimmed, "//") {
+		if isComment(trimmed) {
 			continue
 		}
-		// Skip lines already using i18n
+
+		// For attribute patterns, only flag if the attribute value is not
+		// already generated by an ERB expression on the same line.
+		if isERB {
+			results = append(results, scanAttrPatterns(line, trimmed, short, lineNum)...)
+			results = append(results, scanTagContent(line, trimmed, short, lineNum)...)
+		}
+
+		// Skip lines already calling t() / I18n.t — applies to both Ruby and ERB.
 		if i18nCallRe.MatchString(line) {
 			continue
 		}
 
-		for _, re := range displayPatterns {
-			matches := re.FindStringSubmatch(line)
+		for _, p := range rubyPatterns {
+			matches := p.re.FindStringSubmatch(line)
 			if len(matches) < 2 {
 				continue
 			}
@@ -135,35 +242,161 @@ func scanFile(path, root string) []HardcodedString {
 				continue
 			}
 			results = append(results, HardcodedString{
-				File:    short,
-				Line:    lineNum,
-				Text:    text,
-				Context: trimmed,
+				File:     short,
+				Line:     lineNum,
+				Text:     text,
+				Context:  trimmed,
+				Category: p.category,
 			})
-			break // one finding per line is enough
+			break
 		}
 	}
 	return results
 }
 
-// looksUserFacing filters out strings that are likely not display text:
-// SQL fragments, class names, URL paths, pure symbols, etc.
+func scanAttrPatterns(line, trimmed, short string, lineNum int) []HardcodedString {
+	// Strip ERB tags before checking attribute values — if an attribute is set
+	// via <%= t(...) %>, the raw attribute text will not contain user strings.
+	stripped := erbTagRe.ReplaceAllString(line, "")
+	if i18nCallRe.MatchString(stripped) {
+		return nil
+	}
+
+	var out []HardcodedString
+	for _, p := range attrPatterns {
+		for _, m := range p.re.FindAllStringSubmatch(stripped, -1) {
+			text := strings.TrimSpace(m[1])
+			if !looksUserFacing(text) {
+				continue
+			}
+			if isDecorativeAlt(text) {
+				continue
+			}
+			out = append(out, HardcodedString{
+				File:     short,
+				Line:     lineNum,
+				Text:     text,
+				Context:  trimmed,
+				Category: p.category,
+			})
+		}
+	}
+	return out
+}
+
+func scanTagContent(line, trimmed, short string, lineNum int) []HardcodedString {
+	// Strip ERB expression tags before scanning tag content.
+	stripped := erbTagRe.ReplaceAllString(line, "")
+	// Skip lines that already use t() in any form.
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	// Skip SVG elements, code blocks, and pure ERB logic lines.
+	for _, skipTag := range []string{"<svg", "<path", "<polygon", "<pre", "<code", "<script", "<style", "<%"} {
+		if strings.HasPrefix(trimmed, skipTag) {
+			return nil
+		}
+	}
+
+	var out []HardcodedString
+	for _, m := range tagContentRe.FindAllStringSubmatch(stripped, -1) {
+		text := strings.TrimSpace(m[1])
+		if !looksUserFacing(text) || looksLikeCode(text) {
+			continue
+		}
+		out = append(out, HardcodedString{
+			File:     short,
+			Line:     lineNum,
+			Text:     text,
+			Context:  trimmed,
+			Category: "tag_content",
+		})
+	}
+	return out
+}
+
+func isComment(s string) bool {
+	return strings.HasPrefix(s, "#") ||
+		strings.HasPrefix(s, "//") ||
+		strings.HasPrefix(s, "<!--") ||
+		strings.HasPrefix(s, "<%#")
+}
+
+// isDecorativeAlt skips alts that describe icons/logos rather than content.
+func isDecorativeAlt(s string) bool {
+	lower := strings.ToLower(s)
+	for _, skip := range []string{"logo", "icon", "svg", "flag", "badge", "avatar", "image"} {
+		if strings.Contains(lower, skip) {
+			return true
+		}
+	}
+	return false
+}
+
+// looksUserFacing filters out strings that are clearly not display text.
 func looksUserFacing(s string) bool {
-	if len(s) < 4 || len(s) > 200 {
+	// Too short or too long (very long = SEO meta description, not a UI label).
+	if len(s) < 4 || len(s) > 120 {
 		return false
 	}
-	// Must contain at least one space (real sentences have spaces)
+	// Must contain at least one space — single-word technical terms stay in English.
 	if !strings.Contains(s, " ") {
 		return false
 	}
-	// Skip things that look like SQL, CSS selectors, or code
+	// Skip strings with Ruby interpolation — need %{var} conversion, not a direct swap.
+	if strings.Contains(s, "#{") {
+		return false
+	}
+	// Skip brand names used standalone.
+	if brandNames[s] {
+		return false
+	}
+	// Skip codebase-specific technical phrases.
+	for _, phrase := range technicalPhraseSkips {
+		if strings.EqualFold(s, phrase) || strings.HasPrefix(s, phrase) {
+			return false
+		}
+	}
 	lower := strings.ToLower(s)
-	for _, skip := range []string{"select ", "insert ", "update ", "delete ", "from ", ".css", ".js", "http://", "https://", "<%", "%>"} {
+	for _, skip := range []string{
+		// SQL
+		"select ", "insert ", "update ", "delete ", "from ",
+		// Asset refs
+		".css", ".js", ".rb", "http://", "https://",
+		// ERB fragments
+		"<%", "%>",
+		// HTML attribute fragments
+		"class=", "data-", "style=",
+		// HTTP / MIME / API technical content
+		"application/json", "application/xml", "content-type",
+		"authorization:", "bearer ", "x-api-key", "x-backend-secret",
+		// Ruby class names and code patterns
+		"def ", "end\n", "rescue ", "@media ",
+	} {
 		if strings.Contains(lower, skip) {
 			return false
 		}
 	}
-	// Must start with a letter or digit (not a symbol/operator)
 	r := []rune(s)
 	return unicode.IsLetter(r[0]) || unicode.IsDigit(r[0])
+}
+
+// looksLikeCode catches things like CSS class lists and camelCase identifiers.
+func looksLikeCode(s string) bool {
+	// High density of hyphens (CSS classes like "flex items-center gap-3")
+	hyphens := strings.Count(s, "-")
+	words := len(strings.Fields(s))
+	if words > 1 && hyphens >= words-1 {
+		return true
+	}
+	// Looks like a CSS class string
+	lower := strings.ToLower(s)
+	cssKeywords := []string{"px-", "py-", "mt-", "mb-", "mr-", "ml-", "text-", "bg-", "flex", "grid", "rounded"}
+	matches := 0
+	for _, kw := range cssKeywords {
+		if strings.Contains(lower, kw) {
+			matches++
+		}
+	}
+	return matches >= 2
 }

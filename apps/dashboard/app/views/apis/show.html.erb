@@ -207,7 +207,7 @@
           <!-- FAQ Section -->
           <% if @documentation["faq"].present? %>
             <div id="faq" class="p-8 border-t border-gray-200 dark:border-gray-700">
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Frequently Asked Questions</h2>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6"><%= t('tools.domain_checker.faq.heading') %></h2>
 
               <div class="space-y-4" data-controller="faq-accordion">
                 <% @documentation["faq"].each_with_index do |faq, index| %>

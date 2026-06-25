@@ -89,6 +89,8 @@ en:
     yes_label: "Yes"
     no_label: "No"
     text_to_analyze: "Text to analyze"
+    no_account_demo: "No account required for the demo."
+    email_input_placeholder: "Enter any email address"
     danger_zone:
       heading: "Danger Zone"
       subheading: "Irreversible actions that permanently affect your account"

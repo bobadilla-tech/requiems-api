@@ -94,12 +94,12 @@
   <!-- API Key Info -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">API Key</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('dashboard.usage.table.col_api_key') %></h2>
     </div>
     <div class="p-6">
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Key Name</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('dashboard.api_keys.new.name_label') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @api_key.name %></p>
         </div>
         <div>
@@ -146,7 +146,7 @@
     <!-- User Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Total Requests</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.total_requests') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -154,7 +154,7 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Error Rate</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.error_rate') %></p>
         <p class="text-2xl font-bold <%= @usage_stats[:error_rate] > 10 ? 'text-red-600' : 'text-green-600' %>"><%= @usage_stats[:error_rate] %>%</p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">

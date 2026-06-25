@@ -29,7 +29,7 @@
           </div>
 
           <div style="background-color: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
-            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Quick Start</div>
+            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;"><%= t('dashboard.quick_start.title') %></div>
             <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;">Example request:</p>
             <pre style="margin: 0; font-size: 12px; font-family: 'Courier New', monospace; color: #111827; background-color: #f3f4f6; padding: 12px; border-radius: 4px; white-space: pre-wrap; word-break: break-all;">curl -H "X-Backend-Secret: &lt;your-secret&gt;" \
   <%= @deployment_request.live_url %>/v1/<%= @deployment_request.selected_services.first %></pre>

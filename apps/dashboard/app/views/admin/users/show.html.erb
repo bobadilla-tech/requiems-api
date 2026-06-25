@@ -31,7 +31,7 @@
   <!-- Main Info Card -->
   <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Account Information</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('dashboard.settings.account_info.heading') %></h2>
     </div>
     <div class="p-6">
       <div class="flex items-center mb-6">
@@ -146,7 +146,7 @@
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Total Requests</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.total_requests') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -154,7 +154,7 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Requests Used</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.overview.current_usage') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests_used]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -162,7 +162,7 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= @usage_stats[:avg_response_time] %>ms</p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Error Rate</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.error_rate') %></p>
         <p class="text-2xl font-bold <%= @usage_stats[:error_rate] > 5 ? 'text-red-600' : 'text-green-600' %>"><%= @usage_stats[:error_rate] %>%</p>
       </div>
     </div>
@@ -237,7 +237,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Endpoint</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Method</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Response Time</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.usage.table.col_response') %></th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Requests</th>
           </tr>
         </thead>
