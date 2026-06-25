@@ -1,4 +1,4 @@
-<% content_for :title, "Private Deployment — Requiems API" %>
+<% content_for :title, t('private_deployments.new.private_deployment_requiems_api') %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,7 +17,7 @@
       <!-- Validation errors -->
       <% if @deployment_request.errors.any? %>
         <div class="bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800 px-8 py-4">
-          <p class="text-sm font-semibold text-red-800 dark:text-red-300 mb-1">Please fix the following:</p>
+          <p class="text-sm font-semibold text-red-800 dark:text-red-300 mb-1"><%= t('private_deployments.new.please_fix_the_following') %></p>
           <ul class="list-disc list-inside text-sm text-red-700 dark:text-red-400 space-y-0.5">
             <% @deployment_request.errors.full_messages.each do |msg| %>
               <li><%= msg %></li>
@@ -46,8 +46,8 @@
           <div>
             <div class="flex items-baseline justify-between mb-5">
               <div>
-                <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">1. Choose Your Plan</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Dedicated AMD vCPUs · PostgreSQL · Redis · Caddy (HTTPS)</p>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100"><%= t('private_deployments.new.1_choose_your_plan') %></h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"><%= t('private_deployments.new.dedicated_amd_vcpus_postgresql_redis') %></p>
               </div>
 
               <!-- Billing cycle toggle -->
@@ -115,7 +115,7 @@
                       $<%= yr_price %><span class="text-xs font-normal text-gray-500 dark:text-gray-400">/mo</span>
                     </p>
 
-                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" data-billing-cycle-target="monthlyPrice">billed monthly</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" data-billing-cycle-target="monthlyPrice"><%= t('private_deployments.new.billed_monthly') %></p>
                     <p class="text-xs text-green-600 dark:text-green-500 mt-0.5 hidden" data-billing-cycle-target="yearlyPrice"><%= yr_label %></p>
                     <p class="text-xs text-green-700 dark:text-green-600 font-medium hidden" data-billing-cycle-target="yearlyPrice"><%= yr_total_label %></p>
                   </div>
@@ -127,7 +127,7 @@
           <!-- Section 2: Endpoint Selection -->
           <div>
             <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">2. Select API Services</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Only selected services will be mounted on your instance. Others return 404.</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><%= t('private_deployments.new.only_selected_services_will_be_mounted') %></p>
 
             <div class="grid sm:grid-cols-2 gap-3">
               <% PrivateDeploymentRequest::VALID_SERVICES.each do |svc| %>
@@ -145,14 +145,14 @@
               <% end %>
             </div>
 
-            <p class="mt-3 text-xs text-gray-400 dark:text-gray-500">
-              All 10 services are selected by default. Uncheck any you don't need to keep your instance lean.
-            </p>
+            <p class="mt-3 text-xs text-gray-400 dark:text-gray-500"><%= t('private_deployments.new.all_10_services_are_selected_by_default') %></p>
+
+
           </div>
 
           <!-- Section 3: Notes -->
           <div>
-            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">3. Anything we should know?</h2>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t('private_deployments.new.3_anything_we_should_know') %></h2>
             <%= f.text_area :admin_notes,
               placeholder: "Preferred subdomain (e.g. acme), data-centre preference, expected traffic volume, anything else...",
               rows: 3,

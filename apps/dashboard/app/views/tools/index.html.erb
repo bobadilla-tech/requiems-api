@@ -1,11 +1,11 @@
-<% content_for :title, "Tools — Requiems API" %>
+<% content_for :title, t('tools.index.tools_requiems_api') %>
 <% content_for :description, "Interactive demos for Requiems API tools. Try email validation, sentiment analysis, and more — no account required." %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Interactive API Tools</h1>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t('tools.index.interactive_api_tools') %></h1>
         <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           Try every API live — no account required. See real output from real endpoints.
         </p>
@@ -46,9 +46,9 @@
 
     <div class="mt-16 rounded-2xl p-8 text-center text-white max-w-4xl mx-auto" style="background: linear-gradient(to right, #1D9E75, #0e7a5a);">
       <h2 class="text-2xl font-bold mb-4"><%= t('home.for_llms.cta.heading') %></h2>
-      <p class="text-lg mb-6 text-emerald-100">
-        One API key unlocks all tools — plus 50+ more APIs across validation, finance, networking, and more.
-      </p>
+      <p class="text-lg mb-6 text-emerald-100"><%= t('tools.index.one_api_key_unlocks_all_tools_plus_50') %></p>
+
+
       <div class="flex flex-wrap justify-center gap-4">
         <%= link_to new_user_registration_path, class: "inline-flex items-center px-6 py-3 bg-white text-emerald-700 font-semibold rounded-lg hover:bg-emerald-50 transition-colors" do %>
           Get your free API key

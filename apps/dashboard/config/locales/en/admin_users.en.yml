@@ -1,0 +1,7 @@
+en:
+  admin_users:
+    show:
+      promotion_section:
+        promotional_plan_upgrade: "Promotional Plan Upgrade"
+        required_for_audit_trail_describe_why: "Required for audit trail. Describe why this promotion is being granted."
+        grant_or_revoke_a_temporary_plan: "Grant or revoke a temporary plan upgrade for this user without requiring payment."

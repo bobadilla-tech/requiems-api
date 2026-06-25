@@ -1,0 +1,11 @@
+en:
+  suggestions:
+    new:
+      suggest_an_api_requiems_api: "Suggest an API - Requiems API"
+      we_usually_reply_within_24_hours: "We usually reply within 24 hours."
+      what_would_you_like_to_call_this_api: "What would you like to call this API?"
+      if_you_d_like_us_to_follow_up_with_you: "If you'd like us to follow up with you about this suggestion."
+      tell_us_about_your_specific_use_case_or: "Tell us about your specific use case or project."
+      more_of_a_technical_person: "More of a technical person?"
+      what_functionality_should_this_api: "What functionality should this API provide?"
+      help_us_build_what_you_need_we_value: "Help us build what you need. We value your input and review every suggestion."

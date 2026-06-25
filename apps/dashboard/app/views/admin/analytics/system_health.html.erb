@@ -1,4 +1,4 @@
-<% content_for :title, "System Health" %>
+<% content_for :title, t('admin.analytics.system_health.system_health') %>
 
 <%= render "partials/admin_analytics/nav" %>
 
@@ -7,7 +7,7 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.system_health') %></h1>
-      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">API performance and reliability metrics</p>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= t('admin.analytics.system_health.api_performance_and_reliability_metrics') %></p>
     </div>
 
     <!-- Time Range Selector -->
@@ -36,7 +36,7 @@
   <!-- API Uptime -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">API Uptime</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.api_uptime') %></h3>
       <div class="p-2 <%= @uptime_percentage >= 99 ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30' %> rounded-lg">
         <svg class="h-6 w-6 <%= @uptime_percentage >= 99 ? 'text-green-600' : 'text-red-600' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -52,7 +52,7 @@
   <!-- P50 Response Time -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">P50 Response Time</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.p50_response_time') %></h3>
       <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
         <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -60,13 +60,13 @@
       </div>
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= @p50_response_time %><span class="text-xl">ms</span></p>
-    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Median response time</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.median_response_time') %></p>
   </div>
 
   <!-- P95 Response Time -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">P95 Response Time</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.p95_response_time') %></h3>
       <div class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
         <svg class="h-6 w-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -74,13 +74,13 @@
       </div>
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= @p95_response_time %><span class="text-xl">ms</span></p>
-    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">95th percentile</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.95th_percentile') %></p>
   </div>
 
   <!-- P99 Response Time -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">P99 Response Time</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.p99_response_time') %></h3>
       <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
         <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -88,15 +88,15 @@
       </div>
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= @p99_response_time %><span class="text-xl">ms</span></p>
-    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">99th percentile</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.99th_percentile') %></p>
   </div>
 </div>
 
 <!-- Error Rate Trend -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Error Rate Over Time</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Percentage of requests resulting in errors</p>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.error_rate_over_time') %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.percentage_of_requests_resulting_in') %></p>
   </div>
   <div class="p-6">
     <%= line_chart @error_rate_trend,
@@ -118,8 +118,8 @@
 <% if @time_range == "1h" && @requests_per_minute.present? %>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Requests Per Minute (Last Hour)</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Real-time traffic monitoring</p>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.requests_per_minute_last_hour') %></h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.real_time_traffic_monitoring') %></p>
     </div>
     <div class="p-6">
       <%= line_chart @requests_per_minute,
@@ -139,8 +139,8 @@
   <!-- Common Errors -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Most Common Errors</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Top 10 error status codes</p>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.most_common_errors') %></h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.top_10_error_status_codes') %></p>
     </div>
     <% if @common_errors.any? %>
       <div class="overflow-x-auto">
@@ -194,8 +194,8 @@
         <svg class="mx-auto h-12 w-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <p class="mt-2 text-sm font-medium text-green-600">No errors recorded!</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">The system is running perfectly.</p>
+        <p class="mt-2 text-sm font-medium text-green-600"><%= t('admin.analytics.system_health.no_errors_recorded') %></p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.the_system_is_running_perfectly') %></p>
       </div>
     <% end %>
   </div>
@@ -203,8 +203,8 @@
   <!-- Security Metrics -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Security Metrics</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Authentication and security events</p>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.security_metrics') %></h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.system_health.authentication_and_security_events') %></p>
     </div>
     <div class="p-6 space-y-6">
       <!-- Failed Authentication Attempts -->
@@ -216,7 +216,7 @@
             </svg>
           </div>
           <div class="ml-4">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Failed Auth Attempts (24h)</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.analytics.system_health.failed_auth_attempts_24h') %></p>
             <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@failed_auth_attempts) %></p>
           </div>
         </div>
@@ -250,7 +250,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <div class="ml-3">
-            <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300">Security Monitoring</h3>
+            <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300"><%= t('admin.analytics.system_health.security_monitoring') %></h3>
             <p class="mt-1 text-sm text-blue-700 dark:text-blue-400">
               All API requests are monitored for suspicious activity. High rates of failed authentication may indicate a security threat.
             </p>
@@ -264,7 +264,7 @@
 <!-- Health Insights -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">System Health Insights</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.system_health_insights') %></h2>
   </div>
   <div class="p-6">
     <div class="space-y-4">
@@ -317,7 +317,7 @@
           <% end %>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Response Times</h3>
+          <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.response_times') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @p95_response_time < 500 %>
               <strong class="text-green-600">Fast response times.</strong> The API is performing optimally.

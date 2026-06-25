@@ -1,14 +1,14 @@
-<% content_for :title, "API Reference - Requiems API" %>
+<% content_for :title, t('home.api_reference.api_reference_requiems_api') %>
 <% content_for :description, "Complete API reference documentation for all Requiems API endpoints. Authentication, rate limits, request formats, and response schemas." %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-12">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">API Reference</h1>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6"><%= t('home.api_reference.api_reference') %></h1>
 
-      <p class="text-xl text-gray-600 dark:text-gray-400 mb-12">
-        Complete reference documentation for all Requiems API endpoints.
-      </p>
+      <p class="text-xl text-gray-600 dark:text-gray-400 mb-12"><%= t('home.api_reference.complete_reference_documentation_for') %></p>
+
+
 
       <!-- Base URL -->
       <div class="mb-12">
@@ -21,32 +21,32 @@
       <!-- Authentication -->
       <div class="mb-12">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Authentication</h2>
-        <p class="text-gray-700 dark:text-gray-300 mb-4">
-          All API requests require authentication using an API key in the request header:
-        </p>
+        <p class="text-gray-700 dark:text-gray-300 mb-4"><%= t('home.api_reference.all_api_requests_require_authentication') %></p>
+
+
         <div class="bg-gray-900 text-white p-4 rounded-lg font-mono text-sm">
           requiems-api-key: YOUR_API_KEY
         </div>
         <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">
-          <%= link_to "Get your API key", user_signed_in? ? dashboard_api_keys_path : new_user_registration_path, class: "text-blue-600 hover:text-blue-700" %>
+          <%= link_to t('home.api_reference.get_your_api_key'), user_signed_in? ? dashboard_api_keys_path : new_user_registration_path, class: "text-blue-600 hover:text-blue-700" %>
         </p>
       </div>
 
       <!-- Available APIs -->
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Available APIs</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6"><%= t('home.api_reference.available_apis') %></h2>
 
         <div class="space-y-6">
           <!-- Email APIs -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Email APIs</h3>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.api_reference.email_apis') %></h3>
               <%= render "partials/shared/badge", text: "Live", variant: "success", size: "sm" %>
             </div>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">
-              Validate email addresses, detect disposable emails, and check email domains.
-            </p>
-            <%= link_to "View Email API Documentation", apis_path(category: "email"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
+            <p class="text-gray-700 dark:text-gray-300 mb-4"><%= t('home.api_reference.validate_email_addresses_detect') %></p>
+
+
+            <%= link_to t('home.api_reference.view_email_api_documentation'), apis_path(category: "email"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -55,13 +55,13 @@
           <!-- Text APIs -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Text APIs</h3>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.api_reference.text_apis') %></h3>
               <%= render "partials/shared/badge", text: "Live", variant: "success", size: "sm" %>
             </div>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">
-              Generate random advice, quotes, Lorem Ipsum text, and random words.
-            </p>
-            <%= link_to "View Text API Documentation", apis_path(category: "text"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
+            <p class="text-gray-700 dark:text-gray-300 mb-4"><%= t('home.api_reference.generate_random_advice_quotes_lorem') %></p>
+
+
+            <%= link_to t('home.api_reference.view_text_api_documentation'), apis_path(category: "text"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -70,13 +70,13 @@
           <!-- Miscellaneous APIs -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Miscellaneous APIs</h3>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.api_reference.miscellaneous_apis') %></h3>
               <%= render "partials/shared/badge", text: "Live", variant: "success", size: "sm" %>
             </div>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
               General-purpose utility endpoints. Convert between units of measurement including length, weight, volume, temperature, area, and speed.
             </p>
-            <%= link_to "View Miscellaneous API Documentation", apis_path(category: "misc"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
+            <%= link_to t('home.api_reference.view_miscellaneous_api_documentation'), apis_path(category: "misc"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -85,12 +85,12 @@
           <!-- Coming Soon -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 opacity-60">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">More APIs Coming Soon</h3>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.api_reference.more_apis_coming_soon') %></h3>
               <%= render "partials/shared/badge", text: "Roadmap", variant: "secondary", size: "sm" %>
             </div>
-            <p class="text-gray-700 dark:text-gray-300">
-              Data APIs, Finance APIs, Image APIs, and more utility endpoints are in development.
-            </p>
+            <p class="text-gray-700 dark:text-gray-300"><%= t('home.api_reference.data_apis_finance_apis_image_apis_and') %></p>
+
+
           </div>
         </div>
       </div>
@@ -132,7 +132,7 @@
           </table>
         </div>
         <p class="text-gray-600 dark:text-gray-400 text-sm mt-4">
-          <%= link_to "View pricing details", pricing_path, class: "text-blue-600 hover:text-blue-700" %>
+          <%= link_to t('home.api_reference.view_pricing_details'), pricing_path, class: "text-blue-600 hover:text-blue-700" %>
         </p>
       </div>
 
@@ -149,7 +149,7 @@
           <div class="flex items-start">
             <span class="inline-block px-3 py-1 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300 rounded text-sm font-mono mr-3">400</span>
             <div>
-              <strong class="text-gray-900 dark:text-gray-100">Bad Request</strong> <span class="text-gray-700 dark:text-gray-300">- Invalid request parameters</span>
+              <strong class="text-gray-900 dark:text-gray-100"><%= t('home.api_reference.bad_request') %></strong> <span class="text-gray-700 dark:text-gray-300">- Invalid request parameters</span>
             </div>
           </div>
           <div class="flex items-start">
@@ -161,13 +161,13 @@
           <div class="flex items-start">
             <span class="inline-block px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 rounded text-sm font-mono mr-3">429</span>
             <div>
-              <strong class="text-gray-900 dark:text-gray-100">Too Many Requests</strong> <span class="text-gray-700 dark:text-gray-300">- Rate limit exceeded</span>
+              <strong class="text-gray-900 dark:text-gray-100"><%= t('home.api_reference.too_many_requests') %></strong> <span class="text-gray-700 dark:text-gray-300">- Rate limit exceeded</span>
             </div>
           </div>
           <div class="flex items-start">
             <span class="inline-block px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 rounded text-sm font-mono mr-3">500</span>
             <div>
-              <strong class="text-gray-900 dark:text-gray-100">Internal Server Error</strong> <span class="text-gray-700 dark:text-gray-300">- Something went wrong on our end</span>
+              <strong class="text-gray-900 dark:text-gray-100"><%= t('home.api_reference.internal_server_error') %></strong> <span class="text-gray-700 dark:text-gray-300">- Something went wrong on our end</span>
             </div>
           </div>
         </div>

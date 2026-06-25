@@ -1,9 +1,9 @@
-<% content_for :title, "User Management" %>
+<% content_for :title, t('admin.users.index.user_management') %>
 
 <!-- Header -->
 <div class="mb-8">
   <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.users.index.user_management') %></h1>
-  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">View and manage all user accounts</p>
+  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= t('admin.users.index.view_and_manage_all_user_accounts') %></p>
 </div>
 
 <!-- Search and Filters -->
@@ -57,7 +57,7 @@
 
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-2">
-        <%= f.submit "Apply Filters", class: "px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
+        <%= f.submit t('admin.users.index.apply_filters'), class: "px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
         <%= link_to "Clear", admin_users_path, class: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" %>
       </div>
 
@@ -155,8 +155,8 @@
       <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No users found</h3>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search or filters.</p>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.users.index.no_users_found') %></h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= t('admin.users.index.try_adjusting_your_search_or_filters') %></p>
     </div>
   <% end %>
 </div>

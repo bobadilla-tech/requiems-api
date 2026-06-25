@@ -1,9 +1,9 @@
-<% content_for :title, "Admin Dashboard" %>
+<% content_for :title, t('admin.dashboard.index.admin_dashboard') %>
 
 <!-- Header -->
 <div class="mb-8">
   <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.dashboard.index.admin_dashboard') %></h1>
-  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">System overview and key metrics</p>
+  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= t('admin.dashboard.index.system_overview_and_key_metrics') %></p>
 </div>
 
 <!-- System Stats Cards -->
@@ -11,7 +11,7 @@
   <!-- Total Users -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Users</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.total_users') %></h3>
       <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
         <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -27,7 +27,7 @@
   <!-- API Requests Today -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Requests Today</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.requests_today') %></h3>
       <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
         <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
@@ -59,7 +59,7 @@
   <!-- System Health -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">System Health</h3>
+      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.system_health') %></h3>
       <div class="p-2 <%= @error_rate > 5 ? 'bg-red-100 dark:bg-red-900/30' : 'bg-green-100 dark:bg-green-900/30' %> rounded-lg">
         <svg class="h-6 w-6 <%= @error_rate > 5 ? 'text-red-600' : 'text-green-600' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -83,7 +83,7 @@
     <div class="p-6">
       <div class="text-center mb-6">
         <p class="text-5xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@total_api_keys) %></p>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Total API Keys</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2"><%= t('admin.dashboard.index.total_api_keys') %></p>
       </div>
       <div class="space-y-3">
         <div class="flex items-center justify-between">
@@ -106,7 +106,7 @@
   <!-- Recent Users -->
   <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Users</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.dashboard.index.recent_users') %></h2>
       <%= link_to admin_users_path, class: "text-sm text-blue-600 hover:text-blue-700 font-medium" do %>
         View All →
       <% end %>
@@ -145,7 +145,7 @@
         </table>
       <% else %>
         <div class="px-6 py-12 text-center">
-          <p class="text-sm text-gray-500 dark:text-gray-400">No users yet</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.no_users_yet') %></p>
         </div>
       <% end %>
     </div>
@@ -157,7 +157,7 @@
   <!-- Recent API Keys -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent API Keys</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.dashboard.index.recent_api_keys') %></h2>
     </div>
     <div class="p-6">
       <% if @recent_api_keys.any? %>
@@ -180,7 +180,7 @@
         </div>
       <% else %>
         <div class="text-center py-8">
-          <p class="text-sm text-gray-500 dark:text-gray-400">No API keys created yet</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.no_api_keys_created_yet') %></p>
         </div>
       <% end %>
     </div>
@@ -189,7 +189,7 @@
   <!-- Recent Subscriptions -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Subscriptions</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.dashboard.index.recent_subscriptions') %></h2>
     </div>
     <div class="p-6">
       <% if @recent_subscriptions.any? %>
@@ -210,7 +210,7 @@
         </div>
       <% else %>
         <div class="text-center py-8">
-          <p class="text-sm text-gray-500 dark:text-gray-400">No paid subscriptions yet</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.dashboard.index.no_paid_subscriptions_yet') %></p>
         </div>
       <% end %>
     </div>

@@ -10,7 +10,7 @@
         </svg>
         Back to Users
       <% end %>
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">User Details</h1>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.users.show.user_details') %></h1>
     </div>
 
     <!-- User Status Badge -->
@@ -50,7 +50,7 @@
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.company.presence || "—" %></p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">User ID</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.user_id') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100 font-mono"><%= @user.id %></p>
         </div>
         <div>
@@ -58,7 +58,7 @@
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.created_at.strftime("%B %d, %Y") %></p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Last Sign In</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.last_sign_in') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100">
             <% if @user.last_sign_in_at.present? %>
               <%= time_ago_in_words(@user.last_sign_in_at) %> ago
@@ -69,13 +69,13 @@
         </div>
         <% if @user.suspended? %>
           <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Suspended At</label>
+            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.suspended_at') %></label>
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.suspended_at&.strftime("%B %d, %Y") || "—" %></p>
           </div>
         <% end %>
         <% if @user.banned? %>
           <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Banned At</label>
+            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.banned_at') %></label>
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.banned_at&.strftime("%B %d, %Y") || "—" %></p>
           </div>
         <% end %>
@@ -104,7 +104,7 @@
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Billing Cycle</label>
+            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.billing_cycle') %></label>
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.plan&.titleize || "—" %></p>
           </div>
           <div>
@@ -121,7 +121,7 @@
           <% end %>
           <% if @user.subscription.lemonsqueezy_customer_id.present? %>
             <div>
-              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">LemonSqueezy ID</label>
+              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.lemonsqueezy_id') %></label>
               <p class="text-xs text-gray-600 dark:text-gray-400 font-mono"><%= @user.subscription.lemonsqueezy_customer_id %></p>
             </div>
           <% end %>
@@ -129,7 +129,7 @@
       <% else %>
         <div class="text-center py-6">
           <%= render "partials/shared/badge", text: "Free Plan", variant: "default", size: "sm" %>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">No active subscription</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-2"><%= t('admin.users.show.no_active_subscription') %></p>
         </div>
       <% end %>
     </div>
@@ -141,7 +141,7 @@
 <!-- Usage Statistics -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Usage Statistics</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.users.show.usage_statistics') %></h2>
   </div>
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -150,7 +150,7 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">This Month</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.users.show.this_month') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -158,7 +158,7 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests_used]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Response</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.users.show.avg_response') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= @usage_stats[:avg_response_time] %>ms</p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
@@ -218,7 +218,7 @@
     </div>
   <% else %>
     <div class="px-6 py-12 text-center">
-      <p class="text-sm text-gray-500 dark:text-gray-400">No API keys created</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.users.show.no_api_keys_created') %></p>
     </div>
   <% end %>
 </div>
@@ -226,7 +226,7 @@
 <!-- Recent Activity -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Activity</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.users.show.recent_activity') %></h2>
   </div>
   <% if @recent_activity.any? %>
     <div class="overflow-x-auto">
@@ -277,7 +277,7 @@
     </div>
   <% else %>
     <div class="px-6 py-12 text-center">
-      <p class="text-sm text-gray-500 dark:text-gray-400">No recent activity</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('admin.users.show.no_recent_activity') %></p>
     </div>
   <% end %>
 </div>
@@ -285,8 +285,8 @@
 <!-- Admin Actions -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-red-200 dark:border-red-800">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-red-50 dark:bg-red-900/20">
-    <h2 class="text-lg font-semibold text-red-900 dark:text-red-300">Admin Actions</h2>
-    <p class="text-sm text-red-700 dark:text-red-400 mt-1">These actions are permanent and cannot be undone easily.</p>
+    <h2 class="text-lg font-semibold text-red-900 dark:text-red-300"><%= t('admin.users.show.admin_actions') %></h2>
+    <p class="text-sm text-red-700 dark:text-red-400 mt-1"><%= t('admin.users.show.these_actions_are_permanent_and_cannot') %></p>
   </div>
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -341,12 +341,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
         </svg>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Admin Action Guidelines</h3>
+          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200"><%= t('admin.users.show.admin_action_guidelines') %></h3>
           <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
             <ul class="list-disc pl-5 space-y-1">
               <li><strong>Suspend</strong>: Temporary restriction, revokes all API keys</li>
               <li><strong>Ban</strong>: Permanent restriction, revokes keys and cancels subscription</li>
-              <li><strong>Make Admin</strong>: Grants full system access, use with caution</li>
+              <li><strong><%= t('admin.users.show.make_admin') %></strong>: Grants full system access, use with caution</li>
             </ul>
           </div>
         </div>

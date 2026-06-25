@@ -9,7 +9,7 @@
 
         <div style="background-color: #dc2626; padding: 20px 32px;">
           <p style="margin: 0; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.05em;">Action Required</p>
-          <h1 style="margin: 4px 0 0 0; font-size: 20px; font-weight: 700; color: #ffffff;">New Private Deployment Request</h1>
+          <h1 style="margin: 4px 0 0 0; font-size: 20px; font-weight: 700; color: #ffffff;"><%= t('private_deployment_mailer.admin_notification.new_private_deployment_request') %></h1>
         </div>
 
         <div style="padding: 32px;">
@@ -23,7 +23,7 @@
               <td style="padding: 12px 20px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #e5e7eb;"><%= @deployment_request.contact_name %> &lt;<%= @deployment_request.contact_email %>&gt;</td>
             </tr>
             <tr>
-              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;">Server Tier</td>
+              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= t('private_deployment_mailer.admin_notification.server_tier') %></td>
               <td style="padding: 12px 20px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #e5e7eb;"><%= @deployment_request.server_tier.capitalize %> ($<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo)</td>
             </tr>
             <tr>

@@ -1,4 +1,3 @@
----
 en:
   systems:
     index:
@@ -53,7 +52,6 @@ en:
             - "QR codes"
             - "Encoding & conversions"
             - "Misc utilities"
-
     show:
       back: "All systems"
       engine_label: "Engine"
@@ -66,7 +64,9 @@ en:
       use_cases_heading: "Use cases"
       get_started: "Get API key"
       explore_divisions: "Browse underlying APIs"
-
+      api_reference: "API Reference"
+      use_cases: "Use Cases"
+      api_endpoints: "API Endpoints"
     identity-risk:
       meta_title: "Identity & Risk System | Requiems API"
       kicker: "Identity & Risk System"
@@ -125,7 +125,6 @@ en:
         - "ASN & threat intelligence"
         - "Domain age & reputation signals"
         - "Text content risk scoring"
-
     payments-intelligence:
       meta_title: "Payments Intelligence System | Requiems API"
       kicker: "Payments Intelligence System"
@@ -182,7 +181,6 @@ en:
         - "SWIFT/BIC code verification"
         - "IP geolocation & country matching"
         - "VPN detection for billing anomalies"
-
     global-data:
       meta_title: "Global Data System | Requiems API"
       kicker: "Global Data System"
@@ -236,7 +234,6 @@ en:
         - "Public holiday calendars (100+ countries)"
         - "Postal code lookup & validation"
         - "Working day calculation"
-
     data-integrity:
       meta_title: "Data Integrity System | Requiems API"
       kicker: "Data Integrity System"
@@ -297,7 +294,6 @@ en:
         - "Sentiment analysis"
         - "Language detection"
         - "Spell check & text normalization"
-
     developer-utilities:
       meta_title: "Developer Utilities | Requiems API"
       kicker: "Developer Utilities"

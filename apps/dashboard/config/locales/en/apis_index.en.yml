@@ -1,0 +1,10 @@
+en:
+  apis_index:
+    most_popular:
+      our_most_popular_apis_based_on_usage: "Our most popular APIs based on usage and customer satisfaction."
+    systems_section:
+      composed_signal_engines_one_call: "Composed signal engines — one call returns a structured decision"
+      backend_systems: "Backend Systems"
+    header:
+      sign_up_for_a_free_api_key: "sign up for a free API key"
+      get_free_api_key: "Get Free API Key"

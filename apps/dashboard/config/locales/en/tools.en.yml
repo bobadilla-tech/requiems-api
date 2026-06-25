@@ -7,6 +7,41 @@ en:
         error_unexpected: "Unexpected response from the API."
         error_network: "Network error. Please check your connection."
         error_security_token: "Security token missing. Please refresh the page."
+      use_cases:
+        design_placeholders: "Design placeholders"
+        seed_prompts_conversation_starters_or: "Seed prompts, conversation starters, or personality layers for AI assistants and chatbots."
+        fuel_daily_check_in_screens_push: "Fuel daily check-in screens, push notifications, or meditation app openers with curated wisdom."
+        auto_generate_quote_cards_for_twitter_x: "Auto-generate quote cards for Twitter/X, Instagram, or LinkedIn without a content team."
+        add_a_rotating_quote_to_transactional: "Add a rotating quote to transactional emails, weekly digests, or newsletter signatures."
+        what_can_you_build_with_it: "What can you build with it?"
+        social_media_content: "Social media content"
+        motivation_amp_wellness_apps: "Motivation &amp; wellness apps"
+        show_a_fresh_inspirational_quote_on: "Show a fresh inspirational quote on every visit — dashboards, homepages, onboarding screens."
+        email_footers_amp_newsletters: "Email footers &amp; newsletters"
+        replace_lorem_ipsum_with_real: "Replace Lorem Ipsum with real, meaningful text in wireframes, mockups, and UI demos."
+        quote_of_the_day: "Quote of the day"
+        ai_amp_chatbot_enrichment: "AI &amp; chatbot enrichment"
+      api_combinations:
+        score_the_emotional_tone_of_a_quote: "Score the emotional tone of a quote before displaying it — surface only positive, uplifting results."
+        mix_real_quotes_with_generated_filler: "Mix real quotes with generated filler text for flexible content layouts and design systems."
+        detect_language: "Detect Language"
+        lorem_ipsum: "Lorem Ipsum"
+        pairs_well_with: "Pairs well with"
+        filter_or_route_quotes_by_language: "Filter or route quotes by language before presenting them to a multilingual audience."
+        combine_the_quotes_api_with_other: "Combine the Quotes API with other endpoints to build richer experiences."
+      what_it_does:
+        median_response_under_1_second_quotes: "Median response under 1 second. Quotes served globally."
+        what_is_the_random_quotes_api: "What is the Random Quotes API?"
+        every_quote_includes_the_author_s_name: "Every quote includes the author's name — ready for display."
+        random_quotes_api: "Random Quotes API"
+        batch_endpoint: "batch endpoint"
+        fetch_up_to_50_quotes_per_request_with: "Fetch up to 50 quotes per request with the batch endpoint."
+        batch_ready: "Batch ready"
+      cta:
+        sign_up_for_free_and_start_fetching: "Sign up for free and start fetching inspirational quotes in minutes. No credit card required."
+        ready_to_add_quotes_to_your_app: "Ready to add quotes to your app?"
+      show:
+        random_quote_generator_free_quotes_api: "Random Quote Generator — Free Quotes API Tool"
     unit_conversion:
       demo:
         input_placeholder: "Enter a value"
@@ -22,6 +57,31 @@ en:
         label_input: "Input"
         label_result: "Result"
         label_formula: "Formula"
+      hero:
+        square_meters: "Square Meters"
+        nautical_miles: "Nautical Miles"
+        tons_metric: "Tons (metric)"
+        square_miles: "Square Miles"
+        square_kilometers: "Square Kilometers"
+        square_feet: "Square Feet"
+        target_unit: "Target unit"
+        short_tons_us: "Short Tons (US)"
+        source_unit: "Source unit"
+        gallons_us: "Gallons (US)"
+        cubic_meters: "Cubic Meters"
+        fluid_ounces: "Fluid Ounces"
+        long_tons_uk: "Long Tons (UK)"
+      use_cases:
+        unit_conversion_fits_anywhere: "Unit Conversion fits anywhere measurements need to be translated accurately and instantly."
+        real_problems_real_conversions: "Real problems, real conversions."
+      what_it_does:
+        reliable_conversions_with_transparent: "Reliable conversions with transparent formulas."
+        get_v1_technology_convert_200_ok: "GET /v1/technology/convert → 200 OK"
+        simple_api_requests_instant_results: "Simple API requests, instant results."
+      api_combinations:
+        unit_conversion_becomes_even_more: "Unit Conversion becomes even more useful when combined with other Requiems APIs."
+      show:
+        free_unit_conversion_api_miles_to_km_kg: "Free Unit Conversion API — Miles to KM, KG to LB, Celsius to Fahrenheit | Requiems API"
     sentiment_analysis:
       demo:
         input_placeholder: "Paste any text, review, comment, or feedback..."
@@ -36,6 +96,21 @@ en:
         label_positive: "Positive"
         label_negative: "Negative"
         label_neutral: "Neutral"
+      hero:
+        know_how_your_text_lands: "Know how your text lands."
+      show:
+        free_sentiment_analysis_tool_positive: "Free Sentiment Analysis Tool — Positive, Negative & Neutral Text Detection | Requiems API"
+      use_cases:
+        anywhere_text_flows_through_your_system: "Anywhere text flows through your system, sentiment gives you signal."
+        built_for_real_use_cases: "Built for real use cases"
+      what_it_does:
+        one_call_three_values_enough_signal_to: "One call. Three values. Enough signal to act."
+        proportional_scores_across_all_classes: "Proportional scores across all classes"
+        positive_negative_or_neutral: "Positive, negative, or neutral"
+        what_it_does: "What it does"
+      api_combinations:
+        sentiment_works_best_as_part_of_a: "Sentiment works best as part of a pipeline. Here are three natural combinations."
+        pair_it_with_other_apis: "Pair it with other APIs"
     domain_checker:
       demo:
         error_empty: "Please enter a domain name."
@@ -130,6 +205,8 @@ en:
         body: "One API key. Domain availability, WHOIS data, and 50+ other APIs across validation, networking, finance, and more."
         cta_primary: "Get your free API key"
         cta_docs: "Read the docs →"
+      show:
+        free_domain_checker_availability_dns: "Free Domain Checker — Availability, DNS & WHOIS | Requiems API"
     email_normalizer:
       hero:
         title: "Clean email addresses automatically, every time."
@@ -141,6 +218,7 @@ en:
         integration_badge: "Integration"
         integration_heading: "One request, instant normalization."
         integration_body: "POST /v1/validation/email-normalize with the email in the body and your API key in the header. No SDK required."
+        post_v1_validation_email_normalize_200: "POST /v1/validation/email-normalize → 200 OK"
       use_cases:
         heading: "Real problems, real users."
         subheading: "Email Normalizer fits wherever contact data quality matters."
@@ -209,6 +287,8 @@ en:
         label_change_removed_dots: "dots removed"
         label_change_removed_plus_tag: "tag removed"
         label_change_canonicalised_domain: "alias resolved"
+      show:
+        free_email_normalizer_lowercase_trim: "Free Email Normalizer — Lowercase, Trim & Canonicalize Email Addresses | Requiems API"
     email_validator:
       demo:
         error_empty: "Enter an email address to verify."
@@ -230,6 +310,18 @@ en:
         badge_disposable: "✗ Disposable"
         badge_not_disposable: "✓ Not disposable"
         suggestion_prefix: "Did you mean"
+      what_it_does:
+        post_v1_validation_email_200_ok: "POST /v1/validation/email → 200 OK"
+        fast_uncomplicated_easy_to_integrate: "Fast, uncomplicated, easy to integrate."
+        accurate_and_fast_every_single_check: "Accurate and fast — every single check."
+      hero:
+        syntax_check_live_mx_lookup_disposable: "Syntax check, live MX lookup, disposable detection, and typo correction — in a single API call."
+      show:
+        free_email_validator_syntax_mx_record: "Free Email Validator — Syntax, MX Record & Disposable Check | Requiems API"
+      use_cases:
+        email_validator_fits_wherever_contact: "Email Validator fits wherever contact data quality matters."
+      api_combinations:
+        email_validator_works_even_better_when: "Email Validator works even better when paired with other Requiems APIs."
     phone_validator:
       demo:
         error_empty: "Enter a phone number to validate."
@@ -325,3 +417,9 @@ en:
         body: "One API key. Phone validation, email verification, domain checks, and 50+ other APIs across validation, networking, finance, and more."
         cta_primary: "Get your free API key"
         cta_docs: "Read the docs →"
+      show:
+        phone_validator_carrier_lookup_line: "Phone Validator — Carrier Lookup, Line Type & Format Normalization | Requiems API"
+    index:
+      one_api_key_unlocks_all_tools_plus_50: "One API key unlocks all tools — plus 50+ more APIs across validation, finance, networking, and more."
+      tools_requiems_api: "Tools — Requiems API"
+      interactive_api_tools: "Interactive API Tools"

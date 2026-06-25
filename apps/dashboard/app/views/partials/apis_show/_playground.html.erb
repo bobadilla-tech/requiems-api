@@ -184,16 +184,16 @@
       <div class="text-center">
         <h3 id="rate-limit-title-<%= playground_index %>" class="text-lg font-bold text-gray-900 dark:text-gray-100">Testing too fast!</h3>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          The demo allows <strong class="text-gray-700 dark:text-gray-300">1 request per minute</strong> for anonymous users.
-          Sign up for free and get <strong class="text-gray-700 dark:text-gray-300">4&times; more requests</strong> &mdash; you can keep testing right away.
+          The demo allows <strong class="text-gray-700 dark:text-gray-300"><%= t('apis_show.playground.1_request_per_minute') %></strong> for anonymous users.
+          Sign up for free and get <strong class="text-gray-700 dark:text-gray-300"><%= t('apis_show.playground.4_times_more_requests') %></strong> &mdash; you can keep testing right away.
         </p>
       </div>
 
       <%# CTAs %>
       <div class="mt-6 flex flex-col gap-3">
-        <%= link_to "Create free account", new_user_registration_path,
+        <%= link_to t('apis_show.playground.create_free_account'), new_user_registration_path,
               class: "w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors" %>
-        <%= link_to "Sign in", new_user_session_path,
+        <%= link_to t('auth.sign_in.submit'), new_user_session_path,
               class: "w-full inline-flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" %>
       </div>
     </div>

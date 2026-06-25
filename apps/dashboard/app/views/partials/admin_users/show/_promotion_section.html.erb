@@ -1,7 +1,7 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-purple-200 dark:border-purple-800 mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-purple-50 dark:bg-purple-900/20">
-    <h2 class="text-lg font-semibold text-purple-900 dark:text-purple-300">Promotional Plan Upgrade</h2>
-    <p class="text-sm text-purple-700 dark:text-purple-400 mt-1">Grant or revoke a temporary plan upgrade for this user without requiring payment.</p>
+    <h2 class="text-lg font-semibold text-purple-900 dark:text-purple-300"><%= t('admin_users.show.promotion_section.promotional_plan_upgrade') %></h2>
+    <p class="text-sm text-purple-700 dark:text-purple-400 mt-1"><%= t('admin_users.show.promotion_section.grant_or_revoke_a_temporary_plan') %></p>
   </div>
 
   <div class="p-6">
@@ -96,10 +96,10 @@
                 rows: 2,
                 placeholder: "e.g. YouTube video collaboration, blog post on requiems.xyz",
                 class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none" %>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Required for audit trail. Describe why this promotion is being granted.</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><%= t('admin_users.show.promotion_section.required_for_audit_trail_describe_why') %></p>
         </div>
 
-        <%= f.submit "Upgrade Plan",
+        <%= f.submit t('dashboard.billing.current_plan.upgrade_btn'),
               class: "px-5 py-2.5 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors text-sm cursor-pointer" %>
       <% end %>
 

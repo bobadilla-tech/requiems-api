@@ -1,0 +1,11 @@
+en:
+  private_deployments:
+    new:
+      dedicated_amd_vcpus_postgresql_redis: "Dedicated AMD vCPUs · PostgreSQL · Redis · Caddy (HTTPS)"
+      3_anything_we_should_know: "3. Anything we should know?"
+      private_deployment_requiems_api: "Private Deployment — Requiems API"
+      all_10_services_are_selected_by_default: "All 10 services are selected by default. Uncheck any you don't need to keep your instance lean."
+      only_selected_services_will_be_mounted: "Only selected services will be mounted on your instance. Others return 404."
+      billed_monthly: "billed monthly"
+      please_fix_the_following: "Please fix the following:"
+      1_choose_your_plan: "1. Choose Your Plan"

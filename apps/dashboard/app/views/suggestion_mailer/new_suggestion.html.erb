@@ -16,13 +16,13 @@
   <body>
     <div class="container">
       <div class="header">
-        <h1 style="margin: 0; font-size: 24px;">New API Suggestion</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">A user has suggested a new API for Requiems</p>
+        <h1 style="margin: 0; font-size: 24px;"><%= t('suggestion_mailer.new_suggestion.new_api_suggestion') %></h1>
+        <p style="margin: 10px 0 0 0; opacity: 0.9;"><%= t('suggestion_mailer.new_suggestion.a_user_has_suggested_a_new_api_for') %></p>
       </div>
 
       <div class="content">
         <div class="field">
-          <div class="label">API Name</div>
+          <div class="label"><%= t('suggestion_mailer.new_suggestion.api_name') %></div>
           <div class="value"><strong><%= @suggestion[:api_name] %></strong></div>
         </div>
 
@@ -32,13 +32,13 @@
         </div>
 
         <div class="field">
-          <div class="label">Use Case</div>
+          <div class="label"><%= t('suggestion_mailer.new_suggestion.use_case') %></div>
           <div class="value"><%= simple_format(@suggestion[:use_case]) %></div>
         </div>
 
         <% if @suggestion[:email].present? %>
           <div class="field">
-            <div class="label">Contact Email (for follow-up)</div>
+            <div class="label"><%= t('suggestion_mailer.new_suggestion.contact_email_for_follow_up') %></div>
             <div class="value"><%= @suggestion[:email] %></div>
           </div>
         <% end %>

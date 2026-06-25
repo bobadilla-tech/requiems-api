@@ -123,6 +123,8 @@ en:
         back_btn: "← Back to API Keys"
         view_docs_btn: "View API Documentation"
         go_dashboard_btn: "Go to Dashboard"
+      show:
+        find_me_in_app_views_dashboard_api_keys: "Find me in app/views/dashboard/api_keys/show.html.erb"
     billing:
       title: "Billing & Subscription"
       subtitle: "Manage your plan, payment method, and billing history"
@@ -260,6 +262,8 @@ en:
         cancel: "Cancel — keep my account"
         confirm_btn: "Permanently Delete My Account"
         deleting: "Deleting your account..."
+      show:
+        profile_picture: "Profile picture"
     usage:
       title: "Usage & Analytics"
       subtitle: "Track your API usage and performance metrics"
@@ -391,14 +395,12 @@ en:
           docs_notice: "In the meantime, you can explore our API documentation at %{docs_link}."
           questions: "Questions? Reply to this email or reach us at %{email}."
           questions_html: "Questions? Reply to this email or reach us at %{email}."
-
     private_deployments:
       new:
         back_to_pricing: "← Back to pricing"
         checkout_notice: "You'll be redirected to our secure checkout on LemonSqueezy to complete your subscription."
         submit: "Continue to Payment →"
         redirecting: "Redirecting..."
-
     referrals:
       title: "Referral Program"
       subtitle: "Share your referral link and earn rewards when your friends upgrade to a paid plan."

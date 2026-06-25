@@ -18,7 +18,7 @@
     <div class="container">
       <div class="header">
         <h1 style="margin: 0; font-size: 24px;">🚀 Enterprise Inquiry</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">A potential enterprise customer wants to talk to sales</p>
+        <p style="margin: 10px 0 0 0; opacity: 0.9;"><%= t('sales_mailer.enterprise_inquiry.a_potential_enterprise_customer_wants') %></p>
       </div>
 
       <div class="content">
@@ -32,7 +32,7 @@
         </div>
 
         <div class="field">
-          <div class="label">Contact Person</div>
+          <div class="label"><%= t('sales_mailer.enterprise_inquiry.contact_person') %></div>
           <div class="value"><%= @inquiry[:name] %></div>
         </div>
 
@@ -45,7 +45,7 @@
 
         <% if @inquiry[:message].present? %>
           <div class="field">
-            <div class="label">Message / Specific Needs</div>
+            <div class="label"><%= t('sales_mailer.enterprise_inquiry.message_specific_needs') %></div>
             <div class="value"><%= simple_format(@inquiry[:message]) %></div>
           </div>
         <% end %>

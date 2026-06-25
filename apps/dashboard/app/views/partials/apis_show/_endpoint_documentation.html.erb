@@ -107,7 +107,7 @@
   <!-- Response Schema -->
   <% if endpoint_response_fields.any? %>
     <div class="mb-6">
-      <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Response Fields</h4>
+      <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('apis_show.endpoint_documentation.response_fields') %></h4>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg">
           <thead class="bg-gray-50 dark:bg-gray-700">
@@ -175,7 +175,7 @@
   <!-- Error Codes -->
   <% if endpoint_errors.any? %>
     <div class="mb-6">
-      <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Error Responses</h4>
+      <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('apis_show.endpoint_documentation.error_responses') %></h4>
       <div class="space-y-3">
         <% endpoint_errors.each do |error| %>
           <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">

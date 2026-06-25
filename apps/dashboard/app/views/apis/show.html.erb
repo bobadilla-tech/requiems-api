@@ -67,7 +67,7 @@
                 </svg>
                 <div>
                   <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Copy page link</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400">Copy the current page URL to clipboard</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.copy_the_current_page_url_to_clipboard') %></div>
                 </div>
               </button>
               <button type="button"
@@ -80,7 +80,7 @@
                 </svg>
                 <div>
                   <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Copy as Markdown</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400">Copy full documentation as Markdown</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.copy_full_documentation_as_markdown') %></div>
                 </div>
               </button>
               <div class="my-1 border-t border-gray-100 dark:border-gray-700"></div>
@@ -91,7 +91,7 @@
                 <%= image_tag "ai/claude.svg", class: "h-4 w-4 shrink-0", alt: "Claude" %>
                 <div>
                   <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Open in Claude</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400">Ask Claude about this API</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.ask_claude_about_this_api') %></div>
                 </div>
               </a>
               <a href="<%= open_in_chatgpt_url(@documentation) %>"
@@ -101,7 +101,7 @@
                 <%= image_tag "ai/chatgpt.png", class: "h-4 w-4 shrink-0", alt: "ChatGPT" %>
                 <div>
                   <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Open in ChatGPT</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400">Ask ChatGPT about this API</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.ask_chatgpt_about_this_api') %></div>
                 </div>
               </a>
             </div>
@@ -164,7 +164,7 @@
 
             <% if @documentation.dig("overview", "use_cases").present? %>
               <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Use Cases</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('apis.show.use_cases') %></h3>
                 <ul class="space-y-2">
                   <% @documentation.dig("overview", "use_cases").each do |use_case| %>
                     <li class="flex items-start">
@@ -197,7 +197,7 @@
 
           <!-- Endpoints Section -->
           <div id="endpoints" class="p-8">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">API Endpoints</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6"><%= t('apis.show.api_endpoints') %></h2>
 
             <% @documentation["endpoints"]&.each_with_index do |endpoint, index| %>
               <%= render "partials/apis_show/endpoint_documentation", endpoint: endpoint, index: index, base_url: @documentation["base_url"] %>

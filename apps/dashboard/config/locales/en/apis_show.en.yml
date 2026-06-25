@@ -1,0 +1,9 @@
+en:
+  apis_show:
+    playground:
+      1_request_per_minute: "1 request per minute"
+      create_free_account: "Create free account"
+      4_times_more_requests: "4&times; more requests"
+    endpoint_documentation:
+      error_responses: "Error Responses"
+      response_fields: "Response Fields"

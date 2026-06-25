@@ -193,7 +193,6 @@ en:
         primary: "Get API key"
         secondary: "Talk to Sales"
         footer: "No credit card required • Cancel anytime"
-
     blog:
       title: "Blog - Requiems API"
       heading: "Blog - Coming Soon"
@@ -208,11 +207,9 @@ en:
       meanwhile: "In the meantime, explore our documentation and API directory"
       cta_docs: "Browse Documentation"
       cta_apis: "Explore APIs"
-
     docs:
       redirecting: "Redirecting to API documentation..."
       click_here: "Click here if you're not redirected"
-
     changelog:
       title: "Changelog - Requiems API"
       heading: "Changelog"
@@ -302,7 +299,6 @@ en:
         text: "Want to be notified about new releases and features?"
         signed_in: "We'll send update notifications to your registered email: %{email}"
         sign_up_cta: "Sign up for an account"
-
     glossary:
       title: "API Glossary - Requiems API"
       heading: "API Glossary"
@@ -349,7 +345,6 @@ en:
         text: "Check out our comprehensive documentation or contact our support team"
         cta_docs: "Browse Documentation"
         cta_contact: "Contact Support"
-
     error_codes:
       title: "Error Codes Reference - Requiems API"
       heading: "Error Codes Reference"
@@ -421,7 +416,6 @@ en:
         cta_docs: "View Documentation"
         cta_contact: "Contact Support"
         cta_status: "Check API Status"
-
     pricing:
       title: "Pricing - Requiems API"
       header:
@@ -554,7 +548,6 @@ en:
         a4: "All plans run on EU data centers for GDPR compliance."
         q5: "Is there a free trial for paid plans?"
         a5: "Yes! All monthly paid plans include a 7-day free trial with full access to plan features. No credit card required to start the trial. You can cancel anytime during the trial period."
-
     team:
       title: "Our Team - Requiems API"
       heading: "Meet Our Team"
@@ -576,7 +569,8 @@ en:
         heading: "Join Our Team"
         text: "We're always looking for talented engineers and builders who are passionate about creating developer-first products. Interested in joining us?"
         cta: "Get in touch"
-
+      alexandra_flores: "Alexandra Flores"
+      eliaz_bobadilla: "Eliaz Bobadilla"
     status:
       title: "API Status - Requiems API"
       all_operational: "All Systems Operational"
@@ -604,7 +598,6 @@ en:
       last_updated: "Last updated: %{datetime}"
       having_issues: "Having issues?"
       contact_support: "Contact support"
-
     terms:
       title: "Terms of Service - Requiems API"
       heading: "Terms of Service"
@@ -679,7 +672,6 @@ en:
       contact:
         heading: "Contact"
         text: "Questions about these terms? Contact us at"
-
     privacy:
       title: "Privacy Policy - Requiems API"
       heading: "Privacy Policy"
@@ -737,7 +729,6 @@ en:
       contact:
         heading: "Contact Us"
         text: "For privacy-related questions or to exercise your rights, contact us at:"
-
     about:
       title: "About Us - Requiems API"
       heading: "About Requiems API"
@@ -770,7 +761,6 @@ en:
         intro: "Have questions or want to learn more?"
         get_in_touch: "Get in touch"
         or_email: "or email us at"
-
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"
@@ -839,7 +829,6 @@ en:
         text: "We're here to help! Reach out to our support team or check our documentation."
         contact: "Contact Support"
         docs: "View Documentation"
-
     contact:
       title: "Contact Us - Requiems API"
       heading: "Contact Us"
@@ -890,7 +879,29 @@ en:
         text: "Browse the full API catalog or download the complete documentation to get started."
         browse_apis: "Browse APIs"
         full_docs: "Download llms-full.txt"
-
+    api_reference:
+      api_reference_requiems_api: "API Reference - Requiems API"
+      too_many_requests: "Too Many Requests"
+      api_reference: "API Reference"
+      internal_server_error: "Internal Server Error"
+      complete_reference_documentation_for: "Complete reference documentation for all Requiems API endpoints."
+      all_api_requests_require_authentication: "All API requests require authentication using an API key in the request header:"
+      view_pricing_details: "View pricing details"
+      get_your_api_key: "Get your API key"
+      more_apis_coming_soon: "More APIs Coming Soon"
+      data_apis_finance_apis_image_apis_and: "Data APIs, Finance APIs, Image APIs, and more utility endpoints are in development."
+      available_apis: "Available APIs"
+      view_text_api_documentation: "View Text API Documentation"
+      generate_random_advice_quotes_lorem: "Generate random advice, quotes, Lorem Ipsum text, and random words."
+      miscellaneous_apis: "Miscellaneous APIs"
+      view_email_api_documentation: "View Email API Documentation"
+      text_apis: "Text APIs"
+      email_apis: "Email APIs"
+      validate_email_addresses_detect: "Validate email addresses, detect disposable emails, and check email domains."
+      view_miscellaneous_api_documentation: "View Miscellaneous API Documentation"
+      bad_request: "Bad Request"
+    domain_checker:
+      domain_checker_api_instant_domain: "Domain Checker API — Instant Domain Availability & WHOIS Lookup"
   sales_inquiries:
     new:
       description: "We're here to help you with your API needs. Please fill out the form and we'll get back to you as soon as possible!"
@@ -898,13 +909,11 @@ en:
       success: "Thank you! Our sales team will contact you within 24 hours."
       missing_fields: "Please fill in all required fields."
       error: "Sorry, there was an error submitting your inquiry. Please try again later."
-
   suggestions:
     flash:
       success: "Thank you for your suggestion! We'll review it shortly and usually reply within 24 hours."
       missing_fields: "Please fill in all required fields."
       error: "Sorry, there was an error submitting your suggestion. Please try again later."
-
   examples:
     show:
       breadcrumb_home: "Home"
@@ -921,11 +930,9 @@ en:
       api_documentation: "API documentation"
     flash:
       not_found: "Example not found"
-
   categories:
     flash:
       not_found: "Category not found"
-
   apis:
     flash:
       not_found: "API not found"
