@@ -11,13 +11,14 @@ import (
 
 // Fix describes a single replacement to apply to a source file.
 type Fix struct {
-	File       string
-	Line       int
-	Original   string // the raw line as found in the file
-	Patched    string // the rewritten line
-	YAMLKey    string // the t('key') that was used
-	YAMLValue  string // the value added/found in YAML
-	NewInYAML  bool   // true if key was not in YAML before
+	File      string
+	Line      int
+	EndLine   int    // 0 for single-line; closing tag line for multiline_tag_content
+	Original  string // the raw line as found in the file
+	Patched   string // the rewritten line
+	YAMLKey   string // the t('key') that was used
+	YAMLValue string // the value added/found in YAML
+	NewInYAML bool   // true if key was not in YAML before
 }
 
 // FixPlan groups all fixes with the YAML additions they require.
@@ -96,15 +97,26 @@ func BuildFixPlan(
 			}
 
 			// Build the patched line.
-			replacement := applyTemplate(h.Category, tKey)
-			patched := replaceInLine(line, h.Text, h.Category, replacement)
-			if patched == line {
-				continue // nothing changed — skip
+			var patched string
+			if h.Category == "multiline_tag_content" && h.EndLine > h.Line {
+				// Collapse the multi-line block into one line:
+				// <p class="..."><%= t('key') %></p>
+				tagName := extractTagName(line)
+				leadWS := line[:len(line)-len(strings.TrimLeft(line, " \t"))]
+				openTag := strings.TrimSpace(line)
+				patched = leadWS + openTag + "<%= t('" + tKey + "') %></" + tagName + ">"
+			} else {
+				replacement := applyTemplate(h.Category, tKey)
+				patched = replaceInLine(line, h.Text, h.Category, replacement)
+				if patched == line {
+					continue
+				}
 			}
 
 			plan.Fixes = append(plan.Fixes, Fix{
 				File:      relFile,
 				Line:      h.Line,
+				EndLine:   h.EndLine,
 				Original:  line,
 				Patched:   patched,
 				YAMLKey:   tKey,
@@ -151,6 +163,12 @@ func ApplyFixes(plan FixPlan, root string) ([]string, error) {
 			if idx >= 0 && idx < len(lines) {
 				lines[idx] = fix.Patched
 			}
+			// Multi-line: blank text lines + closing tag (they're folded into patched).
+			if fix.EndLine > fix.Line {
+				for k := fix.Line; k < fix.EndLine && k < len(lines); k++ {
+					lines[k] = ""
+				}
+			}
 		}
 
 		content := strings.Join(lines, "\n")
@@ -166,14 +184,18 @@ func ApplyFixes(plan FixPlan, root string) ([]string, error) {
 }
 
 // generateKey creates a dot-notation YAML key path from the file path and context.
-// Example: "app/views/partials/tools/email_normalizer/_hero.html.erb" + placeholder
-//
-//	→ "tools.email_normalizer.demo.input_placeholder"
+// Examples:
+//   - "app/views/partials/tools/email_normalizer/_hero.html.erb" + placeholder
+//     → "tools.email_normalizer.hero.input_placeholder"
+//   - "app/views/devise/mailer/reset_password_instructions.html.erb"
+//     → "devise.mailer.reset_password_instructions.{leaf}"
 func generateKey(lang string, relFile string, h HardcodedString) string {
-	// Strip app/views/, leading underscore on partials, extension.
 	rel := strings.TrimPrefix(relFile, "app/views/")
 	rel = strings.TrimPrefix(rel, "app/controllers/")
 	rel = strings.TrimPrefix(rel, "app/models/")
+
+	// Devise views: keep "devise" as the first segment so keys route to devise.{lang}.yml.
+	isDevise := strings.HasPrefix(rel, "devise/")
 
 	parts := strings.Split(rel, "/")
 	var keyParts []string
@@ -183,8 +205,13 @@ func generateKey(lang string, relFile string, h HardcodedString) string {
 		p = strings.TrimSuffix(p, ".erb")
 		p = strings.TrimSuffix(p, ".rb")
 		p = strings.TrimSuffix(p, ".haml")
-		p = strings.Replace(p, "-", "_", -1)
-		if p != "" && p != "partials" && p != "views" {
+		p = strings.ReplaceAll(p, "-", "_")
+		skip := p == "" || p == "partials" || p == "views"
+		// Keep "devise" segment; skip "shared" sub-dir inside devise (use parent path).
+		if !isDevise {
+			skip = skip || p == "shared"
+		}
+		if !skip {
 			keyParts = append(keyParts, p)
 		}
 	}
@@ -265,6 +292,17 @@ func replaceInLine(line, text, category, replacement string) string {
 		}
 	}
 	return line
+}
+
+// extractTagName pulls the tag name from an opening HTML tag line.
+// "  <p class=\"...\">" → "p"
+var tagNameRe = regexp.MustCompile(`<(\w+)`)
+
+func extractTagName(line string) string {
+	if m := tagNameRe.FindStringSubmatch(strings.TrimSpace(line)); len(m) >= 2 {
+		return m[1]
+	}
+	return "div"
 }
 
 // extractTKey pulls the key out of a replacement string like `placeholder="<%= t('key') %>"`.

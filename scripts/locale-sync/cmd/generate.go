@@ -216,15 +216,25 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 			return nil
 		}
 
-		// Apply YAML additions.
+		// Apply YAML additions — route each key to its correct topic file.
 		if len(plan.YAMLAdds) > 0 {
-			yamlCandidates := yamlAddsToMergeCandidates(plan.YAMLAdds, lang)
-			sharedPath, changed, err := locale.UpsertShared(rootPath, lang, yamlCandidates)
-			if err != nil {
-				return fmt.Errorf("write YAML: %w", err)
+			byTopic := make(map[string]map[string]string)
+			for fullKey, val := range plan.YAMLAdds {
+				topic := topicFromKey(fullKey, lang)
+				if byTopic[topic] == nil {
+					byTopic[topic] = make(map[string]string)
+				}
+				byTopic[topic][fullKey] = val
 			}
-			if changed {
-				fmt.Printf("YAML: wrote %d new keys to %s\n", len(plan.YAMLAdds), sharedPath)
+			for topic, adds := range byTopic {
+				candidates := yamlAddsToMergeCandidates(adds, lang)
+				path, changed, err := locale.UpsertTopicFile(rootPath, lang, topic, candidates)
+				if err != nil {
+					return fmt.Errorf("write YAML (%s): %w", topic, err)
+				}
+				if changed {
+					fmt.Printf("YAML: wrote %d new keys to %s\n", len(candidates), path)
+				}
 			}
 		}
 
@@ -278,6 +288,17 @@ func yamlAddsToMergeCandidates(adds map[string]string, lang string) []locale.Mer
 		})
 	}
 	return out
+}
+
+// topicFromKey extracts the YAML topic (second dot-segment after lang prefix).
+// "en.tools.email_normalizer.hero.heading" → "tools"
+// "en.devise.mailer.reset_password.body"   → "devise"
+func topicFromKey(fullKey, lang string) string {
+	stripped := strings.TrimPrefix(fullKey, lang+".")
+	if idx := strings.Index(stripped, "."); idx >= 0 {
+		return stripped[:idx]
+	}
+	return "shared"
 }
 
 func sourceFiles(entries []locale.Entry) []string {

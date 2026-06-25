@@ -1,6 +1,7 @@
 package locale
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -37,21 +38,28 @@ func BuildMergeCandidates(dups []KeyDupGroup, lang string) []MergeCandidate {
 }
 
 // UpsertShared merges candidates into the shared locale file.
-// Existing content is preserved; new keys are appended under their namespace.
-// Returns the path written and a bool indicating whether any changes were made.
 func UpsertShared(root, lang string, candidates []MergeCandidate) (string, bool, error) {
-	sharedPath := filepath.Join(root, "config", "locales", lang,
-		fmt.Sprintf("shared.%s.yml", lang))
+	p := filepath.Join(root, "config", "locales", lang, fmt.Sprintf("shared.%s.yml", lang))
+	return upsertYAMLFile(p, candidates)
+}
 
-	// Parse existing file (or start with empty doc node)
-	doc, err := readOrEmptyDoc(sharedPath)
+// UpsertTopicFile merges candidates into {topic}.{lang}.yml.
+// If the topic file does not yet exist it is created.
+// Falls back to shared.{lang}.yml only when topic == "shared".
+func UpsertTopicFile(root, lang, topic string, candidates []MergeCandidate) (string, bool, error) {
+	p := filepath.Join(root, "config", "locales", lang, fmt.Sprintf("%s.%s.yml", topic, lang))
+	return upsertYAMLFile(p, candidates)
+}
+
+// upsertYAMLFile is the shared implementation: read, merge, write.
+func upsertYAMLFile(filePath string, candidates []MergeCandidate) (string, bool, error) {
+	doc, err := readOrEmptyDoc(filePath)
 	if err != nil {
-		return sharedPath, false, err
+		return filePath, false, err
 	}
 
 	changed := false
 	for _, c := range candidates {
-		// SuggestedKey is e.g. "en.shared.errors.rate_limit"
 		parts := strings.Split(c.SuggestedKey, ".")
 		if setYAMLPath(doc, parts, c.Value) {
 			changed = true
@@ -59,18 +67,18 @@ func UpsertShared(root, lang string, candidates []MergeCandidate) (string, bool,
 	}
 
 	if !changed {
-		return sharedPath, false, nil
+		return filePath, false, nil
 	}
 
 	data, err := marshalDoc(doc)
 	if err != nil {
-		return sharedPath, false, err
+		return filePath, false, err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(sharedPath), 0o755); err != nil {
-		return sharedPath, false, err
+	if err := os.MkdirAll(filepath.Dir(filePath), 0o755); err != nil {
+		return filePath, false, err
 	}
-	return sharedPath, true, os.WriteFile(sharedPath, data, 0o644)
+	return filePath, true, os.WriteFile(filePath, data, 0o644)
 }
 
 // WriteSkeleton generates a skeleton locale file for targetLang based on the
@@ -214,7 +222,13 @@ func setMappingPath(node *yaml.Node, path []string, value string) bool {
 
 // marshalDoc serialises a yaml.Node document to bytes with 2-space indentation.
 func marshalDoc(doc *yaml.Node) ([]byte, error) {
-	return yaml.Marshal(doc)
+	var buf bytes.Buffer
+	enc := yaml.NewEncoder(&buf)
+	enc.SetIndent(2)
+	if err := enc.Encode(doc); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
 // MigrationPlan returns the t() key paths that callers should switch to for
