@@ -63,11 +63,14 @@ func runAudit(cmd *cobra.Command, _ []string) error {
 	}
 	fmt.Printf("Scanned %d t() calls in source files.\n\n", len(result.UsedKeys))
 
+	// Deduplicate missing keys once so the summary count matches the displayed list.
+	uniqueMissing := dedupMissingKeys(result.MissingKeys)
+
 	if showOrphaned {
 		printOrphaned(result.OrphanedKeys)
 	}
 	if showMissing {
-		printMissing(result.MissingKeys)
+		printMissing(uniqueMissing)
 	}
 
 	fmt.Println("─────────────────────────────────────────")
@@ -75,7 +78,10 @@ func runAudit(cmd *cobra.Command, _ []string) error {
 	fmt.Printf("  Defined keys:    %d\n", len(defined))
 	fmt.Printf("  t() calls found: %d\n", len(result.UsedKeys))
 	fmt.Printf("  Orphaned keys:   %d  (defined but never called)\n", len(result.OrphanedKeys))
-	fmt.Printf("  Missing keys:    %d  (called but not defined)\n", len(result.MissingKeys))
+	fmt.Printf("  Missing keys:    %d  (called but not defined)\n", len(uniqueMissing))
+	if n := len(result.RelativeKeys); n > 0 {
+		fmt.Printf("  Relative keys:   %d  (t('.key') — skipped, need view-path resolver)\n", n)
+	}
 	fmt.Println()
 
 	return nil
@@ -99,14 +105,21 @@ func printMissing(usages []source.KeyUsage) {
 		return
 	}
 	fmt.Printf("=== Missing Keys (%d) — called in source but not in YAML ===\n\n", len(usages))
-	// Deduplicate by key.
-	seen := map[string]bool{}
 	for _, u := range usages {
-		if seen[u.Key] {
-			continue
-		}
-		seen[u.Key] = true
 		fmt.Printf("  %-55s  %s:%d\n", u.Key, u.File, u.Line)
 	}
 	fmt.Println()
+}
+
+// dedupMissingKeys returns one KeyUsage per unique key (first occurrence wins).
+func dedupMissingKeys(usages []source.KeyUsage) []source.KeyUsage {
+	seen := map[string]bool{}
+	out := usages[:0:0]
+	for _, u := range usages {
+		if !seen[u.Key] {
+			seen[u.Key] = true
+			out = append(out, u)
+		}
+	}
+	return out
 }

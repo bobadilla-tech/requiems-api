@@ -34,6 +34,10 @@ func Scan(root, lang string) ([]Entry, error) {
 	fileCh := make(chan string, 64)
 	resultCh := make(chan result, 64)
 
+	// walkErrCh captures the first directory-walk failure (permission denied, etc.)
+	// so Scan can surface it rather than silently returning partial results.
+	walkErrCh := make(chan error, 1)
+
 	// Producer: find YAML files.
 	// When a lang-specific subdir exists (e.g. config/locales/en/), walk that
 	// directory fully. Also walk config/locales/ root level but skip any
@@ -43,9 +47,9 @@ func Scan(root, lang string) ([]Entry, error) {
 		seen := map[string]bool{}
 		for i, dir := range dirs {
 			isRoot := i > 0 // dirs[0] is always the lang-specific subdir if it exists
-			_ = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+			if err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 				if err != nil {
-					return nil
+					return err // propagate so WalkDir surfaces it
 				}
 				// For the root locales dir, skip subdirectories (lang-subdirs
 				// are already scanned separately).
@@ -60,7 +64,12 @@ func Scan(root, lang string) ([]Entry, error) {
 					fileCh <- path
 				}
 				return nil
-			})
+			}); err != nil {
+				select {
+				case walkErrCh <- fmt.Errorf("walk %s: %w", dir, err):
+				default:
+				}
+			}
 		}
 	}()
 
@@ -94,10 +103,18 @@ func Scan(root, lang string) ([]Entry, error) {
 		}
 	}
 
+	// By the time resultCh is drained, the walk goroutine is guaranteed to have
+	// finished (fileCh close happens after all WalkDir calls complete).
+	var walkErr error
+	select {
+	case walkErr = <-walkErrCh:
+	default:
+	}
+
 	if len(errs) > 0 {
 		return all, errs[0]
 	}
-	return all, nil
+	return all, walkErr
 }
 
 // candidateDirs returns possible locale directories for a language.

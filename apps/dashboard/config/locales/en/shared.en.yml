@@ -1,5 +1,7 @@
 en:
   shared:
+    app_name: "Requiems API"
+    faq_heading: "Frequently Asked Questions"
     nav:
       docs: "Docs"
       docs_apis_desc: "Browse every endpoint"

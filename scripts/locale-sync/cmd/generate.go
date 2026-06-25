@@ -56,6 +56,9 @@ func init() {
 }
 
 func runGenerate(cmd *cobra.Command, _ []string) error {
+	if minDups < 2 {
+		return fmt.Errorf("--min-dups must be at least 2 (got %d); singleton entries are not duplicates", minDups)
+	}
 	if fixSource {
 		scanSource = true
 	}

@@ -23,14 +23,21 @@ type MergeCandidate struct {
 // ready to write into the shared YAML.
 func BuildMergeCandidates(dups []KeyDupGroup, lang string) []MergeCandidate {
 	var out []MergeCandidate
+	seen := make(map[string]bool)
 	for _, g := range dups {
 		if !g.SameValue {
 			continue // skip groups with different wordings — needs human review
 		}
+		suggested := SuggestSharedKey(lang, g.KeyName)
+		if seen[suggested] {
+			fmt.Fprintf(os.Stderr, "locale-sync: SuggestedKey collision on %q (from %q) — skipping\n", suggested, g.KeyName)
+			continue
+		}
+		seen[suggested] = true
 		out = append(out, MergeCandidate{
 			KeyName:      g.KeyName,
 			Value:        g.Entries[0].Value,
-			SuggestedKey: SuggestSharedKey(lang, g.KeyName),
+			SuggestedKey: suggested,
 			Sources:      g.Entries,
 		})
 	}
@@ -199,10 +206,10 @@ func setMappingPath(node *yaml.Node, path []string, value string) bool {
 			}
 			child := node.Content[i+1]
 			if child.Kind != yaml.MappingNode {
-				// Turn scalar into mapping
-				child.Kind = yaml.MappingNode
-				child.Value = ""
-				child.Content = nil
+				// Existing key is a scalar but the path requires a nested mapping.
+				// Mutating it would destroy the existing translation — skip instead.
+				fmt.Fprintf(os.Stderr, "locale-sync: key conflict at %q: scalar exists where mapping needed; skipping\n", strings.Join(path, "."))
+				return false
 			}
 			return setMappingPath(child, path[1:], value)
 		}

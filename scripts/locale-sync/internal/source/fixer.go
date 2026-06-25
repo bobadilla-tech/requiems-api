@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -65,6 +66,11 @@ func BuildFixPlan(
 		byFile[h.File] = append(byFile[h.File], h)
 	}
 
+	// fixIndex maps "relFile:line" → index in plan.Fixes for single-line fixes,
+	// so multiple replacements on the same source line are composed into one Fix
+	// rather than creating separate entries that overwrite each other.
+	fixIndex := make(map[string]int)
+
 	for relFile, items := range byFile {
 		absPath := filepath.Join(root, relFile)
 		lines, err := readLines(absPath)
@@ -88,16 +94,34 @@ func BuildFixPlan(
 				tKey = stripLangPrefixStr(existing, lang)
 			} else {
 				// Generate a new key and schedule a YAML addition.
-				tKey = generateKey(lang, relFile, h)
-				fullKey := lang + "." + tKey
-				if _, already := plan.YAMLAdds[fullKey]; !already {
-					plan.YAMLAdds[fullKey] = h.Text
-					newInYAML = true
+				// If the generated key already maps to a different value (two distinct
+				// strings produce the same slug), append a numeric suffix until free.
+				baseTKey := generateKey(lang, relFile, h)
+				tKey = baseTKey
+				for i := 2; ; i++ {
+					fullKey := lang + "." + tKey
+					existing, already := plan.YAMLAdds[fullKey]
+					if !already {
+						plan.YAMLAdds[fullKey] = h.Text
+						newInYAML = true
+						break
+					}
+					if existing == h.Text {
+						break // same value already queued — reuse the key
+					}
+					if i > 9 {
+						break // give up after 9 suffixes (practically impossible)
+					}
+					tKey = baseTKey + "_" + strconv.Itoa(i)
 				}
 			}
 
+			if tKey == "" {
+				continue
+			}
+
 			// Build the patched line.
-			var patched string
+			var patched, replacement string
 			if h.Category == "multiline_tag_content" && h.EndLine > h.Line {
 				// Collapse the multi-line block into one line:
 				// <p class="..."><%= t('key') %></p>
@@ -106,11 +130,28 @@ func BuildFixPlan(
 				openTag := strings.TrimSpace(line)
 				patched = leadWS + openTag + "<%= t('" + tKey + "') %></" + tagName + ">"
 			} else {
-				replacement := applyTemplate(h.Category, tKey)
+				replacement = applyTemplate(h.Category, tKey)
 				patched = replaceInLine(line, h.Text, h.Category, replacement)
 				if patched == line {
 					continue
 				}
+			}
+
+			// Compose multiple single-line replacements into one Fix rather than
+			// appending a new Fix that would overwrite the previous one in ApplyFixes.
+			if h.Category != "multiline_tag_content" {
+				lineKey := relFile + ":" + strconv.Itoa(h.Line)
+				if existingIdx, ok := fixIndex[lineKey]; ok {
+					composed := replaceInLine(plan.Fixes[existingIdx].Patched, h.Text, h.Category, replacement)
+					if composed != plan.Fixes[existingIdx].Patched {
+						plan.Fixes[existingIdx].Patched = composed
+						if newInYAML {
+							plan.Fixes[existingIdx].NewInYAML = true
+						}
+					}
+					continue
+				}
+				fixIndex[lineKey] = len(plan.Fixes)
 			}
 
 			plan.Fixes = append(plan.Fixes, Fix{
@@ -275,8 +316,9 @@ func replaceInLine(line, text, category, replacement string) string {
 		return strings.Replace(line, old, replacement, 1)
 	case "erb_output":
 		// Replace <%= "text" %> with <%= t('key') %>
+		// Use string concat to avoid %> being misread as a format verb.
 		for _, q := range []string{`"`, `'`} {
-			old := fmt.Sprintf(`<%= %s%s%s %>`, q, text, q)
+			old := "<%= " + q + text + q + " %>"
 			if strings.Contains(line, old) {
 				return strings.Replace(line, old, replacement, 1)
 			}

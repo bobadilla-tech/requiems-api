@@ -5,5 +5,6 @@ en:
       create_free_account: "Create free account"
       4_times_more_requests: "4&times; more requests"
     endpoint_documentation:
+      examples_title: "Code Examples"
       error_responses: "Error Responses"
       response_fields: "Response Fields"

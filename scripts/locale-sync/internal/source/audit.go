@@ -26,6 +26,9 @@ type AuditResult struct {
 	OrphanedKeys []string
 	// MissingKeys: called in source but not defined in YAML.
 	MissingKeys []KeyUsage
+	// RelativeKeys: t('.key') calls that need view-path context to resolve;
+	// excluded from MissingKeys to avoid false positives.
+	RelativeKeys []KeyUsage
 }
 
 // tCallRe captures the key argument from t(), I18n.t(), and translate() calls.
@@ -41,7 +44,6 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 	}
 
 	fileCh := make(chan string, 128)
-	usageCh := make(chan KeyUsage, 512)
 
 	go func() {
 		defer close(fileCh)
@@ -56,6 +58,12 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 		})
 	}()
 
+	type chanMsg struct {
+		abs []KeyUsage
+		rel []KeyUsage
+	}
+	msgCh := make(chan chanMsg, 512)
+
 	const workers = 8
 	var wg sync.WaitGroup
 	for range workers {
@@ -63,22 +71,24 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 		go func() {
 			defer wg.Done()
 			for path := range fileCh {
-				for _, u := range extractTCalls(path, root) {
-					usageCh <- u
-				}
+				r := extractTCalls(path, root)
+				msgCh <- chanMsg{abs: r.absolute, rel: r.relative}
 			}
 		}()
 	}
 	go func() {
 		wg.Wait()
-		close(usageCh)
+		close(msgCh)
 	}()
 
-	var allUsages []KeyUsage
+	var allUsages, allRelative []KeyUsage
 	usedSet := map[string]bool{}
-	for u := range usageCh {
-		allUsages = append(allUsages, u)
-		usedSet[u.Key] = true
+	for msg := range msgCh {
+		allUsages = append(allUsages, msg.abs...)
+		allRelative = append(allRelative, msg.rel...)
+		for _, u := range msg.abs {
+			usedSet[u.Key] = true
+		}
 	}
 
 	// Orphaned: defined but never called.
@@ -105,18 +115,24 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 		UsedKeys:     allUsages,
 		OrphanedKeys: orphaned,
 		MissingKeys:  missing,
+		RelativeKeys: allRelative,
 	}, nil
 }
 
-func extractTCalls(path, root string) []KeyUsage {
+type tCallResult struct {
+	absolute []KeyUsage
+	relative []KeyUsage
+}
+
+func extractTCalls(path, root string) tCallResult {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil
+		return tCallResult{}
 	}
 	defer f.Close()
 
 	short, _ := filepath.Rel(root, path)
-	var out []KeyUsage
+	var res tCallResult
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(make([]byte, 1<<20), 1<<20)
 	lineNum := 0
@@ -128,15 +144,23 @@ func extractTCalls(path, root string) []KeyUsage {
 			continue
 		}
 		for _, m := range tCallRe.FindAllStringSubmatch(line, -1) {
-			key := strings.Trim(m[1], "\"'")
-			key = strings.TrimPrefix(key, ".")
-			if key == "" || strings.ContainsAny(key, " \t") {
+			raw := strings.Trim(m[1], "\"'")
+			if strings.HasPrefix(raw, ".") {
+				// Relative key (t('.title')) — needs view-path context to resolve.
+				// Track separately to avoid false-positive missing-key reports.
+				key := strings.TrimPrefix(raw, ".")
+				if key != "" && !strings.ContainsAny(key, " \t") {
+					res.relative = append(res.relative, KeyUsage{Key: key, File: short, Line: lineNum})
+				}
 				continue
 			}
-			out = append(out, KeyUsage{Key: key, File: short, Line: lineNum})
+			if raw == "" || strings.ContainsAny(raw, " \t") {
+				continue
+			}
+			res.absolute = append(res.absolute, KeyUsage{Key: raw, File: short, Line: lineNum})
 		}
 	}
-	return out
+	return res
 }
 
 func stripLangPrefix(key, lang string) string {

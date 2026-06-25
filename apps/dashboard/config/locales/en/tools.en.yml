@@ -40,6 +40,8 @@ en:
       cta:
         sign_up_for_free_and_start_fetching: "Sign up for free and start fetching inspirational quotes in minutes. No credit card required."
         ready_to_add_quotes_to_your_app: "Ready to add quotes to your app?"
+      faq:
+        heading: "Frequently Asked Questions"
       show:
         random_quote_generator_free_quotes_api: "Random Quote Generator — Free Quotes API Tool"
     unit_conversion:
@@ -111,6 +113,8 @@ en:
       api_combinations:
         sentiment_works_best_as_part_of_a: "Sentiment works best as part of a pipeline. Here are three natural combinations."
         pair_it_with_other_apis: "Pair it with other APIs"
+      faq:
+        heading: "Frequently Asked Questions"
     domain_checker:
       demo:
         error_empty: "Please enter a domain name."
@@ -319,9 +323,13 @@ en:
       show:
         free_email_validator_syntax_mx_record: "Free Email Validator — Syntax, MX Record & Disposable Check | Requiems API"
       use_cases:
+        heading: "Real problems, real users."
         email_validator_fits_wherever_contact: "Email Validator fits wherever contact data quality matters."
       api_combinations:
+        heading: "Use together with complementary APIs."
         email_validator_works_even_better_when: "Email Validator works even better when paired with other Requiems APIs."
+      faq:
+        heading: "Frequently asked questions"
     phone_validator:
       demo:
         error_empty: "Enter a phone number to validate."
