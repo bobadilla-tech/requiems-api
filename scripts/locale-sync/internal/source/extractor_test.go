@@ -17,7 +17,7 @@ func TestLooksUserFacing(t *testing.T) {
 		{"exactly 4 chars", "Help", false}, // no space → false
 		{"normal sentence", "Submit your form", true},
 		{"no space single word", "Dashboard", false},
-		{"has space passes", "API Key", true},
+		{"has space passes", "Submit form now", true},
 		{"too long 121 chars", strings.Repeat("a", 121), false},
 		{"ruby interpolation", "Hello #{user.name}", false},
 		{"contains class=", `class="foo bar"`, false},

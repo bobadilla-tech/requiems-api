@@ -179,7 +179,6 @@ func extractTCalls(path, root string) tCallResult {
 func resolveRelativeKey(shortPath, leaf string) string {
 	p := filepath.ToSlash(shortPath)
 	p = strings.TrimPrefix(p, "app/views/")
-	p = strings.TrimPrefix(p, "partials/")
 	for _, ext := range []string{".html.erb", ".html.haml", ".erb", ".haml", ".rb"} {
 		if strings.HasSuffix(p, ext) {
 			p = p[:len(p)-len(ext)]
