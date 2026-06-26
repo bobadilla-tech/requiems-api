@@ -138,13 +138,25 @@ func runTranslate(_ *cobra.Command, args []string) error {
 	if translateCacheOnly && translateNoCache {
 		return fmt.Errorf("--cache-only and --no-cache are mutually exclusive")
 	}
+	if err := validateLangCode(translateFrom); err != nil {
+		return fmt.Errorf("--from: %w", err)
+	}
+	for _, lang := range translateTo {
+		if lang == "all" {
+			continue
+		}
+		if err := validateLangCode(lang); err != nil {
+			return fmt.Errorf("--to: %w", err)
+		}
+	}
 
 	// Build protector (custom dictionary + standard placeholders).
+	// PluralSep is always protected so it survives the translation API unchanged.
 	protectedWords, err := loadProtectedWords(translateProtectWords, translateProtectFile)
 	if err != nil {
 		return fmt.Errorf("load protected words: %w", err)
 	}
-	protector := translate.NewProtector(protectedWords)
+	protector := translate.NewProtector(append(protectedWords, translate.PluralSep))
 
 	if len(protectedWords) > 0 {
 		fmt.Printf("Protected words: %s\n\n", strings.Join(protectedWords, ", "))
@@ -295,8 +307,64 @@ func runTranslate(_ *cobra.Command, args []string) error {
 			needsAPI = append(needsAPI, m)
 		}
 
-		// API translation in batches.
+		// Group plural siblings (one/other/zero...) so they are translated together
+		// for grammatical coherence. Ungrouped entries fall through to normal batching.
 		langChars := 0
+		singles, pluralGroups := translate.GroupPlurals(needsAPI)
+		if len(pluralGroups) > 0 && !quotaExhausted && client != nil {
+			ctx := context.Background()
+			combTexts := make([]string, len(pluralGroups))
+			combOrders := make([][]string, len(pluralGroups))
+			pluralProtected := make([]translate.Protected, len(pluralGroups))
+			batchChars := 0
+			for i, g := range pluralGroups {
+				combined, order := translate.CombinePluralGroup(g)
+				combOrders[i] = order
+				p := protector.Protect(combined)
+				pluralProtected[i] = p
+				combTexts[i] = p.Text
+				batchChars += len([]rune(p.Text))
+			}
+			if totalCharsUsed+batchChars <= translateQuota {
+				results, err := client.Translate(ctx, combTexts, lm.lang, translateFrom)
+				if err != nil {
+					return fmt.Errorf("API error plural groups (lang=%s): %w", lm.lang, err)
+				}
+				totalCharsUsed += batchChars
+				langChars += batchChars
+				for i, g := range pluralGroups {
+					restored := pluralProtected[i].Restore(results[i])
+					split := translate.SplitPluralTranslation(restored, combOrders[i])
+					for j, entry := range g.Entries {
+						form := combOrders[i][j]
+						text := split[form]
+						translated = append(translated, translate.TranslatedEntry{
+							MissingEntry:   entry,
+							TranslatedText: text,
+							FromCache:      false,
+						})
+						if !translateNoCache && cache != nil {
+							cache.Set(translateFrom, entry.Value, lm.lang, text)
+						}
+					}
+				}
+				if !translateNoCache && cache != nil {
+					if err := cache.Save(); err != nil {
+						fmt.Fprintf(os.Stderr, "  Warning: cache save failed: %v\n", err)
+					}
+				}
+			} else {
+				// Quota would be exceeded — fall back to treating plural forms as singles.
+				singles = append(singles, flattenGroups(pluralGroups)...)
+				quotaExhausted = true
+				report.QuotaHit = true
+			}
+		} else {
+			singles = append(singles, flattenGroups(pluralGroups)...)
+		}
+		needsAPI = singles
+
+		// API translation in batches (singletons — plural groups handled above).
 		if !quotaExhausted && len(needsAPI) > 0 && client != nil {
 			ctx := context.Background()
 			for i := 0; i < len(needsAPI); i += translateBatchSize {
@@ -537,4 +605,12 @@ func truncate(s string, max int) string {
 		return s
 	}
 	return string(r[:max]) + "…"
+}
+
+func flattenGroups(groups []translate.PluralGroup) []translate.MissingEntry {
+	var out []translate.MissingEntry
+	for _, g := range groups {
+		out = append(out, g.Entries...)
+	}
+	return out
 }

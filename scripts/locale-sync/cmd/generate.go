@@ -10,15 +10,16 @@ import (
 )
 
 var (
-	languages   []string
-	placeholder string
-	dryRun      bool
-	overwrite   bool
-	noShared    bool
-	noSkeleton  bool
-	fixSource   bool
-	erbOnly     bool
-	safeOnly    bool
+	languages          []string
+	placeholder        string
+	dryRun             bool
+	overwrite          bool
+	noShared           bool
+	noSkeleton         bool
+	fixSource          bool
+	erbOnly            bool
+	safeOnly           bool
+	generateChangedFiles string
 )
 
 var generateCmd = &cobra.Command{
@@ -52,12 +53,23 @@ func init() {
 		"With --fix: only rewrite .erb/.haml/.slim files, skip Ruby .rb files")
 	generateCmd.Flags().BoolVar(&safeOnly, "safe-only", false,
 		"With --fix: only apply replacements that reuse an existing YAML key (no new keys generated)")
+	generateCmd.Flags().StringVar(&generateChangedFiles, "changed-files", "",
+		`Only scan the listed source files. Pass a file path or "-" to read from stdin.
+Useful in CI: git diff --name-only origin/main | locale-sync generate --source --changed-files -`)
 	rootCmd.AddCommand(generateCmd)
 }
 
 func runGenerate(cmd *cobra.Command, _ []string) error {
 	if minDups < 2 {
 		return fmt.Errorf("--min-dups must be at least 2 (got %d); singleton entries are not duplicates", minDups)
+	}
+	if err := validateLangCode(lang); err != nil {
+		return fmt.Errorf("--lang: %w", err)
+	}
+	for _, l := range languages {
+		if err := validateLangCode(l); err != nil {
+			return fmt.Errorf("--languages: %w", err)
+		}
 	}
 	if fixSource {
 		scanSource = true
@@ -143,7 +155,11 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 
 	// --- Source scan / fix ---
 	if scanSource || fixSource {
-		found, err := source.Extract(rootPath, nil)
+		cf, err := loadChangedFiles(generateChangedFiles)
+		if err != nil {
+			return fmt.Errorf("--changed-files: %w", err)
+		}
+		found, err := source.Extract(rootPath, cf)
 		if err != nil {
 			return fmt.Errorf("source scan: %w", err)
 		}

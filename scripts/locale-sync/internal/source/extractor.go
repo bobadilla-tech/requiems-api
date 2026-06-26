@@ -64,7 +64,7 @@ var technicalPhraseSkips = []string{
 	"Waiting for response",
 	// Code/playground UI — defined elsewhere or intentionally English
 	"Copy code",
-	"Copy URL",
+	// Note: "Copy URL" is NOT listed here — it is user-facing and should be localized.
 	"Copy response",
 	"Copy to clipboard",
 	"Copy as Markdown",
@@ -120,23 +120,32 @@ var attrPatterns = []struct {
 var tagContentRe = regexp.MustCompile(`>([A-Za-z\d][^<\n]{3,})<`)
 
 // Ruby display patterns.
+// allowLabel=true: use looksUserFacingLabel (no space required) — for UI label
+// contexts like link text, button text, form labels where single words are valid.
 var rubyPatterns = []struct {
-	re       *regexp.Regexp
-	category string
+	re         *regexp.Regexp
+	category   string
+	allowLabel bool
 }{
-	{regexp.MustCompile(`<%=\s*["']([^"'%]{4,})["']\s*%>`), "erb_output"},
-	{regexp.MustCompile(`flash(?:\.now)?\[:\w+\]\s*=\s*["']([^"']{4,})["']`), "ruby"},
-	{regexp.MustCompile(`errors\.add\(:\w+,\s*["']([^"']{4,})["']\)`), "ruby"},
-	{regexp.MustCompile(`render\s+plain:\s*["']([^"']{4,})["']`), "ruby"},
-	{regexp.MustCompile(`raise(?:\s+\w+,)?\s*["']([^"']{6,})["']`), "ruby"},
-	{regexp.MustCompile(`(?:notice|alert):\s*["']([^"']{4,})["']`), "ruby"},
+	{regexp.MustCompile(`<%=\s*["']([^"'%]{4,})["']\s*%>`), "erb_output", false},
+	{regexp.MustCompile(`flash(?:\.now)?\[:\w+\]\s*=\s*["']([^"']{4,})["']`), "ruby", false},
+	{regexp.MustCompile(`errors\.add\(:\w+,\s*["']([^"']{4,})["']\)`), "ruby", false},
+	{regexp.MustCompile(`render\s+plain:\s*["']([^"']{4,})["']`), "ruby", false},
+	{regexp.MustCompile(`raise(?:\s+\w+,)?\s*["']([^"']{6,})["']`), "ruby", false},
+	{regexp.MustCompile(`(?:notice|alert):\s*["']([^"']{4,})["']`), "ruby", false},
+	// validates :field, presence: { message: "..." } and length: { too_short: "..." } etc.
+	{regexp.MustCompile(`\b(?:message|too_short|too_long|wrong_length|not_a_number|not_an_integer|greater_than|less_than|other_than|odd|even):\s*["']([^"']{4,})["']`), "ruby", false},
+	// redirect_to ..., alert: / notice: — already covered by notice|alert above, but
 	// content_for :title only — :description holds long SEO copy.
 	// Bug fix: closing quote must be OUTSIDE the capture group.
-	{regexp.MustCompile(`content_for\s+:title,\s*["']([^"']{4,})["']`), "ruby"},
-	// ERB link/button text: link_to "text", …  |  button_to "text", …  |  f.submit "text"
-	{regexp.MustCompile(`\blink_to\s+["']([^"']{4,})["']\s*,`), "ruby"},
-	{regexp.MustCompile(`\bbutton_to\s+["']([^"']{4,})["']\s*,`), "ruby"},
-	{regexp.MustCompile(`\bf\.submit\s+["']([^"']{4,})["']`), "ruby"},
+	{regexp.MustCompile(`content_for\s+:title,\s*["']([^"']{4,})["']`), "ruby", false},
+	// ERB link/button text: link_to "text", … | button_to "text", … | f.submit "text"
+	// Single words like "Cancel", "Back", "Clear" are valid user-facing labels.
+	{regexp.MustCompile(`\blink_to\s+["']([^"']{2,})["']\s*,`), "ruby", true},
+	{regexp.MustCompile(`\bbutton_to\s+["']([^"']{2,})["']\s*,`), "ruby", true},
+	{regexp.MustCompile(`\bf\.submit\s+["']([^"']{2,})["']`), "ruby", true},
+	// Ruby keyword arg placeholder: (inside form helpers — different from HTML placeholder=)
+	{regexp.MustCompile(`\bplaceholder:\s*["']([^"']{4,})["']`), "ruby", false},
 }
 
 type scanResult struct {
@@ -240,6 +249,7 @@ func scanFile(path, root string) ([]HardcodedString, error) {
 			results = append(results, scanErbTernary(line, trimmed, short, lineNum)...)
 			results = append(results, scanLabelTags(line, trimmed, short, lineNum)...)
 			results = append(results, scanHelperKeywordArgs(line, trimmed, short, lineNum)...)
+			results = append(results, scanOptionsArray(line, trimmed, short, lineNum)...)
 		}
 
 		// Skip lines already calling t() / I18n.t — applies to both Ruby and ERB.
@@ -253,8 +263,14 @@ func scanFile(path, root string) ([]HardcodedString, error) {
 				continue
 			}
 			text := strings.TrimSpace(matches[1])
-			if !looksUserFacing(text) {
-				continue
+			if p.allowLabel {
+				if !looksUserFacingLabel(text) {
+					continue
+				}
+			} else {
+				if !looksUserFacing(text) {
+					continue
+				}
 			}
 			results = append(results, HardcodedString{
 				File:     short,
@@ -330,7 +346,12 @@ func scanTagContent(line, trimmed, short string, lineNum int) []HardcodedString 
 	var out []HardcodedString
 	for _, m := range tagContentRe.FindAllStringSubmatch(stripped, -1) {
 		text := strings.TrimSpace(m[1])
-		if !looksUserFacing(text) || looksLikeCode(text) {
+		if looksLikeCode(text) {
+			continue
+		}
+		// looksUserFacing requires a space. Fall back to looksUserFacingLabel for
+		// single-word capitalized status labels (e.g. "Pending", "Active", "Cancelled").
+		if !looksUserFacing(text) && !looksUserFacingLabel(text) {
 			continue
 		}
 		out = append(out, HardcodedString{
@@ -440,6 +461,38 @@ func looksUserFacing(s string) bool {
 	}
 	r := []rune(s)
 	return unicode.IsLetter(r[0]) || unicode.IsDigit(r[0])
+}
+
+// looksUserFacingLabel is like looksUserFacing but permits single-word strings.
+// Use for button/link text, form labels, and status labels where one word is valid UI copy.
+func looksUserFacingLabel(s string) bool {
+	if len(s) < 2 || len(s) > 60 {
+		return false
+	}
+	if strings.Contains(s, "#{") {
+		return false
+	}
+	if brandNames[s] {
+		return false
+	}
+	for _, phrase := range technicalPhraseSkips {
+		if strings.EqualFold(s, phrase) || strings.HasPrefix(s, phrase) {
+			return false
+		}
+	}
+	lower := strings.ToLower(s)
+	for _, skip := range []string{
+		".css", ".js", ".rb", "http://", "https://",
+		"<%", "%>", "class=", "data-", "style=",
+		"application/json", "bearer ", "x-api-key",
+		"def ", "rescue ",
+	} {
+		if strings.Contains(lower, skip) {
+			return false
+		}
+	}
+	r := []rune(s)
+	return unicode.IsLetter(r[0])
 }
 
 // looksLikeCode catches things like CSS class lists and camelCase identifiers.
@@ -570,11 +623,13 @@ func scanErbTernary(line, trimmed, short string, lineNum int) []HardcodedString 
 	return out
 }
 
-// labelTagRe captures the label text argument in label_tag "field", "Label" calls.
-var labelTagRe = regexp.MustCompile(`\blabel_tag\s+["'][^"']*["'],\s*["']([A-Za-z][^"']{1,})["']`)
+// labelTagRe captures the label text argument in label_tag and f.label calls:
+//   label_tag "field", "Label text"
+//   f.label :field, "Label text"
+var labelTagRe = regexp.MustCompile(`(?:\blabel_tag\s+["'][^"']*["'],\s*["']([A-Za-z][^"']{1,})["']|\bf\.label\s+:\w+,\s*["']([A-Za-z][^"']{1,})["'])`)
 
-// scanLabelTags detects hardcoded label text in label_tag helper calls.
-// Uses a relaxed check (no space required) since form labels are often single words.
+// scanLabelTags detects hardcoded label text in label_tag and f.label calls.
+// Uses looksUserFacingLabel (no space required) since form labels are often single words.
 func scanLabelTags(line, trimmed, short string, lineNum int) []HardcodedString {
 	if i18nCallRe.MatchString(line) {
 		return nil
@@ -583,8 +638,12 @@ func scanLabelTags(line, trimmed, short string, lineNum int) []HardcodedString {
 	if len(m) < 2 {
 		return nil
 	}
+	// m[1] = label_tag match, m[2] = f.label match
 	text := strings.TrimSpace(m[1])
-	if len(text) < 2 || looksLikeCode(text) {
+	if text == "" {
+		text = strings.TrimSpace(m[2])
+	}
+	if !looksUserFacingLabel(text) || looksLikeCode(text) {
 		return nil
 	}
 	return []HardcodedString{{
@@ -596,9 +655,9 @@ func scanLabelTags(line, trimmed, short string, lineNum int) []HardcodedString {
 	}}
 }
 
-// helperKeywordArgRe captures string values for text: and submit_tag calls.
-// Catches: render "partial", text: "Convert"  |  submit_tag "Get Started"
-var helperKeywordArgRe = regexp.MustCompile(`(?:\btext:\s*["']([A-Za-z][^"']{1,})["']|\bsubmit_tag\s+["']([^"']{4,})["'])`)
+// helperKeywordArgRe captures string values for text:, submit_tag, and disable_with: calls.
+// Catches: text: "Convert"  |  submit_tag "Get Started"  |  disable_with: "Sending..."
+var helperKeywordArgRe = regexp.MustCompile(`(?:\btext:\s*["']([A-Za-z][^"']{1,})["']|\bsubmit_tag\s+["']([^"']{4,})["']|\bdisable_with:\s*["']([A-Za-z][^"']{1,})["'])`)
 
 // scanHelperKeywordArgs detects hardcoded text in helper keyword args.
 // These bypass looksUserFacing's space check since button labels can be one word.
@@ -610,12 +669,15 @@ func scanHelperKeywordArgs(line, trimmed, short string, lineNum int) []Hardcoded
 	if len(m) < 2 {
 		return nil
 	}
-	// m[1] = text: value, m[2] = submit_tag value
+	// m[1] = text: value, m[2] = submit_tag value, m[3] = disable_with: value
 	text := strings.TrimSpace(m[1])
 	if text == "" {
 		text = strings.TrimSpace(m[2])
 	}
-	if len(text) < 2 || looksLikeCode(text) {
+	if text == "" {
+		text = strings.TrimSpace(m[3])
+	}
+	if !looksUserFacingLabel(text) || looksLikeCode(text) {
 		return nil
 	}
 	return []HardcodedString{{
@@ -625,6 +687,34 @@ func scanHelperKeywordArgs(line, trimmed, short string, lineNum int) []Hardcoded
 		Context:  trimmed,
 		Category: "ruby",
 	}}
+}
+
+// optionsArrayRe matches string labels in 2-element option arrays:
+//   ["Last 7 Days", "7"]   ["All", nil]   ["Active", "true"]
+// Used in options_for_select([...]) and ERB .each loops over option arrays.
+var optionsArrayRe = regexp.MustCompile(`\["([A-Za-z][^"]{1,60}?)",\s*(?:"[^"]*"|nil|\d+|false|true)\]`)
+
+// scanOptionsArray detects hardcoded string labels in options arrays.
+// Each ["Label", value] pair produces one finding for the label string.
+func scanOptionsArray(line, trimmed, short string, lineNum int) []HardcodedString {
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	var out []HardcodedString
+	for _, m := range optionsArrayRe.FindAllStringSubmatch(line, -1) {
+		text := strings.TrimSpace(m[1])
+		if !looksUserFacingLabel(text) || looksLikeCode(text) {
+			continue
+		}
+		out = append(out, HardcodedString{
+			File:     short,
+			Line:     lineNum,
+			Text:     text,
+			Context:  trimmed,
+			Category: "ruby",
+		})
+	}
+	return out
 }
 
 // blockTagOpenRe matches a block-level opening tag that has NO inline content

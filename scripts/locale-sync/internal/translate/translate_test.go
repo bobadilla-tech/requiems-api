@@ -289,6 +289,95 @@ func TestLoadCache_ValidJSON(t *testing.T) {
 	}
 }
 
+// ── GroupPlurals / CombinePluralGroup / SplitPluralTranslation ───────────────
+
+func makeMissing(targetKey, value string) MissingEntry {
+	return MissingEntry{
+		Entry:     locale.Entry{Value: value},
+		TargetKey: targetKey,
+	}
+}
+
+func TestGroupPlurals_PairDetected(t *testing.T) {
+	missing := []MissingEntry{
+		makeMissing("es.items.one", "1 item"),
+		makeMissing("es.items.other", "%{count} items"),
+		makeMissing("es.title", "Title"),
+	}
+	singles, groups := GroupPlurals(missing)
+	if len(groups) != 1 {
+		t.Fatalf("expected 1 plural group, got %d", len(groups))
+	}
+	if groups[0].Parent != "es.items" {
+		t.Errorf("group Parent = %q, want %q", groups[0].Parent, "es.items")
+	}
+	if len(singles) != 1 || singles[0].TargetKey != "es.title" {
+		t.Errorf("expected 1 singleton 'es.title', got %v", singles)
+	}
+}
+
+func TestGroupPlurals_LoneFormIsNotGrouped(t *testing.T) {
+	// Only one plural form missing → no sibling → falls to singles.
+	missing := []MissingEntry{
+		makeMissing("es.items.one", "1 item"),
+		makeMissing("es.title", "Title"),
+	}
+	singles, groups := GroupPlurals(missing)
+	if len(groups) != 0 {
+		t.Errorf("lone plural form should not form a group, got %d groups", len(groups))
+	}
+	if len(singles) != 2 {
+		t.Errorf("expected 2 singles, got %d: %v", len(singles), singles)
+	}
+}
+
+func TestGroupPlurals_NoPlurals(t *testing.T) {
+	missing := []MissingEntry{
+		makeMissing("es.foo", "Foo"),
+		makeMissing("es.bar", "Bar"),
+	}
+	singles, groups := GroupPlurals(missing)
+	if len(groups) != 0 {
+		t.Errorf("expected 0 groups, got %d", len(groups))
+	}
+	if len(singles) != 2 {
+		t.Errorf("expected 2 singles, got %d", len(singles))
+	}
+}
+
+func TestCombineAndSplitPluralGroup_RoundTrip(t *testing.T) {
+	g := PluralGroup{
+		Parent: "es.items",
+		Entries: []MissingEntry{
+			makeMissing("es.items.one", "1 item"),
+			makeMissing("es.items.other", "%{count} items"),
+		},
+	}
+	combined, order := CombinePluralGroup(g)
+	if !contains(combined, PluralSep) {
+		t.Errorf("combined string missing PluralSep: %q", combined)
+	}
+	split := SplitPluralTranslation(combined, order)
+	if split["one"] != "1 item" {
+		t.Errorf("split[one] = %q, want %q", split["one"], "1 item")
+	}
+	if split["other"] != "%{count} items" {
+		t.Errorf("split[other] = %q, want %q", split["other"], "%{count} items")
+	}
+}
+
+func TestSplitPluralTranslation_MissingSepFallback(t *testing.T) {
+	// If translation API strips the separator, all forms fall back to the full string.
+	order := []string{"one", "other"}
+	split := SplitPluralTranslation("translated value", order)
+	if split["one"] != "translated value" {
+		t.Errorf("fallback[one] = %q", split["one"])
+	}
+	if split["other"] != "translated value" {
+		t.Errorf("fallback[other] = %q", split["other"])
+	}
+}
+
 // ── CharCount ─────────────────────────────────────────────────────────────────
 
 func TestCharCount(t *testing.T) {

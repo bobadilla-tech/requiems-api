@@ -175,5 +175,7 @@ en:
       environment: "Environment"
       joined: "Joined"
       reported: "Reported"
+      all: "All"
+      active: "Active"
     errors:
       no_data: "No data returned."

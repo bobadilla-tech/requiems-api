@@ -324,6 +324,58 @@ func MigrationPlan(candidates []MergeCandidate) map[string]string {
 	return plan
 }
 
+// DeleteKeys removes the given full dot-notation keys from filePath and writes
+// the file back. Keys that do not exist in the file are silently skipped.
+// Returns (changed, error): changed is true when at least one key was deleted.
+func DeleteKeys(filePath string, keys []string) (bool, error) {
+	doc, err := readOrEmptyDoc(filePath)
+	if err != nil {
+		return false, err
+	}
+	changed := false
+	for _, key := range keys {
+		parts := strings.Split(key, ".")
+		if deleteYAMLPath(doc, parts) {
+			changed = true
+		}
+	}
+	if !changed {
+		return false, nil
+	}
+	data, err := marshalDoc(doc)
+	if err != nil {
+		return false, err
+	}
+	return true, os.WriteFile(filePath, data, 0o644)
+}
+
+// deleteYAMLPath removes the node at the given path from the document.
+// Returns true if a node was removed.
+func deleteYAMLPath(doc *yaml.Node, path []string) bool {
+	if len(doc.Content) == 0 || len(path) == 0 {
+		return false
+	}
+	return deleteMappingPath(doc.Content[0], path)
+}
+
+func deleteMappingPath(node *yaml.Node, path []string) bool {
+	if node.Kind != yaml.MappingNode {
+		return false
+	}
+	key := path[0]
+	for i := 0; i+1 < len(node.Content); i += 2 {
+		if node.Content[i].Value == key {
+			if len(path) == 1 {
+				// Remove key+value pair.
+				node.Content = append(node.Content[:i], node.Content[i+2:]...)
+				return true
+			}
+			return deleteMappingPath(node.Content[i+1], path[1:])
+		}
+	}
+	return false
+}
+
 // SortedKeys returns map keys in deterministic order.
 func SortedKeys[V any](m map[string]V) []string {
 	keys := make([]string, 0, len(m))

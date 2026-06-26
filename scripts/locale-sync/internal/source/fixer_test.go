@@ -89,3 +89,139 @@ func onlyFix(t *testing.T, plan FixPlan) Fix {
 	}
 	return plan.Fixes[0]
 }
+
+// ── ApplyFixes ────────────────────────────────────────────────────────────────
+
+func TestApplyFixes_SingleLineReplacement(t *testing.T) {
+	file := "app/views/show.html.erb"
+	root := writeSourceFile(t, file, []string{`<h1>Hello World</h1>`})
+
+	plan := FixPlan{
+		YAMLAdds: map[string]string{},
+		Fixes: []Fix{
+			{
+				File:    file,
+				Line:    1,
+				Patched: `<h1><%= t('show.heading') %></h1>`,
+			},
+		},
+	}
+	written, err := ApplyFixes(plan, root)
+	if err != nil {
+		t.Fatalf("ApplyFixes: %v", err)
+	}
+	if len(written) != 1 || written[0] != file {
+		t.Errorf("written = %v, want [%s]", written, file)
+	}
+	content := readSourceFile(t, root, file)
+	if !strings.Contains(content, "t('show.heading')") {
+		t.Errorf("patched content not written:\n%s", content)
+	}
+	if strings.Contains(content, "Hello World") {
+		t.Errorf("original hardcoded text still present:\n%s", content)
+	}
+}
+
+func TestApplyFixes_TwoLinesInSameFile(t *testing.T) {
+	file := "app/views/index.html.erb"
+	root := writeSourceFile(t, file, []string{
+		"<h1>Title Text Here</h1>",
+		"<p>Body text goes here</p>",
+	})
+
+	plan := FixPlan{
+		YAMLAdds: map[string]string{},
+		Fixes: []Fix{
+			{File: file, Line: 1, Patched: "<h1><%= t('index.title') %></h1>"},
+			{File: file, Line: 2, Patched: "<p><%= t('index.body') %></p>"},
+		},
+	}
+	if _, err := ApplyFixes(plan, root); err != nil {
+		t.Fatalf("ApplyFixes: %v", err)
+	}
+	content := readSourceFile(t, root, file)
+	if !strings.Contains(content, "t('index.title')") {
+		t.Errorf("line 1 not patched:\n%s", content)
+	}
+	if !strings.Contains(content, "t('index.body')") {
+		t.Errorf("line 2 not patched:\n%s", content)
+	}
+}
+
+func TestApplyFixes_NonExistentFile_ReturnsError(t *testing.T) {
+	root := t.TempDir()
+	plan := FixPlan{
+		YAMLAdds: map[string]string{},
+		Fixes: []Fix{
+			{File: "app/views/missing.html.erb", Line: 1, Patched: "anything"},
+		},
+	}
+	_, err := ApplyFixes(plan, root)
+	if err == nil {
+		t.Error("expected error for non-existent file, got nil")
+	}
+}
+
+func TestApplyFixes_EmptyPlan_NoFilesWritten(t *testing.T) {
+	root := t.TempDir()
+	written, err := ApplyFixes(FixPlan{YAMLAdds: map[string]string{}}, root)
+	if err != nil {
+		t.Fatalf("ApplyFixes(empty): %v", err)
+	}
+	if len(written) != 0 {
+		t.Errorf("expected 0 written files, got %v", written)
+	}
+}
+
+func TestApplyFixes_OutOfBoundsLineSkipped(t *testing.T) {
+	file := "app/views/show.html.erb"
+	root := writeSourceFile(t, file, []string{"only one line"})
+
+	plan := FixPlan{
+		YAMLAdds: map[string]string{},
+		Fixes:    []Fix{{File: file, Line: 99, Patched: "should not appear"}},
+	}
+	if _, err := ApplyFixes(plan, root); err != nil {
+		t.Fatalf("ApplyFixes: %v", err)
+	}
+	content := readSourceFile(t, root, file)
+	if strings.Contains(content, "should not appear") {
+		t.Error("out-of-bounds fix incorrectly applied")
+	}
+}
+
+func TestApplyFixes_MultilineTagContent_InnerLinesBlank(t *testing.T) {
+	file := "app/views/show.html.erb"
+	root := writeSourceFile(t, file, []string{
+		"<p>",
+		"  Long text",
+		"  spanning lines",
+		"</p>",
+	})
+
+	plan := FixPlan{
+		YAMLAdds: map[string]string{},
+		Fixes: []Fix{
+			{File: file, Line: 1, EndLine: 4, Patched: "<p><%= t('show.body') %></p>"},
+		},
+	}
+	if _, err := ApplyFixes(plan, root); err != nil {
+		t.Fatalf("ApplyFixes: %v", err)
+	}
+	content := readSourceFile(t, root, file)
+	if !strings.Contains(content, "t('show.body')") {
+		t.Errorf("multiline fix not applied:\n%s", content)
+	}
+	if strings.Contains(content, "Long text") || strings.Contains(content, "spanning lines") {
+		t.Errorf("inner lines not blanked:\n%s", content)
+	}
+}
+
+func readSourceFile(t *testing.T, root, relPath string) string {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join(root, relPath))
+	if err != nil {
+		t.Fatalf("read fixture: %v", err)
+	}
+	return string(data)
+}

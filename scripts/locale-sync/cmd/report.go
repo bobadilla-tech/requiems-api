@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -11,9 +13,10 @@ import (
 )
 
 var (
-	reportFormat    string
-	reportErbOnly   bool
-	reportFailOnAny bool
+	reportFormat       string
+	reportErbOnly      bool
+	reportFailOnAny    bool
+	reportChangedFiles string
 )
 
 var reportCmd = &cobra.Command{
@@ -35,11 +38,18 @@ func init() {
 		"Only scan .erb/.haml/.slim files, skip .rb files")
 	reportCmd.Flags().BoolVar(&reportFailOnAny, "fail-on-found", false,
 		"Exit with code 1 if any hardcoded strings are found (useful in CI)")
+	reportCmd.Flags().StringVar(&reportChangedFiles, "changed-files", "",
+		`Only scan files listed here. Pass a file path or "-" to read newline-delimited paths from stdin.
+Useful in CI: git diff --name-only origin/main | locale-sync report --changed-files -`)
 	rootCmd.AddCommand(reportCmd)
 }
 
 func runReport(_ *cobra.Command, _ []string) error {
-	found, err := source.Extract(rootPath, nil)
+	cf, err := loadChangedFiles(reportChangedFiles)
+	if err != nil {
+		return fmt.Errorf("--changed-files: %w", err)
+	}
+	found, err := source.Extract(rootPath, cf)
 	if err != nil {
 		return fmt.Errorf("scan: %w", err)
 	}
@@ -64,6 +74,35 @@ func runReport(_ *cobra.Command, _ []string) error {
 	default:
 		return fmt.Errorf("unknown --format %q: want \"text\" or \"json\"", reportFormat)
 	}
+}
+
+// loadChangedFiles parses the --changed-files argument into a set of relative
+// paths. Pass "-" to read newline-delimited paths from stdin, a file path to
+// read from a file, or "" to return nil (= scan everything).
+func loadChangedFiles(arg string) (map[string]bool, error) {
+	if arg == "" {
+		return nil, nil
+	}
+	var r io.Reader
+	if arg == "-" {
+		r = os.Stdin
+	} else {
+		f, err := os.Open(arg)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+		r = f
+	}
+	set := map[string]bool{}
+	sc := bufio.NewScanner(r)
+	for sc.Scan() {
+		line := strings.TrimSpace(sc.Text())
+		if line != "" {
+			set[line] = true
+		}
+	}
+	return set, sc.Err()
 }
 
 func printReportText(found []source.HardcodedString) error {
