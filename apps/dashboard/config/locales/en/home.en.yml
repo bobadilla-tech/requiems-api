@@ -300,6 +300,9 @@ en:
         signed_in: "We'll send update notifications to your registered email: %{email}"
         sign_up_cta: "Sign up for an account"
       v0_1_0: "v0.1.0"
+      v0_2_0: "v0.2.0"
+      v0_0_1: "v0.0.1"
+      v0_0_2: "v0.0.2"
     glossary:
       title: "API Glossary - Requiems API"
       heading: "API Glossary"
@@ -572,6 +575,7 @@ en:
         heading: "Join Our Team"
         text: "We're always looking for talented engineers and builders who are passionate about creating developer-first products. Interested in joining us?"
         cta: "Get in touch"
+      leonardo: "Leonardo"
     status:
       title: "API Status - Requiems API"
       all_operational: "All Systems Operational"
@@ -673,6 +677,7 @@ en:
       contact:
         heading: "Contact"
         text: "Questions about these terms? Contact us at"
+      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     privacy:
       title: "Privacy Policy - Requiems API"
       heading: "Privacy Policy"
@@ -730,6 +735,7 @@ en:
       contact:
         heading: "Contact Us"
         text: "For privacy-related questions or to exercise your rights, contact us at:"
+      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     about:
       title: "About Us - Requiems API"
       heading: "About Requiems API"
@@ -762,6 +768,7 @@ en:
         intro: "Have questions or want to learn more?"
         get_in_touch: "Get in touch"
         or_email: "or email us at"
+      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"
@@ -904,6 +911,8 @@ en:
       bad_request: "Bad Request"
       roadmap: "Roadmap"
       live: "Live"
+      requests_month: "Requests/Month"
+      unauthorized: "Unauthorized"
     domain_checker:
       domain_checker_api_instant_domain: "Domain Checker API — Instant Domain Availability & WHOIS Lookup"
   sales_inquiries:

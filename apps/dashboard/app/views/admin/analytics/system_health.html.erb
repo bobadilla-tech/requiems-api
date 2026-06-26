@@ -16,10 +16,10 @@
         <%= f.select :time_range,
           options_for_select(
             [
-              ["Last Hour", "1h"],
-              ["Last 24 Hours", "24h"],
-              ["Last 7 Days", "7d"],
-              ["Last 30 Days", "30d"]
+              [t('admin.analytics.system_health.last_hour'), "1h"],
+              [t('admin.analytics.system_health.last_24_hours'), "24h"],
+              [t('admin.analytics.usage.last_7_days'), "7d"],
+              [t('admin.analytics.usage.last_30_days'), "30d"]
             ],
             @time_range
           ),

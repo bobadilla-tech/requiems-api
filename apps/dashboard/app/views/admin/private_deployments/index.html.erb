@@ -90,7 +90,7 @@
                 <%= render "partials/shared/badge", text: dr.status.capitalize, variant: badge_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to "View", admin_private_deployment_path(dr), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('admin.private_deployments.index.view'), admin_private_deployment_path(dr), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>

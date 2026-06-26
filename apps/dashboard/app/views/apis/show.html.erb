@@ -118,8 +118,8 @@
       <aside class="hidden lg:block lg:col-span-3">
         <div class="sticky top-8">
           <nav class="space-y-1" data-controller="scroll-spy">
-            <a href="#overview" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Overview</a>
-            <a href="#endpoints" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Endpoints</a>
+            <a href="#overview" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"><%= t('home.privacy.overview.heading') %></a>
+            <a href="#endpoints" class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"><%= t('apis.show.endpoints') %></a>
             <% @documentation["endpoints"]&.each_with_index do |endpoint, index| %>
               <a href="#endpoint-<%= index %>" class="block pl-6 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
                 <%= endpoint["method"] %> <%= endpoint["name"] %>
@@ -134,11 +134,11 @@
             <% perf = @documentation["performance"] %>
             <div class="mt-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
               <div class="mb-3">
-                <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Performance</span>
+                <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"><%= t('apis.show.performance') %></span>
               </div>
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 dark:text-gray-400">p50 <span class="text-gray-400 dark:text-gray-500">&mdash; median</span></span>
+                  <span class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.p50') %><span class="text-gray-400 dark:text-gray-500">&mdash; median</span></span>
                   <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p50_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
                 </div>
                 <div class="flex items-center justify-between">
@@ -146,7 +146,7 @@
                   <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p95_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 dark:text-gray-400">p99 <span class="text-gray-400 dark:text-gray-500">&mdash; tail</span></span>
+                  <span class="text-xs text-gray-500 dark:text-gray-400"><%= t('apis.show.p99') %><span class="text-gray-400 dark:text-gray-500">&mdash; tail</span></span>
                   <span class="text-sm font-semibold text-gray-800 dark:text-gray-200"><%= perf["p99_ms"] %> <span class="text-xs font-normal text-gray-400">ms</span></span>
                 </div>
               </div>
@@ -160,7 +160,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
           <!-- Overview Section -->
           <div id="overview" class="p-8 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Overview</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t('home.privacy.overview.heading') %></h2>
 
             <% if @documentation.dig("overview", "use_cases").present? %>
               <div class="mb-6">
@@ -180,7 +180,7 @@
 
             <% if @documentation.dig("overview", "features").present? %>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Features</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('home.changelog.v002.features.heading') %></h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <% @documentation.dig("overview", "features").each do |feature| %>
                     <div class="flex items-start">

@@ -46,7 +46,7 @@
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Company</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.private_deployments.index.company') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.company.presence || "—" %></p>
         </div>
         <div>
@@ -54,7 +54,7 @@
           <p class="text-sm text-gray-900 dark:text-gray-100 font-mono"><%= @user.id %></p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Joined</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.joined') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.created_at.strftime("%B %d, %Y") %></p>
         </div>
         <div>
@@ -86,13 +86,13 @@
   <!-- Subscription Card -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Subscription</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.users.show.subscription') %></h2>
     </div>
     <div class="p-6">
       <% if @user.subscription.present? %>
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Plan</label>
+            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('dashboard.billing.history.plan_label') %></label>
             <div class="flex items-center gap-2 flex-wrap">
               <%= render "partials/shared/badge",
                 text: h(@user.subscription.plan_name.titleize),
@@ -108,7 +108,7 @@
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.plan&.titleize || "—" %></p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Started</label>
+            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.started') %></label>
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.current_period_start&.strftime("%B %d, %Y") || "—" %></p>
           </div>
           <% if @user.subscription.cancel_at_period_end? %>
@@ -344,7 +344,7 @@
           <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200"><%= t('admin.users.show.admin_action_guidelines') %></h3>
           <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
             <ul class="list-disc pl-5 space-y-1">
-              <li><strong>Suspend</strong>: Temporary restriction, revokes all API keys</li>
+              <li><strong><%= t('admin.users.show.suspend') %></strong>: Temporary restriction, revokes all API keys</li>
               <li><strong>Ban</strong>: Permanent restriction, revokes keys and cancels subscription</li>
               <li><strong><%= t('admin.users.show.make_admin') %></strong>: Grants full system access, use with caution</li>
             </ul>

@@ -21,7 +21,7 @@
           </div>
 
           <div style="background-color: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
-            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Authentication</div>
+            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;"><%= t('home.faq.authentication.heading') %></div>
             <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;"><%= t('dashboard.quick_start.step_2.header_label') %></p>
             <p style="margin: 0; font-size: 13px; font-family: 'Courier New', monospace; color: #111827; background-color: #f3f4f6; padding: 10px 12px; border-radius: 4px; word-break: break-all;">
               X-Backend-Secret: <%= @deployment_request.tenant_secret %>
@@ -49,7 +49,7 @@
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
 
           <p style="font-size: 13px; color: #9ca3af; margin: 0;">
-            Keep your <code style="font-size: 12px; background-color: #f3f4f6; padding: 2px 5px; border-radius: 3px;">X-Backend-Secret</code> value private. It's the only authentication for your instance.
+            Keep your <code style="font-size: 12px; background-color: #f3f4f6; padding: 2px 5px; border-radius: 3px;"><%= t('private_deployment_mailer.deployment_ready.x_backend_secret') %></code> value private. It's the only authentication for your instance.
             Need help? Reply to this email or reach us at <%= mail_to "eliaz@bobadilla.tech", "eliaz@bobadilla.tech", style: "color: #6b7280;" %>.
           </p>
         </div>

@@ -92,6 +92,20 @@ var technicalPhraseSkips = []string{
 	"Customer Notes",
 	"Granted by",
 	"AI Tooling",
+	// HTTP header / request field names used in code examples
+	"Content-Type",
+	"requiems-api-key",
+	"YOUR_API_KEY",
+	// HTTP methods in code examples
+	"GET",
+	"POST",
+	"PUT",
+	"PATCH",
+	"DELETE",
+	// JSON/code literal values that appear in API response examples
+	"true",
+	"false",
+	"null",
 }
 
 // Patterns that already use i18n helpers — skip lines containing these.

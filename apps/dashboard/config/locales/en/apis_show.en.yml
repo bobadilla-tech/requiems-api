@@ -7,6 +7,9 @@ en:
       4_times_more_requests: "4× more requests"
       anonymous_limit_html: "The demo allows <strong>%{limit}</strong> for anonymous users."
       signup_benefit_html: "Sign up for free and get <strong>%{requests}</strong> — you can keep testing right away."
+      status: "Status:"
+      error: "Error"
+      item1: "item1"
     endpoint_documentation:
       examples_title: "Code Examples"
       error_responses: "Error Responses"

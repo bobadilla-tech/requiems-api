@@ -36,14 +36,14 @@
         <p class="text-sm text-gray-900 dark:text-gray-100 font-mono"><%= @api_key.key_prefix %></p>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Environment</label>
+        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.environment') %></label>
         <%= render "partials/shared/badge",
           text: h(@api_key.environment.to_s.titleize.presence || "Live"),
           variant: @api_key.environment == "live" ? "primary" : "default",
           size: "xs" %>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Created</label>
+        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('dashboard.api_keys.col_created') %></label>
         <p class="text-sm text-gray-900 dark:text-gray-100"><%= @api_key.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
       </div>
       <% if @api_key.revoked_at.present? %>
@@ -64,7 +64,7 @@
   <!-- User Info -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Owner</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.api_keys.show.owner') %></h2>
     </div>
     <div class="p-6 space-y-4">
       <div class="flex items-center">

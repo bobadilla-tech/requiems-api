@@ -20,3 +20,5 @@ en:
       company: "Company"
       cancel: "Cancel"
       sending: "Sending..."
+      acme_corporation: "Acme Corporation"
+      tell_us_about_your_api_needs_expected: "Tell us about your API needs, expected volume, specific requirements, or any questions you have..."

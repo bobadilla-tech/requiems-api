@@ -7,5 +7,9 @@ en:
       use_cases: "Use Cases"
       api_endpoints: "API Endpoints"
       copy_the_current_page_url_to_clipboard: "Copy the current page URL to clipboard"
+      performance: "Performance"
+      endpoints: "Endpoints"
+      p50: "p50"
+      p99: "p99"
     index:
       api_directory_requiems_api: "API Directory | Requiems API"

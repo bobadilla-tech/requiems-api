@@ -46,7 +46,7 @@
         <div class="mb-6">
           <%= label_tag "suggestion[api_name]", t('suggestion_mailer.new_suggestion.api_name'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
           <%= text_field_tag "suggestion[api_name]", params.dig(:suggestion, :api_name),
-            placeholder: "e.g., Weather Forecast API, Stock Market Data API",
+            placeholder: t('suggestions.new.e_g_weather_forecast_api_stock_market'),
             class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent",
             required: true,
             autofocus: true %>
@@ -57,7 +57,7 @@
         <div class="mb-6">
           <%= label_tag "suggestion[description]", t('apis_show.endpoint_documentation.column_description'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
           <%= text_area_tag "suggestion[description]", params.dig(:suggestion, :description),
-            placeholder: "Describe what this API should do...",
+            placeholder: t('suggestions.new.describe_what_this_api_should_do'),
             rows: 4,
             class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none",
             required: true %>
@@ -68,7 +68,7 @@
         <div class="mb-6">
           <%= label_tag "suggestion[use_case]", t('suggestion_mailer.new_suggestion.use_case'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
           <%= text_area_tag "suggestion[use_case]", params.dig(:suggestion, :use_case),
-            placeholder: "How would you use this API in your application?",
+            placeholder: t('suggestions.new.how_would_you_use_this_api_in_your'),
             rows: 4,
             class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none",
             required: true %>
@@ -96,10 +96,10 @@
 
         <!-- Actions -->
         <div class="flex items-center justify-between">
-          <%= link_to "Cancel", root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
+          <%= link_to t('shared.buttons.cancel'), root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
           <%= submit_tag t('suggestions.new.submit_suggestion'),
             class: "px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md",
-            data: { disable_with: "Submitting..." } %>
+            data: { disable_with: t('suggestions.new.submitting') } %>
         </div>
       <% end %>
     </div>

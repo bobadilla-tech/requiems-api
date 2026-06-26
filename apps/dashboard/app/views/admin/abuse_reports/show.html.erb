@@ -53,7 +53,7 @@
 
         <!-- Description -->
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Description</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2"><%= t('apis_show.endpoint_documentation.column_description') %></label>
           <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <p class="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap"><%= @abuse_report.description || "No description provided" %></p>
           </div>
@@ -107,14 +107,14 @@
           <p class="text-sm text-gray-900 dark:text-gray-100 font-mono"><%= @api_key.prefix %>••••••••</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Environment</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.environment') %></label>
           <%= render "partials/shared/badge",
             text: h(@api_key.environment.to_s.titleize),
             variant: @api_key.environment == "live" ? "primary" : "default",
             size: "xs" %>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.col_status') %></label>
           <% if @api_key.revoked_at.present? %>
             <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_revoked'), variant: "danger", size: "xs" %>
           <% else %>
@@ -236,7 +236,7 @@
                 <%= render "partials/shared/badge", text: (report.status || "Pending").titleize, variant: status_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to "View", admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('admin.abuse_reports.show.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>
@@ -304,10 +304,10 @@
           <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-300"><%= t('admin.abuse_reports.show.action_guidelines') %></h3>
           <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
             <ul class="list-disc pl-5 space-y-1">
-              <li><strong>Investigate:</strong> Review the report and gather more information</li>
-              <li><strong>Resolve:</strong> Close the report if no action is needed or after taking corrective measures</li>
-              <li><strong>Suspend:</strong> Temporarily restrict user access and revoke API keys</li>
-              <li><strong>Ban:</strong> Permanent restriction for severe violations</li>
+              <li><strong><%= t('admin.abuse_reports.show.investigate') %></strong> Review the report and gather more information</li>
+              <li><strong><%= t('admin.abuse_reports.show.resolve') %></strong> Close the report if no action is needed or after taking corrective measures</li>
+              <li><strong><%= t('admin.abuse_reports.show.suspend') %></strong> Temporarily restrict user access and revoke API keys</li>
+              <li><strong><%= t('admin.abuse_reports.show.ban') %></strong> Permanent restriction for severe violations</li>
             </ul>
           </div>
         </div>

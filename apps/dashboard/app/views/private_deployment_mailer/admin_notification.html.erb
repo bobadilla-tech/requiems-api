@@ -15,11 +15,11 @@
         <div style="padding: 32px;">
           <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 24px;">
             <tr>
-              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;">Company</td>
+              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= t('admin.private_deployments.index.company') %></td>
               <td style="padding: 12px 20px; font-size: 13px; color: #111827; font-weight: 700; text-align: right; border-bottom: 1px solid #e5e7eb;"><%= @deployment_request.company %></td>
             </tr>
             <tr>
-              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;">Contact</td>
+              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; border-bottom: 1px solid #e5e7eb;"><%= t('home.terms.contact.heading') %></td>
               <td style="padding: 12px 20px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #e5e7eb;"><%= @deployment_request.contact_name %> &lt;<%= @deployment_request.contact_email %>&gt;</td>
             </tr>
             <tr>
@@ -27,7 +27,7 @@
               <td style="padding: 12px 20px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #e5e7eb;"><%= @deployment_request.server_tier.capitalize %> ($<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo)</td>
             </tr>
             <tr>
-              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; vertical-align: top;">Services</td>
+              <td style="padding: 12px 20px; font-size: 13px; font-weight: 600; color: #6b7280; vertical-align: top;"><%= t('admin.private_deployments.index.services') %></td>
               <td style="padding: 12px 20px; font-size: 13px; color: #374151; text-align: right;"><%= @deployment_request.selected_services.join(", ") %></td>
             </tr>
           </table>

@@ -17,7 +17,7 @@
 
   <!-- Request Section -->
   <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Request</h5>
+    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('systems.show.request_label') %></h5>
 
     <% if playground_parameters.any? %>
       <div class="space-y-3 mb-4">
@@ -43,7 +43,7 @@
                 rows="3"
                 class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-mono"
               ></textarea>
-              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter JSON array, e.g., <%= param["example"] || '["item1", "item2"]' %></p>
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter JSON array, e.g., <%= param["example"] || '[t('apis_show.playground.item1'), "item2"]' %></p>
             <% elsif param["type"] == "object" %>
               <textarea
                 data-api-playground-target="param"
@@ -99,12 +99,12 @@
 
   <!-- Response Section -->
   <div class="mt-4 hidden" data-api-playground-target="responseContainer">
-    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Response</h5>
+    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('dashboard.overview.response_col') %></h5>
 
     <!-- Response Status -->
     <div class="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg" data-api-playground-target="responseStatus">
       <div class="flex items-center space-x-2">
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Status:</span>
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300"><%= t('apis_show.playground.status') %></span>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium" data-api-playground-target="statusBadge">
           --
         </span>
@@ -139,7 +139,7 @@
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
         </svg>
         <div>
-          <h6 class="text-sm font-medium text-red-900 dark:text-red-200">Error</h6>
+          <h6 class="text-sm font-medium text-red-900 dark:text-red-200"><%= t('apis_show.playground.error') %></h6>
           <p class="text-sm text-red-700 dark:text-red-300 mt-1" data-api-playground-target="errorMessage">--</p>
         </div>
       </div>

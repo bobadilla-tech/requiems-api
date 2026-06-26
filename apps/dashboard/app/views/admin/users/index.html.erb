@@ -12,24 +12,24 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <!-- Search -->
       <div class="md:col-span-2">
-        <%= f.label :search, "Search", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :search, t('admin.api_keys.index.search'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.text_field :search,
           value: params[:search],
-          placeholder: "Search by email, name, or company",
+          placeholder: t('admin.users.index.search_by_email_name_or_company'),
           class: "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
       </div>
 
       <!-- Plan Filter -->
       <div>
-        <%= f.label :plan, "Plan", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :plan, t('dashboard.billing.history.plan_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.select :plan,
           options_for_select(
             [
-              ["All Plans", "all"],
-              ["Free", "free"],
-              ["Developer", "developer"],
-              ["Business", "business"],
-              ["Professional", "professional"]
+              [t('admin.users.index.all_plans'), "all"],
+              [t('dashboard.plans.free'), "free"],
+              [t('dashboard.plans.developer'), "developer"],
+              [t('dashboard.plans.business'), "business"],
+              [t('dashboard.plans.professional'), "professional"]
             ],
             params[:plan] || "all"
           ),
@@ -39,14 +39,14 @@
 
       <!-- Status Filter -->
       <div>
-        <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :status, t('shared.labels.col_status'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.select :status,
           options_for_select(
             [
-              ["All Users", "all"],
-              ["Active", "active"],
-              ["Suspended", "suspended"],
-              ["Admins", "admin"]
+              [t('admin.users.index.all_users'), "all"],
+              [t('shared.status.active'), "active"],
+              [t('shared.status.suspended'), "suspended"],
+              [t('admin.users.index.admins'), "admin"]
             ],
             params[:status] || "all"
           ),
@@ -58,18 +58,18 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-2">
         <%= f.submit t('admin.users.index.apply_filters'), class: "px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
-        <%= link_to "Clear", admin_users_path, class: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" %>
+        <%= link_to t('admin.api_keys.index.clear'), admin_users_path, class: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" %>
       </div>
 
       <!-- Sort -->
       <div class="flex items-center space-x-2">
-        <label class="text-sm text-gray-600 dark:text-gray-400">Sort:</label>
+        <label class="text-sm text-gray-600 dark:text-gray-400"><%= t('admin.users.index.sort') %></label>
         <%= f.select :sort,
           options_for_select(
             [
-              ["Newest First", "newest"],
-              ["Oldest First", "oldest"],
-              ["By Name", "name"]
+              [t('admin.users.index.newest_first'), "newest"],
+              [t('admin.users.index.oldest_first'), "oldest"],
+              [t('admin.users.index.by_name'), "name"]
             ],
             params[:sort] || "newest"
           ),
@@ -138,7 +138,7 @@
                 <% end %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to "View", admin_user_path(user), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('admin.users.index.view'), admin_user_path(user), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>

@@ -26,6 +26,8 @@ en:
       edit:
         change_my_password: "Change my password"
         change_your_password: "Change your password"
+        new_password: "New password"
+        confirm_new_password: "Confirm new password"
     confirmations:
       new:
         resend_confirmation_instructions: "Resend confirmation instructions"

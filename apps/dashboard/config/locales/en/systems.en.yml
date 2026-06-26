@@ -67,6 +67,10 @@ en:
       api_reference: "API Reference"
       use_cases: "Use Cases"
       api_endpoints: "API Endpoints"
+      endpoints: "Endpoints"
+      p50: "p50"
+      performance: "Performance"
+      p99: "p99"
     identity-risk:
       meta_title: "Identity & Risk System | Requiems API"
       kicker: "Identity & Risk System"

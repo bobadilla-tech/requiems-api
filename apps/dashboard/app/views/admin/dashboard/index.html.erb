@@ -87,11 +87,11 @@
       </div>
       <div class="space-y-3">
         <div class="flex items-center justify-between">
-          <span class="text-sm text-gray-600 dark:text-gray-400">Active</span>
+          <span class="text-sm text-gray-600 dark:text-gray-400"><%= t('shared.status.active') %></span>
           <span class="text-sm font-semibold text-green-600"><%= number_with_delimiter(@active_api_keys) %></span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-sm text-gray-600 dark:text-gray-400">Revoked</span>
+          <span class="text-sm text-gray-600 dark:text-gray-400"><%= t('admin.api_keys.index.revoked') %></span>
           <span class="text-sm font-semibold text-red-600"><%= number_with_delimiter(@total_api_keys - @active_api_keys) %></span>
         </div>
       </div>

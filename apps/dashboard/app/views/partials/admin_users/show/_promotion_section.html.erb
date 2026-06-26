@@ -30,7 +30,7 @@
                 </p>
               </div>
               <div>
-                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Expires</span>
+                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin_users.show.promotion_section.expires') %></span>
                 <p class="text-sm text-gray-900 dark:text-gray-100 mt-0.5">
                   <%= subscription.promotion_expires_at&.strftime("%B %d, %Y") || "—" %>
                   <% if subscription.promotion_expires_at %>
@@ -42,7 +42,7 @@
               </div>
               <% if subscription.promotion_reason.present? %>
                 <div class="sm:col-span-2">
-                  <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reason</span>
+                  <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin_users.show.promotion_section.reason') %></span>
                   <p class="text-sm text-gray-900 dark:text-gray-100 mt-0.5"><%= subscription.promotion_reason %></p>
                 </div>
               <% end %>
@@ -63,15 +63,15 @@
       <%= form_with url: admin_user_promotion_path(user), method: :post, scope: :promotion, class: "space-y-5" do |f| %>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Plan</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><%= t('dashboard.billing.history.plan_label') %></label>
             <%= f.select :plan_name,
-                  [["Developer", "developer"], ["Business", "business"], ["Professional", "professional"]],
+                  [[t('dashboard.plans.developer'), "developer"], [t('dashboard.plans.business'), "business"], [t('dashboard.plans.professional'), "professional"]],
                   {},
                   class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Duration</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"><%= t('admin_users.show.promotion_section.duration') %></label>
             <div class="flex gap-2 flex-wrap mb-2" id="duration-presets">
               <% [["1 mo", 1.month], ["3 mo", 3.months], ["6 mo", 6.months], ["1 yr", 1.year]].each do |label, duration| %>
                 <button type="button"
@@ -94,7 +94,7 @@
           </label>
           <%= f.text_area :reason,
                 rows: 2,
-                placeholder: "e.g. YouTube video collaboration, blog post on requiems.xyz",
+                placeholder: t('admin_users.show.promotion_section.e_g_youtube_video_collaboration_blog'),
                 class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none" %>
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><%= t('admin_users.show.promotion_section.required_for_audit_trail_describe_why') %></p>
         </div>

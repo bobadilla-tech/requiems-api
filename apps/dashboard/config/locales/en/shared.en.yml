@@ -2,7 +2,6 @@ en:
   shared:
     app_name: "Requiems API"
     faq_heading: "Frequently Asked Questions"
-
     buttons:
       close: "Close"
       dismiss: "Dismiss"
@@ -11,21 +10,24 @@ en:
       copy: "Copy"
       copied: "Copied!"
       get_api_key: "Get API Key"
+      primary_cta: "Get API key"
       read_docs: "Read the docs"
       contact_support: "Contact support"
       browse_apis: "Browse APIs"
+      utilities: "Browse utilities"
+      view_case: "View case"
       go_to_dashboard: "Go to Dashboard"
       try_live: "Try it live"
       explore_system: "Explore system"
       apply_filters: "Apply Filters"
       change_password: "Change my password"
-
+      copy_btn: "Copy"
     status:
       active: "Active"
       suspended: "Suspended"
       reported: "Reported"
       all: "All"
-
+      status_col: "Status"
     badges:
       valid: "Valid"
       invalid: "Invalid"
@@ -36,7 +38,8 @@ en:
       yes: "✓ Yes"
       no: "✗ No"
       popular: "Most Popular"
-
+      json: "JSON response"
+      rest: "REST API"
     labels:
       yes: "Yes"
       no: "No"
@@ -50,7 +53,8 @@ en:
       col_status: "Status"
       key_prefix: "Key Prefix"
       system_health: "System Health"
-
+      api_reference: "API Reference"
+      are_you_sure_suspend: "Are you sure you want to suspend this user? All their API keys will be revoked."
     info:
       no_account: "No account required"
       no_account_demo: "No account required for the demo."
@@ -59,16 +63,13 @@ en:
       eu_title: "EU Infrastructure"
       soc2_desc: "In progress."
       we_usually_reply: "We usually reply within 24 hours."
-
     formats:
       time_ago: "%{time} ago"
       of_requests: "of %{limit} requests"
       greeting_html: "Hi <strong>%{email}</strong>,"
-
     empty_states:
       no_data: "No data returned."
       try_search: "Try adjusting your search or filters."
-
     headings:
       examples: "Code Examples"
       use_cases: "Use Cases"
@@ -76,25 +77,21 @@ en:
       accuracy: "Accuracy"
       simplicity: "Simplicity"
       apis_catalog: "Explore the full API directory"
-
     contexts:
       integrations: "Integrations"
       auth: "Auth / Signup"
       onboarding: "Onboarding"
       fraud: "Fraud Prevention"
-
     forms:
       email_placeholder: "Enter any email address"
       text_to_analyze: "Text to analyze"
       password: "Password"
       missing_fields: "Please fill in all required fields."
       domain: "Domain"
-
     result_labels:
       normalized: "Normalized"
       benefit: "Benefit:"
       outcome: "Outcome:"
-
     nav:
       docs: "Docs"
       docs_apis_desc: "Browse every endpoint"
@@ -135,7 +132,6 @@ en:
       clear_search: "Clear search"
       toggle_dark_mode: "Toggle dark mode"
       breadcrumb: "Breadcrumb"
-
     footer:
       tagline: "Backend infrastructure for SaaS products, delivered through one unified API"
       copyright: "© %{year} Bobadilla Tech. All rights reserved."
@@ -178,7 +174,6 @@ en:
         data: "Data"
         security: "Security & Privacy"
         media: "Media Generation"
-
     danger_zone:
       heading: "Danger Zone"
       subheading: "Irreversible actions that permanently affect your account"
@@ -195,6 +190,63 @@ en:
       reason_placeholder: "Tell us what we could have done better..."
       send_confirmation_btn: "Send Confirmation Email"
       sending: "Sending..."
-
     errors:
       no_data: "No data returned."
+    common:
+      primary_cta: "Get API key"
+      coverage: "100+ APIs"
+      view_case: "View case"
+      view: "View"
+      admin: "Admin"
+      admin_actions: "Admin Actions"
+      all: "All"
+      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
+      greeting_html: "Hi <strong>%{email}</strong>,"
+      integrations_context: "Integrations"
+      read_the_docs: "Read the docs"
+      accuracy_heading: "Accuracy"
+      api_reference: "API Reference"
+      apis_catalog_cta: "Browse APIs"
+      apis_catalog_title: "Explore the full API directory"
+      are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+      auth_context: "Auth / Signup"
+      change_my_password: "Change my password"
+      col_status: "Status"
+      copied_btn: "Copied!"
+      cta_btn: "Go to Dashboard"
+      endpoints: "Endpoints"
+      environment: "Environment"
+      eu_title: "EU Infrastructure"
+      examples_title: "Code Examples"
+      explore_cta: "Explore system"
+      fraud_context: "Fraud Prevention"
+      joined: "Joined"
+      key_prefix: "Key Prefix"
+      label_benefit: "Benefit:"
+      label_domain: "Domain"
+      label_normalized: "Normalized"
+      label_outcome: "Outcome:"
+      missing_fields: "Please fill in all required fields."
+      monthly: "Monthly"
+      no_account: "No account required"
+      of_requests: "of %{limit} requests"
+      onboarding_context: "Onboarding"
+      p50: "p50"
+      p99: "p99"
+      password: "Password"
+      performance: "Performance"
+      popular_badge: "Most Popular"
+      simplicity_heading: "Simplicity"
+      soc2_desc: "In progress."
+      support_link: "Contact support"
+      support_prompt: "Still have questions?"
+      system_health: "System Health"
+      this_month: "This Month"
+      time_ago: "%{time} ago"
+      try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
+      use_cases: "Use Cases"
+      use_cases_heading: "Use cases"
+      utilities_cta: "Browse utilities"
+      we_usually_reply_within_24_hours: "We usually reply within 24 hours."
+      x_backend_secret: "X-Backend-Secret"
+      yearly: "Yearly"
