@@ -124,7 +124,7 @@ en:
         view_docs_btn: "View API Documentation"
         go_dashboard_btn: "Go to Dashboard"
       show:
-        find_me_in_app_views_dashboard_api_keys: "Find me in app/views/dashboard/api_keys/show.html.erb"
+        api_key_details: "API Key Details"
     billing:
       title: "Billing & Subscription"
       subtitle: "Manage your plan, payment method, and billing history"

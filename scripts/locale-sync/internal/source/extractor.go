@@ -219,6 +219,10 @@ func scanFile(path, root string) []HardcodedString {
 			results = append(results, scanAttrPatterns(line, trimmed, short, lineNum)...)
 			results = append(results, scanTagContent(line, trimmed, short, lineNum)...)
 			results = append(results, scanBareTextNodes(line, trimmed, short, lineNum)...)
+			results = append(results, scanBareTextSuffixes(line, trimmed, short, lineNum)...)
+			results = append(results, scanErbTernary(line, trimmed, short, lineNum)...)
+			results = append(results, scanLabelTags(line, trimmed, short, lineNum)...)
+			results = append(results, scanHelperKeywordArgs(line, trimmed, short, lineNum)...)
 		}
 
 		// Skip lines already calling t() / I18n.t — applies to both Ruby and ERB.
@@ -454,6 +458,129 @@ func scanBareTextNodes(line, trimmed, short string, lineNum int) []HardcodedStri
 		Text:     prefix,
 		Context:  trimmed,
 		Category: "text_node",
+	}}
+}
+
+// lastErbOrTagCloseRe matches ERB closers (%>) and HTML closing tags (</tag>).
+var lastErbOrTagCloseRe = regexp.MustCompile(`(?:%>|</\w+>)`)
+
+// scanBareTextSuffixes detects user-facing text that appears AFTER the last
+// ERB output closer or HTML closing tag on a line.
+// Mirrors scanBareTextNodes which handles text before the first ERB tag.
+// Example: `<strong><%= t('...') %></strong> Focus on customer retention`
+func scanBareTextSuffixes(line, trimmed, short string, lineNum int) []HardcodedString {
+	if !erbOutputRe.MatchString(line) {
+		return nil
+	}
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	locs := lastErbOrTagCloseRe.FindAllStringIndex(line, -1)
+	if len(locs) == 0 {
+		return nil
+	}
+	lastEnd := locs[len(locs)-1][1]
+	suffix := strings.TrimSpace(line[lastEnd:])
+	// Strip trailing punctuation before checking.
+	cleaned := strings.TrimRight(suffix, ".,;:!?")
+	if cleaned == "" || strings.Contains(cleaned, "<") {
+		return nil
+	}
+	if !looksUserFacing(cleaned) || looksLikeCode(cleaned) {
+		return nil
+	}
+	return []HardcodedString{{
+		File:     short,
+		Line:     lineNum,
+		Text:     cleaned,
+		Context:  trimmed,
+		Category: "text_node",
+	}}
+}
+
+// ternaryBranchRe captures string literals in ternary branches (? 'x' : 'y').
+var ternaryBranchRe = regexp.MustCompile(`[?:]\s*["']([A-Za-z][^"']{2,})["']`)
+
+// scanErbTernary detects hardcoded string literals in Ruby ternary expressions
+// inside ERB output tags: `<%= cond ? 'Yes text' : 'No text' %>`.
+func scanErbTernary(line, trimmed, short string, lineNum int) []HardcodedString {
+	if !erbOutputRe.MatchString(line) || !strings.Contains(line, "?") {
+		return nil
+	}
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	var out []HardcodedString
+	for _, m := range ternaryBranchRe.FindAllStringSubmatch(line, -1) {
+		text := strings.TrimSpace(m[1])
+		if !looksUserFacing(text) || looksLikeCode(text) {
+			continue
+		}
+		out = append(out, HardcodedString{
+			File:     short,
+			Line:     lineNum,
+			Text:     text,
+			Context:  trimmed,
+			Category: "erb_output",
+		})
+	}
+	return out
+}
+
+// labelTagRe captures the label text argument in label_tag "field", "Label" calls.
+var labelTagRe = regexp.MustCompile(`\blabel_tag\s+["'][^"']*["'],\s*["']([A-Za-z][^"']{1,})["']`)
+
+// scanLabelTags detects hardcoded label text in label_tag helper calls.
+// Uses a relaxed check (no space required) since form labels are often single words.
+func scanLabelTags(line, trimmed, short string, lineNum int) []HardcodedString {
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	m := labelTagRe.FindStringSubmatch(line)
+	if len(m) < 2 {
+		return nil
+	}
+	text := strings.TrimSpace(m[1])
+	if len(text) < 2 || looksLikeCode(text) {
+		return nil
+	}
+	return []HardcodedString{{
+		File:     short,
+		Line:     lineNum,
+		Text:     text,
+		Context:  trimmed,
+		Category: "ruby",
+	}}
+}
+
+// helperKeywordArgRe captures string values for text: and submit_tag calls.
+// Catches: render "partial", text: "Convert"  |  submit_tag "Get Started"
+var helperKeywordArgRe = regexp.MustCompile(`(?:\btext:\s*["']([A-Za-z][^"']{1,})["']|\bsubmit_tag\s+["']([^"']{4,})["'])`)
+
+// scanHelperKeywordArgs detects hardcoded text in helper keyword args.
+// These bypass looksUserFacing's space check since button labels can be one word.
+func scanHelperKeywordArgs(line, trimmed, short string, lineNum int) []HardcodedString {
+	if i18nCallRe.MatchString(line) {
+		return nil
+	}
+	m := helperKeywordArgRe.FindStringSubmatch(line)
+	if len(m) < 2 {
+		return nil
+	}
+	// m[1] = text: value, m[2] = submit_tag value
+	text := strings.TrimSpace(m[1])
+	if text == "" {
+		text = strings.TrimSpace(m[2])
+	}
+	if len(text) < 2 || looksLikeCode(text) {
+		return nil
+	}
+	return []HardcodedString{{
+		File:     short,
+		Line:     lineNum,
+		Text:     text,
+		Context:  trimmed,
+		Category: "ruby",
 	}}
 }
 

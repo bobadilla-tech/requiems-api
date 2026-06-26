@@ -894,6 +894,7 @@ en:
       view_text_api_documentation: "View Text API Documentation"
       generate_random_advice_quotes_lorem: "Generate random advice, quotes, Lorem Ipsum text, and random words."
       miscellaneous_apis: "Miscellaneous APIs"
+      miscellaneous_apis_description: "General-purpose utility endpoints. Convert between units of measurement including length, weight, volume, temperature, area, and speed."
       view_email_api_documentation: "View Email API Documentation"
       text_apis: "Text APIs"
       email_apis: "Email APIs"

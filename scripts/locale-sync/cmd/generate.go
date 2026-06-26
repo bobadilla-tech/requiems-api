@@ -148,6 +148,19 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 			return fmt.Errorf("source scan: %w", err)
 		}
 
+		// Scope to ERB/template files if requested — applies to both report and fix modes.
+		if erbOnly {
+			filtered := found[:0]
+			for _, h := range found {
+				if strings.HasSuffix(h.File, ".erb") ||
+					strings.HasSuffix(h.File, ".haml") ||
+					strings.HasSuffix(h.File, ".slim") {
+					filtered = append(filtered, h)
+				}
+			}
+			found = filtered
+		}
+
 		if len(found) == 0 {
 			fmt.Println("No hardcoded user-facing strings detected.")
 			return nil
@@ -161,19 +174,6 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 				fmt.Printf("    %q\n\n", s.Text)
 			}
 			return nil
-		}
-
-		// Fix mode: optionally scope to ERB files only.
-		if erbOnly {
-			filtered := found[:0]
-			for _, h := range found {
-				if strings.HasSuffix(h.File, ".erb") ||
-					strings.HasSuffix(h.File, ".haml") ||
-					strings.HasSuffix(h.File, ".slim") {
-					filtered = append(filtered, h)
-				}
-			}
-			found = filtered
 		}
 
 		// Build value→key index from current YAML.
@@ -254,7 +254,7 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 }
 
 // buildValueToKey inverts the locale entries into a value → full YAML key map.
-// When a value appears under multiple keys, we prefer keys in shared files.
+// Preference order: shared keys > per-topic keys; ties broken lexicographically.
 func buildValueToKey(entries []locale.Entry) map[string]string {
 	m := make(map[string]string)
 	for _, e := range entries {
@@ -266,9 +266,12 @@ func buildValueToKey(entries []locale.Entry) map[string]string {
 			m[e.Value] = e.Key
 			continue
 		}
-		// Prefer shared keys over per-topic keys.
-		if strings.Contains(e.Key, ".shared.") && !strings.Contains(existing, ".shared.") {
-			m[e.Value] = e.Key
+		newIsShared := strings.Contains(e.Key, ".shared.")
+		existingIsShared := strings.Contains(existing, ".shared.")
+		if newIsShared && !existingIsShared {
+			m[e.Value] = e.Key // shared beats per-topic
+		} else if !newIsShared && !existingIsShared && e.Key < existing {
+			m[e.Value] = e.Key // stable: always pick lexicographically smaller key
 		}
 	}
 	return m

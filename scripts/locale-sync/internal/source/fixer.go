@@ -112,6 +112,7 @@ func BuildFixPlan(
 						break
 					}
 					if existing == h.Text {
+						newInYAML = true // key IS being added to YAML in this plan
 						break // same value already queued — reuse the key
 					}
 					if i > 9 {
@@ -316,9 +317,12 @@ func replaceInLine(line, text, category, replacement string) string {
 			}
 		}
 	case "tag_content":
-		// Replace >text< with ><%= t('key') %><
-		old := fmt.Sprintf(">%s<", text)
-		return strings.Replace(line, old, replacement, 1)
+		// Replace >text< with ><%= t('key') %>< — tolerate whitespace around text.
+		re := regexp.MustCompile(`>\s*` + regexp.QuoteMeta(text) + `\s*<`)
+		if loc := re.FindStringIndex(line); loc != nil {
+			return line[:loc[0]] + replacement + line[loc[1]:]
+		}
+		return line
 	case "erb_output":
 		// Replace <%= "text" %> with <%= t('key') %>
 		// Use string concat to avoid %> being misread as a format verb.

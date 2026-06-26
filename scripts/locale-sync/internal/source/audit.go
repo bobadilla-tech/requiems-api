@@ -85,9 +85,16 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 	usedSet := map[string]bool{}
 	for msg := range msgCh {
 		allUsages = append(allUsages, msg.abs...)
-		allRelative = append(allRelative, msg.rel...)
 		for _, u := range msg.abs {
 			usedSet[u.Key] = true
+		}
+		// Resolve relative keys (t('.leaf')) using the view file path so they
+		// don't cause false-positive orphan reports for keys only used this way.
+		for _, u := range msg.rel {
+			allRelative = append(allRelative, u)
+			if resolved := resolveRelativeKey(u.File, u.Key); resolved != "" {
+				usedSet[resolved] = true
+			}
 		}
 	}
 
@@ -161,6 +168,26 @@ func extractTCalls(path, root string) tCallResult {
 		}
 	}
 	return res
+}
+
+// resolveRelativeKey converts a relative t('.leaf') call and its source file
+// path into the full dot-notation key Rails would resolve it to.
+// e.g. "app/views/admin/users/index.html.erb" + "title" → "admin.users.index.title"
+func resolveRelativeKey(shortPath, leaf string) string {
+	p := filepath.ToSlash(shortPath)
+	p = strings.TrimPrefix(p, "app/views/")
+	p = strings.TrimPrefix(p, "partials/")
+	for _, ext := range []string{".html.erb", ".html.haml", ".erb", ".haml", ".rb"} {
+		if strings.HasSuffix(p, ext) {
+			p = p[:len(p)-len(ext)]
+			break
+		}
+	}
+	parts := strings.Split(p, "/")
+	for i, pt := range parts {
+		parts[i] = strings.TrimPrefix(pt, "_")
+	}
+	return strings.Join(parts, ".") + "." + strings.TrimPrefix(leaf, ".")
 }
 
 func stripLangPrefix(key, lang string) string {

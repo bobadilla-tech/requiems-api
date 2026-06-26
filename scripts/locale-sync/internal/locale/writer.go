@@ -66,15 +66,26 @@ func upsertYAMLFile(filePath string, candidates []MergeCandidate) (string, bool,
 	}
 
 	changed := false
+	var conflicts []string
 	for _, c := range candidates {
 		parts := strings.Split(c.SuggestedKey, ".")
-		if setYAMLPath(doc, parts, c.Value) {
+		ok, err := setYAMLPath(doc, parts, c.Value)
+		if err != nil {
+			conflicts = append(conflicts, err.Error())
+			continue
+		}
+		if ok {
 			changed = true
 		}
 	}
 
+	var conflictErr error
+	if len(conflicts) > 0 {
+		conflictErr = fmt.Errorf("YAML key conflicts in %s: %s", filePath, strings.Join(conflicts, "; "))
+	}
+
 	if !changed {
-		return filePath, false, nil
+		return filePath, false, conflictErr
 	}
 
 	data, err := marshalDoc(doc)
@@ -85,7 +96,10 @@ func upsertYAMLFile(filePath string, candidates []MergeCandidate) (string, bool,
 	if err := os.MkdirAll(filepath.Dir(filePath), 0o755); err != nil {
 		return filePath, false, err
 	}
-	return filePath, true, os.WriteFile(filePath, data, 0o644)
+	if err := os.WriteFile(filePath, data, 0o644); err != nil {
+		return filePath, false, err
+	}
+	return filePath, true, conflictErr
 }
 
 // WriteSkeleton generates a skeleton locale file for targetLang based on the
@@ -152,7 +166,7 @@ func buildSkeletonDoc(targetLang string, entries []Entry, placeholder string) *y
 			continue
 		}
 		newParts := append([]string{targetLang}, parts[1:]...)
-		setYAMLPath(doc, newParts, placeholder)
+		_, _ = setYAMLPath(doc, newParts, placeholder)
 	}
 	return doc
 }
@@ -183,17 +197,18 @@ func readOrEmptyDoc(path string) (*yaml.Node, error) {
 }
 
 // setYAMLPath traverses/creates nested mapping nodes along path and sets the
-// leaf to value. Returns true if a new key was inserted (i.e. a change was made).
-func setYAMLPath(doc *yaml.Node, path []string, value string) bool {
+// leaf to value. Returns (true, nil) if inserted, (false, nil) if already
+// present, or (false, error) if a scalar/mapping conflict blocks the insert.
+func setYAMLPath(doc *yaml.Node, path []string, value string) (bool, error) {
 	if len(doc.Content) == 0 {
 		doc.Content = []*yaml.Node{{Kind: yaml.MappingNode}}
 	}
 	return setMappingPath(doc.Content[0], path, value)
 }
 
-func setMappingPath(node *yaml.Node, path []string, value string) bool {
+func setMappingPath(node *yaml.Node, path []string, value string) (bool, error) {
 	if node.Kind != yaml.MappingNode {
-		return false
+		return false, nil
 	}
 	key := path[0]
 
@@ -202,14 +217,13 @@ func setMappingPath(node *yaml.Node, path []string, value string) bool {
 		if node.Content[i].Value == key {
 			if len(path) == 1 {
 				// Key exists — don't overwrite existing values.
-				return false
+				return false, nil
 			}
 			child := node.Content[i+1]
 			if child.Kind != yaml.MappingNode {
 				// Existing key is a scalar but the path requires a nested mapping.
-				// Mutating it would destroy the existing translation — skip instead.
-				fmt.Fprintf(os.Stderr, "locale-sync: key conflict at %q: scalar exists where mapping needed; skipping\n", strings.Join(path, "."))
-				return false
+				// Return an error so the caller can abort rather than silently skip.
+				return false, fmt.Errorf("key conflict at %q: scalar exists where mapping needed", strings.Join(path, "."))
 			}
 			return setMappingPath(child, path[1:], value)
 		}
@@ -220,7 +234,7 @@ func setMappingPath(node *yaml.Node, path []string, value string) bool {
 	if len(path) == 1 {
 		valNode := &yaml.Node{Kind: yaml.ScalarNode, Value: value, Style: yaml.DoubleQuotedStyle}
 		node.Content = append(node.Content, keyNode, valNode)
-		return true
+		return true, nil
 	}
 	child := &yaml.Node{Kind: yaml.MappingNode}
 	node.Content = append(node.Content, keyNode, child)

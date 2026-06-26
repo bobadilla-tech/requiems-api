@@ -1,6 +1,7 @@
 en:
   apis_show:
     playground:
+      rate_limit_title: "Testing too fast!"
       1_request_per_minute: "1 request per minute"
       create_free_account: "Create free account"
       4_times_more_requests: "4&times; more requests"

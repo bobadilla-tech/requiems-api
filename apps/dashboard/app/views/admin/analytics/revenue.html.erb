@@ -202,25 +202,25 @@
       <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700 dark:text-gray-300">
         <li>
           <% if @churn_rate > 5 %>
-            <strong class="text-red-600"><%= t('admin.analytics.revenue.high_churn_rate') %></strong> Focus on customer retention and satisfaction
+            <strong class="text-red-600"><%= t('admin.analytics.revenue.high_churn_rate') %></strong> <%= t('admin.analytics.revenue.high_churn_body') %>
           <% else %>
-            <strong class="text-green-600"><%= t('admin.analytics.revenue.low_churn_rate') %></strong> Customers are satisfied with the service
+            <strong class="text-green-600"><%= t('admin.analytics.revenue.low_churn_rate') %></strong> <%= t('admin.analytics.revenue.low_churn_body') %>
           <% end %>
         </li>
         <li>
           <% if @active_subscriptions > 0 %>
-            Average revenue per customer is $<%= number_with_delimiter((@mrr / @active_subscriptions).round(2)) %>/month
+            <%= t('admin.analytics.revenue.avg_revenue_per_customer', amount: number_with_delimiter((@mrr / @active_subscriptions).round(2))) %>
           <% else %>
-            No active subscriptions yet - focus on customer acquisition
+            <%= t('admin.analytics.revenue.no_subscriptions_body') %>
           <% end %>
         </li>
         <li>
           <% if growth_rate >= 10 %>
-            <strong class="text-green-600"><%= t('admin.analytics.revenue.strong_growth') %></strong> Revenue is increasing rapidly
+            <strong class="text-green-600"><%= t('admin.analytics.revenue.strong_growth') %></strong> <%= t('admin.analytics.revenue.strong_growth_body') %>
           <% elsif growth_rate >= 0 %>
-            <strong class="text-blue-600"><%= t('admin.analytics.revenue.steady_growth') %></strong> Revenue is increasing consistently
+            <strong class="text-blue-600"><%= t('admin.analytics.revenue.steady_growth') %></strong> <%= t('admin.analytics.revenue.steady_growth_body') %>
           <% else %>
-            <strong class="text-red-600"><%= t('admin.analytics.revenue.declining_revenue') %></strong> Investigate causes and implement growth strategies
+            <strong class="text-red-600"><%= t('admin.analytics.revenue.declining_revenue') %></strong> <%= t('admin.analytics.revenue.declining_revenue_body') %>
           <% end %>
         </li>
       </ul>

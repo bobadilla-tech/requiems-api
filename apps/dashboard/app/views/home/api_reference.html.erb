@@ -74,7 +74,7 @@
               <%= render "partials/shared/badge", text: "Live", variant: "success", size: "sm" %>
             </div>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-              General-purpose utility endpoints. Convert between units of measurement including length, weight, volume, temperature, area, and speed.
+              <%= t('home.api_reference.miscellaneous_apis_description') %>
             </p>
             <%= link_to t('home.api_reference.view_miscellaneous_api_documentation'), apis_path(category: "misc"), class: "text-blue-600 hover:text-blue-700 font-medium inline-flex items-center" %>
             <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -45,7 +45,7 @@
     </div>
     <p class="text-3xl font-bold <%= @uptime_percentage >= 99 ? 'text-green-600' : 'text-red-600' %>"><%= @uptime_percentage %>%</p>
     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-      <%= @uptime_percentage >= 99.9 ? 'Excellent' : (@uptime_percentage >= 99 ? 'Good' : 'Needs attention') %>
+      <%= @uptime_percentage >= 99.9 ? t('admin.analytics.system_health.status_excellent') : (@uptime_percentage >= 99 ? t('admin.analytics.system_health.status_good') : t('admin.analytics.system_health.status_needs_attention')) %>
     </p>
   </div>
 

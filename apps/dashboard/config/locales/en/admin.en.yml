@@ -144,6 +144,9 @@ en:
         p50_response_time: "P50 Response Time"
         most_common_errors: "Most Common Errors"
         system_health: "System Health"
+        status_excellent: "Excellent"
+        status_good: "Good"
+        status_needs_attention: "Needs attention"
       revenue:
         annual_recurring_revenue: "Annual Recurring Revenue"
         key_takeaways: "Key Takeaways"
@@ -171,6 +174,13 @@ en:
         monthly_recurring_revenue: "Monthly Recurring Revenue"
         revenue_trend_last_12_months: "Revenue Trend (Last 12 Months)"
         churn_rate_30d: "Churn Rate (30d)"
+        high_churn_body: "Focus on customer retention and satisfaction"
+        low_churn_body: "Customers are satisfied with the service"
+        avg_revenue_per_customer: "Average revenue per customer is $%{amount}/month"
+        no_subscriptions_body: "No active subscriptions yet - focus on customer acquisition"
+        strong_growth_body: "Revenue is increasing rapidly"
+        steady_growth_body: "Revenue is increasing consistently"
+        declining_revenue_body: "Investigate causes and implement growth strategies"
       usage:
         view_user: "View User"
         requests_over_time: "Requests Over Time"

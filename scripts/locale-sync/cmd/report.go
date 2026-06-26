@@ -59,8 +59,10 @@ func runReport(_ *cobra.Command, _ []string) error {
 	switch reportFormat {
 	case "json":
 		return printReportJSON(found)
-	default:
+	case "text":
 		return printReportText(found)
+	default:
+		return fmt.Errorf("unknown --format %q: want \"text\" or \"json\"", reportFormat)
 	}
 }
 

@@ -47,6 +47,7 @@ en:
     unit_conversion:
       demo:
         input_placeholder: "Enter a value"
+        value_label: "Value"
         error_fill_all_fields: "Fill in all fields."
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_network: "Could not reach the API. Check your connection."
