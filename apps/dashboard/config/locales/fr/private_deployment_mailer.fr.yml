@@ -1,0 +1,9 @@
+fr:
+  private_deployment_mailer:
+    admin_notification:
+      server_tier: ""
+      new_private_deployment_request: ""
+    deployment_ready:
+      your_private_api_is_live: ""
+      example_request: ""
+      color_6b7280: ""

@@ -299,6 +299,7 @@ es:
         text: "¿Quieres recibir notificaciones sobre nuevas versiones y funcionalidades?"
         signed_in: "Enviaremos notificaciones de actualización a tu correo registrado: %{email}"
         sign_up_cta: "Crear una cuenta"
+      v0_1_0: "v0.1.0"
     glossary:
       title: "Glosario de API - Requiems API"
       heading: "Glosario de API"
@@ -901,6 +902,8 @@ es:
       more_apis_coming_soon: "Próximamente habrá más API."
       generate_random_advice_quotes_lorem: "Genere consejos aleatorios, citas, texto de Lorem Ipsum y palabras aleatorias."
       miscellaneous_apis_description: "Terminales de utilidad general. Permiten la conversión entre unidades de medida como longitud, peso, volumen, temperatura, área y velocidad."
+      roadmap: "Hoja de ruta"
+      live: "Vivir"
     domain_checker:
       domain_checker_api_instant_domain: "API de verificación de dominios: disponibilidad instantánea de dominios y consulta WHOIS."
   sales_inquiries:

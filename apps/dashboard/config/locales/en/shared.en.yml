@@ -167,5 +167,13 @@ en:
       utilities_cta: "Browse utilities"
       we_usually_reply_within_24_hours: "We usually reply within 24 hours."
       yearly: "Yearly"
+      admin: "Admin"
+      get_api_key: "Get API Key"
+      read_the_docs: "Read the docs"
+      suspended: "Suspended"
+      are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+      environment: "Environment"
+      joined: "Joined"
+      reported: "Reported"
     errors:
       no_data: "No data returned."

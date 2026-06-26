@@ -1,0 +1,13 @@
+es:
+  hello: ""
+  errors:
+    messages:
+      not_saved:
+        one: ""
+        other: ""
+  date:
+    formats:
+      month_year: ""
+  time:
+    formats:
+      status_timestamp: ""

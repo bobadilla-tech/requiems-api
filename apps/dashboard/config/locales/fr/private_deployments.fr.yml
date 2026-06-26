@@ -1,0 +1,11 @@
+fr:
+  private_deployments:
+    new:
+      dedicated_amd_vcpus_postgresql_redis: ""
+      3_anything_we_should_know: ""
+      private_deployment_requiems_api: ""
+      all_10_services_are_selected_by_default: ""
+      only_selected_services_will_be_mounted: ""
+      billed_monthly: ""
+      please_fix_the_following: ""
+      1_choose_your_plan: ""

@@ -1,0 +1,7 @@
+fr:
+  admin_users:
+    show:
+      promotion_section:
+        promotional_plan_upgrade: ""
+        required_for_audit_trail_describe_why: ""
+        grant_or_revoke_a_temporary_plan: ""

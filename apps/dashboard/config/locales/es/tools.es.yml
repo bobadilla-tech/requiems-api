@@ -74,6 +74,9 @@ es:
         tons_metric: "Toneladas (sistema métrico)"
         fluid_ounces: "onzas líquidas"
         cubic_meters: "Metros cúbicos"
+        get_api_key: "Obtén la clave API"
+        convert: "Convertir"
+        read_the_docs: "Lee la documentación"
       what_it_does:
         simple_api_requests_instant_results: "Solicitudes API sencillas, resultados instantáneos."
         reliable_conversions_with_transparent: "Conversiones fiables con fórmulas transparentes."
@@ -114,6 +117,9 @@ es:
         built_for_real_use_cases: "Diseñado para casos de uso reales."
       hero:
         know_how_your_text_lands: "Conoce el impacto que tiene tu texto."
+        get_api_key: "Obtén la clave API"
+        read_the_docs: "Lee la documentación"
+        analyze: "Analizar"
       show:
         free_sentiment_analysis_tool_positive: "Herramienta gratuita de análisis de sentimientos: detección de texto positivo, negativo y neutro | API de Requiems"
     domain_checker:
@@ -329,6 +335,9 @@ es:
         email_validator_works_even_better_when: "Email Validator funciona aún mejor cuando se combina con otras API de Requiems."
       hero:
         syntax_check_live_mx_lookup_disposable: "Verificación de sintaxis, búsqueda MX en tiempo real, detección de elementos desechables y corrección de errores tipográficos, todo en una sola llamada a la API."
+        get_api_key: "Obtén la clave API"
+        read_the_docs: "Lee la documentación"
+        verify: "Verificar"
       show:
         free_email_validator_syntax_mx_record: "Validador de correo electrónico gratuito: comprobación de sintaxis, registro MX y comprobación de correo desechable | API de Requiems"
     phone_validator:

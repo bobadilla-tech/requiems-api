@@ -21,12 +21,19 @@ es:
         report_resolved: "Informe resuelto"
         other_reports_for_this_user: "Otros informes para este usuario"
         last_request: "Última solicitud"
+        are_you_sure_you_want_to_ban_this_user: "¿Seguro que quieres bloquear a este usuario? Esto revocará todas sus claves API y cancelará su suscripción."
+        reported: "Informado"
+        are_you_sure_you_want_to_resolve_this: "¿Está seguro de que desea cerrar este informe?"
+        suspended: "Suspendido"
+        admin: "Administración"
+        are_you_sure_you_want_to_suspend_this: "¿Está seguro de que desea suspender a este usuario? Se revocarán todas sus claves API."
       index:
         monitor_and_manage_abuse_reports: "Supervisar y gestionar los informes de abuso"
         abuse_reports: "Denuncias de abuso"
         apply_filters: "Aplicar filtros"
         total_reports: "Informes totales"
         no_reports_found: "No se encontraron informes"
+        reported: "Informado"
     api_keys:
       revoke_success: "Clave API revocada correctamente."
       revoke_error: "No se pudo revocar la clave API."
@@ -41,11 +48,13 @@ es:
         no_usage_recorded_for_this_key: "No se ha registrado ningún uso para esta clave."
         key_prefix: "Prefijo de clave"
         revoke_reason: "Motivo de la revocación"
+        credits: "Créditos"
       index:
         apply_filters: "Aplicar filtros"
         view_and_manage_all_api_keys_across: "Visualiza y gestiona todas las claves API de los usuarios."
         try_adjusting_your_search_or_filters: "Intenta ajustar tu búsqueda o filtros."
         no_api_keys_found: "No se encontraron claves API"
+        environment: "Ambiente"
     private_deployments:
       subdomain_required: "El slug del subdominio es obligatorio."
       secret_required: "El secreto del tenant es obligatorio."
@@ -59,6 +68,10 @@ es:
         manage_per_tenant_dedicated_api: "Gestionar las solicitudes de implementación de API dedicadas por inquilino"
         no_deployment_requests: "No hay solicitudes de despliegue"
         private_deployments: "Despliegues privados"
+        services: "Servicios"
+        tier: "Nivel"
+        company: "Compañía"
+        submitted: "Enviado"
       show:
         the_backend_secret_value_set_on_their: "El valor BACKEND_SECRET configurado en su VPS. Mínimo 32 caracteres."
         enabled_services_value: "Valor de SERVICIOS HABILITADOS"
@@ -72,6 +85,7 @@ es:
         cancel_request: "Solicitud de cancelación"
         monthly_price: "Precio mensual"
         deployed_at: "Desplegado en"
+        mark_as_deployed_send_email: "Marcar como desplegado + Enviar correo electrónico"
     promotions:
       invalid_plan: "Plan seleccionado no válido."
       expiry_past: "La fecha de caducidad debe ser futura."
@@ -113,12 +127,23 @@ es:
         this_month: "Este mes"
         usage_statistics: "Estadísticas de uso"
         no_recent_activity: "No hay actividad reciente"
+        environment: "Ambiente"
+        admin: "Administración"
+        are_you_sure_you_want_to_suspend_this: "¿Está seguro de que desea suspender a este usuario? Se revocarán todas sus claves API."
+        are_you_sure_you_want_to_unsuspend_this: "¿Está seguro de que desea reactivar la cuenta de este usuario? Recuperará el acceso a su cuenta."
+        timestamp: "Marca de tiempo"
+        are_you_sure_you_want_to_grant_admin: "¿Está seguro de que desea otorgar privilegios de administrador a este usuario? Tendrá acceso completo al sistema."
+        canceling_at_period_end: "Cancelación al final del período"
+        suspended: "Suspendido"
       index:
         apply_filters: "Aplicar filtros"
         no_users_found: "No se encontraron usuarios"
         try_adjusting_your_search_or_filters: "Intenta ajustar tu búsqueda o filtros."
         view_and_manage_all_user_accounts: "Ver y administrar todas las cuentas de usuario"
         user_management: "Gestión de usuarios"
+        joined: "Unido"
+        admin: "Administración"
+        suspended: "Suspendido"
     dashboard:
       index:
         system_overview_and_key_metrics: "Descripción general del sistema y métricas clave"
@@ -133,6 +158,7 @@ es:
         recent_subscriptions: "Suscripciones recientes"
         total_users: "Usuarios totales"
         no_api_keys_created_yet: "Aún no se han creado claves API"
+        joined: "Unido"
     analytics:
       system_health:
         most_common_errors: "Errores más comunes"
@@ -161,6 +187,10 @@ es:
         no_errors_recorded: "¡No se registraron errores!"
         status_excellent: "Excelente"
         status_good: "Bien"
+        count: "Contar"
+        normal: "Normal"
+        status_code: "Código de estado"
+        high: "Alto"
       usage:
         api_usage_patterns_and_statistics: "Patrones de uso de la API y estadísticas"
         top_10_endpoints: "Los 10 principales puntos de acceso"
@@ -171,6 +201,7 @@ es:
         view_user: "Ver usuario"
         requests_over_time: "Solicitudes a lo largo del tiempo"
         requests_by_plan: "Solicitudes por plan"
+        rank: "Rango"
       revenue:
         subscriptions_by_plan: "Suscripciones por plan"
         paying_customers: "clientes que pagan"
@@ -205,3 +236,6 @@ es:
         per_year: "por año"
         revenue_trend_last_12_months: "Tendencia de los ingresos (últimos 12 meses)"
         declining_revenue_body: "Investigar las causas e implementar estrategias de crecimiento."
+    sidebar:
+      users: "Usuarios"
+      admin: "Administración"

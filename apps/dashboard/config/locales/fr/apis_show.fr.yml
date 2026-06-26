@@ -1,0 +1,21 @@
+fr:
+  apis_show:
+    playground:
+      rate_limit_title: ""
+      1_request_per_minute: ""
+      create_free_account: ""
+      4_times_more_requests: ""
+    endpoint_documentation:
+      examples_title: ""
+      error_responses: ""
+      response_fields: ""
+      parameters_heading: ""
+      column_name: ""
+      column_type: ""
+      column_required: ""
+      column_description: ""
+      column_field: ""
+      copy_code: ""
+      try_it_out: ""
+      live_demo: ""
+      optional: ""

@@ -1,0 +1,84 @@
+fr:
+  devise:
+    shared:
+      links:
+        sign_up: ""
+        log_in: ""
+    unlocks:
+      new:
+        resend_unlock_instructions: ""
+      send_instructions: ""
+      send_paranoid_instructions: ""
+      unlocked: ""
+    mailer:
+      reset_password_instructions:
+        someone_has_requested_a_link_to_change: ""
+        if_you_didn_t_request_this_please: ""
+        your_password_won_t_change_until_you: ""
+        change_my_password: ""
+        subject: ""
+      confirmation_instructions:
+        you_can_confirm_your_account_email: ""
+        confirm_my_account: ""
+        subject: ""
+      password_change:
+        we_re_contacting_you_to_notify_you_that: ""
+        subject: ""
+      unlock_instructions:
+        unlock_my_account: ""
+        your_account_has_been_locked_due_to_an: ""
+        click_the_link_below_to_unlock_your: ""
+        subject: ""
+      email_changed:
+        subject: ""
+    passwords:
+      edit:
+        change_my_password: ""
+        change_your_password: ""
+      no_token: ""
+      send_instructions: ""
+      send_paranoid_instructions: ""
+      updated: ""
+      updated_not_active: ""
+    confirmations:
+      new:
+        resend_confirmation_instructions: ""
+      confirmed: ""
+      send_instructions: ""
+      send_paranoid_instructions: ""
+    failure:
+      already_authenticated: ""
+      inactive: ""
+      invalid: ""
+      locked: ""
+      last_attempt: ""
+      not_found_in_database: ""
+      timeout: ""
+      unauthenticated: ""
+      unconfirmed: ""
+    omniauth_callbacks:
+      failure: ""
+      success: ""
+    registrations:
+      destroyed: ""
+      signed_up: ""
+      signed_up_but_inactive: ""
+      signed_up_but_locked: ""
+      signed_up_but_unconfirmed: ""
+      update_needs_confirmation: ""
+      updated: ""
+      updated_but_not_signed_in: ""
+    sessions:
+      signed_in: ""
+      signed_out: ""
+      already_signed_out: ""
+  errors:
+    messages:
+      already_confirmed: ""
+      confirmation_period_expired: ""
+      expired: ""
+      not_found: ""
+      not_locked: ""
+      not_saved:
+        one: ""
+        other: ""

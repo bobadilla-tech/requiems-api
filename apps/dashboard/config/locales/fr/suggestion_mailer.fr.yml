@@ -1,0 +1,8 @@
+fr:
+  suggestion_mailer:
+    new_suggestion:
+      api_name: ""
+      use_case: ""
+      a_user_has_suggested_a_new_api_for: ""
+      contact_email_for_follow_up: ""
+      new_api_suggestion: ""

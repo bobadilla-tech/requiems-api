@@ -1,0 +1,3 @@
+es:
+  referral:
+    cannot_be_the_same_as_referrer: "no puede ser el mismo que el referente"

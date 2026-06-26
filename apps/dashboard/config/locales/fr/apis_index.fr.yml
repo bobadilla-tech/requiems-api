@@ -1,0 +1,13 @@
+fr:
+  apis_index:
+    most_popular:
+      our_most_popular_apis_based_on_usage: ""
+    systems_section:
+      composed_signal_engines_one_call: ""
+      backend_systems: ""
+    header:
+      sign_up_for_a_free_api_key: ""
+      get_free_api_key: ""
+      intro_prefix: ""
+      intro_signed_in: ""
+      intro_signed_out_suffix: ""

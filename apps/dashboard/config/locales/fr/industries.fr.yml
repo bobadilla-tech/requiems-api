@@ -1,0 +1,373 @@
+fr:
+  industries:
+    index:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+      strategy_call:
+        label: ""
+      questions_intro: ""
+      view_industry: ""
+      cards:
+        travel:
+          title: ""
+          blurb: ""
+        telecom:
+          title: ""
+          blurb: ""
+        saas:
+          title: ""
+          blurb: ""
+        retail:
+          title: ""
+          blurb: ""
+        real_estate:
+          title: ""
+          blurb: ""
+        nonprofit:
+          title: ""
+          blurb: ""
+        media:
+          title: ""
+          blurb: ""
+        manufacturing:
+          title: ""
+          blurb: ""
+        logistics:
+          title: ""
+          blurb: ""
+        legal:
+          title: ""
+          blurb: ""
+        insurance:
+          title: ""
+          blurb: ""
+        hospitality:
+          title: ""
+          blurb: ""
+        healthcare:
+          title: ""
+          blurb: ""
+        government:
+          title: ""
+          blurb: ""
+        energy:
+          title: ""
+          blurb: ""
+        edtech:
+          title: ""
+          blurb: ""
+        ecommerce:
+          title: ""
+          blurb: ""
+        agencies:
+          title: ""
+          blurb: ""
+        gaming:
+          title: ""
+          blurb: ""
+        fintech:
+          title: ""
+          blurb: ""
+    travel:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    telecom:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    saas:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    retail:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    real_estate:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    nonprofit:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    media:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    manufacturing:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    logistics:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    legal:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    insurance:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    hospitality:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    healthcare:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    government:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    energy:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    edtech:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    ecommerce:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    agencies:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    gaming:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""
+    fintech:
+      meta_title: ""
+      hero:
+        headline: ""
+        subheadline: ""
+        cta: ""
+        secondary_cta: ""
+      api_mapping:
+        heading: ""
+      proof_points:
+        heading: ""
+      final_cta:
+        headline: ""
+        subheadline: ""
+        cta: ""

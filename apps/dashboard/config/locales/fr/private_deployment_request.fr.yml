@@ -1,0 +1,3 @@
+fr:
+  private_deployment_request:
+    must_include_at_least_one_service: ""
