@@ -252,7 +252,7 @@
           <div class="ml-3">
             <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300"><%= t('admin.analytics.system_health.security_monitoring') %></h3>
             <p class="mt-1 text-sm text-blue-700 dark:text-blue-400">
-              All API requests are monitored for suspicious activity. High rates of failed authentication may indicate a security threat.
+              <%= t('admin.analytics.system_health.security_monitoring_body') %>
             </p>
           </div>
         </div>
@@ -289,11 +289,11 @@
           <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.api_uptime') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @uptime_percentage >= 99.9 %>
-              <strong class="text-green-600">Excellent uptime.</strong> The API is highly reliable with minimal downtime.
+              <%= t('admin.analytics.system_health.uptime_excellent_html') %>
             <% elsif @uptime_percentage >= 99 %>
-              <strong class="text-blue-600">Good uptime.</strong> The API is performing well with acceptable availability.
+              <%= t('admin.analytics.system_health.uptime_good_html') %>
             <% else %>
-              <strong class="text-red-600">Low uptime.</strong> Investigate recent incidents and implement improvements.
+              <%= t('admin.analytics.system_health.uptime_low_html') %>
             <% end %>
           </p>
         </div>
@@ -320,13 +320,13 @@
           <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.response_times') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @p95_response_time < 500 %>
-              <strong class="text-green-600">Fast response times.</strong> The API is performing optimally.
+              <%= t('admin.analytics.system_health.response_fast_html') %>
             <% elsif @p95_response_time < 1000 %>
-              <strong class="text-orange-600">Acceptable performance.</strong> Consider optimizing slow endpoints.
+              <%= t('admin.analytics.system_health.response_acceptable_html') %>
             <% else %>
-              <strong class="text-red-600">Slow response times.</strong> Performance optimization is needed.
+              <%= t('admin.analytics.system_health.response_slow_html') %>
             <% end %>
-            P95: <%= @p95_response_time %>ms, P99: <%= @p99_response_time %>ms
+            <%= t('admin.analytics.system_health.response_times_detail', p95: @p95_response_time, p99: @p99_response_time) %>
           </p>
         </div>
       </div>
@@ -345,14 +345,14 @@
           <% end %>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100">Security</h3>
+          <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.security_label') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @failed_auth_attempts > 100 %>
-              <strong class="text-red-600">High failed auth attempts.</strong> Monitor for potential security threats.
+              <%= t('admin.analytics.system_health.security_high_html') %>
             <% else %>
-              <strong class="text-green-600">Normal security activity.</strong> No suspicious patterns detected.
+              <%= t('admin.analytics.system_health.security_normal_html') %>
             <% end %>
-            <%= number_with_delimiter(@failed_auth_attempts) %> failed attempts in last 24h.
+            <%= t('admin.analytics.system_health.failed_auth_attempts_detail', count: number_with_delimiter(@failed_auth_attempts)) %>
           </p>
         </div>
       </div>

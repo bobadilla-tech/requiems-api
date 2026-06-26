@@ -94,6 +94,9 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 			allRelative = append(allRelative, u)
 			if resolved := resolveRelativeKey(u.File, u.Key); resolved != "" {
 				usedSet[resolved] = true
+				// Also add to allUsages so the missing-key pass can detect
+				// relative keys that have no YAML definition.
+				allUsages = append(allUsages, KeyUsage{Key: resolved, File: u.File, Line: u.Line})
 			}
 		}
 	}

@@ -22,6 +22,7 @@ en:
         quote_of_the_day: "Quote of the day"
         ai_amp_chatbot_enrichment: "AI &amp; chatbot enrichment"
       api_combinations:
+        sentiment_analysis: "Sentiment Analysis"
         score_the_emotional_tone_of_a_quote: "Score the emotional tone of a quote before displaying it — surface only positive, uplifting results."
         mix_real_quotes_with_generated_filler: "Mix real quotes with generated filler text for flexible content layouts and design systems."
         detect_language: "Detect Language"
@@ -332,6 +333,7 @@ en:
         get_api_key: "Get API Key"
       show:
         free_email_validator_syntax_mx_record: "Free Email Validator — Syntax, MX Record & Disposable Check | Requiems API"
+        description: "Validate any email address instantly. RFC 5322 syntax check, live MX record lookup, disposable domain detection, and typo correction — free, no account required."
       use_cases:
         heading: "Real problems, real users."
         email_validator_fits_wherever_contact: "Email Validator fits wherever contact data quality matters."

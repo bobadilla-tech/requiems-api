@@ -131,7 +131,10 @@ func WriteSkeleton(root, sourceLang, targetLang, placeholder string, entries []E
 			}
 		}
 
-		doc := buildSkeletonDoc(targetLang, topicEntries, placeholder)
+		doc, err := buildSkeletonDoc(targetLang, topicEntries, placeholder)
+		if err != nil {
+			return written, err
+		}
 		data, err := marshalDoc(doc)
 		if err != nil {
 			return written, err
@@ -154,7 +157,7 @@ func fileTopicName(short, lang string) string {
 }
 
 // buildSkeletonDoc builds an ordered yaml.Node document for a skeleton file.
-func buildSkeletonDoc(targetLang string, entries []Entry, placeholder string) *yaml.Node {
+func buildSkeletonDoc(targetLang string, entries []Entry, placeholder string) (*yaml.Node, error) {
 	doc := &yaml.Node{Kind: yaml.DocumentNode}
 	root := &yaml.Node{Kind: yaml.MappingNode}
 	doc.Content = []*yaml.Node{root}
@@ -166,9 +169,11 @@ func buildSkeletonDoc(targetLang string, entries []Entry, placeholder string) *y
 			continue
 		}
 		newParts := append([]string{targetLang}, parts[1:]...)
-		_, _ = setYAMLPath(doc, newParts, placeholder)
+		if _, err := setYAMLPath(doc, newParts, placeholder); err != nil {
+			return nil, fmt.Errorf("build skeleton key %q: %w", e.Key, err)
+		}
 	}
-	return doc
+	return doc, nil
 }
 
 // readOrEmptyDoc reads an existing YAML file into a doc node, or returns an

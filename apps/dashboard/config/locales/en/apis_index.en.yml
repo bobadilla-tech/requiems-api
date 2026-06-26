@@ -6,8 +6,11 @@ en:
       composed_signal_engines_one_call: "Composed signal engines — one call returns a structured decision"
       backend_systems: "Backend Systems"
     header:
+      page_heading: "API Directory"
       sign_up_for_a_free_api_key: "sign up for a free API key"
       get_free_api_key: "Get Free API Key"
       intro_prefix: "Unlock all our APIs with a single API key —"
       intro_signed_in: "browse our collection of production-ready APIs."
       intro_signed_out_suffix: "to get started."
+      signup_cta_html: "sign up for a <strong>free API key</strong>"
+      intro_signed_out_html: "%{link} to get started."

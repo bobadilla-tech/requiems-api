@@ -566,12 +566,12 @@ en:
         alexandra:
           role: "Founder, Go-to-Market"
           bio: "Driving our go-to-market strategy and building relationships with developers and enterprises worldwide."
+        alexandra_flores: "Alexandra Flores"
+        eliaz_bobadilla: "Eliaz Bobadilla"
       join:
         heading: "Join Our Team"
         text: "We're always looking for talented engineers and builders who are passionate about creating developer-first products. Interested in joining us?"
         cta: "Get in touch"
-      alexandra_flores: "Alexandra Flores"
-      eliaz_bobadilla: "Eliaz Bobadilla"
     status:
       title: "API Status - Requiems API"
       all_operational: "All Systems Operational"

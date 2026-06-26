@@ -145,7 +145,11 @@
           <%= t('sales_inquiries.new.secure_info_notice') %>
         </p>
         <p>
-          <%= t('sales_inquiries.new.have_general_questions') %> <%= link_to t('sales_inquiries.new.faq_link'), faq_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline" %> <%= t('sales_inquiries.new.or_conjunction') %> <%= link_to t('sales_inquiries.new.contact_support'), contact_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline" %>.
+          <%= t('sales_inquiries.new.have_questions_html',
+                faq_link: link_to(t('sales_inquiries.new.faq_link'), faq_path,
+                                  class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"),
+                contact_link: link_to(t('sales_inquiries.new.contact_support'), contact_path,
+                                      class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline")) %>
         </p>
       </div>
     </div>

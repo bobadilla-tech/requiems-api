@@ -236,6 +236,11 @@ es:
         per_year: "por año"
         revenue_trend_last_12_months: "Tendencia de los ingresos (últimos 12 meses)"
         declining_revenue_body: "Investigar las causas e implementar estrategias de crecimiento."
+        high_churn_html: "<strong class=\"text-red-600\">Alta tasa de abandono:</strong> Centrarse en la retención y satisfacción del cliente."
+        low_churn_html: "<strong class=\"text-green-600\">Baja tasa de abandono:</strong> Los clientes están satisfechos con el servicio."
+        strong_growth_html: "<strong class=\"text-green-600\">Fuerte crecimiento:</strong> Los ingresos están aumentando rápidamente"
+        steady_growth_html: "<strong class=\"text-blue-600\">Crecimiento constante:</strong> Los ingresos están aumentando de forma constante."
+        declining_revenue_html: "<strong class=\"text-red-600\">Disminución de los ingresos:</strong> Investigar las causas e implementar estrategias de crecimiento."
     sidebar:
       users: "Usuarios"
       admin: "Administración"

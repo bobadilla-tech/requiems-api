@@ -13,6 +13,7 @@ en:
       have_general_questions: "Have general questions? Check out our"
       faq_link: "FAQ"
       or_conjunction: "or"
+      have_questions_html: "Have general questions? %{faq_link} or %{contact_link}."
       we_usually_reply_within_24_hours: "We usually reply within 24 hours."
       optional_share_any_details_that_will: "Optional - Share any details that will help us assist you better."
       anything_specific_you_want_to_share: "Anything specific you want to share"

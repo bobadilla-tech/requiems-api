@@ -505,9 +505,6 @@ func scanBareTextSuffixes(line, trimmed, short string, lineNum int) []HardcodedS
 	if !erbOutputRe.MatchString(line) {
 		return nil
 	}
-	if i18nCallRe.MatchString(line) {
-		return nil
-	}
 	locs := lastErbOrTagCloseRe.FindAllStringIndex(line, -1)
 	if len(locs) == 0 {
 		return nil
@@ -525,7 +522,7 @@ func scanBareTextSuffixes(line, trimmed, short string, lineNum int) []HardcodedS
 	return []HardcodedString{{
 		File:     short,
 		Line:     lineNum,
-		Text:     cleaned,
+		Text:     suffix, // preserve trailing punctuation; cleaned was only for validation
 		Context:  trimmed,
 		Category: "text_node",
 	}}
@@ -538,9 +535,6 @@ var ternaryBranchRe = regexp.MustCompile(`[?:]\s*["']([A-Za-z][^"']{2,})["']`)
 // inside ERB output tags: `<%= cond ? 'Yes text' : 'No text' %>`.
 func scanErbTernary(line, trimmed, short string, lineNum int) []HardcodedString {
 	if !erbOutputRe.MatchString(line) || !strings.Contains(line, "?") {
-		return nil
-	}
-	if i18nCallRe.MatchString(line) {
 		return nil
 	}
 	var out []HardcodedString

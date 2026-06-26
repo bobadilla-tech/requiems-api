@@ -1,8 +1,11 @@
 es:
   apis_index:
     header:
+      page_heading: "Directorio de API"
       intro_signed_in: "Explore nuestra colección de API listas para producción."
       intro_signed_out_suffix: "para empezar."
+      signup_cta_html: "regístrate para obtener una <strong>clave API gratuita</strong>"
+      intro_signed_out_html: "%{link} para empezar."
       sign_up_for_a_free_api_key: "Regístrate para obtener una clave API gratuita."
       get_free_api_key: "Obtén una clave API gratuita"
       intro_prefix: "Desbloquea todas nuestras API con una sola clave API."

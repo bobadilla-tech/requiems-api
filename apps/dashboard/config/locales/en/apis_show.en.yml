@@ -4,7 +4,9 @@ en:
       rate_limit_title: "Testing too fast!"
       1_request_per_minute: "1 request per minute"
       create_free_account: "Create free account"
-      4_times_more_requests: "4&times; more requests"
+      4_times_more_requests: "4× more requests"
+      anonymous_limit_html: "The demo allows <strong>%{limit}</strong> for anonymous users."
+      signup_benefit_html: "Sign up for free and get <strong>%{requests}</strong> — you can keep testing right away."
     endpoint_documentation:
       examples_title: "Code Examples"
       error_responses: "Error Responses"
