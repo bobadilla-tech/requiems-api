@@ -252,6 +252,38 @@ func marshalDoc(doc *yaml.Node) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// WriteEntries inserts key→value pairs into filePath, skipping already-present keys.
+// fullKeys maps full dot-notation paths (e.g. "es.tools.foo.bar") to their values.
+// Returns (changed, error).
+func WriteEntries(filePath string, fullKeys map[string]string) (bool, error) {
+	doc, err := readOrEmptyDoc(filePath)
+	if err != nil {
+		return false, err
+	}
+	changed := false
+	for k, v := range fullKeys {
+		parts := strings.Split(k, ".")
+		ok, err := setYAMLPath(doc, parts, v)
+		if err != nil {
+			return false, err
+		}
+		if ok {
+			changed = true
+		}
+	}
+	if !changed {
+		return false, nil
+	}
+	data, err := marshalDoc(doc)
+	if err != nil {
+		return false, err
+	}
+	if err := os.MkdirAll(filepath.Dir(filePath), 0o755); err != nil {
+		return false, err
+	}
+	return true, os.WriteFile(filePath, data, 0o644)
+}
+
 // MigrationPlan returns the t() key paths that callers should switch to for
 // each merge candidate, grouped by source key full path.
 func MigrationPlan(candidates []MergeCandidate) map[string]string {
