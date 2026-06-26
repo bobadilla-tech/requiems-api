@@ -3,9 +3,12 @@ package cmd
 import (
 	"bufio"
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/bobadilla-tech/locale-sync/internal/locale"
 	"github.com/bobadilla-tech/locale-sync/internal/translate"
@@ -13,16 +16,17 @@ import (
 )
 
 var (
-	translateTo        []string
-	translateFrom      string
-	translateDryRun    bool
-	translateForce     bool
-	translateProvider  string
-	translateCacheOnly bool
-	translateNoCache   bool
-	translateCacheFile string
-	translateQuota     int
-	translateBatchSize int
+	translateTo         []string
+	translateFrom       string
+	translateDryRun     bool
+	translateForce      bool
+	translateProvider   string
+	translateCacheOnly  bool
+	translateNoCache    bool
+	translateCacheFile  string
+	translateQuota      int
+	translateBatchSize  int
+	translateReportFile string
 )
 
 var translateCmd = &cobra.Command{
@@ -32,7 +36,8 @@ var translateCmd = &cobra.Command{
 missing in one or more target locale files, then fills them using the
 Google Cloud Translation API.
 
-The command is idempotent: it never overwrites existing translations.
+The command is idempotent: it never overwrites real translations.
+Placeholder values (e.g. "TODO: translate") are replaced with real translations.
 Run with --dry-run to preview what would be translated without calling the API.
 
 Authentication:
@@ -42,7 +47,8 @@ Examples:
   locale-sync translate --to=es,fr,de --root=../../apps/dashboard
   locale-sync translate es fr de
   locale-sync translate --to=all --dry-run
-  locale-sync translate --to=es --cache-only`,
+  locale-sync translate --to=es --cache-only
+  locale-sync translate --to=es --report-file=reports/translate.json`,
 	RunE: runTranslate,
 }
 
@@ -64,10 +70,45 @@ func init() {
 	translateCmd.Flags().StringVar(&translateCacheFile, "cache-file", ".translation-cache.json",
 		"Path to translation cache file")
 	translateCmd.Flags().IntVar(&translateQuota, "quota-limit", 450_000,
-		"Stop translating when this many characters have been sent to the API")
+		"Stop translating when this many characters have been sent to the API (safety margin)")
 	translateCmd.Flags().IntVar(&translateBatchSize, "batch-size", 100,
 		"Number of strings to send per API call")
+	translateCmd.Flags().StringVar(&translateReportFile, "report-file", "",
+		"Write a detailed JSON report of all translations to this file path")
 	rootCmd.AddCommand(translateCmd)
+}
+
+// reportData is the top-level report written to --report-file.
+type reportData struct {
+	Timestamp     string                  `json:"timestamp"`
+	SourceLang    string                  `json:"source_lang"`
+	TotalKeys     int                     `json:"total_keys"`
+	TotalChars    int                     `json:"total_chars_used"`
+	QuotaLimit    int                     `json:"quota_limit"`
+	QuotaHit      bool                   `json:"quota_limit_hit"`
+	Languages     map[string]*langReport  `json:"languages"`
+}
+
+type langReport struct {
+	KeysTranslated int              `json:"keys_translated"`
+	KeysFromCache  int              `json:"keys_from_cache"`
+	KeysViaAPI     int              `json:"keys_via_api"`
+	KeysSkipped    int              `json:"keys_skipped,omitempty"`
+	CharsUsed      int              `json:"chars_used"`
+	FilesWritten   []string         `json:"files_written"`
+	Entries        []reportEntry    `json:"entries"`
+}
+
+type reportEntry struct {
+	Key         string `json:"key"`
+	Source      string `json:"source"`
+	Translation string `json:"translation"`
+	FromCache   bool   `json:"from_cache"`
+}
+
+type langMissing struct {
+	lang    string
+	missing []translate.MissingEntry
 }
 
 func runTranslate(cmd *cobra.Command, args []string) error {
@@ -91,38 +132,38 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 	// 3. For each target lang, find missing entries.
 	var allLangs []langMissing
 	totalCharsNeeded := 0
+	totalKeysNeeded := 0
 
 	for _, tLang := range targets {
-		targetEntries, err := locale.Scan(rootPath, tLang)
-		if err != nil {
-			// Target may not exist yet — treat as zero entries.
-			targetEntries = nil
-		}
+		targetEntries, _ := locale.Scan(rootPath, tLang) // missing dir → empty, not an error
 		missing := translate.FindMissing(sourceEntries, targetEntries, translateFrom, tLang, rootPath)
-		chars := translate.CharCount(missing)
 		allLangs = append(allLangs, langMissing{lang: tLang, missing: missing})
-		totalCharsNeeded += chars
+		totalCharsNeeded += translate.CharCount(missing)
+		totalKeysNeeded += len(missing)
 	}
 
-	// 4. Print summary.
+	// 4. Print plan summary.
 	fmt.Println("=== Translation Plan ===")
 	for _, lm := range allLangs {
-		chars := translate.CharCount(lm.missing)
-		fmt.Printf("  %s: %d missing keys, ~%s characters\n",
-			lm.lang, len(lm.missing), formatInt(chars))
+		if len(lm.missing) == 0 {
+			fmt.Printf("  %-4s  already up to date\n", lm.lang)
+		} else {
+			fmt.Printf("  %-4s  %s keys, ~%s chars\n",
+				lm.lang, formatInt(len(lm.missing)), formatInt(translate.CharCount(lm.missing)))
+		}
 	}
-	fmt.Printf("Total: ~%s characters (Google free tier: ~500,000/month)\n\n",
-		formatInt(totalCharsNeeded))
+	fmt.Printf("  ────\n")
+	fmt.Printf("  Total  %s keys, ~%s chars  (free tier: ~500,000/month)\n\n",
+		formatInt(totalKeysNeeded), formatInt(totalCharsNeeded))
 
-	// 5. Dry-run: just show entries and exit.
+	// 5. Dry-run: print detailed plan to stdout and exit.
 	if translateDryRun {
 		printDryRunPlan(allLangs)
 		fmt.Println("No files written (--dry-run).")
 		return nil
 	}
 
-	// Check if anything to do.
-	if totalCharsNeeded == 0 {
+	if totalKeysNeeded == 0 {
 		fmt.Println("All target locales are up to date. Nothing to translate.")
 		return nil
 	}
@@ -134,7 +175,11 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 			return nil
 		}
 		fmt.Println()
-		if !confirm(fmt.Sprintf("This will consume your Google quota (free tier: ~500,000 chars/month).\nYou have ~%s characters to translate.\nType YES to continue", formatInt(totalCharsNeeded)), "YES") {
+		msg := fmt.Sprintf(
+			"This will consume your Google quota (~%s chars).\nFree tier: ~500,000 chars/month.\nType YES to continue",
+			formatInt(totalCharsNeeded),
+		)
+		if !confirm(msg, "YES") {
 			fmt.Println("Aborted.")
 			return nil
 		}
@@ -156,39 +201,45 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
 		client, err = translate.NewClient(ctx)
 		if err != nil {
-			return fmt.Errorf("init translation client: %w\n\nEnsure GOOGLE_APPLICATION_CREDENTIALS is set to a valid service account JSON file.", err)
+			return fmt.Errorf("init translation client: %w\n\nEnsure GOOGLE_APPLICATION_CREDENTIALS is set to a valid service account JSON file", err)
 		}
 		defer client.Close()
 	}
 
-	// 9. Translate per language.
+	// 9. Translate per language, collect report data.
+	report := &reportData{
+		Timestamp:  time.Now().UTC().Format(time.RFC3339),
+		SourceLang: translateFrom,
+		QuotaLimit: translateQuota,
+		Languages:  make(map[string]*langReport),
+	}
 	totalCharsUsed := 0
 	quotaExhausted := false
 
 	for _, lm := range allLangs {
 		if len(lm.missing) == 0 {
-			fmt.Printf("%s: already up to date.\n", lm.lang)
 			continue
 		}
 
-		fmt.Printf("Translating to %s (%d keys)...\n", lm.lang, len(lm.missing))
+		lr := &langReport{}
+		report.Languages[lm.lang] = lr
+
+		fmt.Printf("Translating to %s (%s keys)...\n", lm.lang, formatInt(len(lm.missing)))
 
 		var translated []translate.TranslatedEntry
-		var cacheHits, apiCalls, cacheSkipped int
-
-		// Separate cache hits from API-needed.
 		var needsAPI []translate.MissingEntry
+		cacheSkipped := 0
+
+		// Split into cache hits vs API-needed.
 		for _, m := range lm.missing {
 			if !translateNoCache && cache != nil {
 				if cached, ok := cache.Get(m.Value, lm.lang); ok {
-					p := translate.Protect(m.Value)
-					_ = p // cached value already has correct placeholders from original translation
 					translated = append(translated, translate.TranslatedEntry{
 						MissingEntry:   m,
 						TranslatedText: cached,
 						FromCache:      true,
 					})
-					cacheHits++
+					lr.KeysFromCache++
 					continue
 				}
 			}
@@ -200,6 +251,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		}
 
 		// API translation in batches.
+		langChars := 0
 		if !quotaExhausted && len(needsAPI) > 0 && client != nil {
 			ctx := context.Background()
 			for i := 0; i < len(needsAPI); i += translateBatchSize {
@@ -209,7 +261,6 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 				}
 				batch := needsAPI[i:end]
 
-				// Protect placeholders, build texts for API.
 				protecteds := make([]translate.Protected, len(batch))
 				apiTexts := make([]string, len(batch))
 				batchChars := 0
@@ -220,21 +271,22 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 					batchChars += len([]rune(p.Text))
 				}
 
-				// Quota check.
 				if totalCharsUsed+batchChars > translateQuota {
-					fmt.Fprintf(os.Stderr, "  Warning: approaching quota limit (%s chars). Stopping API calls.\n",
+					fmt.Fprintf(os.Stderr,
+						"  Warning: quota limit of %s chars reached. Stopping.\n",
 						formatInt(translateQuota))
 					quotaExhausted = true
+					report.QuotaHit = true
 					break
 				}
 
 				results, err := client.Translate(ctx, apiTexts, lm.lang, translateFrom)
 				if err != nil {
-					return fmt.Errorf("translate batch (lang=%s, batch starting at %d): %w", lm.lang, i, err)
+					return fmt.Errorf("API error (lang=%s, offset=%d): %w", lm.lang, i, err)
 				}
 
 				totalCharsUsed += batchChars
-				apiCalls++
+				langChars += batchChars
 
 				for j, m := range batch {
 					restored := protecteds[j].Restore(results[j])
@@ -243,83 +295,128 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 						TranslatedText: restored,
 						FromCache:      false,
 					})
-					// Store in cache.
 					if !translateNoCache && cache != nil {
 						cache.Set(m.Value, lm.lang, restored)
 					}
 				}
 
-				// Save cache after each batch.
 				if !translateNoCache && cache != nil {
 					if err := cache.Save(); err != nil {
-						fmt.Fprintf(os.Stderr, "  Warning: could not save cache: %v\n", err)
+						fmt.Fprintf(os.Stderr, "  Warning: cache save failed: %v\n", err)
 					}
 				}
 			}
 		}
 
-		// Print per-entry results.
-		for _, e := range translated {
-			src := truncate(e.Value, 40)
-			dst := truncate(e.TranslatedText, 40)
-			tag := "[api]  "
-			if e.FromCache {
-				tag = "[cache]"
-			}
-			fmt.Printf("  %s %s\n", tag, dotAfterLang(e.TargetKey))
-			fmt.Printf("         %q → %q\n", src, dst)
-		}
-		if cacheSkipped > 0 {
-			fmt.Printf("  (skipped %d entries — not in cache, --cache-only set)\n", cacheSkipped)
-		}
+		lr.KeysViaAPI = len(translated) - lr.KeysFromCache
+		lr.KeysSkipped = cacheSkipped
+		lr.KeysTranslated = len(translated)
+		lr.CharsUsed = langChars
 
-		// Write results.
+		// Write files and print per-file summary.
 		if len(translated) > 0 {
+			// Count entries per target file for display.
+			fileCount := make(map[string]int)
+			for _, e := range translated {
+				fileCount[e.TargetFile]++
+			}
+
 			written, err := translate.WriteTranslations(translated)
 			if err != nil {
 				return fmt.Errorf("write %s translations: %w", lm.lang, err)
 			}
-			fmt.Printf("  Written %d file(s): %s\n", len(written), strings.Join(written, ", "))
+			lr.FilesWritten = relPaths(written, rootPath)
+
+			for _, f := range written {
+				base := filepath.Base(f)
+				n := fileCount[f]
+				fmt.Printf("  ✓  %-35s  %s keys\n", base, formatInt(n))
+			}
+
+			// Build report entries.
+			for _, e := range translated {
+				lr.Entries = append(lr.Entries, reportEntry{
+					Key:         dotAfterLang(e.TargetKey),
+					Source:      e.Value,
+					Translation: e.TranslatedText,
+					FromCache:   e.FromCache,
+				})
+			}
 		}
 
-		totalCached := cacheHits
-		totalAPI := apiCalls * translateBatchSize
-		if totalAPI > len(needsAPI) {
-			totalAPI = len(needsAPI)
+		if cacheSkipped > 0 {
+			fmt.Printf("  ⚠  %s keys skipped (not in cache, --cache-only)\n", formatInt(cacheSkipped))
 		}
-		fmt.Printf("  Summary: %d from cache, %d via API\n\n", totalCached, len(translated)-totalCached)
+
+		cacheTag := ""
+		if lr.KeysFromCache > 0 {
+			cacheTag = fmt.Sprintf("  |  %s from cache", formatInt(lr.KeysFromCache))
+		}
+		fmt.Printf("  ─  %s keys written%s  |  ~%s chars\n\n",
+			formatInt(lr.KeysTranslated), cacheTag, formatInt(langChars))
 	}
 
-	fmt.Printf("Total API characters used this run: ~%s\n", formatInt(totalCharsUsed))
+	// 10. Final summary.
+	report.TotalChars = totalCharsUsed
+	report.TotalKeys = totalKeysNeeded
+	fmt.Printf("Total API chars used: ~%s", formatInt(totalCharsUsed))
 	if quotaExhausted {
-		fmt.Fprintf(os.Stderr, "Warning: quota limit reached. Run again to continue remaining translations.\n")
+		fmt.Fprintf(os.Stderr, "\nWarning: quota limit hit — re-run to continue remaining entries")
 	}
+	fmt.Println()
+
+	// 11. Write report file.
+	if translateReportFile != "" {
+		if err := writeReport(report, translateReportFile); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: could not write report: %v\n", err)
+		} else {
+			fmt.Printf("Report: %s\n", translateReportFile)
+		}
+	}
+
 	return nil
+}
+
+func writeReport(r *reportData, path string) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(r, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0o644)
+}
+
+func relPaths(paths []string, root string) []string {
+	out := make([]string, 0, len(paths))
+	for _, p := range paths {
+		rel, err := filepath.Rel(root, p)
+		if err != nil {
+			rel = p
+		}
+		out = append(out, rel)
+	}
+	return out
 }
 
 // resolveTargetLangs merges --to flag values and positional args into a deduplicated
 // list of target language codes. "--to=all" triggers auto-discovery.
 func resolveTargetLangs(flagTo []string, args []string, sourceLang string) ([]string, error) {
 	raw := append(append([]string{}, flagTo...), args...)
-	// Expand comma-separated values (cobra does this for StringSlice but be safe).
 	var expanded []string
 	for _, v := range raw {
 		for _, part := range strings.Split(v, ",") {
-			part = strings.TrimSpace(part)
-			if part != "" {
+			if part = strings.TrimSpace(part); part != "" {
 				expanded = append(expanded, part)
 			}
 		}
 	}
-
-	// Handle --to=all.
 	for _, v := range expanded {
 		if v == "all" {
 			return translate.DiscoverLangs(rootPath, sourceLang)
 		}
 	}
-
-	// Deduplicate, exclude source lang.
 	seen := map[string]bool{}
 	var out []string
 	for _, v := range expanded {
@@ -332,8 +429,6 @@ func resolveTargetLangs(flagTo []string, args []string, sourceLang string) ([]st
 	return out, nil
 }
 
-// confirm prompts the user with a message and returns true if they type the
-// expected confirmation string.
 func confirm(message, expected string) bool {
 	fmt.Printf("%s (%s/no): ", message, expected)
 	scanner := bufio.NewScanner(os.Stdin)
@@ -343,28 +438,23 @@ func confirm(message, expected string) bool {
 	return strings.TrimSpace(scanner.Text()) == expected
 }
 
-type langMissing struct {
-	lang    string
-	missing []translate.MissingEntry
-}
-
-// printDryRunPlan prints a preview of what would be translated.
+// printDryRunPlan prints all keys that would be translated (dry-run only).
 func printDryRunPlan(allLangs []langMissing) {
-	fmt.Println("=== Dry Run: Translation Plan ===")
+	fmt.Println("=== Dry Run: Keys to Translate ===")
 	for _, lm := range allLangs {
-		chars := translate.CharCount(lm.missing)
-		fmt.Printf("\n  %s — %d missing keys (~%s chars):\n", lm.lang, len(lm.missing), formatInt(chars))
+		if len(lm.missing) == 0 {
+			continue
+		}
+		fmt.Printf("\n%s (%s keys):\n", strings.ToUpper(lm.lang), formatInt(len(lm.missing)))
 		for _, m := range lm.missing {
 			key := dotAfterLang(m.TargetKey)
-			val := truncate(m.Value, 60)
-			fmt.Printf("    [api] %s: %q → (would translate)\n", key, val)
+			fmt.Printf("  %-60s  %q\n", key, truncate(m.Value, 60))
 		}
 	}
 	fmt.Println()
 }
 
 func formatInt(n int) string {
-	// Simple thousands-separator formatting.
 	s := fmt.Sprintf("%d", n)
 	if len(s) <= 3 {
 		return s
