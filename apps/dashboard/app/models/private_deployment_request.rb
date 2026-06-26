@@ -92,7 +92,7 @@ class PrivateDeploymentRequest < ApplicationRecord
 
   def at_least_one_service_selected
     if selected_services.blank? || selected_services.empty?
-      errors.add(:selected_services, t('private_deployment_request.must_include_at_least_one_service'))
+      errors.add(:selected_services, I18n.t('private_deployment_request.must_include_at_least_one_service'))
       return
     end
 

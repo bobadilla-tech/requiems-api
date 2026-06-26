@@ -33,7 +33,7 @@ type AuditResult struct {
 
 // tCallRe captures the key argument from t(), I18n.t(), and translate() calls.
 // Handles both dot-notation keys and relative keys (starting with .).
-var tCallRe = regexp.MustCompile(`(?:I18n\.t|translate|\bt)\s*[("']\s*[."']?([\w.]+)["']?\s*[,)]`)
+var tCallRe = regexp.MustCompile(`(?:I18n\.t|translate|\bt)\s*\(?\s*["'](\.?[\w.]+)["']`)
 
 // Audit cross-references all t() calls in source against the provided YAML keys.
 // definedKeys is a set of full dot-notation keys from the locale YAML files.

@@ -24,13 +24,13 @@ type Fix struct {
 
 // FixPlan groups all fixes with the YAML additions they require.
 type FixPlan struct {
-	Fixes     []Fix
-	YAMLAdds  map[string]string // key → value to add to YAML
+	Fixes    []Fix
+	YAMLAdds map[string]string // key → value to add to YAML
 }
 
 // applyTemplate substitutes KEY into a per-category ERB/Ruby i18n snippet.
 // We avoid fmt.Sprintf so that `%>` in ERB is never misread as a format verb.
-func applyTemplate(category, key string) string {
+func applyTemplate(category, key, relFile string) string {
 	switch category {
 	case "placeholder":
 		return `placeholder="<%= t('` + key + `') %>"`
@@ -41,6 +41,8 @@ func applyTemplate(category, key string) string {
 		return `><%= t('` + key + `') %><`
 	case "erb_output":
 		return `<%= t('` + key + `') %>`
+	case "ruby":
+		return translationCall(relFile, key)
 	default:
 		return `t('` + key + `')`
 	}
@@ -113,7 +115,7 @@ func BuildFixPlan(
 					}
 					if existing == h.Text {
 						newInYAML = true // key IS being added to YAML in this plan
-						break // same value already queued — reuse the key
+						break            // same value already queued — reuse the key
 					}
 					if i > 9 {
 						break // give up after 9 suffixes (practically impossible)
@@ -136,7 +138,7 @@ func BuildFixPlan(
 				openTag := strings.TrimSpace(line)
 				patched = leadWS + openTag + "<%= t('" + tKey + "') %></" + tagName + ">"
 			} else {
-				replacement = applyTemplate(h.Category, tKey)
+				replacement = applyTemplate(h.Category, tKey, relFile)
 				patched = replaceInLine(line, h.Text, h.Category, replacement)
 				if patched == line {
 					continue
@@ -299,6 +301,18 @@ func slugify(s string) string {
 	return s
 }
 
+// translationCall chooses the Rails helper call form that is valid for the source file.
+func translationCall(relFile, key string) string {
+	rel := filepath.ToSlash(relFile)
+	if strings.Contains(rel, "/views/") ||
+		strings.Contains(rel, "/controllers/") ||
+		strings.Contains(rel, "/helpers/") ||
+		strings.Contains(rel, "/mailers/") {
+		return `t('` + key + `')`
+	}
+	return `I18n.t('` + key + `')`
+}
+
 // replaceInLine finds and replaces the hardcoded text within line based on category.
 func replaceInLine(line, text, category, replacement string) string {
 	switch category {
@@ -337,8 +351,7 @@ func replaceInLine(line, text, category, replacement string) string {
 		for _, q := range []string{`"`, `'`} {
 			old := q + text + q
 			if strings.Contains(line, old) {
-				tKey := extractTKey(replacement)
-				return strings.Replace(line, old, fmt.Sprintf("t('%s')", tKey), 1)
+				return strings.Replace(line, old, replacement, 1)
 			}
 		}
 	}

@@ -36,6 +36,6 @@ class Referral < ApplicationRecord
   def no_self_referral
     return if referrer_id.blank? || referred_user_id.blank?
 
-    errors.add(:referred_user, t('referral.cannot_be_the_same_as_referrer')) if referrer_id == referred_user_id
+    errors.add(:referred_user, I18n.t('referral.cannot_be_the_same_as_referrer')) if referrer_id == referred_user_id
   end
 end

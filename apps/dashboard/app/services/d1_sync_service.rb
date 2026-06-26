@@ -170,7 +170,7 @@ class D1SyncService
   def handle_error_response(response)
     case response.status
     when 401
-      raise UnauthorizedError, t('app.services.d1_sync_service.invalid_api_management_key')
+      raise UnauthorizedError, I18n.t('app.services.d1_sync_service.invalid_api_management_key')
     when 400
       raise Error, "Bad request: #{response.body}"
     else
