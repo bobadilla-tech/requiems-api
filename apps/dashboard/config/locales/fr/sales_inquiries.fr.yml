@@ -17,3 +17,5 @@ fr:
       optional_share_any_details_that_will: "Facultatif - N'hésitez pas à partager tout détail qui nous permettra de mieux vous aider."
       anything_specific_you_want_to_share: "Souhaitez-vous partager quelque chose de précis ?"
       company: "Entreprise"
+      cancel: "Annuler"
+      sending: "Envoi en cours..."

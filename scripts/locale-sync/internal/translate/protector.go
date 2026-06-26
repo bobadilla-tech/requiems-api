@@ -62,14 +62,23 @@ func (p *Protector) Protect(s string) Protected {
 
 	text := s
 
-	// 1. Protect custom dictionary words first (longest first to avoid partial matches).
-	for _, word := range p.customWords {
-		if word == "" {
-			continue
+	// 1. Protect custom dictionary words first using a single-pass regex alternation.
+	//    A sequential strings.ReplaceAll loop would corrupt already-inserted tokens
+	//    when a short custom word (e.g. "X") matches characters inside "XTOKEN0X".
+	//    Words are already sorted longest-first by NewProtector.
+	if len(p.customWords) > 0 {
+		parts := make([]string, 0, len(p.customWords))
+		for _, w := range p.customWords {
+			if w != "" {
+				parts = append(parts, regexp.QuoteMeta(w))
+			}
 		}
-		// Build a simple case-sensitive replacement.
-		result := strings.ReplaceAll(text, word, nextToken(word))
-		text = result
+		if len(parts) > 0 {
+			customRe := regexp.MustCompile(strings.Join(parts, "|"))
+			text = customRe.ReplaceAllStringFunc(text, func(match string) string {
+				return nextToken(match)
+			})
+		}
 	}
 
 	// 2. Protect standard interpolation placeholders.

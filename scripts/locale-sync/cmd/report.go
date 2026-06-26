@@ -39,7 +39,7 @@ func init() {
 }
 
 func runReport(_ *cobra.Command, _ []string) error {
-	found, err := source.Extract(rootPath)
+	found, err := source.Extract(rootPath, nil)
 	if err != nil {
 		return fmt.Errorf("scan: %w", err)
 	}

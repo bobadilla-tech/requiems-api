@@ -143,7 +143,7 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 
 	// --- Source scan / fix ---
 	if scanSource || fixSource {
-		found, err := source.Extract(rootPath)
+		found, err := source.Extract(rootPath, nil)
 		if err != nil {
 			return fmt.Errorf("source scan: %w", err)
 		}

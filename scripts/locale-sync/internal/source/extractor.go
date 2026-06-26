@@ -1,6 +1,7 @@
 package source
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -138,16 +139,23 @@ var rubyPatterns = []struct {
 	{regexp.MustCompile(`\bf\.submit\s+["']([^"']{4,})["']`), "ruby"},
 }
 
+type scanResult struct {
+	found []HardcodedString
+	warn  error // non-nil when the file could not be read
+}
+
 // Extract concurrently scans all .rb/.erb/.haml/.slim files under root/app/
 // and returns hardcoded string literals that look user-facing.
-func Extract(root string) ([]HardcodedString, error) {
+// Files that cannot be read are skipped with a warning printed to stderr.
+// Only files in changedFiles are scanned when the set is non-nil (CI diff mode).
+func Extract(root string, changedFiles map[string]bool) ([]HardcodedString, error) {
 	appDir := filepath.Join(root, "app")
 	if _, err := os.Stat(appDir); os.IsNotExist(err) {
 		appDir = root
 	}
 
 	fileCh := make(chan string, 128)
-	resultCh := make(chan []HardcodedString, 128)
+	resultCh := make(chan scanResult, 128)
 
 	go func() {
 		defer close(fileCh)
@@ -155,9 +163,16 @@ func Extract(root string) ([]HardcodedString, error) {
 			if err != nil || d.IsDir() {
 				return nil
 			}
-			if sourceExts[filepath.Ext(path)] {
-				fileCh <- path
+			if !sourceExts[filepath.Ext(path)] {
+				return nil
 			}
+			if changedFiles != nil {
+				rel, _ := filepath.Rel(root, path)
+				if !changedFiles[rel] && !changedFiles[filepath.ToSlash(rel)] {
+					return nil
+				}
+			}
+			fileCh <- path
 			return nil
 		})
 	}()
@@ -169,10 +184,8 @@ func Extract(root string) ([]HardcodedString, error) {
 		go func() {
 			defer wg.Done()
 			for path := range fileCh {
-				results := scanFile(path, root)
-				if len(results) > 0 {
-					resultCh <- results
-				}
+				found, warn := scanFile(path, root)
+				resultCh <- scanResult{found: found, warn: warn}
 			}
 		}()
 	}
@@ -182,25 +195,28 @@ func Extract(root string) ([]HardcodedString, error) {
 	}()
 
 	var all []HardcodedString
-	for batch := range resultCh {
-		all = append(all, batch...)
+	for r := range resultCh {
+		if r.warn != nil {
+			fmt.Fprintf(os.Stderr, "warning: skipping file: %v\n", r.warn)
+		}
+		all = append(all, r.found...)
 	}
 	return all, nil
 }
 
-func scanFile(path, root string) []HardcodedString {
+func scanFile(path, root string) ([]HardcodedString, error) {
 	short, _ := filepath.Rel(root, path)
 
 	// Skip paths with their own i18n convention.
 	for _, prefix := range pathSkipPrefixes {
 		if strings.HasPrefix(short, prefix) {
-			return nil
+			return nil, nil
 		}
 	}
 
 	lines, err := readLines(path)
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("read %s: %w", short, err)
 	}
 
 	isERB := strings.HasSuffix(path, ".erb") || strings.HasSuffix(path, ".haml") || strings.HasSuffix(path, ".slim")
@@ -256,7 +272,7 @@ func scanFile(path, root string) []HardcodedString {
 		results = append(results, scanMultiLineTagContent(lines, short)...)
 	}
 
-	return results
+	return results, nil
 }
 
 func scanAttrPatterns(line, trimmed, short string, lineNum int) []HardcodedString {

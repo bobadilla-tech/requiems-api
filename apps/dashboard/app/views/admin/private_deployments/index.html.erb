@@ -11,19 +11,19 @@
 <!-- Stats -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Pending</p>
+    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.private_deployments.index.pending') %></p>
     <p class="text-3xl font-bold text-orange-500"><%= PrivateDeploymentRequest.pending.count %></p>
   </div>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Deploying</p>
+    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.private_deployments.index.deploying') %></p>
     <p class="text-3xl font-bold text-blue-500"><%= PrivateDeploymentRequest.deploying.count %></p>
   </div>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Active</p>
+    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.private_deployments.index.active') %></p>
     <p class="text-3xl font-bold text-green-600"><%= PrivateDeploymentRequest.active.count %></p>
   </div>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Cancelled</p>
+    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.private_deployments.index.cancelled') %></p>
     <p class="text-3xl font-bold text-gray-400"><%= PrivateDeploymentRequest.cancelled.count %></p>
   </div>
 </div>
@@ -31,7 +31,7 @@
 <!-- Filter Tabs -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex space-x-4">
-    <% [["All", nil], ["Pending", "pending"], ["Deploying", "deploying"], ["Active", "active"], ["Cancelled", "cancelled"]].each do |label, value| %>
+    <% [[t('admin.private_deployments.index.all'), nil], [t('admin.private_deployments.index.pending'), "pending"], [t('admin.private_deployments.index.deploying'), "deploying"], [t('admin.private_deployments.index.active'), "active"], [t('admin.private_deployments.index.cancelled'), "cancelled"]].each do |label, value| %>
       <%= link_to label,
         admin_private_deployments_path(status: value),
         class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{params[:status] == value ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'}" %>

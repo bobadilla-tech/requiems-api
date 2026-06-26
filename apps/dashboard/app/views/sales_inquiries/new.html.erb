@@ -128,10 +128,10 @@
 
           <!-- Actions -->
           <div class="flex items-center justify-end space-x-4">
-            <%= link_to "Cancel", root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
+            <%= link_to t('sales_inquiries.new.cancel'), root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
             <%= submit_tag t('shared.nav.get_started'),
               class: "px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md",
-              data: { disable_with: "Sending..." } %>
+              data: { disable_with: t('sales_inquiries.new.sending') } %>
           </div>
         <% end %>
       </div>

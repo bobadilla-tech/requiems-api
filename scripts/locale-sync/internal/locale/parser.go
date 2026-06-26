@@ -1,6 +1,7 @@
 package locale
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"os"
@@ -112,7 +113,8 @@ func Scan(root, lang string) ([]Entry, error) {
 	}
 
 	if len(errs) > 0 {
-		return all, errs[0]
+		errs = append(errs, walkErr) // include walk error if any
+		return all, errors.Join(errs...)
 	}
 	return all, walkErr
 }

@@ -126,7 +126,7 @@ func printValueDups(groups []locale.ValueDupGroup) {
 
 func runSourceScan(root string) error {
 	fmt.Println("=== Scanning Source Files for Hardcoded Strings ===")
-	found, err := source.Extract(root)
+	found, err := source.Extract(root, nil)
 	if err != nil {
 		return fmt.Errorf("source scan: %w", err)
 	}

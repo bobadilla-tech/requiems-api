@@ -3,6 +3,7 @@ package translate
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/bobadilla-tech/locale-sync/internal/locale"
@@ -16,13 +17,20 @@ type MissingEntry struct {
 	TargetFile string      // absolute path to the target locale file
 }
 
+// machinePlaceholderRe matches machine-generated placeholder strings like
+// "TODO: translate", "TODO:translate", "FIXME: review", "FIXME:check".
+// It requires the word after the colon to be lowercase — human-written prose
+// that begins with "TODO:" (e.g. Spanish "TODO: Necesitamos...") uses
+// uppercase after the colon and is NOT treated as a placeholder.
+var machinePlaceholderRe = regexp.MustCompile(`^(?:TODO|FIXME):\s*[a-z]`)
+
 // IsPlaceholder reports whether a locale value is an untranslated placeholder
 // that should be overwritten by a real translation.
 // extraPlaceholders are additional values to treat as placeholders (e.g. the
 // value used by `generate --placeholder`).
 func IsPlaceholder(v string, extraPlaceholders ...string) bool {
 	v = strings.TrimSpace(v)
-	if v == "" || strings.HasPrefix(v, "TODO:") || strings.HasPrefix(v, "FIXME:") {
+	if v == "" || machinePlaceholderRe.MatchString(v) {
 		return true
 	}
 	for _, p := range extraPlaceholders {
@@ -93,6 +101,85 @@ func DiscoverLangs(root, sourceLang string) ([]string, error) {
 		}
 	}
 	return langs, nil
+}
+
+// pluralForms are the Rails i18n pluralization key suffixes.
+var pluralForms = map[string]bool{
+	"zero": true, "one": true, "two": true,
+	"few": true, "many": true, "other": true,
+}
+
+// pluralSep is a protected token injected between plural sibling values before
+// sending to the translation API. It is added to the Protector's custom-words
+// list so it survives translation unchanged.
+const PluralSep = "XPLURALSEPX"
+
+// PluralGroup holds sibling pluralization entries that share a parent key
+// (e.g. "en.items.one" and "en.items.other" → parent "items").
+type PluralGroup struct {
+	Entries []MissingEntry // one per plural form, sorted by leaf name
+	Parent  string        // shared key prefix, target-lang qualified
+}
+
+// GroupPlurals partitions missing entries into singletons and groups of plural
+// siblings. Plural siblings are entries whose leaf key is a Rails i18n plural
+// form ("one", "other", "zero", etc.) AND share the same parent key. Groups
+// with only one plural form found (the sibling is already translated) are kept
+// as singletons so they are still translated individually.
+func GroupPlurals(missing []MissingEntry) (singles []MissingEntry, groups []PluralGroup) {
+	parentMap := map[string][]MissingEntry{}
+	var nonPlural []MissingEntry
+
+	for _, m := range missing {
+		parts := strings.Split(m.TargetKey, ".")
+		if len(parts) >= 2 && pluralForms[parts[len(parts)-1]] {
+			parent := strings.Join(parts[:len(parts)-1], ".")
+			parentMap[parent] = append(parentMap[parent], m)
+		} else {
+			nonPlural = append(nonPlural, m)
+		}
+	}
+
+	for parent, entries := range parentMap {
+		if len(entries) >= 2 {
+			groups = append(groups, PluralGroup{Entries: entries, Parent: parent})
+		} else {
+			singles = append(singles, entries...)
+		}
+	}
+	singles = append(singles, nonPlural...)
+	return
+}
+
+// CombinePluralGroup serializes plural sibling values into one string for the
+// translation API, separated by PluralSep. Returns the combined value and a
+// slice of leaf-key names in the same order.
+func CombinePluralGroup(g PluralGroup) (combined string, order []string) {
+	parts := make([]string, len(g.Entries))
+	order = make([]string, len(g.Entries))
+	for i, e := range g.Entries {
+		kParts := strings.Split(e.TargetKey, ".")
+		order[i] = kParts[len(kParts)-1]
+		parts[i] = e.Entry.Value
+	}
+	return strings.Join(parts, " "+PluralSep+" "), order
+}
+
+// SplitPluralTranslation splits a translated combined plural string back into
+// per-form values using order returned by CombinePluralGroup. Falls back to
+// repeating the full string for all forms if the separator is missing (e.g.
+// translation API stripped it).
+func SplitPluralTranslation(translated string, order []string) map[string]string {
+	parts := strings.Split(translated, " "+PluralSep+" ")
+	result := make(map[string]string, len(order))
+	for i, form := range order {
+		if i < len(parts) {
+			result[form] = strings.TrimSpace(parts[i])
+		} else {
+			result[form] = strings.TrimSpace(parts[0]) // fallback
+		}
+	}
+	return result
 }
 
 // CharCount returns the total UTF-8 character count across all entry values.

@@ -32,6 +32,9 @@ func TestIsPlaceholder(t *testing.T) {
 		{"custom placeholder non-match", "Other text", []string{"PENDING"}, false},
 		{"empty extra placeholder ignored", "real", []string{""}, false},
 		{"leading space trimmed TODO", "  TODO: translate  ", nil, true},
+		// Human-written prose that begins with "TODO:" must NOT be treated as placeholder.
+		{"TODO uppercase prose not placeholder", "TODO: Necesitamos mejorar esta sección", nil, false},
+		{"FIXME uppercase prose not placeholder", "FIXME: Esta traducción necesita revisión", nil, false},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
