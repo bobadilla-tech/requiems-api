@@ -2,6 +2,7 @@ en:
   sales_inquiries:
     new:
       heading: "Talk to Sales"
+      description: "Get personalized pricing and discuss your API needs with our sales team."
       fill_out_the_form_below_and_our_sales: "Fill out the form below and our sales team will reach out to discuss your API needs."
       get_in_touch_with_our_sales_team: "Get in Touch with Our Sales Team"
       enterprise_security_privacy_and: "Enterprise security, privacy and compliance"

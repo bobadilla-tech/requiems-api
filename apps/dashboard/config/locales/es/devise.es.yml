@@ -76,6 +76,6 @@ es:
     messages:
       not_found: "extraviado"
       expired: "ha caducado, por favor solicite uno nuevo"
-      not_locked: "no estaba cerrado"
+      not_locked: "no está bloqueada"
       already_confirmed: "Ya se confirmó, por favor intente iniciar sesión."
       confirmation_period_expired: "Debe confirmarse dentro de %{period}, por favor solicite uno nuevo."

@@ -57,15 +57,15 @@ es:
         migration:
           heading: "Migración desde AbstractAPI"
         hero_context: "Plataforma API multipropósito"
-        hero_headline: "API Requiems vs. API Abstracta"
+        hero_headline: "Requiems API vs AbstractAPI"
         features:
           heading: "Comparación de características"
         card_blurb: "AbstractAPI ofrece más de 20 API especializadas (verificación de correo electrónico, geolocalización de IP, validación telefónica, enriquecimiento de datos de empresas, días festivos y más), cada una con su propia clave y suscripción. Excelente experiencia del desarrollador; facturación fragmentada."
-        display_name: "Resumen API"
+        display_name: "AbstractAPI"
         category: "De múltiples fines"
       neverbounce:
         card_blurb: "NeverBounce (una empresa de ZoomInfo) procesa miles de millones de verificaciones al mes y se integra con más de 85 plataformas de marketing. Solo ofrece cobertura por correo electrónico; cada tipo de dato adicional requiere un proveedor diferente."
-        display_name: "NuncaBounce"
+        display_name: "NeverBounce"
         hero_headline: "API de Requiems frente a NeverBounce"
         migration:
           heading: "Migración desde NeverBounce"
@@ -109,10 +109,10 @@ es:
         card_blurb: "Neutrinoapi es un conjunto de herramientas API de propósito general que abarca API para correo electrónico, teléfono, IP, geolocalización, seguridad, procesamiento de imágenes, telefonía, comercio electrónico y mensajes de texto; más de 30 puntos de acceso en una sola cuenta. Establecido desde 2013."
         migration:
           heading: "Migrando desde Neutrinoapi"
-        hero_headline: "API de réquiems frente a API de neutrinos"
+        hero_headline: "Requiems API vs Neutrinoapi"
         meta_description: "Compara Requiems API y Neutrinoapi en cuanto a características, puntos de acceso, precios y experiencia para desarrolladores."
         meta_title: "API Requiems vs. Neutrinoapi: Comparativa de API de propósito general (2026)"
-        display_name: "Neutrinoapio"
+        display_name: "Neutrinoapi"
       numverify:
         features:
           heading: "Comparación de características"
@@ -209,7 +209,7 @@ es:
         card_blurb: "IPstack (un producto de APILayer) ofrece geolocalización IP en tiempo real, con más de 100 campos de datos: país, región, ciudad, zona horaria, moneda, proveedor de servicios de Internet e información sobre amenazas. Compatible con IPv4 e IPv6."
         migration:
           heading: "Migración desde IPstack"
-        display_name: "Pila IP"
+        display_name: "IPstack"
         features:
           heading: "Comparación de características"
         meta_description: "Compara Requiems API e IPstack en cuanto a características, precios, campos de datos y amplitud de la API."
@@ -236,7 +236,7 @@ es:
           heading: "Migrando desde API Ninjas"
         meta_title: "Requiems API vs API Ninjas: Comparativa de API multipropósito 2026"
         card_blurb: "API Ninjas ofrece más de 135 API listas para producción que abarcan finanzas, IA/visión artificial, salud, entretenimiento, transporte y más, utilizadas por más de 600 000 desarrolladores, incluidas empresas de la lista Fortune 500. Política de almacenamiento de datos cero."
-        display_name: "Ninjas de la API"
+        display_name: "API Ninjas"
         category: "De múltiples fines"
       kickbox:
         benchmarks:
@@ -270,9 +270,9 @@ es:
       migration_body: "Cambia tu URL base, actualiza el encabezado de autenticación y ajusta los nombres de los campos. La mayoría de las integraciones se migran en menos de una hora. Consulta las guías completas de migración en nuestra documentación."
       meta_title: "API de Requiems frente a la competencia: Comparativa completa de API (2026)"
       benchmarks_columns:
-        neverbounce: "NuncaBounce"
-        ipstack: "Pila IP"
-        abstractapi: "Resumen API"
+        neverbounce: "NeverBounce"
+        ipstack: "IPstack"
+        abstractapi: "AbstractAPI"
         zerobounce: "ZeroBounce"
       philosophy_pricing_title: "Precios transparentes"
       philosophy_breadth_body: "Verificación de correo electrónico, geolocalización IP, validación telefónica, datos financieros: todo bajo una sola clave, un solo panel de control, una sola factura mensual."

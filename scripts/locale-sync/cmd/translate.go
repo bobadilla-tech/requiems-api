@@ -112,6 +112,17 @@ type langMissing struct {
 }
 
 func runTranslate(cmd *cobra.Command, args []string) error {
+	// Validate flags before doing any work.
+	if translateBatchSize <= 0 {
+		return fmt.Errorf("--batch-size must be a positive integer (got %d)", translateBatchSize)
+	}
+	if translateProvider != "google" {
+		return fmt.Errorf("unsupported --provider %q: only \"google\" is currently supported", translateProvider)
+	}
+	if translateCacheOnly && translateNoCache {
+		return fmt.Errorf("--cache-only and --no-cache are mutually exclusive")
+	}
+
 	// 1. Resolve target languages.
 	targets, err := resolveTargetLangs(translateTo, args, translateFrom)
 	if err != nil {

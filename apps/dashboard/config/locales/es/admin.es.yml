@@ -183,7 +183,7 @@ es:
         revenue_analytics: "Análisis de ingresos"
         revenue_by_plan: "Ingresos por plan"
         new_vs_canceled_subscriptions: "Suscripciones nuevas frente a suscripciones canceladas"
-        customer_distribution: "Distribución al cliente"
+        customer_distribution: "Distribución de clientes"
         strong_growth: "Fuerte crecimiento:"
         subscription_growth_and_churn_over_time: "Crecimiento y abandono de suscripciones a lo largo del tiempo"
         revenue_insights: "Información sobre ingresos"

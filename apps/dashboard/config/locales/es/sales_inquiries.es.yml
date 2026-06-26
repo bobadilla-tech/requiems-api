@@ -2,6 +2,7 @@ es:
   sales_inquiries:
     new:
       heading: "Habla con Ventas"
+      description: "Obtén precios personalizados y habla sobre tus necesidades de API con nuestro equipo de ventas."
       get_in_touch_with_our_sales_team: "Ponte en contacto con nuestro equipo de ventas."
       talk_to_sales_requiems_api: "Contacta con el departamento de ventas - API de Requiems"
       enterprise_dedicated_support: "Soporte empresarial dedicado"
