@@ -72,7 +72,6 @@ fr:
       migration_heading: "Switching is fast"
       migration_body: "Swap your base URL, update your auth header, adjust field names. Most integrations migrate in under an hour. Full migration guides in our docs."
       migration_cta: "Read Migration Docs"
-
     show:
       cta_primary: "Start Free"
       cta_secondary: "View API Docs"
@@ -81,7 +80,10 @@ fr:
       cta_see_all: "See All Comparisons"
       cta_headline: "Ready to switch from %{competitor}?"
       cta_body: "500 free API calls per month, no credit card required. Migration takes under an hour."
-
+      uptime_sla: "SLA de disponibilité"
+      latency_p50: "Latence (p50)"
+      free_tier: "Niveau gratuit"
+      api_coverage: "Couverture API"
     competitors:
       zerobounce:
         display_name: "ZeroBounce"
@@ -156,7 +158,6 @@ fr:
             - "Replace `api.zerobounce.net` base URL with `api.requiems.dev`"
             - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
             - "Map `status` field: ZeroBounce `valid` → Requiems `deliverable`; `invalid` → `undeliverable`"
-
       neverbounce:
         display_name: "NeverBounce"
         category: "Email Verification"
@@ -230,7 +231,6 @@ fr:
             - "Replace `api.neverbounce.com` base URL with `api.requiems.dev`"
             - "Swap API key from query param to `Authorization: Bearer <key>` header"
             - "Map result codes: `valid` → `deliverable`; `invalid` → `undeliverable`; `disposable` → `risky`"
-
       kickbox:
         display_name: "Kickbox"
         category: "Email Verification"
@@ -304,7 +304,6 @@ fr:
             - "Replace `api.kickbox.com` base URL with `api.requiems.dev`"
             - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
             - "Map `result` field: `deliverable` stays; `undeliverable` stays; `risky` maps to Requiems `risky`"
-
       mailboxlayer:
         display_name: "Mailboxlayer"
         category: "Email Verification"
@@ -375,7 +374,6 @@ fr:
             - "Replace `apilayer.net/api/check` with `api.requiems.dev/v1/email/validate`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
             - "Map `format_valid` → `syntax_valid`; `smtp_check` → `smtp_valid`; `score` → `deliverability_score`"
-
       bouncify:
         display_name: "Bouncify"
         category: "Email Verification"
@@ -446,7 +444,6 @@ fr:
             - "Move from batch upload workflow to real-time API call on form submission"
             - "Use `Authorization: Bearer <key>` header with `api.requiems.dev/v1/email/validate`"
             - "Map result fields: `deliverable` stays; `invalid` → `undeliverable`; `accept_all` → `catch_all`"
-
       ipstack:
         display_name: "IPstack"
         category: "IP Geolocation"
@@ -517,7 +514,6 @@ fr:
             - "Replace `api.ipstack.com/{ip}` with `api.requiems.dev/v1/ip/lookup?ip={ip}`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
             - "Most response fields are identical; map `location.geoname_id` to `geoname_id` at root level"
-
       abstractapi:
         display_name: "AbstractAPI"
         category: "Multi-Purpose"
@@ -585,7 +581,6 @@ fr:
             - "Replace `emailvalidation.abstractapi.com`, `ipgeolocation.abstractapi.com`, etc. with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap `api_key` query param for `Authorization: Bearer <key>` header — same key works for every endpoint"
             - "Response field names are similar; consult per-endpoint migration notes in our docs"
-
       neutrinoapi:
         display_name: "Neutrinoapi"
         category: "Multi-Purpose"
@@ -659,7 +654,6 @@ fr:
             - "Replace `neutrinoapi.net/api/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap user-id + api-key combo for `Authorization: Bearer <key>` header"
             - "Map credit-based rate limits to per-call metering in your Requiems dashboard"
-
       api_ninjas:
         display_name: "API Ninjas"
         category: "Multi-Purpose"
@@ -727,7 +721,6 @@ fr:
             - "Replace `api.api-ninjas.com/v1/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap `X-Api-Key` header for `Authorization: Bearer <key>`"
             - "Consult per-endpoint migration docs for field mapping"
-
       numverify:
         display_name: "Numverify"
         category: "Phone Validation"

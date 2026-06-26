@@ -123,6 +123,8 @@ fr:
         back_btn: "← Retour aux clés API"
         view_docs_btn: "Voir la documentation API"
         go_dashboard_btn: "Aller au tableau de bord"
+      show:
+        api_key_details: "Détails de la clé API"
     billing:
       title: "Facturation et abonnement"
       subtitle: "Gérez votre formule, votre moyen de paiement et l'historique de facturation"
@@ -260,6 +262,8 @@ fr:
         cancel: "Annuler — conserver mon compte"
         confirm_btn: "Supprimer définitivement mon compte"
         deleting: "Suppression du compte..."
+      show:
+        profile_picture: "Photo de profil"
     usage:
       title: "Utilisation et analyses"
       subtitle: "Suivez l'utilisation et les performances de votre API"
@@ -391,14 +395,12 @@ fr:
           docs_notice: "En attendant, explorez notre documentation API sur %{docs_link}."
           questions: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
           questions_html: "Des questions ? Répondez à cet e-mail ou écrivez-nous à %{email}."
-
     private_deployments:
       new:
         back_to_pricing: "← Retour aux tarifs"
         checkout_notice: "Vous serez redirigé vers notre tunnel de paiement sécurisé LemonSqueezy pour finaliser votre abonnement."
         submit: "Continuer vers le paiement →"
         redirecting: "Redirection..."
-
     referrals:
       title: "Programme de Parrainage"
       subtitle: "Partagez votre lien de parrainage et gagnez des récompenses quand vos amis souscrivent à un plan payant."
@@ -418,3 +420,5 @@ fr:
         status_col: "Statut"
         status_pending: "En attente"
         status_converted: "Converti"
+    sidebar:
+      referrals: "Orientations"

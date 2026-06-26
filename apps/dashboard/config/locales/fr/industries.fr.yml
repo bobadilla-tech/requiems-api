@@ -1,373 +1,373 @@
 fr:
   industries:
     index:
-      meta_title: ""
+      meta_title: "API par secteur d'activité | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Une seule clé API. Pour tous les secteurs d'activité."
+        subheadline: "Découvrez comment les Requiems API simplifient les flux de travail réels de votre secteur, de la validation à la géolocalisation en passant par la finance."
+        cta: "Réservez un appel stratégique"
       strategy_call:
-        label: ""
-      questions_intro: ""
-      view_industry: ""
+        label: "Réservez un appel stratégique"
+      questions_intro: "Vous ne savez pas quelles API correspondent à votre infrastructure ? Parlons-en."
+      view_industry: "Voir le secteur"
       cards:
         travel:
-          title: ""
-          blurb: ""
+          title: "Voyage"
+          blurb: "Flux de réservation, géolocalisation, devises et détection des fraudes pour les plateformes de voyage."
         telecom:
-          title: ""
-          blurb: ""
+          title: "Télécom"
+          blurb: "Validation téléphonique, analyse IP et vérification des numéros pour les produits de télécommunications."
         saas:
-          title: ""
-          blurb: ""
+          title: "SaaS"
+          blurb: "Authentification, validation de la facturation, qualité des données et prévention du spam pour les applications SaaS."
         retail:
-          title: ""
-          blurb: ""
+          title: "Vente au détail"
+          blurb: "Validation des adresses, enrichissement des stocks et qualité des données de caisse pour le commerce de détail."
         real_estate:
-          title: ""
-          blurb: ""
+          title: "Immobilier"
+          blurb: "Géolocalisation des biens, validation des adresses et données de fuseau horaire pour les plateformes d'annonces."
         nonprofit:
-          title: ""
-          blurb: ""
+          title: "À but non lucratif"
+          blurb: "Validation des données des donateurs, délivrabilité des e-mails et enrichissement des contacts pour les organisations à but non lucratif."
         media:
-          title: ""
-          blurb: ""
+          title: "Médias"
+          blurb: "Règles de contenu basées sur la géolocalisation, routage IP et modération de texte pour les plateformes médias."
         manufacturing:
-          title: ""
-          blurb: ""
+          title: "Fabrication"
+          blurb: "Enrichissement des adresses et des fuseaux horaires, validation des fournisseurs et qualité des données pour les équipes opérationnelles."
         logistics:
-          title: ""
-          blurb: ""
+          title: "Logistique"
+          blurb: "API de validation d'adresse, de géolocalisation et de fuseau horaire pour le routage et la livraison."
         legal:
-          title: ""
-          blurb: ""
+          title: "Légal"
+          blurb: "Validation des adresses des documents, vérification des adresses électroniques et données de conformité pour les technologies juridiques."
         insurance:
-          title: ""
-          blurb: ""
+          title: "Assurance"
+          blurb: "Données d'adresse et de géolocalisation, validation des numéros de téléphone et des adresses électroniques pour les flux de polices et de sinistres."
         hospitality:
-          title: ""
-          blurb: ""
+          title: "Hospitalité"
+          blurb: "Validation des réservations, géolocalisation, devise et qualité des données clients pour les hôtels."
         healthcare:
-          title: ""
-          blurb: ""
+          title: "Soins de santé"
+          blurb: "Validation des coordonnées des patients, planification des rendez-vous en fonction des fuseaux horaires et contrôles des données conformes à la loi HIPAA."
         government:
-          title: ""
-          blurb: ""
+          title: "Gouvernement"
+          blurb: "Vérification d'adresse, validation d'identité et géolocalisation pour les services publics."
         energy:
-          title: ""
-          blurb: ""
+          title: "Énergie"
+          blurb: "Géolocalisation des actifs, validation des adresses et données de fuseau horaire pour les services publics et les réseaux intelligents."
         edtech:
-          title: ""
-          blurb: ""
+          title: "EdTech"
+          blurb: "Validation des coordonnées des étudiants, prise en charge des fuseaux horaires et protection contre le spam pour les plateformes d'apprentissage."
         ecommerce:
-          title: ""
-          blurb: ""
+          title: "commerce électronique"
+          blurb: "Validation des transactions, signaux de fraude, enrichissement des adresses et données de paiement pour les magasins."
         agencies:
-          title: ""
-          blurb: ""
+          title: "Agences"
+          blurb: "Validation des données clients, délivrabilité des e-mails et API d'automatisation pour les agences numériques."
         gaming:
-          title: ""
-          blurb: ""
+          title: "Jeux"
+          blurb: "Géolocalisation IP, modération des discussions, détection des fraudes et verrouillage régional pour les studios de jeux."
         fintech:
-          title: ""
-          blurb: ""
+          title: "Fintech"
+          blurb: "Recherche de BIN, validation IBAN/SWIFT, signaux KYC et détection de fraude pour les fintechs."
     travel:
-      meta_title: ""
+      meta_title: "API pour les entreprises du secteur du voyage | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le voyage : Personnalisez, sécurisez et automatisez chaque réservation"
+        subheadline: "Optimisez les flux de réservation internationaux grâce à des API de géolocalisation, de validation et de paiement conçues pour les plateformes de voyage."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail liés aux voyages"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes de voyage expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Développez votre plateforme de voyage plus rapidement."
+        subheadline: "Nous allons adapter les API à vos flux de travail de réservation et d'opérations."
+        cta: "Réservez un appel stratégique"
     telecom:
-      meta_title: ""
+      meta_title: "API pour les entreprises de télécommunications | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les télécommunications : Validez les numéros, détectez les menaces, optimisez le routage."
+        subheadline: "Validation téléphonique, renseignements sur les adresses IP et vérification des numéros pour les opérateurs, les MVNO et les plateformes de télécommunications."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail des télécommunications"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes de télécommunications livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Concevoir des produits de télécommunications plus intelligents."
+        subheadline: "Passons en revue les API qui correspondent aux flux de travail de vos abonnés et de votre réseau."
+        cta: "Réservez un appel stratégique"
     saas:
-      meta_title: ""
+      meta_title: "API pour produits SaaS | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour SaaS : données propres, inscriptions sécurisées et moins de demandes d’assistance"
+        subheadline: "API de validation, de prévention du spam et d'enrichissement des données pour les produits SaaS nécessitant une mise à l'échelle."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail SaaS"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes SaaS déploient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Naviguez vers un SaaS plus propre et plus sûr."
+        subheadline: "Identifions ensemble les API de validation et d'enrichissement qui correspondent à votre produit."
+        cta: "Réservez un appel stratégique"
     retail:
-      meta_title: ""
+      meta_title: "API pour les entreprises de vente au détail | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le commerce de détail : des données de caisse propres, moins de retours, des clients plus satisfaits"
+        subheadline: "Validation des adresses, contrôles de paiement et signaux de fraude pour les plateformes de vente au détail et les systèmes de point de vente."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail du commerce de détail"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes de vente au détail livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Réduisez les frictions à chaque étape du passage en caisse."
+        subheadline: "Nous allons adapter les API à vos flux de travail de panier et de traitement des commandes."
+        cta: "Réservez un appel stratégique"
     real_estate:
-      meta_title: ""
+      meta_title: "API pour les plateformes immobilières | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour l'immobilier : annonces précises, contacts vérifiés, portée mondiale"
+        subheadline: "API de validation d'adresse, de géolocalisation et de vérification des contacts pour les plateformes immobilières et les CRM."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail immobiliers"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes immobilières expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Créer des plateformes immobilières plus précises."
+        subheadline: "Nous pouvons intégrer les API d'adresse, de géolocalisation et de contact à vos flux de travail d'annonces."
+        cta: "Réservez un appel stratégique"
     nonprofit:
-      meta_title: ""
+      meta_title: "API pour les organisations à but non lucratif | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les organismes sans but lucratif : touchez de vrais donateurs, gardez votre CRM à jour"
+        subheadline: "API de validation des adresses e-mail et des numéros de téléphone, de qualité des données et de géolocalisation pour la communication des organisations à but non lucratif et la gestion des donateurs."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "Des API conçues pour les flux de travail des organisations à but non lucratif"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes à but non lucratif expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Touchez plus de donateurs grâce à des données plus propres."
+        subheadline: "Nous pouvons adapter les API de validation et de communication aux flux de travail de vos donateurs."
+        cta: "Réservez un appel stratégique"
     media:
-      meta_title: ""
+      meta_title: "API pour les entreprises de médias | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les médias : géolocalisation du contenu, modération à grande échelle, localisation instantanée"
+        subheadline: "API de géolocalisation IP, de modération de texte et de détection de la langue pour les éditeurs, les diffuseurs et les plateformes de contenu."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail multimédias"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes médias livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Diffuser le bon contenu auprès du bon public."
+        subheadline: "Nous pouvons intégrer les API de géolocalisation, de modération et de langue à votre plateforme."
+        cta: "Réservez un appel stratégique"
     manufacturing:
-      meta_title: ""
+      meta_title: "API pour les entreprises manufacturières | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le secteur manufacturier : données fournisseurs fiables, opérations optimisées, portée mondiale"
+        subheadline: "API de validation d'adresse, de géolocalisation et de vérification des contacts pour les opérations de fabrication et la chaîne d'approvisionnement."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de production"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes de production livrent avec les Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Assurez la qualité des données à chaque étape de votre chaîne d'approvisionnement."
+        subheadline: "Nous pouvons intégrer les API d'adresse, de contact et de finance à vos flux de travail opérationnels."
+        cta: "Réservez un appel stratégique"
     logistics:
-      meta_title: ""
+      meta_title: "API pour les entreprises de logistique | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour la logistique : validez les adresses, optimisez les itinéraires et livrez à temps."
+        subheadline: "API de validation d'adresse, de géolocalisation et de fuseau horaire pour la livraison, l'entreposage et la logistique du dernier kilomètre."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail logistiques"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes logistiques expédient avec les Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Livrer à temps avec des données propres et précises."
+        subheadline: "Nous pouvons intégrer les API d'adresse et de routage à vos flux de travail de livraison."
+        cta: "Réservez un appel stratégique"
     legal:
-      meta_title: ""
+      meta_title: "API pour les entreprises de technologies juridiques | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les technologies juridiques : contacts précis, adresses vérifiées, données sécurisées"
+        subheadline: "API de validation d'adresses électroniques et postales, de recherche de domaines et de géolocalisation pour les plateformes juridiques et les outils de conformité."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "Des API conçues pour les flux de travail juridiques"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes de technologies juridiques déploient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Développez des technologies juridiques basées sur des données fiables."
+        subheadline: "Nous pouvons adapter les API de validation et de domaine à vos flux de travail contractuels et de conformité."
+        cta: "Réservez un appel stratégique"
     insurance:
-      meta_title: ""
+      meta_title: "API pour les compagnies d'assurance | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour l'assurance : données de risque précises, contacts vérifiés, traitement des sinistres plus rapide"
+        subheadline: "Validation des adresses, numéros de téléphone et adresses électroniques, ainsi que des API de géolocalisation pour la souscription d'assurance, les polices et les sinistres."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail dans le secteur de l'assurance"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes d'assurance expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Concevoir des produits d'assurance basés sur des données précises et vérifiées."
+        subheadline: "Nous pouvons adapter les API à vos processus de souscription, de gestion des polices et de sinistres."
+        cta: "Réservez un appel stratégique"
     hospitality:
-      meta_title: ""
+      meta_title: "API pour les entreprises du secteur de l'hôtellerie | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour l'hôtellerie : Personnalisez chaque séjour, validez chaque réservation"
+        subheadline: "API de géolocalisation, de validation et de paiement pour les hôtels, les complexes hôteliers et les plateformes d'accueil."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "Des API conçues pour les flux de travail du secteur de l'hôtellerie"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes hôtelières expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Offrez une meilleure expérience client grâce à des données précises."
+        subheadline: "Nous pouvons intégrer les API de géolocalisation, de validation et de paiement à votre infrastructure hôtelière."
+        cta: "Réservez un appel stratégique"
     healthcare:
-      meta_title: ""
+      meta_title: "API pour les plateformes de santé | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le secteur de la santé : coordonnées des patients vérifiées, planification précise, données fiables"
+        subheadline: "API de validation des numéros de téléphone et des adresses e-mail, de planification des rendez-vous en fonction des fuseaux horaires et de géolocalisation pour les plateformes de soins de santé et les technologies de la santé."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail du secteur de la santé"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes soignantes expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Concevez des produits de santé à partir de données fiables."
+        subheadline: "Nous allons intégrer les API de validation, de planification et de géolocalisation à vos flux de travail cliniques."
+        cta: "Réservez un appel stratégique"
     government:
-      meta_title: ""
+      meta_title: "API pour les services gouvernementaux | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les gouvernements : adresses exactes, identités vérifiées, confiance du public"
+        subheadline: "API de validation d'adresse, de géolocalisation et de vérification des contacts pour les plateformes du secteur public et les services de gouvernement électronique."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail gouvernementaux"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes gouvernementales livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Élaborer des services publics à partir de données fiables et vérifiées."
+        subheadline: "Permettez-nous de connecter les API d'adresse, de contact et de lutte contre la fraude à votre plateforme gouvernementale."
+        cta: "Réservez un appel stratégique"
     energy:
-      meta_title: ""
+      meta_title: "API pour les entreprises énergétiques | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour l'énergie : données d'actifs précises, répartition optimisée, couverture mondiale"
+        subheadline: "API de géolocalisation, de validation d'adresses et de fuseaux horaires pour les services publics, les énergies renouvelables et les plateformes de réseaux intelligents."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "Des API conçues pour les flux de travail énergétiques"
       proof_points:
-        heading: ""
+        heading: "Quelles équipes énergétiques transportent les Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Optimisez vos opérations énergétiques grâce à des données propres."
+        subheadline: "Nous pouvons intégrer les API de géolocalisation, d'adresse et de validation à votre plateforme énergétique."
+        cta: "Réservez un appel stratégique"
     edtech:
-      meta_title: ""
+      meta_title: "API pour les plateformes EdTech | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les technologies éducatives : apprenants vérifiés, portée mondiale, moins de demandes d’assistance"
+        subheadline: "API de validation d'e-mail et de numéro de téléphone, de planification en fonction des fuseaux horaires et de prévention du spam pour les plateformes d'apprentissage et les produits EdTech."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail EdTech"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes EdTech livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Concevoir des plateformes d'apprentissage accessibles à tous les élèves."
+        subheadline: "Nous pouvons intégrer les API de validation, de planification et de modération à votre produit EdTech."
+        cta: "Réservez un appel stratégique"
     ecommerce:
-      meta_title: ""
+      meta_title: "API pour les entreprises de commerce électronique | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le e-commerce : moins d’échecs de paiement, des données plus propres, un taux de conversion plus élevé"
+        subheadline: "API de validation, de contrôle des paiements, de détection de fraude et de géolocalisation pour les boutiques en ligne et les plateformes de marché."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail du commerce électronique"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes e-commerce livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Convertissez plus, remboursez moins, développez-vous davantage."
+        subheadline: "Nous allons intégrer les API de paiement, de détection de fraude et de validation à votre infrastructure e-commerce."
+        cta: "Réservez un appel stratégique"
     agencies:
-      meta_title: ""
+      meta_title: "API pour agences numériques | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour les agences : données clients propres, automatisations plus rapides, meilleure délivrabilité"
+        subheadline: "Validation des adresses e-mail et des numéros de téléphone, enrichissement des données et API d'automatisation pour les agences de marketing et de développement numérique."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "Des API conçues pour les flux de travail des agences"
       proof_points:
-        heading: ""
+        heading: "Quelles équipes d'agences expédient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Fournir un travail de meilleure qualité à chaque client."
+        subheadline: "Permettez-nous de faire correspondre les API de validation, de domaine et d'automatisation à votre infrastructure d'agence."
+        cta: "Réservez un appel stratégique"
     gaming:
-      meta_title: ""
+      meta_title: "API pour studios de jeux | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour le jeu : verrouillage régional, modération du chat et détection de la fraude à grande échelle"
+        subheadline: "API de géolocalisation IP, de modération de contenu et de détection de fraude pour les studios de jeux et les plateformes multijoueurs."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail de jeu"
       proof_points:
-        heading: ""
+        heading: "Quels studios de jeux livrent avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Offrez des expériences de jeu plus sûres et plus intelligentes."
+        subheadline: "Nous pouvons intégrer les API de renseignement IP, de modération et de lutte contre la fraude à votre plateforme de jeu."
+        cta: "Réservez un appel stratégique"
     fintech:
-      meta_title: ""
+      meta_title: "API pour les entreprises Fintech | Requiems API"
       hero:
-        headline: ""
-        subheadline: ""
-        cta: ""
-        secondary_cta: ""
+        headline: "API pour la Fintech : recherche de BIN, validation d’IBAN et détection de fraude en millisecondes"
+        subheadline: "API de validation des paiements, d'enrichissement KYC et de détection des fraudes pour les produits fintech et l'infrastructure financière."
+        cta: "Réservez un appel stratégique"
+        secondary_cta: "Parcourir les API"
       api_mapping:
-        heading: ""
+        heading: "API conçues pour les flux de travail fintech"
       proof_points:
-        heading: ""
+        heading: "Ce que les équipes fintech déploient avec Requiems"
       final_cta:
-        headline: ""
-        subheadline: ""
-        cta: ""
+        headline: "Concevez des produits fintech à partir de données de paiement fiables."
+        subheadline: "Nous allons intégrer les API BIN, IBAN, fraude et KYC à vos flux de travail financiers."
+        cta: "Réservez un appel stratégique"

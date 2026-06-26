@@ -1,4 +1,3 @@
----
 fr:
   systems:
     index:
@@ -53,7 +52,6 @@ fr:
             - "Codes QR"
             - "Encodage et conversions"
             - "Utilitaires divers"
-
     show:
       back: "Tous les systèmes"
       engine_label: "Moteur"
@@ -66,7 +64,9 @@ fr:
       use_cases_heading: "Cas d'usage"
       get_started: "Obtenir une clé API"
       explore_divisions: "Parcourir les APIs sous-jacentes"
-
+      api_reference: "Référence API"
+      use_cases: "Cas d'utilisation"
+      api_endpoints: "Points de terminaison de l'API"
     identity-risk:
       meta_title: "Système identité et risque | Requiems API"
       kicker: "Système identité et risque"
@@ -125,7 +125,6 @@ fr:
         - "ASN et renseignement sur les menaces"
         - "Signaux d'âge et réputation de domaine"
         - "Score de risque du contenu texte"
-
     payments-intelligence:
       meta_title: "Système intelligence paiements | Requiems API"
       kicker: "Système intelligence paiements"
@@ -182,7 +181,6 @@ fr:
         - "Vérification code SWIFT/BIC"
         - "Géolocalisation IP et correspondance pays"
         - "Détection VPN pour anomalies de facturation"
-
     global-data:
       meta_title: "Système données mondiales | Requiems API"
       kicker: "Système données mondiales"
@@ -236,7 +234,6 @@ fr:
         - "Calendriers de jours fériés (100+ pays)"
         - "Recherche et validation de codes postaux"
         - "Calcul des jours ouvrés"
-
     data-integrity:
       meta_title: "Système intégrité des données | Requiems API"
       kicker: "Système intégrité des données"
@@ -297,7 +294,6 @@ fr:
         - "Analyse de sentiment"
         - "Détection de langue"
         - "Orthographe et normalisation de texte"
-
     developer-utilities:
       meta_title: "Utilitaires développeur | Requiems API"
       kicker: "Utilitaires développeur"

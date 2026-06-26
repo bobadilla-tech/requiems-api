@@ -193,7 +193,6 @@ fr:
         primary: "Obtenir une clé API"
         secondary: "Parler aux ventes"
         footer: "Sans carte bancaire • Résiliation à tout moment"
-
     blog:
       title: "Blog — Requiems API"
       heading: "Blog — Bientôt"
@@ -208,11 +207,9 @@ fr:
       meanwhile: "En attendant, parcourez notre documentation et le répertoire des APIs"
       cta_docs: "Voir la documentation"
       cta_apis: "Explorer les APIs"
-
     docs:
       redirecting: "Redirection vers la documentation API..."
       click_here: "Cliquez ici si vous n'êtes pas redirigé"
-
     changelog:
       title: "Journal des modifications — Requiems API"
       heading: "Journal des modifications"
@@ -302,7 +299,7 @@ fr:
         text: "Souhaitez-vous être averti des nouvelles versions et fonctionnalités ?"
         signed_in: "Nous enverrons les notifications à votre adresse enregistrée : %{email}"
         sign_up_cta: "Créer un compte"
-
+      v0_1_0: "v0.1.0"
     glossary:
       title: "Glossaire API — Requiems API"
       heading: "Glossaire API"
@@ -349,7 +346,6 @@ fr:
         text: "Consultez notre documentation complète ou contactez le support"
         cta_docs: "Voir la documentation"
         cta_contact: "Contacter le support"
-
     error_codes:
       title: "Référence des codes d'erreur — Requiems API"
       heading: "Référence des codes d'erreur"
@@ -421,7 +417,6 @@ fr:
         cta_docs: "Voir la documentation"
         cta_contact: "Contacter le support"
         cta_status: "Voir l'état des APIs"
-
     pricing:
       title: "Tarifs — Requiems API"
       header:
@@ -554,7 +549,6 @@ fr:
         a4: "Toutes les formules tournent dans l'UE pour le RGPD."
         q5: "Y a-t-il un essai gratuit pour les formules payantes ?"
         a5: "Oui ! Les formules mensuelles payantes incluent 7 jours d'essai avec accès complet. Aucune carte bancaire pour démarrer l'essai. Annulation possible à tout moment pendant l'essai."
-
     team:
       title: "Notre équipe — Requiems API"
       heading: "Rencontrez l'équipe"
@@ -576,7 +570,8 @@ fr:
         heading: "Rejoignez-nous"
         text: "Nous cherchons toujours des ingénieurs passionnés par les produits orientés développeur. Intéressé·e ?"
         cta: "Nous contacter"
-
+      alexandra_flores: "Alexandra Flores"
+      eliaz_bobadilla: "Eliaz Bobadilla"
     status:
       title: "État des APIs — Requiems API"
       all_operational: "Tous les systèmes sont opérationnels"
@@ -604,7 +599,6 @@ fr:
       last_updated: "Dernière mise à jour : %{datetime}"
       having_issues: "Un problème ?"
       contact_support: "Contacter le support"
-
     terms:
       title: "Conditions d'utilisation — Requiems API"
       heading: "Conditions d'utilisation"
@@ -679,7 +673,6 @@ fr:
       contact:
         heading: "Contact"
         text: "Questions sur ces conditions ? Écrivez-nous à"
-
     privacy:
       title: "Politique de confidentialité — Requiems API"
       heading: "Politique de confidentialité"
@@ -737,7 +730,6 @@ fr:
       contact:
         heading: "Nous contacter"
         text: "Pour toute question relative à la confidentialité ou pour exercer vos droits, contactez-nous à :"
-
     about:
       title: "À propos — Requiems API"
       heading: "À propos de Requiems API"
@@ -770,7 +762,6 @@ fr:
         intro: "Des questions ou envie d'en savoir plus ?"
         get_in_touch: "Écrivez-nous"
         or_email: "ou par e-mail à"
-
     faq:
       title: "FAQ — Requiems API"
       heading: "Questions fréquentes"
@@ -839,7 +830,6 @@ fr:
         text: "Nous sommes là pour vous aider ! Contactez le support ou consultez la documentation."
         contact: "Contacter le support"
         docs: "Voir la documentation"
-
     contact:
       title: "Nous contacter — Requiems API"
       heading: "Nous contacter"
@@ -890,7 +880,32 @@ fr:
         text: "Parcourez le catalogue complet ou téléchargez la documentation complète pour commencer."
         browse_apis: "Parcourir les APIs"
         full_docs: "Télécharger llms-full.txt"
-
+    api_reference:
+      too_many_requests: "Trop de requêtes"
+      complete_reference_documentation_for: "Documentation de référence complète pour tous les points de terminaison Requiems API."
+      data_apis_finance_apis_image_apis_and: "Des API de données, des API financières, des API d'images et d'autres points de terminaison utilitaires sont en cours de développement."
+      generate_random_advice_quotes_lorem: "Générez des conseils aléatoires, des citations, du texte Lorem Ipsum et des mots aléatoires."
+      miscellaneous_apis_description: "Points de terminaison utilitaires à usage général. Permettent de convertir entre différentes unités de mesure, notamment la longueur, le poids, le volume, la température, la surface et la vitesse."
+      text_apis: "API de texte"
+      email_apis: "API de messagerie électronique"
+      bad_request: "Mauvaise demande"
+      api_reference: "Référence API"
+      get_your_api_key: "Obtenez votre clé API"
+      miscellaneous_apis: "API diverses"
+      roadmap: "Feuille de route"
+      api_reference_requiems_api: "Référence API - Requiems API"
+      all_api_requests_require_authentication: "Toutes les requêtes API nécessitent une authentification à l'aide d'une clé API dans l'en-tête de la requête :"
+      view_pricing_details: "Voir les détails des prix"
+      available_apis: "API disponibles"
+      view_text_api_documentation: "Consulter la documentation de l'API Text"
+      view_email_api_documentation: "Consulter la documentation de l'API Email"
+      validate_email_addresses_detect: "Valider les adresses e-mail, détecter les e-mails jetables et vérifier les domaines de messagerie."
+      internal_server_error: "Erreur interne du serveur"
+      more_apis_coming_soon: "D'autres API seront bientôt disponibles."
+      view_miscellaneous_api_documentation: "Consulter la documentation API diverse"
+      live: "En direct"
+    domain_checker:
+      domain_checker_api_instant_domain: "API de vérification de domaine — Disponibilité instantanée des domaines et recherche WHOIS"
   sales_inquiries:
     new:
       description: "Nous sommes là pour vous aider avec vos besoins API. Remplissez le formulaire et nous vous recontacterons dès que possible."
@@ -898,13 +913,11 @@ fr:
       success: "Merci ! Notre équipe commerciale vous contactera sous 24 heures."
       missing_fields: "Veuillez remplir tous les champs obligatoires."
       error: "Désolé, une erreur s'est produite lors de l'envoi de votre demande. Veuillez réessayer plus tard."
-
   suggestions:
     flash:
       success: "Merci pour votre suggestion ! Nous l'examinerons sous peu et répondons en général sous 24 heures."
       missing_fields: "Veuillez remplir tous les champs obligatoires."
       error: "Désolé, une erreur s'est produite lors de l'envoi de votre suggestion. Veuillez réessayer plus tard."
-
   examples:
     show:
       breadcrumb_home: "Accueil"
@@ -921,11 +934,9 @@ fr:
       api_documentation: "documentation API"
     flash:
       not_found: "Exemple introuvable"
-
   categories:
     flash:
       not_found: "Catégorie introuvable"
-
   apis:
     flash:
       not_found: "API introuvable"

@@ -1,9 +1,9 @@
 fr:
   private_deployment_mailer:
     admin_notification:
-      server_tier: ""
-      new_private_deployment_request: ""
+      server_tier: "Niveau serveur"
+      new_private_deployment_request: "Nouvelle demande de déploiement privé"
     deployment_ready:
-      your_private_api_is_live: ""
-      example_request: ""
-      color_6b7280: ""
+      your_private_api_is_live: "Votre API privée est active."
+      example_request: "Exemple de requête :"
+      color_6b7280: "couleur : #6b7280 ;"

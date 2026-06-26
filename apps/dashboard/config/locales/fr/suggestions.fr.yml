@@ -1,13 +1,13 @@
 fr:
   suggestions:
     new:
-      suggest_an_api_requiems_api: ""
-      we_usually_reply_within_24_hours: ""
-      what_would_you_like_to_call_this_api: ""
-      if_you_d_like_us_to_follow_up_with_you: ""
-      tell_us_about_your_specific_use_case_or: ""
-      more_of_a_technical_person: ""
-      what_functionality_should_this_api: ""
-      help_us_build_what_you_need_we_value: ""
-      your_email_optional: ""
-      submit_suggestion: ""
+      suggest_an_api_requiems_api: "Proposer une API - Requiems API"
+      we_usually_reply_within_24_hours: "Nous répondons généralement sous 24 heures."
+      what_would_you_like_to_call_this_api: "Comment souhaitez-vous appeler cette API ?"
+      if_you_d_like_us_to_follow_up_with_you: "Si vous souhaitez que nous vous recontactons à ce sujet."
+      tell_us_about_your_specific_use_case_or: "Parlez-nous de votre cas d'utilisation ou de votre projet spécifique."
+      more_of_a_technical_person: "Plutôt un profil technique ?"
+      what_functionality_should_this_api: "Quelles fonctionnalités cette API devrait-elle offrir ?"
+      help_us_build_what_you_need_we_value: "Aidez-nous à construire ce dont vous avez besoin. Votre avis compte et nous examinons chaque suggestion."
+      your_email_optional: "Votre adresse e-mail (facultatif)"
+      submit_suggestion: "Soumettre une suggestion"

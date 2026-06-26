@@ -2,6 +2,6 @@ fr:
   admin_users:
     show:
       promotion_section:
-        promotional_plan_upgrade: ""
-        required_for_audit_trail_describe_why: ""
-        grant_or_revoke_a_temporary_plan: ""
+        promotional_plan_upgrade: "Mise à niveau du plan promotionnel"
+        required_for_audit_trail_describe_why: "Document requis pour la traçabilité. Veuillez expliquer les raisons de cette promotion."
+        grant_or_revoke_a_temporary_plan: "Accorder ou révoquer une mise à niveau temporaire du forfait pour cet utilisateur sans exiger de paiement."

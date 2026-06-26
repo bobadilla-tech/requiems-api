@@ -1,11 +1,11 @@
 fr:
   apis:
     show:
-      ask_claude_about_this_api: ""
-      ask_chatgpt_about_this_api: ""
-      copy_full_documentation_as_markdown: ""
-      use_cases: ""
-      api_endpoints: ""
-      copy_the_current_page_url_to_clipboard: ""
+      ask_claude_about_this_api: "Demandez à Claude à propos de cette API"
+      ask_chatgpt_about_this_api: "Demandez à ChatGPT des informations sur cette API"
+      copy_full_documentation_as_markdown: "Copier la documentation complète au format Markdown"
+      use_cases: "Cas d'utilisation"
+      api_endpoints: "Points de terminaison de l'API"
+      copy_the_current_page_url_to_clipboard: "Copier l'URL de la page actuelle dans le presse-papiers"
     index:
-      api_directory_requiems_api: ""
+      api_directory_requiems_api: "Répertoire des API | Requiems API"
