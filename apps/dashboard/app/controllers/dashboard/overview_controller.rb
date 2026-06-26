@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::OverviewController < Dashboard::BaseController
-
   def index
     @current_plan = current_user.current_plan
     @usage_this_month = current_user.usage_this_month
@@ -18,7 +17,7 @@ class Dashboard::OverviewController < Dashboard::BaseController
 
   def calculate_usage_percentage
     total_limit = @usage_this_month + @requests_remaining
-    
+
     return 0 if total_limit <= 0
 
     ((@usage_this_month.to_f / total_limit) * 100).round

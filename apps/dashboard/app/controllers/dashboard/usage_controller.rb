@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::UsageController < Dashboard::BaseController
-
   def show
     set_date_range
 
