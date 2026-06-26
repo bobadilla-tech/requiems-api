@@ -1,0 +1,8 @@
+es:
+  suggestion_mailer:
+    new_suggestion:
+      contact_email_for_follow_up: "Correo electrónico de contacto (para seguimiento)"
+      new_api_suggestion: "Nueva sugerencia de API"
+      api_name: "Nombre de la API"
+      use_case: "Caso de uso"
+      a_user_has_suggested_a_new_api_for: "Un usuario ha sugerido una nueva API para Requiems."

@@ -1,0 +1,16 @@
+es:
+  sales_inquiries:
+    new:
+      heading: "Habla con Ventas"
+      get_in_touch_with_our_sales_team: "Ponte en contacto con nuestro equipo de ventas."
+      talk_to_sales_requiems_api: "Contacta con el departamento de ventas - API de Requiems"
+      enterprise_dedicated_support: "Soporte empresarial dedicado"
+      contact_support: "Contactar con soporte"
+      secure_info_notice: "Su información está segura y solo se utilizará para ponernos en contacto con usted en relación con su consulta."
+      have_general_questions: "¿Tienes preguntas generales? Consulta nuestra"
+      we_usually_reply_within_24_hours: "Solemos responder en un plazo de 24 horas."
+      fill_out_the_form_below_and_our_sales: "Rellene el formulario a continuación y nuestro equipo de ventas se pondrá en contacto con usted para hablar sobre sus necesidades de API."
+      enterprise_security_privacy_and: "Seguridad, privacidad y cumplimiento normativo de la empresa"
+      faq_link: "Preguntas frecuentes"
+      or_conjunction: "o"
+      optional_share_any_details_that_will: "Opcional: Comparta cualquier detalle que nos ayude a brindarle una mejor asistencia."

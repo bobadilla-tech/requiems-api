@@ -16,7 +16,18 @@ type MissingEntry struct {
 	TargetFile string      // absolute path to the target locale file
 }
 
-// FindMissing returns source entries whose keys are not present in target entries.
+// IsPlaceholder reports whether a locale value is an untranslated placeholder
+// that should be overwritten by a real translation.
+func IsPlaceholder(v string) bool {
+	v = strings.TrimSpace(v)
+	return v == "" ||
+		strings.HasPrefix(v, "TODO:") ||
+		strings.HasPrefix(v, "FIXME:") ||
+		v == "TODO: translate"
+}
+
+// FindMissing returns source entries whose keys are absent in target entries
+// or whose target value is a known placeholder (e.g. "TODO: translate").
 // Empty-valued source entries (skeleton placeholders) are skipped.
 func FindMissing(
 	sourceEntries []locale.Entry,
@@ -25,6 +36,9 @@ func FindMissing(
 ) []MissingEntry {
 	targetSet := make(map[string]bool, len(targetEntries))
 	for _, e := range targetEntries {
+		if IsPlaceholder(e.Value) {
+			continue // treat placeholder as absent so it gets translated
+		}
 		// Strip leading lang prefix for comparison.
 		targetSet[stripLang(e.Key, targetLang)] = true
 	}

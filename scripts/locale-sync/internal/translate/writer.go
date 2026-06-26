@@ -12,10 +12,9 @@ type TranslatedEntry struct {
 }
 
 // WriteTranslations writes translated entries into their respective target YAML files.
-// Entries are grouped by TargetFile; locale.WriteEntries handles the actual YAML merge.
+// Existing placeholder values (e.g. "TODO: translate") are overwritten.
 // Returns the list of files that were modified.
 func WriteTranslations(translated []TranslatedEntry) ([]string, error) {
-	// Group by target file.
 	byFile := make(map[string]map[string]string)
 	for _, e := range translated {
 		if byFile[e.TargetFile] == nil {
@@ -26,7 +25,7 @@ func WriteTranslations(translated []TranslatedEntry) ([]string, error) {
 
 	var written []string
 	for filePath, entries := range byFile {
-		changed, err := locale.WriteEntries(filePath, entries)
+		changed, err := locale.UpsertEntries(filePath, entries, IsPlaceholder)
 		if err != nil {
 			return written, err
 		}

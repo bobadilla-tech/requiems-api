@@ -200,32 +200,44 @@ func readOrEmptyDoc(path string) (*yaml.Node, error) {
 // leaf to value. Returns (true, nil) if inserted, (false, nil) if already
 // present, or (false, error) if a scalar/mapping conflict blocks the insert.
 func setYAMLPath(doc *yaml.Node, path []string, value string) (bool, error) {
+	return upsertYAMLPath(doc, path, value, nil)
+}
+
+// upsertYAMLPath is like setYAMLPath but calls shouldOverwrite(existingValue)
+// at the leaf to decide whether to replace an already-present scalar.
+// nil shouldOverwrite behaves identically to setYAMLPath (never overwrite).
+func upsertYAMLPath(doc *yaml.Node, path []string, value string, shouldOverwrite func(string) bool) (bool, error) {
 	if len(doc.Content) == 0 {
 		doc.Content = []*yaml.Node{{Kind: yaml.MappingNode}}
 	}
-	return setMappingPath(doc.Content[0], path, value)
+	return upsertMappingPath(doc.Content[0], path, value, shouldOverwrite)
 }
 
 func setMappingPath(node *yaml.Node, path []string, value string) (bool, error) {
+	return upsertMappingPath(node, path, value, nil)
+}
+
+func upsertMappingPath(node *yaml.Node, path []string, value string, shouldOverwrite func(string) bool) (bool, error) {
 	if node.Kind != yaml.MappingNode {
 		return false, nil
 	}
 	key := path[0]
 
-	// Find existing key
 	for i := 0; i+1 < len(node.Content); i += 2 {
 		if node.Content[i].Value == key {
 			if len(path) == 1 {
-				// Key exists — don't overwrite existing values.
+				existing := node.Content[i+1].Value
+				if shouldOverwrite != nil && shouldOverwrite(existing) {
+					node.Content[i+1].Value = value
+					return true, nil
+				}
 				return false, nil
 			}
 			child := node.Content[i+1]
 			if child.Kind != yaml.MappingNode {
-				// Existing key is a scalar but the path requires a nested mapping.
-				// Return an error so the caller can abort rather than silently skip.
 				return false, fmt.Errorf("key conflict at %q: scalar exists where mapping needed", strings.Join(path, "."))
 			}
-			return setMappingPath(child, path[1:], value)
+			return upsertMappingPath(child, path[1:], value, shouldOverwrite)
 		}
 	}
 
@@ -238,7 +250,7 @@ func setMappingPath(node *yaml.Node, path []string, value string) (bool, error) 
 	}
 	child := &yaml.Node{Kind: yaml.MappingNode}
 	node.Content = append(node.Content, keyNode, child)
-	return setMappingPath(child, path[1:], value)
+	return upsertMappingPath(child, path[1:], value, shouldOverwrite)
 }
 
 // marshalDoc serialises a yaml.Node document to bytes with 2-space indentation.
@@ -256,6 +268,13 @@ func marshalDoc(doc *yaml.Node) ([]byte, error) {
 // fullKeys maps full dot-notation paths (e.g. "es.tools.foo.bar") to their values.
 // Returns (changed, error).
 func WriteEntries(filePath string, fullKeys map[string]string) (bool, error) {
+	return UpsertEntries(filePath, fullKeys, nil)
+}
+
+// UpsertEntries is like WriteEntries but calls shouldOverwrite(existingValue) before
+// skipping an already-present key. When shouldOverwrite returns true the existing
+// scalar is replaced. Pass nil to get the same behaviour as WriteEntries.
+func UpsertEntries(filePath string, fullKeys map[string]string, shouldOverwrite func(existing string) bool) (bool, error) {
 	doc, err := readOrEmptyDoc(filePath)
 	if err != nil {
 		return false, err
@@ -263,7 +282,7 @@ func WriteEntries(filePath string, fullKeys map[string]string) (bool, error) {
 	changed := false
 	for k, v := range fullKeys {
 		parts := strings.Split(k, ".")
-		ok, err := setYAMLPath(doc, parts, v)
+		ok, err := upsertYAMLPath(doc, parts, v, shouldOverwrite)
 		if err != nil {
 			return false, err
 		}

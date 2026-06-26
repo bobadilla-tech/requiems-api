@@ -1,0 +1,11 @@
+es:
+  apis_show:
+    playground:
+      1_request_per_minute: "1 solicitud por minuto"
+      create_free_account: "Crea una cuenta gratuita"
+      4_times_more_requests: "4 veces más solicitudes"
+      rate_limit_title: "¡Las pruebas se están realizando demasiado rápido!"
+    endpoint_documentation:
+      examples_title: "Ejemplos de código"
+      error_responses: "Respuestas de error"
+      response_fields: "Campos de respuesta"

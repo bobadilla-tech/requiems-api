@@ -123,6 +123,8 @@ es:
         back_btn: "← Volver a claves API"
         view_docs_btn: "Ver documentación de la API"
         go_dashboard_btn: "Ir al panel"
+      show:
+        api_key_details: "Detalles de la clave API"
     billing:
       title: "Facturación y suscripción"
       subtitle: "Gestiona tu plan, método de pago e historial de facturación"
@@ -260,6 +262,8 @@ es:
         cancel: "Cancelar — conservar mi cuenta"
         confirm_btn: "Eliminar mi cuenta permanentemente"
         deleting: "Eliminando tu cuenta..."
+      show:
+        profile_picture: "Foto de perfil"
     usage:
       title: "Uso y análisis"
       subtitle: "Rastrea el uso y las métricas de rendimiento de tu API"
@@ -391,14 +395,12 @@ es:
           docs_notice: "Mientras tanto, puedes explorar nuestra documentación de API en %{docs_link}."
           questions: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
           questions_html: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
-
     private_deployments:
       new:
         back_to_pricing: "← Volver a precios"
         checkout_notice: "Serás redirigido a nuestro proceso de pago seguro en LemonSqueezy para completar tu suscripción."
         submit: "Continuar al pago →"
         redirecting: "Redirigiendo..."
-
     referrals:
       title: "Programa de Referidos"
       subtitle: "Comparte tu enlace de referido y gana recompensas cuando tus amigos actualicen a un plan de pago."
