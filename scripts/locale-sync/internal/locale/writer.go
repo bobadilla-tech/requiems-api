@@ -219,7 +219,7 @@ func setMappingPath(node *yaml.Node, path []string, value string) (bool, error) 
 
 func upsertMappingPath(node *yaml.Node, path []string, value string, shouldOverwrite func(string) bool) (bool, error) {
 	if node.Kind != yaml.MappingNode {
-		return false, nil
+		return false, fmt.Errorf("cannot insert at %q: node is not a mapping (kind=%d)", strings.Join(path, "."), node.Kind)
 	}
 	key := path[0]
 

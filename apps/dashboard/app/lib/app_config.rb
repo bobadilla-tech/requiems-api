@@ -179,7 +179,7 @@ class AppConfig
     validate_url(@internal_api_url, "INTERNAL_API_URL")
 
     unless @lemonsqueezy_store_id.match?(/^\d+$/)
-      raise InvalidConfigError, "LEMONSQUEEZY_STORE_ID must be numeric"
+      raise InvalidConfigError, t('app.lib.app_config.lemonsqueezy_store_id_must_be_numeric')
     end
 
     validate_variant_id(@lemonsqueezy_developer_monthly_variant_id, "LEMONSQUEEZY_DEVELOPER_MONTHLY_VARIANT_ID")

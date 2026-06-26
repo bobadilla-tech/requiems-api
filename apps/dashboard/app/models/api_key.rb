@@ -51,7 +51,7 @@ class ApiKey < ApplicationRecord
         self.key_hash = ApiKeyGenerator.hash_key(generated_key)
         self.active = true if active.nil?
       else
-        errors.add(:base, "Failed to generate API key. Please try again.")
+        errors.add(:base, t('api_key.failed_to_generate_api_key_please_try'))
         throw :abort
       end
     end

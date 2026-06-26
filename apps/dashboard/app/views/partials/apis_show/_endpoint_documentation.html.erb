@@ -74,9 +74,9 @@
                 <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400"><code class="text-xs bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded"><%= param["type"] %></code></td>
                 <td class="px-4 py-3 text-sm">
                   <% if param["required"] %>
-                    <%= render "partials/shared/badge", text: "Required", variant: "danger", size: "xs" %>
+                    <%= render "partials/shared/badge", text: t('apis_show.endpoint_documentation.column_required'), variant: "danger", size: "xs" %>
                   <% else %>
-                    <%= render "partials/shared/badge", text: "Optional", variant: "default", size: "xs" %>
+                    <%= render "partials/shared/badge", text: t('apis_show.endpoint_documentation.optional'), variant: "default", size: "xs" %>
                   <% end %>
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"><%= param["description"] %></td>
@@ -98,7 +98,7 @@
         </svg>
         <%= t('apis_show.endpoint_documentation.try_it_out') %>
       </h4>
-      <%= render "partials/shared/badge", text: "Live Demo", variant: "success", size: "sm" %>
+      <%= render "partials/shared/badge", text: t('apis_show.endpoint_documentation.live_demo'), variant: "success", size: "sm" %>
     </div>
 
     <%= render "partials/apis_show/playground", endpoint: endpoint_data, endpoint_path: endpoint_path, index: endpoint_index %>

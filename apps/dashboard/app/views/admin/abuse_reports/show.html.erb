@@ -116,9 +116,9 @@
         <div>
           <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
           <% if @api_key.revoked_at.present? %>
-            <%= render "partials/shared/badge", text: "Revoked", variant: "danger", size: "xs" %>
+            <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_revoked'), variant: "danger", size: "xs" %>
           <% else %>
-            <%= render "partials/shared/badge", text: "Active", variant: "success", size: "xs" %>
+            <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_active'), variant: "success", size: "xs" %>
           <% end %>
         </div>
       </div>
@@ -172,11 +172,11 @@
     <!-- User Status -->
     <div class="flex items-center space-x-2">
       <% if @user.admin? %>
-        <%= render "partials/shared/badge", text: "Admin", variant: "danger", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('admin.abuse_reports.show.admin'), variant: "danger", size: "xs" %>
       <% elsif @user.suspended? %>
-        <%= render "partials/shared/badge", text: "Suspended", variant: "warning", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('admin.abuse_reports.show.suspended'), variant: "warning", size: "xs" %>
       <% else %>
-        <%= render "partials/shared/badge", text: "Active", variant: "success", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_active'), variant: "success", size: "xs" %>
       <% end %>
 
       <% if @user.subscription.present? %>
@@ -185,7 +185,7 @@
           variant: @user.subscription.plan_name == "free" ? "default" : "primary",
           size: "xs" %>
       <% else %>
-        <%= render "partials/shared/badge", text: "Free Plan", variant: "default", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('dashboard.billing.current_plan.free_label'), variant: "default", size: "xs" %>
       <% end %>
     </div>
   </div>
@@ -201,10 +201,10 @@
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reported</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('apis_show.endpoint_documentation.column_type') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin.abuse_reports.show.reported') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('shared.common.col_status') %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.api_keys.col_actions') %></th>
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">

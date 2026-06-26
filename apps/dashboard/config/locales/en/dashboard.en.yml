@@ -420,3 +420,5 @@ en:
         status_col: "Status"
         status_pending: "Pending"
         status_converted: "Converted"
+    sidebar:
+      referrals: "Referrals"

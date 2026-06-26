@@ -25,7 +25,7 @@ func WriteTranslations(translated []TranslatedEntry) ([]string, error) {
 
 	var written []string
 	for filePath, entries := range byFile {
-		changed, err := locale.UpsertEntries(filePath, entries, IsPlaceholder)
+		changed, err := locale.UpsertEntries(filePath, entries, func(v string) bool { return IsPlaceholder(v) })
 		if err != nil {
 			return written, err
 		}

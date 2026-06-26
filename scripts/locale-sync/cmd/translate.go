@@ -16,17 +16,20 @@ import (
 )
 
 var (
-	translateTo         []string
-	translateFrom       string
-	translateDryRun     bool
-	translateForce      bool
-	translateProvider   string
-	translateCacheOnly  bool
-	translateNoCache    bool
-	translateCacheFile  string
-	translateQuota      int
-	translateBatchSize  int
-	translateReportFile string
+	translateTo                []string
+	translateFrom              string
+	translateDryRun            bool
+	translateForce             bool
+	translateProvider          string
+	translateCacheOnly         bool
+	translateNoCache           bool
+	translateCacheFile         string
+	translateQuota             int
+	translateBatchSize         int
+	translateReportFile        string
+	translateProtectWords      []string
+	translateProtectFile       string
+	translateSkeletonPlaceholder string
 )
 
 var translateCmd = &cobra.Command{
@@ -40,14 +43,18 @@ The command is idempotent: it never overwrites real translations.
 Placeholder values (e.g. "TODO: translate") are replaced with real translations.
 Run with --dry-run to preview what would be translated without calling the API.
 
+Use --protect-words or --protect-file to keep brand names and proper nouns
+unchanged — they are replaced with tokens before calling the API and restored
+after so Google never sees them.
+
 Authentication:
   Set GOOGLE_APPLICATION_CREDENTIALS to a service account JSON key file.
 
 Examples:
-  locale-sync translate --to=es,fr,de --root=../../apps/dashboard
-  locale-sync translate es fr de
+  locale-sync translate --to=es,fr --root=../../apps/dashboard
   locale-sync translate --to=all --dry-run
-  locale-sync translate --to=es --cache-only
+  locale-sync translate --to=es --protect-words=NeverBounce,IPstack,AbstractAPI
+  locale-sync translate --to=es --protect-file=.translate-dictionary.txt
   locale-sync translate --to=es --report-file=reports/translate.json`,
 	RunE: runTranslate,
 }
@@ -75,28 +82,35 @@ func init() {
 		"Number of strings to send per API call")
 	translateCmd.Flags().StringVar(&translateReportFile, "report-file", "",
 		"Write a detailed JSON report of all translations to this file path")
+	translateCmd.Flags().StringSliceVar(&translateProtectWords, "protect-words", nil,
+		"Comma-separated words/phrases that must not be translated (e.g. brand names)")
+	translateCmd.Flags().StringVar(&translateProtectFile, "protect-file", "",
+		"Path to a file with one protected word/phrase per line (# lines are comments)")
+	translateCmd.Flags().StringVar(&translateSkeletonPlaceholder, "skeleton-placeholder", "",
+		"Treat this value as an untranslated placeholder (match the value used with generate --placeholder)")
 	rootCmd.AddCommand(translateCmd)
 }
 
-// reportData is the top-level report written to --report-file.
+// --- report types ---
+
 type reportData struct {
-	Timestamp     string                  `json:"timestamp"`
-	SourceLang    string                  `json:"source_lang"`
-	TotalKeys     int                     `json:"total_keys"`
-	TotalChars    int                     `json:"total_chars_used"`
-	QuotaLimit    int                     `json:"quota_limit"`
-	QuotaHit      bool                   `json:"quota_limit_hit"`
-	Languages     map[string]*langReport  `json:"languages"`
+	Timestamp  string                 `json:"timestamp"`
+	SourceLang string                 `json:"source_lang"`
+	TotalKeys  int                    `json:"total_keys"`
+	TotalChars int                    `json:"total_chars_used"`
+	QuotaLimit int                    `json:"quota_limit"`
+	QuotaHit   bool                   `json:"quota_limit_hit"`
+	Languages  map[string]*langReport `json:"languages"`
 }
 
 type langReport struct {
-	KeysTranslated int              `json:"keys_translated"`
-	KeysFromCache  int              `json:"keys_from_cache"`
-	KeysViaAPI     int              `json:"keys_via_api"`
-	KeysSkipped    int              `json:"keys_skipped,omitempty"`
-	CharsUsed      int              `json:"chars_used"`
-	FilesWritten   []string         `json:"files_written"`
-	Entries        []reportEntry    `json:"entries"`
+	KeysTranslated int           `json:"keys_translated"`
+	KeysFromCache  int           `json:"keys_from_cache"`
+	KeysViaAPI     int           `json:"keys_via_api"`
+	KeysSkipped    int           `json:"keys_skipped,omitempty"`
+	CharsUsed      int           `json:"chars_used"`
+	FilesWritten   []string      `json:"files_written"`
+	Entries        []reportEntry `json:"entries"`
 }
 
 type reportEntry struct {
@@ -111,7 +125,9 @@ type langMissing struct {
 	missing []translate.MissingEntry
 }
 
-func runTranslate(cmd *cobra.Command, args []string) error {
+// --- main command ---
+
+func runTranslate(_ *cobra.Command, args []string) error {
 	// Validate flags before doing any work.
 	if translateBatchSize <= 0 {
 		return fmt.Errorf("--batch-size must be a positive integer (got %d)", translateBatchSize)
@@ -123,7 +139,18 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("--cache-only and --no-cache are mutually exclusive")
 	}
 
-	// 1. Resolve target languages.
+	// Build protector (custom dictionary + standard placeholders).
+	protectedWords, err := loadProtectedWords(translateProtectWords, translateProtectFile)
+	if err != nil {
+		return fmt.Errorf("load protected words: %w", err)
+	}
+	protector := translate.NewProtector(protectedWords)
+
+	if len(protectedWords) > 0 {
+		fmt.Printf("Protected words: %s\n\n", strings.Join(protectedWords, ", "))
+	}
+
+	// Resolve target languages.
 	targets, err := resolveTargetLangs(translateTo, args, translateFrom)
 	if err != nil {
 		return err
@@ -132,7 +159,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("no target languages specified; use --to=es,fr or positional args")
 	}
 
-	// 2. Load source entries.
+	// Load source entries.
 	fmt.Printf("Loading %s locale entries from %s...\n", translateFrom, rootPath)
 	sourceEntries, err := locale.Scan(rootPath, translateFrom)
 	if err != nil {
@@ -140,20 +167,28 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("  %d source entries found.\n\n", len(sourceEntries))
 
-	// 3. For each target lang, find missing entries.
+	// For each target lang, find missing entries.
 	var allLangs []langMissing
 	totalCharsNeeded := 0
 	totalKeysNeeded := 0
 
 	for _, tLang := range targets {
-		targetEntries, _ := locale.Scan(rootPath, tLang) // missing dir → empty, not an error
-		missing := translate.FindMissing(sourceEntries, targetEntries, translateFrom, tLang, rootPath)
+		targetEntries, scanErr := locale.Scan(rootPath, tLang)
+		if scanErr != nil {
+			// Ignore "nothing to scan" (no locale dir yet); surface real errors.
+			if len(targetEntries) == 0 {
+				targetEntries = nil
+			} else {
+				return fmt.Errorf("scan %s locales: %w", tLang, scanErr)
+			}
+		}
+		missing := translate.FindMissing(sourceEntries, targetEntries, translateFrom, tLang, rootPath, translateSkeletonPlaceholder)
 		allLangs = append(allLangs, langMissing{lang: tLang, missing: missing})
 		totalCharsNeeded += translate.CharCount(missing)
 		totalKeysNeeded += len(missing)
 	}
 
-	// 4. Print plan summary.
+	// Print plan summary.
 	fmt.Println("=== Translation Plan ===")
 	for _, lm := range allLangs {
 		if len(lm.missing) == 0 {
@@ -167,7 +202,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 	fmt.Printf("  Total  %s keys, ~%s chars  (free tier: ~500,000/month)\n\n",
 		formatInt(totalKeysNeeded), formatInt(totalCharsNeeded))
 
-	// 5. Dry-run: print detailed plan to stdout and exit.
+	// Dry-run: print detailed plan and exit.
 	if translateDryRun {
 		printDryRunPlan(allLangs)
 		fmt.Println("No files written (--dry-run).")
@@ -179,7 +214,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	// 6. Double confirmation (unless --force or --cache-only).
+	// Double confirmation (unless --force or --cache-only).
 	if !translateForce && !translateCacheOnly {
 		if !confirm("WARNING: This will call the Google Cloud Translation API.\nAre you sure?", "yes") {
 			fmt.Println("Aborted.")
@@ -197,7 +232,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		fmt.Println()
 	}
 
-	// 7. Load cache.
+	// Load cache.
 	var cache *translate.Cache
 	if !translateNoCache {
 		cache, err = translate.LoadCache(translateCacheFile)
@@ -206,7 +241,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// 8. Create API client (unless cache-only).
+	// Create API client (unless cache-only).
 	var client *translate.Client
 	if !translateCacheOnly {
 		ctx := context.Background()
@@ -217,7 +252,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		defer client.Close()
 	}
 
-	// 9. Translate per language, collect report data.
+	// Translate per language.
 	report := &reportData{
 		Timestamp:  time.Now().UTC().Format(time.RFC3339),
 		SourceLang: translateFrom,
@@ -241,10 +276,9 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 		var needsAPI []translate.MissingEntry
 		cacheSkipped := 0
 
-		// Split into cache hits vs API-needed.
 		for _, m := range lm.missing {
 			if !translateNoCache && cache != nil {
-				if cached, ok := cache.Get(m.Value, lm.lang); ok {
+				if cached, ok := cache.Get(translateFrom, m.Value, lm.lang); ok {
 					translated = append(translated, translate.TranslatedEntry{
 						MissingEntry:   m,
 						TranslatedText: cached,
@@ -276,7 +310,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 				apiTexts := make([]string, len(batch))
 				batchChars := 0
 				for j, m := range batch {
-					p := translate.Protect(m.Value)
+					p := protector.Protect(m.Value)
 					protecteds[j] = p
 					apiTexts[j] = p.Text
 					batchChars += len([]rune(p.Text))
@@ -307,7 +341,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 						FromCache:      false,
 					})
 					if !translateNoCache && cache != nil {
-						cache.Set(m.Value, lm.lang, restored)
+						cache.Set(translateFrom, m.Value, lm.lang, restored)
 					}
 				}
 
@@ -326,7 +360,6 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 
 		// Write files and print per-file summary.
 		if len(translated) > 0 {
-			// Count entries per target file for display.
 			fileCount := make(map[string]int)
 			for _, e := range translated {
 				fileCount[e.TargetFile]++
@@ -339,12 +372,9 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 			lr.FilesWritten = relPaths(written, rootPath)
 
 			for _, f := range written {
-				base := filepath.Base(f)
-				n := fileCount[f]
-				fmt.Printf("  ✓  %-35s  %s keys\n", base, formatInt(n))
+				fmt.Printf("  ✓  %-35s  %s keys\n", filepath.Base(f), formatInt(fileCount[f]))
 			}
 
-			// Build report entries.
 			for _, e := range translated {
 				lr.Entries = append(lr.Entries, reportEntry{
 					Key:         dotAfterLang(e.TargetKey),
@@ -367,7 +397,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 			formatInt(lr.KeysTranslated), cacheTag, formatInt(langChars))
 	}
 
-	// 10. Final summary.
+	// Final summary.
 	report.TotalChars = totalCharsUsed
 	report.TotalKeys = totalKeysNeeded
 	fmt.Printf("Total API chars used: ~%s", formatInt(totalCharsUsed))
@@ -376,7 +406,7 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Println()
 
-	// 11. Write report file.
+	// Write report file.
 	if translateReportFile != "" {
 		if err := writeReport(report, translateReportFile); err != nil {
 			fmt.Fprintf(os.Stderr, "Warning: could not write report: %v\n", err)
@@ -386,6 +416,30 @@ func runTranslate(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+// loadProtectedWords merges --protect-words flag values with words from --protect-file.
+func loadProtectedWords(flagWords []string, filePath string) ([]string, error) {
+	var all []string
+	all = append(all, flagWords...)
+	if filePath != "" {
+		fileWords, err := translate.LoadDictionaryFile(filePath)
+		if err != nil {
+			return nil, err
+		}
+		all = append(all, fileWords...)
+	}
+	// Deduplicate.
+	seen := map[string]bool{}
+	var out []string
+	for _, w := range all {
+		w = strings.TrimSpace(w)
+		if w != "" && !seen[w] {
+			seen[w] = true
+			out = append(out, w)
+		}
+	}
+	return out, nil
 }
 
 func writeReport(r *reportData, path string) error {
@@ -411,8 +465,6 @@ func relPaths(paths []string, root string) []string {
 	return out
 }
 
-// resolveTargetLangs merges --to flag values and positional args into a deduplicated
-// list of target language codes. "--to=all" triggers auto-discovery.
 func resolveTargetLangs(flagTo []string, args []string, sourceLang string) ([]string, error) {
 	raw := append(append([]string{}, flagTo...), args...)
 	var expanded []string
@@ -449,7 +501,6 @@ func confirm(message, expected string) bool {
 	return strings.TrimSpace(scanner.Text()) == expected
 }
 
-// printDryRunPlan prints all keys that would be translated (dry-run only).
 func printDryRunPlan(allLangs []langMissing) {
 	fmt.Println("=== Dry Run: Keys to Translate ===")
 	for _, lm := range allLangs {

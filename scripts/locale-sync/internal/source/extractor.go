@@ -217,6 +217,7 @@ func scanFile(path, root string) []HardcodedString {
 
 		if isERB {
 			results = append(results, scanAttrPatterns(line, trimmed, short, lineNum)...)
+			results = append(results, scanTableHeaders(line, trimmed, short, lineNum)...)
 			results = append(results, scanTagContent(line, trimmed, short, lineNum)...)
 			results = append(results, scanBareTextNodes(line, trimmed, short, lineNum)...)
 			results = append(results, scanBareTextSuffixes(line, trimmed, short, lineNum)...)
@@ -314,6 +315,38 @@ func scanTagContent(line, trimmed, short string, lineNum int) []HardcodedString 
 	for _, m := range tagContentRe.FindAllStringSubmatch(stripped, -1) {
 		text := strings.TrimSpace(m[1])
 		if !looksUserFacing(text) || looksLikeCode(text) {
+			continue
+		}
+		out = append(out, HardcodedString{
+			File:     short,
+			Line:     lineNum,
+			Text:     text,
+			Context:  trimmed,
+			Category: "tag_content",
+		})
+	}
+	return out
+}
+
+// tableHeaderRe matches text inside <th> cells including those with attributes.
+// Unlike tagContentRe, it allows single-word labels because column headers
+// like "Name", "Type", "Field" are inherently user-facing even without spaces.
+var tableHeaderRe = regexp.MustCompile(`<th[^>]*>\s*([A-Za-z][A-Za-z0-9 ]{1,50}?)\s*<`)
+
+func scanTableHeaders(line, trimmed, short string, lineNum int) []HardcodedString {
+	if i18nCallRe.MatchString(line) || erbOutputRe.MatchString(line) {
+		return nil
+	}
+	stripped := erbTagRe.ReplaceAllString(line, "")
+	var out []HardcodedString
+	for _, m := range tableHeaderRe.FindAllStringSubmatch(stripped, -1) {
+		text := strings.TrimSpace(m[1])
+		if text == "" || looksLikeCode(text) || brandNames[text] {
+			continue
+		}
+		// Require at least 2 chars and a letter start.
+		r := []rune(text)
+		if len(r) < 2 || !unicode.IsLetter(r[0]) {
 			continue
 		}
 		out = append(out, HardcodedString{

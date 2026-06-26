@@ -74,6 +74,9 @@ en:
         cubic_meters: "Cubic Meters"
         fluid_ounces: "Fluid Ounces"
         long_tons_uk: "Long Tons (UK)"
+        get_api_key: "Get API Key"
+        read_the_docs: "Read the docs"
+        convert: "Convert"
       use_cases:
         unit_conversion_fits_anywhere: "Unit Conversion fits anywhere measurements need to be translated accurately and instantly."
         real_problems_real_conversions: "Real problems, real conversions."
@@ -101,6 +104,9 @@ en:
         label_neutral: "Neutral"
       hero:
         know_how_your_text_lands: "Know how your text lands."
+        get_api_key: "Get API Key"
+        read_the_docs: "Read the docs"
+        analyze: "Analyze"
       show:
         free_sentiment_analysis_tool_positive: "Free Sentiment Analysis Tool — Positive, Negative & Neutral Text Detection | Requiems API"
       use_cases:
@@ -321,6 +327,9 @@ en:
         accurate_and_fast_every_single_check: "Accurate and fast — every single check."
       hero:
         syntax_check_live_mx_lookup_disposable: "Syntax check, live MX lookup, disposable detection, and typo correction — in a single API call."
+        read_the_docs: "Read the docs"
+        verify: "Verify"
+        get_api_key: "Get API Key"
       show:
         free_email_validator_syntax_mx_record: "Free Email Validator — Syntax, MX Record & Disposable Check | Requiems API"
       use_cases:

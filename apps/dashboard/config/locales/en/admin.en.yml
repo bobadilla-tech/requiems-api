@@ -21,12 +21,19 @@ en:
         view_full_profile: "View Full Profile"
         take_action_on_this_abuse_report: "Take action on this abuse report"
         report_type: "Report Type"
+        are_you_sure_you_want_to_resolve_this: "Are you sure you want to resolve this report?"
+        suspended: "Suspended"
+        admin: "Admin"
+        are_you_sure_you_want_to_ban_this_user: "Are you sure you want to BAN this user? This will revoke all API keys and cancel their subscription."
+        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+        reported: "Reported"
       index:
         apply_filters: "Apply Filters"
         abuse_reports: "Abuse Reports"
         total_reports: "Total Reports"
         monitor_and_manage_abuse_reports: "Monitor and manage abuse reports"
         no_reports_found: "No reports found"
+        reported: "Reported"
     api_keys:
       revoke_success: "API key revoked successfully."
       revoke_error: "Failed to revoke API key."
@@ -36,6 +43,7 @@ en:
         view_and_manage_all_api_keys_across: "View and manage all API keys across users"
         apply_filters: "Apply Filters"
         try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
+        environment: "Environment"
       show:
         used_at: "Used At"
         view_user_profile: "View User Profile"
@@ -46,6 +54,7 @@ en:
         recent_usage: "Recent Usage"
         key_details: "Key Details"
         key_prefix: "Key Prefix"
+        credits: "Credits"
     private_deployments:
       subdomain_required: "Subdomain slug is required."
       secret_required: "Tenant secret is required."
@@ -67,11 +76,16 @@ en:
         server_tier: "Server Tier"
         monthly_price: "Monthly Price"
         subdomain_slug: "Subdomain Slug"
+        mark_as_deployed_send_email: "Mark as Deployed + Send Email"
       index:
         private_deployments: "Private Deployments"
         manage_per_tenant_dedicated_api: "Manage per-tenant dedicated API deployment requests"
         no_deployment_requests: "No deployment requests"
         none_yet_in_this_category: "None yet in this category."
+        submitted: "Submitted"
+        tier: "Tier"
+        company: "Company"
+        services: "Services"
     promotions:
       invalid_plan: "Invalid plan selected."
       expiry_past: "Expiry date must be in the future."
@@ -113,12 +127,23 @@ en:
         these_actions_are_permanent_and_cannot: "These actions are permanent and cannot be undone easily."
         no_api_keys_created: "No API keys created"
         user_details: "User Details"
+        admin: "Admin"
+        are_you_sure_you_want_to_grant_admin: "Are you sure you want to grant admin privileges to this user? They will have full system access."
+        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+        timestamp: "Timestamp"
+        are_you_sure_you_want_to_unsuspend_this: "Are you sure you want to unsuspend this user? They will regain access to their account."
+        canceling_at_period_end: "Canceling at Period End"
+        suspended: "Suspended"
+        environment: "Environment"
       index:
         try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
         view_and_manage_all_user_accounts: "View and manage all user accounts"
         no_users_found: "No users found"
         apply_filters: "Apply Filters"
         user_management: "User Management"
+        joined: "Joined"
+        admin: "Admin"
+        suspended: "Suspended"
     analytics:
       system_health:
         error_rate_over_time: "Error Rate Over Time"
@@ -147,6 +172,10 @@ en:
         status_excellent: "Excellent"
         status_good: "Good"
         status_needs_attention: "Needs attention"
+        count: "Count"
+        normal: "Normal"
+        high: "High"
+        status_code: "Status Code"
       revenue:
         annual_recurring_revenue: "Annual Recurring Revenue"
         key_takeaways: "Key Takeaways"
@@ -191,6 +220,7 @@ en:
         average_response_times_by_endpoint: "Average Response Times by Endpoint"
         top_10_slowest_endpoints: "Top 10 slowest endpoints"
         top_10_endpoints: "Top 10 Endpoints"
+        rank: "Rank"
     dashboard:
       index:
         recent_api_keys: "Recent API Keys"
@@ -205,3 +235,7 @@ en:
         recent_subscriptions: "Recent Subscriptions"
         system_overview_and_key_metrics: "System overview and key metrics"
         total_users: "Total Users"
+        joined: "Joined"
+    sidebar:
+      admin: "Admin"
+      users: "Users"

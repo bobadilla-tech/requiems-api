@@ -18,25 +18,34 @@ type MissingEntry struct {
 
 // IsPlaceholder reports whether a locale value is an untranslated placeholder
 // that should be overwritten by a real translation.
-func IsPlaceholder(v string) bool {
+// extraPlaceholders are additional values to treat as placeholders (e.g. the
+// value used by `generate --placeholder`).
+func IsPlaceholder(v string, extraPlaceholders ...string) bool {
 	v = strings.TrimSpace(v)
-	return v == "" ||
-		strings.HasPrefix(v, "TODO:") ||
-		strings.HasPrefix(v, "FIXME:") ||
-		v == "TODO: translate"
+	if v == "" || strings.HasPrefix(v, "TODO:") || strings.HasPrefix(v, "FIXME:") {
+		return true
+	}
+	for _, p := range extraPlaceholders {
+		if p != "" && v == p {
+			return true
+		}
+	}
+	return false
 }
 
 // FindMissing returns source entries whose keys are absent in target entries
 // or whose target value is a known placeholder (e.g. "TODO: translate").
-// Empty-valued source entries (skeleton placeholders) are skipped.
+// skeletonPlaceholder is the custom placeholder value used by `generate
+// --placeholder`; empty string is always treated as a placeholder regardless.
 func FindMissing(
 	sourceEntries []locale.Entry,
 	targetEntries []locale.Entry,
 	sourceLang, targetLang, root string,
+	skeletonPlaceholder string,
 ) []MissingEntry {
 	targetSet := make(map[string]bool, len(targetEntries))
 	for _, e := range targetEntries {
-		if IsPlaceholder(e.Value) {
+		if IsPlaceholder(e.Value, skeletonPlaceholder) {
 			continue // treat placeholder as absent so it gets translated
 		}
 		// Strip leading lang prefix for comparison.

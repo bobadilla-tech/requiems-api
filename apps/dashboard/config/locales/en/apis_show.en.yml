@@ -17,3 +17,5 @@ en:
       column_field: "Field"
       copy_code: "Copy code"
       try_it_out: "Try it out"
+      live_demo: "Live Demo"
+      optional: "Optional"

@@ -299,6 +299,7 @@ en:
         text: "Want to be notified about new releases and features?"
         signed_in: "We'll send update notifications to your registered email: %{email}"
         sign_up_cta: "Sign up for an account"
+      v0_1_0: "v0.1.0"
     glossary:
       title: "API Glossary - Requiems API"
       heading: "API Glossary"
@@ -901,6 +902,8 @@ en:
       validate_email_addresses_detect: "Validate email addresses, detect disposable emails, and check email domains."
       view_miscellaneous_api_documentation: "View Miscellaneous API Documentation"
       bad_request: "Bad Request"
+      roadmap: "Roadmap"
+      live: "Live"
     domain_checker:
       domain_checker_api_instant_domain: "Domain Checker API — Instant Domain Availability & WHOIS Lookup"
   sales_inquiries:
