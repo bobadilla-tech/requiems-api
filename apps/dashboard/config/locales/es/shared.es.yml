@@ -111,7 +111,6 @@ es:
       badge_yes: "✓ Sí"
       onboarding_context: "Incorporación"
       simplicity_heading: "Sencillez"
-      status_col: "Estado"
       support_link: "Contacta con soporte"
       utilities_cta: "Explorar utilidades"
       apply_filters: "Aplicar filtros"
@@ -177,3 +176,13 @@ es:
     no_account_demo: "No se requiere cuenta para la demostración."
     app_name: "API de Requiems"
     email_input_placeholder: "Ingrese cualquier dirección de correo electrónico"
+    buttons:
+      get_api_key: "Obtén la clave API"
+      read_docs: "Lee la documentación"
+    status:
+      suspended: "Suspendido"
+      reported: "Informado"
+    labels:
+      admin: "Administración"
+      environment: "Ambiente"
+      joined: "Unido"

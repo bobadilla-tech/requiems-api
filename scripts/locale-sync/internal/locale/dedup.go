@@ -96,14 +96,41 @@ func FindDuplicates(entries []Entry, minOccurrences int) Duplicates {
 	}
 }
 
-// SuggestSharedKey proposes a semantic shared key path for a duplicate group.
-// e.g. "error_rate_limit" → "shared.errors.rate_limit"
-func SuggestSharedKey(lang, keyName string) string {
-	clean := strings.TrimPrefix(keyName, "error_")
-	clean = strings.TrimPrefix(clean, "err_")
+// sharedRoutes maps key-name prefixes/exact matches to their semantic shared namespace.
+// First match wins. Order matters — longer/more-specific prefixes first.
+var sharedRoutes = []struct {
+	prefixes []string
+	target   string
+}{
+	{[]string{"error_", "err_"}, "errors"},
+	{[]string{"badge_"}, "badges"},
+	{[]string{"active", "suspended", "reported", "revoked", "pending", "status"}, "status"},
+	{[]string{"copy", "cancel", "close", "dismiss", "save", "back", "delete", "edit",
+		"submit", "confirm", "get_api_key", "read_docs", "contact_support",
+		"browse_apis", "go_to_dashboard", "try_live", "explore_system",
+		"apply_filters", "change_password"}, "buttons"},
+}
 
-	if isErrorKey(keyName) {
-		return lang + ".shared.errors." + clean
+// SuggestSharedKey proposes a semantic shared key path for a duplicate group.
+// e.g. "error_rate_limit" → "en.shared.errors.rate_limit"
+// e.g. "copy_btn"        → "en.shared.buttons.copy_btn"
+// e.g. "badge_valid"     → "en.shared.badges.valid"
+func SuggestSharedKey(lang, keyName string) string {
+	lower := strings.ToLower(keyName)
+	for _, route := range sharedRoutes {
+		for _, prefix := range route.prefixes {
+			if strings.HasPrefix(lower, prefix) || lower == strings.TrimSuffix(prefix, "_") {
+				// Strip well-known prefixes so badge_valid → badges.valid (not badges.badge_valid).
+				clean := strings.TrimPrefix(lower, "badge_")
+				clean = strings.TrimPrefix(clean, "error_")
+				clean = strings.TrimPrefix(clean, "err_")
+				// For exact matches (e.g. "copy", "active") keep original casing from keyName.
+				if clean == lower {
+					clean = keyName
+				}
+				return lang + ".shared." + route.target + "." + clean
+			}
+		}
 	}
 	return lang + ".shared.common." + keyName
 }

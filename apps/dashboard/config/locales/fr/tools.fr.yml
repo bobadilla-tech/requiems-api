@@ -42,6 +42,7 @@ fr:
         filter_or_route_quotes_by_language: "Filtrer ou acheminer les citations par langue avant de les présenter à un public multilingue."
         score_the_emotional_tone_of_a_quote: "Évaluez la tonalité émotionnelle d'une citation avant de l'afficher — ne mettez en avant que les résultats positifs et encourageants."
         detect_language: "Détection de la langue"
+        sentiment_analysis: "Analyse des sentiments"
       faq:
         heading: "Foire aux questions"
     unit_conversion:
