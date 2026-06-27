@@ -1,4 +1,3 @@
----
 en:
   divisions:
     carousel:
@@ -26,13 +25,7 @@ en:
       division_hub_tagline_kicker: "How teams use it"
     index:
       meta_title: "API divisions | Requiems API"
-      tagline_kicker: "Browse by problem area"
-      tagline: "One API key opens the full catalog. Pick the division that fits your problem, then open the technical directory when you are ready to wire endpoints."
-      hero:
-        headline: "Ship faster without building everything from scratch"
-        subheadline: "Explore how each division solves real business problems, then open the technical directory when you are ready to integrate."
-        primary_cta: "Get API key"
-        secondary_cta: "View pricing"
+      hero: {}
       strategy_call:
         label: "Book a strategy call"
       questions_intro: "Still have questions? Let's talk through your use case."
@@ -47,36 +40,19 @@ en:
         validation:
           title: "Validation"
           blurb: "Stop bad emails, invalid phones, and toxic content before it hits your database."
-        networking:
-          title: "Networking & Internet"
-          blurb: "IP intelligence, domains, and threat signals for security and infrastructure teams."
+        networking: {}
         places:
           title: "Places"
           blurb: "Timezones, holidays, geocoding, and address data for global products."
-        text:
-          title: "Text & Language"
-          blurb: "Spell check, moderation, language detection, and text utilities in one suite."
-        technology:
-          title: "Developer tools"
-          blurb: "Encoding, QR codes, conversions, and utilities you would otherwise rebuild every project."
-        entertainment:
-          title: "Entertainment"
-          blurb: "Trivia, quotes, jokes, and games that make apps feel alive, without a content team."
+        text: {}
+        technology: {}
+        entertainment: {}
         health:
           title: "Health"
           blurb: "Fitness and wellness data for coaching, retention, and health experiences."
-      technical_note: "Technical API directory"
-
     validation:
-      meta_title: "Validation APIs | Requiems API"
-      hero:
-        headline: "Validate data before it breaks your app."
-        subheadline: "Stop bad emails, invalid phones, and toxic content with APIs that catch issues at the source."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about bad data before it compounds: fake signups, wrong numbers, and risky text. They are written for teams that need a fast, credible path to cleaner inputs."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -86,7 +62,6 @@ en:
           label: "Phone validation"
         - key: "profanity_filter"
           label: "Profanity filter"
-      featured_cases:
       featured_cases: []
       use_cases:
         - filter_key: "email_validator"
@@ -144,13 +119,7 @@ en:
           label: "Average API response time"
         - value: "10,000+"
           label: "Peak validations per minute (tier-dependent)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where you lose time today (bounces, SMS failures, or noisy UGC). Each outcome maps to endpoints you can try with a small change in your form or pipeline."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "SaaS & startups"
         - "E-commerce"
@@ -165,23 +134,10 @@ en:
         - name: "CompilStrength"
           role: "compilestrength.com"
           quote: "We rely on Requiems validation to keep our user database clean and their recognition services to deliver a tailored experience to every athlete."
-      final_cta:
-        headline: "Start validating data today."
-        subheadline: "Integrate in minutes. Catch issues before they cost you."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     networking:
-      meta_title: "Networking & Internet APIs | Requiems API"
-      hero:
-        headline: "Secure your network with real-time intelligence."
-        subheadline: "IP geolocation, domain lookups, and threat detection for infrastructure and security teams."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about what happens at the edge of your network: risky sessions, unclear geography, and brittle domain work. They highlight APIs you can integrate faster than you can staff a full signals team."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -256,13 +212,7 @@ en:
           label: "Average API response time"
         - value: "200+"
           label: "Countries & territories in directory"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how traffic hits your edge (fraud signals, country context, or domain checks). Each outcome maps to endpoints that are easier to run here than to own long-term."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Cybersecurity"
         - "E-commerce"
@@ -271,23 +221,10 @@ en:
         - "Telecom"
         - "Legal & compliance"
       testimonials: []
-      final_cta:
-        headline: "Secure your network today."
-        subheadline: "Integrate in minutes. Protect against threats instantly."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     places:
-      meta_title: "Places APIs | Requiems API"
-      hero:
-        headline: "Build global apps without location friction."
-        subheadline: "Timezone, holiday, and geolocation APIs for world-ready products that work everywhere."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about clocks, calendars, and addresses that break when you go global. They highlight APIs that carry regional nuance so your product does not have to."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -362,13 +299,7 @@ en:
           label: "Average API response time"
         - value: "250+"
           label: "Countries & regions in data products"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where logistics or calendars hurt you (timezones, addresses, or launch windows). Each outcome maps to endpoints that bake in regional rules."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Travel & hospitality"
         - "Logistics"
@@ -377,23 +308,10 @@ en:
         - "HR tech"
         - "Fintech"
       testimonials: []
-      final_cta:
-        headline: "Build world-ready apps today."
-        subheadline: "Integrate in minutes. Make every location feel local."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     text:
-      meta_title: "Text & Language APIs | Requiems API"
-      hero:
-        headline: "Improve every text interaction with a single API suite."
-        subheadline: "Spell checking, content moderation, language analysis, and text utilities that power better user experiences."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about language work that should not become a science project: guardrails, quality, detection, and helpers. They highlight APIs you can wire next to your existing editors and queues."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -476,13 +394,7 @@ en:
           label: "Average API response time"
         - value: "Millions"
           label: "Text operations per day (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where language hurts quality or trust (moderation, spelling, detection, or synonyms). Each outcome maps to endpoints you can layer into editors or queues."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Publishing & media"
         - "SaaS"
@@ -491,23 +403,10 @@ en:
         - "Marketing"
         - "Customer support"
       testimonials: []
-      final_cta:
-        headline: "Turn text into better experiences today."
-        subheadline: "Integrate in minutes. Improve every interaction with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     technology:
-      meta_title: "Developer tools APIs | Requiems API"
-      hero:
-        headline: "Build developer-ready features faster."
-        subheadline: "Utility APIs for encoding, parsing, conversion, and developer workflows that ship in minutes."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about the small utilities that still steal sprint time: encodings, conversions, and shareable links. They highlight APIs that exist so you can keep building your differentiator."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -592,13 +491,7 @@ en:
           label: "Average API response time"
         - value: "Millions"
           label: "Utility conversions per month (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors chores your team keeps postponing (format conversion, QR codes, user-agent analytics). Each outcome maps to utility endpoints that stay boring on purpose."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "SaaS engineering"
         - "DevOps & platform"
@@ -610,23 +503,10 @@ en:
         - name: "Franzua"
           role: "Founder, Flyver"
           quote: "We build digital tools that work. Requiems is part of that toolkit—reliable, fast, and out of our way."
-      final_cta:
-        headline: "Ship developer features faster today."
-        subheadline: "Integrate in minutes. Turn routine utilities into production-ready APIs."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     entertainment:
-      meta_title: "Entertainment APIs | Requiems API"
-      hero:
-        headline: "Make every experience more fun with instant entertainment APIs."
-        subheadline: "Trivia, quotes, jokes, and games that bring apps to life with one integration."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about lightweight delight that still needs uptime: games, quotes, and snackable content. They highlight APIs that make engagement tangible without a content org."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -705,13 +585,7 @@ en:
           label: "Average API response time"
         - value: "Thousands"
           label: "Content responses served daily (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how you want retention to feel (trivia, quotes, reactions). Each outcome maps to lightweight content endpoints you can swap in quickly."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Consumer apps"
         - "Media"
@@ -720,23 +594,10 @@ en:
         - "Wellness"
         - "Growth teams"
       testimonials: []
-      final_cta:
-        headline: "Add instant entertainment to your app today."
-        subheadline: "Integrate in minutes. Make your product more engaging with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     health:
-      meta_title: "Health APIs | Requiems API"
-      hero:
-        headline: "Make health apps smarter with instant fitness and nutrition APIs."
-        subheadline: "Exercise guidance, nutrition insights, and wellness tools that improve retention and user outcomes."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about helping people finish routines: workouts, planning moments, and gentle accountability. They highlight health APIs that pair with your coaching or benefits story."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -799,13 +660,7 @@ en:
           label: "Average API response time"
         - value: "Thousands"
           label: "Health plans generated daily (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how people stick with your product (workouts, nutrition nudges, habits). Each outcome maps to health endpoints you can pair with your own coaching UX."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Fitness & coaching"
         - "Wellness apps"
@@ -817,23 +672,10 @@ en:
         - name: "CompileStrength"
           role: "compilestrength.com"
           quote: "The fitness data from Requiems powers our core features. We didn't have to build or maintain any of that infrastructure."
-      final_cta:
-        headline: "Launch smarter health experiences today."
-        subheadline: "Integrate in minutes. Help users stay healthy with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      final_cta: {}
     finance:
-      meta_title: "Finance APIs | Requiems API"
-      hero:
-        headline: "Move money with cleaner data and fewer surprises."
-        subheadline: "BIN, IBAN, SWIFT, crypto, and exchange-rate APIs built for checkout, payouts, and compliance workflows."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "The headline covers what you can integrate. The examples below are checkout, payout, and FX—short situations where validation or reference data changed the outcome."
+      hero: {}
+      strategy_call: {}
       filters:
         - key: "all"
           label: "All cases"
@@ -910,13 +752,7 @@ en:
           label: "Average API response time"
         - value: "Global"
           label: "Major payment & reference schemes in catalog"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how money moves through your product (cards, bank rails, FX). Each outcome maps to finance endpoints you validate before funds leave the building."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      how_it_works: {}
       industries:
         - "Fintech"
         - "E-commerce"
@@ -928,9 +764,4 @@ en:
         - name: "Verigeo"
           role: "verigeo.pe"
           quote: "We use Requiems for financial data in our widgets and to block fake signups at registration. The recognition layer helped us personalize marketing without building anything from scratch."
-      final_cta:
-        headline: "Ship payments data you can trust today."
-        subheadline: "Integrate in minutes. Reduce fraud, rejects, and manual fixes."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
+      final_cta: {}

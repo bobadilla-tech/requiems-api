@@ -12,8 +12,6 @@ en:
           - "Built for production"
         cta_primary: "Get API key"
         cta_secondary: "Explore systems"
-        try_badge: "✨ Try it now • No credit card required"
-        api_request: "API Request"
       trusted_by:
         label: "Trusted by teams shipping real products"
       social_proof:
@@ -26,29 +24,21 @@ en:
         utilities_cta: "Browse utilities"
         cards:
           identity_risk:
-            title: "Identity & Risk System"
-            blurb: "Protect your product from fake users, fraud, and bad data before it reaches your database."
             signals:
               - "Risk scoring"
               - "Email, phone, and IP intelligence"
               - "Domain and behavioral signals"
           payments_intelligence:
-            title: "Payments Intelligence System"
-            blurb: "Validate and enrich financial data to reduce failed payments and detect risky transactions."
             signals:
               - "BIN & card validation"
               - "IBAN / SWIFT checks"
               - "Transaction risk signals"
           global_data:
-            title: "Global Data System"
-            blurb: "Power international products with accurate, real-time location and compliance-ready data."
             signals:
               - "Geocoding"
               - "Timezones & holidays"
               - "Address intelligence"
           data_integrity:
-            title: "Data Integrity System"
-            blurb: "Clean, validate, and standardize user input across your entire platform."
             signals:
               - "Input validation"
               - "Text normalization"
@@ -62,12 +52,6 @@ en:
               - "Misc utilities"
       how_it_works:
         heading: "How it works"
-        step1_title: "Choose a system"
-        step1_body: "Pick the problem you want to solve: identity, payments, global data, or data integrity."
-        step2_title: "Call a single endpoint"
-        step2_body: "Use high-level endpoints or compose workflows based on your needs."
-        step3_title: "Get decisions, not raw data"
-        step3_body: "Receive risk scores, validation results, and enriched insights, ready to use in your product."
       engine_spotlight:
         kicker: "Engines"
         heading: "Multiple signals. One structured decision."
@@ -436,8 +420,6 @@ en:
         free:
           name: "Free"
           description: "Perfect for testing and small projects"
-          requests: "500"
-          rate_limit: "30/min"
           features:
             - "500 requests/month"
             - "30 requests/minute"
@@ -448,8 +430,6 @@ en:
         developer:
           name: "Developer"
           description: "For developers building production apps"
-          requests: "100k"
-          rate_limit: "5,000/min"
           features:
             - "100,000 requests/month"
             - "5,000 requests/minute"
@@ -460,9 +440,6 @@ en:
         business:
           name: "Business"
           description: "For growing businesses and teams"
-          requests: "1M"
-          rate_limit: "10k/min"
-          popular_badge: "Most Popular"
           features:
             - "1,000,000 requests/month"
             - "10,000 requests/minute"
@@ -474,8 +451,6 @@ en:
         professional:
           name: "Professional"
           description: "For high-volume applications"
-          requests: "10M"
-          rate_limit: "50k/min"
           features:
             - "10,000,000 requests/month"
             - "50,000 requests/minute"
@@ -485,10 +460,6 @@ en:
             - "Custom SLAs"
           cta: "Start Free Trial"
         enterprise:
-          heading: "Enterprise"
-          description: "Custom solutions for large-scale deployments"
-          price: "Custom Pricing"
-          cta: "Contact Sales"
           features:
             - "Unlimited API requests"
             - "Private dedicated servers"
@@ -556,7 +527,6 @@ en:
       title: "Our Team - Requiems API"
       heading: "Meet Our Team"
       subheading: "The people building production-ready APIs for developers worldwide."
-      company_prefix: "All team members are part of"
       company_sentence: "All team members are part of %{company_link}"
       linkedin_cta: "Connect on LinkedIn"
       members:
@@ -569,8 +539,6 @@ en:
         alexandra:
           role: "Founder, Go-to-Market"
           bio: "Driving our go-to-market strategy and building relationships with developers and enterprises worldwide."
-        alexandra_flores: "Alexandra Flores"
-        eliaz_bobadilla: "Eliaz Bobadilla"
       join:
         heading: "Join Our Team"
         text: "We're always looking for talented engineers and builders who are passionate about creating developer-first products. Interested in joining us?"
@@ -649,9 +617,7 @@ en:
           - "Issues caused by your misuse of the API"
       data_privacy:
         heading: "5. Data and Privacy"
-        text: "We do not log the content of API requests or responses. Usage metadata (timestamps, endpoints, status codes) is retained for billing and analytics. See our"
         policy_link: "Privacy Policy"
-        policy_suffix: "for details."
         full: "We do not log the content of API requests or responses. Usage metadata (timestamps, endpoints, status codes) is retained for billing and analytics. See our %{link} for details."
       ip:
         heading: "6. Intellectual Property"
@@ -805,10 +771,6 @@ en:
         heading: "Rate Limits"
         q1: "What are the rate limits?"
         a1: "Rate limits vary by plan:"
-        free: "Free: %{rate_limit} requests/minute"
-        developer: "Developer: %{rate_limit} requests/minute"
-        business: "Business: %{rate_limit} requests/minute"
-        professional: "Professional: %{rate_limit} requests/minute"
         q2: "How should I handle rate limit errors?"
         a2_html: 'When you receive a 429 error, implement exponential backoff. Wait a few seconds and retry. Check the <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">Retry-After</code> header for the recommended wait time. Consider upgrading your plan if you consistently hit rate limits.'
       support:

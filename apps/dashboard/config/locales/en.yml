@@ -28,15 +28,12 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
   errors:
     messages:
       not_saved:
         one: "1 error prohibited this record from being saved:"
         other: "%{count} errors prohibited this record from being saved:"
   date:
-    formats:
-      month_year: "%B %Y"
+    formats: {}
   time:
-    formats:
-      status_timestamp: "%B %d, %Y at %I:%M %p %Z"
+    formats: {}

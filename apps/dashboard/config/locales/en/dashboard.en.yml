@@ -5,7 +5,6 @@ en:
       developer: "Developer"
       business: "Business"
       professional: "Professional"
-      enterprise: "Enterprise"
     overview:
       title: "Dashboard"
       welcome: "Welcome back, %{name}!"
@@ -29,9 +28,7 @@ en:
       no_activity: "No activity yet"
       no_activity_desc: "Get started by making your first API call."
       browse_docs: "Browse API Documentation"
-      active_key:
-        one: "Active key"
-        other: "Active keys"
+      active_key: {}
       api_keys: "API Keys"
       manage: "Manage"
       create_key: "Create New Key"
@@ -98,9 +95,7 @@ en:
         cancel: "Cancel"
         submit: "Generate API Key"
         submitting: "Generating..."
-        errors:
-          one: "%{count} error prohibited this API key from being created:"
-          other: "%{count} errors prohibited this API key from being created:"
+        errors: {}
       show_key:
         title: "API Key Created"
         success_heading: "API Key Created Successfully!"
@@ -116,10 +111,6 @@ en:
         curl_example: "Example cURL request:"
         js_example: "Example in JavaScript:"
         security_heading: "Security Best Practices"
-        security_1: "Never expose your API key in client-side code, public repositories, or browser JavaScript"
-        security_2: "Store it securely using environment variables or a secrets management system"
-        security_3: "Revoke immediately if you suspect your key has been compromised"
-        security_4: "Rotate keys regularly as part of your security practices"
         back_btn: "← Back to API Keys"
         view_docs_btn: "View API Documentation"
         go_dashboard_btn: "Go to Dashboard"
@@ -211,9 +202,7 @@ en:
         deletion_email_sent: "Check your email — we sent a confirmation link. It expires in 1 hour."
         invalid_token: "This link is invalid or has expired. Please request a new one."
         deleted: "Your account has been permanently deleted. We're sorry to see you go."
-      errors:
-        one: "%{count} error prohibited these settings from being saved:"
-        other: "%{count} errors prohibited these settings from being saved:"
+      errors: {}
       account_info:
         heading: "Account Information"
         subheading: "Update your account details and email address"
@@ -280,8 +269,6 @@ en:
       cards:
         total_requests: "Total Requests"
         api_calls_in_period: "API calls in period"
-        requests_used: "Requests Used"
-        counted_against_quota: "Counted against quota"
         avg_response: "Avg Response Time"
         avg_latency: "Average latency"
         error_rate: "Error Rate"
@@ -307,7 +294,6 @@ en:
         col_response: "Response Time"
         col_requests: "Requests"
         col_api_key: "API Key"
-        time_ago: "%{time} ago"
         unknown_key: "Unknown"
         showing_info: "Showing %{from}–%{to} of %{total} requests"
         page_of: "Page %{page} of %{pages}"
@@ -336,7 +322,6 @@ en:
         heading: "4. Code Examples"
         body: "Copy and adapt these examples in your preferred language."
       copy_btn: "Copy"
-      copied_btn: "Copied!"
       browse_apis: "Browse All APIs"
     mailers:
       subscription:
@@ -362,7 +347,6 @@ en:
           expiry_notice_html: "Your upgraded access is valid until <strong>%{expires_at}</strong>. After that your account will return to the free plan automatically."
           contact_notice_html: "Questions? Reach us at %{email_link}."
       account_deletion:
-        subject: "Confirm your account deletion"
         header_title: "Account Deletion Requested"
         header_subtitle: "Requiems API — Action Required"
         greeting_html: "Hi <strong>%{email}</strong>,"

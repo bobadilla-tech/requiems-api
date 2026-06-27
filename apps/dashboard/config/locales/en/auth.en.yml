@@ -37,6 +37,4 @@ en:
       submit: "Update Password"
       submitting: "Updating..."
     errors:
-      heading:
-        one: "%{count} error prevented this from being saved:"
-        other: "%{count} errors prevented this from being saved:"
+      heading: {}

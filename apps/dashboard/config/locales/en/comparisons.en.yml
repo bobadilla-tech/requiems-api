@@ -61,11 +61,7 @@ en:
           neverbounce: true
           ipstack: false
           abstractapi: false
-      benchmarks_columns:
-        zerobounce: "ZeroBounce"
-        neverbounce: "NeverBounce"
-        ipstack: "IPstack"
-        abstractapi: "AbstractAPI"
+      benchmarks_columns: {}
       competitors_heading: "Pick your comparison"
       card_cta: "View Full Comparison"
       card_coming_soon: "Coming Soon"
@@ -86,13 +82,6 @@ en:
       api_coverage: "API coverage"
     competitors:
       zerobounce:
-        display_name: "ZeroBounce"
-        category: "Email Verification"
-        card_blurb: "ZeroBounce focuses exclusively on email verification with 99% accuracy claims, catch-all detection, and spam-trap identification. A solid specialist — but you'll need additional vendors for IP, phone, and other data."
-        meta_title: "Requiems API vs ZeroBounce: Email Verification Comparison 2026"
-        meta_description: "Compare Requiems API and ZeroBounce on features, pricing, accuracy, and API breadth. See which fits your stack."
-        hero_headline: "Requiems API vs ZeroBounce"
-        hero_context: "Email Verification"
         tldr:
           - title: "One key for everything"
             body: "ZeroBounce is email-only. Requiems API covers email, phone, IP, finance, and more — one subscription, one integration."
@@ -101,7 +90,6 @@ en:
           - title: "No credit-pool anxiety"
             body: "ZeroBounce sells credits that expire. Requiems API bills per call with a monthly free tier — use it when you need it."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Syntax validation"
               ours: true
@@ -139,33 +127,14 @@ en:
             - feature: "Finance / BIN lookup"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "100 credits"
-          their_latency: "~180ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "~8 email endpoints"
-        philosophy:
-          heading: "Philosophy"
-          body: "ZeroBounce built a premium single-purpose tool. Requiems API is built on the idea that developers shouldn't manage five API keys and five invoices to validate the same form submission. We cover every data signal you need — email, phone, IP, and more — through one consistent interface, priced on actual usage."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from ZeroBounce"
           steps:
             - "Replace `api.zerobounce.net` base URL with `api.requiems.dev`"
             - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
             - "Map `status` field: ZeroBounce `valid` → Requiems `deliverable`; `invalid` → `undeliverable`"
       neverbounce:
-        display_name: "NeverBounce"
-        category: "Email Verification"
-        card_blurb: "NeverBounce (a ZoomInfo company) processes billions of verifications monthly and integrates with 85+ marketing platforms. Email-only coverage; each additional data type means another vendor."
-        meta_title: "Requiems API vs NeverBounce: Email Verification Comparison 2026"
-        meta_description: "Compare Requiems API and NeverBounce on features, pricing, integrations, and API breadth."
-        hero_headline: "Requiems API vs NeverBounce"
-        hero_context: "Email Verification"
         tldr:
           - title: "Broader coverage"
             body: "NeverBounce is email-only. Requiems API adds phone, IP, finance, and 80+ more endpoints under one key."
@@ -174,7 +143,6 @@ en:
           - title: "Simpler integration"
             body: "One auth pattern, one error format, one SDK across all APIs. NeverBounce requires a separate integration per product."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Syntax validation"
               ours: true
@@ -212,33 +180,14 @@ en:
             - feature: "Finance / BIN lookup"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "1,000 credits on signup"
-          their_latency: "~150ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "~5 email endpoints"
-        philosophy:
-          heading: "Philosophy"
-          body: "NeverBounce excels at email list hygiene at scale and has the deepest integration ecosystem in email marketing. If you need 85 native platform connectors, they're hard to beat. Requiems API is built for developers who want raw API access to multiple data signals — less clicks, more code, broader coverage."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from NeverBounce"
           steps:
             - "Replace `api.neverbounce.com` base URL with `api.requiems.dev`"
             - "Swap API key from query param to `Authorization: Bearer <key>` header"
             - "Map result codes: `valid` → `deliverable`; `invalid` → `undeliverable`; `disposable` → `risky`"
       kickbox:
-        display_name: "Kickbox"
-        category: "Email Verification"
-        card_blurb: "Kickbox is an email verification platform used by 150,000+ senders, with real-time API, bulk list cleaning, and a proprietary Sendex deliverability score. Single-purpose; no phone or IP coverage."
-        meta_title: "Requiems API vs Kickbox: Email Verification Comparison 2026"
-        meta_description: "Compare Requiems API and Kickbox on features, pricing, Sendex score, and API breadth."
-        hero_headline: "Requiems API vs Kickbox"
-        hero_context: "Email Verification"
         tldr:
           - title: "No proprietary score lock-in"
             body: "Kickbox's Sendex score is a black box. Requiems API returns raw signals so you build your own deliverability logic."
@@ -247,7 +196,6 @@ en:
           - title: "SOC 2 + GDPR"
             body: "Both platforms are SOC 2 / GDPR compliant. Requiems API adds per-call audit logs out of the box."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Syntax validation"
               ours: true
@@ -285,32 +233,14 @@ en:
             - feature: "Phone validation"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "100 free verifications"
-          their_latency: "~130ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "~6 email endpoints"
-        philosophy:
-          heading: "Philosophy"
-          body: "Kickbox is a polished email verification product with first-class deliverability consulting services. Requiems API takes a developer-first approach: expose raw, accurate signals and let engineers decide how to weight them. We're the right fit when you want data, not advice."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from Kickbox"
           steps:
             - "Replace `api.kickbox.com` base URL with `api.requiems.dev`"
             - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
             - "Map `result` field: `deliverable` stays; `undeliverable` stays; `risky` maps to Requiems `risky`"
       mailboxlayer:
-        display_name: "Mailboxlayer"
-        category: "Email Verification"
-        card_blurb: "Mailboxlayer (an APILayer product) provides real-time email validation via a simple URL-based API with syntax checks, SMTP ping, MX records, and a quality score. Free tier of 100 req/mo."
-        meta_title: "Requiems API vs Mailboxlayer: Email Validation Comparison 2026"
-        meta_description: "Compare Requiems API and Mailboxlayer on features, pricing, accuracy, and API breadth."
-        hero_headline: "Requiems API vs Mailboxlayer"
         hero_context: "Email Validation"
         tldr:
           - title: "More endpoints, same simplicity"
@@ -320,7 +250,6 @@ en:
           - title: "Active development"
             body: "Mailboxlayer is a legacy APILayer product with slow updates. Requiems API ships new APIs monthly."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Syntax validation"
               ours: true
@@ -355,33 +284,14 @@ en:
             - feature: "Phone validation"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "100 req/mo"
-          their_latency: "~200ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "1 endpoint"
-        philosophy:
-          heading: "Philosophy"
-          body: "Mailboxlayer is a lean, low-cost validation endpoint ideal for simple syntax + SMTP checks. Requiems API takes a wider view: we ship the email endpoint you need plus IP, phone, finance, and text APIs — all through the same developer experience."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from Mailboxlayer"
           steps:
             - "Replace `apilayer.net/api/check` with `api.requiems.dev/v1/email/validate`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
             - "Map `format_valid` → `syntax_valid`; `smtp_check` → `smtp_valid`; `score` → `deliverability_score`"
       bouncify:
-        display_name: "Bouncify"
-        category: "Email Verification"
-        card_blurb: "Bouncify is a bulk email list cleaning service used by 10,000+ marketing teams, offering SMTP verification, catch-all detection, disposable checks, and spam-trap removal. Upload-and-download workflow; API available."
-        meta_title: "Requiems API vs Bouncify: Email Verification Comparison 2026"
-        meta_description: "Compare Requiems API and Bouncify on features, pricing, API access, and breadth."
-        hero_headline: "Requiems API vs Bouncify"
-        hero_context: "Email Verification"
         tldr:
           - title: "API-first vs upload-first"
             body: "Bouncify is optimized for CSV uploads. Requiems API is built for real-time API calls — validate at signup, not after the fact."
@@ -390,7 +300,6 @@ en:
           - title: "100+ endpoints"
             body: "Bouncify is email-only. Requiems API covers email, phone, IP, and finance in one subscription."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Syntax validation"
               ours: true
@@ -425,33 +334,14 @@ en:
             - feature: "Phone validation"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "Signup credits"
-          their_latency: "Batch processing"
-          their_uptime: "N/A (SaaS uploads)"
-          their_coverage: "~9 email checks"
-        philosophy:
-          heading: "Philosophy"
-          body: "Bouncify is a marketing-team tool — upload a list, get back a clean list. Requiems API is a developer tool — call an endpoint per signup and enforce quality in real time. Both approaches work; it depends on where in your funnel you want the quality gate."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from Bouncify"
           steps:
             - "Move from batch upload workflow to real-time API call on form submission"
             - "Use `Authorization: Bearer <key>` header with `api.requiems.dev/v1/email/validate`"
             - "Map result fields: `deliverable` stays; `invalid` → `undeliverable`; `accept_all` → `catch_all`"
       ipstack:
-        display_name: "IPstack"
-        category: "IP Geolocation"
-        card_blurb: "IPstack (an APILayer product) delivers real-time IP geolocation covering 100+ data fields: country, region, city, timezone, currency, ISP, and threat intelligence. IPv4 and IPv6 supported."
-        meta_title: "Requiems API vs IPstack: IP Geolocation Comparison 2026"
-        meta_description: "Compare Requiems API and IPstack on features, pricing, data fields, and API breadth."
-        hero_headline: "Requiems API vs IPstack"
-        hero_context: "IP Geolocation"
         tldr:
           - title: "One vendor for IP + email + phone"
             body: "IPstack is geolocation-only. Requiems API provides the same location data plus email verification, phone validation, and more."
@@ -460,7 +350,6 @@ en:
           - title: "Richer free tier"
             body: "IPstack free = 100 req/mo. Requiems API free = 500 req/mo across every endpoint type."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Country / region / city"
               ours: true
@@ -495,33 +384,14 @@ en:
             - feature: "Phone validation"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~90ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "100 req/mo"
-          their_latency: "~120ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "~3 IP endpoints"
-        philosophy:
-          heading: "Philosophy"
-          body: "IPstack is a mature geolocation product from APILayer. If you only need IP-to-location data and prefer a well-known brand, it works. Requiems API is the better fit when your app already uses — or will eventually need — email, phone, or other validation signals: one key, one bill, one docs site."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from IPstack"
           steps:
             - "Replace `api.ipstack.com/{ip}` with `api.requiems.dev/v1/ip/lookup?ip={ip}`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
             - "Most response fields are identical; map `location.geoname_id` to `geoname_id` at root level"
       abstractapi:
-        display_name: "AbstractAPI"
-        category: "Multi-Purpose"
-        card_blurb: "AbstractAPI offers 20+ focused APIs — email verification, IP geolocation, phone validation, company enrichment, holidays, and more — each under a separate key and separate subscription. Strong DX; fragmented billing."
-        meta_title: "Requiems API vs AbstractAPI: API Platform Comparison 2026"
-        meta_description: "Compare Requiems API and AbstractAPI on features, unified billing, coverage, and developer experience."
-        hero_headline: "Requiems API vs AbstractAPI"
-        hero_context: "Multi-Purpose API Platform"
         tldr:
           - title: "One key, not twenty"
             body: "AbstractAPI gives you one key per API product. Requiems API gives you one key for all 100+ endpoints."
@@ -530,7 +400,6 @@ en:
           - title: "Consistent schema"
             body: "AbstractAPI response shapes vary per product. Requiems API uses a consistent envelope, error format, and auth method across everything."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Email verification"
               ours: true
@@ -562,33 +431,14 @@ en:
             - feature: "100+ endpoints"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo unified"
-          their_free_tier: "Varies per API (100–250)"
-          their_latency: "~150ms p50 (est.)"
-          their_uptime: "99.99%"
-          their_coverage: "~20 APIs (separate keys)"
-        philosophy:
-          heading: "Philosophy"
-          body: "AbstractAPI built excellent individual API products — their email and IP products in particular are well-regarded. But each one is a separate account, key, and plan. Requiems API started from the opposite question: what if every API you'll ever need shared one account? We traded the per-product polish of a specialist for the operational simplicity of a unified platform."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from AbstractAPI"
           steps:
             - "Replace `emailvalidation.abstractapi.com`, `ipgeolocation.abstractapi.com`, etc. with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap `api_key` query param for `Authorization: Bearer <key>` header — same key works for every endpoint"
             - "Response field names are similar; consult per-endpoint migration notes in our docs"
       neutrinoapi:
-        display_name: "Neutrinoapi"
-        category: "Multi-Purpose"
-        card_blurb: "Neutrinoapi is a general-purpose API toolkit covering email, phone, IP, geolocation, security, imaging, telephony, e-commerce, and text APIs — 30+ endpoints under one account. Established since 2013."
-        meta_title: "Requiems API vs Neutrinoapi: General-Purpose API Comparison 2026"
-        meta_description: "Compare Requiems API and Neutrinoapi on features, endpoints, pricing, and developer experience."
-        hero_headline: "Requiems API vs Neutrinoapi"
-        hero_context: "Multi-Purpose API"
         tldr:
           - title: "More endpoints"
             body: "Neutrinoapi covers ~30 endpoints. Requiems API covers 100+ with faster release cadence."
@@ -597,7 +447,6 @@ en:
           - title: "Transparent pricing"
             body: "Neutrinoapi uses a credit system with per-endpoint credit costs. Requiems API bills uniformly per API call."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Email validation"
               ours: true
@@ -635,33 +484,14 @@ en:
             - feature: "OpenAPI 3.1 spec"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "Trial credits"
-          their_latency: "~200ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "~30 endpoints"
-        philosophy:
-          heading: "Philosophy"
-          body: "Neutrinoapi pioneered the general-purpose API concept and offers a genuinely broad toolkit. Requiems API builds on that vision with a modern API design, 100+ endpoints, and a developer experience shaped by what teams actually need in 2026: OpenAPI specs, consistent schemas, and usage-based pricing with no credit math."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from Neutrinoapi"
           steps:
             - "Replace `neutrinoapi.net/api/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap user-id + api-key combo for `Authorization: Bearer <key>` header"
             - "Map credit-based rate limits to per-call metering in your Requiems dashboard"
       api_ninjas:
-        display_name: "API Ninjas"
-        category: "Multi-Purpose"
-        card_blurb: "API Ninjas provides 135+ production-ready APIs covering finance, AI/vision, health, entertainment, transportation, and more — used by 600,000+ developers including Fortune 500 companies. Zero data storage policy."
-        meta_title: "Requiems API vs API Ninjas: Multi-Purpose API Comparison 2026"
-        meta_description: "Compare Requiems API and API Ninjas on coverage, pricing, data freshness, and developer experience."
-        hero_headline: "Requiems API vs API Ninjas"
-        hero_context: "Multi-Purpose API Platform"
         tldr:
           - title: "Validation depth"
             body: "API Ninjas has breadth but shallow validation APIs. Requiems API's email, phone, and IP validation goes deeper — SMTP checks, HLR lookup, threat scoring."
@@ -670,7 +500,6 @@ en:
           - title: "Enterprise-ready billing"
             body: "Both offer volume pricing. Requiems API adds per-team usage dashboards, per-key rate limits, and invoice-based billing."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Email validation"
               ours: true
@@ -702,33 +531,14 @@ en:
             - feature: "OpenAPI 3.1 spec"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~120ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "Free tier (no card)"
-          their_latency: "243ms median"
-          their_uptime: "99.99%"
-          their_coverage: "135+ APIs"
-        philosophy:
-          heading: "Philosophy"
-          body: "API Ninjas is a data catalogue — thousands of facts served via REST. Requiems API is a validation and enrichment platform — we do live checks against real-world systems, not just database lookups. If you need historical earnings transcripts or animal facts, API Ninjas wins. If you need to know whether an email address actually receives mail right now, Requiems API is the right tool."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from API Ninjas"
           steps:
             - "Replace `api.api-ninjas.com/v1/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`"
             - "Swap `X-Api-Key` header for `Authorization: Bearer <key>`"
             - "Consult per-endpoint migration docs for field mapping"
       numverify:
-        display_name: "Numverify"
-        category: "Phone Validation"
-        card_blurb: "Numverify (an APILayer product) is a phone number validation and lookup API covering line type, carrier, location, and formatting for 232 countries. Simple URL-based access; free tier of 100 req/mo."
-        meta_title: "Requiems API vs Numverify: Phone Validation Comparison 2026"
-        meta_description: "Compare Requiems API and Numverify on phone validation features, pricing, coverage, and API breadth."
-        hero_headline: "Requiems API vs Numverify"
-        hero_context: "Phone Number Validation"
         tldr:
           - title: "Beyond phone"
             body: "Numverify is phone-only. Requiems API adds email verification, IP geolocation, finance, and 80+ more endpoints."
@@ -737,7 +547,6 @@ en:
           - title: "Active development"
             body: "Numverify is a legacy APILayer product. Requiems API ships new APIs and improvements every sprint."
         features:
-          heading: "Feature comparison"
           rows:
             - feature: "Phone number formatting"
               ours: true
@@ -766,21 +575,9 @@ en:
             - feature: "IP geolocation"
               ours: true
               theirs: false
-        benchmarks:
-          heading: "Benchmarks"
-          latency: "~110ms p50"
-          uptime: "99.9%"
-          coverage: "100+ APIs"
-          free_tier: "500 req/mo"
-          their_free_tier: "100 req/mo"
-          their_latency: "~180ms p50 (est.)"
-          their_uptime: "99.9%"
-          their_coverage: "1 endpoint"
-        philosophy:
-          heading: "Philosophy"
-          body: "Numverify does one thing: validate a phone number against a database. Requiems API does live HLR lookups for reachability checking in addition to the same carrier and format data — plus every other validation signal your app needs. One subscription, zero extra vendors."
+        benchmarks: {}
+        philosophy: {}
         migration:
-          heading: "Migrating from Numverify"
           steps:
             - "Replace `apilayer.net/api/validate` with `api.requiems.dev/v1/phone/validate`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"

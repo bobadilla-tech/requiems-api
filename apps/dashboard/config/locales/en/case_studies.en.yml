@@ -1,4 +1,3 @@
----
 en:
   case_studies:
     hub:
@@ -8,14 +7,11 @@ en:
       hero_subheadline: "Real partners using Requiems for geomarketing, fitness products, and more. Read how they combine our APIs with their own IP, and let your business be the next success story."
       cards_heading: "Featured partners"
       card_cta: "Read case study"
-      verigeo_blurb: "Peru's geomarketing leader uses Places, validation, and finance APIs to georeference at scale, keep signups clean, and power customer-facing widgets."
-      compilestrength_blurb: "Science-based training software uses our fitness exercise catalog so coaches can focus on programming UX, not maintaining exercise databases."
       partnership_heading: "Using Requiems in production?"
       partnership_body: "Contact us for consultation, partner pricing, or testimonial placement on this site. We'd love to feature your story."
       partnership_primary_cta: "Book a strategy call"
       partnership_secondary_cta: "Browse API docs"
       hub_divisions_hint: "Explore by problem area"
-
     common:
       apis_heading: "APIs in this story"
       apis_intro: "Live endpoints from our catalog: same API key, full documentation at each link."
@@ -31,15 +27,7 @@ en:
         secondary_apis: "Browse APIs"
         strategy_cta: "Book a strategy call"
       back_to_hub: "All case studies"
-
     verigeo:
-      meta_title: "Verigeo case study | Requiems API"
-      meta_description: "How Verigeo (verigeo.pe) uses Requiems Places, validation, and finance APIs for geomarketing, georeferencing workflows, and trustworthy widgets."
-      hero_headline: "Verigeo scales geomarketing with location-ready APIs"
-      hero_subheadline: "Verigeo delivers GIS, georeferencing, and geomarketing solutions across Peru. Requiems backs reference data and guardrails so their team can focus on customer workflows, not reinventing global postal, timezone, and validation infrastructure."
-      quote_text: "We use Requiems for financial data in our widgets and to block fake signups at registration. The recognition layer helped us personalize marketing without building anything from scratch."
-      quote_name: "Verigeo"
-      quote_role: "verigeo.pe · Geomarketing & GIS"
       sections:
         - heading: "Location intelligence at national scale"
           paragraphs:
@@ -80,15 +68,7 @@ en:
           benefit: "Authoritative FX snapshots for widgets that quote multi-currency context."
         - id: crypto
           benefit: "Spot crypto context alongside traditional FX when dashboards demand both."
-
     compilestrength:
-      meta_title: "CompileStrength case study | Requiems API"
-      meta_description: "CompileStrength builds science-based lifting software. See how the Fitness Exercises API supports programmatic training flows without owning the entire exercise catalog."
-      hero_headline: "CompileStrength trains smarter with evidence-backed exercise data"
-      hero_subheadline: "CompileStrength pairs progressive overload and periodization philosophy with product velocity. Requiems delivers structured fitness exercise data so the team can ship AI programming, filters, and analytics without rebuilding health datasets from scratch."
-      quote_text: "The fitness data from Requiems powers our core features. We didn't have to build or maintain any of that infrastructure."
-      quote_name: "CompileStrength"
-      quote_role: "compilestrength.com · Science-based training"
       sections:
         - heading: "Exercise science belongs in the product, not only in spreadsheets"
           paragraphs:
