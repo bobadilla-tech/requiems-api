@@ -106,6 +106,25 @@ var technicalPhraseSkips = []string{
 	"true",
 	"false",
 	"null",
+	// CSS values — appear when ERB expressions are embedded in style attributes
+	// e.g. mail_to(..., style: "color: #6b7280;")
+	"linear infinite",
+	"color:",
+	"background-color:",
+	"background:",
+	"font-size:",
+	"font-weight:",
+	"font-family:",
+	"border-radius:",
+	"border:",
+	"padding:",
+	"margin:",
+	"text-transform:",
+	"letter-spacing:",
+	"line-height:",
+	"display:",
+	"width:",
+	"height:",
 }
 
 // Patterns that already use i18n helpers — skip lines containing these.
@@ -468,6 +487,8 @@ func looksUserFacing(s string) bool {
 		"authorization:", "bearer ", "x-api-key", "x-backend-secret",
 		// Ruby class names and code patterns
 		"def ", "end\n", "rescue ", "@media ",
+		// CSS property values (e.g. "color: #6b7280;" passed as style: arg)
+		": #", "px;", "em;", "rem;", "%;",
 	} {
 		if strings.Contains(lower, skip) {
 			return false
@@ -500,6 +521,7 @@ func looksUserFacingLabel(s string) bool {
 		"<%", "%>", "class=", "data-", "style=",
 		"application/json", "bearer ", "x-api-key",
 		"def ", "rescue ",
+		": #", "px;", "em;", "rem;", "%;",
 	} {
 		if strings.Contains(lower, skip) {
 			return false

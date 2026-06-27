@@ -233,19 +233,24 @@ func SuggestSharedKey(lang, keyName string) string {
 	return lang + ".shared.common." + keyName
 }
 
-// FilterExistingValueCandidates drops candidates whose value is already present
-// anywhere in the shared file (under any key name). Prevents generate from
-// writing copy_btn alongside an already-existing copy with the same text.
+// FilterExistingValueCandidates drops candidates already covered by shared:
+// either their value exists in shared (under any key) or their SuggestedKey is
+// already defined. The key check catches interpolated values (%{…}) that
+// looksLikePlaceholder excludes from the value dedup set.
 func FilterExistingValueCandidates(candidates []MergeCandidate, allEntries []Entry) []MergeCandidate {
 	sharedValues := make(map[string]bool)
+	sharedKeys := make(map[string]bool)
 	for _, e := range allEntries {
-		if isSharedFile(e.ShortPath) && e.Value != "" && !looksLikePlaceholder(e.Value) {
-			sharedValues[e.Value] = true
+		if isSharedFile(e.ShortPath) {
+			sharedKeys[e.Key] = true
+			if e.Value != "" && !looksLikePlaceholder(e.Value) {
+				sharedValues[e.Value] = true
+			}
 		}
 	}
 	out := candidates[:0]
 	for _, c := range candidates {
-		if !sharedValues[c.Value] {
+		if !sharedValues[c.Value] && !sharedKeys[c.SuggestedKey] {
 			out = append(out, c)
 		}
 	}

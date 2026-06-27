@@ -29,6 +29,9 @@ en:
         investigate: "Investigate:"
         suspend: "Suspend:"
         ban: "Ban:"
+        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+        are_you_sure_you_want_to_ban_this_user: "Are you sure you want to BAN this user? This will revoke all API keys and cancel their subscription."
+        are_you_sure_you_want_to_resolve_this: "Are you sure you want to resolve this report?"
       index:
         apply_filters: "Apply Filters"
         abuse_reports: "Abuse Reports"
@@ -169,6 +172,9 @@ en:
         subscription: "Subscription"
         suspend: "Suspend"
         started: "Started"
+        are_you_sure_you_want_to_unsuspend_this: "Are you sure you want to unsuspend this user? They will regain access to their account."
+        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
+        are_you_sure_you_want_to_grant_admin: "Are you sure you want to grant admin privileges to this user? They will have full system access."
       index:
         try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
         view_and_manage_all_user_accounts: "View and manage all user accounts"

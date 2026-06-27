@@ -6,4 +6,3 @@ es:
     deployment_ready:
       your_private_api_is_live: "Tu API privada ya está activa."
       example_request: "Ejemplo de solicitud:"
-      color_6b7280: "color: #6b7280;"

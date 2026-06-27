@@ -5,5 +5,4 @@ fr:
       new_private_deployment_request: "Nouvelle demande de déploiement privé"
     deployment_ready:
       your_private_api_is_live: "Votre API privée est active."
-      example_request: "Exemple de requête :"
-      color_6b7280: "couleur : #6b7280 ;"
+      example_request: "Exemple de requête :"
