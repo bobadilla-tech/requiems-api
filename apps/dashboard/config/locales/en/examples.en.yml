@@ -15,7 +15,7 @@ en:
       view_tutorial: "View Tutorial"
       view_tutorial_aria: "%{title} - View Tutorial"
       apis_used: "APIs Used"
-      tech_count: {}
+      tech_count: {one: "%{count} technology", other: "%{count} technologies"}
     categories: {}
     difficulties: {}
     items:

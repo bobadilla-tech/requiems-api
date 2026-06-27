@@ -38,6 +38,7 @@ en:
       upgrade_heading: "Upgrade Your Plan"
       upgrade_desc: "Get more requests, faster rate limits, and priority support."
       view_pricing: "View Pricing"
+      of_requests: "of %{limit} requests"
     api_keys:
       title: "API Keys"
       subtitle: "Manage your API keys and access credentials"
@@ -146,6 +147,7 @@ en:
         warning_moderate_body: "You've used %{percent}% of your monthly quota. You may want to upgrade soon."
         rate_limit_heading: "Rate Limit"
         rate_limit_unit: "requests per minute"
+        of_requests: "of %{limit} requests"
       upgrade_section:
         heading: "Upgrade Your Plan"
         subtitle: "Choose a plan that fits your needs"
@@ -331,6 +333,7 @@ en:
           plan_label: "Your plan"
           cta_btn: "Go to Dashboard"
           contact_notice_html: "Questions? Reach us at %{email_link}."
+          greeting_html: "Hi <strong>%{email}</strong>,"
       promotion:
         upgrade_notification:
           subject: "Your Requiems plan has been upgraded to %{plan}"
@@ -342,6 +345,7 @@ en:
           cta_btn: "Go to Dashboard"
           expiry_notice_html: "Your upgraded access is valid until <strong>%{expires_at}</strong>. After that your account will return to the free plan automatically."
           contact_notice_html: "Questions? Reach us at %{email_link}."
+          greeting_html: "Hi <strong>%{email}</strong>,"
       account_deletion:
         header_title: "Account Deletion Requested"
         header_subtitle: "Requiems API — Action Required"
@@ -356,6 +360,7 @@ en:
         consequence_3: "Permanently delete all usage data and history"
         ignore_notice: "If you didn't request this, you can safely ignore this email. Your account will not be deleted."
         contact_notice_html: "If you have concerns, contact us at %{email_link}."
+        greeting_html: "Hi <strong>%{email}</strong>,"
       private_deployments:
         request_received:
           subject: "Request Received: Requiems Private Deployment"

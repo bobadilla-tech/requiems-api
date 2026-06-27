@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/bobadilla-tech/locale-sync/internal/locale"
@@ -11,8 +12,9 @@ import (
 )
 
 var (
-	pruneLang   string
-	pruneDryRun bool
+	pruneLang    string
+	pruneDryRun  bool
+	prunePattern string
 )
 
 var pruneCmd = &cobra.Command{
@@ -34,6 +36,8 @@ func init() {
 	pruneCmd.Flags().StringVarP(&pruneLang, "lang", "l", "en", "Locale language to prune")
 	pruneCmd.Flags().BoolVar(&pruneDryRun, "dry-run", false,
 		"Print orphaned keys without deleting them")
+	pruneCmd.Flags().StringVar(&prunePattern, "pattern", "",
+		"Only prune keys whose full path matches this regex (e.g. 'shared\\.common\\.')")
 	rootCmd.AddCommand(pruneCmd)
 }
 
@@ -55,13 +59,28 @@ func runPrune(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("audit: %w", err)
 	}
 
-	if len(result.OrphanedKeys) == 0 {
+	orphaned := result.OrphanedKeys
+	if prunePattern != "" {
+		re, err := regexp.Compile(prunePattern)
+		if err != nil {
+			return fmt.Errorf("--pattern: %w", err)
+		}
+		filtered := orphaned[:0]
+		for _, k := range orphaned {
+			if re.MatchString(k) {
+				filtered = append(filtered, k)
+			}
+		}
+		orphaned = filtered
+	}
+
+	if len(orphaned) == 0 {
 		fmt.Println("No orphaned keys found.")
 		return nil
 	}
 
-	fmt.Printf("Found %d orphaned key(s):\n\n", len(result.OrphanedKeys))
-	for _, k := range result.OrphanedKeys {
+	fmt.Printf("Found %d orphaned key(s):\n\n", len(orphaned))
+	for _, k := range orphaned {
 		fmt.Printf("  %s\n", k)
 	}
 	fmt.Println()
@@ -78,7 +97,7 @@ func runPrune(_ *cobra.Command, _ []string) error {
 		keyToEntry[e.Key] = e
 	}
 
-	for _, k := range result.OrphanedKeys {
+	for _, k := range orphaned {
 		e, ok := keyToEntry[k]
 		if !ok {
 			// Key may be stored without lang prefix in orphaned list.
