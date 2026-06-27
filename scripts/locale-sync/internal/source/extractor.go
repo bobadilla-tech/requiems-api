@@ -179,6 +179,8 @@ var rubyPatterns = []struct {
 	{regexp.MustCompile(`\bf\.submit\s+["']([^"']{2,})["']`), "ruby", true},
 	// Ruby keyword arg placeholder: (inside form helpers — different from HTML placeholder=)
 	{regexp.MustCompile(`\bplaceholder:\s*["']([^"']{4,})["']`), "ruby", false},
+	// Turbo / UJS confirm dialogs: data: { turbo_confirm: "..." } or confirm: "..."
+	{regexp.MustCompile(`\b(?:turbo_confirm|confirm):\s*["']([^"']{8,})["']`), "ruby", false},
 }
 
 type scanResult struct {
@@ -634,12 +636,16 @@ func scanBareTextSuffixes(line, trimmed, short string, lineNum int) []HardcodedS
 }
 
 // ternaryBranchRe captures string literals in ternary branches (? 'x' : 'y').
+// Requires spaces around ? to avoid matching predicate methods (suspended?) and
+// hash key-value pairs (turbo_confirm: "...").
 var ternaryBranchRe = regexp.MustCompile(`[?:]\s*["']([A-Za-z][^"']{2,})["']`)
 
 // scanErbTernary detects hardcoded string literals in Ruby ternary expressions
 // inside ERB output tags: `<%= cond ? 'Yes text' : 'No text' %>`.
 func scanErbTernary(line, trimmed, short string, lineNum int) []HardcodedString {
-	if !erbOutputRe.MatchString(line) || !strings.Contains(line, "?") {
+	// Require a spaced ternary operator " ? " to distinguish from predicate methods
+	// (suspended?) and hash key-value pairs (turbo_confirm: "...").
+	if !erbOutputRe.MatchString(line) || !strings.Contains(line, " ? ") {
 		return nil
 	}
 	var out []HardcodedString
@@ -739,7 +745,8 @@ func scanOptionsArray(line, trimmed, short string, lineNum int) []HardcodedStrin
 	var out []HardcodedString
 	for _, m := range optionsArrayRe.FindAllStringSubmatch(line, -1) {
 		text := strings.TrimSpace(m[1])
-		if !looksUserFacingLabel(text) || looksLikeCode(text) {
+		r := []rune(text)
+		if !looksUserFacingLabel(text) || looksLikeCode(text) || !unicode.IsUpper(r[0]) {
 			continue
 		}
 		out = append(out, HardcodedString{

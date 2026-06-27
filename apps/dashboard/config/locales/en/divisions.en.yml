@@ -25,7 +25,10 @@ en:
       division_hub_tagline_kicker: "How teams use it"
     index:
       meta_title: "API divisions | Requiems API"
-      hero: {}
+      hero:
+        headline: "Ship faster with reliable API data"
+        subheadline: "Every division you need—validation, finance, places, and more—under one API key."
+        primary_cta: "Get started free"
       strategy_call:
         label: "Book a strategy call"
       questions_intro: "Still have questions? Let's talk through your use case."
@@ -51,7 +54,10 @@ en:
           title: "Health"
           blurb: "Fitness and wellness data for coaching, retention, and health experiences."
     validation:
-      hero: {}
+      hero:
+        headline: "Validate data before it breaks your app"
+        subheadline: "Catch bad emails, invalid phones, and toxic content at the edge—before it hits your database."
+        primary_cta: "Get started free"
       strategy_call: {}
       filters:
         - key: "all"
@@ -674,7 +680,10 @@ en:
           quote: "The fitness data from Requiems powers our core features. We didn't have to build or maintain any of that infrastructure."
       final_cta: {}
     finance:
-      hero: {}
+      hero:
+        headline: "Move money with cleaner data"
+        subheadline: "BIN, IBAN, SWIFT, and exchange rates for fintech and checkout flows."
+        primary_cta: "Get started free"
       strategy_call: {}
       filters:
         - key: "all"
