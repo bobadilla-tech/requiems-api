@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// ── resolveRelativeKey ────────────────────────────────────────────────────────
+// ── ResolveRelativeKey ────────────────────────────────────────────────────────
 
 func TestResolveRelativeKey(t *testing.T) {
 	cases := []struct {
@@ -72,9 +72,9 @@ func TestResolveRelativeKey(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := resolveRelativeKey(tc.shortPath, tc.leaf)
+			got := ResolveRelativeKey(tc.shortPath, tc.leaf)
 			if got != tc.want {
-				t.Errorf("resolveRelativeKey(%q, %q) = %q, want %q",
+				t.Errorf("ResolveRelativeKey(%q, %q) = %q, want %q",
 					tc.shortPath, tc.leaf, got, tc.want)
 			}
 		})

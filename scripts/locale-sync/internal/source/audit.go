@@ -92,7 +92,7 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 		// don't cause false-positive orphan reports for keys only used this way.
 		for _, u := range msg.rel {
 			allRelative = append(allRelative, u)
-			if resolved := resolveRelativeKey(u.File, u.Key); resolved != "" {
+			if resolved := ResolveRelativeKey(u.File, u.Key); resolved != "" {
 				usedSet[resolved] = true
 				// Also add to allUsages so the missing-key pass can detect
 				// relative keys that have no YAML definition.
@@ -103,22 +103,34 @@ func Audit(root, lang string, definedKeys map[string]bool) (AuditResult, error) 
 
 	// Orphaned: defined but never called.
 	// We check both the full key and without the leading lang prefix.
+	// Pluralization forms (.one/.other/.zero/.two/.few/.many) are NOT orphaned when
+	// their base key is called — Rails resolves t('foo', count: n) → foo.one / foo.other.
 	var orphaned []string
 	for key := range definedKeys {
 		stripped := stripLangPrefix(key, lang)
-		if !usedSet[stripped] && !usedSet[key] {
-			orphaned = append(orphaned, key)
+		if usedSet[stripped] || usedSet[key] {
+			continue
 		}
+		if isPluralizationForm(stripped, usedSet) || isPluralizationForm(key, usedSet) {
+			continue
+		}
+		orphaned = append(orphaned, key)
 	}
 	sort.Strings(orphaned)
 
 	// Missing: called but not defined.
+	// Skip pluralization bases — t('foo.bar', count: n) resolves to foo.bar.one / foo.bar.other
+	// at Rails runtime, so the base key foo.bar will never appear as a scalar in YAML.
 	var missing []KeyUsage
 	for _, u := range allUsages {
 		full := lang + "." + u.Key
-		if !definedKeys[full] && !definedKeys[u.Key] {
-			missing = append(missing, u)
+		if definedKeys[full] || definedKeys[u.Key] {
+			continue
 		}
+		if isPluralizationBase(u.Key, full, definedKeys) {
+			continue
+		}
+		missing = append(missing, u)
 	}
 
 	return AuditResult{
@@ -176,7 +188,7 @@ func extractTCalls(path, root string) tCallResult {
 // resolveRelativeKey converts a relative t('.leaf') call and its source file
 // path into the full dot-notation key Rails would resolve it to.
 // e.g. "app/views/admin/users/index.html.erb" + "title" → "admin.users.index.title"
-func resolveRelativeKey(shortPath, leaf string) string {
+func ResolveRelativeKey(shortPath, leaf string) string {
 	p := filepath.ToSlash(shortPath)
 	p = strings.TrimPrefix(p, "app/views/")
 	for _, ext := range []string{".html.erb", ".html.haml", ".erb", ".haml", ".rb"} {
@@ -190,6 +202,34 @@ func resolveRelativeKey(shortPath, leaf string) string {
 		parts[i] = strings.TrimPrefix(pt, "_")
 	}
 	return strings.Join(parts, ".") + "." + strings.TrimPrefix(leaf, ".")
+}
+
+// isPluralizationForm returns true when key ends with a Rails pluralization suffix
+// (.one/.other/.zero/.two/.few/.many) AND the base key (without suffix) is called
+// in source. Used by the orphan checker so prune never deletes live plural forms.
+func isPluralizationForm(key string, usedSet map[string]bool) bool {
+	for _, form := range []string{"one", "other", "zero", "two", "few", "many"} {
+		suffix := "." + form
+		if strings.HasSuffix(key, suffix) {
+			base := key[:len(key)-len(suffix)]
+			if usedSet[base] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// isPluralizationBase returns true when key is a Rails pluralization base:
+// t('foo.bar', count: n) resolves to foo.bar.one / foo.bar.other at runtime,
+// so foo.bar will never appear as a scalar in YAML.
+func isPluralizationBase(key, fullKey string, definedKeys map[string]bool) bool {
+	for _, form := range []string{"one", "other", "zero", "two", "few", "many"} {
+		if definedKeys[fullKey+"."+form] || definedKeys[key+"."+form] {
+			return true
+		}
+	}
+	return false
 }
 
 func stripLangPrefix(key, lang string) string {

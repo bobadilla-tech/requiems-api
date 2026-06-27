@@ -7,9 +7,20 @@ en:
       dismiss: "Dismiss"
       dismiss_banner: "Dismiss banner"
       cancel: "Cancel"
+      apply_filters: "Apply Filters"
+      get_api_key: "Get API Key"
+      read_docs: "Read the docs"
+      browse_apis: "Browse APIs"
+      change_password: "Change my password"
+      copy: "Copy"
+      go_to_dashboard: "Go to Dashboard"
+      explore_system: "Explore system"
+      contact_support: "Contact support"
+      try_live: "Try it live"
     status:
       active: "Active"
       suspended: "Suspended"
+      reported: "Reported"
     badges: {}
     labels:
       yes: "Yes"
@@ -18,18 +29,35 @@ en:
       joined: "Joined"
       monthly: "Monthly"
       col_status: "Status"
+      admin: "Admin"
+      admin_actions: "Admin Actions"
+      api_reference: "API Reference"
+      key_prefix: "Key Prefix"
+      system_health: "System Health"
+      this_month: "This Month"
+      yearly: "Yearly"
     info:
       no_account_demo: "No account required for the demo."
-    formats: {}
-    empty_states: {}
+      eu_title: "EU Infrastructure"
+      no_account: "No account required"
+      soc2_desc: "In progress."
+      support_prompt: "Still have questions?"
+      we_usually_reply: "We usually reply within 24 hours."
+    formats: {greeting_html: "Hi <strong>%{email}</strong>,", of_requests: "of %{limit} requests"}
+    empty_states: {try_search: "Try adjusting your search or filters."}
     headings:
       accuracy: "Accuracy"
       simplicity: "Simplicity"
-    contexts: {}
+      apis_catalog: "Explore the full API directory"
+      examples: "Code Examples"
+      use_cases: "Use Cases"
+    contexts: {integrations: "Integrations", auth: "Auth / Signup", fraud: "Fraud Prevention", onboarding: "Onboarding"}
     forms:
       email_placeholder: "Enter any email address"
       text_to_analyze: "Text to analyze"
-    result_labels: {}
+      missing_fields: "Please fill in all required fields."
+      password: "Password"
+    result_labels: {benefit: "Benefit:", outcome: "Outcome:"}
     nav:
       docs: "Docs"
       docs_apis_desc: "Browse every endpoint"
@@ -111,5 +139,5 @@ en:
       send_confirmation_btn: "Send Confirmation Email"
       sending: "Sending..."
       cancel_btn: "Cancel"
-    errors: {}
-    common: {}
+    errors: {no_data: "No data returned."}
+    common: {view: "View", all: "All", eliaz_bobadilla_tech: "eliaz@bobadilla.tech", invalid: "Invalid", json_response: "JSON response", latency: "< 300ms avg latency", no: "✗ No", rest_api: "REST API", uptime: "99.9% uptime", valid: "Valid", yes: "✓ Yes", endpoints: "Endpoints", p50: "p50", p99: "p99", performance: "Performance", primary_cta: "Get API key", utilities: "Browse utilities", x_backend_secret: "X-Backend-Secret"}

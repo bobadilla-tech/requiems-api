@@ -196,7 +196,19 @@ func flattenNode(node *yaml.Node, prefix, file, short string, entries *[]Entry) 
 			}
 		}
 	case yaml.SequenceNode:
-		// Sequences (arrays) skipped — not typical for string values.
+		// Emit the parent key so t('foo.items') / t('foo.features') calls that
+		// iterate over the array aren't reported as missing by the auditor.
+		if prefix != "" {
+			parts := strings.Split(prefix, ".")
+			*entries = append(*entries, Entry{
+				Key:       prefix,
+				KeyName:   parts[len(parts)-1],
+				Value:     "[array]",
+				File:      file,
+				ShortPath: short,
+				Line:      node.Line,
+			})
+		}
 	case yaml.AliasNode:
 		flattenNode(node.Alias, prefix, file, short, entries)
 	}

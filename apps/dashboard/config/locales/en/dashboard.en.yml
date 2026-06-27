@@ -10,7 +10,6 @@ en:
       welcome: "Welcome back, %{name}!"
       subtitle: "Here's your API usage overview for %{date}"
       current_usage: "Requests Used"
-      of_requests: "of %{limit} requests"
       used_this_month: "%{percent}% used this month"
       monthly_quota: "Monthly Quota"
       resets_monthly: "Resets every month"
@@ -28,7 +27,7 @@ en:
       no_activity: "No activity yet"
       no_activity_desc: "Get started by making your first API call."
       browse_docs: "Browse API Documentation"
-      active_key: {}
+      active_key: {one: "Active key", other: "Active keys"}
       api_keys: "API Keys"
       manage: "Manage"
       create_key: "Create New Key"
@@ -95,7 +94,7 @@ en:
         cancel: "Cancel"
         submit: "Generate API Key"
         submitting: "Generating..."
-        errors: {}
+        errors: {one: "%{count} error prohibited this API key from being created:", other: "%{count} errors prohibited this API key from being created:"}
       show_key:
         title: "API Key Created"
         success_heading: "API Key Created Successfully!"
@@ -140,7 +139,6 @@ en:
         manage_btn: "Manage Subscription"
       usage:
         heading: "Usage This Period"
-        of_requests: "of %{limit} requests"
         percent_used: "%{percent}% used"
         warning_critical_heading: "Running low on requests!"
         warning_critical_body: "You're approaching your monthly limit. Consider upgrading to avoid service interruption."
@@ -202,7 +200,7 @@ en:
         deletion_email_sent: "Check your email — we sent a confirmation link. It expires in 1 hour."
         invalid_token: "This link is invalid or has expired. Please request a new one."
         deleted: "Your account has been permanently deleted. We're sorry to see you go."
-      errors: {}
+      errors: {one: "%{count} error prohibited these settings from being saved:", other: "%{count} errors prohibited these settings from being saved:"}
       account_info:
         heading: "Account Information"
         subheading: "Update your account details and email address"
@@ -329,7 +327,6 @@ en:
           subject: "You're now on the %{plan} plan"
           header_title: "Subscription Activated"
           header_subtitle: "Requiems API — Welcome to your new plan"
-          greeting_html: "Hi <strong>%{email}</strong>,"
           intro: "Your subscription is now active. You have full access to all features included in your plan."
           plan_label: "Your plan"
           cta_btn: "Go to Dashboard"
@@ -339,7 +336,6 @@ en:
           subject: "Your Requiems plan has been upgraded to %{plan}"
           header_title: "Plan Upgrade"
           header_subtitle: "Requiems API — You've been upgraded"
-          greeting_html: "Hi <strong>%{email}</strong>,"
           intro: "Great news! Your Requiems API plan has been upgraded."
           plan_label: "Your new plan"
           expires_label: "Access until"
@@ -349,7 +345,6 @@ en:
       account_deletion:
         header_title: "Account Deletion Requested"
         header_subtitle: "Requiems API — Action Required"
-        greeting_html: "Hi <strong>%{email}</strong>,"
         intro: "We received a request to permanently delete your Requiems API account. Click the button below to confirm."
         warning: "This action is permanent and cannot be undone."
         reason_label: "Your reason"

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/bobadilla-tech/locale-sync/internal/locale"
+	"github.com/bobadilla-tech/locale-sync/internal/source"
 	"github.com/spf13/cobra"
 )
 
@@ -242,6 +243,137 @@ func applyCallerRewrites(root string, callers []tCaller, oldKey, newKey string) 
 		}
 		rel, _ := filepath.Rel(root, absFile)
 		fmt.Printf("Source: rewrote %d caller(s) in %s\n", len(fileCalls), rel)
+	}
+	return nil
+}
+
+// tCallerExt extends tCaller with relative-call metadata.
+type tCallerExt struct {
+	tCaller
+	relative bool   // true when caller was t('.leaf') form
+	leaf     string // leaf key for relative callers (without leading dot)
+}
+
+// relTCallRe matches relative t('.leaf') and I18n.t('.leaf') calls.
+var relTCallRe = regexp.MustCompile(`(?:I18n\.)?t\((?:'(\.\w+)'|"(\.\w+)")\)`)
+
+// findTCallersExtended scans source files for both absolute and lazy t() callers
+// of keyPath (without lang prefix). Lazy callers are included when resolving their
+// view-path context matches keyPath.
+func findTCallersExtended(root, keyPath string) ([]tCallerExt, error) {
+	appDir := filepath.Join(root, "app")
+	if _, err := os.Stat(appDir); os.IsNotExist(err) {
+		appDir = root
+	}
+
+	var callers []tCallerExt
+	sourceExts := map[string]bool{".rb": true, ".erb": true, ".haml": true, ".slim": true}
+
+	err := filepath.WalkDir(appDir, func(path string, d fs.DirEntry, werr error) error {
+		if werr != nil || d.IsDir() {
+			return nil
+		}
+		if !sourceExts[filepath.Ext(path)] {
+			return nil
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return nil
+		}
+		rel, _ := filepath.Rel(root, path)
+		for i, line := range strings.Split(string(data), "\n") {
+			// Absolute callers.
+			for _, m := range tCallRe.FindAllStringSubmatch(line, -1) {
+				k := m[1]
+				if k == "" {
+					k = m[2]
+				}
+				for _, pfx := range []string{"en.", "es.", "fr.", "de.", "pt.", "ja.", "zh."} {
+					k = strings.TrimPrefix(k, pfx)
+				}
+				if k == keyPath {
+					callers = append(callers, tCallerExt{
+						tCaller: tCaller{relFile: rel, absFile: path, line: i + 1, raw: line},
+					})
+				}
+			}
+			// Relative (lazy) callers.
+			for _, m := range relTCallRe.FindAllStringSubmatch(line, -1) {
+				rawLeaf := m[1]
+				if rawLeaf == "" {
+					rawLeaf = m[2]
+				}
+				leaf := strings.TrimPrefix(rawLeaf, ".")
+				resolved := source.ResolveRelativeKey(rel, leaf)
+				if resolved == keyPath {
+					callers = append(callers, tCallerExt{
+						tCaller:  tCaller{relFile: rel, absFile: path, line: i + 1, raw: line},
+						relative: true,
+						leaf:     leaf,
+					})
+				}
+			}
+		}
+		return nil
+	})
+	return callers, err
+}
+
+// applyCallerRewritesExtended rewrites both absolute and relative t() callers to newKey.
+func applyCallerRewritesExtended(root string, callers []tCallerExt, oldKey, newKey string) error {
+	// Group all callers by file.
+	type fileWork struct {
+		abs      []tCallerExt
+		relLeafs map[string]bool // unique leaves needing relative rewrite
+	}
+	byFile := map[string]*fileWork{}
+	for _, c := range callers {
+		if byFile[c.absFile] == nil {
+			byFile[c.absFile] = &fileWork{relLeafs: map[string]bool{}}
+		}
+		if c.relative {
+			byFile[c.absFile].relLeafs[c.leaf] = true
+		} else {
+			byFile[c.absFile].abs = append(byFile[c.absFile].abs, c)
+		}
+	}
+
+	esc := regexp.QuoteMeta(oldKey)
+	singleQ := regexp.MustCompile(`((?:I18n\.)?t\()('` + esc + `')(\))`)
+	doubleQ := regexp.MustCompile(`((?:I18n\.)?t\()("` + esc + `")(\))`)
+
+	for absFile, work := range byFile {
+		data, err := os.ReadFile(absFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "warning: cannot read %s: %v\n", absFile, err)
+			continue
+		}
+		content := string(data)
+
+		// Absolute rewrites.
+		if len(work.abs) > 0 {
+			content = singleQ.ReplaceAllString(content, "${1}'"+newKey+"'${3}")
+			content = doubleQ.ReplaceAllString(content, `${1}"`+newKey+`"${3}`)
+		}
+
+		// Relative rewrites — one pair of patterns per unique leaf.
+		for leaf := range work.relLeafs {
+			leafEsc := regexp.QuoteMeta("." + leaf)
+			relSingleQ := regexp.MustCompile(`((?:I18n\.)?t\()('` + leafEsc + `')(\))`)
+			relDoubleQ := regexp.MustCompile(`((?:I18n\.)?t\()("` + leafEsc + `")(\))`)
+			content = relSingleQ.ReplaceAllString(content, "${1}'"+newKey+"'${3}")
+			content = relDoubleQ.ReplaceAllString(content, `${1}"`+newKey+`"${3}`)
+		}
+
+		if string(data) == content {
+			continue
+		}
+		if err := os.WriteFile(absFile, []byte(content), 0o644); err != nil {
+			fmt.Fprintf(os.Stderr, "warning: cannot write %s: %v\n", absFile, err)
+			continue
+		}
+		rel, _ := filepath.Rel(root, absFile)
+		fmt.Printf("Source: rewrote caller(s) in %s\n", rel)
 	}
 	return nil
 }
