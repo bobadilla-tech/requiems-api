@@ -29,8 +29,12 @@ type FragmentLine struct {
 // erbOutputExprRe matches a single <%= ... %> output tag.
 var erbOutputExprRe = regexp.MustCompile(`<%=\s*([\s\S]*?)\s*%>`)
 
-// htmlTagInTextRe matches HTML tags inside text nodes (not the full line).
+// htmlTagInTextRe matches complete HTML tags inside text nodes.
 var htmlTagInTextRe = regexp.MustCompile(`</?[a-zA-Z][^>]*>`)
+
+// fullHTMLTagLineRe matches a line whose non-ERB content is entirely one HTML
+// open/close tag (i.e., ERB is inside an HTML attribute, not in text content).
+var fullHTMLTagLineRe = regexp.MustCompile(`^</?[a-zA-Z][^>]*>$`)
 
 // DetectFragments walks app/ and returns lines where visible text and ERB
 // expressions are mixed without a t() wrapper.
@@ -83,6 +87,13 @@ func scanFileFragments(path, root string) ([]FragmentLine, error) {
 		}
 		// Must have at least one ERB output tag
 		if !strings.Contains(trimmed, "<%=") {
+			continue
+		}
+		// Skip lines where the ERB is inside an HTML attribute, not text content.
+		// Replace ERB tags with a placeholder and check if the result is a pure
+		// HTML open/close tag (e.g. <div class="... ERB ...">).
+		withoutERB := erbOutputExprRe.ReplaceAllString(trimmed, "X")
+		if fullHTMLTagLineRe.MatchString(strings.TrimSpace(withoutERB)) {
 			continue
 		}
 
