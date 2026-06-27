@@ -188,9 +188,3 @@ es:
       sending: "Enviando..."
     errors:
       no_data: "No se han devuelto datos."
-    common:
-      admin: "Administración"
-      read_the_docs: "Lee la documentación"
-      are_you_sure_you_want_to_suspend_this: "¿Está seguro de que desea suspender a este usuario? Se revocarán todas sus claves API."
-      environment: "Ambiente"
-      joined: "Unido"

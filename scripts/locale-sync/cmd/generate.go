@@ -88,6 +88,7 @@ func runGenerate(cmd *cobra.Command, _ []string) error {
 	// --- Shared file consolidation ---
 	if !noShared {
 		candidates := locale.BuildMergeCandidates(dups.KeyDups, lang)
+		candidates = locale.FilterExistingValueCandidates(candidates, entries)
 		if len(candidates) == 0 {
 			fmt.Println("No auto-mergeable duplicates found — shared file unchanged.")
 		} else {
