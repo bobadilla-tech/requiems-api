@@ -698,8 +698,10 @@ en:
         heading: "Third-Party Services"
         text: "We use the following third-party services:"
         items:
-          - "<strong>LemonSqueezy:</strong> Payment processing (see their privacy policy)"
-          - "<strong>Cloudflare:</strong> Infrastructure and DDoS protection"
+          - name: "LemonSqueezy"
+            desc: "Payment processing (see their privacy policy)"
+          - name: "Cloudflare"
+            desc: "Infrastructure and DDoS protection"
       contact:
         heading: "Contact Us"
         text: "For privacy-related questions or to exercise your rights, contact us at:"
@@ -707,7 +709,7 @@ en:
       title: "About Us - Requiems API"
       heading: "About Requiems API"
       intro: "Utility APIs behind one key, so you ship core product instead of maintaining a patchwork of providers."
-      company_info_html: 'Requiems API is a product by <a href="https://bobadilla.tech" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold">Bobadilla Technologies</a>, a team dedicated to building developer-first tools and infrastructure.'
+      company_info_html: "Requiems API is a product by %{company_link}, a team dedicated to building developer-first tools and infrastructure."
       mission:
         heading: "Our Mission"
         text: "Give small teams the same kind of validation, content, and data APIs larger platforms rely on, without enterprise procurement or a dozen vendor relationships. From MVPs and agencies to fintech and ops-heavy apps, integration should be fast and boring (in a good way)."
@@ -754,7 +756,7 @@ en:
         q1: "How do I authenticate my requests?"
         a1: "Include your API key in the Authorization header as a Bearer token:"
         q2: "What's the difference between test and live API keys?"
-        a2_html: 'Test keys (starting with <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">rq_test_</code>) are for development and testing. Live keys (<code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">rq_live_</code>) are for production use. Both key types count against your monthly request quota.'
+        a2_html: "Test keys (starting with %{test_key}) are for development and testing. Live keys (%{live_key}) are for production use. Both key types count against your monthly request quota."
         q3: "Can I regenerate my API key?"
         a3: 'Yes! Go to your dashboard, click on the API key you want to regenerate, and select "Regenerate". Note that the old key will stop working immediately, so update all your applications.'
       billing:
@@ -772,7 +774,7 @@ en:
         q1: "What are the rate limits?"
         a1: "Rate limits vary by plan:"
         q2: "How should I handle rate limit errors?"
-        a2_html: 'When you receive a 429 error, implement exponential backoff. Wait a few seconds and retry. Check the <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">Retry-After</code> header for the recommended wait time. Consider upgrading your plan if you consistently hit rate limits.'
+        a2_html: "When you receive a 429 error, implement exponential backoff. Wait a few seconds and retry. Check the %{retry_after_header} header for the recommended wait time. Consider upgrading your plan if you consistently hit rate limits."
       support:
         heading: "Support"
         q1: "How can I get help?"

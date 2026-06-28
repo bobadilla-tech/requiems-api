@@ -289,11 +289,14 @@
           <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.api_uptime') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @uptime_percentage >= 99.9 %>
-              <%= t('admin.analytics.system_health.uptime_excellent_html') %>
+              <strong class="text-green-600"><%= t('admin.analytics.system_health.uptime_excellent_label') %></strong>
+              <%= t('admin.analytics.system_health.uptime_excellent_description') %>
             <% elsif @uptime_percentage >= 99 %>
-              <%= t('admin.analytics.system_health.uptime_good_html') %>
+              <strong class="text-blue-600"><%= t('admin.analytics.system_health.uptime_good_label') %></strong>
+              <%= t('admin.analytics.system_health.uptime_good_description') %>
             <% else %>
-              <%= t('admin.analytics.system_health.uptime_low_html') %>
+              <strong class="text-red-600"><%= t('admin.analytics.system_health.uptime_low_label') %></strong>
+              <%= t('admin.analytics.system_health.uptime_low_description') %>
             <% end %>
           </p>
         </div>
@@ -320,11 +323,14 @@
           <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.response_times') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @p95_response_time < 500 %>
-              <%= t('admin.analytics.system_health.response_fast_html') %>
+              <strong class="text-green-600"><%= t('admin.analytics.system_health.response_fast_label') %></strong>
+              <%= t('admin.analytics.system_health.response_fast_description') %>
             <% elsif @p95_response_time < 1000 %>
-              <%= t('admin.analytics.system_health.response_acceptable_html') %>
+              <strong class="text-orange-600"><%= t('admin.analytics.system_health.response_acceptable_label') %></strong>
+              <%= t('admin.analytics.system_health.response_acceptable_description') %>
             <% else %>
-              <%= t('admin.analytics.system_health.response_slow_html') %>
+              <strong class="text-red-600"><%= t('admin.analytics.system_health.response_slow_label') %></strong>
+              <%= t('admin.analytics.system_health.response_slow_description') %>
             <% end %>
             <%= t('admin.analytics.system_health.response_times_detail', p95: @p95_response_time, p99: @p99_response_time) %>
           </p>
@@ -348,9 +354,11 @@
           <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.analytics.system_health.security_label') %></h3>
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             <% if @failed_auth_attempts > 100 %>
-              <%= t('admin.analytics.system_health.security_high_html') %>
+              <strong class="text-red-600"><%= t('admin.analytics.system_health.security_high_label') %></strong>
+              <%= t('admin.analytics.system_health.security_high_description') %>
             <% else %>
-              <%= t('admin.analytics.system_health.security_normal_html') %>
+              <strong class="text-green-600"><%= t('admin.analytics.system_health.security_normal_label') %></strong>
+              <%= t('admin.analytics.system_health.security_normal_description') %>
             <% end %>
             <%= t('admin.analytics.system_health.failed_auth_attempts_detail', count: number_with_delimiter(@failed_auth_attempts)) %>
           </p>

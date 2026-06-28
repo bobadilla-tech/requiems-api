@@ -202,9 +202,11 @@
       <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700 dark:text-gray-300">
         <li>
           <% if @churn_rate > 5 %>
-            <%= t('admin.analytics.revenue.high_churn_html') %>
+            <strong class="text-red-600"><%= t('admin.analytics.revenue.high_churn_label') %></strong>
+            <%= t('admin.analytics.revenue.high_churn_description') %>
           <% else %>
-            <%= t('admin.analytics.revenue.low_churn_html') %>
+            <strong class="text-green-600"><%= t('admin.analytics.revenue.low_churn_label') %></strong>
+            <%= t('admin.analytics.revenue.low_churn_description') %>
           <% end %>
         </li>
         <li>
@@ -216,11 +218,14 @@
         </li>
         <li>
           <% if growth_rate >= 10 %>
-            <%= t('admin.analytics.revenue.strong_growth_html') %>
+            <strong class="text-green-600"><%= t('admin.analytics.revenue.strong_growth_label') %></strong>
+            <%= t('admin.analytics.revenue.strong_growth_description') %>
           <% elsif growth_rate >= 0 %>
-            <%= t('admin.analytics.revenue.steady_growth_html') %>
+            <strong class="text-blue-600"><%= t('admin.analytics.revenue.steady_growth_label') %></strong>
+            <%= t('admin.analytics.revenue.steady_growth_description') %>
           <% else %>
-            <%= t('admin.analytics.revenue.declining_revenue_html') %>
+            <strong class="text-red-600"><%= t('admin.analytics.revenue.declining_revenue_label') %></strong>
+            <%= t('admin.analytics.revenue.declining_revenue_description') %>
           <% end %>
         </li>
       </ul>
