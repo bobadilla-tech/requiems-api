@@ -35,4 +35,3 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Tool not found.", flash[:alert]
   end
 end
-

@@ -55,6 +55,20 @@ class PrivateDeploymentRequestTest < ActiveSupport::TestCase
     assert_equal "https://acme-team.requiems.xyz", request.live_url
   end
 
+  test "rejects invalid subdomain slug format" do
+    request = build_request(subdomain_slug: "UPPER_CASE!")
+
+    assert_not request.valid?
+    assert_includes request.errors[:subdomain_slug],
+                    I18n.t("private_deployment_request.must_be_lowercase_letters_numbers_and")
+  end
+
+  test "accepts valid subdomain slug" do
+    request = build_request(subdomain_slug: "acme-team-42")
+
+    assert request.valid?
+  end
+
   test "tier_specs returns configured specs for tier" do
     request = build_request(server_tier: "starter")
 

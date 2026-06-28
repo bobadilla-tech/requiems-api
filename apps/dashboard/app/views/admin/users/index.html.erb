@@ -1,9 +1,9 @@
-<% content_for :title, "User Management" %>
+<% content_for :title, t('admin.users.index.user_management') %>
 
 <!-- Header -->
 <div class="mb-8">
-  <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
-  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">View and manage all user accounts</p>
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.users.index.user_management') %></h1>
+  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= t('admin.users.index.view_and_manage_all_user_accounts') %></p>
 </div>
 
 <!-- Search and Filters -->
@@ -12,24 +12,24 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <!-- Search -->
       <div class="md:col-span-2">
-        <%= f.label :search, "Search", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :search, t('admin.api_keys.index.search'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.text_field :search,
           value: params[:search],
-          placeholder: "Search by email, name, or company",
+          placeholder: t('admin.users.index.search_by_email_name_or_company'),
           class: "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
       </div>
 
       <!-- Plan Filter -->
       <div>
-        <%= f.label :plan, "Plan", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :plan, t('dashboard.billing.history.plan_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.select :plan,
           options_for_select(
             [
-              ["All Plans", "all"],
-              ["Free", "free"],
-              ["Developer", "developer"],
-              ["Business", "business"],
-              ["Professional", "professional"]
+              [t('admin.users.index.all_plans'), "all"],
+              [t('dashboard.plans.free'), "free"],
+              [t('dashboard.plans.developer'), "developer"],
+              [t('dashboard.plans.business'), "business"],
+              [t('dashboard.plans.professional'), "professional"]
             ],
             params[:plan] || "all"
           ),
@@ -39,14 +39,14 @@
 
       <!-- Status Filter -->
       <div>
-        <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+        <%= f.label :status, t('shared.labels.col_status'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
         <%= f.select :status,
           options_for_select(
             [
-              ["All Users", "all"],
-              ["Active", "active"],
-              ["Suspended", "suspended"],
-              ["Admins", "admin"]
+              [t('admin.users.index.all_users'), "all"],
+              [t('shared.status.active'), "active"],
+              [t('shared.status.suspended'), "suspended"],
+              [t('admin.users.index.admins'), "admin"]
             ],
             params[:status] || "all"
           ),
@@ -57,19 +57,19 @@
 
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-2">
-        <%= f.submit "Apply Filters", class: "px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
-        <%= link_to "Clear", admin_users_path, class: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" %>
+        <%= f.submit t('admin.users.index.apply_filters'), class: "px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
+        <%= link_to t('admin.api_keys.index.clear'), admin_users_path, class: "px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" %>
       </div>
 
       <!-- Sort -->
       <div class="flex items-center space-x-2">
-        <label class="text-sm text-gray-600 dark:text-gray-400">Sort:</label>
+        <label class="text-sm text-gray-600 dark:text-gray-400"><%= t('admin.users.index.sort') %></label>
         <%= f.select :sort,
           options_for_select(
             [
-              ["Newest First", "newest"],
-              ["Oldest First", "oldest"],
-              ["By Name", "name"]
+              [t('admin.users.index.newest_first'), "newest"],
+              [t('admin.users.index.oldest_first'), "oldest"],
+              [t('admin.users.index.by_name'), "name"]
             ],
             params[:sort] || "newest"
           ),
@@ -85,7 +85,7 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-      Users (<%= @pagy.count %>)
+      <%= t('admin.users.index.users_count', count: @pagy.count) %>
     </h2>
   </div>
 
@@ -94,12 +94,12 @@
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Plan</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">API Keys</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Joined</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.referrals.table.user_col') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.billing.history.plan_label') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('shared.nav.api_keys') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin.users.index.joined') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('shared.labels.col_status') %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.api_keys.col_actions') %></th>
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -107,7 +107,7 @@
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
-                  <img src="<%= gravatar_url(user.email, size: 40) %>" alt="Avatar" class="flex-shrink-0 h-10 w-10 rounded-full">
+                  <img src="<%= gravatar_url(user.email, size: 40) %>" alt="Avatar" class="shrink-0 h-10 w-10 rounded-full">
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= user.email %></div>
                     <% if user.name.present? %>
@@ -123,22 +123,22 @@
                   size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= user.api_keys.active_keys.count %> active
+                <%= t('admin.users.index.count_active', count: user.api_keys.active_keys.count) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= time_ago_in_words(user.created_at) %> ago
+                <%= t('admin.users.index.created_at_ago', created_at: time_ago_in_words(user.created_at)) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <% if user.admin? %>
-                  <%= render "partials/shared/badge", text: "Admin", variant: "danger", size: "xs" %>
+                  <%= render "partials/shared/badge", text: t('admin.users.index.admin'), variant: "danger", size: "xs" %>
                 <% elsif user.suspended? %>
-                  <%= render "partials/shared/badge", text: "Suspended", variant: "warning", size: "xs" %>
+                  <%= render "partials/shared/badge", text: t('admin.users.index.suspended'), variant: "warning", size: "xs" %>
                 <% else %>
-                  <%= render "partials/shared/badge", text: "Active", variant: "success", size: "xs" %>
+                  <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_active'), variant: "success", size: "xs" %>
                 <% end %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to "View", admin_user_path(user), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('shared.common.view'), admin_user_path(user), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>
@@ -155,8 +155,8 @@
       <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">No users found</h3>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search or filters.</p>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= t('admin.users.index.no_users_found') %></h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= t('admin.users.index.try_adjusting_your_search_or_filters') %></p>
     </div>
   <% end %>
 </div>

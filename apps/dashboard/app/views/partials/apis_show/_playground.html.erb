@@ -17,7 +17,7 @@
 
   <!-- Request Section -->
   <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Request</h5>
+    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('systems.show.request_label') %></h5>
 
     <% if playground_parameters.any? %>
       <div class="space-y-3 mb-4">
@@ -99,12 +99,12 @@
 
   <!-- Response Section -->
   <div class="mt-4 hidden" data-api-playground-target="responseContainer">
-    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Response</h5>
+    <h5 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('dashboard.overview.response_col') %></h5>
 
     <!-- Response Status -->
     <div class="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg" data-api-playground-target="responseStatus">
       <div class="flex items-center space-x-2">
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Status:</span>
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300"><%= t('apis_show.playground.status') %></span>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium" data-api-playground-target="statusBadge">
           --
         </span>
@@ -139,7 +139,7 @@
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
         </svg>
         <div>
-          <h6 class="text-sm font-medium text-red-900 dark:text-red-200">Error</h6>
+          <h6 class="text-sm font-medium text-red-900 dark:text-red-200"><%= t('apis_show.playground.error') %></h6>
           <p class="text-sm text-red-700 dark:text-red-300 mt-1" data-api-playground-target="errorMessage">--</p>
         </div>
       </div>
@@ -167,7 +167,7 @@
       <button type="button"
               onclick="document.getElementById('<%= playground_modal_id %>').style.display='none'; document.body.classList.remove('overflow-hidden')"
               class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              aria-label="<%= t('shared.dismiss') %>">
+              aria-label="<%= t('shared.buttons.dismiss') %>">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -182,18 +182,18 @@
 
       <%# Content %>
       <div class="text-center">
-        <h3 id="rate-limit-title-<%= playground_index %>" class="text-lg font-bold text-gray-900 dark:text-gray-100">Testing too fast!</h3>
+        <h3 id="rate-limit-title-<%= playground_index %>" class="text-lg font-bold text-gray-900 dark:text-gray-100"><%= t('apis_show.playground.rate_limit_title') %></h3>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          The demo allows <strong class="text-gray-700 dark:text-gray-300">1 request per minute</strong> for anonymous users.
-          Sign up for free and get <strong class="text-gray-700 dark:text-gray-300">4&times; more requests</strong> &mdash; you can keep testing right away.
+          <%= t('apis_show.playground.anonymous_limit_html', limit: t('apis_show.playground.1_request_per_minute')) %>
+          <%= t('apis_show.playground.signup_benefit_html', requests: t('apis_show.playground.4_times_more_requests')) %>
         </p>
       </div>
 
       <%# CTAs %>
       <div class="mt-6 flex flex-col gap-3">
-        <%= link_to "Create free account", new_user_registration_path,
+        <%= link_to t('apis_show.playground.create_free_account'), new_user_registration_path,
               class: "w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors" %>
-        <%= link_to "Sign in", new_user_session_path,
+        <%= link_to t('auth.sign_in.submit'), new_user_session_path,
               class: "w-full inline-flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" %>
       </div>
     </div>

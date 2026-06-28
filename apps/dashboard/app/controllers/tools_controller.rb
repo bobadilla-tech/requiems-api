@@ -49,7 +49,7 @@ class ToolsController < ApplicationController
     @tool_id = params[:id]
 
     unless SUPPORTED_TOOLS.include?(@tool_id)
-      redirect_to root_path, alert: "Tool not found."
+      redirect_to root_path, alert: t("tools_controller.tool_not_found")
       return
     end
 

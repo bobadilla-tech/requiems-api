@@ -1,0 +1,8 @@
+---
+fr:
+  categories:
+    show:
+      no_apis_available_in_this_category_yet: Aucune API n'est encore disponible dans
+        cette catégorie.
+      we_re_working_on_bringing_apis_to_this: Nous travaillons à l'intégration d'API
+        dans cette catégorie. Revenez bientôt !

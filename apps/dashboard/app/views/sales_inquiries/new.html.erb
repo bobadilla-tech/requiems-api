@@ -1,10 +1,10 @@
-<% content_for :title, "Talk to Sales - Requiems API" %>
+<% content_for :title, t('sales_inquiries.new.talk_to_sales_requiems_api') %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-12">
       <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Talk to Sales</h1>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t('sales_inquiries.new.heading') %></h1>
         <p class="text-xl text-gray-600 dark:text-gray-400">
           <%= t("sales_inquiries.new.description") %>
         </p>
@@ -35,7 +35,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
               </svg>
             </div>
-            <h3 class="ml-3 text-lg font-bold text-gray-900 dark:text-gray-100">Enterprise security, privacy and compliance</h3>
+            <h3 class="ml-3 text-lg font-bold text-gray-900 dark:text-gray-100"><%= t('sales_inquiries.new.enterprise_security_privacy_and') %></h3>
           </div>
           <p class="text-gray-700 dark:text-gray-300 text-sm">
             Meet your compliance requirements with SOC 2 certification, GDPR compliance, security documentation, and enterprise-grade data protection.
@@ -50,7 +50,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
               </svg>
             </div>
-            <h3 class="ml-3 text-lg font-bold text-gray-900 dark:text-gray-100">Enterprise dedicated support</h3>
+            <h3 class="ml-3 text-lg font-bold text-gray-900 dark:text-gray-100"><%= t('sales_inquiries.new.enterprise_dedicated_support') %></h3>
           </div>
           <p class="text-gray-700 dark:text-gray-300 text-sm">
             Get dedicated support with guaranteed response times, direct access to our engineering team, and priority assistance for your critical needs.
@@ -72,16 +72,16 @@
 
       <!-- Form Section -->
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-8 mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Get in Touch with Our Sales Team</h2>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">Fill out the form below and our sales team will reach out to discuss your API needs.</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t('sales_inquiries.new.get_in_touch_with_our_sales_team') %></h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-6"><%= t('sales_inquiries.new.fill_out_the_form_below_and_our_sales') %></p>
 
         <%= form_with url: talk_to_sales_path, method: :post, local: true, data: { turbo: false } do |f| %>
           <div class="grid md:grid-cols-2 gap-6">
             <!-- Name -->
             <div>
-              <%= label_tag "inquiry[name]", "Name", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+              <%= label_tag "inquiry[name]", t('apis_show.endpoint_documentation.column_name'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
               <%= text_field_tag "inquiry[name]", params.dig(:inquiry, :name),
-                placeholder: "John Doe",
+                placeholder: t('auth.sign_up.name_placeholder'),
                 class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500",
                 required: true,
                 autofocus: true %>
@@ -89,7 +89,7 @@
 
             <!-- Email -->
             <div>
-              <%= label_tag "inquiry[email]", "Email", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+              <%= label_tag "inquiry[email]", t('home.contact.form.email'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
               <%= email_field_tag "inquiry[email]", params.dig(:inquiry, :email),
                 placeholder: "john@company.com",
                 class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500",
@@ -99,21 +99,21 @@
 
           <!-- Company -->
           <div class="mt-6">
-            <%= label_tag "inquiry[company]", "Company", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+            <%= label_tag "inquiry[company]", t('sales_inquiries.new.company'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
             <%= text_field_tag "inquiry[company]", params.dig(:inquiry, :company),
-              placeholder: "Acme Corporation",
+              placeholder: t('sales_inquiries.new.acme_corporation'),
               class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500",
               required: true %>
           </div>
 
           <!-- Message -->
           <div class="mt-6">
-            <%= label_tag "inquiry[message]", "Anything specific you want to share", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+            <%= label_tag "inquiry[message]", t('sales_inquiries.new.anything_specific_you_want_to_share'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
             <%= text_area_tag "inquiry[message]", params.dig(:inquiry, :message),
-              placeholder: "Tell us about your API needs, expected volume, specific requirements, or any questions you have...",
+              placeholder: t('sales_inquiries.new.tell_us_about_your_api_needs_expected'),
               rows: 5,
               class: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500" %>
-            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Optional - Share any details that will help us assist you better.</p>
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"><%= t('sales_inquiries.new.optional_share_any_details_that_will') %></p>
           </div>
 
           <!-- Response Time Notice -->
@@ -122,16 +122,16 @@
               <svg class="h-5 w-5 text-blue-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <p class="text-sm text-blue-800 dark:text-blue-300">We usually reply within 24 hours.</p>
+              <p class="text-sm text-blue-800 dark:text-blue-300"><%= t('sales_inquiries.new.we_usually_reply_within_24_hours') %></p>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="flex items-center justify-end space-x-4">
-            <%= link_to "Cancel", root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
-            <%= submit_tag "Get Started",
+            <%= link_to t('sales_inquiries.new.cancel'), root_path, class: "px-6 py-3 text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-colors" %>
+            <%= submit_tag t('shared.nav.get_started'),
               class: "px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md",
-              data: { disable_with: "Sending..." } %>
+              data: { disable_with: t('sales_inquiries.new.sending') } %>
           </div>
         <% end %>
       </div>
@@ -142,10 +142,14 @@
           <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
           </svg>
-          Your information is secure and will only be used to contact you about your inquiry.
+          <%= t('sales_inquiries.new.secure_info_notice') %>
         </p>
         <p>
-          Have general questions? Check out our <%= link_to "FAQ", faq_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline" %> or <%= link_to "contact support", contact_path, class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline" %>.
+          <%= t('sales_inquiries.new.have_questions_html',
+                faq_link: link_to(t('sales_inquiries.new.faq_link'), faq_path,
+                                  class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"),
+                contact_link: link_to(t('sales_inquiries.new.contact_support'), contact_path,
+                                      class: "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline")) %>
         </p>
       </div>
     </div>

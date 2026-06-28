@@ -251,7 +251,7 @@ module ApplicationHelper
       tag.meta(property: "og:description", content: description),
       tag.meta(property: "og:image",       content: image),
       tag.meta(property: "og:image:width", content: "1200"),
-      tag.meta(property: "og:image:height",content: "630"),
+      tag.meta(property: "og:image:height", content: "630"),
       tag.meta(name: "twitter:card",        content: "summary_large_image"),
       tag.meta(name: "twitter:title",       content: title),
       tag.meta(name: "twitter:description", content: description),

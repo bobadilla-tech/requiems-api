@@ -1,0 +1,219 @@
+package cmd
+
+import (
+	"bufio"
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"strings"
+
+	"github.com/bobadilla-tech/locale-sync/internal/locale"
+	"github.com/bobadilla-tech/locale-sync/internal/source"
+	"github.com/spf13/cobra"
+)
+
+var (
+	reportFormat       string
+	reportErbOnly      bool
+	reportFailOnAny    bool
+	reportChangedFiles string
+)
+
+var reportCmd = &cobra.Command{
+	Use:   "report",
+	Short: "Scan source files and report hardcoded strings that should be i18n'd",
+	Long: `report scans Ruby/ERB source files for hardcoded user-facing strings and
+prints a lint report. Useful in CI to track i18n coverage over time.
+
+Exit codes:
+  0  — no hardcoded strings found
+  1  — hardcoded strings found (only when --fail-on-found is set)`,
+	RunE: runReport,
+}
+
+func init() {
+	reportCmd.Flags().StringVarP(&rootPath, "root", "r", ".", "Rails app root directory")
+	reportCmd.Flags().StringVar(&reportFormat, "format", "text", "Output format: text or json")
+	reportCmd.Flags().BoolVar(&reportErbOnly, "erb-only", false,
+		"Only scan .erb/.haml/.slim files, skip .rb files")
+	reportCmd.Flags().BoolVar(&reportFailOnAny, "fail-on-found", false,
+		"Exit with code 1 if any hardcoded strings are found (useful in CI)")
+	reportCmd.Flags().StringVar(&reportChangedFiles, "changed-files", "",
+		`Only scan files listed here. Pass a file path or "-" to read newline-delimited paths from stdin.
+Useful in CI: git diff --name-only origin/main | locale-sync report --changed-files -`)
+	rootCmd.AddCommand(reportCmd)
+}
+
+func runReport(_ *cobra.Command, _ []string) error {
+	cf, err := loadChangedFiles(reportChangedFiles)
+	if err != nil {
+		return fmt.Errorf("--changed-files: %w", err)
+	}
+	found, err := source.Extract(rootPath, cf)
+	if err != nil {
+		return fmt.Errorf("scan: %w", err)
+	}
+
+	if reportErbOnly {
+		filtered := found[:0]
+		for _, h := range found {
+			if strings.HasSuffix(h.File, ".erb") ||
+				strings.HasSuffix(h.File, ".haml") ||
+				strings.HasSuffix(h.File, ".slim") {
+				filtered = append(filtered, h)
+			}
+		}
+		found = filtered
+	}
+
+	// Scan locale YAML values for technical strings that should not be translated.
+	entries, err := locale.Scan(rootPath, "en")
+	if err != nil {
+		return fmt.Errorf("locale scan: %w", err)
+	}
+	valueFindings := locale.LintValues(entries)
+
+	switch reportFormat {
+	case "json":
+		return printReportJSON(found, valueFindings)
+	case "text":
+		return printReportText(found, valueFindings)
+	default:
+		return fmt.Errorf("unknown --format %q: want \"text\" or \"json\"", reportFormat)
+	}
+}
+
+// loadChangedFiles parses the --changed-files argument into a set of relative
+// paths. Pass "-" to read newline-delimited paths from stdin, a file path to
+// read from a file, or "" to return nil (= scan everything).
+func loadChangedFiles(arg string) (map[string]bool, error) {
+	if arg == "" {
+		return nil, nil
+	}
+	var r io.Reader
+	if arg == "-" {
+		r = os.Stdin
+	} else {
+		f, err := os.Open(arg)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+		r = f
+	}
+	set := map[string]bool{}
+	sc := bufio.NewScanner(r)
+	for sc.Scan() {
+		line := strings.TrimSpace(sc.Text())
+		if line != "" {
+			set[line] = true
+		}
+	}
+	return set, sc.Err()
+}
+
+func printReportText(found []source.HardcodedString, valueFindings []locale.LintFinding) error {
+	if len(found) == 0 && len(valueFindings) == 0 {
+		fmt.Println("✓ No hardcoded strings found.")
+		return nil
+	}
+
+	if len(found) > 0 {
+		// Group by file.
+		byFile := make(map[string][]source.HardcodedString)
+		var fileOrder []string
+		seen := map[string]bool{}
+		for _, h := range found {
+			if !seen[h.File] {
+				fileOrder = append(fileOrder, h.File)
+				seen[h.File] = true
+			}
+			byFile[h.File] = append(byFile[h.File], h)
+		}
+
+		fmt.Printf("=== Hardcoded String Report (%d strings in %d files) ===\n\n",
+			len(found), len(fileOrder))
+
+		for _, file := range fileOrder {
+			items := byFile[file]
+			fmt.Printf("  %s (%d)\n", file, len(items))
+			for _, h := range items {
+				loc := fmt.Sprintf("%d", h.Line)
+				if h.EndLine > h.Line {
+					loc = fmt.Sprintf("%d-%d", h.Line, h.EndLine)
+				}
+				fmt.Printf("    [%s] line %-6s %q\n", h.Category, loc, h.Text)
+			}
+			fmt.Println()
+		}
+	}
+
+	if len(valueFindings) > 0 {
+		fmt.Printf("=== Technical Locale Values (%d) ===\n\n", len(valueFindings))
+		for _, f := range valueFindings {
+			fmt.Printf("  %s line %d\n", f.File, f.Line)
+			fmt.Printf("    key:    %s\n", f.Key)
+			fmt.Printf("    value:  %q\n", f.Value)
+			fmt.Printf("    reason: %s\n\n", f.Reason)
+		}
+	}
+
+	if reportFailOnAny {
+		os.Exit(1)
+	}
+	return nil
+}
+
+type jsonReportEntry struct {
+	File     string `json:"file"`
+	Line     int    `json:"line"`
+	EndLine  int    `json:"end_line,omitempty"`
+	Category string `json:"category"`
+	Text     string `json:"text"`
+}
+
+type jsonValueFinding struct {
+	File   string `json:"file"`
+	Line   int    `json:"line"`
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+	Reason string `json:"reason"`
+}
+
+type jsonReport struct {
+	HardcodedStrings []jsonReportEntry  `json:"hardcoded_strings"`
+	TechnicalValues  []jsonValueFinding `json:"technical_locale_values"`
+}
+
+func printReportJSON(found []source.HardcodedString, valueFindings []locale.LintFinding) error {
+	hardcoded := make([]jsonReportEntry, 0, len(found))
+	for _, h := range found {
+		hardcoded = append(hardcoded, jsonReportEntry{
+			File:     h.File,
+			Line:     h.Line,
+			EndLine:  h.EndLine,
+			Category: h.Category,
+			Text:     h.Text,
+		})
+	}
+	technical := make([]jsonValueFinding, 0, len(valueFindings))
+	for _, f := range valueFindings {
+		technical = append(technical, jsonValueFinding{
+			File:   f.File,
+			Line:   f.Line,
+			Key:    f.Key,
+			Value:  f.Value,
+			Reason: f.Reason,
+		})
+	}
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(jsonReport{HardcodedStrings: hardcoded, TechnicalValues: technical}); err != nil {
+		return err
+	}
+	if reportFailOnAny && (len(found) > 0 || len(valueFindings) > 0) {
+		os.Exit(1)
+	}
+	return nil
+}

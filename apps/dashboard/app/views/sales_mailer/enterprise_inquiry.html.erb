@@ -18,7 +18,7 @@
     <div class="container">
       <div class="header">
         <h1 style="margin: 0; font-size: 24px;">🚀 Enterprise Inquiry</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;">A potential enterprise customer wants to talk to sales</p>
+        <p style="margin: 10px 0 0 0; opacity: 0.9;"><%= t('sales_mailer.enterprise_inquiry.a_potential_enterprise_customer_wants') %></p>
       </div>
 
       <div class="content">
@@ -27,17 +27,17 @@
         </div>
 
         <div class="field">
-          <div class="label">Company</div>
+          <div class="label"><%= t('admin.private_deployments.index.company') %></div>
           <div class="value"><strong><%= @inquiry[:company] %></strong></div>
         </div>
 
         <div class="field">
-          <div class="label">Contact Person</div>
+          <div class="label"><%= t('sales_mailer.enterprise_inquiry.contact_person') %></div>
           <div class="value"><%= @inquiry[:name] %></div>
         </div>
 
         <div class="field">
-          <div class="label">Email</div>
+          <div class="label"><%= t('home.contact.form.email') %></div>
           <div class="value">
             <a href="mailto:<%= @inquiry[:email] %>"><%= @inquiry[:email] %></a>
           </div>
@@ -45,7 +45,7 @@
 
         <% if @inquiry[:message].present? %>
           <div class="field">
-            <div class="label">Message / Specific Needs</div>
+            <div class="label"><%= t('sales_mailer.enterprise_inquiry.message_specific_needs') %></div>
             <div class="value"><%= simple_format(@inquiry[:message]) %></div>
           </div>
         <% end %>
@@ -53,7 +53,7 @@
         <div class="footer">
           <p><strong>Submitted:</strong> <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %></p>
           <p style="margin-top: 10px; background-color: #fef3c7; padding: 10px; border-radius: 4px; border-left: 4px solid #f59e0b;">
-            ⏰ <strong>Reminder:</strong> Enterprise inquiries should receive a response within 24 hours.
+            ⏰ <strong><%= t('sales_mailer.enterprise_inquiry.reminder') %></strong> Enterprise inquiries should receive a response within 24 hours.
           </p>
         </div>
       </div>

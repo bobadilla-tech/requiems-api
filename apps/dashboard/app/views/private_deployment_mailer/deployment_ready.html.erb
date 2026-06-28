@@ -8,7 +8,7 @@
       <div style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
 
         <div style="background-color: #16a34a; padding: 28px 32px;">
-          <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff;">Your Private API is Live</h1>
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff;"><%= t('private_deployment_mailer.deployment_ready.your_private_api_is_live') %></h1>
           <p style="margin: 6px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.8);"><%= @deployment_request.company %>: dedicated instance ready</p>
         </div>
 
@@ -21,16 +21,16 @@
           </div>
 
           <div style="background-color: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
-            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Authentication</div>
-            <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;">Include this header in every request:</p>
+            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;"><%= t('home.faq.authentication.heading') %></div>
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;"><%= t('dashboard.quick_start.step_2.header_label') %></p>
             <p style="margin: 0; font-size: 13px; font-family: 'Courier New', monospace; color: #111827; background-color: #f3f4f6; padding: 10px 12px; border-radius: 4px; word-break: break-all;">
               X-Backend-Secret: <%= @deployment_request.tenant_secret %>
             </p>
           </div>
 
           <div style="background-color: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;">
-            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Quick Start</div>
-            <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;">Example request:</p>
+            <div style="font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;"><%= t('dashboard.quick_start.title') %></div>
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #374151;"><%= t('private_deployment_mailer.deployment_ready.example_request') %></p>
             <pre style="margin: 0; font-size: 12px; font-family: 'Courier New', monospace; color: #111827; background-color: #f3f4f6; padding: 12px; border-radius: 4px; white-space: pre-wrap; word-break: break-all;">curl -H "X-Backend-Secret: &lt;your-secret&gt;" \
   <%= @deployment_request.live_url %>/v1/<%= @deployment_request.selected_services.first %></pre>
           </div>

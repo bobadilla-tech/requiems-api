@@ -165,5 +165,4 @@ class Admin::AnalyticsController < Admin::BaseController
       hash[label] = rate
     end
   end
-
 end
