@@ -1,9 +1,0 @@
-# Brand names that must not be translated
-NeverBounce
-IPstack
-AbstractAPI
-Neutrinoapi
-Requiems API
-API Ninjas
-Numverify
-Mailboxlayer
