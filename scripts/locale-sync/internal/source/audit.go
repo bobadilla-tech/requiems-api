@@ -239,3 +239,93 @@ func stripLangPrefix(key, lang string) string {
 	}
 	return key
 }
+
+// BareTCallIssue is a bare t() call found in a Ruby file where it is not defined
+// at runtime (models, jobs, services, workers, lib). These raise NoMethodError in
+// production — I18n.t() must be used instead.
+type BareTCallIssue struct {
+	File string // relative path from Rails root
+	Line int
+	Key  string // the key argument, e.g. "admin.users.title"
+}
+
+// bareTCallOnlyRe matches standalone t('key') / t("key") — excludes I18n.t() and
+// translate() by requiring a non-word, non-dot character (or start-of-line) before 't'.
+var bareTCallOnlyRe = regexp.MustCompile(`(?:^|[^.\w])t\s*\(\s*["']([\w.]+)["']`)
+
+// invalidTCallDirs are Rails directories where bare t() is not available at runtime.
+// Controllers, mailers, and helpers are excluded (they include the translation helper).
+var invalidTCallDirs = []string{
+	"app/models/",
+	"app/jobs/",
+	"app/services/",
+	"app/workers/",
+	"app/decorators/",
+	"lib/",
+}
+
+// CheckBareTCalls scans .rb files in non-helper Rails layers for bare t() calls.
+// Returns one BareTCallIssue per offending line; callers should use I18n.t() there.
+func CheckBareTCalls(root string) ([]BareTCallIssue, error) {
+	var issues []BareTCallIssue
+
+	dirs := make([]string, 0, len(invalidTCallDirs)+1)
+	for _, d := range invalidTCallDirs {
+		full := filepath.Join(root, filepath.FromSlash(d))
+		if _, err := os.Stat(full); err == nil {
+			dirs = append(dirs, full)
+		}
+	}
+
+	for _, dir := range dirs {
+		err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, walkErr error) error {
+			if walkErr != nil || d.IsDir() || filepath.Ext(path) != ".rb" {
+				return nil
+			}
+			rel, _ := filepath.Rel(root, path)
+			found, err := scanBareTCalls(path, filepath.ToSlash(rel))
+			if err == nil {
+				issues = append(issues, found...)
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return issues, nil
+}
+
+func scanBareTCalls(path, relSlash string) ([]BareTCallIssue, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var issues []BareTCallIssue
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 1<<20), 1<<20)
+	lineNum := 0
+
+	for scanner.Scan() {
+		lineNum++
+		line := scanner.Text()
+		trimmed := strings.TrimSpace(line)
+		if isComment(trimmed) {
+			continue
+		}
+		// If the line already uses I18n.t or translate(), skip — not a bare t() issue.
+		if strings.Contains(line, "I18n.t") || strings.Contains(line, "translate(") {
+			continue
+		}
+		for _, m := range bareTCallOnlyRe.FindAllStringSubmatch(line, -1) {
+			key := m[1]
+			if key != "" && !strings.ContainsAny(key, " \t") {
+				issues = append(issues, BareTCallIssue{File: relSlash, Line: lineNum, Key: key})
+			}
+		}
+	}
+	return issues, scanner.Err()
+}

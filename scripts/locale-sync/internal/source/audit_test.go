@@ -353,3 +353,120 @@ func TestStripLangPrefix(t *testing.T) {
 		}
 	}
 }
+
+// ── CheckBareTCalls ───────────────────────────────────────────────────────────
+// bare t() is valid in controllers, mailers, helpers (ActionController/ActionMailer
+// inject the helper). In models, jobs, services, workers, lib — it raises
+// NoMethodError at runtime. These tests lock down both sides of the boundary.
+
+func writeRubyFileForAudit(t *testing.T, relPath, content string) string {
+	t.Helper()
+	root := t.TempDir()
+	full := filepath.Join(root, filepath.FromSlash(relPath))
+	if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+		t.Fatalf("MkdirAll: %v", err)
+	}
+	if err := os.WriteFile(full, []byte(content), 0o644); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	return root
+}
+
+func TestCheckBareTCalls_ControllerIsValid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/controllers/foo_controller.rb",
+		"redirect_to root_path, notice: t('flash.done')\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 0 {
+		t.Errorf("controller: expected 0 issues, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_MailerIsValid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/mailers/foo_mailer.rb",
+		"subject t('mailers.foo.subject')\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 0 {
+		t.Errorf("mailer: expected 0 issues, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_HelperIsValid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/helpers/application_helper.rb",
+		"def page_title; t('shared.title'); end\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 0 {
+		t.Errorf("helper: expected 0 issues, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_ModelIsInvalid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/models/user.rb",
+		"def label; t('models.user.label'); end\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 1 {
+		t.Fatalf("model: expected 1 issue, got %d: %v", len(issues), issues)
+	}
+	if issues[0].Key != "models.user.label" {
+		t.Errorf("Key = %q, want %q", issues[0].Key, "models.user.label")
+	}
+}
+
+func TestCheckBareTCalls_JobIsInvalid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/jobs/notify_job.rb",
+		"message = t('jobs.notify.body')\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 1 {
+		t.Fatalf("job: expected 1 issue, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_LibIsInvalid(t *testing.T) {
+	root := writeRubyFileForAudit(t, "lib/utility.rb",
+		"puts t('lib.util.message')\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 1 {
+		t.Fatalf("lib: expected 1 issue, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_I18nTInModelIsOK(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/models/user.rb",
+		"def label; I18n.t('models.user.label'); end\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 0 {
+		t.Errorf("I18n.t in model: expected 0 issues, got %d: %v", len(issues), issues)
+	}
+}
+
+func TestCheckBareTCalls_CommentSkipped(t *testing.T) {
+	root := writeRubyFileForAudit(t, "app/models/user.rb",
+		"# t('models.user.label') — example usage\n")
+	issues, err := CheckBareTCalls(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(issues) != 0 {
+		t.Errorf("comment line: expected 0 issues, got %d: %v", len(issues), issues)
+	}
+}
