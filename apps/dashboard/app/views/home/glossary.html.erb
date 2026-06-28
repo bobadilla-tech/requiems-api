@@ -17,7 +17,12 @@
               <%= term[:definition] %>
             </p>
             <p class="text-sm text-gray-600 dark:text-gray-400 italic">
-              <%= sanitize term[:example], tags: %w[code a], attributes: %w[class href] %>
+              <%= term[:example_prefix] %>
+              <% if term[:example_code] %>
+                <code class="bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded"><%= term[:example_code] %></code>
+              <% elsif term[:example_link_href] %>
+                <%= link_to term[:example_link_text], term[:example_link_href], class: "text-blue-600 hover:text-blue-700" %>
+              <% end %>
             </p>
           </div>
         <% end %>

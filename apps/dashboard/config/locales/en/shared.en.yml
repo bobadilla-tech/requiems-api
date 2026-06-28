@@ -23,8 +23,8 @@ en:
       reported: "Reported"
     badges: {}
     labels:
-      yes: "Yes"
-      no: "No"
+      "yes": "Yes"
+      "no": "No"
       environment: "Environment"
       joined: "Joined"
       monthly: "Monthly"
@@ -141,4 +141,4 @@ en:
       sending: "Sending..."
       cancel_btn: "Cancel"
     errors: {no_data: "No data returned."}
-    common: {view: "View", all: "All", invalid: "Invalid", json_response: "JSON response", latency: "< 300ms avg latency", no: "✗ No", rest_api: "REST API", uptime: "99.9% uptime", valid: "Valid", yes: "✓ Yes", performance: "Performance", utilities: "Browse utilities"}
+    common: {view: "View", all: "All", invalid: "Invalid", json_response: "JSON response", latency: "< 300ms avg latency", "no": "✗ No", rest_api: "REST API", uptime: "99.9% uptime", valid: "Valid", "yes": "✓ Yes", performance: "Performance", utilities: "Browse utilities"}
