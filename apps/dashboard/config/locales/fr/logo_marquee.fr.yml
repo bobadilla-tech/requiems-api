@@ -1,3 +1,0 @@
-fr:
-  logo_marquee:
-    animation_anim_name___speed_linear_infinite: "animation : %{anim_name}%{speed} linéaire infinie ;"

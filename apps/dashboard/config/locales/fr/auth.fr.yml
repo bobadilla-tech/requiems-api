@@ -1,42 +1,43 @@
+---
 fr:
   auth:
-    sign_in:
-      heading: "Connectez-vous à votre compte"
-      subheading: "Accédez à votre tableau de bord Requiem API"
-      email: "E-mail"
-      password: "Mot de passe"
-      remember_me: "Se souvenir de moi"
-      submit: "Se connecter"
-    sign_up:
-      heading: "Créez votre compte"
-      subheading: "Commencez à utiliser Requiem API avec un compte gratuit"
-      name: "Nom complet"
-      name_placeholder: "Jean Dupont"
-      email: "E-mail"
-      company: "Entreprise (facultatif)"
-      company_placeholder: "Votre Société SAS"
-      password: "Mot de passe"
-      password_min: "minimum %{min} caractères"
-      confirm_password: "Confirmer le mot de passe"
-      submit: "Créer un compte"
-    forgot_password:
-      heading: "Mot de passe oublié ?"
-      subheading: "Entrez votre e-mail et nous vous enverrons les instructions de réinitialisation"
-      email: "E-mail"
-      submit: "Envoyer les instructions"
     change_password:
-      title: "Changer le mot de passe"
-      back: "Retour aux paramètres"
-      subheading: "Mettez à jour votre mot de passe pour sécuriser votre compte"
-      section_heading: "Nouveau mot de passe"
-      new_password: "Nouveau mot de passe"
-      confirm: "Confirmer le nouveau mot de passe"
-      current: "Mot de passe actuel"
-      current_note: "Requis pour confirmer vos modifications"
-      cancel: "Annuler"
-      submit: "Mettre à jour le mot de passe"
-      submitting: "Mise à jour..."
+      back: Retour aux paramètres
+      cancel: Annuler
+      confirm: Confirmer le nouveau mot de passe
+      current: Mot de passe actuel
+      current_note: Requis pour confirmer vos modifications
+      new_password: Nouveau mot de passe
+      section_heading: Nouveau mot de passe
+      subheading: Mettez à jour votre mot de passe pour sécuriser votre compte
+      submit: Mettre à jour le mot de passe
+      submitting: Mise à jour...
+      title: Changer le mot de passe
     errors:
       heading:
         one: "%{count} erreur a empêché l'enregistrement :"
         other: "%{count} erreurs ont empêché l'enregistrement :"
+    forgot_password:
+      email: E-mail
+      heading: Mot de passe oublié ?
+      subheading: Entrez votre e-mail et nous vous enverrons les instructions de réinitialisation
+      submit: Envoyer les instructions
+    sign_in:
+      email: E-mail
+      heading: Connectez-vous à votre compte
+      password: Mot de passe
+      remember_me: Se souvenir de moi
+      subheading: Accédez à votre tableau de bord Requiem API
+      submit: Se connecter
+    sign_up:
+      company: Entreprise (facultatif)
+      company_placeholder: Votre Société SAS
+      confirm_password: Confirmer le mot de passe
+      email: E-mail
+      heading: Créez votre compte
+      name: Nom complet
+      name_placeholder: Jean Dupont
+      password: Mot de passe
+      password_min: minimum %{min} caractères
+      subheading: Commencez à utiliser Requiem API avec un compte gratuit
+      submit: Créer un compte

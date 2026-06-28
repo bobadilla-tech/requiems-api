@@ -1,11 +1,14 @@
+---
 fr:
   sales_mailer:
     enterprise_inquiry:
-      a_potential_enterprise_customer_wants: "Un client potentiel d'entreprise souhaite parler aux commerciaux"
-      contact_person: "Personne de contact"
-      message_specific_needs: "Message / Besoins spécifiques"
-      reminder: "Rappel:"
-      reply_directly_to_this: "Répondez directement à ce courriel pour contacter : %{email}"
-      company_company: "Société : %{company}"
-      contact_person_name: "Personne à contacter : %{name}"
-      email_email: "Courriel : %{email}"
+      a_potential_enterprise_customer_wants: Un client potentiel d'entreprise souhaite
+        parler aux commerciaux
+      company_company: 'Société : %{company}'
+      contact_person: Personne de contact
+      contact_person_name: 'Personne à contacter : %{name}'
+      email_email: 'Courriel : %{email}'
+      message_specific_needs: Message / Besoins spécifiques
+      reminder: 'Rappel:'
+      reply_directly_to_this: 'Répondez directement à ce courriel pour contacter :
+        %{email}'

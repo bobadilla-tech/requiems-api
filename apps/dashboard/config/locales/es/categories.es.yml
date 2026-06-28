@@ -1,5 +1,7 @@
+---
 es:
   categories:
     show:
-      no_apis_available_in_this_category_yet: "Aún no hay API disponibles en esta categoría."
-      we_re_working_on_bringing_apis_to_this: "Estamos trabajando para incorporar API a esta categoría. ¡Vuelve pronto!"
+      no_apis_available_in_this_category_yet: Aún no hay API disponibles en esta categoría.
+      we_re_working_on_bringing_apis_to_this: Estamos trabajando para incorporar API
+        a esta categoría. ¡Vuelve pronto!

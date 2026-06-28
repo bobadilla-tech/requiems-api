@@ -1,3 +1,4 @@
+---
 en:
   referral:
-    cannot_be_the_same_as_referrer: "cannot be the same as referrer"
+    cannot_be_the_same_as_referrer: cannot be the same as referrer

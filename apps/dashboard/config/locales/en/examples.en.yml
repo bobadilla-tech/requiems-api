@@ -1,27 +1,24 @@
+---
 en:
   examples:
     index:
-      title: "Code Examples | Requiems API"
-      description: "Ready-to-run code examples for Requiems API integrations. Copy-paste tutorials for email validation, IP lookup, QR codes, and more."
-      heading: "Example Projects & Tutorials"
-      subheading: "Learn how to integrate Requiems APIs into your projects with these practical examples and step-by-step tutorials."
-      filter_all: "All Examples"
-      empty_heading: "No examples found"
-      empty_body: "Try selecting a different category."
-      cta_heading: "Want to Contribute an Example?"
-      cta_body: "Share your project with the community! We welcome contributions of all kinds."
-      cta_github: "Submit an Example"
-      cta_contact: "Contact Us"
-      view_tutorial: "View Tutorial"
+      apis_used: APIs Used
+      cta_body: Share your project with the community! We welcome contributions of
+        all kinds.
+      cta_contact: Contact Us
+      cta_github: Submit an Example
+      cta_heading: Want to Contribute an Example?
+      description: Ready-to-run code examples for Requiems API integrations. Copy-paste
+        tutorials for email validation, IP lookup, QR codes, and more.
+      empty_body: Try selecting a different category.
+      empty_heading: No examples found
+      filter_all: All Examples
+      heading: Example Projects & Tutorials
+      subheading: Learn how to integrate Requiems APIs into your projects with these
+        practical examples and step-by-step tutorials.
+      tech_count:
+        one: "%{count} technology"
+        other: "%{count} technologies"
+      title: Code Examples | Requiems API
+      view_tutorial: View Tutorial
       view_tutorial_aria: "%{title} - View Tutorial"
-      apis_used: "APIs Used"
-      tech_count: {one: "%{count} technology", other: "%{count} technologies"}
-    categories: {}
-    difficulties: {}
-    items:
-      email-validator-web-app: {}
-      random-quote-generator: {}
-      lorem-ipsum-generator: {}
-      api-testing-cli: {}
-      daily-advice-bot: {}
-      email-validation-service: {}

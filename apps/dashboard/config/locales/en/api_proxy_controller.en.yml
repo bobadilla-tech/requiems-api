@@ -1,3 +1,4 @@
+---
 en:
   api_proxy_controller:
-    the_endpoint_must_start_with_v1: "The endpoint must start with /v1/"
+    the_endpoint_must_start_with_v1: The endpoint must start with /v1/

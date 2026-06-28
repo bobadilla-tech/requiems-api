@@ -1,16 +1,18 @@
+---
 fr:
   apis_index:
-    most_popular:
-      our_most_popular_apis_based_on_usage: "Nos API les plus populaires, en fonction de leur utilisation et de la satisfaction client."
-    systems_section:
-      composed_signal_engines_one_call: "Moteurs de signaux composés — un appel renvoie une décision structurée"
-      backend_systems: "Systèmes backend"
     header:
-      page_heading: "Répertoire des API"
-      sign_up_for_a_free_api_key: "Inscrivez-vous pour obtenir une clé API gratuite"
-      get_free_api_key: "Obtenez une clé API gratuite"
-      intro_prefix: "Débloquez toutes nos API avec une seule clé API —"
-      intro_signed_in: "Parcourez notre collection d'API prêtes à l'emploi."
-      intro_signed_out_suffix: "pour commencer."
-      signup_cta_html: "inscrivez-vous pour obtenir une <strong>clé API gratuite</strong>"
+      get_free_api_key: Obtenez une clé API gratuite
+      intro_prefix: Débloquez toutes nos API avec une seule clé API —
+      intro_signed_in: Parcourez notre collection d'API prêtes à l'emploi.
       intro_signed_out_html: "%{link} pour commencer."
+      page_heading: Répertoire des API
+      sign_up_for_a_free_api_key: Inscrivez-vous pour obtenir une clé API gratuite
+      signup_cta_html: inscrivez-vous pour obtenir une <strong>clé API gratuite</strong>
+    most_popular:
+      our_most_popular_apis_based_on_usage: Nos API les plus populaires, en fonction
+        de leur utilisation et de la satisfaction client.
+    systems_section:
+      backend_systems: Systèmes backend
+      composed_signal_engines_one_call: Moteurs de signaux composés — un appel renvoie
+        une décision structurée

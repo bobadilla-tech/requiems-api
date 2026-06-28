@@ -1,11 +1,16 @@
+---
 es:
   admin_users:
     show:
       promotion_section:
-        promotional_plan_upgrade: "Actualización del plan promocional"
-        required_for_audit_trail_describe_why: "Requerido para el registro de auditoría. Describa el motivo de esta promoción."
-        grant_or_revoke_a_temporary_plan: "Otorgar o revocar una mejora temporal del plan para este usuario sin requerir pago alguno."
-        reason: "Razón"
-        e_g_youtube_video_collaboration_blog: "Por ejemplo, colaboración en vídeo de YouTube, publicación en el blog requiems.xyz"
-        duration: "Duración"
-        expires: "Caduca"
+        duration: Duración
+        e_g_youtube_video_collaboration_blog: Por ejemplo, colaboración en vídeo de
+          YouTube, publicación en el blog requiems.xyz
+        expires: Caduca
+        grant_or_revoke_a_temporary_plan: Otorgar o revocar una mejora temporal del
+          plan para este usuario sin requerir pago alguno.
+        promotion_expires_at_from_now: "(%{promotion_expires_at} de ahora en adelante)"
+        promotional_plan_upgrade: Actualización del plan promocional
+        reason: Razón
+        required_for_audit_trail_describe_why: Requerido para el registro de auditoría.
+          Describa el motivo de esta promoción.

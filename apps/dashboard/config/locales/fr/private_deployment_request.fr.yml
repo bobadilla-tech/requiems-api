@@ -1,4 +1,6 @@
+---
 fr:
   private_deployment_request:
-    must_include_at_least_one_service: "doit inclure au moins un service"
-    must_be_lowercase_letters_numbers_and: "Ne doit contenir que des lettres minuscules, des chiffres et des traits d'union (2 à 40 caractères)."
+    must_be_lowercase_letters_numbers_and: Ne doit contenir que des lettres minuscules,
+      des chiffres et des traits d'union (2 à 40 caractères).
+    must_include_at_least_one_service: doit inclure au moins un service

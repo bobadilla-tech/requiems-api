@@ -1,441 +1,577 @@
+---
 en:
   tools:
-    quotes:
-      demo:
-        error_rate_limit: "Rate limit reached. Please wait a moment and try again."
-        error_generic: "Something went wrong. Please try again."
-        error_unexpected: "Unexpected response from the API."
-        error_network: "Network error. Please check your connection."
-        error_security_token: "Security token missing. Please refresh the page."
-      use_cases:
-        design_placeholders: "Design placeholders"
-        seed_prompts_conversation_starters_or: "Seed prompts, conversation starters, or personality layers for AI assistants and chatbots."
-        fuel_daily_check_in_screens_push: "Fuel daily check-in screens, push notifications, or meditation app openers with curated wisdom."
-        auto_generate_quote_cards_for_twitter_x: "Auto-generate quote cards for Twitter/X, Instagram, or LinkedIn without a content team."
-        add_a_rotating_quote_to_transactional: "Add a rotating quote to transactional emails, weekly digests, or newsletter signatures."
-        what_can_you_build_with_it: "What can you build with it?"
-        social_media_content: "Social media content"
-        motivation_amp_wellness_apps: "Motivation &amp; wellness apps"
-        show_a_fresh_inspirational_quote_on: "Show a fresh inspirational quote on every visit — dashboards, homepages, onboarding screens."
-        email_footers_amp_newsletters: "Email footers &amp; newsletters"
-        replace_lorem_ipsum_with_real: "Replace Lorem Ipsum with real, meaningful text in wireframes, mockups, and UI demos."
-        quote_of_the_day: "Quote of the day"
-        ai_amp_chatbot_enrichment: "AI &amp; chatbot enrichment"
-      api_combinations:
-        sentiment_analysis: "Sentiment Analysis"
-        score_the_emotional_tone_of_a_quote: "Score the emotional tone of a quote before displaying it — surface only positive, uplifting results."
-        mix_real_quotes_with_generated_filler: "Mix real quotes with generated filler text for flexible content layouts and design systems."
-        detect_language: "Detect Language"
-        lorem_ipsum: "Lorem Ipsum"
-        pairs_well_with: "Pairs well with"
-        filter_or_route_quotes_by_language: "Filter or route quotes by language before presenting them to a multilingual audience."
-        combine_the_quotes_api_with_other: "Combine the Quotes API with other endpoints to build richer experiences."
-      what_it_does:
-        median_response_under_1_second_quotes: "Median response under 1 second. Quotes served globally."
-        what_is_the_random_quotes_api: "What is the Random Quotes API?"
-        every_quote_includes_the_author_s_name: "Every quote includes the author's name — ready for display."
-        random_quotes_api: "Random Quotes API"
-        batch_endpoint: "batch endpoint"
-        fetch_up_to_50_quotes_per_request_with: "Fetch up to 50 quotes per request with the batch endpoint."
-        batch_ready: "Batch ready"
-        fast: "Fast"
-        attributed: "Attributed"
-      cta:
-        sign_up_for_free_and_start_fetching: "Sign up for free and start fetching inspirational quotes in minutes. No credit card required."
-        ready_to_add_quotes_to_your_app: "Ready to add quotes to your app?"
-      faq:
-        heading: "Frequently Asked Questions"
-      show:
-        random_quote_generator_free_quotes_api: "Random Quote Generator — Free Quotes API Tool"
-    unit_conversion:
-      demo:
-        input_placeholder: "Enter a value"
-        value_label: "Value"
-        error_fill_all_fields: "Fill in all fields."
-        error_rate_limit: "Too many requests. Wait a moment and try again."
-        error_no_data: "No data returned."
-        error_generic: "Something went wrong. Try again."
-        result_heading: "Conversion Result"
-        label_from: "From"
-        label_to: "To"
-        label_input: "Input"
-        label_result: "Result"
-        label_formula: "Formula"
-      hero:
-        square_meters: "Square Meters"
-        nautical_miles: "Nautical Miles"
-        tons_metric: "Tons (metric)"
-        square_miles: "Square Miles"
-        square_kilometers: "Square Kilometers"
-        square_feet: "Square Feet"
-        target_unit: "Target unit"
-        short_tons_us: "Short Tons (US)"
-        source_unit: "Source unit"
-        gallons_us: "Gallons (US)"
-        cubic_meters: "Cubic Meters"
-        fluid_ounces: "Fluid Ounces"
-        long_tons_uk: "Long Tons (UK)"
-        get_api_key: "Get API Key"
-        read_the_docs: "Read the docs"
-        convert: "Convert"
-        milliliters: "Milliliters"
-        millimeters: "Millimeters"
-        inches: "Inches"
-        kelvin: "Kelvin"
-        hectares: "Hectares"
-        kilograms: "Kilograms"
-        km_hour: "Km/hour"
-        knots: "Knots"
-        feet: "Feet"
-        ounces: "Ounces"
-        centimeters: "Centimeters"
-        quarts: "Quarts"
-        cups: "Cups"
-        miles_hour: "Miles/hour"
-        acres: "Acres"
-        kilometers: "Kilometers"
-        pounds: "Pounds"
-        grams: "Grams"
-        celsius: "Celsius"
-        liters: "Liters"
-        meters: "Meters"
-        pints: "Pints"
-        meters_second: "Meters/second"
-        fahrenheit: "Fahrenheit"
-        yards: "Yards"
-        miles: "Miles"
-      use_cases:
-        unit_conversion_fits_anywhere: "Unit Conversion fits anywhere measurements need to be translated accurately and instantly."
-        real_problems_real_conversions: "Real problems, real conversions."
-        food: "Food"
-        education: "Education"
-        fitness: "Fitness"
-        science: "Science"
-        development: "Development"
-      what_it_does:
-        reliable_conversions_with_transparent: "Reliable conversions with transparent formulas."
-        get_v1_technology_convert_200_ok: "GET /v1/technology/convert → 200 OK"
-        simple_api_requests_instant_results: "Simple API requests, instant results."
-      api_combinations:
-        unit_conversion_becomes_even_more: "Unit Conversion becomes even more useful when combined with other Requiems APIs."
-      show:
-        free_unit_conversion_api_miles_to_km_kg: "Free Unit Conversion API — Miles to KM, KG to LB, Celsius to Fahrenheit | Requiems API"
-    sentiment_analysis:
-      demo:
-        input_placeholder: "Paste any text, review, comment, or feedback..."
-        error_empty: "Enter some text to analyze."
-        error_rate_limit: "Too many requests. Wait a moment and try again."
-        error_generic: "Something went wrong. Try again."
-        error_no_data: "No data returned."
-        label_breakdown: "Breakdown"
-        label_confident: "confident"
-      hero:
-        know_how_your_text_lands: "Know how your text lands."
-        get_api_key: "Get API Key"
-        read_the_docs: "Read the docs"
-        analyze: "Analyze"
-      show:
-        free_sentiment_analysis_tool_positive: "Free Sentiment Analysis Tool — Positive, Negative & Neutral Text Detection | Requiems API"
-      use_cases:
-        anywhere_text_flows_through_your_system: "Anywhere text flows through your system, sentiment gives you signal."
-        built_for_real_use_cases: "Built for real use cases"
-      what_it_does:
-        one_call_three_values_enough_signal_to: "One call. Three values. Enough signal to act."
-        proportional_scores_across_all_classes: "Proportional scores across all classes"
-        positive_negative_or_neutral: "Positive, negative, or neutral"
-        what_it_does: "What it does"
-      api_combinations:
-        sentiment_works_best_as_part_of_a: "Sentiment works best as part of a pipeline. Here are three natural combinations."
-        pair_it_with_other_apis: "Pair it with other APIs"
-      faq:
-        heading: "Frequently Asked Questions"
     domain_checker:
-      demo:
-        error_empty: "Please enter a domain name."
-        error_invalid: "Enter a valid domain name, e.g. example.com."
-        submit: "Check"
-        error_rate_limit: "Too many requests. Wait a moment and try again."
-        error_generic: "Something went wrong. Try again."
-        error_no_data: "No data returned."
-        result_heading: "Domain Check"
-        label_available: "Available"
-        label_dns_a: "A records"
-        label_dns_mx: "MX records"
-        label_dns_ns: "Name servers"
-        badge_available: "Available"
-        badge_registered: "Registered"
-        badge_present: "Present"
-        badge_none: "None"
-      hero:
-        badge: "Domain Intelligence API"
-        title: "Check Any Domain"
-        title_highlight: "in Milliseconds"
-        subtitle: "Availability, WHOIS data, registrar info, and expiry dates — all from a single API call. No scraping, no rate limits on your end."
-        cta_primary: "Get started free"
-        cta_docs: "View docs"
-        try_live: "Try it live"
-        label_input: "Domain name"
-        placeholder: "e.g. example.com"
-        no_account: "No account required"
-      what_it_does:
-        heading: "What the Domain Checker API Does"
-        subheading: "One endpoint. Everything you need to know about a domain — availability, ownership, and registration history."
-        accuracy_heading: "Accuracy"
-        accuracy_body: "Every response includes parsed WHOIS data (domain ownership and registration records), DNS status (whether traffic-routing records exist), SSL validity (active HTTPS certificate), MX records (mail server configuration), and a reputation score — all normalized into a consistent JSON structure."
-        simplicity_heading: "Simplicity"
-        simplicity_body: "A single POST request with your API key is all it takes. No SDK, no configuration, no setup — just an HTTP call and a JSON response."
-      use_cases:
-        heading: "Built for Every Domain Workflow"
-        subheading: "From fraud prevention to onboarding — if it touches a domain name, this API has you covered."
-        auth_context: "Auth / Signup"
-        auth_title: "Avoid risky domains before signup"
-        auth_body: "Check domain health before accepting it as a user-provided business domain. Reject expired, parked, or flagged domains."
-        fraud_context: "Fraud Prevention"
-        fraud_title: "Block malicious or expired domains"
-        fraud_body: "Detect domains flagged for spam or phishing, or those with lapsed registrations. Prevent bad actors from abusing your platform."
-        integrations_context: "Integrations"
-        integrations_title: "Verify partner domains in workflows"
-        integrations_body: "Validate that partner or vendor domains are live and properly configured before integrating them into automated workflows."
-        email_marketing_context: "Email Marketing"
-        email_marketing_title: "Inspect domain health before email campaigns"
-        email_marketing_body: "Check MX records and domain reputation before targeting an address list. Reduce bounce risk from entire sending domains."
-        devops_context: "DevOps / Monitoring"
-        devops_title: "Detect missing DNS or SSL issues"
-        devops_body: "Surface missing DNS records or expired SSL certificates before they cause downtime or user-facing errors."
-        onboarding_context: "Onboarding"
-        onboarding_title: "Secure onboarding with trusted domains"
-        onboarding_body: "Allow only domains with verified DNS, active MX, and clean reputation during business onboarding. Block throwaway or newly registered domains."
       api_combinations:
-        heading: "Pair It With Other APIs"
-        subheading: "Domain Checker is more powerful combined. Stack it with other Requiems APIs to build multi-point validation into a single workflow."
-        label_benefit: "Benefit:"
-        label_outcome: "Outcome:"
-        email_validator_name: "Domain Checker + Email Validator"
-        email_validator_benefit: "Validate both the domain and specific email address."
-        email_validator_outcome: "Full email deliverability confidence: domain health plus mailbox-level checks."
-        vpn_detection_name: "Domain Checker + VPN Detection"
-        vpn_detection_benefit: "Check domain health while identifying VPN or proxy traffic from the same request."
-        vpn_detection_outcome: "Double-layered fraud signal: a flagged domain combined with anonymized traffic is a strong block trigger."
-        phone_validator_name: "Domain Checker + Phone Validator"
-        phone_validator_benefit: "Verify domain health and phone number at the same onboarding step."
-        phone_validator_outcome: "Multi-point contact validation — confirmed digital presence and reachable phone — before granting access."
-      faq:
-        heading: "Frequently Asked Questions"
-        support_prompt: "Still have questions?"
-        support_link: "Contact support"
-        q1: "What does Domain Checker check exactly?"
-        a1: "It checks DNS record existence, MX record presence, SSL certificate validity, and domain reputation against known threat lists."
-        q2: "Does it verify if the domain has a mail server?"
-        a2: "Yes. The mx_valid field indicates whether the domain has valid MX records configured — a prerequisite for receiving email."
-        q3: "Does it check SSL certificates?"
-        a3: "Yes. ssl_valid returns true if the domain has a valid, non-expired SSL certificate. It does not check chain depth or extended validation status."
-        q4: "Can it validate multiple domains at once?"
-        a4: "The endpoint accepts one domain per request. For bulk validation, call in parallel or use the batch endpoint if available on your plan."
-        q5: "Is it free to use the demo?"
-        a5: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
+        email_validator_benefit: Validate both the domain and specific email address.
+        email_validator_name: Domain Checker + Email Validator
+        email_validator_outcome: 'Full email deliverability confidence: domain health
+          plus mailbox-level checks.'
+        heading: Pair It With Other APIs
+        label_benefit: 'Benefit:'
+        label_outcome: 'Outcome:'
+        phone_validator_benefit: Verify domain health and phone number at the same
+          onboarding step.
+        phone_validator_name: Domain Checker + Phone Validator
+        phone_validator_outcome: Multi-point contact validation — confirmed digital
+          presence and reachable phone — before granting access.
+        subheading: Domain Checker is more powerful combined. Stack it with other
+          Requiems APIs to build multi-point validation into a single workflow.
+        vpn_detection_benefit: Check domain health while identifying VPN or proxy
+          traffic from the same request.
+        vpn_detection_name: Domain Checker + VPN Detection
+        vpn_detection_outcome: 'Double-layered fraud signal: a flagged domain combined
+          with anonymized traffic is a strong block trigger.'
       cta:
-        heading: "Automate this with Requiems."
-        body: "One API key. Domain availability, WHOIS data, and 50+ other APIs across validation, networking, finance, and more."
-        cta_primary: "Get your free API key"
-        cta_docs: "Read the docs →"
+        body: One API key. Domain availability, WHOIS data, and 50+ other APIs across
+          validation, networking, finance, and more.
+        cta_docs: Read the docs →
+        cta_primary: Get your free API key
+        heading: Automate this with Requiems.
+      demo:
+        badge_available: Available
+        badge_none: None
+        badge_present: Present
+        badge_registered: Registered
+        error_empty: Please enter a domain name.
+        error_generic: Something went wrong. Try again.
+        error_invalid: Enter a valid domain name, e.g. example.com.
+        error_no_data: No data returned.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        label_available: Available
+        label_dns_a: A records
+        label_dns_mx: MX records
+        label_dns_ns: Name servers
+        result_failed_heading: Domain check failed
+        result_heading: Domain Check
+        submit: Check
+      faq:
+        a1: It checks DNS record existence, MX record presence, SSL certificate validity,
+          and domain reputation against known threat lists.
+        a2: Yes. The mx_valid field indicates whether the domain has valid MX records
+          configured — a prerequisite for receiving email.
+        a3: Yes. ssl_valid returns true if the domain has a valid, non-expired SSL
+          certificate. It does not check chain depth or extended validation status.
+        a4: The endpoint accepts one domain per request. For bulk validation, call
+          in parallel or use the batch endpoint if available on your plan.
+        a5: The interactive demo requires no account. A free tier is available after
+          signup with a monthly request quota. See the pricing page for limits.
+        heading: Frequently Asked Questions
+        q1: What does Domain Checker check exactly?
+        q2: Does it verify if the domain has a mail server?
+        q3: Does it check SSL certificates?
+        q4: Can it validate multiple domains at once?
+        q5: Is it free to use the demo?
+        support_link: Contact support
+        support_prompt: Still have questions?
+      hero:
+        badge: Domain Intelligence API
+        cta_docs: View docs
+        cta_primary: Get started free
+        label_input: Domain name
+        no_account: No account required
+        placeholder: e.g. example.com
+        subtitle: Availability, WHOIS data, registrar info, and expiry dates — all
+          from a single API call. No scraping, no rate limits on your end.
+        title: Check Any Domain
+        title_highlight: in Milliseconds
+        try_live: Try it live
       show:
-        free_domain_checker_availability_dns: "Free Domain Checker — Availability, DNS & WHOIS | Requiems API"
+        free_domain_checker_availability_dns: Free Domain Checker — Availability,
+          DNS & WHOIS | Requiems API
+      use_cases:
+        auth_body: Check domain health before accepting it as a user-provided business
+          domain. Reject expired, parked, or flagged domains.
+        auth_context: Auth / Signup
+        auth_title: Avoid risky domains before signup
+        devops_body: Surface missing DNS records or expired SSL certificates before
+          they cause downtime or user-facing errors.
+        devops_context: DevOps / Monitoring
+        devops_title: Detect missing DNS or SSL issues
+        email_marketing_body: Check MX records and domain reputation before targeting
+          an address list. Reduce bounce risk from entire sending domains.
+        email_marketing_context: Email Marketing
+        email_marketing_title: Inspect domain health before email campaigns
+        fraud_body: Detect domains flagged for spam or phishing, or those with lapsed
+          registrations. Prevent bad actors from abusing your platform.
+        fraud_context: Fraud Prevention
+        fraud_title: Block malicious or expired domains
+        heading: Built for Every Domain Workflow
+        integrations_body: Validate that partner or vendor domains are live and properly
+          configured before integrating them into automated workflows.
+        integrations_context: Integrations
+        integrations_title: Verify partner domains in workflows
+        onboarding_body: Allow only domains with verified DNS, active MX, and clean
+          reputation during business onboarding. Block throwaway or newly registered
+          domains.
+        onboarding_context: Onboarding
+        onboarding_title: Secure onboarding with trusted domains
+        subheading: From fraud prevention to onboarding — if it touches a domain name,
+          this API has you covered.
+      what_it_does:
+        accuracy_body: Every response includes parsed WHOIS data (domain ownership
+          and registration records), DNS status (whether traffic-routing records exist),
+          SSL validity (active HTTPS certificate), MX records (mail server configuration),
+          and a reputation score — all normalized into a consistent JSON structure.
+        accuracy_heading: Accuracy
+        heading: What the Domain Checker API Does
+        simplicity_body: A single POST request with your API key is all it takes.
+          No SDK, no configuration, no setup — just an HTTP call and a JSON response.
+        simplicity_heading: Simplicity
+        subheading: One endpoint. Everything you need to know about a domain — availability,
+          ownership, and registration history.
     email_normalizer:
-      hero:
-        title: "Clean email addresses automatically, every time."
-        subtitle: "Normalize, lowercase, trim, and canonicalize email addresses in one API call."
-      what_it_does:
-        clean_data_badge: "Clean data"
-        clean_data_heading: "Normalize email input with one call."
-        clean_data_body: "The API trims whitespace, lowercases the address, fixes common provider aliases, and returns a canonical email — so every address stored in your system is consistent."
-        integration_badge: "Integration"
-        integration_heading: "One request, instant normalization."
-        integration_body: "POST /v1/validation/email-normalize with the email in the body and your API key in the header. No SDK required."
-        post_v1_validation_email_normalize_200: "POST /v1/validation/email-normalize → 200 OK"
-      use_cases:
-        heading: "Real problems, real users."
-        subheading: "Email Normalizer fits wherever contact data quality matters."
-        import_context: "Data Import"
-        import_title: "Standardize email data before import"
-        import_desc: "Normalize emails before bulk import into your database. Prevent format variations from creating duplicate records."
-        crm_dedup_context: "CRM / Data"
-        crm_dedup_title: "Merge duplicate accounts with normalized emails"
-        crm_dedup_desc: "Use the normalized form as a deduplication key. Identify accounts that belong to the same person across different email formats."
-        integrations_context: "Integrations"
-        integrations_title: "Improve email matching across systems"
-        integrations_desc: "Normalize before cross-system lookups. Ensure User.Name@Gmail.com and username@gmail.com match as the same identity."
-        analytics_context: "Analytics"
-        analytics_title: "Normalize signup emails for analytics"
-        analytics_desc: "Standardize at point of capture. Keep analytics and segmentation consistent regardless of how users type their address."
-        crm_dup_context: "CRM / Data"
-        crm_dup_title: "Reduce false duplicates in CRM"
-        crm_dup_desc: "Stop treating email variants as separate contacts. Normalization reduces bloated contact counts and improves list hygiene."
-        outreach_context: "Email Marketing"
-        outreach_title: "Clean email records before outreach"
-        outreach_desc: "Run your list through the normalizer before a send. Catch variation-caused bounces before they affect sender reputation."
       api_combinations:
-        heading: "Use together with complementary APIs."
-        subheading: "Requiems APIs are designed to compose. Combine Email Normalizer with other endpoints to build a complete contact validation pipeline with a single API key."
-        validator_pair: "Email Normalizer + Email Validator"
-        validator_benefit: "Normalize then validate for complete email hygiene."
-        validator_outcome: "Clean, canonical email that is also confirmed deliverable — ideal for signup and import flows."
-        phone_pair: "Email Normalizer + Phone Validator"
-        phone_benefit: "Normalize email and validate phone at the same step."
-        phone_outcome: "Consistent, verified contact data across both channels from a single onboarding call."
-        domain_pair: "Email Normalizer + Domain Checker"
-        domain_benefit: "Normalize email and verify its domain health together."
-        domain_outcome: "Canonical email paired with domain trust score — higher confidence before outreach."
-      faq:
-        heading: "Frequently asked questions"
-        q1: "What does Email Normalizer actually do?"
-        a1: "It strips tags (e.g. +label), lowercases the address, and removes provider-specific formatting quirks so variants of the same address map to one canonical form."
-        q2: "Does it normalize the domain and local part?"
-        a2: "Yes. Both are normalized. The local part is lowercased and cleaned of provider-specific suffixes. The domain is lowercased and alias-resolved where possible."
-        q3: "Can it correct capitalization and spacing?"
-        a3: "Capitalization is corrected by lowercasing. Spaces are not valid in email addresses per RFC 5321 and are stripped if present."
-        q4: "Does it work with international emails?"
-        a4: "Yes. Unicode email addresses in internationalized domains are supported. Domain normalization applies lowercasing and alias resolution; encoding of internationalized domain names depends on the underlying mail provider."
-        q5: "Is it free to use the demo?"
-        a5: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
+        domain_benefit: Normalize email and verify its domain health together.
+        domain_outcome: Canonical email paired with domain trust score — higher confidence
+          before outreach.
+        domain_pair: Email Normalizer + Domain Checker
+        heading: Use together with complementary APIs.
+        phone_benefit: Normalize email and validate phone at the same step.
+        phone_outcome: Consistent, verified contact data across both channels from
+          a single onboarding call.
+        phone_pair: Email Normalizer + Phone Validator
+        subheading: Requiems APIs are designed to compose. Combine Email Normalizer
+          with other endpoints to build a complete contact validation pipeline with
+          a single API key.
+        validator_benefit: Normalize then validate for complete email hygiene.
+        validator_outcome: Clean, canonical email that is also confirmed deliverable
+          — ideal for signup and import flows.
+        validator_pair: Email Normalizer + Email Validator
       cta:
-        heading: "Automate this with Requiems."
-        body: "One API key. Email normalization and more across Requiems."
-        cta_primary: "Get your free API key"
-        cta_docs: "Read the docs →"
+        body: One API key. Email normalization and more across Requiems.
+        cta_docs: Read the docs →
+        cta_primary: Get your free API key
+        heading: Automate this with Requiems.
       demo:
-        submit: "Normalize"
-        error_empty: "Enter an email address to normalize."
-        error_rate_limit: "Too many requests. Wait a moment and try again."
-        error_generic: "Something went wrong. Try again."
-        error_no_data: "No data returned."
-        label_normalized: "Normalized"
-        label_local: "Local part"
-        label_domain: "Domain"
-        label_changes: "Changes"
-        no_changes: "none"
-        badge_normalized: "Normalized"
-        badge_canonical: "Already canonical"
+        badge_canonical: Already canonical
+        badge_normalized: Normalized
+        error_empty: Enter an email address to normalize.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No data returned.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        label_change_canonicalised_domain: alias resolved
+        label_change_lowercased: lowercased
+        label_change_removed_dots: dots removed
+        label_change_removed_plus_tag: tag removed
+        label_change_trimmed_whitespace: whitespace trimmed
+        label_changes: Changes
+        label_domain: Domain
+        label_local: Local part
+        label_normalized: Normalized
+        no_changes: none
+        submit: Normalize
+      faq:
+        a1: It strips tags (e.g. +label), lowercases the address, and removes provider-specific
+          formatting quirks so variants of the same address map to one canonical form.
+        a2: Yes. Both are normalized. The local part is lowercased and cleaned of
+          provider-specific suffixes. The domain is lowercased and alias-resolved
+          where possible.
+        a3: Capitalization is corrected by lowercasing. Spaces are not valid in email
+          addresses per RFC 5321 and are stripped if present.
+        a4: Yes. Unicode email addresses in internationalized domains are supported.
+          Domain normalization applies lowercasing and alias resolution; encoding
+          of internationalized domain names depends on the underlying mail provider.
+        a5: The interactive demo requires no account. A free tier is available after
+          signup with a monthly request quota. See the pricing page for limits.
+        heading: Frequently asked questions
+        q1: What does Email Normalizer actually do?
+        q2: Does it normalize the domain and local part?
+        q3: Can it correct capitalization and spacing?
+        q4: Does it work with international emails?
+        q5: Is it free to use the demo?
+      hero:
+        subtitle: Normalize, lowercase, trim, and canonicalize email addresses in
+          one API call.
+        title: Clean email addresses automatically, every time.
       show:
-        free_email_normalizer_lowercase_trim: "Free Email Normalizer — Lowercase, Trim & Canonicalize Email Addresses | Requiems API"
+        free_email_normalizer_lowercase_trim: Free Email Normalizer — Lowercase, Trim
+          & Canonicalize Email Addresses | Requiems API
+      use_cases:
+        analytics_context: Analytics
+        analytics_desc: Standardize at point of capture. Keep analytics and segmentation
+          consistent regardless of how users type their address.
+        analytics_title: Normalize signup emails for analytics
+        crm_dedup_context: CRM / Data
+        crm_dedup_desc: Use the normalized form as a deduplication key. Identify accounts
+          that belong to the same person across different email formats.
+        crm_dedup_title: Merge duplicate accounts with normalized emails
+        crm_dup_context: CRM / Data
+        crm_dup_desc: Stop treating email variants as separate contacts. Normalization
+          reduces bloated contact counts and improves list hygiene.
+        crm_dup_title: Reduce false duplicates in CRM
+        heading: Real problems, real users.
+        import_context: Data Import
+        import_desc: Normalize emails before bulk import into your database. Prevent
+          format variations from creating duplicate records.
+        import_title: Standardize email data before import
+        integrations_context: Integrations
+        integrations_desc: Normalize before cross-system lookups. Ensure User.Name@Gmail.com
+          and username@gmail.com match as the same identity.
+        integrations_title: Improve email matching across systems
+        outreach_context: Email Marketing
+        outreach_desc: Run your list through the normalizer before a send. Catch variation-caused
+          bounces before they affect sender reputation.
+        outreach_title: Clean email records before outreach
+        subheading: Email Normalizer fits wherever contact data quality matters.
+      what_it_does:
+        clean_data_badge: Clean data
+        clean_data_body: The API trims whitespace, lowercases the address, fixes common
+          provider aliases, and returns a canonical email — so every address stored
+          in your system is consistent.
+        clean_data_heading: Normalize email input with one call.
+        integration_badge: Integration
+        integration_body: POST /v1/validation/email-normalize with the email in the
+          body and your API key in the header. No SDK required.
+        integration_heading: One request, instant normalization.
+        post_v1_validation_email_normalize_200: POST /v1/validation/email-normalize
+          → 200 OK
     email_validator:
+      api_combinations:
+        email_validator_works_even_better_when: Email Validator works even better
+          when paired with other Requiems APIs.
+        heading: Use together with complementary APIs.
       demo:
-        error_empty: "Enter an email address to verify."
-        error_rate_limit: "Too many requests. Wait a moment and try again."
-        error_generic: "Something went wrong. Try again."
-        error_no_data: "No data returned."
         badge_disposable: "✗ Disposable"
+        badge_invalid: Invalid
+        badge_no: "✗ No"
         badge_not_disposable: "✓ Not disposable"
-        suggestion_prefix: "Did you mean"
-      what_it_does:
-        post_v1_validation_email_200_ok: "POST /v1/validation/email → 200 OK"
-        fast_uncomplicated_easy_to_integrate: "Fast, uncomplicated, easy to integrate."
-        accurate_and_fast_every_single_check: "Accurate and fast — every single check."
-      hero:
-        syntax_check_live_mx_lookup_disposable: "Syntax check, live MX lookup, disposable detection, and typo correction — in a single API call."
-        read_the_docs: "Read the docs"
-        verify: "Verify"
-        get_api_key: "Get API Key"
-      show:
-        free_email_validator_syntax_mx_record: "Free Email Validator — Syntax, MX Record & Disposable Check | Requiems API"
-        description: "Validate any email address instantly. RFC 5322 syntax check, live MX record lookup, disposable domain detection, and typo correction — free, no account required."
-      use_cases:
-        heading: "Real problems, real users."
-        email_validator_fits_wherever_contact: "Email Validator fits wherever contact data quality matters."
-        conversion: "Conversion"
-        marketing: "Marketing"
-        growth: "Growth"
-        operations: "Operations"
-      api_combinations:
-        heading: "Use together with complementary APIs."
-        email_validator_works_even_better_when: "Email Validator works even better when paired with other Requiems APIs."
+        badge_valid: Valid
+        badge_yes: "✓ Yes"
+        error_empty: Enter an email address to verify.
+        error_generic: Something went wrong. Try again.
+        error_network: Could not reach the API. Check your connection.
+        error_no_data: No data returned.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        label_disposable: Disposable domain
+        label_domain: Domain
+        label_mx_record: MX record
+        label_normalized: Normalized
+        label_suggestion: Suggestion
+        label_syntax: Syntax
+        label_valid: Valid
+        suggestion_prefix: Did you mean
       faq:
-        heading: "Frequently asked questions"
-    phone_validator:
-      demo:
-        error_empty: "Enter a phone number to validate."
-        error_rate_limit: "Rate limit reached. Wait a moment and try again."
-        error_generic: "Something went wrong. Try again."
-        error_no_data: "No data returned."
-        label_country: "Country"
-        label_line_type: "Line type"
-        label_formatted: "Formatted"
-        label_carrier: "Carrier"
-        label_voip: "VoIP"
-        label_virtual_number: "Virtual number"
+        heading: Frequently asked questions
       hero:
-        badge: "Phone Validation API"
-        title: "Validate Phone Numbers"
-        title_highlight: "in Real Time"
-        subtitle: "Carrier lookup, line type detection, format normalization, and country code parsing — all from a single API call."
-        cta_primary: "Get started free"
-        cta_docs: "View docs"
-        try_live: "Try it live"
-        placeholder: "+14155552671"
-        submit: "Validate"
-        no_account: "No account required"
-        label_input: "Phone number"
-      what_it_does:
-        heading: "What the Phone Validation API Does"
-        subheading: "One endpoint. Everything you need to know about a phone number — validity, carrier, line type, and normalized format."
-        accuracy_heading: "Accuracy"
-        accuracy_body: "Every response includes country and region detection, carrier name, line type classification (mobile, landline, VoIP), and the phone number formatted to E.164 international standard — all normalized into a consistent JSON structure."
-        simplicity_heading: "Simplicity"
-        simplicity_body: "A single GET request with your API key is all it takes. No SDK, no configuration, no setup — just an HTTP call and a JSON response."
-      use_cases:
-        heading: "Validate Phone Numbers in Any Workflow"
-        subheading: "From fraud prevention to onboarding — if it touches a phone number, this API has you covered."
-        auth_context: "Auth / Signup"
-        auth_title: "Verify phone numbers at registration"
-        auth_body: "Ensure every phone number is real, reachable, and correctly formatted before accepting it during user signup."
-        fraud_context: "Fraud Prevention"
-        fraud_title: "Detect VoIP and virtual numbers"
-        fraud_body: "Flag disposable or virtual phone numbers used by bad actors. Block high-risk line types during sensitive operations."
-        integrations_context: "Integrations"
-        integrations_title: "Validate phone data in workflows"
-        integrations_body: "Normalize and validate partner-provided phone numbers before they enter your CRM, billing, or support systems."
-        sms_context: "SMS Marketing"
-        sms_title: "Confirm mobile numbers for campaigns"
-        sms_body: "Filter for mobile-only line types before sending SMS. Reduce undelivered messages and protect sender reputation."
-        onboarding_context: "Onboarding"
-        onboarding_title: "Standardize international numbers"
-        onboarding_body: "Convert phone numbers from any country into E.164 format automatically. One consistent format across your entire user base."
-        support_context: "Support"
-        support_title: "Look up caller info in real time"
-        support_body: "Identify carrier and country from an incoming phone number during support calls. Route to the right team instantly."
-      api_combinations:
-        heading: "Pair It With Other APIs"
-        subheading: "Combine Phone Validator with other Requiems APIs to build multi-point validation into a single workflow."
-        label_benefit: "Benefit:"
-        label_outcome: "Outcome:"
-        email_validator_name: "Phone Validator + Email Validator"
-        email_validator_benefit: "Validate phone and email in the same onboarding step."
-        email_validator_outcome: "Complete contact verification — reachable phone and deliverable email — before granting access."
-        email_normalizer_name: "Phone Validator + Email Normalizer"
-        email_normalizer_benefit: "Normalize email and validate phone together."
-        email_normalizer_outcome: "Consistent, verified contact data across both channels from a single API call."
-        domain_checker_name: "Phone Validator + Domain Checker"
-        domain_checker_benefit: "Verify phone number and check domain reputation at once."
-        domain_checker_outcome: "Multi-point identity confidence — confirmed phone, healthy domain — for high-risk signups."
-      faq:
-        heading: "Frequently Asked Questions"
-        support_prompt: "Still have questions?"
-        support_link: "Contact support"
-        q1: "What information does Phone Validator return?"
-        a1: "It returns whether the number is valid and reachable, the country and country code, the carrier name, the line type (mobile, landline, VoIP, toll-free, or premium), and the number formatted to E.164 and local standards."
-        q2: "Does it work with international phone numbers?"
-        a2: "Yes. It supports phone numbers from 200+ countries and territories. Pass the number in E.164 format with the country code, or let the API detect the country from the number pattern."
-        q3: "Can it detect VoIP and virtual numbers?"
-        a3: "Yes. The line_type field distinguishes mobile, landline, VoIP, toll-free, and premium-rate numbers. Use this to flag virtual or disposable numbers for fraud screening."
-        q4: "How accurate is the carrier detection?"
-        a4: "Carrier detection is sourced from global carrier databases and is accurate for most major carriers across North America, Europe, and Asia. Accuracy may vary for MVNOs and smaller regional carriers."
-        q5: "Is it free to try?"
-        a5: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
-      cta:
-        heading: "Automate this with Requiems."
-        body: "One API key. Phone validation, email verification, domain checks, and 50+ other APIs across validation, networking, finance, and more."
+        get_api_key: Get API Key
+        read_the_docs: Read the docs
+        syntax_check_live_mx_lookup_disposable: Syntax check, live MX lookup, disposable
+          detection, and typo correction — in a single API call.
+        verify: Verify
       show:
-        phone_validator_carrier_lookup_line: "Phone Validator — Carrier Lookup, Line Type & Format Normalization | Requiems API"
+        description: Validate any email address instantly. RFC 5322 syntax check,
+          live MX record lookup, disposable domain detection, and typo correction
+          — free, no account required.
+        free_email_validator_syntax_mx_record: Free Email Validator — Syntax, MX Record
+          & Disposable Check | Requiems API
+      use_cases:
+        conversion: Conversion
+        email_validator_fits_wherever_contact: Email Validator fits wherever contact
+          data quality matters.
+        growth: Growth
+        heading: Real problems, real users.
+        marketing: Marketing
+        operations: Operations
+      what_it_does:
+        accurate_and_fast_every_single_check: Accurate and fast — every single check.
+        fast_uncomplicated_easy_to_integrate: Fast, uncomplicated, easy to integrate.
+        post_v1_validation_email_200_ok: POST /v1/validation/email → 200 OK
     index:
-      one_api_key_unlocks_all_tools_plus_50: "One API key unlocks all tools — plus 50+ more APIs across validation, finance, networking, and more."
-      tools_requiems_api: "Tools — Requiems API"
-      interactive_api_tools: "Interactive API Tools"
+      interactive_api_tools: Interactive API Tools
+      one_api_key_unlocks_all_tools_plus_50: One API key unlocks all tools — plus
+        50+ more APIs across validation, finance, networking, and more.
+      tools_requiems_api: Tools — Requiems API
+    phone_validator:
+      api_combinations:
+        domain_checker_benefit: Verify phone number and check domain reputation at
+          once.
+        domain_checker_name: Phone Validator + Domain Checker
+        domain_checker_outcome: Multi-point identity confidence — confirmed phone,
+          healthy domain — for high-risk signups.
+        email_normalizer_benefit: Normalize email and validate phone together.
+        email_normalizer_name: Phone Validator + Email Normalizer
+        email_normalizer_outcome: Consistent, verified contact data across both channels
+          from a single API call.
+        email_validator_benefit: Validate phone and email in the same onboarding step.
+        email_validator_name: Phone Validator + Email Validator
+        email_validator_outcome: Complete contact verification — reachable phone and
+          deliverable email — before granting access.
+        heading: Pair It With Other APIs
+        label_benefit: 'Benefit:'
+        label_outcome: 'Outcome:'
+        subheading: Combine Phone Validator with other Requiems APIs to build multi-point
+          validation into a single workflow.
+      cta:
+        body: One API key. Phone validation, email verification, domain checks, and
+          50+ other APIs across validation, networking, finance, and more.
+        heading: Automate this with Requiems.
+      demo:
+        error_empty: Enter a phone number to validate.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No data returned.
+        error_rate_limit: Rate limit reached. Wait a moment and try again.
+        label_carrier: Carrier
+        label_country: Country
+        label_formatted: Formatted
+        label_line_type: Line type
+        label_virtual_number: Virtual number
+        label_voip: VoIP
+        result_failed_heading: Validation failed
+      faq:
+        a1: It returns whether the number is valid and reachable, the country and
+          country code, the carrier name, the line type (mobile, landline, VoIP, toll-free,
+          or premium), and the number formatted to E.164 and local standards.
+        a2: Yes. It supports phone numbers from 200+ countries and territories. Pass
+          the number in E.164 format with the country code, or let the API detect
+          the country from the number pattern.
+        a3: Yes. The line_type field distinguishes mobile, landline, VoIP, toll-free,
+          and premium-rate numbers. Use this to flag virtual or disposable numbers
+          for fraud screening.
+        a4: Carrier detection is sourced from global carrier databases and is accurate
+          for most major carriers across North America, Europe, and Asia. Accuracy
+          may vary for MVNOs and smaller regional carriers.
+        a5: The interactive demo requires no account. A free tier is available after
+          signup with a monthly request quota. See the pricing page for limits.
+        heading: Frequently Asked Questions
+        q1: What information does Phone Validator return?
+        q2: Does it work with international phone numbers?
+        q3: Can it detect VoIP and virtual numbers?
+        q4: How accurate is the carrier detection?
+        q5: Is it free to try?
+        support_link: Contact support
+        support_prompt: Still have questions?
+      hero:
+        badge: Phone Validation API
+        cta_docs: View docs
+        cta_primary: Get started free
+        label_input: Phone number
+        no_account: No account required
+        placeholder: "+14155552671"
+        submit: Validate
+        subtitle: Carrier lookup, line type detection, format normalization, and country
+          code parsing — all from a single API call.
+        title: Validate Phone Numbers
+        title_highlight: in Real Time
+        try_live: Try it live
+      show:
+        phone_validator_carrier_lookup_line: Phone Validator — Carrier Lookup, Line
+          Type & Format Normalization | Requiems API
+      use_cases:
+        auth_body: Ensure every phone number is real, reachable, and correctly formatted
+          before accepting it during user signup.
+        auth_context: Auth / Signup
+        auth_title: Verify phone numbers at registration
+        fraud_body: Flag disposable or virtual phone numbers used by bad actors. Block
+          high-risk line types during sensitive operations.
+        fraud_context: Fraud Prevention
+        fraud_title: Detect VoIP and virtual numbers
+        heading: Validate Phone Numbers in Any Workflow
+        integrations_body: Normalize and validate partner-provided phone numbers before
+          they enter your CRM, billing, or support systems.
+        integrations_context: Integrations
+        integrations_title: Validate phone data in workflows
+        onboarding_body: Convert phone numbers from any country into E.164 format
+          automatically. One consistent format across your entire user base.
+        onboarding_context: Onboarding
+        onboarding_title: Standardize international numbers
+        sms_body: Filter for mobile-only line types before sending SMS. Reduce undelivered
+          messages and protect sender reputation.
+        sms_context: SMS Marketing
+        sms_title: Confirm mobile numbers for campaigns
+        subheading: From fraud prevention to onboarding — if it touches a phone number,
+          this API has you covered.
+        support_body: Identify carrier and country from an incoming phone number during
+          support calls. Route to the right team instantly.
+        support_context: Support
+        support_title: Look up caller info in real time
+      what_it_does:
+        accuracy_body: Every response includes country and region detection, carrier
+          name, line type classification (mobile, landline, VoIP), and the phone number
+          formatted to E.164 international standard — all normalized into a consistent
+          JSON structure.
+        accuracy_heading: Accuracy
+        heading: What the Phone Validation API Does
+        simplicity_body: A single GET request with your API key is all it takes. No
+          SDK, no configuration, no setup — just an HTTP call and a JSON response.
+        simplicity_heading: Simplicity
+        subheading: One endpoint. Everything you need to know about a phone number
+          — validity, carrier, line type, and normalized format.
+    quotes:
+      api_combinations:
+        combine_the_quotes_api_with_other: Combine the Quotes API with other endpoints
+          to build richer experiences.
+        detect_language: Detect Language
+        filter_or_route_quotes_by_language: Filter or route quotes by language before
+          presenting them to a multilingual audience.
+        lorem_ipsum: Lorem Ipsum
+        mix_real_quotes_with_generated_filler: Mix real quotes with generated filler
+          text for flexible content layouts and design systems.
+        pairs_well_with: Pairs well with
+        score_the_emotional_tone_of_a_quote: Score the emotional tone of a quote before
+          displaying it — surface only positive, uplifting results.
+        sentiment_analysis: Sentiment Analysis
+      cta:
+        ready_to_add_quotes_to_your_app: Ready to add quotes to your app?
+        sign_up_for_free_and_start_fetching: Sign up for free and start fetching inspirational
+          quotes in minutes. No credit card required.
+      demo:
+        error_generic: Something went wrong. Please try again.
+        error_network: Network error. Please check your connection.
+        error_rate_limit: Rate limit reached. Please wait a moment and try again.
+        error_security_token: Security token missing. Please refresh the page.
+        error_unexpected: Unexpected response from the API.
+      faq:
+        heading: Frequently Asked Questions
+      show:
+        random_quote_generator_free_quotes_api: Random Quote Generator — Free Quotes
+          API Tool
+      use_cases:
+        add_a_rotating_quote_to_transactional: Add a rotating quote to transactional
+          emails, weekly digests, or newsletter signatures.
+        ai_amp_chatbot_enrichment: AI &amp; chatbot enrichment
+        auto_generate_quote_cards_for_twitter_x: Auto-generate quote cards for Twitter/X,
+          Instagram, or LinkedIn without a content team.
+        design_placeholders: Design placeholders
+        email_footers_amp_newsletters: Email footers &amp; newsletters
+        fuel_daily_check_in_screens_push: Fuel daily check-in screens, push notifications,
+          or meditation app openers with curated wisdom.
+        motivation_amp_wellness_apps: Motivation &amp; wellness apps
+        quote_of_the_day: Quote of the day
+        replace_lorem_ipsum_with_real: Replace Lorem Ipsum with real, meaningful text
+          in wireframes, mockups, and UI demos.
+        seed_prompts_conversation_starters_or: Seed prompts, conversation starters,
+          or personality layers for AI assistants and chatbots.
+        show_a_fresh_inspirational_quote_on: Show a fresh inspirational quote on every
+          visit — dashboards, homepages, onboarding screens.
+        social_media_content: Social media content
+        what_can_you_build_with_it: What can you build with it?
+      what_it_does:
+        attributed: Attributed
+        batch_endpoint: batch endpoint
+        batch_ready: Batch ready
+        every_quote_includes_the_author_s_name: Every quote includes the author's
+          name — ready for display.
+        fast: Fast
+        fetch_up_to_50_quotes_per_request_with: Fetch up to 50 quotes per request
+          with the batch endpoint.
+        median_response_under_1_second_quotes: Median response under 1 second. Quotes
+          served globally.
+        random_quotes_api: Random Quotes API
+        what_is_the_random_quotes_api: What is the Random Quotes API?
+    sentiment_analysis:
+      api_combinations:
+        pair_it_with_other_apis: Pair it with other APIs
+        sentiment_works_best_as_part_of_a: Sentiment works best as part of a pipeline.
+          Here are three natural combinations.
+      demo:
+        error_empty: Enter some text to analyze.
+        error_generic: Something went wrong. Try again.
+        error_network: Could not reach the API. Check your connection.
+        error_no_data: No data returned.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        input_placeholder: Paste any text, review, comment, or feedback...
+        label_breakdown: Breakdown
+        label_confident: confident
+        label_negative: Negative
+        label_neutral: Neutral
+        label_positive: Positive
+        result_heading: Sentiment Analysis
+      faq:
+        heading: Frequently Asked Questions
+      hero:
+        analyze: Analyze
+        get_api_key: Get API Key
+        know_how_your_text_lands: Know how your text lands.
+        read_the_docs: Read the docs
+      show:
+        free_sentiment_analysis_tool_positive: Free Sentiment Analysis Tool — Positive,
+          Negative & Neutral Text Detection | Requiems API
+      use_cases:
+        anywhere_text_flows_through_your_system: Anywhere text flows through your
+          system, sentiment gives you signal.
+        built_for_real_use_cases: Built for real use cases
+      what_it_does:
+        one_call_three_values_enough_signal_to: One call. Three values. Enough signal
+          to act.
+        positive_negative_or_neutral: Positive, negative, or neutral
+        proportional_scores_across_all_classes: Proportional scores across all classes
+        what_it_does: What it does
+    unit_conversion:
+      api_combinations:
+        unit_conversion_becomes_even_more: Unit Conversion becomes even more useful
+          when combined with other Requiems APIs.
+      demo:
+        error_fill_all_fields: Fill in all fields.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No data returned.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        input_placeholder: Enter a value
+        label_formula: Formula
+        label_from: From
+        label_input: Input
+        label_result: Result
+        label_to: To
+        result_failed_heading: Conversion failed
+        result_heading: Conversion Result
+        value_label: Value
+      hero:
+        acres: Acres
+        celsius: Celsius
+        centimeters: Centimeters
+        convert: Convert
+        cubic_meters: Cubic Meters
+        cups: Cups
+        fahrenheit: Fahrenheit
+        feet: Feet
+        fluid_ounces: Fluid Ounces
+        gallons_us: Gallons (US)
+        get_api_key: Get API Key
+        grams: Grams
+        hectares: Hectares
+        inches: Inches
+        kelvin: Kelvin
+        kilograms: Kilograms
+        kilometers: Kilometers
+        km_hour: Km/hour
+        knots: Knots
+        liters: Liters
+        long_tons_uk: Long Tons (UK)
+        meters: Meters
+        meters_second: Meters/second
+        miles: Miles
+        miles_hour: Miles/hour
+        milliliters: Milliliters
+        millimeters: Millimeters
+        nautical_miles: Nautical Miles
+        ounces: Ounces
+        pints: Pints
+        pounds: Pounds
+        quarts: Quarts
+        read_the_docs: Read the docs
+        short_tons_us: Short Tons (US)
+        source_unit: Source unit
+        square_feet: Square Feet
+        square_kilometers: Square Kilometers
+        square_meters: Square Meters
+        square_miles: Square Miles
+        target_unit: Target unit
+        tons_metric: Tons (metric)
+        yards: Yards
+      show:
+        free_unit_conversion_api_miles_to_km_kg: Free Unit Conversion API — Miles
+          to KM, KG to LB, Celsius to Fahrenheit | Requiems API
+      use_cases:
+        development: Development
+        education: Education
+        fitness: Fitness
+        food: Food
+        real_problems_real_conversions: Real problems, real conversions.
+        science: Science
+        unit_conversion_fits_anywhere: Unit Conversion fits anywhere measurements
+          need to be translated accurately and instantly.
+      what_it_does:
+        get_v1_technology_convert_200_ok: GET /v1/technology/convert → 200 OK
+        reliable_conversions_with_transparent: Reliable conversions with transparent
+          formulas.
+        simple_api_requests_instant_results: Simple API requests, instant results.

@@ -1,86 +1,103 @@
+---
 fr:
   devise:
-    shared:
-      links:
-        sign_up: "S'inscrire"
-        log_in: "Se connecter"
-    unlocks:
+    confirmations:
+      confirmed: Votre compte a bien été confirmé.
       new:
-        resend_unlock_instructions: "Renvoyer les instructions de déverrouillage"
-      send_instructions: "Vous allez recevoir un e-mail contenant les instructions pour déverrouiller votre compte."
-      send_paranoid_instructions: "Si votre compte existe, vous recevrez dans quelques minutes un e-mail avec les instructions pour le déverrouiller."
-      unlocked: "Votre compte a été déverrouillé. Connectez-vous pour continuer."
+        resend_confirmation_instructions: Renvoyer les instructions de confirmation
+      send_instructions: Vous allez recevoir un e-mail avec les instructions nécessaires
+        pour confirmer votre compte.
+      send_paranoid_instructions: Si votre adresse e-mail est connue, vous recevrez
+        un e-mail dans quelques instants avec les instructions pour confirmer votre
+        compte.
+    failure:
+      already_authenticated: Vous êtes déjà connecté.
+      inactive: Votre compte n'a pas encore été activé.
+      invalid: "%{authentication_keys} ou mot de passe invalide."
+      last_attempt: Votre compte sera verrouillé après une autre tentative infructueuse.
+      locked: Votre compte est verrouillé.
+      not_found_in_database: "%{authentication_keys} ou mot de passe invalide."
+      timeout: Votre session a expiré. Veuillez vous reconnecter pour continuer.
+      unauthenticated: Vous devez vous connecter ou vous inscrire pour continuer.
+      unconfirmed: Vous devez confirmer votre compte e-mail pour continuer.
     mailer:
-      reset_password_instructions:
-        someone_has_requested_a_link_to_change: "Quelqu'un a demandé un lien pour modifier votre mot de passe. Vous pouvez le faire via le lien ci-dessous."
-        if_you_didn_t_request_this_please: "Si vous n'avez pas fait cette demande, veuillez ignorer ce courriel."
-        your_password_won_t_change_until_you: "Votre mot de passe ne changera pas tant que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau."
-        change_my_password: "Changer mon mot de passe"
-        subject: "Instructions pour la réinitialisation de votre mot de passe"
       confirmation_instructions:
-        you_can_confirm_your_account_email: "Vous pouvez confirmer l'adresse e-mail de votre compte via le lien ci-dessous :"
-        confirm_my_account: "Confirmer mon compte"
-        subject: "Instructions de confirmation"
-      password_change:
-        we_re_contacting_you_to_notify_you_that: "Nous vous contactons pour vous informer que votre mot de passe a été modifié."
-        subject: "Votre mot de passe a été modifié"
-      unlock_instructions:
-        unlock_my_account: "Débloquer mon compte"
-        your_account_has_been_locked_due_to_an: "Votre compte a été bloqué en raison d'un nombre excessif de tentatives de connexion infructueuses."
-        click_the_link_below_to_unlock_your: "Cliquez sur le lien ci-dessous pour déverrouiller votre compte :"
-        subject: "Instructions pour le déverrouillage de votre compte"
+        confirm_my_account: Confirmer mon compte
+        subject: Instructions de confirmation
+        you_can_confirm_your_account_email: 'Vous pouvez confirmer l''adresse e-mail
+          de votre compte via le lien ci-dessous :'
       email_changed:
-        subject: "Votre adresse e-mail a été modifiée"
+        subject: Votre adresse e-mail a été modifiée
+      password_change:
+        subject: Votre mot de passe a été modifié
+        we_re_contacting_you_to_notify_you_that: Nous vous contactons pour vous informer
+          que votre mot de passe a été modifié.
+      reset_password_instructions:
+        change_my_password: Changer mon mot de passe
+        if_you_didn_t_request_this_please: Si vous n'avez pas fait cette demande,
+          veuillez ignorer ce courriel.
+        someone_has_requested_a_link_to_change: Quelqu'un a demandé un lien pour modifier
+          votre mot de passe. Vous pouvez le faire via le lien ci-dessous.
+        subject: Instructions pour la réinitialisation de votre mot de passe
+        your_password_won_t_change_until_you: Votre mot de passe ne changera pas tant
+          que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau.
+      unlock_instructions:
+        click_the_link_below_to_unlock_your: 'Cliquez sur le lien ci-dessous pour
+          déverrouiller votre compte :'
+        subject: Instructions pour le déverrouillage de votre compte
+        unlock_my_account: Débloquer mon compte
+        your_account_has_been_locked_due_to_an: Votre compte a été bloqué en raison
+          d'un nombre excessif de tentatives de connexion infructueuses.
+    omniauth_callbacks:
+      failure: Impossible de vous authentifier depuis %{kind} car "%{reason}".
+      success: Authentifié avec succès depuis %{kind}.
     passwords:
       edit:
-        change_my_password: "Changer mon mot de passe"
-        change_your_password: "Changez votre mot de passe"
-        confirm_new_password: "Confirmer le nouveau mot de passe"
-        new_password: "Nouveau mot de passe"
-      no_token: "Vous ne pouvez accéder à cette page que depuis un lien de réinitialisation du mot de passe envoyé par e-mail. Si vous venez d'utiliser le formulaire de réinitialisation, vérifiez vos e-mails pour le lien de réinitialisation."
-      send_instructions: "Vous allez recevoir un e-mail contenant les instructions pour réinitialiser votre mot de passe."
-      send_paranoid_instructions: "Si votre adresse e-mail est connue, vous recevrez dans quelques minutes un e-mail avec les instructions pour réinitialiser votre mot de passe."
-      updated: "Votre mot de passe a été modifié avec succès. Vous êtes maintenant connecté."
-      updated_not_active: "Votre mot de passe a été modifié avec succès."
-    confirmations:
-      new:
-        resend_confirmation_instructions: "Renvoyer les instructions de confirmation"
-      confirmed: "Votre compte a bien été confirmé."
-      send_instructions: "Vous allez recevoir un e-mail avec les instructions nécessaires pour confirmer votre compte."
-      send_paranoid_instructions: "Si votre adresse e-mail est connue, vous recevrez un e-mail dans quelques instants avec les instructions pour confirmer votre compte."
-    failure:
-      already_authenticated: "Vous êtes déjà connecté."
-      inactive: "Votre compte n'a pas encore été activé."
-      invalid: "%{authentication_keys} ou mot de passe invalide."
-      locked: "Votre compte est verrouillé."
-      last_attempt: "Votre compte sera verrouillé après une autre tentative infructueuse."
-      not_found_in_database: "%{authentication_keys} ou mot de passe invalide."
-      timeout: "Votre session a expiré. Veuillez vous reconnecter pour continuer."
-      unauthenticated: "Vous devez vous connecter ou vous inscrire pour continuer."
-      unconfirmed: "Vous devez confirmer votre compte e-mail pour continuer."
-    omniauth_callbacks:
-      failure: "Impossible de vous authentifier depuis %{kind} car \"%{reason}\"."
-      success: "Authentifié avec succès depuis %{kind}."
+        change_my_password: Changer mon mot de passe
+        change_your_password: Changez votre mot de passe
+        confirm_new_password: Confirmer le nouveau mot de passe
+        new_password: Nouveau mot de passe
+      no_token: Vous ne pouvez accéder à cette page que depuis un lien de réinitialisation
+        du mot de passe envoyé par e-mail. Si vous venez d'utiliser le formulaire
+        de réinitialisation, vérifiez vos e-mails pour le lien de réinitialisation.
+      send_instructions: Vous allez recevoir un e-mail contenant les instructions
+        pour réinitialiser votre mot de passe.
+      send_paranoid_instructions: Si votre adresse e-mail est connue, vous recevrez
+        dans quelques minutes un e-mail avec les instructions pour réinitialiser votre
+        mot de passe.
+      updated: Votre mot de passe a été modifié avec succès. Vous êtes maintenant
+        connecté.
+      updated_not_active: Votre mot de passe a été modifié avec succès.
     registrations:
-      destroyed: "Au revoir ! Votre compte a été supprimé avec succès. Nous espérons vous revoir bientôt."
-      signed_up: "Bienvenue ! Vous vous êtes inscrit et connecté avec succès."
-      signed_up_but_inactive: "Vous vous êtes inscrit avec succès. Cependant, nous n'avons pas pu vous connecter car votre compte n'a pas encore été activé."
-      signed_up_but_locked: "Vous vous êtes inscrit avec succès. Cependant, nous n'avons pas pu vous connecter car votre compte est verrouillé."
-      signed_up_but_unconfirmed: "Un message contenant les instructions pour valider votre compte a été envoyé à l'adresse %{email}. Vous devez valider votre adresse e-mail pour pouvoir vous connecter."
-      update_needs_confirmation: "Votre compte a bien été mis à jour mais nous devons vérifier votre nouvelle adresse e-mail. Vous recevrez un e-mail contenant les instructions de confirmation."
-      updated: "Votre compte a bien été mis à jour."
-      updated_but_not_signed_in: "Votre compte a bien été mis à jour, mais comme votre mot de passe a été modifié, vous devez vous reconnecter."
+      destroyed: Au revoir ! Votre compte a été supprimé avec succès. Nous espérons
+        vous revoir bientôt.
+      signed_up: Bienvenue ! Vous vous êtes inscrit et connecté avec succès.
+      signed_up_but_inactive: Vous vous êtes inscrit avec succès. Cependant, nous
+        n'avons pas pu vous connecter car votre compte n'a pas encore été activé.
+      signed_up_but_locked: Vous vous êtes inscrit avec succès. Cependant, nous n'avons
+        pas pu vous connecter car votre compte est verrouillé.
+      signed_up_but_unconfirmed: Un message contenant les instructions pour valider
+        votre compte a été envoyé à l'adresse %{email}. Vous devez valider votre adresse
+        e-mail pour pouvoir vous connecter.
+      update_needs_confirmation: Votre compte a bien été mis à jour mais nous devons
+        vérifier votre nouvelle adresse e-mail. Vous recevrez un e-mail contenant
+        les instructions de confirmation.
+      updated: Votre compte a bien été mis à jour.
+      updated_but_not_signed_in: Votre compte a bien été mis à jour, mais comme votre
+        mot de passe a été modifié, vous devez vous reconnecter.
     sessions:
-      signed_in: "Connecté avec succès."
-      signed_out: "Déconnecté avec succès."
-      already_signed_out: "Déconnecté avec succès."
-  errors:
-    messages:
-      already_confirmed: "a déjà été confirmé, veuillez essayer de vous connecter"
-      confirmation_period_expired: "doit être confirmé dans les %{period}, veuillez en demander un nouveau"
-      expired: "a expiré, veuillez en demander un nouveau"
-      not_found: "n'a pas été trouvé"
-      not_locked: "n'était pas verrouillé"
-      not_saved:
-        one: "Une erreur a empêché ce/cette %{resource} d'être enregistré(e) :"
-        other: "%{count} erreurs ont empêché ce/cette %{resource} d'être enregistré(e) :"
+      already_signed_out: Déconnecté avec succès.
+      signed_in: Connecté avec succès.
+      signed_out: Déconnecté avec succès.
+    shared:
+      links:
+        log_in: Se connecter
+        sign_up: S'inscrire
+    unlocks:
+      new:
+        resend_unlock_instructions: Renvoyer les instructions de déverrouillage
+      send_instructions: Vous allez recevoir un e-mail contenant les instructions
+        pour déverrouiller votre compte.
+      send_paranoid_instructions: Si votre compte existe, vous recevrez dans quelques
+        minutes un e-mail avec les instructions pour le déverrouiller.
+      unlocked: Votre compte a été déverrouillé. Connectez-vous pour continuer.

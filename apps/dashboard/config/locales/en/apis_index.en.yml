@@ -1,15 +1,18 @@
+---
 en:
   apis_index:
-    most_popular:
-      our_most_popular_apis_based_on_usage: "Our most popular APIs based on usage and customer satisfaction."
-    systems_section:
-      composed_signal_engines_one_call: "Composed signal engines — one call returns a structured decision"
-      backend_systems: "Backend Systems"
     header:
-      page_heading: "API Directory"
-      sign_up_for_a_free_api_key: "sign up for a free API key"
-      get_free_api_key: "Get Free API Key"
-      intro_prefix: "Unlock all our APIs with a single API key —"
-      intro_signed_in: "browse our collection of production-ready APIs."
-      signup_cta_html: "sign up for a <strong>free API key</strong>"
+      get_free_api_key: Get Free API Key
+      intro_prefix: Unlock all our APIs with a single API key —
+      intro_signed_in: browse our collection of production-ready APIs.
       intro_signed_out_html: "%{link} to get started."
+      page_heading: API Directory
+      sign_up_for_a_free_api_key: sign up for a free API key
+      signup_cta_html: sign up for a <strong>free API key</strong>
+    most_popular:
+      our_most_popular_apis_based_on_usage: Our most popular APIs based on usage and
+        customer satisfaction.
+    systems_section:
+      backend_systems: Backend Systems
+      composed_signal_engines_one_call: Composed signal engines — one call returns
+        a structured decision

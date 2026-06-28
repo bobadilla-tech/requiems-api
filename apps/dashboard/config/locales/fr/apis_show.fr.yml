@@ -1,27 +1,29 @@
+---
 fr:
   apis_show:
-    playground:
-      rate_limit_title: "Tests trop rapides !"
-      1_request_per_minute: "1 requête par minute"
-      create_free_account: "Créer un compte gratuit"
-      4_times_more_requests: "4 fois plus de demandes"
-      anonymous_limit_html: "La démo autorise <strong>%{limit}</strong> pour les utilisateurs anonymes."
-      signup_benefit_html: "Inscrivez-vous gratuitement et obtenez <strong>%{requests}</strong> — vous pouvez continuer à tester immédiatement."
-      status: "Statut:"
-      error: "Erreur"
-      item1: "article 1"
     endpoint_documentation:
-      examples_title: "Exemples de code"
-      error_responses: "Réponses d'erreur"
-      response_fields: "Champs de réponse"
-      parameters_heading: "Paramètres"
-      column_name: "Nom"
-      column_type: "Type"
-      column_required: "Requis"
-      column_description: "Description"
-      column_field: "Champ"
-      copy_code: "Copier le code"
-      copy_url: "Copier l'URL"
-      try_it_out: "Essayez-le"
-      live_demo: "Démo en direct"
-      optional: "Facultatif"
+      column_description: Description
+      column_field: Champ
+      column_name: Nom
+      column_required: Requis
+      column_type: Type
+      copy_code: Copier le code
+      copy_url: Copier l'URL
+      error_responses: Réponses d'erreur
+      examples_title: Exemples de code
+      live_demo: Démo en direct
+      optional: Facultatif
+      parameters_heading: Paramètres
+      response_fields: Champs de réponse
+      try_it_out: Essayez-le
+    playground:
+      1_request_per_minute: 1 requête par minute
+      4_times_more_requests: 4 fois plus de demandes
+      anonymous_limit_html: La démo autorise <strong>%{limit}</strong> pour les utilisateurs
+        anonymes.
+      create_free_account: Créer un compte gratuit
+      error: Erreur
+      rate_limit_title: Tests trop rapides !
+      signup_benefit_html: Inscrivez-vous gratuitement et obtenez <strong>%{requests}</strong>
+        — vous pouvez continuer à tester immédiatement.
+      status: 'Statut:'

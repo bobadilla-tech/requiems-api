@@ -1,5 +1,5 @@
 ---
-fr:
+es:
   account_deletion_mailer:
     confirmation:
-      hi_email: Salut %{email},
+      hi_email: Hola %{email},

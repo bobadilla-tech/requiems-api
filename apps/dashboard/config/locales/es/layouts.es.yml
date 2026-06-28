@@ -1,6 +1,7 @@
+---
 es:
   layouts:
     footer:
-      linkedin: "LinkedIn"
+      linkedin: LinkedIn
     navbar:
-      requiems: "Réquiems"
+      requiems: Réquiems

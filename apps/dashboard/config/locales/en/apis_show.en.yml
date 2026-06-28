@@ -1,27 +1,29 @@
+---
 en:
   apis_show:
-    playground:
-      rate_limit_title: "Testing too fast!"
-      1_request_per_minute: "1 request per minute"
-      create_free_account: "Create free account"
-      4_times_more_requests: "4× more requests"
-      anonymous_limit_html: "The demo allows <strong>%{limit}</strong> for anonymous users."
-      signup_benefit_html: "Sign up for free and get <strong>%{requests}</strong> — you can keep testing right away."
-      status: "Status:"
-      error: "Error"
-      item1: "item1"
     endpoint_documentation:
-      examples_title: "Code Examples"
-      error_responses: "Error Responses"
-      response_fields: "Response Fields"
-      parameters_heading: "Parameters"
-      column_name: "Name"
-      column_type: "Type"
-      column_required: "Required"
-      column_description: "Description"
-      column_field: "Field"
-      copy_code: "Copy code"
-      copy_url: "Copy URL"
-      try_it_out: "Try it out"
-      live_demo: "Live Demo"
-      optional: "Optional"
+      column_description: Description
+      column_field: Field
+      column_name: Name
+      column_required: Required
+      column_type: Type
+      copy_code: Copy code
+      copy_url: Copy URL
+      error_responses: Error Responses
+      examples_title: Code Examples
+      live_demo: Live Demo
+      optional: Optional
+      parameters_heading: Parameters
+      response_fields: Response Fields
+      try_it_out: Try it out
+    playground:
+      1_request_per_minute: 1 request per minute
+      4_times_more_requests: 4× more requests
+      anonymous_limit_html: The demo allows <strong>%{limit}</strong> for anonymous
+        users.
+      create_free_account: Create free account
+      error: Error
+      rate_limit_title: Testing too fast!
+      signup_benefit_html: Sign up for free and get <strong>%{requests}</strong> —
+        you can keep testing right away.
+      status: 'Status:'

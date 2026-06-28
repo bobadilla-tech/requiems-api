@@ -1,327 +1,339 @@
+---
 en:
   admin:
-    access_denied: "Access denied. Admin privileges required."
     abuse_reports:
-      investigate_success: "Report marked as investigating."
-      investigate_error: "Failed to update report status."
-      resolve_success: "Report resolved successfully."
-      resolve_error: "Failed to resolve report."
-      not_found: "Abuse report not found."
+      index:
+        abuse: Abuse
+        abuse_reports: Abuse Reports
+        all_statuses: All Statuses
+        all_types: All Types
+        apply_filters: Apply Filters
+        created_at_ago: "%{created_at} ago"
+        investigating: Investigating
+        malicious_activity: Malicious Activity
+        monitor_and_manage_abuse_reports: Monitor and manage abuse reports
+        no_reports_found: No reports found
+        reported: Reported
+        reports_count: Reports (%{count})
+        resolved: Resolved
+        search_by_user_email_or_description: Search by user email or description
+        spam: Spam
+        terms_violation: Terms Violation
+        total_reports: Total Reports
+      investigate_error: Failed to update report status.
+      investigate_success: Report marked as investigating.
+      not_found: Abuse report not found.
+      resolve_error: Failed to resolve report.
+      resolve_success: Report resolved successfully.
       show:
-        key_prefix: "Key Prefix"
-        this_month: "This Month"
-        reported_user: "Reported User"
-        reported_at: "Reported At"
-        last_request: "Last Request"
-        report_resolved: "Report Resolved"
-        other_reports_for_this_user: "Other Reports for This User"
-        admin_actions: "Admin Actions"
-        report_details: "Report Details"
-        action_guidelines: "Action Guidelines"
-        view_full_profile: "View Full Profile"
-        take_action_on_this_abuse_report: "Take action on this abuse report"
-        report_type: "Report Type"
-        suspended: "Suspended"
-        admin: "Admin"
-        reported: "Reported"
-        resolve: "Resolve:"
-        investigate: "Investigate:"
-        suspend: "Suspend:"
-        ban: "Ban:"
-        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
-        are_you_sure_you_want_to_ban_this_user: "Are you sure you want to BAN this user? This will revoke all API keys and cancel their subscription."
-        are_you_sure_you_want_to_resolve_this: "Are you sure you want to resolve this report?"
+        action_guidelines: Action Guidelines
+        admin: Admin
+        admin_actions: Admin Actions
+        are_you_sure_you_want_to_ban_this_user: Are you sure you want to BAN this
+          user? This will revoke all API keys and cancel their subscription.
+        are_you_sure_you_want_to_resolve_this: Are you sure you want to resolve this
+          report?
+        ban: 'Ban:'
+        by_email: by %{email}
         created_at_ago: "(%{created_at} ago)"
-        by_email: "by %{email}"
+        investigate: 'Investigate:'
+        key_prefix: Key Prefix
+        last_request: Last Request
         last_request_at_ago: "%{last_request_at} ago"
-      index:
-        apply_filters: "Apply Filters"
-        abuse_reports: "Abuse Reports"
-        total_reports: "Total Reports"
-        monitor_and_manage_abuse_reports: "Monitor and manage abuse reports"
-        no_reports_found: "No reports found"
-        reported: "Reported"
-        terms_violation: "Terms Violation"
-        all_types: "All Types"
-        investigating: "Investigating"
-        spam: "Spam"
-        malicious_activity: "Malicious Activity"
-        all_statuses: "All Statuses"
-        abuse: "Abuse"
-        resolved: "Resolved"
-        search_by_user_email_or_description: "Search by user email or description"
-        reports_count: "Reports (%{count})"
-        created_at_ago: "%{created_at} ago"
-    api_keys:
-      revoke_success: "API key revoked successfully."
-      revoke_error: "Failed to revoke API key."
-      not_found: "API key not found."
-      index:
-        no_api_keys_found: "No API keys found"
-        view_and_manage_all_api_keys_across: "View and manage all API keys across users"
-        apply_filters: "Apply Filters"
-        try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
-        environment: "Environment"
-        search: "Search"
-        search_placeholder: "Search by key prefix, user email, or name"
-        status: "Status"
-        active: "Active"
-        revoked: "Revoked"
-        clear: "Clear"
-      show:
-        used_at: "Used At"
-        view_user_profile: "View User Profile"
-        no_usage_recorded_for_this_key: "No usage recorded for this key."
-        admin_actions: "Admin Actions"
-        revoke_reason: "Revoke Reason"
-        revoked_at: "Revoked At"
-        recent_usage: "Recent Usage"
-        key_details: "Key Details"
-        key_prefix: "Key Prefix"
-        credits: "Credits"
-        owner: "Owner"
-        are_you_sure_you_want_to_revoke_this: "Are you sure you want to revoke this API key? This cannot be undone."
-    private_deployments:
-      subdomain_required: "Subdomain slug is required."
-      secret_required: "Tenant secret is required."
-      activate_success: "Deployment marked as active. Confirmation email sent to %{email}."
-      activate_error: "Failed to activate deployment."
-      cancel_success: "Deployment request cancelled."
-      cancel_error: "Failed to cancel deployment."
-      not_found: "Deployment request not found."
-      show:
-        cancel_request: "Cancel Request"
-        the_backend_secret_value_set_on_their: "The BACKEND_SECRET value set on their VPS. Min 32 chars."
-        tenant_secret_backend_secret: "Tenant Secret (BACKEND_SECRET)"
-        cancel_deployment_request: "Cancel Deployment Request"
-        lowercase_letters_numbers_hyphens_2_40: "Lowercase letters, numbers, hyphens. 2–40 chars."
-        admin_notes: "Admin Notes"
-        enabled_services_value: "ENABLED_SERVICES value"
-        live_deployment: "Live Deployment"
-        deployed_at: "Deployed At"
-        server_tier: "Server Tier"
-        monthly_price: "Monthly Price"
-        subdomain_slug: "Subdomain Slug"
-        mark_as_deployed_send_email: "Mark as Deployed + Send Email"
-        32_character_secret: "32+ character secret"
-        account: "Account"
-        activating: "Activating..."
-        hetzner_server_id_ip_any_notes: "Hetzner server ID, IP, any notes..."
-        mark_this_request_as_cancelled: "Mark this request as cancelled?"
-      index:
-        private_deployments: "Private Deployments"
-        manage_per_tenant_dedicated_api: "Manage per-tenant dedicated API deployment requests"
-        no_deployment_requests: "No deployment requests"
-        none_yet_in_this_category: "None yet in this category."
-        submitted: "Submitted"
-        tier: "Tier"
-        company: "Company"
-        services: "Services"
-        pending: "Pending"
-        deploying: "Deploying"
-        active: "Active"
-        cancelled: "Cancelled"
-        created_at_ago: "%{created_at} ago"
-    promotions:
-      invalid_plan: "Invalid plan selected."
-      expiry_past: "Expiry date must be in the future."
-      reason_required: "Reason is required."
-      upgrade_success: "%{email} has been upgraded to the %{plan} plan until %{date}."
-      upgrade_error: "Failed to apply promotion."
-      no_active_promotion: "This user has no active promotion."
-      revoke_success: "Promotion revoked. %{email} has been returned to the free plan."
-      revoke_error: "Failed to revoke promotion."
-    users:
-      not_found: "User not found."
-      suspend_success: "User suspended successfully. All API keys have been revoked."
-      suspend_error: "Failed to suspend user."
-      unsuspend_success: "User unsuspended successfully."
-      unsuspend_error: "Failed to unsuspend user."
-      ban_success: "User banned successfully. All API keys revoked and subscription canceled."
-      ban_error: "Failed to ban user."
-      make_admin_success: "User granted admin privileges."
-      make_admin_error: "Failed to grant admin privileges."
-      remove_admin_self: "You cannot remove your own admin privileges."
-      remove_admin_success: "Admin privileges removed from user."
-      remove_admin_error: "Failed to remove admin privileges."
-      show:
-        lemonsqueezy_id: "LemonSqueezy ID"
-        recent_activity: "Recent Activity"
-        usage_statistics: "Usage Statistics"
-        make_admin: "Make Admin"
-        last_sign_in: "Last Sign In"
-        suspended_at: "Suspended At"
-        admin_action_guidelines: "Admin Action Guidelines"
-        user_id: "User ID"
-        banned_at: "Banned At"
-        no_recent_activity: "No recent activity"
-        billing_cycle: "Billing Cycle"
-        admin_actions: "Admin Actions"
-        no_active_subscription: "No active subscription"
-        avg_response: "Avg Response"
-        this_month: "This Month"
-        these_actions_are_permanent_and_cannot: "These actions are permanent and cannot be undone easily."
-        no_api_keys_created: "No API keys created"
-        user_details: "User Details"
-        page_title: "User Details - %{email}"
-        back_to_users: "Back to Users"
-        admin: "Admin"
-        timestamp: "Timestamp"
-        canceling_at_period_end: "Canceling at Period End"
-        suspended: "Suspended"
-        environment: "Environment"
-        subscription: "Subscription"
-        suspend: "Suspend"
-        started: "Started"
-        are_you_sure_you_want_to_unsuspend_this: "Are you sure you want to unsuspend this user? They will regain access to their account."
-        are_you_sure_you_want_to_suspend_this: "Are you sure you want to suspend this user? All their API keys will be revoked."
-        are_you_sure_you_want_to_grant_admin: "Are you sure you want to grant admin privileges to this user? They will have full system access."
-        last_sign_in_at_ago: "%{last_sign_in_at} ago"
-        created_at_ago: "%{created_at} ago"
-      index:
-        try_adjusting_your_search_or_filters: "Try adjusting your search or filters."
-        view_and_manage_all_user_accounts: "View and manage all user accounts"
-        no_users_found: "No users found"
-        apply_filters: "Apply Filters"
-        user_management: "User Management"
-        joined: "Joined"
-        admin: "Admin"
-        suspended: "Suspended"
-        all_users: "All Users"
-        search_by_email_name_or_company: "Search by email, name, or company"
-        admins: "Admins"
-        sort: "Sort:"
-        by_name: "By Name"
-        all_plans: "All Plans"
-        newest_first: "Newest First"
-        oldest_first: "Oldest First"
-        users_count: "Users (%{count})"
-        count_active: "%{count} active"
-        created_at_ago: "%{created_at} ago"
+        other_reports_for_this_user: Other Reports for This User
+        report_details: Report Details
+        report_resolved: Report Resolved
+        report_type: Report Type
+        reported: Reported
+        reported_at: Reported At
+        reported_user: Reported User
+        resolve: 'Resolve:'
+        suspend: 'Suspend:'
+        suspended: Suspended
+        take_action_on_this_abuse_report: Take action on this abuse report
+        this_month: This Month
+        view_full_profile: View Full Profile
+    access_denied: Access denied. Admin privileges required.
     analytics:
-      system_health:
-        error_rate_over_time: "Error Rate Over Time"
-        authentication_and_security_events: "Authentication and security events"
-        response_times: "Response Times"
-        p95_response_time: "P95 Response Time"
-        security_metrics: "Security Metrics"
-        99th_percentile: "99th percentile"
-        api_performance_and_reliability_metrics: "API performance and reliability metrics"
-        percentage_of_requests_resulting_in: "Percentage of requests resulting in errors"
-        median_response_time: "Median response time"
-        security_monitoring: "Security Monitoring"
-        api_uptime: "API Uptime"
-        no_errors_recorded: "No errors recorded!"
-        95th_percentile: "95th percentile"
-        failed_auth_attempts_24h: "Failed Auth Attempts (24h)"
-        requests_per_minute_last_hour: "Requests Per Minute (Last Hour)"
-        p99_response_time: "P99 Response Time"
-        system_health_insights: "System Health Insights"
-        top_10_error_status_codes: "Top 10 error status codes"
-        real_time_traffic_monitoring: "Real-time traffic monitoring"
-        the_system_is_running_perfectly: "The system is running perfectly."
-        p50_response_time: "P50 Response Time"
-        most_common_errors: "Most Common Errors"
-        system_health: "System Health"
-        status_excellent: "Excellent"
-        status_good: "Good"
-        status_needs_attention: "Needs attention"
-        count: "Count"
-        normal: "Normal"
-        high: "High"
-        status_code: "Status Code"
-        security_label: "Security"
-        security_monitoring_body: "All API requests are monitored for suspicious activity. High rates of failed authentication may indicate a security threat."
-        uptime_excellent_label: "Excellent uptime."
-        uptime_excellent_description: "The API is highly reliable with minimal downtime."
-        uptime_good_label: "Good uptime."
-        uptime_good_description: "The API is performing well with acceptable availability."
-        uptime_low_label: "Low uptime."
-        uptime_low_description: "Investigate recent incidents and implement improvements."
-        response_fast_label: "Fast response times."
-        response_fast_description: "The API is performing optimally."
-        response_acceptable_label: "Acceptable performance."
-        response_acceptable_description: "Consider optimizing slow endpoints."
-        response_slow_label: "Slow response times."
-        response_slow_description: "Performance optimization is needed."
-        response_times_detail: "P95: %{p95}ms, P99: %{p99}ms"
-        security_high_label: "High failed auth attempts."
-        security_high_description: "Monitor for potential security threats."
-        security_normal_label: "Normal security activity."
-        security_normal_description: "No suspicious patterns detected."
-        failed_auth_attempts_detail: "%{count} failed attempts in last 24h."
-        last_hour: "Last Hour"
-        last_24_hours: "Last 24 Hours"
       revenue:
-        annual_recurring_revenue: "Annual Recurring Revenue"
-        key_takeaways: "Key Takeaways"
-        monthly_recurring_revenue_over_time: "Monthly recurring revenue over time"
-        new_vs_canceled_subscriptions: "New vs Canceled Subscriptions"
-        per_year: "per year"
-        average_revenue_per_user: "Average Revenue Per User"
-        subscription_growth_and_churn_over_time: "Subscription growth and churn over time"
-        subscriptions_by_plan: "Subscriptions by Plan"
-        per_month: "per month"
-        paying_customers: "paying customers"
-        revenue_analytics: "Revenue Analytics"
-        customer_distribution: "Customer distribution"
-        revenue_by_plan: "Revenue by Plan"
-        mrr_growth_last_month: "MRR Growth (Last Month)"
-        revenue_insights: "Revenue Insights"
-        subscription_revenue_and_financial: "Subscription revenue and financial metrics"
-        monthly_revenue_breakdown: "Monthly revenue breakdown"
-        active_subscriptions: "Active Subscriptions"
-        monthly_recurring_revenue: "Monthly Recurring Revenue"
-        revenue_trend_last_12_months: "Revenue Trend (Last 12 Months)"
-        churn_rate_30d: "Churn Rate (30d)"
-        avg_revenue_per_customer: "Average revenue per customer is $%{amount}/month"
-        no_subscriptions_body: "No active subscriptions yet - focus on customer acquisition"
-        high_churn_label: "High churn rate:"
-        high_churn_description: "Focus on customer retention and satisfaction."
-        low_churn_label: "Low churn rate:"
-        low_churn_description: "Customers are satisfied with the service."
-        strong_growth_label: "Strong growth:"
-        strong_growth_description: "Revenue is increasing rapidly."
-        steady_growth_label: "Steady growth:"
-        steady_growth_description: "Revenue is increasing consistently."
-        declining_revenue_label: "Declining revenue:"
-        declining_revenue_description: "Investigate causes and implement growth strategies."
+        active_subscriptions: Active Subscriptions
+        annual_recurring_revenue: Annual Recurring Revenue
+        average_revenue_per_user: Average Revenue Per User
+        avg_revenue_per_customer: Average revenue per customer is $%{amount}/month
+        churn_rate_30d: Churn Rate (30d)
+        customer_distribution: Customer distribution
+        declining_revenue_description: Investigate causes and implement growth strategies.
+        declining_revenue_label: 'Declining revenue:'
+        high_churn_description: Focus on customer retention and satisfaction.
+        high_churn_label: 'High churn rate:'
+        key_takeaways: Key Takeaways
+        low_churn_description: Customers are satisfied with the service.
+        low_churn_label: 'Low churn rate:'
+        monthly_recurring_revenue: Monthly Recurring Revenue
+        monthly_recurring_revenue_over_time: Monthly recurring revenue over time
+        monthly_revenue_breakdown: Monthly revenue breakdown
+        mrr_growth_last_month: MRR Growth (Last Month)
+        new_vs_canceled_subscriptions: New vs Canceled Subscriptions
+        no_subscriptions_body: No active subscriptions yet - focus on customer acquisition
+        paying_customers: paying customers
+        per_month: per month
+        per_year: per year
+        revenue_analytics: Revenue Analytics
+        revenue_by_plan: Revenue by Plan
+        revenue_insights: Revenue Insights
+        revenue_trend_last_12_months: Revenue Trend (Last 12 Months)
+        steady_growth_description: Revenue is increasing consistently.
+        steady_growth_label: 'Steady growth:'
+        strong_growth_description: Revenue is increasing rapidly.
+        strong_growth_label: 'Strong growth:'
+        subscription_growth_and_churn_over_time: Subscription growth and churn over
+          time
+        subscription_revenue_and_financial: Subscription revenue and financial metrics
+        subscriptions_by_plan: Subscriptions by Plan
+      system_health:
+        95th_percentile: 95th percentile
+        99th_percentile: 99th percentile
+        api_performance_and_reliability_metrics: API performance and reliability metrics
+        api_uptime: API Uptime
+        authentication_and_security_events: Authentication and security events
+        count: Count
+        error_rate_over_time: Error Rate Over Time
+        failed_auth_attempts_24h: Failed Auth Attempts (24h)
+        failed_auth_attempts_detail: "%{count} failed attempts in last 24h."
+        high: High
+        last_24_hours: Last 24 Hours
+        last_hour: Last Hour
+        median_response_time: Median response time
+        most_common_errors: Most Common Errors
+        no_errors_recorded: No errors recorded!
+        normal: Normal
+        p50_response_time: P50 Response Time
+        p95_response_time: P95 Response Time
+        p99_response_time: P99 Response Time
+        percentage_of_requests_resulting_in: Percentage of requests resulting in errors
+        real_time_traffic_monitoring: Real-time traffic monitoring
+        requests_per_minute_last_hour: Requests Per Minute (Last Hour)
+        response_acceptable_description: Consider optimizing slow endpoints.
+        response_acceptable_label: Acceptable performance.
+        response_fast_description: The API is performing optimally.
+        response_fast_label: Fast response times.
+        response_slow_description: Performance optimization is needed.
+        response_slow_label: Slow response times.
+        response_times: Response Times
+        response_times_detail: 'P95: %{p95}ms, P99: %{p99}ms'
+        security_high_description: Monitor for potential security threats.
+        security_high_label: High failed auth attempts.
+        security_label: Security
+        security_metrics: Security Metrics
+        security_monitoring: Security Monitoring
+        security_monitoring_body: All API requests are monitored for suspicious activity.
+          High rates of failed authentication may indicate a security threat.
+        security_normal_description: No suspicious patterns detected.
+        security_normal_label: Normal security activity.
+        status_code: Status Code
+        status_excellent: Excellent
+        status_good: Good
+        status_needs_attention: Needs attention
+        system_health: System Health
+        system_health_insights: System Health Insights
+        the_system_is_running_perfectly: The system is running perfectly.
+        top_10_error_status_codes: Top 10 error status codes
+        uptime_excellent_description: The API is highly reliable with minimal downtime.
+        uptime_excellent_label: Excellent uptime.
+        uptime_good_description: The API is performing well with acceptable availability.
+        uptime_good_label: Good uptime.
+        uptime_low_description: Investigate recent incidents and implement improvements.
+        uptime_low_label: Low uptime.
       usage:
-        view_user: "View User"
-        requests_over_time: "Requests Over Time"
-        usage_analytics: "Usage Analytics"
-        requests_by_plan: "Requests by Plan"
-        api_usage_patterns_and_statistics: "API usage patterns and statistics"
-        top_10_users_by_usage: "Top 10 Users by Usage"
-        average_response_times_by_endpoint: "Average Response Times by Endpoint"
-        last_7_days: "Last 7 Days"
-        last_30_days: "Last 30 Days"
-        last_90_days: "Last 90 Days"
-        in_the_last_n_days: "in the last %{n} days"
-        top_10_slowest_endpoints: "Top 10 slowest endpoints"
-        top_10_endpoints: "Top 10 Endpoints"
-        rank: "Rank"
+        api_usage_patterns_and_statistics: API usage patterns and statistics
+        average_response_times_by_endpoint: Average Response Times by Endpoint
+        in_the_last_n_days: in the last %{n} days
+        last_30_days: Last 30 Days
+        last_7_days: Last 7 Days
+        last_90_days: Last 90 Days
+        rank: Rank
+        requests_by_plan: Requests by Plan
+        requests_over_time: Requests Over Time
+        top_10_endpoints: Top 10 Endpoints
+        top_10_slowest_endpoints: Top 10 slowest endpoints
+        top_10_users_by_usage: Top 10 Users by Usage
+        usage_analytics: Usage Analytics
+        view_user: View User
+    api_keys:
+      index:
+        active: Active
+        apply_filters: Apply Filters
+        clear: Clear
+        environment: Environment
+        no_api_keys_found: No API keys found
+        revoked: Revoked
+        search: Search
+        search_placeholder: Search by key prefix, user email, or name
+        status: Status
+        try_adjusting_your_search_or_filters: Try adjusting your search or filters.
+        view_and_manage_all_api_keys_across: View and manage all API keys across users
+      not_found: API key not found.
+      revoke_error: Failed to revoke API key.
+      revoke_success: API key revoked successfully.
+      show:
+        admin_actions: Admin Actions
+        are_you_sure_you_want_to_revoke_this: Are you sure you want to revoke this
+          API key? This cannot be undone.
+        credits: Credits
+        key_details: Key Details
+        key_prefix: Key Prefix
+        no_usage_recorded_for_this_key: No usage recorded for this key.
+        owner: Owner
+        recent_usage: Recent Usage
+        revoke_reason: Revoke Reason
+        revoked_at: Revoked At
+        used_at: Used At
+        view_user_profile: View User Profile
     dashboard:
       index:
-        recent_api_keys: "Recent API Keys"
-        no_api_keys_created_yet: "No API keys created yet"
-        no_users_yet: "No users yet"
-        admin_dashboard: "Admin Dashboard"
-        no_paid_subscriptions_yet: "No paid subscriptions yet"
-        total_api_keys: "Total API Keys"
-        requests_today: "Requests Today"
-        system_health: "System Health"
-        recent_users: "Recent Users"
-        recent_subscriptions: "Recent Subscriptions"
-        system_overview_and_key_metrics: "System overview and key metrics"
-        total_users: "Total Users"
-        joined: "Joined"
+        active_subscriptions_active_active_subscriptions2: "%{active_subscriptions}
+          active %{active_subscriptions2}"
         active_users_active_30d: "%{active_users} active (30d)"
-        total_requests_30d_last_30_days: "%{total_requests_30d} last 30 days"
-        active_subscriptions_active_active_subscriptions2: "%{active_subscriptions} active %{active_subscriptions2}"
+        admin_dashboard: Admin Dashboard
         created_at_ago: "%{created_at} ago"
+        joined: Joined
+        no_api_keys_created_yet: No API keys created yet
+        no_paid_subscriptions_yet: No paid subscriptions yet
+        no_users_yet: No users yet
+        recent_api_keys: Recent API Keys
+        recent_subscriptions: Recent Subscriptions
+        recent_users: Recent Users
+        requests_today: Requests Today
+        system_health: System Health
+        system_overview_and_key_metrics: System overview and key metrics
         titleize_plan: "%{titleize} plan"
+        total_api_keys: Total API Keys
+        total_requests_30d_last_30_days: "%{total_requests_30d} last 30 days"
+        total_users: Total Users
+    private_deployments:
+      activate_error: Failed to activate deployment.
+      activate_success: Deployment marked as active. Confirmation email sent to %{email}.
+      cancel_error: Failed to cancel deployment.
+      cancel_success: Deployment request cancelled.
+      index:
+        active: Active
+        cancelled: Cancelled
+        company: Company
+        created_at_ago: "%{created_at} ago"
+        deploying: Deploying
+        manage_per_tenant_dedicated_api: Manage per-tenant dedicated API deployment
+          requests
+        no_deployment_requests: No deployment requests
+        none_yet_in_this_category: None yet in this category.
+        pending: Pending
+        private_deployments: Private Deployments
+        services: Services
+        submitted: Submitted
+        tier: Tier
+      not_found: Deployment request not found.
+      secret_required: Tenant secret is required.
+      show:
+        32_character_secret: 32+ character secret
+        account: Account
+        activating: Activating...
+        admin_notes: Admin Notes
+        cancel_deployment_request: Cancel Deployment Request
+        cancel_request: Cancel Request
+        deployed_at: Deployed At
+        enabled_services_value: ENABLED_SERVICES value
+        hetzner_server_id_ip_any_notes: Hetzner server ID, IP, any notes...
+        live_deployment: Live Deployment
+        lowercase_letters_numbers_hyphens_2_40: Lowercase letters, numbers, hyphens.
+          2–40 chars.
+        mark_as_deployed_send_email: Mark as Deployed + Send Email
+        mark_this_request_as_cancelled: Mark this request as cancelled?
+        monthly_price: Monthly Price
+        server_tier: Server Tier
+        subdomain_slug: Subdomain Slug
+        tenant_secret_backend_secret: Tenant Secret (BACKEND_SECRET)
+        the_backend_secret_value_set_on_their: The BACKEND_SECRET value set on their
+          VPS. Min 32 chars.
+      subdomain_required: Subdomain slug is required.
+    promotions:
+      expiry_past: Expiry date must be in the future.
+      invalid_plan: Invalid plan selected.
+      no_active_promotion: This user has no active promotion.
+      reason_required: Reason is required.
+      revoke_error: Failed to revoke promotion.
+      revoke_success: Promotion revoked. %{email} has been returned to the free plan.
+      upgrade_error: Failed to apply promotion.
+      upgrade_success: "%{email} has been upgraded to the %{plan} plan until %{date}."
     sidebar:
-      admin: "Admin"
-      users: "Users"
-      analytics: "Analytics"
+      admin: Admin
+      analytics: Analytics
+      users: Users
+    users:
+      ban_error: Failed to ban user.
+      ban_success: User banned successfully. All API keys revoked and subscription
+        canceled.
+      index:
+        admin: Admin
+        admins: Admins
+        all_plans: All Plans
+        all_users: All Users
+        apply_filters: Apply Filters
+        by_name: By Name
+        count_active: "%{count} active"
+        created_at_ago: "%{created_at} ago"
+        joined: Joined
+        newest_first: Newest First
+        no_users_found: No users found
+        oldest_first: Oldest First
+        search_by_email_name_or_company: Search by email, name, or company
+        sort: 'Sort:'
+        suspended: Suspended
+        try_adjusting_your_search_or_filters: Try adjusting your search or filters.
+        user_management: User Management
+        users_count: Users (%{count})
+        view_and_manage_all_user_accounts: View and manage all user accounts
+      make_admin_error: Failed to grant admin privileges.
+      make_admin_success: User granted admin privileges.
+      not_found: User not found.
+      remove_admin_error: Failed to remove admin privileges.
+      remove_admin_self: You cannot remove your own admin privileges.
+      remove_admin_success: Admin privileges removed from user.
+      show:
+        admin: Admin
+        admin_action_guidelines: Admin Action Guidelines
+        admin_actions: Admin Actions
+        are_you_sure_you_want_to_grant_admin: Are you sure you want to grant admin
+          privileges to this user? They will have full system access.
+        are_you_sure_you_want_to_unsuspend_this: Are you sure you want to unsuspend
+          this user? They will regain access to their account.
+        avg_response: Avg Response
+        back_to_users: Back to Users
+        banned_at: Banned At
+        billing_cycle: Billing Cycle
+        canceling_at_period_end: Canceling at Period End
+        created_at_ago: "%{created_at} ago"
+        environment: Environment
+        last_sign_in: Last Sign In
+        last_sign_in_at_ago: "%{last_sign_in_at} ago"
+        lemonsqueezy_id: LemonSqueezy ID
+        make_admin: Make Admin
+        no_active_subscription: No active subscription
+        no_api_keys_created: No API keys created
+        no_recent_activity: No recent activity
+        page_title: User Details - %{email}
+        recent_activity: Recent Activity
+        started: Started
+        subscription: Subscription
+        suspend: Suspend
+        suspended: Suspended
+        suspended_at: Suspended At
+        these_actions_are_permanent_and_cannot: These actions are permanent and cannot
+          be undone easily.
+        this_month: This Month
+        timestamp: Timestamp
+        usage_statistics: Usage Statistics
+        user_details: User Details
+        user_id: User ID
+      suspend_error: Failed to suspend user.
+      suspend_success: User suspended successfully. All API keys have been revoked.
+      unsuspend_error: Failed to unsuspend user.
+      unsuspend_success: User unsuspended successfully.

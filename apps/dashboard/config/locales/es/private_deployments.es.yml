@@ -1,14 +1,18 @@
+---
 es:
   private_deployments:
     new:
-      only_selected_services_will_be_mounted: "Solo se instalarán en su instancia los servicios seleccionados. Los demás devolverán un error 404."
-      billed_monthly: "facturado mensualmente"
-      please_fix_the_following: "Por favor, corrija lo siguiente:"
-      1_choose_your_plan: "1. Elige tu plan"
-      dedicated_amd_vcpus_postgresql_redis: "CPU virtuales AMD dedicadas · PostgreSQL · Redis · Caddy (HTTPS)"
-      3_anything_we_should_know: "3. ¿Hay algo que debamos saber?"
-      private_deployment_requiems_api: "Implementación privada: API de Requiems"
-      all_10_services_are_selected_by_default: "Los 10 servicios están seleccionados por defecto. Desmarca los que no necesites para mantener tu instancia optimizada."
-      yourcompany_requiems_xyz: "tuempresa.réquiems.xyz"
-      optional: "Opcional."
-      update_account_details: "Actualizar detalles de la cuenta →"
+      1_choose_your_plan: 1. Elige tu plan
+      3_anything_we_should_know: 3. ¿Hay algo que debamos saber?
+      all_10_services_are_selected_by_default: Los 10 servicios están seleccionados
+        por defecto. Desmarca los que no necesites para mantener tu instancia optimizada.
+      billed_monthly: facturado mensualmente
+      dedicated_amd_vcpus_postgresql_redis: CPU virtuales AMD dedicadas · PostgreSQL
+        · Redis · Caddy (HTTPS)
+      only_selected_services_will_be_mounted: Solo se instalarán en su instancia los
+        servicios seleccionados. Los demás devolverán un error 404.
+      optional: Opcional.
+      please_fix_the_following: 'Por favor, corrija lo siguiente:'
+      private_deployment_requiems_api: 'Implementación privada: API de Requiems'
+      update_account_details: Actualizar detalles de la cuenta →
+      yourcompany_requiems_xyz: tuempresa.réquiems.xyz

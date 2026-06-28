@@ -1,40 +1,43 @@
+---
 en:
   auth:
-    sign_in:
-      heading: "Sign in to your account"
-      subheading: "Access your Requiem API dashboard"
-      email: "Email address"
-      password: "Password"
-      remember_me: "Remember me"
-      submit: "Sign in"
-    sign_up:
-      heading: "Create your account"
-      subheading: "Start using Requiem API with a free account"
-      name: "Full Name"
-      name_placeholder: "John Doe"
-      email: "Email address"
-      company: "Company (optional)"
-      company_placeholder: "Your Company Inc."
-      password: "Password"
-      password_min: "%{min} characters minimum"
-      confirm_password: "Confirm Password"
-      submit: "Create Account"
-    forgot_password:
-      heading: "Forgot your password?"
-      subheading: "Enter your email and we'll send you reset instructions"
-      email: "Email address"
-      submit: "Send reset instructions"
     change_password:
-      title: "Change Password"
-      back: "Back to Settings"
-      subheading: "Update your password to keep your account secure"
-      section_heading: "New Password"
-      new_password: "New Password"
-      confirm: "Confirm New Password"
-      current: "Current Password"
-      current_note: "Required to confirm your changes"
-      cancel: "Cancel"
-      submit: "Update Password"
-      submitting: "Updating..."
+      back: Back to Settings
+      cancel: Cancel
+      confirm: Confirm New Password
+      current: Current Password
+      current_note: Required to confirm your changes
+      new_password: New Password
+      section_heading: New Password
+      subheading: Update your password to keep your account secure
+      submit: Update Password
+      submitting: Updating...
+      title: Change Password
     errors:
-      heading: {one: "%{count} error prevented this from being saved:", other: "%{count} errors prevented this from being saved:"}
+      heading:
+        one: "%{count} error prevented this from being saved:"
+        other: "%{count} errors prevented this from being saved:"
+    forgot_password:
+      email: Email address
+      heading: Forgot your password?
+      subheading: Enter your email and we'll send you reset instructions
+      submit: Send reset instructions
+    sign_in:
+      email: Email address
+      heading: Sign in to your account
+      password: Password
+      remember_me: Remember me
+      subheading: Access your Requiem API dashboard
+      submit: Sign in
+    sign_up:
+      company: Company (optional)
+      company_placeholder: Your Company Inc.
+      confirm_password: Confirm Password
+      email: Email address
+      heading: Create your account
+      name: Full Name
+      name_placeholder: John Doe
+      password: Password
+      password_min: "%{min} characters minimum"
+      subheading: Start using Requiem API with a free account
+      submit: Create Account

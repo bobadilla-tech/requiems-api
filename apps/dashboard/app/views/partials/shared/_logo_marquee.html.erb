@@ -33,7 +33,7 @@
   #<%= track_id %> {
     display: flex;
     width: max-content;
-    <%= t('logo_marquee.animation_anim_name___speed_linear_infinite', anim_name: anim_name, speed: speed) %>
+    animation: <%= anim_name %><%= speed %> linear infinite;
   }
   #<%= track_id %>:hover { animation-play-state: paused; }
   .lm-outer {

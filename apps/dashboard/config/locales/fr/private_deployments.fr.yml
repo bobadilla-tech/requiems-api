@@ -1,14 +1,19 @@
+---
 fr:
   private_deployments:
     new:
-      dedicated_amd_vcpus_postgresql_redis: "vCPU AMD dédiés · PostgreSQL · Redis · Caddy (HTTPS)"
-      3_anything_we_should_know: "3. Y a-t-il quelque chose que nous devrions savoir ?"
-      private_deployment_requiems_api: "Déploiement privé — Requiems API"
-      all_10_services_are_selected_by_default: "Les 10 services sont sélectionnés par défaut. Décochez ceux dont vous n'avez pas besoin pour optimiser votre instance."
-      only_selected_services_will_be_mounted: "Seuls les services sélectionnés seront installés sur votre instance. Les autres renverront une erreur 404."
-      billed_monthly: "facturé mensuellement"
-      please_fix_the_following: "Veuillez corriger les éléments suivants :"
-      1_choose_your_plan: "1. Choisissez votre forfait"
-      yourcompany_requiems_xyz: "votreentreprise.requiems.xyz"
-      optional: "Facultatif."
-      update_account_details: "Mettre à jour les informations du compte →"
+      1_choose_your_plan: 1. Choisissez votre forfait
+      3_anything_we_should_know: 3. Y a-t-il quelque chose que nous devrions savoir
+        ?
+      all_10_services_are_selected_by_default: Les 10 services sont sélectionnés par
+        défaut. Décochez ceux dont vous n'avez pas besoin pour optimiser votre instance.
+      billed_monthly: facturé mensuellement
+      dedicated_amd_vcpus_postgresql_redis: vCPU AMD dédiés · PostgreSQL · Redis ·
+        Caddy (HTTPS)
+      only_selected_services_will_be_mounted: Seuls les services sélectionnés seront
+        installés sur votre instance. Les autres renverront une erreur 404.
+      optional: Facultatif.
+      please_fix_the_following: 'Veuillez corriger les éléments suivants :'
+      private_deployment_requiems_api: Déploiement privé — Requiems API
+      update_account_details: Mettre à jour les informations du compte →
+      yourcompany_requiems_xyz: votreentreprise.requiems.xyz

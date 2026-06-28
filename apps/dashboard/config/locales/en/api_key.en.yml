@@ -1,3 +1,5 @@
+---
 en:
   api_key:
-    failed_to_generate_api_key_please_try: "Failed to generate API key. Please try again."
+    failed_to_generate_api_key_please_try: Failed to generate API key. Please try
+      again.

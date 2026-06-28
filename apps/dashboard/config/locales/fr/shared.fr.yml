@@ -1,208 +1,126 @@
+---
 fr:
   shared:
-    app_name: "Requiems API"
-    faq_heading: "Foire aux questions"
+    app_name: Requiems API
     buttons:
-      close: "Fermer"
-      dismiss: "Ignorer"
-      dismiss_banner: "Fermer la bannière"
-      cancel: "Annuler"
-      copy: "Copie"
-      copied: "Copié !"
-      get_api_key: "Obtenir la clé API"
-      primary_cta: "Obtenir la clé API"
-      read_docs: "Lisez les documents"
-      contact_support: "Contactez l'assistance"
-      browse_apis: "Parcourir les API"
-      utilities: "Parcourir les utilitaires"
-      view_case: "Voir le cas"
-      go_to_dashboard: "Accéder au tableau de bord"
-      try_live: "Essayez-le en direct"
-      explore_system: "Système d'exploration"
-      apply_filters: "Appliquer les filtres"
-      change_password: "Changer mon mot de passe"
-      copy_btn: "Copie"
-    status:
-      active: "Actif"
-      suspended: "Suspendu"
-      reported: "Signalé"
-      all: "Tous"
-      status_col: "Statut"
-    badges:
-      valid: "Valide"
-      invalid: "Invalide"
-      json_response: "Réponse JSON"
-      rest_api: "API REST"
-      uptime: "Disponibilité de 99,9 %"
-      latency: "Latence moyenne < 300 ms"
-      "yes": "✓ Oui"
-      "no": "✗ Non"
-      popular: "Les plus populaires"
-      rest: "API REST"
-      json: "Réponse JSON"
-    labels:
-      "yes": "Oui"
-      "no": "Non"
-      admin: "Administrateur"
-      admin_actions: "Actions d'administration"
-      environment: "Environnement"
-      joined: "Adhésion"
-      monthly: "Mensuel"
-      yearly: "Annuel"
-      this_month: "Ce mois-ci"
-      col_status: "Statut"
-      key_prefix: "Préfixe clé"
-      system_health: "Santé du système"
-      api_reference: "Référence API"
-      are_you_sure_suspend: "Êtes-vous sûr de vouloir suspendre cet utilisateur ? Toutes ses clés API seront révoquées."
-    info:
-      no_account: "Aucun compte requis"
-      no_account_demo: "Aucun compte n'est requis pour la démo."
-      coverage: "Plus de 100 API"
-      support_prompt: "Vous avez encore des questions ?"
-      eu_title: "Infrastructures de l'UE"
-      soc2_desc: "En cours."
-      we_usually_reply: "Nous répondons généralement sous 24 heures."
-    formats:
-      time_ago: "%{time} il y a"
-      of_requests: "de demandes %{limit}"
-      greeting_html: "Salut <strong>%{email}</strong>,"
-    empty_states:
-      no_data: "Aucune donnée n'a été renvoyée."
-      try_search: "Essayez de modifier votre recherche ou vos filtres."
-    headings:
-      examples: "Exemples de code"
-      use_cases: "Cas d'utilisation"
-      use_cases_subheading: "Cas d'utilisation"
-      accuracy: "Précision"
-      simplicity: "Simplicité"
-      apis_catalog: "Explorez le répertoire complet des API"
-    contexts:
-      integrations: "Intégrations"
-      auth: "Authentification / Inscription"
-      onboarding: "Intégration"
-      fraud: "Prévention de la fraude"
-    forms:
-      email_placeholder: "Saisissez une adresse e-mail."
-      text_to_analyze: "Texte à analyser"
-      password: "Mot de passe"
-      missing_fields: "Veuillez remplir tous les champs obligatoires."
-      domain: "Domaine"
-    result_labels:
-      normalized: "Normalisé"
-      benefit: "Avantage:"
-      outcome: "Résultat:"
-    nav:
-      docs: "Documentation"
-      docs_apis_desc: "Parcourir chaque point de terminaison"
-      docs_examples_desc: "Intégrations prêtes à copier"
-      docs_divisions_desc: "APIs par catégorie"
-      compare: "Comparer"
-      docs_compare_desc: "Requiems API vs concurrents"
-      industries: "Industries"
-      docs_industries_desc: "API adaptées à votre secteur d'activité"
-      divisions: "Divisions"
-      systems: "Systèmes"
-      divisions_hub: "Vue d'ensemble de toutes les divisions"
-      divisions_panel_heading: "Aller à une division"
-      divisions_all: "Toutes les divisions"
-      apis: "APIs"
-      examples: "Exemples"
-      tools: "Outils"
-      docs_tools_desc: "Démos interactives d'APIs"
-      case_studies: "Études de cas"
-      pricing: "Tarifs"
-      dashboard: "Tableau de bord"
-      api_keys: "Clés API"
-      usage: "Utilisation"
-      settings: "Paramètres"
-      sign_out: "Se déconnecter"
-      sign_in: "Se connecter"
-      sign_up: "S'inscrire"
-      get_started: "Commencer"
-      dark_mode: "Mode sombre"
-      light_mode: "Mode clair"
-      open_menu: "Ouvrir le menu principal"
-      close_menu: "Fermer le menu principal"
-      mobile_menu_title: "Menu"
-      search_placeholder: "APIs, exemples, docs..."
-      search_no_results: "Aucun résultat"
-      search_try_different: "Essayez d'autres mots-clés"
-      language: "Langue"
-      clear_search: "Effacer la recherche"
-      toggle_dark_mode: "Basculer le mode sombre"
-      breadcrumb: "Fil d'Ariane"
-    footer:
-      tagline: "Infrastructure backend pour produits SaaS, livrée via une API unifiée"
-      copyright: "© %{year} Bobadilla Tech. Tous droits réservés."
-      sections:
-        get_started: "Commencer"
-        api_categories: "Catégories d'APIs"
-        about: "À propos"
-        developers: "Développeurs"
-      links:
-        api_directory: "Répertoire des APIs"
-        api_status: "État des APIs"
-        blog: "Blog"
-        example_apps: "Applications d'exemple"
-        api_glossary: "Glossaire des APIs"
-        error_codes: "Codes d'erreur"
-        pricing: "Tarifs"
-        our_team: "Notre équipe"
-        suggest_api: "Suggérer une API"
-        faq: "FAQ"
-        for_llms: "Pour les LLM et outils d'IA"
-        privacy_policy: "Politique de confidentialité"
-        terms_of_service: "Conditions d'utilisation"
-        contact_us: "Nous contacter"
-        talk_to_sales: "Parler aux ventes"
-        github: "GitHub"
-        contributing: "Contribuer"
-        changelog: "Journal des modifications"
-        finance: "Finance"
-        technology: "Outils pour développeurs"
-        ai_vision: "IA et vision par ordinateur"
-        nature: "Nature"
-        entertainment: "Divertissement"
-        health: "Santé et bien-être"
-        miscellaneous: "Divers"
-        places: "Lieux"
-        text: "Texte"
-        transportation: "Transport"
-        tax: "Fiscalité"
-        validation: "Validation"
-        data: "Données"
-        security: "Sécurité et confidentialité"
-        media: "Génération de médias"
-    danger_zone:
-      heading: "Zone de danger"
-      subheading: "Actions irréversibles qui affectent définitivement votre compte"
-      default_title: "Supprimer le compte"
-      default_description: "Supprime définitivement votre compte et toutes les données associées. Cette action est irréversible."
-      default_bullets:
-        - "Toutes vos clés API seront immédiatement révoquées"
-        - "Votre abonnement sera annulé"
-        - "Toutes les données d'utilisation seront définitivement supprimées"
-      delete_btn: "Supprimer le compte"
-      modal_title: "Supprimer votre compte ?"
-      modal_body: "Nous vous enverrons un lien de confirmation à %{email}. Le lien expire dans %{expiry}."
-      reason_label: "Pourquoi nous quittez-vous ?"
-      reason_placeholder: "Dites-nous ce que nous aurions pu améliorer..."
-      send_confirmation_btn: "Envoyer l'e-mail de confirmation"
-      sending: "Envoi en cours..."
-      cancel_btn: "Annuler"
-    errors:
-      no_data: "Aucune donnée n'a été renvoyée."
+      cancel: Annuler
+      close: Fermer
+      dismiss: Ignorer
+      dismiss_banner: Fermer la bannière
     common:
-      "no": "✗ Non"
-      uptime: "Disponibilité de 99,9 %"
-      json_response: "Réponse JSON"
-      "yes": "✓ Oui"
-      utilities: "Parcourir les utilitaires"
-      invalid: "Invalide"
-      valid: "Valide"
-      view: "Voir"
-      all: "Tous"
-      latency: "Latence moyenne < 300 ms"
-      rest_api: "API REST"
-      performance: "Performance"
+      all: Tous
+      invalid: Invalide
+      json_response: Réponse JSON
+      latency: Latence moyenne < 300 ms
+      'no': "✗ Non"
+      performance: Performance
+      rest_api: API REST
+      uptime: Disponibilité de 99,9 %
+      utilities: Parcourir les utilitaires
+      valid: Valide
+      view: Voir
+      'yes': "✓ Oui"
+    danger_zone:
+      cancel_btn: Annuler
+      default_bullets:
+      - Toutes vos clés API seront immédiatement révoquées
+      - Votre abonnement sera annulé
+      - Toutes les données d'utilisation seront définitivement supprimées
+      default_description: Supprime définitivement votre compte et toutes les données
+        associées. Cette action est irréversible.
+      default_title: Supprimer le compte
+      delete_btn: Supprimer le compte
+      heading: Zone de danger
+      modal_body: Nous vous enverrons un lien de confirmation à %{email}. Le lien
+        expire dans %{expiry}.
+      modal_title: Supprimer votre compte ?
+      reason_label: Pourquoi nous quittez-vous ?
+      reason_placeholder: Dites-nous ce que nous aurions pu améliorer...
+      send_confirmation_btn: Envoyer l'e-mail de confirmation
+      sending: Envoi en cours...
+      subheading: Actions irréversibles qui affectent définitivement votre compte
+    faq_heading: Foire aux questions
+    footer:
+      copyright: "© %{year} Bobadilla Tech. Tous droits réservés."
+      links:
+        api_directory: Répertoire des APIs
+        api_glossary: Glossaire des APIs
+        api_status: État des APIs
+        blog: Blog
+        changelog: Journal des modifications
+        contact_us: Nous contacter
+        contributing: Contribuer
+        error_codes: Codes d'erreur
+        example_apps: Applications d'exemple
+        faq: FAQ
+        for_llms: Pour les LLM et outils d'IA
+        github: GitHub
+        our_team: Notre équipe
+        pricing: Tarifs
+        privacy_policy: Politique de confidentialité
+        suggest_api: Suggérer une API
+        talk_to_sales: Parler aux ventes
+        terms_of_service: Conditions d'utilisation
+      sections:
+        about: À propos
+        api_categories: Catégories d'APIs
+        developers: Développeurs
+        get_started: Commencer
+      tagline: Infrastructure backend pour produits SaaS, livrée via une API unifiée
+    forms:
+      email_placeholder: Saisissez une adresse e-mail.
+      text_to_analyze: Texte à analyser
+    headings:
+      accuracy: Précision
+      simplicity: Simplicité
+    info:
+      no_account_demo: Aucun compte n'est requis pour la démo.
+    labels:
+      are_you_sure_suspend: Êtes-vous sûr de vouloir suspendre cet utilisateur ? Toutes
+        ses clés API seront révoquées.
+      col_status: Statut
+      environment: Environnement
+      joined: Adhésion
+      monthly: Mensuel
+      'no': Non
+      'yes': Oui
+    nav:
+      api_keys: Clés API
+      apis: APIs
+      breadcrumb: Fil d'Ariane
+      case_studies: Études de cas
+      clear_search: Effacer la recherche
+      close_menu: Fermer le menu principal
+      compare: Comparer
+      dark_mode: Mode sombre
+      dashboard: Tableau de bord
+      divisions: Divisions
+      docs: Documentation
+      docs_apis_desc: Parcourir chaque point de terminaison
+      docs_compare_desc: Requiems API vs concurrents
+      docs_divisions_desc: APIs par catégorie
+      docs_examples_desc: Intégrations prêtes à copier
+      docs_industries_desc: API adaptées à votre secteur d'activité
+      docs_tools_desc: Démos interactives d'APIs
+      examples: Exemples
+      get_started: Commencer
+      industries: Industries
+      language: Langue
+      light_mode: Mode clair
+      mobile_menu_title: Menu
+      open_menu: Ouvrir le menu principal
+      pricing: Tarifs
+      search_no_results: Aucun résultat
+      search_placeholder: APIs, exemples, docs...
+      search_try_different: Essayez d'autres mots-clés
+      settings: Paramètres
+      sign_in: Se connecter
+      sign_out: Se déconnecter
+      sign_up: S'inscrire
+      systems: Systèmes
+      toggle_dark_mode: Basculer le mode sombre
+      tools: Outils
+      usage: Utilisation
+    status:
+      active: Actif
+      suspended: Suspendu

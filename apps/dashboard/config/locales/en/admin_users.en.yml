@@ -1,12 +1,16 @@
+---
 en:
   admin_users:
     show:
       promotion_section:
-        promotional_plan_upgrade: "Promotional Plan Upgrade"
-        required_for_audit_trail_describe_why: "Required for audit trail. Describe why this promotion is being granted."
-        grant_or_revoke_a_temporary_plan: "Grant or revoke a temporary plan upgrade for this user without requiring payment."
-        expires: "Expires"
-        reason: "Reason"
-        e_g_youtube_video_collaboration_blog: "e.g. YouTube video collaboration, blog post on requiems.xyz"
-        duration: "Duration"
+        duration: Duration
+        e_g_youtube_video_collaboration_blog: e.g. YouTube video collaboration, blog
+          post on requiems.xyz
+        expires: Expires
+        grant_or_revoke_a_temporary_plan: Grant or revoke a temporary plan upgrade
+          for this user without requiring payment.
         promotion_expires_at_from_now: "(%{promotion_expires_at} from now)"
+        promotional_plan_upgrade: Promotional Plan Upgrade
+        reason: Reason
+        required_for_audit_trail_describe_why: Required for audit trail. Describe
+          why this promotion is being granted.

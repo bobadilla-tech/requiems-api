@@ -1,42 +1,43 @@
+---
 es:
   auth:
-    sign_in:
-      heading: "Inicia sesión en tu cuenta"
-      subheading: "Accede a tu panel de Requiem API"
-      email: "Correo electrónico"
-      password: "Contraseña"
-      remember_me: "Recuérdame"
-      submit: "Iniciar sesión"
-    sign_up:
-      heading: "Crea tu cuenta"
-      subheading: "Comienza a usar Requiem API con una cuenta gratuita"
-      name: "Nombre completo"
-      name_placeholder: "Juan Pérez"
-      email: "Correo electrónico"
-      company: "Empresa (opcional)"
-      company_placeholder: "Tu Empresa S.A."
-      password: "Contraseña"
-      password_min: "mínimo %{min} caracteres"
-      confirm_password: "Confirmar contraseña"
-      submit: "Crear cuenta"
-    forgot_password:
-      heading: "¿Olvidaste tu contraseña?"
-      subheading: "Ingresa tu correo y te enviaremos instrucciones para restablecerla"
-      email: "Correo electrónico"
-      submit: "Enviar instrucciones"
     change_password:
-      title: "Cambiar contraseña"
-      back: "Volver a ajustes"
-      subheading: "Actualiza tu contraseña para mantener tu cuenta segura"
-      section_heading: "Nueva contraseña"
-      new_password: "Nueva contraseña"
-      confirm: "Confirmar nueva contraseña"
-      current: "Contraseña actual"
-      current_note: "Requerida para confirmar tus cambios"
-      cancel: "Cancelar"
-      submit: "Actualizar contraseña"
-      submitting: "Actualizando..."
+      back: Volver a ajustes
+      cancel: Cancelar
+      confirm: Confirmar nueva contraseña
+      current: Contraseña actual
+      current_note: Requerida para confirmar tus cambios
+      new_password: Nueva contraseña
+      section_heading: Nueva contraseña
+      subheading: Actualiza tu contraseña para mantener tu cuenta segura
+      submit: Actualizar contraseña
+      submitting: Actualizando...
+      title: Cambiar contraseña
     errors:
       heading:
         one: "%{count} error impidió guardar esto:"
         other: "%{count} errores impidieron guardar esto:"
+    forgot_password:
+      email: Correo electrónico
+      heading: "¿Olvidaste tu contraseña?"
+      subheading: Ingresa tu correo y te enviaremos instrucciones para restablecerla
+      submit: Enviar instrucciones
+    sign_in:
+      email: Correo electrónico
+      heading: Inicia sesión en tu cuenta
+      password: Contraseña
+      remember_me: Recuérdame
+      subheading: Accede a tu panel de Requiem API
+      submit: Iniciar sesión
+    sign_up:
+      company: Empresa (opcional)
+      company_placeholder: Tu Empresa S.A.
+      confirm_password: Confirmar contraseña
+      email: Correo electrónico
+      heading: Crea tu cuenta
+      name: Nombre completo
+      name_placeholder: Juan Pérez
+      password: Contraseña
+      password_min: mínimo %{min} caracteres
+      subheading: Comienza a usar Requiem API con una cuenta gratuita
+      submit: Crear cuenta

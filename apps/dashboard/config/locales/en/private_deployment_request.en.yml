@@ -1,4 +1,6 @@
+---
 en:
   private_deployment_request:
-    must_include_at_least_one_service: "must include at least one service"
-    must_be_lowercase_letters_numbers_and: "must be lowercase letters, numbers, and hyphens only (2–40 chars)"
+    must_be_lowercase_letters_numbers_and: must be lowercase letters, numbers, and
+      hyphens only (2–40 chars)
+    must_include_at_least_one_service: must include at least one service

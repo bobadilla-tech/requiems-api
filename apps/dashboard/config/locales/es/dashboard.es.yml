@@ -1,424 +1,471 @@
+---
 es:
   dashboard:
-    plans:
-      free: "Gratuito"
-      developer: "Desarrollador"
-      business: "Negocio"
-      professional: "Profesional"
-      enterprise: "Empresarial"
-    overview:
-      title: "Panel"
-      welcome: "¡Bienvenido de nuevo, %{name}!"
-      subtitle: "Aquí está tu resumen de uso de API para %{date}"
-      current_usage: "Solicitudes usadas"
-      of_requests: "de %{limit} solicitudes"
-      used_this_month: "%{percent}% usado este mes"
-      monthly_quota: "Cuota mensual"
-      resets_monthly: "Se restablece cada mes"
-      requests_remaining: "Solicitudes restantes"
-      running_low: "¡Quedando pocas!"
-      available_month: "Disponibles este mes"
-      recent_activity: "Actividad reciente de la API"
-      view_all: "Ver todo"
-      time_col: "Hora"
-      time_ago: "hace %{time}"
-      endpoint_col: "Endpoint"
-      status_col: "Estado"
-      response_col: "Respuesta"
-      requests_col: "Solicitudes"
-      no_activity: "Sin actividad aún"
-      no_activity_desc: "Comienza realizando tu primera llamada a la API."
-      browse_docs: "Ver documentación de la API"
-      active_key:
-        one: "Clave activa"
-        other: "Claves activas"
-      api_keys: "Claves API"
-      manage: "Gestionar"
-      create_key: "Crear nueva clave"
-      billing: "Facturación"
-      current_plan: "Plan actual"
-      next_billing: "Próxima fecha de facturación"
-      view_details: "Ver detalles"
-      upgrade_heading: "Actualiza tu plan"
-      upgrade_desc: "Obtén más solicitudes, límites de tasa más rápidos y soporte prioritario."
-      view_pricing: "Ver precios"
     api_keys:
-      title: "Claves API"
-      subtitle: "Gestiona tus claves API y credenciales de acceso"
+      active_keys: Claves activas
+      btn_regenerate: Regenerar
+      btn_revoke: Revocar
+      col_actions: Acciones
+      col_created: Creada
+      col_key: Clave
+      col_last_used: Último uso
+      col_name: Nombre
+      col_status: Estado
+      confirm_regenerate: "¿Estás seguro? Esto revocará la clave actual y creará una
+        nueva. Deberás actualizar todos los sistemas que usen esta clave."
+      confirm_revoke: "¿Estás seguro? Esta acción no se puede deshacer. Los sistemas
+        que usen esta clave perderán acceso de inmediato."
+      create_btn: Crear nueva clave
+      empty_btn: Crear tu primera clave
+      empty_desc: Comienza creando tu primera clave API para acceder a nuestras APIs.
+      empty_heading: Sin claves API todavía
       flash:
-        created: "Clave API creada correctamente. Cópiala ahora: no podrás verla de nuevo."
-        regenerated: "Clave API regenerada correctamente. Cópiala ahora: no podrás verla de nuevo."
-        cannot_regenerate_revoked: "No se puede regenerar una clave revocada. Crea una nueva."
-        revoked: "Clave API revocada correctamente."
-        revoke_error: "No se pudo revocar la clave API."
-        not_found: "Clave API no encontrada."
-      create_btn: "Crear nueva clave"
-      info_heading: "Información importante"
-      info_shared_label: "Cuota compartida:"
-      info_shared_text: "Todas tus claves API comparten la misma cuota mensual de solicitudes según tu plan."
-      info_one_time_label: "Visualización única:"
-      info_one_time_text: "Las claves API completas se muestran solo una vez al crearlas. Guárdalas de forma segura."
-      info_security_label: "Seguridad:"
-      info_security_text: "Nunca expongas tus claves API en código del lado del cliente o repositorios públicos."
-      info_regenerate_label: "Regenerar si está comprometida:"
-      info_regenerate_text: "Revoca y regenera de inmediato si una clave se expone."
-      active_keys: "Claves activas"
-      revoked_keys: "Claves revocadas"
-      total_keys: "Total de claves"
-      table_heading: "Tus claves API"
-      col_name: "Nombre"
-      col_status: "Estado"
-      col_key: "Clave"
-      col_created: "Creada"
-      col_last_used: "Último uso"
-      col_actions: "Acciones"
-      revoked_ago: "Revocada hace %{time}"
-      status_revoked: "Revocada"
-      status_active: "Activa"
-      status_inactive: "Inactiva"
-      last_used_never: "Nunca"
-      btn_regenerate: "Regenerar"
-      btn_revoke: "Revocar"
-      confirm_regenerate: "¿Estás seguro? Esto revocará la clave actual y creará una nueva. Deberás actualizar todos los sistemas que usen esta clave."
-      confirm_revoke: "¿Estás seguro? Esta acción no se puede deshacer. Los sistemas que usen esta clave perderán acceso de inmediato."
-      empty_heading: "Sin claves API todavía"
-      empty_desc: "Comienza creando tu primera clave API para acceder a nuestras APIs."
-      empty_btn: "Crear tu primera clave"
+        cannot_regenerate_revoked: No se puede regenerar una clave revocada. Crea
+          una nueva.
+        created: 'Clave API creada correctamente. Cópiala ahora: no podrás verla de
+          nuevo.'
+        not_found: Clave API no encontrada.
+        regenerated: 'Clave API regenerada correctamente. Cópiala ahora: no podrás
+          verla de nuevo.'
+        revoke_error: No se pudo revocar la clave API.
+        revoked: Clave API revocada correctamente.
+      info_heading: Información importante
+      info_one_time_label: 'Visualización única:'
+      info_one_time_text: Las claves API completas se muestran solo una vez al crearlas.
+        Guárdalas de forma segura.
+      info_regenerate_label: 'Regenerar si está comprometida:'
+      info_regenerate_text: Revoca y regenera de inmediato si una clave se expone.
+      info_security_label: 'Seguridad:'
+      info_security_text: Nunca expongas tus claves API en código del lado del cliente
+        o repositorios públicos.
+      info_shared_label: 'Cuota compartida:'
+      info_shared_text: Todas tus claves API comparten la misma cuota mensual de solicitudes
+        según tu plan.
+      last_used_never: Nunca
       new:
-        title: "Crear nueva clave API"
-        back: "Volver a claves API"
-        subtitle: "Genera una nueva clave API para acceder a nuestros servicios"
-        security_heading: "Información de seguridad importante"
-        security_text: "Tu clave API solo se mostrará una vez después de la creación. Asegúrate de copiarla y guardarla de forma segura. No podemos recuperar claves perdidas."
-        name_label: "Nombre de la clave"
-        name_placeholder: "ej., Servidor de producción, App móvil, Pipeline CI/CD"
-        name_hint: "Un nombre descriptivo para identificar dónde se usa esta clave."
-        quota_heading: "Cuota compartida"
-        quota_text: "Todas tus claves API comparten la misma cuota mensual según tu plan. Crear varias claves no aumenta tu límite."
-        cancel: "Cancelar"
-        submit: "Generar clave API"
-        submitting: "Generando..."
+        back: Volver a claves API
+        cancel: Cancelar
         errors:
           one: "%{count} error impidió crear esta clave API:"
           other: "%{count} errores impidieron crear esta clave API:"
+        name_hint: Un nombre descriptivo para identificar dónde se usa esta clave.
+        name_label: Nombre de la clave
+        name_placeholder: ej., Servidor de producción, App móvil, Pipeline CI/CD
+        quota_heading: Cuota compartida
+        quota_text: Todas tus claves API comparten la misma cuota mensual según tu
+          plan. Crear varias claves no aumenta tu límite.
+        security_heading: Información de seguridad importante
+        security_text: Tu clave API solo se mostrará una vez después de la creación.
+          Asegúrate de copiarla y guardarla de forma segura. No podemos recuperar
+          claves perdidas.
+        submit: Generar clave API
+        submitting: Generando...
+        subtitle: Genera una nueva clave API para acceder a nuestros servicios
+        title: Crear nueva clave API
+      revoked_ago: Revocada hace %{time}
+      revoked_keys: Claves revocadas
+      show:
+        api_key_details: Detalles de la clave API
       show_key:
-        title: "Clave API creada"
-        success_heading: "¡Clave API creada exitosamente!"
-        success_body: "Tu nueva clave API ha sido generada. Asegúrate de copiarla ahora, no podrás verla de nuevo."
-        key_label: "Tu clave API"
-        copy_btn: "Copiar"
-        copied_btn: "¡Copiado!"
-        key_hint: "Haz clic en el código para seleccionarlo todo, o usa el botón Copiar"
-        warning_heading: "⚠️ ¡Esta es tu única oportunidad de copiar esta clave!"
-        warning_body: "Por razones de seguridad, no podemos mostrarte esta clave de nuevo. Si la pierdes, deberás regenerarla, lo cual invalidará la clave actual."
-        usage_heading: "Cómo usar tu clave API"
-        header_example: "Inclúyela en tus encabezados HTTP:"
-        curl_example: "Ejemplo con cURL:"
-        js_example: "Ejemplo en JavaScript:"
-        security_heading: "Mejores prácticas de seguridad"
-        security_1: "Nunca expongas tu clave API en código del lado del cliente, repositorios públicos o JavaScript del navegador"
-        security_2: "Guárdala de forma segura usando variables de entorno o un sistema de gestión de secretos"
-        security_3: "Revócala inmediatamente si sospechas que tu clave ha sido comprometida"
-        security_4: "Rota las claves regularmente como parte de tus prácticas de seguridad"
         back_btn: "← Volver a claves API"
-        view_docs_btn: "Ver documentación de la API"
-        go_dashboard_btn: "Ir al panel"
-      show:
-        api_key_details: "Detalles de la clave API"
+        copied_btn: "¡Copiado!"
+        copy_btn: Copiar
+        curl_example: 'Ejemplo con cURL:'
+        go_dashboard_btn: Ir al panel
+        header_example: 'Inclúyela en tus encabezados HTTP:'
+        js_example: 'Ejemplo en JavaScript:'
+        key_hint: Haz clic en el código para seleccionarlo todo, o usa el botón Copiar
+        key_label: Tu clave API
+        security_1: Nunca expongas tu clave API en código del lado del cliente, repositorios
+          públicos o JavaScript del navegador
+        security_2: Guárdala de forma segura usando variables de entorno o un sistema
+          de gestión de secretos
+        security_3: Revócala inmediatamente si sospechas que tu clave ha sido comprometida
+        security_4: Rota las claves regularmente como parte de tus prácticas de seguridad
+        security_heading: Mejores prácticas de seguridad
+        success_body: Tu nueva clave API ha sido generada. Asegúrate de copiarla ahora,
+          no podrás verla de nuevo.
+        success_heading: "¡Clave API creada exitosamente!"
+        title: Clave API creada
+        usage_heading: Cómo usar tu clave API
+        view_docs_btn: Ver documentación de la API
+        warning_body: Por razones de seguridad, no podemos mostrarte esta clave de
+          nuevo. Si la pierdes, deberás regenerarla, lo cual invalidará la clave actual.
+        warning_heading: "⚠️ ¡Esta es tu única oportunidad de copiar esta clave!"
+      status_active: Activa
+      status_inactive: Inactiva
+      status_revoked: Revocada
+      subtitle: Gestiona tus claves API y credenciales de acceso
+      table_heading: Tus claves API
+      title: Claves API
+      total_keys: Total de claves
     billing:
-      title: "Facturación y suscripción"
-      subtitle: "Gestiona tu plan, método de pago e historial de facturación"
-      flash:
-        activated: "Suscripción activada correctamente. Tu nuevo plan ya está activo."
-        canceled: "El pago se canceló. Tu suscripción no ha cambiado."
-        invalid_plan: "Plan seleccionado no válido"
-        promotional_no_portal: "Los planes promocionales no tienen portal de cliente."
-        no_subscription: "No se encontró una suscripción activa"
-        no_subscription_to_cancel: "No hay suscripción activa que cancelar"
-      plan_notice:
-        heading: "¿Listo para actualizar a %{plan}?"
-        body: "¡Desplázate hacia abajo para ver los detalles del plan %{plan} y comenzar tu prueba gratuita de 7 días!"
       current_plan:
-        heading: "Plan actual"
-        free_label: "Plan gratuito"
+        cancels_on: Cancela el %{date}
+        free_label: Plan gratuito
+        heading: Plan actual
+        manage_btn: Gestionar suscripción
+        no_renewal: Sin renovación - Plan gratuito
         per_month: "/mes"
-        cancels_on: "Cancela el %{date}"
-        renews_on: "Se renueva el %{date}"
-        no_renewal: "Sin renovación - Plan gratuito"
-        upgrade_btn: "Actualizar plan"
-        manage_btn: "Gestionar suscripción"
-      usage:
-        heading: "Uso en este período"
-        of_requests: "de %{limit} solicitudes"
-        percent_used: "%{percent}% usado"
-        warning_critical_heading: "¡Quedando pocas solicitudes!"
-        warning_critical_body: "Te estás acercando a tu límite mensual. Considera actualizar para evitar interrupciones del servicio."
-        warning_moderate_heading: "¡Atención!"
-        warning_moderate_body: "Has usado el %{percent}% de tu cuota mensual. Puede que quieras actualizar pronto."
-        rate_limit_heading: "Límite de tasa"
-        rate_limit_unit: "solicitudes por minuto"
-      upgrade_section:
-        heading: "Actualiza tu plan"
-        subtitle: "Elige un plan que se adapte a tus necesidades"
-        monthly: "Mensual"
-        yearly: "Anual"
-        save_percent: "Ahorra 17%"
-        most_popular: "Más popular"
-        per_month: "/mes"
-        billed_yearly: "$%{price} facturado anualmente"
-        upgrade_btn: "Actualizar a %{plan}"
-        view_all: "Ver todos los planes y detalles de precios →"
-      payment:
-        heading: "Método de pago"
-        managed_by: "Gestionado por LemonSqueezy"
-        secure_processing: "Procesamiento de pagos seguro"
-        update_btn: "Actualizar método de pago"
-        promoted_heading: "No se requiere método de pago"
-        promoted_subheading: "Tu plan actual fue otorgado mediante una promoción de administrador."
-        none_heading: "Sin método de pago registrado"
-        none_hint: "Actualiza tu plan para agregar un método de pago"
-      history:
-        heading: "Historial de facturación"
-        plan_label: "Plan"
-        status_label: "Estado"
-        promoted_status: "Promocional"
-        period_started: "Período iniciado"
-        cancels_on: "Cancela el"
-        renews_on: "Se renueva el"
-        promoted_expires_on: "La promoción finaliza el"
-        portal_note: "El historial completo de facturas está disponible en el portal de clientes de LemonSqueezy a través de Gestionar suscripción."
-        promoted_note: "Este plan es promocional y no tiene facturas de LemonSqueezy."
-        none_heading: "Sin historial de facturación"
-        none_hint: "Las facturas aparecerán aquí después de tu primer pago"
+        renews_on: Se renueva el %{date}
+        upgrade_btn: Actualizar plan
       faq:
-        heading: "Preguntas frecuentes sobre facturación"
+        heading: Preguntas frecuentes sobre facturación
+        q1_body: Se te cobrará al inicio de cada período de facturación. El primer
+          cobro ocurre cuando actualizas a un plan de pago.
         q1_heading: "¿Cuándo se me cobrará?"
-        q1_body: "Se te cobrará al inicio de cada período de facturación. El primer cobro ocurre cuando actualizas a un plan de pago."
+        q2_body: "¡Sí! Puedes cancelar tu suscripción en cualquier momento. Continuarás
+          teniendo acceso hasta el final de tu período de facturación actual."
         q2_heading: "¿Puedo cancelar en cualquier momento?"
-        q2_body: "¡Sí! Puedes cancelar tu suscripción en cualquier momento. Continuarás teniendo acceso hasta el final de tu período de facturación actual."
+        q3_body: Las solicitudes a la API serán rechazadas con un código de estado
+          429. Puedes actualizar tu plan para aumentar tu cuota de inmediato.
         q3_heading: "¿Qué pasa si supero mi cuota?"
-        q3_body: "Las solicitudes a la API serán rechazadas con un código de estado 429. Puedes actualizar tu plan para aumentar tu cuota de inmediato."
+        q4_body: No, las solicitudes no utilizadas no se acumulan para el siguiente
+          período de facturación. Tu cuota se restablece al inicio de cada período.
         q4_heading: "¿Las solicitudes no utilizadas se acumulan?"
-        q4_body: "No, las solicitudes no utilizadas no se acumulan para el siguiente período de facturación. Tu cuota se restablece al inicio de cada período."
-    settings:
-      title: "Ajustes"
-      subtitle: "Gestiona tus preferencias de cuenta y configuración de seguridad"
       flash:
-        email_confirm: "Ajustes actualizados. Revisa tu correo para confirmar la nueva dirección."
-        updated: "Ajustes actualizados correctamente."
-        error: "No se pudieron actualizar los ajustes. Revisa el formulario."
-        reason_too_short: "Indica un motivo (al menos 10 caracteres)."
-        deletion_email_sent: "Revisa tu correo: te enviamos un enlace de confirmación. Expira en 1 hora."
-        invalid_token: "Este enlace no es válido o ha expirado. Solicita uno nuevo."
-        deleted: "Tu cuenta se ha eliminado permanentemente. Lamentamos verte marchar."
-      errors:
-        one: "%{count} error impidió guardar estos ajustes:"
-        other: "%{count} errores impidieron guardar estos ajustes:"
-      account_info:
-        heading: "Información de la cuenta"
-        subheading: "Actualiza los detalles de tu cuenta y dirección de correo electrónico"
-        email_label: "Dirección de correo electrónico"
-        email_hint: "Este es tu correo de acceso y donde te enviaremos notificaciones importantes."
-        name_label: "Nombre completo"
-        name_placeholder: "Tu nombre completo"
-        name_hint: "Opcional - nos ayuda a personalizar tu experiencia"
-        company_label: "Nombre de la empresa"
-        company_placeholder: "Tu empresa u organización"
-        company_hint: "Opcional - se muestra en las facturas"
-        avatar_heading: "Foto de perfil"
-        avatar_body: "Tu avatar es proporcionado por %{gravatar_link}, basado en tu dirección de correo. Actualízalo allí para cambiarlo aquí."
-        gravatar_link_text: "Gravatar"
-        update_gravatar: "Actualizar en Gravatar →"
-        password_heading: "Contraseña"
-        change_password: "Cambiar contraseña →"
-      language:
-        heading: "Preferencia de idioma"
-        subheading: "Elige tu idioma preferido para la interfaz"
-        auto_detect: "Detección automática"
-        auto_detect_hint: "La detección automática usa la configuración de idioma de tu navegador"
-      email_prefs:
-        heading: "Preferencias de correo electrónico"
-        subheading: "Controla qué correos recibes de nosotros"
-        notifications_label: "Notificaciones por correo"
-        notifications_hint: "Recibe correos sobre actividad de tu cuenta, cambios en claves API y actualizaciones importantes"
-        usage_alerts_label: "Alertas de uso"
-        usage_alerts_hint: "Recibe notificaciones cuando alcances el 75% y 90% de tu cuota mensual"
-        weekly_reports_label: "Informes semanales de uso"
-        weekly_reports_hint: "Recibe un resumen semanal del uso y rendimiento de tu API"
-      save_btn: "Guardar cambios"
-      saving: "Guardando..."
-      confirm_deletion:
-        title: "Confirmar eliminación de cuenta"
-        subtitle: "Este es el último paso — tu cuenta será eliminada permanentemente."
-        back: "Volver a ajustes"
-        reason_heading: "Tu motivo para irte"
-        consequences_heading: "Lo que ocurrirá"
-        api_keys_bullet_title: "Todas tus claves API serán revocadas inmediatamente"
-        api_keys_bullet_body: "Las aplicaciones que usen tus claves dejarán de funcionar al instante"
-        subscription_bullet_title: "Tu suscripción será cancelada"
-        subscription_bullet_body: "No se realizarán más cargos"
-        data_bullet_title: "Todos los datos de uso serán eliminados permanentemente"
-        data_bullet_body: "Esto no se puede recuperar"
-        cancel: "Cancelar — conservar mi cuenta"
-        confirm_btn: "Eliminar mi cuenta permanentemente"
-        deleting: "Eliminando tu cuenta..."
-      show:
-        profile_picture: "Foto de perfil"
-    usage:
-      title: "Uso y análisis"
-      subtitle: "Rastrea el uso y las métricas de rendimiento de tu API"
-      export_btn: "Exportar CSV"
-      date_range:
-        heading: "Rango de fechas"
-        last_7: "Últimos 7 días"
-        last_30: "Últimos 30 días"
-        last_90: "Últimos 90 días"
-        custom: "Rango personalizado"
-        start_date: "Fecha de inicio"
-        end_date: "Fecha de fin"
-        apply_btn: "Aplicar"
-      cards:
-        total_requests: "Total de solicitudes"
-        api_calls_in_period: "Llamadas a la API en el período"
-        requests_used: "Solicitudes usadas"
-        counted_against_quota: "Contabilizadas contra la cuota"
-        avg_response: "Tiempo de respuesta promedio"
-        avg_latency: "Latencia promedio"
-        error_rate: "Tasa de errores"
-        failed_requests: "Solicitudes fallidas"
-      charts:
-        usage_over_time: "Uso a lo largo del tiempo"
-        usage_over_time_sub: "Volumen diario de solicitudes y errores"
-        by_endpoint: "Uso por endpoint"
-        by_endpoint_sub: "Endpoints principales por número de solicitudes"
-        loading: "Cargando gráfica..."
-        loading_short: "Cargando..."
-        no_data_heading: "Sin datos disponibles"
-        no_data_body: "No se encontraron datos de solicitudes en el rango de fechas seleccionado."
-        no_endpoints_heading: "No se encontraron llamadas a la API"
-        no_endpoints_body: "No hay datos de endpoints en el rango de fechas seleccionado."
-      table:
-        heading: "Solicitudes recientes"
-        subheading: "Últimas llamadas a la API en el rango de fechas seleccionado"
-        col_time: "Hora"
-        col_endpoint: "Endpoint"
-        col_method: "Método"
-        col_status: "Estado"
-        col_response: "Tiempo de respuesta"
-        col_requests: "Solicitudes"
-        col_api_key: "Clave API"
-        time_ago: "hace %{time}"
-        unknown_key: "Desconocida"
-        showing_info: "Mostrando %{from}–%{to} de %{total} solicitudes"
-        page_of: "Página %{page} de %{pages}"
-        prev: "Ant."
-        next: "Sig."
-        empty_heading: "Sin datos de uso"
-        empty_body: "No se encontraron llamadas a la API en el rango de fechas seleccionado."
-    quick_start:
-      title: "Inicio Rápido"
-      heading: "Comienza con la API de Requiems"
-      subtitle: "Sigue estos pasos para hacer tu primera llamada a la API en minutos"
-      step_1:
-        heading: "1. Crea Tu Cuenta"
-        body: "Regístrate para obtener una cuenta gratuita y conseguir tu clave de API. No se requiere tarjeta de crédito."
-        cta: "¡Ya lo hiciste! Has iniciado sesión."
-      step_2:
-        heading: "2. Obtén Tu Clave de API"
-        body: "Ve a Claves de API para crear una clave. La incluirás en cada solicitud como encabezado."
-        cta: "Administrar Claves de API"
-        header_label: "Incluye este encabezado en cada solicitud:"
-      step_3:
-        heading: "3. Haz Tu Primera Llamada a la API"
-        body: "Prueba esta solicitud de ejemplo para obtener un consejo aleatorio:"
-        note: "Reemplaza YOUR_API_KEY con una clave activa de tu página de Claves de API."
-      step_4:
-        heading: "4. Ejemplos de Código"
-        body: "Copia y adapta estos ejemplos en tu lenguaje preferido."
-      copy_btn: "Copiar"
-      copied_btn: "¡Copiado!"
-      browse_apis: "Ver Todas las APIs"
+        activated: Suscripción activada correctamente. Tu nuevo plan ya está activo.
+        canceled: El pago se canceló. Tu suscripción no ha cambiado.
+        invalid_plan: Plan seleccionado no válido
+        no_subscription: No se encontró una suscripción activa
+        no_subscription_to_cancel: No hay suscripción activa que cancelar
+        promotional_no_portal: Los planes promocionales no tienen portal de cliente.
+      history:
+        cancels_on: Cancela el
+        heading: Historial de facturación
+        none_heading: Sin historial de facturación
+        none_hint: Las facturas aparecerán aquí después de tu primer pago
+        period_started: Período iniciado
+        plan_label: Plan
+        portal_note: El historial completo de facturas está disponible en el portal
+          de clientes de LemonSqueezy a través de Gestionar suscripción.
+        promoted_expires_on: La promoción finaliza el
+        promoted_note: Este plan es promocional y no tiene facturas de LemonSqueezy.
+        promoted_status: Promocional
+        renews_on: Se renueva el
+        status_label: Estado
+      payment:
+        heading: Método de pago
+        managed_by: Gestionado por LemonSqueezy
+        none_heading: Sin método de pago registrado
+        none_hint: Actualiza tu plan para agregar un método de pago
+        promoted_heading: No se requiere método de pago
+        promoted_subheading: Tu plan actual fue otorgado mediante una promoción de
+          administrador.
+        secure_processing: Procesamiento de pagos seguro
+        update_btn: Actualizar método de pago
+      plan_notice:
+        body: "¡Desplázate hacia abajo para ver los detalles del plan %{plan} y comenzar
+          tu prueba gratuita de 7 días!"
+        heading: "¿Listo para actualizar a %{plan}?"
+      subtitle: Gestiona tu plan, método de pago e historial de facturación
+      title: Facturación y suscripción
+      upgrade_section:
+        billed_yearly: "$%{price} facturado anualmente"
+        heading: Actualiza tu plan
+        monthly: Mensual
+        most_popular: Más popular
+        per_month: "/mes"
+        save_percent: Ahorra 17%
+        subtitle: Elige un plan que se adapte a tus necesidades
+        upgrade_btn: Actualizar a %{plan}
+        view_all: Ver todos los planes y detalles de precios →
+        yearly: Anual
+      usage:
+        heading: Uso en este período
+        of_requests: de %{limit} solicitudes
+        percent_used: "%{percent}% usado"
+        rate_limit_heading: Límite de tasa
+        rate_limit_unit: solicitudes por minuto
+        warning_critical_body: Te estás acercando a tu límite mensual. Considera actualizar
+          para evitar interrupciones del servicio.
+        warning_critical_heading: "¡Quedando pocas solicitudes!"
+        warning_moderate_body: Has usado el %{percent}% de tu cuota mensual. Puede
+          que quieras actualizar pronto.
+        warning_moderate_heading: "¡Atención!"
     mailers:
-      subscription:
-        upgrade_notification:
-          subject: "Ahora estás en el plan %{plan}"
-          header_title: "Suscripción activada"
-          header_subtitle: "Requiems API — Bienvenido a tu nuevo plan"
-          greeting_html: "Hola <strong>%{email}</strong>,"
-          intro: "Tu suscripción está ahora activa. Tienes acceso completo a todas las funciones incluidas en tu plan."
-          plan_label: "Tu plan"
-          cta_btn: "Ir al panel"
-          contact_notice_html: "¿Preguntas? Contáctanos en %{email_link}."
-      promotion:
-        upgrade_notification:
-          subject: "Tu plan de Requiems ha sido actualizado a %{plan}"
-          header_title: "Actualización de plan"
-          header_subtitle: "Requiems API — Has sido actualizado"
-          greeting_html: "Hola <strong>%{email}</strong>,"
-          intro: "¡Buenas noticias! Tu plan de Requiems API ha sido actualizado."
-          plan_label: "Tu nuevo plan"
-          expires_label: "Acceso hasta"
-          cta_btn: "Ir al panel"
-          expiry_notice_html: "Tu acceso mejorado es válido hasta el <strong>%{expires_at}</strong>. Después de esa fecha, tu cuenta volverá automáticamente al plan gratuito."
-          contact_notice_html: "¿Preguntas? Contáctanos en %{email_link}."
       account_deletion:
-        subject: "Confirma la eliminación de tu cuenta"
-        header_title: "Eliminación de cuenta solicitada"
-        header_subtitle: "Requiems API — Acción requerida"
-        greeting_html: "Hola <strong>%{email}</strong>,"
-        intro: "Recibimos una solicitud para eliminar permanentemente tu cuenta de Requiems API. Haz clic en el botón de abajo para confirmar."
-        warning: "Esta acción es permanente y no se puede deshacer."
-        reason_label: "Tu motivo"
-        expiry_html: "Este enlace expira el <strong>%{expires_at}</strong>. Después de eso deberás solicitar un nuevo correo de confirmación."
-        confirm_btn: "Confirmar eliminación de cuenta"
-        consequences_heading: "Al eliminar tu cuenta:"
-        consequence_1: "Todas tus claves API serán revocadas inmediatamente"
-        consequence_2: "Tu suscripción activa será cancelada"
-        consequence_3: "Todos los datos de uso e historial serán eliminados permanentemente"
-        ignore_notice: "Si no solicitaste esto, puedes ignorar este correo de forma segura. Tu cuenta no será eliminada."
-        contact_notice_html: "Si tienes dudas, contáctanos en %{email_link}."
+        confirm_btn: Confirmar eliminación de cuenta
+        consequence_1: Todas tus claves API serán revocadas inmediatamente
+        consequence_2: Tu suscripción activa será cancelada
+        consequence_3: Todos los datos de uso e historial serán eliminados permanentemente
+        consequences_heading: 'Al eliminar tu cuenta:'
+        contact_notice_html: Si tienes dudas, contáctanos en %{email_link}.
+        expiry_html: Este enlace expira el <strong>%{expires_at}</strong>. Después
+          de eso deberás solicitar un nuevo correo de confirmación.
+        greeting_html: Hola <strong>%{email}</strong>,
+        header_subtitle: Requiems API — Acción requerida
+        header_title: Eliminación de cuenta solicitada
+        ignore_notice: Si no solicitaste esto, puedes ignorar este correo de forma
+          segura. Tu cuenta no será eliminada.
+        intro: Recibimos una solicitud para eliminar permanentemente tu cuenta de
+          Requiems API. Haz clic en el botón de abajo para confirmar.
+        reason_label: Tu motivo
+        warning: Esta acción es permanente y no se puede deshacer.
       private_deployments:
         request_received:
-          subject: "Solicitud recibida: despliegue privado de Requiems"
-          header_title: "Solicitud recibida"
-          header_subtitle: "Tu despliegue privado se está preparando"
-          greeting: "Hola %{name},"
-          intro: "Hemos recibido tu solicitud de despliegue privado para %{company}. Tu entorno API dedicado estará listo en un plazo de 24 a 48 horas."
-          notify: "Te enviaremos un correo en cuanto esté activo."
-          order_summary: "Resumen del pedido"
-          server_tier: "Nivel de servidor"
-          monthly_price: "Precio mensual"
-          selected_services: "Servicios seleccionados"
-          what_next: "Qué ocurre a continuación:"
-          what_next_detail: "Aprovisionaremos tu VPS en Hetzner, configuraremos tu API Go privada solo con los servicios elegidos y tu subdominio en yourcompany.requiems.xyz. Cuando esté activo recibirás un segundo correo con la URL y los datos de autenticación."
-          docs_notice_html: "Mientras tanto, puedes explorar nuestra documentación de API en %{docs_link}."
-          docs_notice: "Mientras tanto, puedes explorar nuestra documentación de API en %{docs_link}."
+          docs_notice: Mientras tanto, puedes explorar nuestra documentación de API
+            en %{docs_link}.
+          docs_notice_html: Mientras tanto, puedes explorar nuestra documentación
+            de API en %{docs_link}.
+          greeting: Hola %{name},
+          header_subtitle: Tu despliegue privado se está preparando
+          header_title: Solicitud recibida
+          intro: Hemos recibido tu solicitud de despliegue privado para %{company}.
+            Tu entorno API dedicado estará listo en un plazo de 24 a 48 horas.
+          monthly_price: Precio mensual
+          notify: Te enviaremos un correo en cuanto esté activo.
+          order_summary: Resumen del pedido
           questions: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
           questions_html: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
+          selected_services: Servicios seleccionados
+          server_tier: Nivel de servidor
+          subject: 'Solicitud recibida: despliegue privado de Requiems'
+          what_next: 'Qué ocurre a continuación:'
+          what_next_detail: Aprovisionaremos tu VPS en Hetzner, configuraremos tu
+            API Go privada solo con los servicios elegidos y tu subdominio en yourcompany.requiems.xyz.
+            Cuando esté activo recibirás un segundo correo con la URL y los datos
+            de autenticación.
+      promotion:
+        upgrade_notification:
+          contact_notice_html: "¿Preguntas? Contáctanos en %{email_link}."
+          cta_btn: Ir al panel
+          expires_label: Acceso hasta
+          expiry_notice_html: Tu acceso mejorado es válido hasta el <strong>%{expires_at}</strong>.
+            Después de esa fecha, tu cuenta volverá automáticamente al plan gratuito.
+          greeting_html: Hola <strong>%{email}</strong>,
+          header_subtitle: Requiems API — Has sido actualizado
+          header_title: Actualización de plan
+          intro: "¡Buenas noticias! Tu plan de Requiems API ha sido actualizado."
+          plan_label: Tu nuevo plan
+          subject: Tu plan de Requiems ha sido actualizado a %{plan}
+      subscription:
+        upgrade_notification:
+          contact_notice_html: "¿Preguntas? Contáctanos en %{email_link}."
+          cta_btn: Ir al panel
+          greeting_html: Hola <strong>%{email}</strong>,
+          header_subtitle: Requiems API — Bienvenido a tu nuevo plan
+          header_title: Suscripción activada
+          intro: Tu suscripción está ahora activa. Tienes acceso completo a todas
+            las funciones incluidas en tu plan.
+          plan_label: Tu plan
+          subject: Ahora estás en el plan %{plan}
+    overview:
+      active_key:
+        one: Clave activa
+        other: Claves activas
+      api_keys: Claves API
+      available_month: Disponibles este mes
+      billing: Facturación
+      browse_docs: Ver documentación de la API
+      create_key: Crear nueva clave
+      current_plan: Plan actual
+      current_usage: Solicitudes usadas
+      endpoint_col: Endpoint
+      manage: Gestionar
+      monthly_quota: Cuota mensual
+      next_billing: Próxima fecha de facturación
+      no_activity: Sin actividad aún
+      no_activity_desc: Comienza realizando tu primera llamada a la API.
+      of_requests: de %{limit} solicitudes
+      recent_activity: Actividad reciente de la API
+      requests_col: Solicitudes
+      requests_remaining: Solicitudes restantes
+      resets_monthly: Se restablece cada mes
+      response_col: Respuesta
+      running_low: "¡Quedando pocas!"
+      status_col: Estado
+      subtitle: Aquí está tu resumen de uso de API para %{date}
+      time_ago: hace %{time}
+      time_col: Hora
+      title: Panel
+      upgrade_desc: Obtén más solicitudes, límites de tasa más rápidos y soporte prioritario.
+      upgrade_heading: Actualiza tu plan
+      used_this_month: "%{percent}% usado este mes"
+      view_all: Ver todo
+      view_details: Ver detalles
+      view_pricing: Ver precios
+      welcome: "¡Bienvenido de nuevo, %{name}!"
+    plans:
+      business: Negocio
+      developer: Desarrollador
+      enterprise: Empresarial
+      free: Gratuito
+      professional: Profesional
     private_deployments:
       new:
         back_to_pricing: "← Volver a precios"
-        checkout_notice: "Serás redirigido a nuestro proceso de pago seguro en LemonSqueezy para completar tu suscripción."
-        submit: "Continuar al pago →"
-        redirecting: "Redirigiendo..."
+        checkout_notice: Serás redirigido a nuestro proceso de pago seguro en LemonSqueezy
+          para completar tu suscripción.
+        redirecting: Redirigiendo...
+        submit: Continuar al pago →
+    quick_start:
+      browse_apis: Ver Todas las APIs
+      copy_btn: Copiar
+      heading: Comienza con la API de Requiems
+      step_1:
+        body: Regístrate para obtener una cuenta gratuita y conseguir tu clave de
+          API. No se requiere tarjeta de crédito.
+        cta: "¡Ya lo hiciste! Has iniciado sesión."
+        heading: 1. Crea Tu Cuenta
+      step_2:
+        body: Ve a Claves de API para crear una clave. La incluirás en cada solicitud
+          como encabezado.
+        cta: Administrar Claves de API
+        header_label: 'Incluye este encabezado en cada solicitud:'
+        heading: 2. Obtén Tu Clave de API
+      step_3:
+        body: 'Prueba esta solicitud de ejemplo para obtener un consejo aleatorio:'
+        heading: 3. Haz Tu Primera Llamada a la API
+        note: Reemplaza YOUR_API_KEY con una clave activa de tu página de Claves de
+          API.
+      step_4:
+        body: Copia y adapta estos ejemplos en tu lenguaje preferido.
+        heading: 4. Ejemplos de Código
+      subtitle: Sigue estos pasos para hacer tu primera llamada a la API en minutos
+      title: Inicio Rápido
     referrals:
-      title: "Programa de Referidos"
-      subtitle: "Comparte tu enlace de referido y gana recompensas cuando tus amigos actualicen a un plan de pago."
-      stats:
-        total_referred: "Usuarios Referidos"
-        total_converted: "Conversiones de Pago"
       link:
-        heading: "Tu Enlace de Referido"
-        description: "Comparte este enlace con tus amigos. Cuando se registren y actualicen, se les atribuirá a ti."
-        copy: "Copiar"
         copied: "¡Copiado!"
+        copy: Copiar
+        description: Comparte este enlace con tus amigos. Cuando se registren y actualicen,
+          se les atribuirá a ti.
+        heading: Tu Enlace de Referido
+      stats:
+        total_converted: Conversiones de Pago
+        total_referred: Usuarios Referidos
+      subtitle: Comparte tu enlace de referido y gana recompensas cuando tus amigos
+        actualicen a un plan de pago.
       table:
-        heading: "Referidos Recientes"
-        empty: "Aún no tienes referidos. ¡Comparte tu enlace para empezar!"
-        user_col: "Usuario"
-        date_col: "Registro"
-        status_col: "Estado"
-        status_pending: "Pendiente"
-        status_converted: "Convertido"
+        date_col: Registro
+        empty: Aún no tienes referidos. ¡Comparte tu enlace para empezar!
+        heading: Referidos Recientes
+        status_col: Estado
+        status_converted: Convertido
+        status_pending: Pendiente
+        user_col: Usuario
+      title: Programa de Referidos
+    settings:
+      account_info:
+        avatar_body: Tu avatar es proporcionado por %{gravatar_link}, basado en tu
+          dirección de correo. Actualízalo allí para cambiarlo aquí.
+        avatar_heading: Foto de perfil
+        change_password: Cambiar contraseña →
+        company_hint: Opcional - se muestra en las facturas
+        company_label: Nombre de la empresa
+        company_placeholder: Tu empresa u organización
+        email_hint: Este es tu correo de acceso y donde te enviaremos notificaciones
+          importantes.
+        email_label: Dirección de correo electrónico
+        gravatar_link_text: Gravatar
+        heading: Información de la cuenta
+        name_hint: Opcional - nos ayuda a personalizar tu experiencia
+        name_label: Nombre completo
+        name_placeholder: Tu nombre completo
+        password_heading: Contraseña
+        subheading: Actualiza los detalles de tu cuenta y dirección de correo electrónico
+        update_gravatar: Actualizar en Gravatar →
+      confirm_deletion:
+        api_keys_bullet_body: Las aplicaciones que usen tus claves dejarán de funcionar
+          al instante
+        api_keys_bullet_title: Todas tus claves API serán revocadas inmediatamente
+        back: Volver a ajustes
+        cancel: Cancelar — conservar mi cuenta
+        confirm_btn: Eliminar mi cuenta permanentemente
+        consequences_heading: Lo que ocurrirá
+        data_bullet_body: Esto no se puede recuperar
+        data_bullet_title: Todos los datos de uso serán eliminados permanentemente
+        deleting: Eliminando tu cuenta...
+        reason_heading: Tu motivo para irte
+        subscription_bullet_body: No se realizarán más cargos
+        subscription_bullet_title: Tu suscripción será cancelada
+        subtitle: Este es el último paso — tu cuenta será eliminada permanentemente.
+        title: Confirmar eliminación de cuenta
+      email_prefs:
+        heading: Preferencias de correo electrónico
+        notifications_hint: Recibe correos sobre actividad de tu cuenta, cambios en
+          claves API y actualizaciones importantes
+        notifications_label: Notificaciones por correo
+        subheading: Controla qué correos recibes de nosotros
+        usage_alerts_hint: Recibe notificaciones cuando alcances el 75% y 90% de tu
+          cuota mensual
+        usage_alerts_label: Alertas de uso
+        weekly_reports_hint: Recibe un resumen semanal del uso y rendimiento de tu
+          API
+        weekly_reports_label: Informes semanales de uso
+      errors:
+        one: "%{count} error impidió guardar estos ajustes:"
+        other: "%{count} errores impidieron guardar estos ajustes:"
+      flash:
+        deleted: Tu cuenta se ha eliminado permanentemente. Lamentamos verte marchar.
+        deletion_email_sent: 'Revisa tu correo: te enviamos un enlace de confirmación.
+          Expira en 1 hora.'
+        email_confirm: Ajustes actualizados. Revisa tu correo para confirmar la nueva
+          dirección.
+        error: No se pudieron actualizar los ajustes. Revisa el formulario.
+        invalid_token: Este enlace no es válido o ha expirado. Solicita uno nuevo.
+        reason_too_short: Indica un motivo (al menos 10 caracteres).
+        updated: Ajustes actualizados correctamente.
+      language:
+        auto_detect: Detección automática
+        auto_detect_hint: La detección automática usa la configuración de idioma de
+          tu navegador
+        heading: Preferencia de idioma
+        subheading: Elige tu idioma preferido para la interfaz
+      save_btn: Guardar cambios
+      saving: Guardando...
+      show:
+        profile_picture: Foto de perfil
+      subtitle: Gestiona tus preferencias de cuenta y configuración de seguridad
+      title: Ajustes
     sidebar:
-      referrals: "Referencias"
+      referrals: Referencias
+    usage:
+      cards:
+        api_calls_in_period: Llamadas a la API en el período
+        avg_latency: Latencia promedio
+        avg_response: Tiempo de respuesta promedio
+        error_rate: Tasa de errores
+        failed_requests: Solicitudes fallidas
+        total_requests: Total de solicitudes
+      charts:
+        by_endpoint: Uso por endpoint
+        by_endpoint_sub: Endpoints principales por número de solicitudes
+        loading: Cargando gráfica...
+        loading_short: Cargando...
+        no_data_body: No se encontraron datos de solicitudes en el rango de fechas
+          seleccionado.
+        no_data_heading: Sin datos disponibles
+        no_endpoints_body: No hay datos de endpoints en el rango de fechas seleccionado.
+        no_endpoints_heading: No se encontraron llamadas a la API
+        usage_over_time: Uso a lo largo del tiempo
+        usage_over_time_sub: Volumen diario de solicitudes y errores
+      date_range:
+        apply_btn: Aplicar
+        custom: Rango personalizado
+        end_date: Fecha de fin
+        heading: Rango de fechas
+        last_30: Últimos 30 días
+        last_7: Últimos 7 días
+        last_90: Últimos 90 días
+        start_date: Fecha de inicio
+      export_btn: Exportar CSV
+      subtitle: Rastrea el uso y las métricas de rendimiento de tu API
+      table:
+        col_api_key: Clave API
+        col_endpoint: Endpoint
+        col_method: Método
+        col_requests: Solicitudes
+        col_response: Tiempo de respuesta
+        col_status: Estado
+        col_time: Hora
+        empty_body: No se encontraron llamadas a la API en el rango de fechas seleccionado.
+        empty_heading: Sin datos de uso
+        heading: Solicitudes recientes
+        next: Sig.
+        page_of: Página %{page} de %{pages}
+        prev: Ant.
+        showing_info: Mostrando %{from}–%{to} de %{total} solicitudes
+        subheading: Últimas llamadas a la API en el rango de fechas seleccionado
+        unknown_key: Desconocida
+      title: Uso y análisis

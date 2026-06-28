@@ -1,8 +1,7 @@
+---
 fr:
   layouts:
     footer:
-      linkedin: "LinkedIn"
+      linkedin: LinkedIn
     navbar:
-      requiems: "Requiems"
-    application:
-      gtag__config_value: "gtag('config', '%{value}');"
+      requiems: Requiems

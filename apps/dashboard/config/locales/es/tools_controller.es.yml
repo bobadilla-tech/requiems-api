@@ -1,3 +1,4 @@
+---
 es:
   tools_controller:
-    tool_not_found: "Herramienta no encontrada."
+    tool_not_found: Herramienta no encontrada.

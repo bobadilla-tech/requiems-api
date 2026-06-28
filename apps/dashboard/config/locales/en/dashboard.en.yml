@@ -1,408 +1,463 @@
+---
 en:
   dashboard:
-    plans:
-      free: "Free"
-      developer: "Developer"
-      business: "Business"
-      professional: "Professional"
-    overview:
-      title: "Dashboard"
-      welcome: "Welcome back, %{name}!"
-      subtitle: "Here's your API usage overview for %{date}"
-      current_usage: "Requests Used"
-      used_this_month: "%{percent}% used this month"
-      monthly_quota: "Monthly Quota"
-      resets_monthly: "Resets every month"
-      requests_remaining: "Requests Remaining"
-      running_low: "Running low!"
-      available_month: "Available this month"
-      recent_activity: "Recent API Activity"
-      view_all: "View All"
-      time_col: "Time"
-      time_ago: "%{time} ago"
-      endpoint_col: "Endpoint"
-      status_col: "Status"
-      response_col: "Response"
-      requests_col: "Requests"
-      no_activity: "No activity yet"
-      no_activity_desc: "Get started by making your first API call."
-      browse_docs: "Browse API Documentation"
-      active_key: {one: "Active key", other: "Active keys"}
-      api_keys: "API Keys"
-      manage: "Manage"
-      create_key: "Create New Key"
-      billing: "Billing"
-      current_plan: "Current Plan"
-      next_billing: "Next Billing Date"
-      view_details: "View Details"
-      upgrade_heading: "Upgrade Your Plan"
-      upgrade_desc: "Get more requests, faster rate limits, and priority support."
-      view_pricing: "View Pricing"
-      of_requests: "of %{limit} requests"
     api_keys:
-      title: "API Keys"
-      subtitle: "Manage your API keys and access credentials"
+      active_keys: Active Keys
+      btn_regenerate: Regenerate
+      btn_revoke: Revoke
+      col_actions: Actions
+      col_created: Created
+      col_key: Key
+      col_last_used: Last Used
+      col_name: Name
+      col_status: Status
+      confirm_regenerate: Are you sure? This will revoke the current key and create
+        a new one. You'll need to update all systems using this key.
+      confirm_revoke: Are you sure? This action cannot be undone. Systems using this
+        key will immediately lose access.
+      create_btn: Create New Key
+      empty_btn: Create Your First Key
+      empty_desc: Get started by creating your first API key to access our APIs.
+      empty_heading: No API Keys Yet
       flash:
-        created: "API key created successfully. Make sure to copy it now - you won't be able to see it again!"
-        regenerated: "API key regenerated successfully. Make sure to copy the new key - you won't be able to see it again!"
-        cannot_regenerate_revoked: "Cannot regenerate a revoked key. Please create a new one."
-        revoked: "API key revoked successfully."
-        revoke_error: "Failed to revoke API key."
-        not_found: "API key not found."
-      create_btn: "Create New Key"
-      info_heading: "Important Information"
-      info_shared_label: "Shared Quota:"
-      info_shared_text: "All your API keys share the same monthly request quota based on your plan."
-      info_one_time_label: "One-Time Display:"
-      info_one_time_text: "Full API keys are shown only once during creation. Store them securely."
-      info_security_label: "Security:"
-      info_security_text: "Never expose your API keys in client-side code or public repositories."
-      info_regenerate_label: "Regenerate if Compromised:"
-      info_regenerate_text: "Revoke and regenerate immediately if a key is exposed."
-      active_keys: "Active Keys"
-      revoked_keys: "Revoked Keys"
-      total_keys: "Total Keys"
-      table_heading: "Your API Keys"
-      col_name: "Name"
-      col_status: "Status"
-      col_key: "Key"
-      col_created: "Created"
-      col_last_used: "Last Used"
-      col_actions: "Actions"
-      revoked_ago: "Revoked %{time} ago"
-      status_revoked: "Revoked"
-      status_active: "Active"
-      status_inactive: "Inactive"
-      last_used_never: "Never"
-      btn_regenerate: "Regenerate"
-      btn_revoke: "Revoke"
-      confirm_regenerate: "Are you sure? This will revoke the current key and create a new one. You'll need to update all systems using this key."
-      confirm_revoke: "Are you sure? This action cannot be undone. Systems using this key will immediately lose access."
-      empty_heading: "No API Keys Yet"
-      empty_desc: "Get started by creating your first API key to access our APIs."
-      empty_btn: "Create Your First Key"
+        cannot_regenerate_revoked: Cannot regenerate a revoked key. Please create
+          a new one.
+        created: API key created successfully. Make sure to copy it now - you won't
+          be able to see it again!
+        not_found: API key not found.
+        regenerated: API key regenerated successfully. Make sure to copy the new key
+          - you won't be able to see it again!
+        revoke_error: Failed to revoke API key.
+        revoked: API key revoked successfully.
+      info_heading: Important Information
+      info_one_time_label: 'One-Time Display:'
+      info_one_time_text: Full API keys are shown only once during creation. Store
+        them securely.
+      info_regenerate_label: 'Regenerate if Compromised:'
+      info_regenerate_text: Revoke and regenerate immediately if a key is exposed.
+      info_security_label: 'Security:'
+      info_security_text: Never expose your API keys in client-side code or public
+        repositories.
+      info_shared_label: 'Shared Quota:'
+      info_shared_text: All your API keys share the same monthly request quota based
+        on your plan.
+      last_used_never: Never
       new:
-        title: "Create New API Key"
-        back: "Back to API Keys"
-        subtitle: "Generate a new API key to access our services"
-        security_heading: "Important Security Information"
-        security_text: "Your API key will only be shown once after creation. Make sure to copy and store it securely. We cannot recover lost keys."
-        name_label: "Key Name"
-        name_placeholder: "e.g., Production Server, Mobile App, CI/CD Pipeline"
-        name_hint: "A descriptive name to help you identify where this key is used."
-        quota_heading: "Shared Quota"
-        quota_text: "All your API keys share the same monthly request quota based on your subscription plan. Creating multiple keys doesn't increase your limit."
-        cancel: "Cancel"
-        submit: "Generate API Key"
-        submitting: "Generating..."
-        errors: {one: "%{count} error prohibited this API key from being created:", other: "%{count} errors prohibited this API key from being created:"}
+        back: Back to API Keys
+        cancel: Cancel
+        errors:
+          one: "%{count} error prohibited this API key from being created:"
+          other: "%{count} errors prohibited this API key from being created:"
+        name_hint: A descriptive name to help you identify where this key is used.
+        name_label: Key Name
+        name_placeholder: e.g., Production Server, Mobile App, CI/CD Pipeline
+        quota_heading: Shared Quota
+        quota_text: All your API keys share the same monthly request quota based on
+          your subscription plan. Creating multiple keys doesn't increase your limit.
+        security_heading: Important Security Information
+        security_text: Your API key will only be shown once after creation. Make sure
+          to copy and store it securely. We cannot recover lost keys.
+        submit: Generate API Key
+        submitting: Generating...
+        subtitle: Generate a new API key to access our services
+        title: Create New API Key
+      revoked_ago: Revoked %{time} ago
+      revoked_keys: Revoked Keys
+      show:
+        api_key_details: API Key Details
       show_key:
-        title: "API Key Created"
-        success_heading: "API Key Created Successfully!"
-        success_body: "Your new API key has been generated. Make sure to copy it now - you won't be able to see it again."
-        key_label: "Your API Key"
-        copy_btn: "Copy"
-        copied_btn: "Copied!"
-        key_hint: "Click the code to select all, or use the Copy button"
-        warning_heading: "⚠️ This is your only chance to copy this key!"
-        warning_body: "For security reasons, we cannot show you this key again. If you lose it, you'll need to regenerate it, which will invalidate the current key."
-        usage_heading: "How to Use Your API Key"
-        header_example: "Include it in your HTTP headers:"
-        curl_example: "Example cURL request:"
-        js_example: "Example in JavaScript:"
-        security_heading: "Security Best Practices"
         back_btn: "← Back to API Keys"
-        view_docs_btn: "View API Documentation"
-        go_dashboard_btn: "Go to Dashboard"
-      show:
-        api_key_details: "API Key Details"
+        copied_btn: Copied!
+        copy_btn: Copy
+        curl_example: 'Example cURL request:'
+        go_dashboard_btn: Go to Dashboard
+        header_example: 'Include it in your HTTP headers:'
+        js_example: 'Example in JavaScript:'
+        key_hint: Click the code to select all, or use the Copy button
+        key_label: Your API Key
+        security_1: Never expose your API key in client-side code, public repositories,
+          or browser JavaScript
+        security_2: Store it via environment variables or a secrets vault
+        security_3: Revoke it immediately if you suspect it has been compromised
+        security_4: Rotate keys regularly as part of your security policy
+        security_heading: Security Best Practices
+        success_body: Your new API key has been generated. Make sure to copy it now
+          - you won't be able to see it again.
+        success_heading: API Key Created Successfully!
+        title: API Key Created
+        usage_heading: How to Use Your API Key
+        view_docs_btn: View API Documentation
+        warning_body: For security reasons, we cannot show you this key again. If
+          you lose it, you'll need to regenerate it, which will invalidate the current
+          key.
+        warning_heading: "⚠️ This is your only chance to copy this key!"
+      status_active: Active
+      status_inactive: Inactive
+      status_revoked: Revoked
+      subtitle: Manage your API keys and access credentials
+      table_heading: Your API Keys
+      title: API Keys
+      total_keys: Total Keys
     billing:
-      title: "Billing & Subscription"
-      subtitle: "Manage your plan, payment method, and billing history"
-      flash:
-        activated: "Subscription activated successfully! Your new plan is now active."
-        canceled: "Checkout was canceled. Your subscription was not changed."
-        invalid_plan: "Invalid plan selected"
-        promotional_no_portal: "Promotional plans do not have a customer portal."
-        no_subscription: "No active subscription found"
-        no_subscription_to_cancel: "No active subscription to cancel"
-      plan_notice:
-        heading: "Ready to upgrade to %{plan}?"
-        body: "Scroll down to see the %{plan} plan details and start your 7-day free trial!"
       current_plan:
-        heading: "Current Plan"
-        free_label: "Free Plan"
+        cancels_on: Cancels on %{date}
+        free_label: Free Plan
+        heading: Current Plan
+        manage_btn: Manage Subscription
+        no_renewal: No renewal - Free plan
         per_month: "/month"
-        cancels_on: "Cancels on %{date}"
-        renews_on: "Renews on %{date}"
-        no_renewal: "No renewal - Free plan"
-        upgrade_btn: "Upgrade Plan"
-        manage_btn: "Manage Subscription"
-      usage:
-        heading: "Usage This Period"
-        percent_used: "%{percent}% used"
-        warning_critical_heading: "Running low on requests!"
-        warning_critical_body: "You're approaching your monthly limit. Consider upgrading to avoid service interruption."
-        warning_moderate_heading: "Heads up!"
-        warning_moderate_body: "You've used %{percent}% of your monthly quota. You may want to upgrade soon."
-        rate_limit_heading: "Rate Limit"
-        rate_limit_unit: "requests per minute"
-        of_requests: "of %{limit} requests"
-      upgrade_section:
-        heading: "Upgrade Your Plan"
-        subtitle: "Choose a plan that fits your needs"
-        monthly: "Monthly"
-        yearly: "Yearly"
-        save_percent: "Save 17%"
-        most_popular: "Most Popular"
-        per_month: "/month"
-        billed_yearly: "$%{price} billed yearly"
-        upgrade_btn: "Upgrade to %{plan}"
-        view_all: "View all plans and pricing details →"
-      payment:
-        heading: "Payment Method"
-        managed_by: "Managed by LemonSqueezy"
-        secure_processing: "Secure payment processing"
-        update_btn: "Update Payment Method"
-        promoted_heading: "No payment method required"
-        promoted_subheading: "Your current plan was granted by an admin promotion."
-        none_heading: "No payment method on file"
-        none_hint: "Upgrade to add a payment method"
-      history:
-        heading: "Billing History"
-        plan_label: "Plan"
-        status_label: "Status"
-        promoted_status: "Promotional"
-        period_started: "Period started"
-        cancels_on: "Cancels on"
-        renews_on: "Renews on"
-        promoted_expires_on: "Promotion ends on"
-        portal_note: "Full invoice history available in the LemonSqueezy customer portal via Manage Subscription."
-        promoted_note: "This plan is promotional and has no LemonSqueezy invoices."
-        none_heading: "No billing history"
-        none_hint: "Invoices will appear here after your first payment"
+        renews_on: Renews on %{date}
+        upgrade_btn: Upgrade Plan
       faq:
-        heading: "Billing FAQ"
-        q1_heading: "When will I be charged?"
-        q1_body: "You'll be charged at the beginning of each billing period. Your first charge happens when you upgrade to a paid plan."
-        q2_heading: "Can I cancel anytime?"
-        q2_body: "Yes! You can cancel your subscription at any time. You'll continue to have access until the end of your current billing period."
-        q3_heading: "What happens if I exceed my quota?"
-        q3_body: "API requests will be rejected with a 429 status code. You can upgrade your plan to increase your quota immediately."
-        q4_heading: "Do unused requests roll over?"
-        q4_body: "No, unused requests do not roll over to the next billing period. Your quota resets at the start of each period."
-    settings:
-      title: "Settings"
-      subtitle: "Manage your account preferences and security settings"
+        heading: Billing FAQ
+        q1_body: You'll be charged at the beginning of each billing period. Your first
+          charge happens when you upgrade to a paid plan.
+        q1_heading: When will I be charged?
+        q2_body: Yes! You can cancel your subscription at any time. You'll continue
+          to have access until the end of your current billing period.
+        q2_heading: Can I cancel anytime?
+        q3_body: API requests will be rejected with a 429 status code. You can upgrade
+          your plan to increase your quota immediately.
+        q3_heading: What happens if I exceed my quota?
+        q4_body: No, unused requests do not roll over to the next billing period.
+          Your quota resets at the start of each period.
+        q4_heading: Do unused requests roll over?
       flash:
-        email_confirm: "Settings updated. Please check your email to confirm your new address."
-        updated: "Settings updated successfully."
-        error: "Failed to update settings. Please check the form for errors."
-        reason_too_short: "Please provide a reason (at least 10 characters)."
-        deletion_email_sent: "Check your email — we sent a confirmation link. It expires in 1 hour."
-        invalid_token: "This link is invalid or has expired. Please request a new one."
-        deleted: "Your account has been permanently deleted. We're sorry to see you go."
-      errors: {one: "%{count} error prohibited these settings from being saved:", other: "%{count} errors prohibited these settings from being saved:"}
-      account_info:
-        heading: "Account Information"
-        subheading: "Update your account details and email address"
-        email_label: "Email Address"
-        email_hint: "This is your login email and where we'll send important notifications."
-        name_label: "Full Name"
-        name_placeholder: "Your full name"
-        name_hint: "Optional - helps us personalize your experience"
-        company_label: "Company Name"
-        company_placeholder: "Your company or organization"
-        company_hint: "Optional - displayed on invoices"
-        avatar_heading: "Profile Picture"
-        avatar_body: "Your avatar is provided by %{gravatar_link}, based on your email address. Update it there to change it here."
-        gravatar_link_text: "Gravatar"
-        update_gravatar: "Update on Gravatar →"
-        password_heading: "Password"
-        change_password: "Change Password →"
-      language:
-        heading: "Language Preference"
-        subheading: "Choose your preferred language for the interface"
-        auto_detect: "Auto-detect"
-        auto_detect_hint: "Auto-detect uses your browser's language settings"
-      email_prefs:
-        heading: "Email Preferences"
-        subheading: "Control what emails you receive from us"
-        notifications_label: "Email Notifications"
-        notifications_hint: "Receive emails about account activity, API key changes, and important updates"
-        usage_alerts_label: "Usage Alerts"
-        usage_alerts_hint: "Get notified when you reach 75% and 90% of your monthly quota"
-        weekly_reports_label: "Weekly Usage Reports"
-        weekly_reports_hint: "Receive a weekly summary of your API usage and performance"
-      save_btn: "Save Changes"
-      saving: "Saving..."
-      confirm_deletion:
-        title: "Confirm Account Deletion"
-        subtitle: "This is the final step — your account will be permanently deleted."
-        back: "Back to Settings"
-        reason_heading: "Your reason for leaving"
-        consequences_heading: "What will happen"
-        api_keys_bullet_title: "All API keys will be revoked immediately"
-        api_keys_bullet_body: "Any applications using your keys will stop working instantly"
-        subscription_bullet_title: "Your subscription will be canceled"
-        subscription_bullet_body: "No further charges will be made"
-        data_bullet_title: "All usage data will be permanently deleted"
-        data_bullet_body: "This cannot be recovered"
-        cancel: "Cancel — keep my account"
-        confirm_btn: "Permanently Delete My Account"
-        deleting: "Deleting your account..."
-      show:
-        profile_picture: "Profile picture"
-    usage:
-      title: "Usage & Analytics"
-      subtitle: "Track your API usage and performance metrics"
-      export_btn: "Export CSV"
-      date_range:
-        heading: "Date Range"
-        last_7: "Last 7 Days"
-        last_30: "Last 30 Days"
-        last_90: "Last 90 Days"
-        custom: "Custom Range"
-        start_date: "Start Date"
-        end_date: "End Date"
-        apply_btn: "Apply"
-      cards:
-        total_requests: "Total Requests"
-        api_calls_in_period: "API calls in period"
-        avg_response: "Avg Response Time"
-        avg_latency: "Average latency"
-        error_rate: "Error Rate"
-        failed_requests: "Failed requests"
-      charts:
-        usage_over_time: "Usage Over Time"
-        usage_over_time_sub: "Daily request volume and errors"
-        by_endpoint: "Usage by Endpoint"
-        by_endpoint_sub: "Top endpoints by request count"
-        loading: "Loading chart..."
-        loading_short: "Loading..."
-        no_data_heading: "No data available"
-        no_data_body: "No request data found in the selected date range."
-        no_endpoints_heading: "No API calls found"
-        no_endpoints_body: "No endpoint data in the selected date range."
-      table:
-        heading: "Recent Requests"
-        subheading: "Latest API calls in selected date range"
-        col_time: "Time"
-        col_endpoint: "Endpoint"
-        col_method: "Method"
-        col_status: "Status"
-        col_response: "Response Time"
-        col_requests: "Requests"
-        col_api_key: "API Key"
-        unknown_key: "Unknown"
-        showing_info: "Showing %{from}–%{to} of %{total} requests"
-        page_of: "Page %{page} of %{pages}"
-        prev: "Prev"
-        next: "Next"
-        empty_heading: "No usage data"
-        empty_body: "No API calls found in the selected date range."
-    quick_start:
-      title: "Quick Start"
-      heading: "Get Started with Requiems API"
-      subtitle: "Follow these steps to make your first API call in minutes"
-      step_1:
-        heading: "1. Create Your Account"
-        body: "Sign up for a free account to get your API key and start making requests. No credit card required."
-        cta: "Already done! You're logged in."
-      step_2:
-        heading: "2. Get Your API Key"
-        body: "Go to API Keys to create a key. You'll include it in every request as a header."
-        cta: "Manage API Keys"
-        header_label: "Include this header in every request:"
-      step_3:
-        heading: "3. Make Your First API Call"
-        body: "Try this example request to get a random piece of advice:"
-        note: "Replace YOUR_API_KEY with an active key from your API Keys page."
-      step_4:
-        heading: "4. Code Examples"
-        body: "Copy and adapt these examples in your preferred language."
-      copy_btn: "Copy"
-      browse_apis: "Browse All APIs"
+        activated: Subscription activated successfully! Your new plan is now active.
+        canceled: Checkout was canceled. Your subscription was not changed.
+        invalid_plan: Invalid plan selected
+        no_subscription: No active subscription found
+        no_subscription_to_cancel: No active subscription to cancel
+        promotional_no_portal: Promotional plans do not have a customer portal.
+      history:
+        cancels_on: Cancels on
+        heading: Billing History
+        none_heading: No billing history
+        none_hint: Invoices will appear here after your first payment
+        period_started: Period started
+        plan_label: Plan
+        portal_note: Full invoice history available in the LemonSqueezy customer portal
+          via Manage Subscription.
+        promoted_expires_on: Promotion ends on
+        promoted_note: This plan is promotional and has no LemonSqueezy invoices.
+        promoted_status: Promotional
+        renews_on: Renews on
+        status_label: Status
+      payment:
+        heading: Payment Method
+        managed_by: Managed by LemonSqueezy
+        none_heading: No payment method on file
+        none_hint: Upgrade to add a payment method
+        promoted_heading: No payment method required
+        promoted_subheading: Your current plan was granted by an admin promotion.
+        secure_processing: Secure payment processing
+        update_btn: Update Payment Method
+      plan_notice:
+        body: Scroll down to see the %{plan} plan details and start your 7-day free
+          trial!
+        heading: Ready to upgrade to %{plan}?
+      subtitle: Manage your plan, payment method, and billing history
+      title: Billing & Subscription
+      upgrade_section:
+        billed_yearly: "$%{price} billed yearly"
+        heading: Upgrade Your Plan
+        monthly: Monthly
+        most_popular: Most Popular
+        per_month: "/month"
+        save_percent: Save 17%
+        subtitle: Choose a plan that fits your needs
+        upgrade_btn: Upgrade to %{plan}
+        view_all: View all plans and pricing details →
+        yearly: Yearly
+      usage:
+        heading: Usage This Period
+        of_requests: of %{limit} requests
+        percent_used: "%{percent}% used"
+        rate_limit_heading: Rate Limit
+        rate_limit_unit: requests per minute
+        warning_critical_body: You're approaching your monthly limit. Consider upgrading
+          to avoid service interruption.
+        warning_critical_heading: Running low on requests!
+        warning_moderate_body: You've used %{percent}% of your monthly quota. You
+          may want to upgrade soon.
+        warning_moderate_heading: Heads up!
     mailers:
-      subscription:
-        upgrade_notification:
-          subject: "You're now on the %{plan} plan"
-          header_title: "Subscription Activated"
-          header_subtitle: "Requiems API — Welcome to your new plan"
-          intro: "Your subscription is now active. You have full access to all features included in your plan."
-          plan_label: "Your plan"
-          cta_btn: "Go to Dashboard"
-          contact_notice_html: "Questions? Reach us at %{email_link}."
-          greeting_html: "Hi <strong>%{email}</strong>,"
-      promotion:
-        upgrade_notification:
-          subject: "Your Requiems plan has been upgraded to %{plan}"
-          header_title: "Plan Upgrade"
-          header_subtitle: "Requiems API — You've been upgraded"
-          intro: "Great news! Your Requiems API plan has been upgraded."
-          plan_label: "Your new plan"
-          expires_label: "Access until"
-          cta_btn: "Go to Dashboard"
-          expiry_notice_html: "Your upgraded access is valid until <strong>%{expires_at}</strong>. After that your account will return to the free plan automatically."
-          contact_notice_html: "Questions? Reach us at %{email_link}."
-          greeting_html: "Hi <strong>%{email}</strong>,"
       account_deletion:
-        header_title: "Account Deletion Requested"
-        header_subtitle: "Requiems API — Action Required"
-        intro: "We received a request to permanently delete your Requiems API account. Click the button below to confirm."
-        warning: "This action is permanent and cannot be undone."
-        reason_label: "Your reason"
-        expiry_html: "This link expires at <strong>%{expires_at}</strong>. After that you will need to request a new confirmation email."
-        confirm_btn: "Confirm Account Deletion"
-        consequences_heading: "Deleting your account will:"
-        consequence_1: "Revoke all your API keys immediately"
-        consequence_2: "Cancel your active subscription"
-        consequence_3: "Permanently delete all usage data and history"
-        ignore_notice: "If you didn't request this, you can safely ignore this email. Your account will not be deleted."
-        contact_notice_html: "If you have concerns, contact us at %{email_link}."
-        greeting_html: "Hi <strong>%{email}</strong>,"
+        confirm_btn: Confirm Account Deletion
+        consequence_1: Revoke all your API keys immediately
+        consequence_2: Cancel your active subscription
+        consequence_3: Permanently delete all usage data and history
+        consequences_heading: 'Deleting your account will:'
+        contact_notice_html: If you have concerns, contact us at %{email_link}.
+        expiry_html: This link expires at <strong>%{expires_at}</strong>. After that
+          you will need to request a new confirmation email.
+        greeting_html: Hi <strong>%{email}</strong>,
+        header_subtitle: Requiems API — Action Required
+        header_title: Account Deletion Requested
+        ignore_notice: If you didn't request this, you can safely ignore this email.
+          Your account will not be deleted.
+        intro: We received a request to permanently delete your Requiems API account.
+          Click the button below to confirm.
+        reason_label: Your reason
+        warning: This action is permanent and cannot be undone.
       private_deployments:
         request_received:
-          subject: "Request Received: Requiems Private Deployment"
-          header_title: "Request Received"
-          header_subtitle: "Your private deployment is being prepared"
-          greeting: "Hi %{name},"
-          intro: "We've received your private deployment request for %{company}. Your dedicated API environment will be ready within 24–48 hours."
-          notify: "We'll email you as soon as it's live."
-          order_summary: "Order Summary"
-          server_tier: "Server tier"
-          monthly_price: "Monthly price"
-          selected_services: "Selected services"
-          what_next: "What happens next:"
-          what_next_detail: "We'll provision your Hetzner VPS, set up your private Go API with only your selected services, and configure your subdomain at yourcompany.requiems.xyz. Once live you'll receive a second email with your URL and authentication details."
-          docs_notice_html: "In the meantime, you can explore our API documentation at %{docs_link}."
-          docs_notice: "In the meantime, you can explore our API documentation at %{docs_link}."
-          questions: "Questions? Reply to this email or reach us at %{email}."
-          questions_html: "Questions? Reply to this email or reach us at %{email}."
+          docs_notice: In the meantime, you can explore our API documentation at %{docs_link}.
+          docs_notice_html: In the meantime, you can explore our API documentation
+            at %{docs_link}.
+          greeting: Hi %{name},
+          header_subtitle: Your private deployment is being prepared
+          header_title: Request Received
+          intro: We've received your private deployment request for %{company}. Your
+            dedicated API environment will be ready within 24–48 hours.
+          monthly_price: Monthly price
+          notify: We'll email you as soon as it's live.
+          order_summary: Order Summary
+          questions: Questions? Reply to this email or reach us at %{email}.
+          questions_html: Questions? Reply to this email or reach us at %{email}.
+          selected_services: Selected services
+          server_tier: Server tier
+          subject: 'Request Received: Requiems Private Deployment'
+          what_next: 'What happens next:'
+          what_next_detail: We'll provision your Hetzner VPS, set up your private
+            Go API with only your selected services, and configure your subdomain
+            at yourcompany.requiems.xyz. Once live you'll receive a second email with
+            your URL and authentication details.
+      promotion:
+        upgrade_notification:
+          contact_notice_html: Questions? Reach us at %{email_link}.
+          cta_btn: Go to Dashboard
+          expires_label: Access until
+          expiry_notice_html: Your upgraded access is valid until <strong>%{expires_at}</strong>.
+            After that your account will return to the free plan automatically.
+          greeting_html: Hi <strong>%{email}</strong>,
+          header_subtitle: Requiems API — You've been upgraded
+          header_title: Plan Upgrade
+          intro: Great news! Your Requiems API plan has been upgraded.
+          plan_label: Your new plan
+          subject: Your Requiems plan has been upgraded to %{plan}
+      subscription:
+        upgrade_notification:
+          contact_notice_html: Questions? Reach us at %{email_link}.
+          cta_btn: Go to Dashboard
+          greeting_html: Hi <strong>%{email}</strong>,
+          header_subtitle: Requiems API — Welcome to your new plan
+          header_title: Subscription Activated
+          intro: Your subscription is now active. You have full access to all features
+            included in your plan.
+          plan_label: Your plan
+          subject: You're now on the %{plan} plan
+    overview:
+      active_key:
+        one: Active key
+        other: Active keys
+      api_keys: API Keys
+      available_month: Available this month
+      billing: Billing
+      browse_docs: Browse API Documentation
+      create_key: Create New Key
+      current_plan: Current Plan
+      current_usage: Requests Used
+      endpoint_col: Endpoint
+      manage: Manage
+      monthly_quota: Monthly Quota
+      next_billing: Next Billing Date
+      no_activity: No activity yet
+      no_activity_desc: Get started by making your first API call.
+      of_requests: of %{limit} requests
+      recent_activity: Recent API Activity
+      requests_col: Requests
+      requests_remaining: Requests Remaining
+      resets_monthly: Resets every month
+      response_col: Response
+      running_low: Running low!
+      status_col: Status
+      subtitle: Here's your API usage overview for %{date}
+      time_ago: "%{time} ago"
+      time_col: Time
+      title: Dashboard
+      upgrade_desc: Get more requests, faster rate limits, and priority support.
+      upgrade_heading: Upgrade Your Plan
+      used_this_month: "%{percent}% used this month"
+      view_all: View All
+      view_details: View Details
+      view_pricing: View Pricing
+      welcome: Welcome back, %{name}!
+    plans:
+      business: Business
+      developer: Developer
+      enterprise: Enterprise
+      free: Free
+      professional: Professional
     private_deployments:
       new:
         back_to_pricing: "← Back to pricing"
-        checkout_notice: "You'll be redirected to our secure checkout on LemonSqueezy to complete your subscription."
-        submit: "Continue to Payment →"
-        redirecting: "Redirecting..."
+        checkout_notice: You'll be redirected to our secure checkout on LemonSqueezy
+          to complete your subscription.
+        redirecting: Redirecting...
+        submit: Continue to Payment →
+    quick_start:
+      browse_apis: Browse All APIs
+      copy_btn: Copy
+      heading: Get Started with Requiems API
+      step_1:
+        body: Sign up for a free account to get your API key and start making requests.
+          No credit card required.
+        cta: Already done! You're logged in.
+        heading: 1. Create Your Account
+      step_2:
+        body: Go to API Keys to create a key. You'll include it in every request as
+          a header.
+        cta: Manage API Keys
+        header_label: 'Include this header in every request:'
+        heading: 2. Get Your API Key
+      step_3:
+        body: 'Try this example request to get a random piece of advice:'
+        heading: 3. Make Your First API Call
+        note: Replace YOUR_API_KEY with an active key from your API Keys page.
+      step_4:
+        body: Copy and adapt these examples in your preferred language.
+        heading: 4. Code Examples
+      subtitle: Follow these steps to make your first API call in minutes
+      title: Quick Start
     referrals:
-      title: "Referral Program"
-      subtitle: "Share your referral link and earn rewards when your friends upgrade to a paid plan."
-      stats:
-        total_referred: "Users Referred"
-        total_converted: "Paid Conversions"
       link:
-        heading: "Your Referral Link"
-        description: "Share this link with friends. When they sign up and upgrade, they'll be attributed to you."
-        copy: "Copy"
-        copied: "Copied!"
+        copied: Copied!
+        copy: Copy
+        description: Share this link with friends. When they sign up and upgrade,
+          they'll be attributed to you.
+        heading: Your Referral Link
+      stats:
+        total_converted: Paid Conversions
+        total_referred: Users Referred
+      subtitle: Share your referral link and earn rewards when your friends upgrade
+        to a paid plan.
       table:
-        heading: "Recent Referrals"
-        empty: "No referrals yet. Share your link to get started!"
-        user_col: "User"
-        date_col: "Signed Up"
-        status_col: "Status"
-        status_pending: "Pending"
-        status_converted: "Converted"
+        date_col: Signed Up
+        empty: No referrals yet. Share your link to get started!
+        heading: Recent Referrals
+        status_col: Status
+        status_converted: Converted
+        status_pending: Pending
+        user_col: User
+      title: Referral Program
+    settings:
+      account_info:
+        avatar_body: Your avatar is provided by %{gravatar_link}, based on your email
+          address. Update it there to change it here.
+        avatar_heading: Profile Picture
+        change_password: Change Password →
+        company_hint: Optional - displayed on invoices
+        company_label: Company Name
+        company_placeholder: Your company or organization
+        email_hint: This is your login email and where we'll send important notifications.
+        email_label: Email Address
+        gravatar_link_text: Gravatar
+        heading: Account Information
+        name_hint: Optional - helps us personalize your experience
+        name_label: Full Name
+        name_placeholder: Your full name
+        password_heading: Password
+        subheading: Update your account details and email address
+        update_gravatar: Update on Gravatar →
+      confirm_deletion:
+        api_keys_bullet_body: Any applications using your keys will stop working instantly
+        api_keys_bullet_title: All API keys will be revoked immediately
+        back: Back to Settings
+        cancel: Cancel — keep my account
+        confirm_btn: Permanently Delete My Account
+        consequences_heading: What will happen
+        data_bullet_body: This cannot be recovered
+        data_bullet_title: All usage data will be permanently deleted
+        deleting: Deleting your account...
+        reason_heading: Your reason for leaving
+        subscription_bullet_body: No further charges will be made
+        subscription_bullet_title: Your subscription will be canceled
+        subtitle: This is the final step — your account will be permanently deleted.
+        title: Confirm Account Deletion
+      email_prefs:
+        heading: Email Preferences
+        notifications_hint: Receive emails about account activity, API key changes,
+          and important updates
+        notifications_label: Email Notifications
+        subheading: Control what emails you receive from us
+        usage_alerts_hint: Get notified when you reach 75% and 90% of your monthly
+          quota
+        usage_alerts_label: Usage Alerts
+        weekly_reports_hint: Receive a weekly summary of your API usage and performance
+        weekly_reports_label: Weekly Usage Reports
+      errors:
+        one: "%{count} error prohibited these settings from being saved:"
+        other: "%{count} errors prohibited these settings from being saved:"
+      flash:
+        deleted: Your account has been permanently deleted. We're sorry to see you
+          go.
+        deletion_email_sent: Check your email — we sent a confirmation link. It expires
+          in 1 hour.
+        email_confirm: Settings updated. Please check your email to confirm your new
+          address.
+        error: Failed to update settings. Please check the form for errors.
+        invalid_token: This link is invalid or has expired. Please request a new one.
+        reason_too_short: Please provide a reason (at least 10 characters).
+        updated: Settings updated successfully.
+      language:
+        auto_detect: Auto-detect
+        auto_detect_hint: Auto-detect uses your browser's language settings
+        heading: Language Preference
+        subheading: Choose your preferred language for the interface
+      save_btn: Save Changes
+      saving: Saving...
+      show:
+        profile_picture: Profile picture
+      subtitle: Manage your account preferences and security settings
+      title: Settings
     sidebar:
-      referrals: "Referrals"
+      referrals: Referrals
+    usage:
+      cards:
+        api_calls_in_period: API calls in period
+        avg_latency: Average latency
+        avg_response: Avg Response Time
+        error_rate: Error Rate
+        failed_requests: Failed requests
+        total_requests: Total Requests
+      charts:
+        by_endpoint: Usage by Endpoint
+        by_endpoint_sub: Top endpoints by request count
+        loading: Loading chart...
+        loading_short: Loading...
+        no_data_body: No request data found in the selected date range.
+        no_data_heading: No data available
+        no_endpoints_body: No endpoint data in the selected date range.
+        no_endpoints_heading: No API calls found
+        usage_over_time: Usage Over Time
+        usage_over_time_sub: Daily request volume and errors
+      date_range:
+        apply_btn: Apply
+        custom: Custom Range
+        end_date: End Date
+        heading: Date Range
+        last_30: Last 30 Days
+        last_7: Last 7 Days
+        last_90: Last 90 Days
+        start_date: Start Date
+      export_btn: Export CSV
+      subtitle: Track your API usage and performance metrics
+      table:
+        col_api_key: API Key
+        col_endpoint: Endpoint
+        col_method: Method
+        col_requests: Requests
+        col_response: Response Time
+        col_status: Status
+        col_time: Time
+        empty_body: No API calls found in the selected date range.
+        empty_heading: No usage data
+        heading: Recent Requests
+        next: Next
+        page_of: Page %{page} of %{pages}
+        prev: Prev
+        showing_info: Showing %{from}–%{to} of %{total} requests
+        subheading: Latest API calls in selected date range
+        unknown_key: Unknown
+      title: Usage & Analytics
