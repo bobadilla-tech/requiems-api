@@ -130,4 +130,17 @@ class ApiKeyTest < ActiveSupport::TestCase
     assert_not_nil new_key.key_prefix
     assert new_key.key_prefix.start_with?("rq_test_")
   end
+
+  test "adds error when server returns no key in non-test env" do
+    fake_service = Object.new
+    fake_service.define_singleton_method(:create_key) { |**_| nil }
+
+    Cloudflare::ApiManagementService.stub(:new, fake_service) do
+      Rails.stub(:env, ActiveSupport::StringInquirer.new("production")) do
+        api_key = @user.api_keys.build(name: "Server Fail", environment: "live")
+        assert_not api_key.save
+        assert_includes api_key.errors[:base], I18n.t("api_key.failed_to_generate_api_key_please_try")
+      end
+    end
+  end
 end
