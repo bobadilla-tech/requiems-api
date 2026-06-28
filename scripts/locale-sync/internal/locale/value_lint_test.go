@@ -61,6 +61,81 @@ func TestLintValues_SkipsEmpty(t *testing.T) {
 	}
 }
 
+// ── HTML-in-locale tests ──────────────────────────────────────────────────────
+
+func TestLintValues_HtmlWithCssClasses(t *testing.T) {
+	// _html key with Tailwind class attribute — should be flagged.
+	e := makeEntry("en.admin.analytics.revenue.low_churn_html",
+		`<strong class="text-green-600">Low churn rate:</strong> Customers are satisfied`)
+	got := LintValues([]Entry{e})
+	if len(got) != 1 {
+		t.Fatalf("expected 1 finding for _html key with CSS class, got %d: %v", len(got), got)
+	}
+}
+
+func TestLintValues_HtmlInNonHtmlKey(t *testing.T) {
+	// Non-_html key with <code> — Rails won't html_safe this; should be flagged.
+	e := makeEntry("en.home.developer_docs.examples.disposable_email.example",
+		`Example: <code class="bg-gray-100 px-2 py-1 rounded">POST /v1/networking/check</code>`)
+	got := LintValues([]Entry{e})
+	if len(got) != 1 {
+		t.Fatalf("expected 1 finding for HTML in non-_html key, got %d: %v", len(got), got)
+	}
+}
+
+func TestLintValues_SimpleInlineHtmlNotFlagged(t *testing.T) {
+	// _html key with plain <strong> wrapping an interpolation variable — no CSS class,
+	// acceptable Rails pattern; must NOT be flagged.
+	e := makeEntry("en.shared.formats.greeting_html", "Hi <strong>%{email}</strong>,")
+	got := LintValues([]Entry{e})
+	if len(got) != 0 {
+		t.Errorf("expected 0 findings for simple inline _html, got %d: %v", len(got), got)
+	}
+}
+
+func TestLintValues_CodePlaceholderNotFlagged(t *testing.T) {
+	// <key> in a migration step is a code placeholder, not an HTML tag.
+	// knownHtmlTagRe must not match it.
+	e := makeEntry("en.comparisons.steps.0",
+		"Swap `apikey` query param for `Authorization: Bearer <key>` header")
+	got := LintValues([]Entry{e})
+	if len(got) != 0 {
+		t.Errorf("expected 0 findings for <key> code placeholder, got %d: %v", len(got), got)
+	}
+}
+
+// ── Regression: HTML-in-locale patterns found in locale-sync hygiene pass ────
+
+// TestRegression_AdminChurnHtml guards the pattern where admin analytics insight
+// keys used _html suffix to embed Tailwind colour classes directly in translations.
+// Example: low_churn_html: "<strong class=\"text-green-600\">Low churn rate:</strong> ..."
+func TestRegression_AdminChurnHtml(t *testing.T) {
+	cases := []struct{ key, value string }{
+		{"en.admin.analytics.revenue.low_churn_html", `<strong class="text-green-600">Low churn rate:</strong> Customers are satisfied`},
+		{"en.admin.analytics.revenue.high_churn_html", `<strong class="text-red-600">High churn rate:</strong> Focus on customer retention`},
+		{"en.admin.analytics.uptime.uptime_excellent_html", `<strong class="text-green-600">Excellent uptime.</strong> The API is highly reliable.`},
+	}
+	for _, tc := range cases {
+		t.Run(tc.key, func(t *testing.T) {
+			got := LintValues([]Entry{makeEntry(tc.key, tc.value)})
+			if len(got) == 0 {
+				t.Errorf("LintValues(%q) returned 0 findings — CSS in _html key must be flagged", tc.key)
+			}
+		})
+	}
+}
+
+// TestRegression_HomeExampleWithCode guards the pattern where home.en.yml FAQ/tutorial
+// `example:` keys (no _html suffix) embedded <code> tags with full Tailwind classes.
+func TestRegression_HomeExampleWithCode(t *testing.T) {
+	e := makeEntry("en.home.developer_docs.steps.auth.example",
+		`Example: <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Authorization: Bearer YOUR_API_KEY</code>`)
+	got := LintValues([]Entry{e})
+	if len(got) == 0 {
+		t.Error("LintValues returned 0 findings — <code> in non-_html example key must be flagged")
+	}
+}
+
 // TestRegression_SharedCommonBadEntries guards against the specific bad values that
 // were added to en/fr/es shared.common and removed in the locale-sync hygiene pass.
 // If any of these values reappear in a locale file, LintValues must flag them.
