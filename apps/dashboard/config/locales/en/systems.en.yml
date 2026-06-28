@@ -12,7 +12,6 @@ en:
       grid_subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
       explore_cta: "Explore system"
       utilities_kicker: "Extras"
-      utilities_cta: "Browse utilities"
       apis_catalog_title: "Explore the full API directory"
       apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog. Same API key, consistent docs, copy-ready examples."
       apis_catalog_cta: "Browse APIs"
@@ -56,9 +55,6 @@ en:
       use_cases: "Use Cases"
       api_endpoints: "API Endpoints"
       endpoints: "Endpoints"
-      p50: "p50"
-      performance: "Performance"
-      p99: "p99"
     identity-risk:
       hero: {}
       engine: {}

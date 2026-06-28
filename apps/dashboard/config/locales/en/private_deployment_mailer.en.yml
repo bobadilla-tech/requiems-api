@@ -3,7 +3,12 @@ en:
     admin_notification:
       server_tier: "Server Tier"
       new_private_deployment_request: "New Private Deployment Request"
+      company_company: "Company:   %{company}"
+      contact_contact_name_contact_email: "Contact:   %{contact_name} <%{contact_email}>"
+      tier_capitalize_monthly_price_dollars__mo: "Tier:      %{capitalize} ($%{monthly_price_dollars}/mo)"
+      notes_admin_notes: "Notes:     %{admin_notes}"
     deployment_ready:
       your_private_api_is_live: "Your Private API is Live"
       example_request: "Example request:"
-      x_backend_secret: "X-Backend-Secret"
+      hi_contact_name: "Hi %{contact_name},"
+      your_private_requiems_api: "Your private Requiems API environment for %{company} is deployed and ready."

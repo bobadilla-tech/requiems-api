@@ -35,6 +35,8 @@ fr:
       edit:
         change_my_password: "Changer mon mot de passe"
         change_your_password: "Changez votre mot de passe"
+        confirm_new_password: "Confirmer le nouveau mot de passe"
+        new_password: "Nouveau mot de passe"
       no_token: "Vous ne pouvez accéder à cette page que depuis un lien de réinitialisation du mot de passe envoyé par e-mail. Si vous venez d'utiliser le formulaire de réinitialisation, vérifiez vos e-mails pour le lien de réinitialisation."
       send_instructions: "Vous allez recevoir un e-mail contenant les instructions pour réinitialiser votre mot de passe."
       send_paranoid_instructions: "Si votre adresse e-mail est connue, vous recevrez dans quelques minutes un e-mail avec les instructions pour réinitialiser votre mot de passe."

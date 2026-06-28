@@ -56,6 +56,13 @@ func TestLooksLikeCode(t *testing.T) {
 		{"normal sentence", "Submit your form today", false},
 		{"two css keywords", "px-4 flex items", true},
 		{"one css keyword", "flex layout", false}, // only 1 match
+		// Stimulus controller#action descriptors must never be flagged as user-facing text.
+		{"stimulus bare action", "modal#close", true},
+		{"stimulus with event", "click->modal#close", true},
+		{"stimulus with garbage suffix", `modal#close">`, true},
+		{"stimulus dismiss", "modal#dismiss", true},
+		{"stimulus multi-word controller", "dropdown-menu#toggle", true},
+		{"normal word with hash", "C# programming", false}, // C# is not a Stimulus action
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -198,6 +205,188 @@ func TestScanErbTernary_NoQuestionMark(t *testing.T) {
 	got := scanErbTernary(`<%= t('foo.bar') %>`, `<%= t('foo.bar') %>`, "test.erb", 1)
 	if len(got) != 0 {
 		t.Errorf("expected 0 results for line without ?, got %d", len(got))
+	}
+}
+
+// ── i18nCallRe — guards the early-return that prevents false positives ────────
+
+func TestI18nCallRe_MatchesI18nT(t *testing.T) {
+	// I18n.t() in model/service context must be recognised so the line is skipped.
+	if !i18nCallRe.MatchString(`I18n.t("api_key.failed_to_generate")`) {
+		t.Error("i18nCallRe must match I18n.t()")
+	}
+}
+
+func TestI18nCallRe_MatchesBareT(t *testing.T) {
+	if !i18nCallRe.MatchString(`t('admin.sidebar.analytics')`) {
+		t.Error("i18nCallRe must match bare t()")
+	}
+}
+
+func TestI18nCallRe_MatchesTranslate(t *testing.T) {
+	if !i18nCallRe.MatchString(`translate('some.key')`) {
+		t.Error("i18nCallRe must match translate()")
+	}
+}
+
+func TestI18nCallRe_NoFalsePositiveOnStringLiteral(t *testing.T) {
+	// A plain hardcoded string must NOT match i18nCallRe (or it would be silently skipped).
+	if i18nCallRe.MatchString(`title_text = "My Title"`) {
+		t.Error("i18nCallRe must not match variable assignments with string literals")
+	}
+}
+
+// ── scanAttrPatterns ──────────────────────────────────────────────────────────
+
+func TestScanAttrPatterns_Placeholder(t *testing.T) {
+	line := `<input placeholder="Email address">`
+	got := scanAttrPatterns(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for placeholder attr, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Email address" {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Email address")
+	}
+}
+
+func TestScanAttrPatterns_AriaLabel(t *testing.T) {
+	line := `<button aria-label="Close dialog">`
+	got := scanAttrPatterns(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for aria-label, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Close dialog" {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Close dialog")
+	}
+}
+
+func TestScanAttrPatterns_AlreadyTranslated(t *testing.T) {
+	// After ERB tag stripping, the attribute value is empty — pattern requires 4+ chars.
+	line := `<input placeholder="<%= t('key') %>">`
+	got := scanAttrPatterns(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("expected 0 results for already-translated placeholder, got %d: %v", len(got), got)
+	}
+}
+
+func TestScanAttrPatterns_DecorativeAlt(t *testing.T) {
+	// Alt text describing an icon/logo is decorative — not user-facing UI copy.
+	line := `<img alt="Company logo">`
+	got := scanAttrPatterns(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("expected 0 results for decorative alt text, got %d: %v", len(got), got)
+	}
+}
+
+// ── scanTagContent ────────────────────────────────────────────────────────────
+
+func TestScanTagContent_BareText(t *testing.T) {
+	line := `<p>Hello world today</p>`
+	got := scanTagContent(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for bare tag content, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Hello world today" {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Hello world today")
+	}
+}
+
+func TestScanTagContent_I18nCallSkipped(t *testing.T) {
+	// Line has i18nCallRe match → scanTagContent returns nil immediately.
+	line := `<p><%= t('key') %></p>`
+	got := scanTagContent(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("expected 0 results when i18n call present, got %d: %v", len(got), got)
+	}
+}
+
+func TestScanTagContent_ErbOutputSkipped(t *testing.T) {
+	// Any line with <%= is skipped to avoid orphaned fragments.
+	line := `<p>Welcome <%= @email %>!</p>`
+	got := scanTagContent(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("expected 0 results for line with ERB output, got %d: %v", len(got), got)
+	}
+}
+
+// ── Stimulus action regression ────────────────────────────────────────────────
+// tagContentRe `>([A-Za-z\d][^<\n]{3,})<` can match the `>` inside a Stimulus
+// action arrow `->` and capture `controller#action">` as "tag content".
+// These tests lock down that no Stimulus descriptor leaks through as user-facing text.
+
+func TestScanTagContent_StimulusActionNotDetected(t *testing.T) {
+	// Exact line that caused the regression: data-action="click->modal#close"></div>
+	// tagContentRe sees `->modal#close">` and captures `modal#close">` as content.
+	// looksLikeCode must kill it before it becomes a finding.
+	line := `  <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" data-action="click->modal#close"></div>`
+	got := scanTagContent(line, line, "partials/shared/_modal.html.erb", 1)
+	for _, h := range got {
+		if strings.Contains(h.Text, "modal#close") || strings.Contains(h.Text, "#close") {
+			t.Errorf("Stimulus action leaked as tag content: %q", h.Text)
+		}
+	}
+}
+
+func TestScanAttrPatterns_StimulusActionNotDetected(t *testing.T) {
+	// data-action is not in attrPatterns, but guard: no attr scanner should emit Stimulus descriptors.
+	line := `  <div data-action="click->modal#close" data-controller="modal"></div>`
+	got := scanAttrPatterns(line, line, "test.erb", 1)
+	for _, h := range got {
+		if strings.Contains(h.Text, "modal#close") || strings.Contains(h.Text, "#close") {
+			t.Errorf("Stimulus action leaked via attr pattern: %q", h.Text)
+		}
+	}
+}
+
+func TestLooksLikeCode_StimulusWithTrailingHTML(t *testing.T) {
+	// The exact garbage string tagContentRe captured: `modal#close">`
+	// Must be identified as code, not user-facing text.
+	if !looksLikeCode(`modal#close">`) {
+		t.Error(`looksLikeCode("modal#close\">") must return true — Stimulus action with trailing HTML`)
+	}
+}
+
+// ── scanHelperKeywordArgs ─────────────────────────────────────────────────────
+
+func TestScanHelperKeywordArgs_DisableWith(t *testing.T) {
+	line := `<%= f.submit "Submit", disable_with: "Sending..." %>`
+	got := scanHelperKeywordArgs(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for disable_with, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Sending..." {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Sending...")
+	}
+}
+
+func TestScanHelperKeywordArgs_SubmitTag(t *testing.T) {
+	line := `<%= submit_tag "Save Changes" %>`
+	got := scanHelperKeywordArgs(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for submit_tag, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Save Changes" {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Save Changes")
+	}
+}
+
+func TestScanHelperKeywordArgs_TextKeyword(t *testing.T) {
+	line := `<%= link_to root_path, text: "Convert" %>`
+	got := scanHelperKeywordArgs(line, line, "test.erb", 1)
+	if len(got) != 1 {
+		t.Fatalf("expected 1 result for text: keyword, got %d: %v", len(got), got)
+	}
+	if got[0].Text != "Convert" {
+		t.Errorf("Text = %q, want %q", got[0].Text, "Convert")
+	}
+}
+
+func TestScanHelperKeywordArgs_AlreadyTranslated(t *testing.T) {
+	// i18nCallRe matches t() → scanHelperKeywordArgs returns nil.
+	line := `<%= f.submit t('shared.submit'), disable_with: t('shared.sending') %>`
+	got := scanHelperKeywordArgs(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("expected 0 results when t() used for values, got %d: %v", len(got), got)
 	}
 }
 

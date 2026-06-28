@@ -21,7 +21,6 @@ en:
         subheading: "Each system composes proprietary signals into a single structured decision, delivered in one API call."
         explore_cta: "Explore system"
         utilities_label: "Extras"
-        utilities_cta: "Browse utilities"
         cards:
           identity_risk:
             signals:
@@ -404,6 +403,9 @@ en:
         cta_docs: "View Documentation"
         cta_contact: "Contact Support"
         cta_status: "Check API Status"
+      2xx_error_codes: "2xx %{error_codes}"
+      4xx_error_codes: "4xx %{error_codes}"
+      5xx_error_codes: "5xx %{error_codes}"
     pricing:
       title: "Pricing - Requiems API"
       header:
@@ -499,7 +501,6 @@ en:
           support_response: "Support response"
           sla: "SLA"
         values:
-          all: "All"
           eu: "EU"
           community: "Community"
           none: "-"
@@ -645,7 +646,6 @@ en:
       contact:
         heading: "Contact"
         text: "Questions about these terms? Contact us at"
-      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     privacy:
       title: "Privacy Policy - Requiems API"
       heading: "Privacy Policy"
@@ -703,7 +703,6 @@ en:
       contact:
         heading: "Contact Us"
         text: "For privacy-related questions or to exercise your rights, contact us at:"
-      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     about:
       title: "About Us - Requiems API"
       heading: "About Requiems API"
@@ -736,7 +735,6 @@ en:
         intro: "Have questions or want to learn more?"
         get_in_touch: "Get in touch"
         or_email: "or email us at"
-      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"

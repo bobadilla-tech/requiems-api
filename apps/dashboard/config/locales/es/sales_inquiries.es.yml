@@ -18,3 +18,7 @@ es:
       optional_share_any_details_that_will: "Opcional: Comparta cualquier detalle que nos ayude a brindarle una mejor asistencia."
       anything_specific_you_want_to_share: "¿Hay algo específico que quieras compartir?"
       company: "Compañía"
+      cancel: "Cancelar"
+      sending: "Envío..."
+      acme_corporation: "Corporación Acme"
+      tell_us_about_your_api_needs_expected: "Cuéntenos sobre sus necesidades de API, el volumen previsto, los requisitos específicos o cualquier pregunta que tenga..."

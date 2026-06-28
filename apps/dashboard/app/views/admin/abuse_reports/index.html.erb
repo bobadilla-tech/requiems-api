@@ -89,7 +89,7 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-      Reports (<%= @pagy.count %>)
+      <%= t('admin.abuse_reports.index.reports_count', count: @pagy.count) %>
     </h2>
   </div>
 
@@ -132,7 +132,7 @@
                 <%= report.description.present? ? truncate(report.description, length: 60) : "—" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= time_ago_in_words(report.created_at) %> ago
+                <%= t('admin.abuse_reports.index.created_at_ago', created_at: time_ago_in_words(report.created_at)) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <%
@@ -146,7 +146,7 @@
                 <%= render "partials/shared/badge", text: (report.status || "Pending").titleize, variant: status_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to t('admin.abuse_reports.index.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('shared.common.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>

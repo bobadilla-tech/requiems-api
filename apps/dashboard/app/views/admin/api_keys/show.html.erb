@@ -134,7 +134,7 @@
     <div class="p-6">
       <%= button_to revoke_admin_api_key_path(@api_key), method: :delete,
         class: "px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors",
-        data: { turbo_confirm: "Are you sure you want to revoke this API key? This cannot be undone." } do %>
+        data: { turbo_confirm: t('admin.api_keys.show.are_you_sure_you_want_to_revoke_this') } do %>
         Revoke API Key
       <% end %>
     </div>

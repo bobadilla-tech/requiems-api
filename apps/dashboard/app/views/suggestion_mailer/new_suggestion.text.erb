@@ -1,7 +1,7 @@
 NEW API SUGGESTION
 ====================
 
-API Name: <%= @suggestion[:api_name] %>
+<%= t('suggestion_mailer.new_suggestion.api_name_api_name', api_name: @suggestion[:api_name]) %>
 
 Description:
 <%= @suggestion[:description] %>
@@ -10,11 +10,11 @@ Use Case:
 <%= @suggestion[:use_case] %>
 
 <% if @suggestion[:email].present? %>
-Contact Email (for follow-up): <%= @suggestion[:email] %>
+<%= t('suggestion_mailer.new_suggestion.contact_email_for_follow_up', email: @suggestion[:email]) %>
 <% end %>
 
 --
 Submitted: <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %>
 
 This suggestion was submitted through the Requiems API website.
-Consider creating an issue or discussion on GitHub: <%= ExternalLinks::GITHUB[:repository] %>
+<%= t('suggestion_mailer.new_suggestion.consider_creating_an_issue', repository: ExternalLinks::GITHUB[:repository]) %>

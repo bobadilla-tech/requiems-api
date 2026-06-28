@@ -20,7 +20,7 @@
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@total_users) %></p>
     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-      <%= number_with_delimiter(@active_users) %> active (30d)
+      <%= t('admin.dashboard.index.active_users_active_30d', active_users: number_with_delimiter(@active_users)) %>
     </p>
   </div>
 
@@ -36,7 +36,7 @@
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@total_requests_today) %></p>
     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-      <%= number_with_delimiter(@total_requests_30d) %> last 30 days
+      <%= t('admin.dashboard.index.total_requests_30d_last_30_days', total_requests_30d: number_with_delimiter(@total_requests_30d)) %>
     </p>
   </div>
 
@@ -52,7 +52,7 @@
     </div>
     <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">$<%= number_with_delimiter(@mrr) %></p>
     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-      <%= @active_subscriptions %> active <%= "subscription".pluralize(@active_subscriptions) %>
+      <%= t('admin.dashboard.index.active_subscriptions_active_active_subscriptions2', active_subscriptions: @active_subscriptions, active_subscriptions2: "subscription".pluralize(@active_subscriptions)) %>
     </p>
   </div>
 
@@ -137,7 +137,7 @@
                     size: "xs" %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                  <%= time_ago_in_words(user.created_at) %> ago
+                  <%= t('admin.dashboard.index.created_at_ago', created_at: time_ago_in_words(user.created_at)) %>
                 </td>
               </tr>
             <% end %>
@@ -199,7 +199,7 @@
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate"><%= subscription.user.email %></p>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                  <%= subscription.plan_name.titleize %> plan
+                  <%= t('admin.dashboard.index.titleize_plan', titleize: subscription.plan_name.titleize) %>
                 </p>
               </div>
               <div class="ml-4 flex-shrink-0">

@@ -9,3 +9,4 @@ en:
         reason: "Reason"
         e_g_youtube_video_collaboration_blog: "e.g. YouTube video collaboration, blog post on requiems.xyz"
         duration: "Duration"
+        promotion_expires_at_from_now: "(%{promotion_expires_at} from now)"

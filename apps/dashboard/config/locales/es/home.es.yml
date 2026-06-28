@@ -300,6 +300,9 @@ es:
         signed_in: "Enviaremos notificaciones de actualización a tu correo registrado: %{email}"
         sign_up_cta: "Crear una cuenta"
       v0_1_0: "v0.1.0"
+      v0_0_2: "v0.0.2"
+      v0_2_0: "v0.2.0"
+      v0_0_1: "v0.0.1"
     glossary:
       title: "Glosario de API - Requiems API"
       heading: "Glosario de API"
@@ -572,6 +575,7 @@ es:
         cta: "Ponte en contacto"
       eliaz_bobadilla: "Eliaz Bobadilla"
       alexandra_flores: "Alexandra Flores"
+      leonardo: "Leonardo"
     status:
       title: "Estado de la API - Requiems API"
       all_operational: "Todos los sistemas están operativos"
@@ -904,6 +908,8 @@ es:
       miscellaneous_apis_description: "Terminales de utilidad general. Permiten la conversión entre unidades de medida como longitud, peso, volumen, temperatura, área y velocidad."
       roadmap: "Hoja de ruta"
       live: "Vivir"
+      requests_month: "Solicitudes/Mes"
+      unauthorized: "No autorizado"
     domain_checker:
       domain_checker_api_instant_domain: "API de verificación de dominios: disponibilidad instantánea de dominios y consulta WHOIS."
   sales_inquiries:

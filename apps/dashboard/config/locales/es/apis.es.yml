@@ -7,5 +7,6 @@ es:
       copy_full_documentation_as_markdown: "Copiar la documentación completa como Markdown"
       use_cases: "Casos de uso"
       api_endpoints: "Puntos finales de la API"
+      endpoints: "Puntos finales"
     index:
       api_directory_requiems_api: "Directorio de API | API de Requiems"

@@ -5,6 +5,11 @@ fr:
       1_request_per_minute: "1 requête par minute"
       create_free_account: "Créer un compte gratuit"
       4_times_more_requests: "4 fois plus de demandes"
+      anonymous_limit_html: "La démo autorise <strong>%{limit}</strong> pour les utilisateurs anonymes."
+      signup_benefit_html: "Inscrivez-vous gratuitement et obtenez <strong>%{requests}</strong> — vous pouvez continuer à tester immédiatement."
+      status: "Statut:"
+      error: "Erreur"
+      item1: "article 1"
     endpoint_documentation:
       examples_title: "Exemples de code"
       error_responses: "Réponses d'erreur"

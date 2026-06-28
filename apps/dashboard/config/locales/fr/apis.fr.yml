@@ -7,5 +7,6 @@ fr:
       use_cases: "Cas d'utilisation"
       api_endpoints: "Points de terminaison de l'API"
       copy_the_current_page_url_to_clipboard: "Copier l'URL de la page actuelle dans le presse-papiers"
+      endpoints: "Points d'extrémité"
     index:
       api_directory_requiems_api: "Répertoire des API | Requiems API"

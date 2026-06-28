@@ -1,0 +1,4 @@
+en:
+  account_deletion_mailer:
+    confirmation:
+      hi_email: "Hi %{email},"

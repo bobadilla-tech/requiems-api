@@ -5,6 +5,11 @@ es:
       create_free_account: "Crea una cuenta gratuita"
       4_times_more_requests: "4 veces más solicitudes"
       rate_limit_title: "¡Las pruebas se están realizando demasiado rápido!"
+      status: "Estado:"
+      error: "Error"
+      item1: "artículo1"
+      anonymous_limit_html: "La demo permite <strong>%{limit}</strong> a usuarios anónimos."
+      signup_benefit_html: "Regístrate gratis y obtén <strong>%{requests}</strong> — podrás seguir haciendo pruebas de inmediato."
     endpoint_documentation:
       examples_title: "Ejemplos de código"
       error_responses: "Respuestas de error"
@@ -19,3 +24,4 @@ es:
       try_it_out: "Pruébalo"
       live_demo: "Demostración en vivo"
       optional: "Opcional"
+      copy_url: "Copiar URL"

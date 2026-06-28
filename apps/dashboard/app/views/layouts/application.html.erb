@@ -10,7 +10,7 @@
         function gtag(){dataLayer.push(arguments);}
       
         gtag('js', new Date());
-        gtag('config', '<%= ENV["GA4_MEASUREMENT_ID"] %>');
+        <%= t('layouts.application.gtag__config_value', value: ENV["GA4_MEASUREMENT_ID"]) %>
       </script>
     <% end %>
 

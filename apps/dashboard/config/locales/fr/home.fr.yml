@@ -300,6 +300,9 @@ fr:
         signed_in: "Nous enverrons les notifications à votre adresse enregistrée : %{email}"
         sign_up_cta: "Créer un compte"
       v0_1_0: "v0.1.0"
+      v0_2_0: "v0.2.0"
+      v0_0_1: "v0.0.1"
+      v0_0_2: "v0.0.2"
     glossary:
       title: "Glossaire API — Requiems API"
       heading: "Glossaire API"
@@ -574,6 +577,7 @@ fr:
         cta: "Nous contacter"
       alexandra_flores: "Alexandra Flores"
       eliaz_bobadilla: "Eliaz Bobadilla"
+      leonardo: "Léonard de Vinci"
     status:
       title: "État des APIs — Requiems API"
       all_operational: "Tous les systèmes sont opérationnels"
@@ -906,6 +910,8 @@ fr:
       more_apis_coming_soon: "D'autres API seront bientôt disponibles."
       view_miscellaneous_api_documentation: "Consulter la documentation API diverse"
       live: "En direct"
+      requests_month: "Demandes/mois"
+      unauthorized: "Non autorisé"
     domain_checker:
       domain_checker_api_instant_domain: "API de vérification de domaine — Disponibilité instantanée des domaines et recherche WHOIS"
   sales_inquiries:

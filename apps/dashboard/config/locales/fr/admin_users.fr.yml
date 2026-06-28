@@ -5,3 +5,7 @@ fr:
         promotional_plan_upgrade: "Mise à niveau du plan promotionnel"
         required_for_audit_trail_describe_why: "Document requis pour la traçabilité. Veuillez expliquer les raisons de cette promotion."
         grant_or_revoke_a_temporary_plan: "Accorder ou révoquer une mise à niveau temporaire du forfait pour cet utilisateur sans exiger de paiement."
+        expires: "Expire"
+        reason: "Raison"
+        e_g_youtube_video_collaboration_blog: "Par exemple, une collaboration vidéo sur YouTube, un article de blog sur requiems.xyz"
+        duration: "Durée"

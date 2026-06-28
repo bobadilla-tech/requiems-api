@@ -273,6 +273,68 @@ func TestAudit_MissingKeyDetected(t *testing.T) {
 	}
 }
 
+// ── tCallRe ───────────────────────────────────────────────────────────────────
+// These tests guard against regressions where tCallRe fails to detect a valid
+// t() call form, which would cause the Audit to report the key as orphaned
+// (defined but never used) — a false positive that can cause unintended pruning.
+
+func TestTCallRe_MatchesI18nT(t *testing.T) {
+	m := tCallRe.FindStringSubmatch(`I18n.t('admin.users.index.title')`)
+	if len(m) < 2 || m[1] != "admin.users.index.title" {
+		t.Errorf("expected key %q, got %v", "admin.users.index.title", m)
+	}
+}
+
+func TestTCallRe_MatchesI18nT_DoubleQuotes(t *testing.T) {
+	m := tCallRe.FindStringSubmatch(`I18n.t("admin.sidebar.analytics")`)
+	if len(m) < 2 || m[1] != "admin.sidebar.analytics" {
+		t.Errorf("expected key %q, got %v", "admin.sidebar.analytics", m)
+	}
+}
+
+func TestTCallRe_MatchesBareT(t *testing.T) {
+	m := tCallRe.FindStringSubmatch(`t('some.key')`)
+	if len(m) < 2 || m[1] != "some.key" {
+		t.Errorf("expected key %q, got %v", "some.key", m)
+	}
+}
+
+func TestTCallRe_MatchesTranslate(t *testing.T) {
+	m := tCallRe.FindStringSubmatch(`translate('shared.nav.title')`)
+	if len(m) < 2 || m[1] != "shared.nav.title" {
+		t.Errorf("expected key %q, got %v", "shared.nav.title", m)
+	}
+}
+
+func TestTCallRe_RelativeKey(t *testing.T) {
+	m := tCallRe.FindStringSubmatch(`t('.title')`)
+	if len(m) < 2 || m[1] != ".title" {
+		t.Errorf("expected relative key %q, got %v", ".title", m)
+	}
+}
+
+func TestTCallRe_WithoutParens(t *testing.T) {
+	// t 'key' (space, no parens) — older Rails style used in some helpers.
+	m := tCallRe.FindStringSubmatch(`t 'admin.key'`)
+	if len(m) < 2 || m[1] != "admin.key" {
+		t.Errorf("expected key %q (no parens form), got %v", "admin.key", m)
+	}
+}
+
+func TestTCallRe_NoMatchOnStringLiteral(t *testing.T) {
+	// A plain string literal is not a t() call — must not be flagged as a key usage.
+	if tCallRe.MatchString(`"some hardcoded string"`) {
+		t.Error("tCallRe must not match plain string literals")
+	}
+}
+
+func TestTCallRe_NoMatchOnVariableAssignment(t *testing.T) {
+	// Variables whose names start with 't' (e.g. title_text) must not trigger.
+	if tCallRe.MatchString(`title_text = "My Title"`) {
+		t.Error("tCallRe must not match variable assignments")
+	}
+}
+
 // ── stripLangPrefix ───────────────────────────────────────────────────────────
 
 func TestStripLangPrefix(t *testing.T) {

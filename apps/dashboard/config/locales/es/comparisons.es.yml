@@ -30,14 +30,17 @@ es:
           heading: "Filosofía"
         migration:
           heading: "Migrando desde Bouncify"
+          steps: "[formación]"
         meta_title: "Comparativa de verificación de correo electrónico: API de Requiems vs. Bouncify (2026)"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         hero_context: "Verificación de correo electrónico"
         display_name: "Bouncify"
         hero_headline: "API de Requiems vs Bouncify"
         card_blurb: "Bouncify es un servicio de limpieza masiva de listas de correo electrónico utilizado por más de 10 000 equipos de marketing. Ofrece verificación SMTP, detección de direcciones comodín, comprobación de direcciones desechables y eliminación de trampas de spam. Flujo de trabajo de carga y descarga; API disponible."
         meta_description: "Compara Requiems API y Bouncify en cuanto a características, precios, acceso a la API y amplitud."
+        tldr: "[formación]"
       abstractapi:
         meta_title: "Requiems API vs AbstractAPI: Comparación de plataformas API 2026"
         philosophy:
@@ -56,19 +59,23 @@ es:
         meta_description: "Compara Requiems API y AbstractAPI en cuanto a funcionalidades, facturación unificada, cobertura y experiencia para desarrolladores."
         migration:
           heading: "Migración desde AbstractAPI"
+          steps: "[formación]"
         hero_context: "Plataforma API multipropósito"
         hero_headline: "Requiems API vs AbstractAPI"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         card_blurb: "AbstractAPI ofrece más de 20 API especializadas (verificación de correo electrónico, geolocalización de IP, validación telefónica, enriquecimiento de datos de empresas, días festivos y más), cada una con su propia clave y suscripción. Excelente experiencia del desarrollador; facturación fragmentada."
         display_name: "AbstractAPI"
         category: "De múltiples fines"
+        tldr: "[formación]"
       neverbounce:
         card_blurb: "NeverBounce (una empresa de ZoomInfo) procesa miles de millones de verificaciones al mes y se integra con más de 85 plataformas de marketing. Solo ofrece cobertura por correo electrónico; cada tipo de dato adicional requiere un proveedor diferente."
         display_name: "NeverBounce"
         hero_headline: "API de Requiems frente a NeverBounce"
         migration:
           heading: "Migración desde NeverBounce"
+          steps: "[formación]"
         benchmarks:
           uptime: "99,9%"
           free_tier: "500 solicitudes/mes"
@@ -82,12 +89,14 @@ es:
         meta_title: "Comparativa de verificación de correo electrónico: API Requiems vs NeverBounce (2026)"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         philosophy:
           body: "NeverBounce destaca por su gestión integral de listas de correo electrónico y cuenta con el ecosistema de integración más completo en marketing por correo electrónico. Si necesitas 85 conectores nativos para tu plataforma, son difíciles de superar. La API de Requiems está diseñada para desarrolladores que buscan acceso directo a múltiples señales de datos mediante API: menos clics, más código y mayor cobertura."
           heading: "Filosofía"
         category: "Verificación de correo electrónico"
         meta_description: "Compara Requiems API y NeverBounce en cuanto a características, precios, integraciones y amplitud de la API."
         hero_context: "Verificación de correo electrónico"
+        tldr: "[formación]"
       neutrinoapi:
         benchmarks:
           free_tier: "500 solicitudes/mes"
@@ -103,19 +112,23 @@ es:
         hero_context: "API multipropósito"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         philosophy:
           heading: "Filosofía"
           body: "Neutrinoapi fue pionera en el concepto de API de propósito general y ofrece un conjunto de herramientas realmente amplio. Requiems API se basa en esa visión con un diseño de API moderno, más de 100 puntos de acceso y una experiencia de desarrollador diseñada según las necesidades reales de los equipos en 2026: especificaciones OpenAPI, esquemas consistentes y precios basados en el uso, sin cálculos de créditos."
         card_blurb: "Neutrinoapi es un conjunto de herramientas API de propósito general que abarca API para correo electrónico, teléfono, IP, geolocalización, seguridad, procesamiento de imágenes, telefonía, comercio electrónico y mensajes de texto; más de 30 puntos de acceso en una sola cuenta. Establecido desde 2013."
         migration:
           heading: "Migrando desde Neutrinoapi"
+          steps: "[formación]"
         hero_headline: "Requiems API vs Neutrinoapi"
         meta_description: "Compara Requiems API y Neutrinoapi en cuanto a características, puntos de acceso, precios y experiencia para desarrolladores."
         meta_title: "API Requiems vs. Neutrinoapi: Comparativa de API de propósito general (2026)"
         display_name: "Neutrinoapi"
+        tldr: "[formación]"
       numverify:
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         benchmarks:
           their_free_tier: "100 solicitudes/mes"
           their_coverage: "1 punto final"
@@ -135,9 +148,11 @@ es:
           body: "Numverify se centra en una única función: validar un número de teléfono con una base de datos. La API de Requiems realiza consultas HLR en tiempo real para comprobar la accesibilidad, además de proporcionar los mismos datos de operador y formato, así como cualquier otra señal de validación que tu aplicación necesite. Una sola suscripción, sin proveedores adicionales."
         migration:
           heading: "Migración desde Numverify"
+          steps: "[formación]"
         display_name: "Numverify"
         hero_headline: "API de Requiems vs Numverify"
         hero_context: "Validación del número de teléfono"
+        tldr: "[formación]"
       zerobounce:
         hero_context: "Verificación de correo electrónico"
         benchmarks:
@@ -159,10 +174,13 @@ es:
         hero_headline: "API Requiems vs ZeroBounce"
         migration:
           heading: "Migración desde ZeroBounce"
+          steps: "[formación]"
         category: "Verificación de correo electrónico"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         display_name: "ZeroBounce"
+        tldr: "[formación]"
       mailboxlayer:
         benchmarks:
           coverage: "Más de 100 API"
@@ -176,6 +194,7 @@ es:
           their_latency: "~200 ms p50 (est.)"
         migration:
           heading: "Migración desde Mailboxlayer"
+          steps: "[formación]"
         philosophy:
           heading: "Filosofía"
           body: "Mailboxlayer es un punto final de validación ligero y económico, ideal para comprobaciones sencillas de sintaxis y SMTP. La API de Requiems ofrece una visión más amplia: proporcionamos el punto final de correo electrónico que necesitas, además de API para IP, teléfono, finanzas y mensajes de texto, todo ello a través de la misma experiencia de desarrollo."
@@ -186,8 +205,10 @@ es:
         card_blurb: "Mailboxlayer (un producto de APILayer) ofrece validación de correo electrónico en tiempo real mediante una API sencilla basada en URL con comprobaciones de sintaxis, ping SMTP, registros MX y una puntuación de calidad. Plan gratuito de 100 solicitudes al mes."
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         category: "Verificación de correo electrónico"
         hero_headline: "API de Requiems frente a Mailboxlayer"
+        tldr: "[formación]"
       ipstack:
         meta_title: "Comparación de la API de Requiems frente a IPstack: Geolocalización IP (2026)"
         benchmarks:
@@ -209,15 +230,19 @@ es:
         card_blurb: "IPstack (un producto de APILayer) ofrece geolocalización IP en tiempo real, con más de 100 campos de datos: país, región, ciudad, zona horaria, moneda, proveedor de servicios de Internet e información sobre amenazas. Compatible con IPv4 e IPv6."
         migration:
           heading: "Migración desde IPstack"
+          steps: "[formación]"
         display_name: "IPstack"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         meta_description: "Compara Requiems API e IPstack en cuanto a características, precios, campos de datos y amplitud de la API."
+        tldr: "[formación]"
       api_ninjas:
         hero_headline: "API de Réquiems vs. API Ninjas"
         hero_context: "Plataforma API multipropósito"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         benchmarks:
           heading: "Puntos de referencia"
           latency: "~120 ms p50"
@@ -234,10 +259,12 @@ es:
           body: "API Ninjas es un catálogo de datos con miles de datos disponibles a través de REST. Requiems API es una plataforma de validación y enriquecimiento: realizamos comprobaciones en tiempo real con sistemas reales, no solo consultas a bases de datos. Si necesita transcripciones históricas de ganancias o información sobre animales, API Ninjas es la solución ideal. Si necesita saber si una dirección de correo electrónico recibe correos en este momento, Requiems API es la herramienta adecuada."
         migration:
           heading: "Migrando desde API Ninjas"
+          steps: "[formación]"
         meta_title: "Requiems API vs API Ninjas: Comparativa de API multipropósito 2026"
         card_blurb: "API Ninjas ofrece más de 135 API listas para producción que abarcan finanzas, IA/visión artificial, salud, entretenimiento, transporte y más, utilizadas por más de 600 000 desarrolladores, incluidas empresas de la lista Fortune 500. Política de almacenamiento de datos cero."
         display_name: "API Ninjas"
         category: "De múltiples fines"
+        tldr: "[formación]"
       kickbox:
         benchmarks:
           uptime: "99,9%"
@@ -258,11 +285,14 @@ es:
           heading: "Filosofía"
         migration:
           heading: "Migración desde Kickbox"
+          steps: "[formación]"
         features:
           heading: "Comparación de características"
+          rows: "[formación]"
         category: "Verificación de correo electrónico"
         meta_title: "Comparativa de verificación de correo electrónico entre Requiems API y Kickbox (2026)"
         meta_description: "Compara Requiems API y Kickbox en cuanto a características, precios, puntuación de Sendex y amplitud de la API."
+        tldr: "[formación]"
     hub:
       benchmarks_ours: "API de Requiems"
       hero_headline: "Comparativa de la API de Requiems"
@@ -292,3 +322,4 @@ es:
       philosophy_pricing_body: "Pago por llamada, no por producto. Sin suscripciones separadas para cada tipo de dato. Su presupuesto rinde más al no tener que dividirlo entre diferentes proveedores."
       hero_cta_secondary: "Ver la documentación de la API"
       card_coming_soon: "Muy pronto"
+      benchmarks_rows: "[formación]"

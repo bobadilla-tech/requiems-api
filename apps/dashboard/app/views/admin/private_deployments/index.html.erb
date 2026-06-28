@@ -31,7 +31,7 @@
 <!-- Filter Tabs -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex space-x-4">
-    <% [[t('admin.private_deployments.index.all'), nil], [t('admin.private_deployments.index.pending'), "pending"], [t('admin.private_deployments.index.deploying'), "deploying"], [t('admin.private_deployments.index.active'), "active"], [t('admin.private_deployments.index.cancelled'), "cancelled"]].each do |label, value| %>
+    <% [[t('shared.common.all'), nil], [t('admin.private_deployments.index.pending'), "pending"], [t('admin.private_deployments.index.deploying'), "deploying"], [t('admin.private_deployments.index.active'), "active"], [t('admin.private_deployments.index.cancelled'), "cancelled"]].each do |label, value| %>
       <%= link_to label,
         admin_private_deployments_path(status: value),
         class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{params[:status] == value ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'}" %>
@@ -76,7 +76,7 @@
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= time_ago_in_words(dr.created_at) %> ago
+                <%= t('admin.private_deployments.index.created_at_ago', created_at: time_ago_in_words(dr.created_at)) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <%
@@ -90,7 +90,7 @@
                 <%= render "partials/shared/badge", text: dr.status.capitalize, variant: badge_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to t('admin.private_deployments.index.view'), admin_private_deployment_path(dr), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('shared.common.view'), admin_private_deployment_path(dr), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>

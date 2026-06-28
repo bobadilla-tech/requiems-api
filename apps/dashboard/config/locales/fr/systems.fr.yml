@@ -67,6 +67,7 @@ fr:
       api_reference: "Référence API"
       use_cases: "Cas d'utilisation"
       api_endpoints: "Points de terminaison de l'API"
+      endpoints: "Points d'extrémité"
     identity-risk:
       meta_title: "Système identité et risque | Requiems API"
       kicker: "Système identité et risque"

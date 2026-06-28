@@ -35,7 +35,7 @@
                   <%= subscription.promotion_expires_at&.strftime("%B %d, %Y") || "—" %>
                   <% if subscription.promotion_expires_at %>
                     <span class="text-xs text-gray-500 dark:text-gray-400">
-                      (<%= time_ago_in_words(subscription.promotion_expires_at) %> from now)
+                      <%= t('admin_users.show.promotion_section.promotion_expires_at_from_now', promotion_expires_at: time_ago_in_words(subscription.promotion_expires_at)) %>
                     </span>
                   <% end %>
                 </p>

@@ -64,7 +64,7 @@
           <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2"><%= t('admin.abuse_reports.show.reported_at') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100">
             <%= @abuse_report.created_at.strftime("%B %d, %Y at %I:%M %p") %>
-            (<%= time_ago_in_words(@abuse_report.created_at) %> ago)
+            <%= t('admin.abuse_reports.show.created_at_ago', created_at: time_ago_in_words(@abuse_report.created_at)) %>
           </p>
         </div>
 
@@ -80,7 +80,7 @@
                 <p class="mt-1 text-sm text-green-700 dark:text-green-400">
                   Resolved on <%= @abuse_report.resolved_at.strftime("%B %d, %Y at %I:%M %p") %>
                   <% if @resolver %>
-                    by <%= @resolver.email %>
+                    <%= t('admin.abuse_reports.show.by_email', email: @resolver.email) %>
                   <% end %>
                 </p>
               </div>
@@ -161,7 +161,7 @@
         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.abuse_reports.show.last_request') %></p>
         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
           <% if @usage_stats[:last_request_at].present? %>
-            <%= time_ago_in_words(@usage_stats[:last_request_at]) %> ago
+            <%= t('admin.abuse_reports.show.last_request_at_ago', last_request_at: time_ago_in_words(@usage_stats[:last_request_at])) %>
           <% else %>
             Never
           <% end %>
@@ -222,7 +222,7 @@
                 <%= render "partials/shared/badge", text: (report.report_type || "Unknown").titleize, variant: type_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= time_ago_in_words(report.created_at) %> ago
+                <%= t('admin.abuse_reports.show.created_at_ago', created_at: time_ago_in_words(report.created_at)) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <%
@@ -236,7 +236,7 @@
                 <%= render "partials/shared/badge", text: (report.status || "Pending").titleize, variant: status_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to t('admin.abuse_reports.show.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('shared.common.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>
@@ -266,7 +266,7 @@
 
       <!-- Resolve -->
       <% if @abuse_report.status != "resolved" %>
-        <%= button_to resolve_admin_abuse_report_path(@abuse_report), method: :post, class: "w-full px-4 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to resolve this report?" } do %>
+        <%= button_to resolve_admin_abuse_report_path(@abuse_report), method: :post, class: "w-full px-4 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors text-center", data: { turbo_confirm: t('admin.abuse_reports.show.are_you_sure_you_want_to_resolve_this') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
@@ -276,7 +276,7 @@
 
       <!-- Suspend User -->
       <% unless @user.suspended? %>
-        <%= button_to suspend_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to suspend this user? All their API keys will be revoked." } do %>
+        <%= button_to suspend_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-center", data: { turbo_confirm: t('shared.labels.are_you_sure_suspend') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
           </svg>
@@ -286,7 +286,7 @@
 
       <!-- Ban User -->
       <% unless @user.banned? %>
-        <%= button_to ban_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to BAN this user? This will revoke all API keys and cancel their subscription." } do %>
+        <%= button_to ban_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors text-center", data: { turbo_confirm: t('admin.abuse_reports.show.are_you_sure_you_want_to_ban_this_user') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
           </svg>

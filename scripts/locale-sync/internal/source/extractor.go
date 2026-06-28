@@ -533,8 +533,16 @@ func looksUserFacingLabel(s string) bool {
 	return unicode.IsLetter(r[0])
 }
 
+// stimulusActionRe matches Stimulus controller#action descriptors like "modal#close"
+// or "click->modal#close", which are technical routing strings, not user-facing text.
+var stimulusActionRe = regexp.MustCompile(`\b[a-z][a-z0-9_-]*#[a-z_][a-z0-9_]*\b`)
+
 // looksLikeCode catches things like CSS class lists and camelCase identifiers.
 func looksLikeCode(s string) bool {
+	// Stimulus controller#action descriptor (e.g. "modal#close", "click->modal#close")
+	if stimulusActionRe.MatchString(s) {
+		return true
+	}
 	// High density of hyphens (CSS classes like "flex items-center gap-3")
 	hyphens := strings.Count(s, "-")
 	words := len(strings.Fields(s))

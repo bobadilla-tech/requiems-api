@@ -156,7 +156,7 @@
           <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.monthly_requests"), values: ["500", "100k", "1M", "10M"] %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.rate_limit"), values: ["30/min", "5k/min", "10k/min", "50k/min"] %>
-            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.api_endpoints"), values: Array.new(4) { t("home.pricing.table.values.all") } %>
+            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.api_endpoints"), values: Array.new(4) { t("shared.common.all") } %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.data_centers"), values: Array.new(4) { t("home.pricing.table.values.eu") } %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.support_response"), values: [t("home.pricing.table.values.community"), "24h", "4h", "1h"] %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.sla"), values: [t("home.pricing.table.values.none"), t("home.pricing.table.values.none"), "99.9%", "99.95%"] %>

@@ -15,6 +15,7 @@ es:
         filter_or_route_quotes_by_language: "Filtre o redirija las citas por idioma antes de presentarlas a una audiencia multilingüe."
         pairs_well_with: "Combina bien con"
         combine_the_quotes_api_with_other: "Combina la API de cotizaciones con otros puntos finales para crear experiencias más completas."
+        sentiment_analysis: "Análisis de sentimientos"
       what_it_does:
         every_quote_includes_the_author_s_name: "Cada cita incluye el nombre del autor, lista para ser mostrada."
         fetch_up_to_50_quotes_per_request_with: "Obtenga hasta 50 cotizaciones por solicitud con el punto final de procesamiento por lotes."
@@ -23,6 +24,8 @@ es:
         median_response_under_1_second_quotes: "Tiempo de respuesta medio inferior a 1 segundo. Cotizaciones disponibles a nivel mundial."
         batch_ready: "Lote listo"
         batch_endpoint: "punto final del lote"
+        fast: "Rápido"
+        attributed: "Atribuido"
       show:
         random_quote_generator_free_quotes_api: "Generador de citas aleatorias: herramienta API gratuita para citas"
       use_cases:
@@ -77,6 +80,32 @@ es:
         get_api_key: "Obtén la clave API"
         convert: "Convertir"
         read_the_docs: "Lee la documentación"
+        kilograms: "Kilogramos"
+        meters: "Medidores"
+        kelvin: "Kelvin"
+        hectares: "Hectáreas"
+        acres: "Acres"
+        pounds: "Libras"
+        celsius: "Celsius"
+        liters: "litros"
+        yards: "Yardas"
+        cups: "Tazas"
+        miles_hour: "Millas/hora"
+        miles: "Millas"
+        millimeters: "milímetros"
+        inches: "Pulgadas"
+        km_hour: "km/hora"
+        feet: "Pies"
+        ounces: "onzas"
+        kilometers: "kilómetros"
+        knots: "Nudos"
+        meters_second: "Metros por segundo"
+        quarts: "cuartos"
+        pints: "Pintas"
+        fahrenheit: "Fahrenheit"
+        milliliters: "Mililitros"
+        centimeters: "centímetros"
+        grams: "gramos"
       what_it_does:
         simple_api_requests_instant_results: "Solicitudes API sencillas, resultados instantáneos."
         reliable_conversions_with_transparent: "Conversiones fiables con fórmulas transparentes."
@@ -84,6 +113,11 @@ es:
       use_cases:
         unit_conversion_fits_anywhere: "La conversión de unidades es útil en cualquier situación donde se necesite traducir medidas de forma precisa e instantánea."
         real_problems_real_conversions: "Problemas reales, conversiones reales."
+        education: "Educación"
+        fitness: "Aptitud física"
+        development: "Desarrollo"
+        science: "Ciencia"
+        food: "Alimento"
       show:
         free_unit_conversion_api_miles_to_km_kg: "API gratuita de conversión de unidades: millas a kilómetros, kilogramos a libras, grados Celsius a grados Fahrenheit | API de Requiems"
       api_combinations:
@@ -324,6 +358,10 @@ es:
       use_cases:
         email_validator_fits_wherever_contact: "Email Validator es ideal para cualquier aplicación donde la calidad de los datos de contacto sea importante."
         heading: "Problemas reales, usuarios reales."
+        growth: "Crecimiento"
+        conversion: "Conversión"
+        marketing: "Marketing"
+        operations: "Operaciones"
       faq:
         heading: "Preguntas frecuentes"
       what_it_does:
@@ -340,6 +378,7 @@ es:
         verify: "Verificar"
       show:
         free_email_validator_syntax_mx_record: "Validador de correo electrónico gratuito: comprobación de sintaxis, registro MX y comprobación de correo desechable | API de Requiems"
+        description: "Valida cualquier dirección de correo electrónico al instante. Verificación de sintaxis RFC 5322, consulta de registros MX en tiempo real, detección de dominios desechables y corrección de errores tipográficos: gratis, sin necesidad de cuenta."
     phone_validator:
       demo:
         error_empty: "Introduce un número de teléfono para validar."

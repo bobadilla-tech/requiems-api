@@ -141,4 +141,4 @@ en:
       sending: "Sending..."
       cancel_btn: "Cancel"
     errors: {no_data: "No data returned."}
-    common: {view: "View", all: "All", eliaz_bobadilla_tech: "eliaz@bobadilla.tech", invalid: "Invalid", json_response: "JSON response", latency: "< 300ms avg latency", no: "✗ No", rest_api: "REST API", uptime: "99.9% uptime", valid: "Valid", yes: "✓ Yes", p50: "p50", p99: "p99", performance: "Performance", primary_cta: "Get API key", utilities: "Browse utilities", x_backend_secret: "X-Backend-Secret"}
+    common: {view: "View", all: "All", eliaz_bobadilla_tech: "eliaz@bobadilla.tech", invalid: "Invalid", json_response: "JSON response", latency: "< 300ms avg latency", no: "✗ No", rest_api: "REST API", uptime: "99.9% uptime", valid: "Valid", yes: "✓ Yes", p50: "p50", p99: "p99", performance: "Performance", utilities: "Browse utilities", x_backend_secret: "X-Backend-Secret"}

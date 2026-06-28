@@ -44,6 +44,8 @@ es:
       edit:
         change_your_password: "Cambia tu contraseña"
         change_my_password: "Cambiar mi contraseña"
+        new_password: "Nueva contraseña"
+        confirm_new_password: "Confirmar nueva contraseña"
       no_token: "No puedes acceder a esta página sin haber recibido un correo electrónico de restablecimiento de contraseña. Si accedes desde uno de estos correos, asegúrate de haber utilizado la URL completa proporcionada."
       send_paranoid_instructions: "Si tu dirección de correo electrónico existe en nuestra base de datos, recibirás un enlace para recuperar tu contraseña en tu correo electrónico en unos minutos."
     registrations:

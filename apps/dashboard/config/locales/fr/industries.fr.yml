@@ -80,8 +80,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail liés aux voyages"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes de voyage expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Développez votre plateforme de voyage plus rapidement."
         subheadline: "Nous allons adapter les API à vos flux de travail de réservation et d'opérations."
@@ -95,8 +97,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail des télécommunications"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes de télécommunications livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Concevoir des produits de télécommunications plus intelligents."
         subheadline: "Passons en revue les API qui correspondent aux flux de travail de vos abonnés et de votre réseau."
@@ -110,8 +114,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail SaaS"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes SaaS déploient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Naviguez vers un SaaS plus propre et plus sûr."
         subheadline: "Identifions ensemble les API de validation et d'enrichissement qui correspondent à votre produit."
@@ -125,8 +131,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail du commerce de détail"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes de vente au détail livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Réduisez les frictions à chaque étape du passage en caisse."
         subheadline: "Nous allons adapter les API à vos flux de travail de panier et de traitement des commandes."
@@ -140,8 +148,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail immobiliers"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes immobilières expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Créer des plateformes immobilières plus précises."
         subheadline: "Nous pouvons intégrer les API d'adresse, de géolocalisation et de contact à vos flux de travail d'annonces."
@@ -155,8 +165,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "Des API conçues pour les flux de travail des organisations à but non lucratif"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes à but non lucratif expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Touchez plus de donateurs grâce à des données plus propres."
         subheadline: "Nous pouvons adapter les API de validation et de communication aux flux de travail de vos donateurs."
@@ -170,8 +182,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail multimédias"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes médias livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Diffuser le bon contenu auprès du bon public."
         subheadline: "Nous pouvons intégrer les API de géolocalisation, de modération et de langue à votre plateforme."
@@ -185,8 +199,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de production"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes de production livrent avec les Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Assurez la qualité des données à chaque étape de votre chaîne d'approvisionnement."
         subheadline: "Nous pouvons intégrer les API d'adresse, de contact et de finance à vos flux de travail opérationnels."
@@ -200,8 +216,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail logistiques"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes logistiques expédient avec les Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Livrer à temps avec des données propres et précises."
         subheadline: "Nous pouvons intégrer les API d'adresse et de routage à vos flux de travail de livraison."
@@ -215,8 +233,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "Des API conçues pour les flux de travail juridiques"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes de technologies juridiques déploient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Développez des technologies juridiques basées sur des données fiables."
         subheadline: "Nous pouvons adapter les API de validation et de domaine à vos flux de travail contractuels et de conformité."
@@ -230,8 +250,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail dans le secteur de l'assurance"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes d'assurance expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Concevoir des produits d'assurance basés sur des données précises et vérifiées."
         subheadline: "Nous pouvons adapter les API à vos processus de souscription, de gestion des polices et de sinistres."
@@ -245,8 +267,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "Des API conçues pour les flux de travail du secteur de l'hôtellerie"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes hôtelières expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Offrez une meilleure expérience client grâce à des données précises."
         subheadline: "Nous pouvons intégrer les API de géolocalisation, de validation et de paiement à votre infrastructure hôtelière."
@@ -260,8 +284,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail du secteur de la santé"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes soignantes expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Concevez des produits de santé à partir de données fiables."
         subheadline: "Nous allons intégrer les API de validation, de planification et de géolocalisation à vos flux de travail cliniques."
@@ -275,8 +301,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail gouvernementaux"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes gouvernementales livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Élaborer des services publics à partir de données fiables et vérifiées."
         subheadline: "Permettez-nous de connecter les API d'adresse, de contact et de lutte contre la fraude à votre plateforme gouvernementale."
@@ -290,8 +318,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "Des API conçues pour les flux de travail énergétiques"
+        apis: "[tableau]"
       proof_points:
         heading: "Quelles équipes énergétiques transportent les Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Optimisez vos opérations énergétiques grâce à des données propres."
         subheadline: "Nous pouvons intégrer les API de géolocalisation, d'adresse et de validation à votre plateforme énergétique."
@@ -305,8 +335,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail EdTech"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes EdTech livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Concevoir des plateformes d'apprentissage accessibles à tous les élèves."
         subheadline: "Nous pouvons intégrer les API de validation, de planification et de modération à votre produit EdTech."
@@ -320,8 +352,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail du commerce électronique"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes e-commerce livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Convertissez plus, remboursez moins, développez-vous davantage."
         subheadline: "Nous allons intégrer les API de paiement, de détection de fraude et de validation à votre infrastructure e-commerce."
@@ -335,8 +369,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "Des API conçues pour les flux de travail des agences"
+        apis: "[tableau]"
       proof_points:
         heading: "Quelles équipes d'agences expédient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Fournir un travail de meilleure qualité à chaque client."
         subheadline: "Permettez-nous de faire correspondre les API de validation, de domaine et d'automatisation à votre infrastructure d'agence."
@@ -350,8 +386,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail de jeu"
+        apis: "[tableau]"
       proof_points:
         heading: "Quels studios de jeux livrent avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Offrez des expériences de jeu plus sûres et plus intelligentes."
         subheadline: "Nous pouvons intégrer les API de renseignement IP, de modération et de lutte contre la fraude à votre plateforme de jeu."
@@ -365,8 +403,10 @@ fr:
         secondary_cta: "Parcourir les API"
       api_mapping:
         heading: "API conçues pour les flux de travail fintech"
+        apis: "[tableau]"
       proof_points:
         heading: "Ce que les équipes fintech déploient avec Requiems"
+        items: "[tableau]"
       final_cta:
         headline: "Concevez des produits fintech à partir de données de paiement fiables."
         subheadline: "Nous allons intégrer les API BIN, IBAN, fraude et KYC à vos flux de travail financiers."

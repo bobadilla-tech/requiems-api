@@ -11,3 +11,7 @@ es:
       more_of_a_technical_person: "¿Eres más bien una persona técnica?"
       your_email_optional: "Tu correo electrónico (opcional)"
       submit_suggestion: "Enviar sugerencia"
+      how_would_you_use_this_api_in_your: "¿Cómo utilizarías esta API en tu aplicación?"
+      submitting: "Sumisión..."
+      describe_what_this_api_should_do: "Describe qué debería hacer esta API..."
+      e_g_weather_forecast_api_stock_market: "Por ejemplo, API de pronóstico del tiempo, API de datos del mercado de valores."

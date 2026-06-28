@@ -19,3 +19,6 @@ fr:
       company: "Entreprise"
       cancel: "Annuler"
       sending: "Envoi en cours..."
+      have_questions_html: "Vous avez des questions d'ordre général ? %{faq_link} ou %{contact_link}."
+      acme_corporation: "Acme Corporation"
+      tell_us_about_your_api_needs_expected: "Parlez-nous de vos besoins en matière d'API, du volume attendu, des exigences spécifiques ou de toute question que vous pourriez avoir..."

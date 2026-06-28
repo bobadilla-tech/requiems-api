@@ -36,6 +36,12 @@ var htmlTagInTextRe = regexp.MustCompile(`</?[a-zA-Z][^>]*>`)
 // open/close tag (i.e., ERB is inside an HTML attribute, not in text content).
 var fullHTMLTagLineRe = regexp.MustCompile(`^</?[a-zA-Z][^>]*>$`)
 
+// htmlAttrLineRe matches lines that are HTML attributes in a multi-line tag:
+//   data-api-name="<%= ... %>"
+//   class="<%= ... %>"
+// The non-ERB content would look like:   word-or-word="X" or just word="X">
+var htmlAttrLineRe = regexp.MustCompile(`^[\w-]+=`)
+
 // DetectFragments walks app/ and returns lines where visible text and ERB
 // expressions are mixed without a t() wrapper.
 func DetectFragments(root string) ([]FragmentLine, error) {
@@ -90,10 +96,12 @@ func scanFileFragments(path, root string) ([]FragmentLine, error) {
 			continue
 		}
 		// Skip lines where the ERB is inside an HTML attribute, not text content.
-		// Replace ERB tags with a placeholder and check if the result is a pure
-		// HTML open/close tag (e.g. <div class="... ERB ...">).
+		// Replace ERB tags with a placeholder and check if the result is either:
+		//   (a) a complete HTML tag <div class="X">    — fullHTMLTagLineRe
+		//   (b) a standalone HTML attribute  data-x="X" — htmlAttrLineRe
 		withoutERB := erbOutputExprRe.ReplaceAllString(trimmed, "X")
-		if fullHTMLTagLineRe.MatchString(strings.TrimSpace(withoutERB)) {
+		withoutERBTrimmed := strings.TrimSpace(withoutERB)
+		if fullHTMLTagLineRe.MatchString(withoutERBTrimmed) || htmlAttrLineRe.MatchString(withoutERBTrimmed) {
 			continue
 		}
 
@@ -202,15 +210,32 @@ func parseFragmentLine(raw, trimmed, relSlash, absFile string, lineNum int) *Fra
 			mergedParts = append(mergedParts, "%{"+name+"}")
 			bindings = append(bindings, name+": "+p.text)
 		} else {
-			stripped := strings.TrimSpace(htmlTagInTextRe.ReplaceAllString(p.text, ""))
-			if stripped != "" {
-				mergedParts = append(mergedParts, stripped)
+			// Strip HTML tags but preserve internal whitespace so "Hi %{name}!" keeps
+			// the space between text and placeholder rather than collapsing to "Hi%{name}!".
+			cleaned := htmlTagInTextRe.ReplaceAllString(p.text, "")
+			if strings.TrimSpace(cleaned) != "" {
+				mergedParts = append(mergedParts, cleaned)
 			}
 		}
 	}
 
 	mergedValue := strings.TrimSpace(strings.Join(mergedParts, ""))
 	if len(mergedValue) < 4 {
+		return nil
+	}
+	// Reject merged values that are HTML attributes, CSS, or technical content.
+	if strings.Contains(mergedValue, `="`) || strings.HasPrefix(mergedValue, "<") {
+		return nil
+	}
+	lowerMerged := strings.ToLower(mergedValue)
+	for _, skip := range []string{"x-api-key", "x-backend-secret", "data-", "class=", "style="} {
+		if strings.HasPrefix(lowerMerged, skip) {
+			return nil
+		}
+	}
+	// Reject CSS / JS blocks: remove %{var} placeholders and check for { } braces.
+	withoutPlaceholders := regexp.MustCompile(`%\{[^}]+\}`).ReplaceAllString(mergedValue, "")
+	if strings.Contains(withoutPlaceholders, "{") || strings.Contains(withoutPlaceholders, "}") {
 		return nil
 	}
 
@@ -262,7 +287,7 @@ func fragmentVarName(expr string, seen map[string]int) string {
 			return r == '.' || r == '@' || r == ':' || r == '(' || r == ' '
 		})
 		for i := len(parts) - 1; i >= 0; i-- {
-			p := strings.TrimRight(parts[i], "(),;")
+			p := strings.TrimRight(parts[i], "(),;[]")
 			if p != "" && !strings.ContainsAny(p, "\"'") {
 				name = p
 				break

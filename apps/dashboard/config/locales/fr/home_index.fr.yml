@@ -1,0 +1,6 @@
+fr:
+  home_index:
+    hero:
+      api_requiems_xyz_v1: "api.requiems.xyz/v1/"
+    categories:
+      soon: "Bientôt"

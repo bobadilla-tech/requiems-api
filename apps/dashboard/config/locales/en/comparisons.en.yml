@@ -582,3 +582,5 @@ en:
             - "Replace `apilayer.net/api/validate` with `api.requiems.dev/v1/phone/validate`"
             - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
             - "Map `line_type` values: `mobile` stays; `landline` stays; `special_services` → `other`"
+    competitor_card:
+      requiems_api_vs_display_name: "Requiems API vs %{display_name}"

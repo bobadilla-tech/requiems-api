@@ -84,8 +84,10 @@ es:
       meta_title: "API para productos SaaS | API de Requiems"
       proof_points:
         heading: "¿Qué productos envían los equipos de SaaS con Requiems?"
+        items: "[formación]"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo SaaS"
+        apis: "[formación]"
     real_estate:
       hero:
         subheadline: "API de validación de direcciones, geolocalización y verificación de contactos para plataformas inmobiliarias y CRM."
@@ -94,12 +96,14 @@ es:
         cta: "Reserva una llamada estratégica"
       proof_points:
         heading: "¿Qué envían los equipos inmobiliarios con Requiems?"
+        items: "[formación]"
       final_cta:
         headline: "Construir plataformas inmobiliarias más precisas."
         subheadline: "Integramos las API de direcciones, geolocalización y contactos en los flujos de trabajo de sus anuncios."
         cta: "Reserva una llamada estratégica"
       api_mapping:
         heading: "APIs diseñadas para flujos de trabajo inmobiliarios"
+        apis: "[formación]"
       meta_title: "API para plataformas inmobiliarias | API de Requiems"
     nonprofit:
       hero:
@@ -114,8 +118,10 @@ es:
       meta_title: "API para organizaciones sin fines de lucro | API de Requiems"
       proof_points:
         heading: "¿Qué equipos sin fines de lucro envían con Requiems?"
+        items: "[formación]"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de organizaciones sin fines de lucro."
+        apis: "[formación]"
     government:
       final_cta:
         headline: "Construya servicios públicos sobre la base de datos fiables y verificados."
@@ -129,8 +135,10 @@ es:
         secondary_cta: "Explorar API"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo gubernamentales"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué equipos gubernamentales envían con Requiems?"
+        items: "[formación]"
     edtech:
       final_cta:
         subheadline: "Podemos integrar las API de validación, programación y moderación en su producto de tecnología educativa."
@@ -143,8 +151,10 @@ es:
         cta: "Reserva una llamada estratégica"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de tecnología educativa."
+        apis: "[formación]"
       proof_points:
         heading: "Lo que los equipos de tecnología educativa envían con Requiems"
+        items: "[formación]"
       meta_title: "API para plataformas de tecnología educativa | API Requiems"
     media:
       hero:
@@ -154,6 +164,7 @@ es:
         secondary_cta: "Explorar API"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo multimedia."
+        apis: "[formación]"
       meta_title: "API para empresas de medios | API de Requiems"
       final_cta:
         cta: "Reserva una llamada estratégica"
@@ -161,6 +172,7 @@ es:
         subheadline: "Podemos integrar las API de geolocalización, moderación e idiomas en su plataforma."
       proof_points:
         heading: "¿Qué equipos de medios envían con Requiems?"
+        items: "[formación]"
     healthcare:
       final_cta:
         cta: "Reserva una llamada estratégica"
@@ -174,8 +186,10 @@ es:
       meta_title: "API para plataformas de atención médica | API Requiems"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo en el sector sanitario."
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué equipos sanitarios envían con Requiems?"
+        items: "[formación]"
     telecom:
       meta_title: "API para empresas de telecomunicaciones | API Requiems"
       final_cta:
@@ -189,11 +203,14 @@ es:
         secondary_cta: "Explorar API"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de telecomunicaciones"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué equipos de telecomunicaciones envían con Requiems?"
+        items: "[formación]"
     logistics:
       api_mapping:
         heading: "API diseñadas para flujos de trabajo logísticos"
+        apis: "[formación]"
       hero:
         cta: "Reserva una llamada estratégica"
         subheadline: "API de validación de direcciones, geolocalización y zonas horarias para la entrega, el almacenamiento y la logística de última milla."
@@ -206,6 +223,7 @@ es:
       meta_title: "API para empresas de logística | API Requiems"
       proof_points:
         heading: "¿Qué equipos de logística envían con Requiems?"
+        items: "[formación]"
     gaming:
       hero:
         subheadline: "API de geolocalización IP, moderación de contenido y detección de fraude para estudios de videojuegos y plataformas multijugador."
@@ -218,14 +236,18 @@ es:
         cta: "Reserva una llamada estratégica"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de videojuegos"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué estudios de videojuegos incluyen Requiems en sus juegos?"
+        items: "[formación]"
       meta_title: "API para estudios de videojuegos | API de Requiems"
     legal:
       api_mapping:
         heading: "API diseñadas para flujos de trabajo legales"
+        apis: "[formación]"
       proof_points:
         heading: "Qué incluyen los equipos de tecnología legal con Requiems"
+        items: "[formación]"
       final_cta:
         subheadline: "Podemos integrar las API de validación y de dominio con sus flujos de trabajo de contratos y cumplimiento normativo."
         headline: "Desarrolle tecnología legal basada en datos fiables."
@@ -249,8 +271,10 @@ es:
       meta_title: "API para negocios de hostelería | API de Requiems"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo en el sector hotelero."
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué productos envían los equipos de hostelería con Requiems?"
+        items: "[formación]"
     ecommerce:
       final_cta:
         headline: "Convierte más, reembolsa menos, crece más."
@@ -264,8 +288,10 @@ es:
       meta_title: "API para negocios de comercio electrónico | API Requiems"
       api_mapping:
         heading: "APIs diseñadas para flujos de trabajo de comercio electrónico"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué productos envían los equipos de comercio electrónico con Requiems?"
+        items: "[formación]"
     agencies:
       final_cta:
         headline: "Entregue un trabajo de mayor calidad a cada cliente."
@@ -279,8 +305,10 @@ es:
         cta: "Reserva una llamada estratégica"
       proof_points:
         heading: "¿Qué equipos de agencias envían con Requiems?"
+        items: "[formación]"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de agencias."
+        apis: "[formación]"
     fintech:
       final_cta:
         cta: "Reserva una llamada estratégica"
@@ -294,8 +322,10 @@ es:
       meta_title: "API para empresas Fintech | API Requiems"
       proof_points:
         heading: "¿Qué productos envían los equipos de tecnología financiera con Requiems?"
+        items: "[formación]"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo fintech"
+        apis: "[formación]"
     retail:
       hero:
         secondary_cta: "Explorar API"
@@ -304,18 +334,22 @@ es:
         subheadline: "Validación de direcciones, comprobaciones de pago y detección de fraudes en plataformas de venta minorista y sistemas de punto de venta (POS)."
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de venta minorista."
+        apis: "[formación]"
       final_cta:
         cta: "Reserva una llamada estratégica"
         headline: "Reduzca la fricción en cada paso del proceso de compra."
         subheadline: "Vamos a asignar las API adecuadas a sus flujos de trabajo de carrito y cumplimiento de pedidos."
       proof_points:
         heading: "¿Qué productos envían los equipos de venta minorista junto con Requiems?"
+        items: "[formación]"
       meta_title: "API para negocios minoristas | API de Requiems"
     insurance:
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de seguros"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué productos envían los equipos de seguros con Requiems?"
+        items: "[formación]"
       hero:
         headline: "API para seguros: datos de riesgo precisos, contactos verificados, reclamaciones más rápidas."
         secondary_cta: "Explorar API"
@@ -329,6 +363,7 @@ es:
     energy:
       api_mapping:
         heading: "API diseñadas para flujos de trabajo energéticos"
+        apis: "[formación]"
       final_cta:
         cta: "Reserva una llamada estratégica"
         headline: "Impulsa operaciones energéticas más inteligentes con datos limpios."
@@ -341,6 +376,7 @@ es:
       meta_title: "API para empresas energéticas | API de Requiems"
       proof_points:
         heading: "¿Qué equipos de energía envían con Requiems?"
+        items: "[formación]"
     manufacturing:
       final_cta:
         subheadline: "Podemos integrar las API de direcciones, contactos y finanzas con sus flujos de trabajo operativos."
@@ -349,6 +385,7 @@ es:
       meta_title: "API para empresas manufactureras | API Requiems"
       api_mapping:
         heading: "API diseñadas para flujos de trabajo de fabricación."
+        apis: "[formación]"
       hero:
         cta: "Reserva una llamada estratégica"
         headline: "API para la fabricación: datos de proveedores limpios, operaciones más inteligentes, alcance global."
@@ -356,6 +393,7 @@ es:
         secondary_cta: "Explorar API"
       proof_points:
         heading: "¿Qué equipos de fabricación envían con Requiems?"
+        items: "[formación]"
     travel:
       final_cta:
         subheadline: "Permítanos asignar las API adecuadas a sus flujos de trabajo de reservas y operaciones."
@@ -368,6 +406,8 @@ es:
         secondary_cta: "Explorar API"
       api_mapping:
         heading: "APIs diseñadas para flujos de trabajo de viajes"
+        apis: "[formación]"
       proof_points:
         heading: "¿Qué artículos envían los equipos de viajes con Requiems?"
+        items: "[formación]"
       meta_title: "API para empresas de viajes | API de Requiems"

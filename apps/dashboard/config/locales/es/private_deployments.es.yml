@@ -9,3 +9,6 @@ es:
       3_anything_we_should_know: "3. ¿Hay algo que debamos saber?"
       private_deployment_requiems_api: "Implementación privada: API de Requiems"
       all_10_services_are_selected_by_default: "Los 10 servicios están seleccionados por defecto. Desmarca los que no necesites para mantener tu instancia optimizada."
+      yourcompany_requiems_xyz: "tuempresa.réquiems.xyz"
+      optional: "Opcional."
+      update_account_details: "Actualizar detalles de la cuenta →"

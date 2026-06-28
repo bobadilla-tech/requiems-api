@@ -11,3 +11,7 @@ fr:
       help_us_build_what_you_need_we_value: "Aidez-nous à construire ce dont vous avez besoin. Votre avis compte et nous examinons chaque suggestion."
       your_email_optional: "Votre adresse e-mail (facultatif)"
       submit_suggestion: "Soumettre une suggestion"
+      describe_what_this_api_should_do: "Décrivez ce que cette API devrait faire..."
+      e_g_weather_forecast_api_stock_market: "Par exemple, API de prévisions météorologiques, API de données boursières"
+      how_would_you_use_this_api_in_your: "Comment utiliseriez-vous cette API dans votre application ?"
+      submitting: "Soumission..."
