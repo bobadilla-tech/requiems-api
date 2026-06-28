@@ -64,9 +64,9 @@ func runRefactorKey(_ *cobra.Command, _ []string) error {
 	}
 
 	// ── 1. Discover locale files that contain --old ────────────────────────
-	entries, err := locale.Scan(rootPath, pruneLang)
-	if err != nil {
-		return fmt.Errorf("scan locales: %w", err)
+	langs := []string{pruneLang}
+	if refactorAllLang {
+		langs = discoverLangs(rootPath, pruneLang)
 	}
 
 	// Find every locale file that holds the old key (lang prefix is optional in --old).
@@ -76,15 +76,21 @@ func runRefactorKey(_ *cobra.Command, _ []string) error {
 		key   string // full key as stored in YAML
 	}
 	var occurrences []fileOccurrence
-	for _, e := range entries {
-		// Match with or without leading lang prefix.
-		keyWithout := stripLangPrefixStr(e.Key, pruneLang)
-		if keyWithout == refactorOld || e.Key == refactorOld {
-			occurrences = append(occurrences, fileOccurrence{
-				file:  e.File,
-				value: e.Value,
-				key:   e.Key,
-			})
+	for _, lang := range langs {
+		langEntries, err := locale.Scan(rootPath, lang)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "warning: could not scan %s locales: %v\n", lang, err)
+			continue
+		}
+		for _, e := range langEntries {
+			keyWithout := stripLangPrefixStr(e.Key, lang)
+			if keyWithout == refactorOld || e.Key == refactorOld {
+				occurrences = append(occurrences, fileOccurrence{
+					file:  e.File,
+					value: e.Value,
+					key:   e.Key,
+				})
+			}
 		}
 	}
 
@@ -111,7 +117,7 @@ func runRefactorKey(_ *cobra.Command, _ []string) error {
 	fmt.Println()
 
 	if refactorDryRun {
-		fmt.Printf("YAML: add %q → %q in %d file(s)\n", refactorNew, occurrences[0].value, len(occurrences))
+		fmt.Printf("YAML: rename %q → %q in %d file(s)\n", refactorOld, refactorNew, len(occurrences))
 		fmt.Printf("Source: rewrite %d caller(s) to t('%s')\n", len(callers), refactorNew)
 		fmt.Printf("--dry-run: no files modified.\n")
 		return nil
@@ -138,6 +144,11 @@ func runRefactorKey(_ *cobra.Command, _ []string) error {
 		} else {
 			fmt.Printf("YAML: %q already present in %s (skipped)\n", newFullKey, shortPath(o.file, rootPath))
 		}
+		if _, derr := locale.DeleteKeys(o.file, []string{o.key}); derr != nil {
+			fmt.Fprintf(os.Stderr, "warning: could not remove old key %q: %v\n", o.key, derr)
+		} else {
+			fmt.Printf("YAML: removed old key %q from %s\n", o.key, shortPath(o.file, rootPath))
+		}
 	}
 
 	// ── 4. Rewrite t() callers in source ──────────────────────────────────
@@ -145,7 +156,8 @@ func runRefactorKey(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("rewrite source files: %w", err)
 	}
 
-	fmt.Printf("\nDone. Old key %q preserved — run `locale-sync prune` to remove it after verification.\n", refactorOld)
+	fmt.Printf("\nDone. Renamed %q → %q across %d locale file(s) and %d source caller(s).\n",
+		refactorOld, refactorNew, len(occurrences), len(callers))
 	return nil
 }
 
@@ -406,4 +418,21 @@ func stripLangPrefixStr(key, lang string) string {
 		return key[len(prefix):]
 	}
 	return key
+}
+
+// discoverLangs returns baseLang plus any other language code directories found
+// under {rootPath}/config/locales/.
+func discoverLangs(rootPath, baseLang string) []string {
+	localesDir := filepath.Join(rootPath, "config", "locales")
+	dirs, err := os.ReadDir(localesDir)
+	if err != nil {
+		return []string{baseLang}
+	}
+	langs := []string{baseLang}
+	for _, d := range dirs {
+		if d.IsDir() && d.Name() != baseLang {
+			langs = append(langs, d.Name())
+		}
+	}
+	return langs
 }
