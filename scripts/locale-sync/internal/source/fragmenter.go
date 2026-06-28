@@ -195,6 +195,14 @@ func parseFragmentLine(raw, trimmed, relSlash, absFile string, lineNum int) *Fra
 				complexReason = "multi-argument ERB expression — extract to a local variable first"
 				break
 			}
+			// Boolean operators (|| / &&) mean the expression has conditional logic.
+			// Auto-inlining as t(..., var: expr) produces invalid Ruby when the variable
+			// name is derived from an operator token (e.g. "||" → ||: which is a syntax error).
+			// The caller should assign the expression to a local variable first.
+			if strings.Contains(expr, " || ") || strings.Contains(expr, " && ") {
+				complexReason = "ERB expression contains boolean operator — assign to a local variable first"
+				break
+			}
 		}
 	}
 
@@ -294,6 +302,17 @@ func fragmentVarName(expr string, seen map[string]int) string {
 			}
 		}
 	}
+	if name == "" {
+		name = "value"
+	}
+	// Sanitize to a valid Ruby identifier: word characters only, no leading digit.
+	var clean strings.Builder
+	for _, r := range name {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_' {
+			clean.WriteRune(r)
+		}
+	}
+	name = strings.TrimLeft(clean.String(), "0123456789")
 	if name == "" {
 		name = "value"
 	}

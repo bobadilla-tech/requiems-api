@@ -39,8 +39,6 @@ en:
       upgrade_desc: "Get more requests, faster rate limits, and priority support."
       view_pricing: "View Pricing"
       of_requests: "of %{limit} requests"
-      index:
-        ms: "%{||}ms"
     api_keys:
       title: "API Keys"
       subtitle: "Manage your API keys and access credentials"

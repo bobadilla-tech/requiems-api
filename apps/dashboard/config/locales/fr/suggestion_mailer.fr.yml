@@ -6,3 +6,5 @@ fr:
       a_user_has_suggested_a_new_api_for: "Un utilisateur a suggéré une nouvelle API pour Requiems."
       contact_email_for_follow_up: "Adresse électronique de contact (pour le suivi)"
       new_api_suggestion: "Nouvelle suggestion d'API"
+      api_name_api_name: "Nom de l'API : %{api_name}"
+      consider_creating_an_issue: "Vous pouvez créer un ticket ou une discussion sur GitHub : %{repository}"

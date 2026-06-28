@@ -57,7 +57,8 @@ en:
       endpoints: "Endpoints"
     identity-risk:
       hero: {}
-      engine: {}
+      engine:
+        name: "Identity & Risk Engine"
       use_cases:
         - title: "Signup protection"
           body: "Block disposable emails, VPN signups, and high-risk IPs at registration."

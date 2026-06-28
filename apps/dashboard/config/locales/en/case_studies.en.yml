@@ -28,6 +28,7 @@ en:
         strategy_cta: "Book a strategy call"
       back_to_hub: "All case studies"
     verigeo:
+      hero_headline: "Verigeo scales geomarketing"
       sections:
         - heading: "Location intelligence at national scale"
           paragraphs:
@@ -69,6 +70,7 @@ en:
         - id: crypto
           benefit: "Spot crypto context alongside traditional FX when dashboards demand both."
     compilestrength:
+      hero_headline: "CompileStrength trains smarter"
       sections:
         - heading: "Exercise science belongs in the product, not only in spreadsheets"
           paragraphs:

@@ -420,6 +420,9 @@ fr:
         cta_docs: "Voir la documentation"
         cta_contact: "Contacter le support"
         cta_status: "Voir l'état des APIs"
+      2xx_error_codes: "2xx %{error_codes}"
+      4xx_error_codes: "4xx %{error_codes}"
+      5xx_error_codes: "5xx %{error_codes}"
     pricing:
       title: "Tarifs — Requiems API"
       header:

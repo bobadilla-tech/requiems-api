@@ -5,3 +5,7 @@ fr:
       contact_person: "Personne de contact"
       message_specific_needs: "Message / Besoins spécifiques"
       reminder: "Rappel:"
+      reply_directly_to_this: "Répondez directement à ce courriel pour contacter : %{email}"
+      company_company: "Société : %{company}"
+      contact_person_name: "Personne à contacter : %{name}"
+      email_email: "Courriel : %{email}"
