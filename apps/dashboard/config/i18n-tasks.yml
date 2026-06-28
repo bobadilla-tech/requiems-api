@@ -8,9 +8,23 @@ data:
   write:
     - config/locales/%{locale}.yml
 
-# Patterns for ignoring false positives (dynamic keys, etc.)
+# Dynamic key namespaces — slug-based views use t("#{i18n_scope}.key") patterns.
+# These keys cannot be statically detected, so suppress false "unused" reports.
+ignore_unused:
+  - "case_studies.*.*"
+  - "comparisons.competitors.*.*"
+  - "comparisons.competitors.*"
+  - "divisions.*.*"
+  - "industries.*.*"
+  - "systems.*.*"
+  - "categories.*.*"
+  - "date.*"
+  - "devise.*"
+  - "number.*"
+  - "time.*"
+  - "support.*"
+
 ignore_missing: []
-ignore_unused: []
 
 # Search patterns for t() usage in code
 search:

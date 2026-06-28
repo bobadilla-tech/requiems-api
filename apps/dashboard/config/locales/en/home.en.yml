@@ -527,7 +527,7 @@ en:
         q2: "Can I use Requiems API for commercial projects?"
         a2: "Yes! All plans, including the free tier, can be used for commercial projects. Our managed cloud service provides enterprise-grade reliability, scalability, and support for production applications."
         q3: "Do you offer custom enterprise plans?"
-        a3: "Yes! Enterprise plans include custom pricing, dedicated infrastructure, private deployments, EU data residency, custom SLAs, and dedicated support. Contact our sales team at eliaz@bobadilla.tech to discuss your requirements."
+        a3_html: "Yes! Enterprise plans include custom pricing, dedicated infrastructure, private deployments, EU data residency, custom SLAs, and dedicated support. Contact our sales team at %{contact_email} to discuss your requirements."
         q4: "What data centers do you use?"
         a4: "All plans run on EU data centers for GDPR compliance."
         q5: "Is there a free trial for paid plans?"

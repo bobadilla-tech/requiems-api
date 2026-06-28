@@ -63,7 +63,9 @@ func entryReason(keyName, v string) string {
 	}
 
 	// Technical identifier checks.
-	if strings.Contains(v, "@") {
+	// Skip multi-line values (JSON/code blocks) and values with multiple @ signs
+	// (illustrative format examples); only flag a single embedded contact email.
+	if strings.Count(v, "@") == 1 && !strings.Contains(v, "\n") {
 		return "email address — hardcode the address in source, not in a locale file"
 	}
 	if !strings.Contains(v, " ") && strings.Count(v, "-") >= 2 {

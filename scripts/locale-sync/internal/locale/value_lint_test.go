@@ -136,6 +136,27 @@ func TestRegression_HomeExampleWithCode(t *testing.T) {
 	}
 }
 
+// TestLintValues_MultipleEmailsNotFlagged guards that illustrative format strings
+// containing two or more @ signs (e.g. normalization examples) are not flagged
+// as contact email addresses.
+func TestLintValues_MultipleEmailsNotFlagged(t *testing.T) {
+	v := "Ensure User.Name@Gmail.com and username@gmail.com match as the same identity."
+	got := LintValues([]Entry{makeEntry("en.tools.email_normalizer.use_cases.integrations_desc", v)})
+	if len(got) != 0 {
+		t.Errorf("LintValues flagged illustrative multi-email string: %v", got[0].Reason)
+	}
+}
+
+// TestLintValues_MultilineJsonNotFlagged guards that multi-line JSON code blocks
+// containing an email address (e.g. API example payloads) are not flagged.
+func TestLintValues_MultilineJsonNotFlagged(t *testing.T) {
+	v := "{\n  \"email\": \"user@tempmail.io\",\n  \"ip_address\": \"45.33.32.156\"\n}\n"
+	got := LintValues([]Entry{makeEntry("en.home.index.engine_spotlight.request", v)})
+	if len(got) != 0 {
+		t.Errorf("LintValues flagged multiline JSON payload: %v", got[0].Reason)
+	}
+}
+
 // TestRegression_SharedCommonBadEntries guards against the specific bad values that
 // were added to en/fr/es shared.common and removed in the locale-sync hygiene pass.
 // If any of these values reappear in a locale file, LintValues must flag them.
