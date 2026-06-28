@@ -196,13 +196,9 @@ fr:
     common:
       no: "✗ Non"
       uptime: "Disponibilité de 99,9 %"
-      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
-      x_backend_secret: "Secret du backend X"
       json_response: "Réponse JSON"
       yes: "✓ Oui"
       utilities: "Parcourir les utilitaires"
-      p99: "p99"
-      p50: "p50"
       invalid: "Invalide"
       valid: "Valide"
       view: "Voir"

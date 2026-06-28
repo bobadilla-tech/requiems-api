@@ -549,6 +549,11 @@ func looksLikeCode(s string) bool {
 	if words > 1 && hyphens >= words-1 {
 		return true
 	}
+	// Single-word strings with 2+ hyphens are technical tokens — HTTP headers
+	// (X-Backend-Secret), Stimulus descriptors, kebab-case identifiers — never UI copy.
+	if !strings.Contains(s, " ") && hyphens >= 2 {
+		return true
+	}
 	// Looks like a CSS class string
 	lower := strings.ToLower(s)
 	cssKeywords := []string{"px-", "py-", "mt-", "mb-", "mr-", "ml-", "text-", "bg-", "flex", "grid", "rounded"}

@@ -63,6 +63,12 @@ func TestLooksLikeCode(t *testing.T) {
 		{"stimulus dismiss", "modal#dismiss", true},
 		{"stimulus multi-word controller", "dropdown-menu#toggle", true},
 		{"normal word with hash", "C# programming", false}, // C# is not a Stimulus action
+		// Single-word strings with 2+ hyphens are HTTP headers / technical tokens.
+		{"http header two hyphens", "X-Backend-Secret", true},
+		{"kebab three segments", "data-turbo-frame", true},
+		{"one hyphen no space not caught", "two-factor", false},
+		// Multi-word string: has space → new single-word rule does not apply.
+		{"hyphenated phrase with space", "sign-in and register now", false},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -378,6 +384,51 @@ func TestScanHelperKeywordArgs_TextKeyword(t *testing.T) {
 	}
 	if got[0].Text != "Convert" {
 		t.Errorf("Text = %q, want %q", got[0].Text, "Convert")
+	}
+}
+
+// ── Regression: HTTP header literals must not be extracted as hardcoded UI strings ──
+//
+// X-Backend-Secret (and similar kebab-identifier tokens) appeared in views as
+// literal strings and were incorrectly flagged by the extractor because
+// looksLikeCode did not handle single-word strings with ≥ 2 hyphens.
+// The fix added that rule to looksLikeCode; these tests lock it in.
+
+func TestRegression_HttpHeaderNotFlaggedByTableHeaders(t *testing.T) {
+	line := `<th>X-Backend-Secret</th>`
+	got := scanTableHeaders(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("X-Backend-Secret in <th> must not be extracted as hardcoded string; got %d findings: %v", len(got), got)
+	}
+}
+
+func TestRegression_HttpHeaderNotFlaggedByTagContent(t *testing.T) {
+	line := `<dt>X-Backend-Secret</dt>`
+	got := scanTagContent(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("X-Backend-Secret in <dt> must not be extracted as hardcoded string; got %d findings: %v", len(got), got)
+	}
+}
+
+func TestRegression_HttpHeaderNotFlaggedByHelperKeywordArgs(t *testing.T) {
+	line := `<%= f.label :secret, text: "X-Backend-Secret" %>`
+	got := scanHelperKeywordArgs(line, line, "test.erb", 1)
+	if len(got) != 0 {
+		t.Errorf("X-Backend-Secret in text: arg must not be extracted as hardcoded string; got %d findings: %v", len(got), got)
+	}
+}
+
+func TestRegression_MetricCodeNotFlaggedByTagContent(t *testing.T) {
+	// p50 / p99 are single lowercase tokens — looksUserFacingLabel requires a
+	// letter start and min length 2, but looksLikeCode does not catch them.
+	// They are filtered upstream by looksUserFacingLabel's length and start-char rules.
+	// This test confirms they do not produce false-positive findings.
+	for _, token := range []string{"p50", "p99"} {
+		line := `<span>` + token + `</span>`
+		got := scanTagContent(line, line, "test.erb", 1)
+		if len(got) != 0 {
+			t.Errorf("metric code %q in <span> must not be extracted; got %d findings: %v", token, len(got), got)
+		}
 	}
 }
 

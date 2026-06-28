@@ -93,7 +93,7 @@
             <dd><a href="<%= @deployment_request.live_url %>" target="_blank" class="font-mono text-sm text-blue-600 hover:text-blue-700"><%= @deployment_request.live_url %></a></dd>
           </div>
           <div class="flex justify-between text-sm">
-            <dt class="text-green-700 dark:text-green-400"><%= t('shared.common.x_backend_secret') %></dt>
+            <dt class="text-green-700 dark:text-green-400">X-Backend-Secret</dt>
             <dd class="font-mono text-xs bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 px-2 py-1 rounded text-gray-900 dark:text-gray-100"><%= @deployment_request.tenant_secret %></dd>
           </div>
           <div class="flex justify-between text-sm">

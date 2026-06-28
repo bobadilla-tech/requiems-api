@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bobadilla-tech/locale-sync/internal/locale"
 	"github.com/bobadilla-tech/locale-sync/internal/source"
 	"github.com/spf13/cobra"
 )
@@ -66,11 +67,18 @@ func runReport(_ *cobra.Command, _ []string) error {
 		found = filtered
 	}
 
+	// Scan locale YAML values for technical strings that should not be translated.
+	entries, err := locale.Scan(rootPath, "en")
+	if err != nil {
+		return fmt.Errorf("locale scan: %w", err)
+	}
+	valueFindings := locale.LintValues(entries)
+
 	switch reportFormat {
 	case "json":
-		return printReportJSON(found)
+		return printReportJSON(found, valueFindings)
 	case "text":
-		return printReportText(found)
+		return printReportText(found, valueFindings)
 	default:
 		return fmt.Errorf("unknown --format %q: want \"text\" or \"json\"", reportFormat)
 	}
@@ -105,38 +113,50 @@ func loadChangedFiles(arg string) (map[string]bool, error) {
 	return set, sc.Err()
 }
 
-func printReportText(found []source.HardcodedString) error {
-	if len(found) == 0 {
+func printReportText(found []source.HardcodedString, valueFindings []locale.LintFinding) error {
+	if len(found) == 0 && len(valueFindings) == 0 {
 		fmt.Println("✓ No hardcoded strings found.")
 		return nil
 	}
 
-	// Group by file.
-	byFile := make(map[string][]source.HardcodedString)
-	var fileOrder []string
-	seen := map[string]bool{}
-	for _, h := range found {
-		if !seen[h.File] {
-			fileOrder = append(fileOrder, h.File)
-			seen[h.File] = true
+	if len(found) > 0 {
+		// Group by file.
+		byFile := make(map[string][]source.HardcodedString)
+		var fileOrder []string
+		seen := map[string]bool{}
+		for _, h := range found {
+			if !seen[h.File] {
+				fileOrder = append(fileOrder, h.File)
+				seen[h.File] = true
+			}
+			byFile[h.File] = append(byFile[h.File], h)
 		}
-		byFile[h.File] = append(byFile[h.File], h)
+
+		fmt.Printf("=== Hardcoded String Report (%d strings in %d files) ===\n\n",
+			len(found), len(fileOrder))
+
+		for _, file := range fileOrder {
+			items := byFile[file]
+			fmt.Printf("  %s (%d)\n", file, len(items))
+			for _, h := range items {
+				loc := fmt.Sprintf("%d", h.Line)
+				if h.EndLine > h.Line {
+					loc = fmt.Sprintf("%d-%d", h.Line, h.EndLine)
+				}
+				fmt.Printf("    [%s] line %-6s %q\n", h.Category, loc, h.Text)
+			}
+			fmt.Println()
+		}
 	}
 
-	fmt.Printf("=== Hardcoded String Report (%d strings in %d files) ===\n\n",
-		len(found), len(fileOrder))
-
-	for _, file := range fileOrder {
-		items := byFile[file]
-		fmt.Printf("  %s (%d)\n", file, len(items))
-		for _, h := range items {
-			loc := fmt.Sprintf("%d", h.Line)
-			if h.EndLine > h.Line {
-				loc = fmt.Sprintf("%d-%d", h.Line, h.EndLine)
-			}
-			fmt.Printf("    [%s] line %-6s %q\n", h.Category, loc, h.Text)
+	if len(valueFindings) > 0 {
+		fmt.Printf("=== Technical Locale Values (%d) ===\n\n", len(valueFindings))
+		for _, f := range valueFindings {
+			fmt.Printf("  %s line %d\n", f.File, f.Line)
+			fmt.Printf("    key:    %s\n", f.Key)
+			fmt.Printf("    value:  %q\n", f.Value)
+			fmt.Printf("    reason: %s\n\n", f.Reason)
 		}
-		fmt.Println()
 	}
 
 	if reportFailOnAny {
@@ -153,10 +173,23 @@ type jsonReportEntry struct {
 	Text     string `json:"text"`
 }
 
-func printReportJSON(found []source.HardcodedString) error {
-	entries := make([]jsonReportEntry, 0, len(found))
+type jsonValueFinding struct {
+	File   string `json:"file"`
+	Line   int    `json:"line"`
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+	Reason string `json:"reason"`
+}
+
+type jsonReport struct {
+	HardcodedStrings []jsonReportEntry  `json:"hardcoded_strings"`
+	TechnicalValues  []jsonValueFinding `json:"technical_locale_values"`
+}
+
+func printReportJSON(found []source.HardcodedString, valueFindings []locale.LintFinding) error {
+	hardcoded := make([]jsonReportEntry, 0, len(found))
 	for _, h := range found {
-		entries = append(entries, jsonReportEntry{
+		hardcoded = append(hardcoded, jsonReportEntry{
 			File:     h.File,
 			Line:     h.Line,
 			EndLine:  h.EndLine,
@@ -164,12 +197,22 @@ func printReportJSON(found []source.HardcodedString) error {
 			Text:     h.Text,
 		})
 	}
+	technical := make([]jsonValueFinding, 0, len(valueFindings))
+	for _, f := range valueFindings {
+		technical = append(technical, jsonValueFinding{
+			File:   f.File,
+			Line:   f.Line,
+			Key:    f.Key,
+			Value:  f.Value,
+			Reason: f.Reason,
+		})
+	}
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
-	if err := enc.Encode(entries); err != nil {
+	if err := enc.Encode(jsonReport{HardcodedStrings: hardcoded, TechnicalValues: technical}); err != nil {
 		return err
 	}
-	if reportFailOnAny && len(found) > 0 {
+	if reportFailOnAny && (len(found) > 0 || len(valueFindings) > 0) {
 		os.Exit(1)
 	}
 	return nil

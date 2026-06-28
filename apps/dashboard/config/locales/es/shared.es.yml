@@ -190,17 +190,13 @@ es:
     errors:
       no_data: "No se han devuelto datos."
     common:
-      eliaz_bobadilla_tech: "eliaz@bobadilla.tech"
       json_response: "Respuesta JSON"
       no: "✗ No"
       view: "Vista"
       invalid: "Inválido"
       rest_api: "API REST"
-      p99: "p99"
-      x_backend_secret: "X-Backend-Secreto"
       latency: "Latencia media inferior a 300 ms"
       valid: "Válido"
-      p50: "p50"
       all: "Todo"
       uptime: "99,9% de tiempo de actividad"
       yes: "✓ Sí"
