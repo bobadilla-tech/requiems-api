@@ -14,6 +14,20 @@ class AppConfigTest < ActiveSupport::TestCase
     )
   end
 
+  test "validate_config raises when lemonsqueezy store id is non-numeric" do
+    config = AppConfig.instance
+    original = config.instance_variable_get(:@lemonsqueezy_store_id)
+
+    config.instance_variable_set(:@lemonsqueezy_store_id, "not-a-number")
+
+    error = assert_raises(AppConfig::InvalidConfigError) do
+      config.send(:validate_config)
+    end
+    assert_equal I18n.t("app.lib.app_config.lemonsqueezy_store_id_must_be_numeric"), error.message
+  ensure
+    config&.instance_variable_set(:@lemonsqueezy_store_id, original)
+  end
+
   test "private deployment checkout uuid lookup raises when config is missing" do
     config = nil
     original = nil
