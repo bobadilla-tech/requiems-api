@@ -229,11 +229,51 @@ The controller does **only** client-side validation and loading state. No
 
 ## 4. i18n requirements
 
-All user-facing strings in tool pages must use `t()`. Add keys to
-`apps/dashboard/config/locales/en/tools.en.yml` only. **Do not create ES or FR
-files.** Translation into other languages is handled by the maintainer using
-rori18n — a project-specific CLI that calls Google Cloud Translation and
-protects brand names automatically.
+All user-facing strings in tool pages must use `t()`. Use **rori18n** to
+extract strings and generate the locale files. rori18n is a Go CLI in the
+[rori18n repo](https://github.com/bobadilla-tech/rori18n) — `go run . <cmd>`.
+
+#### Step 1 — find hardcoded strings
+
+```sh
+cd path/to/rori18n
+git diff --name-only origin/main | \
+  go run . report --root ../requiems-api/apps/dashboard --changed-files -
+```
+
+Lists every hardcoded user-visible string in your changed files. Fix them with
+`t()` calls and EN keys before moving on.
+
+#### Step 2 — extract and generate locale files
+
+```sh
+git diff --name-only origin/main | \
+  go run . generate \
+    --root ../requiems-api/apps/dashboard \
+    --fix --languages es,fr \
+    --changed-files -
+```
+
+This does three things in one pass:
+1. Finds remaining hardcoded strings in your changed files
+2. Writes the EN key to the correct YAML file and injects the `t()` call
+3. Creates matching empty skeleton entries in `es/tools.es.yml` and `fr/tools.fr.yml`
+
+For keys you already wrote manually with `t()`, also add an empty `""` stub
+to the ES and FR files — the maintainer will fill them.
+
+#### Step 3 — lint
+
+```sh
+go run . lint --root ../requiems-api/apps/dashboard
+```
+
+Exits 1 with `file:line: missing key` if any `t()` call has no matching YAML
+entry. Fix before opening the PR.
+
+> **Translation** (ES/FR empty values → real text) is run by the maintainer
+> after merge using `go run . translate --to es,fr`. Do not write translations
+> manually.
 
 ### Key structure
 
@@ -353,9 +393,10 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] `grep -r "_escapeHtml\|escapeHtml" app/javascript/controllers/{tool_name}*`
       returns nothing
 - [ ] All user-facing strings go through `t()` — no hardcoded English in JS or
-      ERB
-- [ ] New locale keys added to `en/tools.en.yml`
-- [ ] New locale keys added to `en/tools.en.yml` only (ES/FR handled by maintainer)
+      ERB (`rori18n report --changed-files -` returns nothing)
+- [ ] `rori18n generate --fix --languages es,fr --changed-files -` run — EN keys
+      written, ES/FR skeleton entries created
+- [ ] `rori18n lint` exits 0
 - [ ] Input types are semantically correct (no `type="text"` for enumerated
       values)
 - [ ] CTA buttons use `render "partials/shared/button"` — not raw `link_to` with
