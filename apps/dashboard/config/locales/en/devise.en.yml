@@ -1,0 +1,41 @@
+---
+en:
+  devise:
+    confirmations:
+      new:
+        resend_confirmation_instructions: Resend confirmation instructions
+    mailer:
+      confirmation_instructions:
+        confirm_my_account: Confirm my account
+        you_can_confirm_your_account_email: 'You can confirm your account email through
+          the link below:'
+      password_change:
+        we_re_contacting_you_to_notify_you_that: We're contacting you to notify you
+          that your password has been changed.
+      reset_password_instructions:
+        change_my_password: Change my password
+        if_you_didn_t_request_this_please: If you didn't request this, please ignore
+          this email.
+        someone_has_requested_a_link_to_change: Someone has requested a link to change
+          your password. You can do this through the link below.
+        your_password_won_t_change_until_you: Your password won't change until you
+          access the link above and create a new one.
+      unlock_instructions:
+        click_the_link_below_to_unlock_your: 'Click the link below to unlock your
+          account:'
+        unlock_my_account: Unlock my account
+        your_account_has_been_locked_due_to_an: Your account has been locked due to
+          an excessive number of unsuccessful sign in attempts.
+    passwords:
+      edit:
+        change_my_password: Change my password
+        change_your_password: Change your password
+        confirm_new_password: Confirm new password
+        new_password: New password
+    shared:
+      links:
+        log_in: Log in
+        sign_up: Sign up
+    unlocks:
+      new:
+        resend_unlock_instructions: Resend unlock instructions

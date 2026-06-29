@@ -22,7 +22,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "email_normalizer renders result on success" do
     payload = { "original" => "Test@Gmail.com", "normalized" => "test@gmail.com",
-                "local" => "test", "domain" => "gmail.com", "changes" => ["lowercased"] }
+                "local" => "test", "domain" => "gmail.com", "changes" => [ "lowercased" ] }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/email-normalizer", params: { email: "Test@Gmail.com" }
     end
@@ -106,7 +106,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "sentiment_analysis renders result on success" do
     payload = { "sentiment" => "positive", "score" => 0.92, "comparative" => 0.46,
-                "positive" => ["great"], "negative" => [] }
+                "positive" => [ "great" ], "negative" => [] }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/sentiment-analysis", params: { text: "This is great!" }
     end
@@ -148,7 +148,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "domain_checker renders result on success" do
     payload = { "domain" => "example.com", "available" => false,
-                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+                "dns" => { "a" => [ "93.184.216.34" ], "mx" => [], "ns" => [ "a.iana-servers.net" ] } }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/domain-checker", params: { domain: "example.com" }
     end
@@ -164,7 +164,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "domain_checker normalizes URL input" do
     payload = { "domain" => "example.com", "available" => false,
-                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+                "dns" => { "a" => [ "93.184.216.34" ], "mx" => [], "ns" => [ "a.iana-servers.net" ] } }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/domain-checker", params: { domain: "https://example.com/some/path?q=1" }
     end

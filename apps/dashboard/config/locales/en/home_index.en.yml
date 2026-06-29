@@ -1,0 +1,7 @@
+---
+en:
+  home_index:
+    categories:
+      soon: Soon
+    hero:
+      api_requiems_xyz_v1: api.requiems.xyz/v1/

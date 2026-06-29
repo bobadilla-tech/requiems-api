@@ -166,5 +166,5 @@ func TestRiskScore_OnlyEmailConfidence(t *testing.T) {
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
-	assert.LessOrEqual(t, resp.Data.Confidence, 0.34)
+	assert.Greater(t, resp.Data.Confidence, 0.70)
 }

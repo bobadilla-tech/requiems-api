@@ -29,18 +29,18 @@
 
     <!-- Contact Info -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Contact</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4"><%= t('home.terms.contact.heading') %></h2>
       <dl class="space-y-3">
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">Name</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('apis_show.endpoint_documentation.column_name') %></dt>
           <dd class="font-medium text-gray-900 dark:text-gray-100"><%= @deployment_request.contact_name %></dd>
         </div>
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">Email</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('home.contact.form.email') %></dt>
           <dd class="font-medium text-gray-900 dark:text-gray-100"><%= mail_to @deployment_request.contact_email, @deployment_request.contact_email, class: "text-blue-600 hover:text-blue-700" %></dd>
         </div>
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">Account</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('admin.private_deployments.show.account') %></dt>
           <dd><%= link_to @deployment_request.user.email, admin_user_path(@deployment_request.user), class: "text-blue-600 hover:text-blue-700 text-sm" %></dd>
         </div>
       </dl>
@@ -51,18 +51,18 @@
       <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Deployment Spec</h2>
       <dl class="space-y-3 mb-6">
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">Server Tier</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('admin.private_deployments.show.server_tier') %></dt>
           <dd class="font-medium text-gray-900 dark:text-gray-100 capitalize">
             <%= @deployment_request.server_tier %>
             <span class="text-gray-500 font-normal">(<%= @deployment_request.tier_specs[:hetzner] %>, <%= @deployment_request.tier_specs[:vcpu] %> vCPU, <%= @deployment_request.tier_specs[:ram] %> RAM)</span>
           </dd>
         </div>
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">Monthly Price</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('admin.private_deployments.show.monthly_price') %></dt>
           <dd class="font-bold text-gray-900 dark:text-gray-100">$<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo</dd>
         </div>
         <div class="flex justify-between text-sm">
-          <dt class="text-gray-500 dark:text-gray-400">ENABLED_SERVICES value</dt>
+          <dt class="text-gray-500 dark:text-gray-400"><%= t('admin.private_deployments.show.enabled_services_value') %></dt>
           <dd class="font-mono text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-gray-900 dark:text-gray-100"><%= @deployment_request.selected_services.join(",") %></dd>
         </div>
       </dl>
@@ -86,7 +86,7 @@
     <!-- Active deployment info -->
     <% if @deployment_request.status == "active" %>
       <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
-        <h2 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-4">Live Deployment</h2>
+        <h2 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-4"><%= t('admin.private_deployments.show.live_deployment') %></h2>
         <dl class="space-y-3">
           <div class="flex justify-between text-sm">
             <dt class="text-green-700 dark:text-green-400">URL</dt>
@@ -97,7 +97,7 @@
             <dd class="font-mono text-xs bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 px-2 py-1 rounded text-gray-900 dark:text-gray-100"><%= @deployment_request.tenant_secret %></dd>
           </div>
           <div class="flex justify-between text-sm">
-            <dt class="text-green-700 dark:text-green-400">Deployed At</dt>
+            <dt class="text-green-700 dark:text-green-400"><%= t('admin.private_deployments.show.deployed_at') %></dt>
             <dd class="text-gray-900 dark:text-gray-100"><%= @deployment_request.deployed_at&.strftime("%B %d, %Y at %H:%M UTC") %></dd>
           </div>
         </dl>
@@ -118,7 +118,7 @@
         <%= form_with url: activate_admin_private_deployment_path(@deployment_request), method: :patch, local: true, data: { turbo: false } do |f| %>
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subdomain Slug <span class="text-red-500">*</span></label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><%= t('admin.private_deployments.show.subdomain_slug') %><span class="text-red-500">*</span></label>
               <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
                 <%= text_field_tag :subdomain_slug, "",
                   placeholder: "mycoolbusiness",
@@ -127,30 +127,30 @@
                   pattern: "[a-z0-9\\-]{2,40}" %>
                 <span class="px-3 py-2 bg-gray-50 dark:bg-gray-700 text-xs text-gray-500 border-l border-gray-300 dark:border-gray-600 whitespace-nowrap">.requiems.xyz</span>
               </div>
-              <p class="mt-1 text-xs text-gray-400">Lowercase letters, numbers, hyphens. 2–40 chars.</p>
+              <p class="mt-1 text-xs text-gray-400"><%= t('admin.private_deployments.show.lowercase_letters_numbers_hyphens_2_40') %></p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tenant Secret (BACKEND_SECRET) <span class="text-red-500">*</span></label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><%= t('admin.private_deployments.show.tenant_secret_backend_secret') %><span class="text-red-500">*</span></label>
               <%= text_field_tag :tenant_secret, "",
-                placeholder: "32+ character secret",
+                placeholder: t('admin.private_deployments.show.32_character_secret'),
                 class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-gray-100 font-mono text-sm",
                 required: true,
                 minlength: 32 %>
-              <p class="mt-1 text-xs text-gray-400">The BACKEND_SECRET value set on their VPS. Min 32 chars.</p>
+              <p class="mt-1 text-xs text-gray-400"><%= t('admin.private_deployments.show.the_backend_secret_value_set_on_their') %></p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Admin Notes</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><%= t('admin.private_deployments.show.admin_notes') %></label>
               <%= text_area_tag :admin_notes, @deployment_request.admin_notes,
                 rows: 2,
-                placeholder: "Hetzner server ID, IP, any notes...",
+                placeholder: t('admin.private_deployments.show.hetzner_server_id_ip_any_notes'),
                 class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-700 dark:text-gray-100 text-sm" %>
             </div>
 
-            <%= submit_tag "Mark as Deployed + Send Email",
+            <%= submit_tag t('admin.private_deployments.show.mark_as_deployed_send_email'),
               class: "w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors",
-              data: { confirm: "This will send the deployment-ready email to #{@deployment_request.contact_email}. Continue?", disable_with: "Activating..." } %>
+              data: { confirm: "This will send the deployment-ready email to #{@deployment_request.contact_email}. Continue?", disable_with: t('admin.private_deployments.show.activating') } %>
           </div>
         <% end %>
       </div>
@@ -159,12 +159,12 @@
     <% if @deployment_request.status != "cancelled" %>
       <!-- Cancel -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Cancel Request</h2>
-        <%= button_to "Cancel Deployment Request",
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3"><%= t('admin.private_deployments.show.cancel_request') %></h2>
+        <%= button_to t('admin.private_deployments.show.cancel_deployment_request'),
           cancel_admin_private_deployment_path(@deployment_request),
           method: :patch,
           class: "w-full px-4 py-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 text-sm font-medium rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors",
-          data: { confirm: "Mark this request as cancelled?" } %>
+          data: { confirm: t('admin.private_deployments.show.mark_this_request_as_cancelled') } %>
       </div>
     <% end %>
 

@@ -1,0 +1,14 @@
+---
+es:
+  sales_mailer:
+    enterprise_inquiry:
+      a_potential_enterprise_customer_wants: Un cliente empresarial potencial quiere
+        hablar con el departamento de ventas.
+      company_company: 'Empresa: %{company}'
+      contact_person: Persona de contacto
+      contact_person_name: 'Persona de contacto: %{name}'
+      email_email: 'Correo electrónico: %{email}'
+      message_specific_needs: Mensaje / Necesidades específicas
+      reminder: 'Recordatorio:'
+      reply_directly_to_this: 'Responda directamente a este correo electrónico para
+        contactar con: %{email}'

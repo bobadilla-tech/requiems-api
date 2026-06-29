@@ -1,0 +1,4 @@
+en:
+  api_proxy_controller:
+    errors:
+      invalid_endpoint: "The endpoint must start with /v1/"

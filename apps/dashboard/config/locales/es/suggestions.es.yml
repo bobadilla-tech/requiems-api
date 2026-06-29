@@ -1,0 +1,23 @@
+---
+es:
+  suggestions:
+    new:
+      describe_what_this_api_should_do: Describe qué debería hacer esta API...
+      e_g_weather_forecast_api_stock_market: Por ejemplo, API de pronóstico del tiempo,
+        API de datos del mercado de valores.
+      help_us_build_what_you_need_we_value: Ayúdanos a construir lo que necesitas.
+        Valoramos tu opinión y analizamos todas las sugerencias.
+      how_would_you_use_this_api_in_your: "¿Cómo utilizarías esta API en tu aplicación?"
+      if_you_d_like_us_to_follow_up_with_you: Si desea que nos pongamos en contacto
+        con usted para hablar sobre esta sugerencia.
+      more_of_a_technical_person: "¿Eres más bien una persona técnica?"
+      submit_suggestion: Enviar sugerencia
+      submitting: Sumisión...
+      suggest_an_api_requiems_api: Sugerir una API - API de Requiems
+      tell_us_about_your_specific_use_case_or: Cuéntenos sobre su caso de uso o proyecto
+        específico.
+      we_usually_reply_within_24_hours: Solemos responder en un plazo de 24 horas.
+      what_functionality_should_this_api: "¿Qué funcionalidades debería proporcionar
+        esta API?"
+      what_would_you_like_to_call_this_api: "¿Cómo le gustaría llamar a esta API?"
+      your_email_optional: Tu correo electrónico (opcional)

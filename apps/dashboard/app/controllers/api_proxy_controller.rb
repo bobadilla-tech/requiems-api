@@ -11,7 +11,7 @@ class ApiProxyController < ApplicationController
     unless valid_endpoint?(endpoint)
       return render json: {
         error: "Invalid endpoint",
-        message: "The endpoint must start with /v1/"
+        message: t('api_proxy_controller.errors.invalid_endpoint')
       }, status: :bad_request
     end
 

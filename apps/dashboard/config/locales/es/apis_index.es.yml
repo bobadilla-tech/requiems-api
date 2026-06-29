@@ -1,0 +1,18 @@
+---
+es:
+  apis_index:
+    header:
+      get_free_api_key: Obtén una clave API gratuita
+      intro_prefix: Desbloquea todas nuestras API con una sola clave API.
+      intro_signed_in: Explore nuestra colección de API listas para producción.
+      intro_signed_out_html: "%{link} para empezar."
+      page_heading: Directorio de API
+      sign_up_for_a_free_api_key: Regístrate para obtener una clave API gratuita.
+      signup_cta_html: regístrate para obtener una <strong>clave API gratuita</strong>
+    most_popular:
+      our_most_popular_apis_based_on_usage: Nuestras API más populares según su uso
+        y la satisfacción del cliente.
+    systems_section:
+      backend_systems: Sistemas de backend
+      composed_signal_engines_one_call: 'Motores de señalización compuestos: una llamada
+        devuelve una decisión estructurada.'

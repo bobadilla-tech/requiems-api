@@ -33,13 +33,13 @@
   <!-- Main Info Card -->
   <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Report Details</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.abuse_reports.show.report_details') %></h2>
     </div>
     <div class="p-6">
       <div class="space-y-6">
         <!-- Report Type -->
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Report Type</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2"><%= t('admin.abuse_reports.show.report_type') %></label>
           <%
             type_variant = case @abuse_report.report_type
               when "spam" then "warning"
@@ -53,7 +53,7 @@
 
         <!-- Description -->
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Description</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2"><%= t('apis_show.endpoint_documentation.column_description') %></label>
           <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <p class="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap"><%= @abuse_report.description || "No description provided" %></p>
           </div>
@@ -61,10 +61,10 @@
 
         <!-- Reported At -->
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Reported At</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2"><%= t('admin.abuse_reports.show.reported_at') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100">
             <%= @abuse_report.created_at.strftime("%B %d, %Y at %I:%M %p") %>
-            (<%= time_ago_in_words(@abuse_report.created_at) %> ago)
+            <%= t('admin.abuse_reports.show.created_at_ago', created_at: time_ago_in_words(@abuse_report.created_at)) %>
           </p>
         </div>
 
@@ -76,11 +76,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
               <div class="ml-3">
-                <h3 class="text-sm font-medium text-green-800 dark:text-green-300">Report Resolved</h3>
+                <h3 class="text-sm font-medium text-green-800 dark:text-green-300"><%= t('admin.abuse_reports.show.report_resolved') %></h3>
                 <p class="mt-1 text-sm text-green-700 dark:text-green-400">
                   Resolved on <%= @abuse_report.resolved_at.strftime("%B %d, %Y at %I:%M %p") %>
                   <% if @resolver %>
-                    by <%= @resolver.email %>
+                    <%= t('admin.abuse_reports.show.by_email', email: @resolver.email) %>
                   <% end %>
                 </p>
               </div>
@@ -94,31 +94,31 @@
   <!-- API Key Info -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">API Key</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('dashboard.usage.table.col_api_key') %></h2>
     </div>
     <div class="p-6">
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Key Name</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('dashboard.api_keys.new.name_label') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100"><%= @api_key.name %></p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Key Prefix</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.abuse_reports.show.key_prefix') %></label>
           <p class="text-sm text-gray-900 dark:text-gray-100 font-mono"><%= @api_key.prefix %>••••••••</p>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Environment</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.environment') %></label>
           <%= render "partials/shared/badge",
             text: h(@api_key.environment.to_s.titleize),
             variant: @api_key.environment == "live" ? "primary" : "default",
             size: "xs" %>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
+          <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('shared.labels.col_status') %></label>
           <% if @api_key.revoked_at.present? %>
-            <%= render "partials/shared/badge", text: "Revoked", variant: "danger", size: "xs" %>
+            <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_revoked'), variant: "danger", size: "xs" %>
           <% else %>
-            <%= render "partials/shared/badge", text: "Active", variant: "success", size: "xs" %>
+            <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_active'), variant: "success", size: "xs" %>
           <% end %>
         </div>
       </div>
@@ -129,7 +129,7 @@
 <!-- User Information -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Reported User</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.abuse_reports.show.reported_user') %></h2>
   </div>
   <div class="p-6">
     <div class="flex items-center mb-6">
@@ -139,29 +139,29 @@
         <% if @user.name.present? %>
           <div class="text-sm text-gray-600 dark:text-gray-400"><%= @user.name %></div>
         <% end %>
-        <%= link_to "View Full Profile", admin_user_path(@user), class: "text-sm text-blue-600 hover:text-blue-700" %>
+        <%= link_to t('admin.abuse_reports.show.view_full_profile'), admin_user_path(@user), class: "text-sm text-blue-600 hover:text-blue-700" %>
       </div>
     </div>
 
     <!-- User Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Total Requests</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.total_requests') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">This Month</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.abuse_reports.show.this_month') %></p>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Error Rate</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.error_rate') %></p>
         <p class="text-2xl font-bold <%= @usage_stats[:error_rate] > 10 ? 'text-red-600' : 'text-green-600' %>"><%= @usage_stats[:error_rate] %>%</p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Last Request</p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.abuse_reports.show.last_request') %></p>
         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
           <% if @usage_stats[:last_request_at].present? %>
-            <%= time_ago_in_words(@usage_stats[:last_request_at]) %> ago
+            <%= t('admin.abuse_reports.show.last_request_at_ago', last_request_at: time_ago_in_words(@usage_stats[:last_request_at])) %>
           <% else %>
             Never
           <% end %>
@@ -172,11 +172,11 @@
     <!-- User Status -->
     <div class="flex items-center space-x-2">
       <% if @user.admin? %>
-        <%= render "partials/shared/badge", text: "Admin", variant: "danger", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('admin.abuse_reports.show.admin'), variant: "danger", size: "xs" %>
       <% elsif @user.suspended? %>
-        <%= render "partials/shared/badge", text: "Suspended", variant: "warning", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('admin.abuse_reports.show.suspended'), variant: "warning", size: "xs" %>
       <% else %>
-        <%= render "partials/shared/badge", text: "Active", variant: "success", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('dashboard.api_keys.status_active'), variant: "success", size: "xs" %>
       <% end %>
 
       <% if @user.subscription.present? %>
@@ -185,7 +185,7 @@
           variant: @user.subscription.plan_name == "free" ? "default" : "primary",
           size: "xs" %>
       <% else %>
-        <%= render "partials/shared/badge", text: "Free Plan", variant: "default", size: "xs" %>
+        <%= render "partials/shared/badge", text: t('dashboard.billing.current_plan.free_label'), variant: "default", size: "xs" %>
       <% end %>
     </div>
   </div>
@@ -195,16 +195,16 @@
 <% if @other_reports.any? %>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Other Reports for This User</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.abuse_reports.show.other_reports_for_this_user') %></h2>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reported</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('apis_show.endpoint_documentation.column_type') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin.abuse_reports.show.reported') %></th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('shared.labels.col_status') %></th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.api_keys.col_actions') %></th>
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -222,7 +222,7 @@
                 <%= render "partials/shared/badge", text: (report.report_type || "Unknown").titleize, variant: type_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                <%= time_ago_in_words(report.created_at) %> ago
+                <%= t('admin.abuse_reports.show.created_at_ago', created_at: time_ago_in_words(report.created_at)) %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <%
@@ -236,7 +236,7 @@
                 <%= render "partials/shared/badge", text: (report.status || "Pending").titleize, variant: status_variant, size: "xs" %>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <%= link_to "View", admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
+                <%= link_to t('shared.common.view'), admin_abuse_report_path(report), class: "text-blue-600 hover:text-blue-700" %>
               </td>
             </tr>
           <% end %>
@@ -249,8 +249,8 @@
 <!-- Admin Actions -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow border-2 border-orange-200 dark:border-orange-800">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-orange-50 dark:bg-orange-900/20">
-    <h2 class="text-lg font-semibold text-orange-900 dark:text-orange-300">Admin Actions</h2>
-    <p class="text-sm text-orange-700 dark:text-orange-400 mt-1">Take action on this abuse report</p>
+    <h2 class="text-lg font-semibold text-orange-900 dark:text-orange-300"><%= t('admin.abuse_reports.show.admin_actions') %></h2>
+    <p class="text-sm text-orange-700 dark:text-orange-400 mt-1"><%= t('admin.abuse_reports.show.take_action_on_this_abuse_report') %></p>
   </div>
   <div class="p-6">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -266,7 +266,7 @@
 
       <!-- Resolve -->
       <% if @abuse_report.status != "resolved" %>
-        <%= button_to resolve_admin_abuse_report_path(@abuse_report), method: :post, class: "w-full px-4 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to resolve this report?" } do %>
+        <%= button_to resolve_admin_abuse_report_path(@abuse_report), method: :post, class: "w-full px-4 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors text-center", data: { turbo_confirm: t('admin.abuse_reports.show.are_you_sure_you_want_to_resolve_this') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
@@ -276,7 +276,7 @@
 
       <!-- Suspend User -->
       <% unless @user.suspended? %>
-        <%= button_to suspend_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to suspend this user? All their API keys will be revoked." } do %>
+        <%= button_to suspend_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-center", data: { turbo_confirm: t('shared.labels.are_you_sure_suspend') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
           </svg>
@@ -286,7 +286,7 @@
 
       <!-- Ban User -->
       <% unless @user.banned? %>
-        <%= button_to ban_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors text-center", data: { turbo_confirm: "Are you sure you want to BAN this user? This will revoke all API keys and cancel their subscription." } do %>
+        <%= button_to ban_admin_user_path(@user), method: :post, class: "w-full px-4 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors text-center", data: { turbo_confirm: t('admin.abuse_reports.show.are_you_sure_you_want_to_ban_this_user') } do %>
           <svg class="h-5 w-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
           </svg>
@@ -301,13 +301,13 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
         </svg>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-300">Action Guidelines</h3>
+          <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-300"><%= t('admin.abuse_reports.show.action_guidelines') %></h3>
           <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
             <ul class="list-disc pl-5 space-y-1">
-              <li><strong>Investigate:</strong> Review the report and gather more information</li>
-              <li><strong>Resolve:</strong> Close the report if no action is needed or after taking corrective measures</li>
-              <li><strong>Suspend:</strong> Temporarily restrict user access and revoke API keys</li>
-              <li><strong>Ban:</strong> Permanent restriction for severe violations</li>
+              <li><strong><%= t('admin.abuse_reports.show.investigate') %></strong> Review the report and gather more information</li>
+              <li><strong><%= t('admin.abuse_reports.show.resolve') %></strong> Close the report if no action is needed or after taking corrective measures</li>
+              <li><strong><%= t('admin.abuse_reports.show.suspend') %></strong> Temporarily restrict user access and revoke API keys</li>
+              <li><strong><%= t('admin.abuse_reports.show.ban') %></strong> Permanent restriction for severe violations</li>
             </ul>
           </div>
         </div>

@@ -2,32 +2,32 @@
   {
     title:   "Prevent high-bounce campaigns",
     desc:    "Verify imported lists before launching any sequence. Bounce spikes tank deliverability for every future send.",
-    tags:    ["Marketing", "Email campaigns"]
+    tags:    [t('tools.email_validator.use_cases.marketing'), "Email campaigns"]
   },
   {
     title:   "Stop fake signups at source",
     desc:    "Real-time form validation blocks bots and throwaway emails before they inflate your subscriber count.",
-    tags:    ["Growth", "Signup flows"]
+    tags:    [t('tools.email_validator.use_cases.growth'), "Signup flows"]
   },
   {
     title:   "Keep CRM data clean",
     desc:    "Regular validation ensures your contact base reflects real people, not dead addresses.",
-    tags:    ["Operations", "CRM"]
+    tags:    [t('tools.email_validator.use_cases.operations'), "CRM"]
   },
   {
     title:   "Trust your open rate metrics",
     desc:    "Accurate lists make analytics reflect actual recipients, not bounces.",
-    tags:    ["Analytics", "Email marketing"]
+    tags:    [t('admin.sidebar.analytics'), "Email marketing"]
   },
   {
     title:   "Block disposable addresses",
     desc:    "Catch throwaway domains before they reduce your sender reputation.",
-    tags:    ["Security", "Fraud prevention"]
+    tags:    [t('admin.analytics.system_health.security_label'), "Fraud prevention"]
   },
   {
     title:   "Catch typos instantly",
     desc:    "Spot gmial.com or outlok.com at entry and prompt a correction before the user moves on.",
-    tags:    ["Conversion", "Checkout forms"]
+    tags:    [t('tools.email_validator.use_cases.conversion'), "Checkout forms"]
   }
 ] %>
 
@@ -35,10 +35,10 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Real problems, real users.</h2>
-      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-        Email Validator fits wherever contact data quality matters.
-      </p>
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t('tools.email_validator.use_cases.heading') %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto"><%= t('tools.email_validator.use_cases.email_validator_fits_wherever_contact') %></p>
+
+
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

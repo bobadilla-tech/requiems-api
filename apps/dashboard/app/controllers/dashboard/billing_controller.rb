@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::BillingController < Dashboard::BaseController
-
   helper_method :valid_plan?
 
   def show

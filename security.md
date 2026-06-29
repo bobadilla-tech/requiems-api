@@ -2,12 +2,34 @@
 
 ## Supported Versions
 
-We release patches for security vulnerabilities in the following versions:
+Requiems API only supports the latest released version. We do not provide
+security patches, backports, or maintenance updates for older versions.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-| < 0.1   | :x:                |
+| Version        | Supported          |
+| -------------- | ------------------ |
+| Latest release | :white_check_mark: |
+| Older releases | :x:                |
+
+If you are running an older release, please upgrade to the latest version before
+reporting or requesting support for a vulnerability.
+
+## Deployment and Support Scope
+
+Requiems API is primarily intended to be operated by us as a hosted service on
+our own infrastructure. The core source code is open source, and you may
+self-deploy it, but self-hosted deployments are not an officially supported
+product offering.
+
+Some backend functionality depends on proprietary files, private datasets, and
+operational infrastructure that are not included in this repository and are not
+distributed publicly. Because of that, self-hosted installations may require
+their own replacement data, configuration, or service integrations, and may not
+match the behavior of the hosted Requiems API service.
+
+Security reports are welcome for the open source code in this repository and for
+the hosted Requiems API service. We generally do not provide security support
+for custom self-hosted deployments, local infrastructure, private forks, or
+modified versions outside our control.
 
 ## Reporting a Vulnerability
 
@@ -66,11 +88,15 @@ Please include the following information in your report:
 
 This security policy covers:
 
-- ✅ The Requiems API source code in this repository
-- ✅ Official deployment configurations
+- ✅ The latest released version of the Requiems API source code in this
+  repository
+- ✅ The hosted Requiems API service operated by us
+- ✅ Official deployment configurations used by the hosted service
 - ✅ Dependencies we directly control
+- ❌ Older releases
+- ❌ Private forks, modified versions, or custom self-hosted deployments
 - ❌ Third-party services or integrations
-- ❌ Infrastructure outside of this repository
+- ❌ Infrastructure outside of our control
 
 ## Questions?
 

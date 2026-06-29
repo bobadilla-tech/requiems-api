@@ -31,7 +31,7 @@ jobs:
       auth-gateway: ${{ steps.filter.outputs.auth-gateway }}
       api-management: ${{ steps.filter.outputs.api-management }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: dorny/paths-filter@v4
         id: filter
@@ -78,7 +78,7 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v6
@@ -87,7 +87,7 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Cache Go build
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/go-build
           key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
@@ -122,7 +122,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v6
@@ -131,7 +131,7 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Cache Go build
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/go-build
           key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
@@ -180,7 +180,7 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -190,7 +190,7 @@ jobs:
           working-directory: apps/dashboard
 
       - name: Cache Rails bootsnap
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/cache
           key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
@@ -235,7 +235,7 @@ jobs:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -245,7 +245,7 @@ jobs:
           working-directory: apps/dashboard
 
       - name: Cache Rails bootsnap
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/cache
           key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
@@ -272,7 +272,7 @@ jobs:
 
       - name: Cache RuboCop
         if: github.actor != 'dependabot[bot]'
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/rubocop
           key: rubocop-${{ runner.os }}-${{ hashFiles('apps/dashboard/.rubocop.yml', 'apps/dashboard/Gemfile.lock') }}

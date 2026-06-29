@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::SettingsController < Dashboard::BaseController
-
   def show
     # Settings page - view current settings
   end

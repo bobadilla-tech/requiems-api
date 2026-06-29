@@ -2,935 +2,897 @@
 en:
   divisions:
     carousel:
-      heading: "Featured cases"
-      subtitle: "Illustrative composites—map the pattern to your own KPIs and endpoints."
-      pagination_label: "Carousel slides"
-      previous: "Previous slide"
-      next: "Next slide"
-      slide: "Slide %{number}"
+      heading: Featured cases
+      next: Next slide
+      pagination_label: Carousel slides
+      previous: Previous slide
+      slide: Slide %{number}
+      subtitle: Illustrative composites—map the pattern to your own KPIs and endpoints.
     common:
-      industries_heading: "Industries we serve"
-      testimonials_heading: "What customers say"
-      use_cases_heading: "Use cases"
-      use_case_example_label: "Example"
-      scale_heading: "Reliability at a glance"
-      scale_intro: "APIS you can trust."
-      how_heading: "How it works"
-      how_intro: "Three short steps from picking a pattern to measuring impact in your own metrics."
-      next_step_heading: "Wire endpoints for this division"
-      next_step_body: "Use the cards above for scenarios; request shapes, parameters, examples, and errors are in the technical directory for this category."
-      technical_api_kicker: "For engineers"
-      technical_api_title: "Browse APIs in this category"
-      technical_api_subtitle: "Live and beta endpoints, parameters, and examples in the technical directory."
-      technical_api_action: "Open directory"
-      division_hub_tagline_kicker: "How teams use it"
-    index:
-      meta_title: "API divisions | Requiems API"
-      tagline_kicker: "Browse by problem area"
-      tagline: "One API key opens the full catalog. Pick the division that fits your problem, then open the technical directory when you are ready to wire endpoints."
+      division_hub_tagline_kicker: How teams use it
+      how_heading: How it works
+      how_intro: Three short steps from picking a pattern to measuring impact in your
+        own metrics.
+      industries_heading: Industries we serve
+      next_step_body: Use the cards above for scenarios; request shapes, parameters,
+        examples, and errors are in the technical directory for this category.
+      next_step_heading: Wire endpoints for this division
+      scale_heading: Reliability at a glance
+      scale_intro: APIS you can trust.
+      technical_api_action: Open directory
+      technical_api_kicker: For engineers
+      technical_api_subtitle: Live and beta endpoints, parameters, and examples in
+        the technical directory.
+      technical_api_title: Browse APIs in this category
+      testimonials_heading: What customers say
+      use_case_example_label: Example
+      use_cases_heading: Use cases
+    entertainment:
+      featured_cases: []
+      filters:
+      - key: all
+        label: All cases
+      - key: quotes
+        label: Random quotes
+      - key: trivia
+        label: Trivia
+      - key: facts
+        label: Random facts
+      - key: emoji
+        label: Emoji
+      - key: horoscope
+        label: Horoscope
+      - key: sudoku
+        label: Sudoku
+      - key: dad_jokes
+        label: Dad jokes
+      - key: chuck
+        label: Chuck Norris facts
+      - key: advice
+        label: Random advice
+      industries:
+      - Consumer apps
+      - Media
+      - Messaging
+      - Games
+      - Wellness
+      - Growth teams
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: Thousands
+        label: Content responses served daily (platform scale)
+      testimonials: []
+      use_cases:
+      - filter_key: trivia
+        endpoint: GET /v1/entertainment/trivia
+        title: Daily questions that bring users back between core tasks
+        description: Add daily trivia to increase engagement. Give users a lightweight
+          reason to return.
+        tag_problem: Engagement
+        tag_industry: Media
+        case_anchor: case-trivia
+        example: The home screen shows one trivia question on cold start, difficulty
+          based on yesterday’s streak. Answering logs locally; wrong answers unlock
+          a hint API call—still under the same rate limit.
+      - filter_key: quotes
+        endpoint: GET /v1/entertainment/quotes/random
+        title: Share-ready quotes without a copy desk
+        description: Generate fun quotes for social sharing. Reduce creative burden
+          for growth teams.
+        tag_problem: Social content
+        tag_industry: Apps
+        case_anchor: case-quotes
+        example: Share sheet pulls a random quote tagged “motivation,” pre-fills attribution,
+          and opens the native share dialog. Marketing stops manually pasting text
+          into Figma every Monday.
+      - filter_key: dad_jokes
+        endpoint: GET /v1/entertainment/jokes/dad
+        title: Lightweight laughs on loading or between chapters
+        description: Offer new jokes each visit. Keep lightweight apps feeling fresh
+          without a content team.
+        tag_problem: Retention
+        tag_industry: Entertainment
+        case_anchor: case-trivia
+        example: A kids’ reading app shows one dad joke on the loading screen between
+          chapters. Cache TTL is 6 hours so repeat opens in the same afternoon do
+          not hammer the API.
+      - filter_key: emoji
+        endpoint: GET /v1/entertainment/emoji/random
+        title: Fresh reactions per channel without new asset packs
+        description: Keep users in chat with emoji reactions. Make conversations feel
+          human.
+        tag_problem: UX
+        tag_industry: Messaging
+        case_anchor: case-emoji
+        example: Reaction bar requests “trending reactions” for the channel topic.
+          Server returns 12 emoji ids; client maps to local sprites so chats feel
+          fresh without shipping asset packs.
+      - filter_key: facts
+        endpoint: GET /v1/entertainment/facts
+        title: Celebration modals that teach something in one call
+        description: Add random facts to gamified learning. Turn study breaks into
+          habit loops.
+        tag_problem: Education
+        tag_industry: Games
+        case_anchor: case-trivia
+        example: After each quiz level, the client fetches one science fact for the
+          celebration modal. Parents see “learned something new” in session replays
+          without a CMS.
+      - filter_key: horoscope
+        endpoint: GET /v1/entertainment/horoscope/{sign}
+        title: Personalized morning copy from sun sign and date
+        description: Create personalized horoscopes for daily users. Add lifestyle
+          hooks without heavy content ops.
+        tag_problem: Lifestyle
+        tag_industry: Wellness
+        case_anchor: case-quotes
+        example: Morning push job reads the user’s sun sign from profile, requests
+          today’s horoscope copy, and stores the rendered paragraph in the notification
+          payload—no manual copy deck.
+    finance:
+      featured_cases: []
+      filters:
+      - key: all
+        label: All cases
+      - key: bin
+        label: BIN lookup
+      - key: iban
+        label: IBAN validator
+      - key: swift
+        label: SWIFT code
+      - key: crypto
+        label: Crypto prices
+      - key: fx
+        label: Exchange rates
+      - key: inflation
+        label: Inflation
+      - key: commodities
+        label: Commodities
+      - key: mortgage
+        label: Mortgage
       hero:
-        headline: "Ship faster without building everything from scratch"
-        subheadline: "Explore how each division solves real business problems, then open the technical directory when you are ready to integrate."
-        primary_cta: "Get API key"
-        secondary_cta: "View pricing"
-      strategy_call:
-        label: "Book a strategy call"
-      questions_intro: "Still have questions? Let's talk through your use case."
-      view_division: "View division"
-      apis_catalog_title: "Explore the full API directory"
-      apis_catalog_subtitle: "Every live and beta endpoint in one searchable catalog—same API key, consistent docs, copy-ready examples."
-      apis_catalog_cta: "Browse APIs"
+        headline: Move money with cleaner data
+        primary_cta: Get started free
+        subheadline: BIN, IBAN, SWIFT, and exchange rates for fintech and checkout
+          flows.
+      industries:
+      - Fintech
+      - E-commerce
+      - Marketplaces
+      - Banking & payouts
+      - Crypto apps
+      - Finance operations
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: Global
+        label: Major payment & reference schemes in catalog
+      testimonials:
+      - name: Verigeo
+        role: verigeo.pe
+        quote: We use Requiems for financial data in our widgets and to block fake
+          signups at registration. The recognition layer helped us personalize marketing
+          without building anything from scratch.
+      use_cases:
+      - filter_key: bin
+        endpoint: GET /v1/finance/bin/{bin}
+        title: Fewer false declines at checkout
+        description: Enrich card metadata for risk and routing. Reduce good-customer
+          friction while staying compliant.
+        tag_problem: Payments
+        tag_industry: Fintech
+        case_anchor: case-bin
+        example: Authorization sends the first 8 PAN digits (or token equivalent)
+          to BIN lookup; issuer country and product type feed your rules engine so
+          domestic debit stops scoring like cross-border credit.
+      - filter_key: iban
+        endpoint: GET /v1/finance/iban/{iban}
+        title: Cleaner payouts with IBAN validation
+        description: Validate bank accounts before money moves. Stop expensive repair
+          loops after the fact.
+        tag_problem: Payouts
+        tag_industry: Marketplaces
+        case_anchor: case-iban
+        example: Seller onboarding validates IBAN checksum and length for the selected
+          country before creating a payout profile. Invalid accounts return field
+          errors instead of failed batch files from the bank.
+      - filter_key: swift
+        endpoint: GET /v1/finance/swift/{code}
+        title: Faster bank routing with SWIFT lookups
+        description: Confirm institution metadata for wires and compliance. Reduce
+          manual research for finance teams.
+        tag_problem: Banking data
+        tag_industry: Finance ops
+        case_anchor: case-swift
+        example: Analyst pastes BIC into ops tooling; lookup returns institution name,
+          city, and branch metadata for the wire confirmation PDF. CSV exports include
+          the same fields for auditors.
+      - filter_key: crypto
+        endpoint: GET /v1/finance/crypto/{symbol}
+        title: Real-time pricing for digital assets
+        description: Show trustworthy crypto prices in-app. Keep quotes aligned with
+          what users expect.
+        tag_problem: Pricing
+        tag_industry: Crypto apps
+        case_anchor: case-fx
+        example: Wallet home polls spot prices for BTC and ETH every 30s with shared
+          cache keys. Trade review shows the same snapshot id as the portfolio tile
+          so users do not see two different numbers.
+      - filter_key: fx
+        endpoint: GET /v1/finance/exchange-rate
+        title: Fairer checkout totals worldwide
+        description: Convert with transparent rates. Reduce disputes and abandoned
+          carts on international orders.
+        tag_problem: Multi-currency
+        tag_industry: E-commerce
+        case_anchor: case-fx
+        example: Cart subtotal is stored in merchant EUR; pay button refresh pulls
+          USD mid-market rate plus your rounding rule. Email receipt lists rate timestamp
+          so CS matches the charged amount.
+      - filter_key: inflation
+        endpoint: GET /v1/finance/inflation
+        title: Better planning data for finance teams
+        description: Inflation and reference data for models and disclosures. Ship
+          insights without building data pipelines.
+        tag_problem: Analytics
+        tag_industry: Finance
+        case_anchor: case-fx
+        example: 'FP&A sheet runs Monday cron: pull YoY CPI for US and EU, write cells
+          used by forecast macros. Decks cite the same series id as the internal wiki
+          without copy-paste from random news sites.'
+    health:
+      featured_cases: []
+      filters:
+      - key: all
+        label: All cases
+      - key: fitness
+        label: Fitness exercises
+      industries:
+      - Fitness & coaching
+      - Wellness apps
+      - Nutrition
+      - Healthcare platforms
+      - Employer wellness
+      - Lifestyle brands
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: Thousands
+        label: Health plans generated daily (platform scale)
+      testimonials:
+      - name: CompileStrength
+        role: compilestrength.com
+        quote: The fitness data from Requiems powers our core features. We didn't
+          have to build or maintain any of that infrastructure.
+      use_cases:
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises
+        title: Workout lists filtered by equipment, duration, and goal
+        description: Deliver personalized exercise routines instantly. Help users
+          progress without manual programming.
+        tag_problem: Fitness
+        tag_industry: Wellness
+        case_anchor: case-fitness
+        example: User picks duration, equipment “dumbbells only,” and goal “strength.”
+          API returns ordered exercises with sets and rest; the app logs completed
+          set toggles back to your DB.
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises/random
+        title: Surprise-me sessions for meal planning and variety
+        description: Generate nutrition facts and meal suggestions automatically.
+          Reduce friction in health journeys.
+        tag_problem: Nutrition
+        tag_industry: Health
+        case_anchor: case-nutrition
+        example: Meal-plan step sends target calories plus “vegetarian.” Response
+          lists three dinner ideas with macro summaries; user swaps one slot and re-fetches
+          for the same day.
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises/random
+        title: Micro-workouts when streaks break
+        description: Keep users engaged with goal-tracking reminders. Make habits
+          stick with timely prompts.
+        tag_problem: Retention
+        tag_industry: Fitness
+        case_anchor: case-habits
+        example: Streak widget notices two missed days and requests a 7-minute “micro”
+          workout. Push copy uses the API blurb so messaging stays consistent with
+          in-app coaching.
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises
+        title: Onboarding flows backed by real exercise catalog data
+        description: Provide trusted wellness calculations for every user. Reduce
+          guesswork in dashboards.
+        tag_problem: Health metrics
+        tag_industry: Apps
+        case_anchor: case-fitness
+        example: Onboarding collects height in cm and weight in kg; BMI streams to
+          the chart with a standard disclaimer string from product legal. Historical
+          points store raw inputs for audit.
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises/random
+        title: Ideas for healthier swaps at checkout
+        description: Recommend nutrition facts during checkout. Nudge better decisions
+          at the point of sale.
+        tag_problem: Food tech
+        tag_industry: Nutrition
+        case_anchor: case-nutrition
+        example: Barcode scan returns sugar per serving; checkout suggests one lower-sugar
+          swap from the same aisle category using the nutrition hint block in the
+          response.
+      - filter_key: fitness
+        endpoint: GET /v1/health/exercises
+        title: Daily tips tied to your exercise catalog
+        description: Surface bite-sized health tips that users actually follow. Build
+          routines without heavy content.
+        tag_problem: Wellness
+        tag_industry: Lifestyle
+        case_anchor: case-habits
+        example: Daily 7am local notification pulls “tip of the day,” stores idempotency
+          key per user+date, and skips send if the user already completed a logged
+          workout.
+    index:
+      apis_catalog_cta: Browse APIs
+      apis_catalog_subtitle: Every live and beta endpoint in one searchable catalog—same
+        API key, consistent docs, copy-ready examples.
+      apis_catalog_title: Explore the full API directory
       cards:
         finance:
-          title: "Finance"
-          blurb: "BIN, IBAN, SWIFT, rates, and payment validation for fintech and checkout flows."
-        validation:
-          title: "Validation"
-          blurb: "Stop bad emails, invalid phones, and toxic content before it hits your database."
-        networking:
-          title: "Networking & Internet"
-          blurb: "IP intelligence, domains, and threat signals for security and infrastructure teams."
-        places:
-          title: "Places"
-          blurb: "Timezones, holidays, geocoding, and address data for global products."
-        text:
-          title: "Text & Language"
-          blurb: "Spell check, moderation, language detection, and text utilities in one suite."
-        technology:
-          title: "Developer tools"
-          blurb: "Encoding, QR codes, conversions, and utilities you would otherwise rebuild every project."
-        entertainment:
-          title: "Entertainment"
-          blurb: "Trivia, quotes, jokes, and games that make apps feel alive, without a content team."
+          blurb: BIN, IBAN, SWIFT, rates, and payment validation for fintech and checkout
+            flows.
+          title: Finance
         health:
-          title: "Health"
-          blurb: "Fitness and wellness data for coaching, retention, and health experiences."
-      technical_note: "Technical API directory"
-
-    validation:
-      meta_title: "Validation APIs | Requiems API"
+          blurb: Fitness and wellness data for coaching, retention, and health experiences.
+          title: Health
+        places:
+          blurb: Timezones, holidays, geocoding, and address data for global products.
+          title: Places
+        validation:
+          blurb: Stop bad emails, invalid phones, and toxic content before it hits
+            your database.
+          title: Validation
       hero:
-        headline: "Validate data before it breaks your app."
-        subheadline: "Stop bad emails, invalid phones, and toxic content with APIs that catch issues at the source."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
+        headline: Ship faster with reliable API data
+        primary_cta: Get started free
+        subheadline: Every division you need—validation, finance, places, and more—under
+          one API key.
+      meta_title: API divisions | Requiems API
+      questions_intro: Still have questions? Let's talk through your use case.
       strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about bad data before it compounds: fake signups, wrong numbers, and risky text. They are written for teams that need a fast, credible path to cleaner inputs."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "email_validator"
-          label: "Email validator"
-        - key: "phone_validation"
-          label: "Phone validation"
-        - key: "profanity_filter"
-          label: "Profanity filter"
-      featured_cases:
-      featured_cases: []
-      use_cases:
-        - filter_key: "email_validator"
-          endpoint: "POST /v1/validation/email"
-          title: "Catch bad addresses before campaigns and CRM sync"
-          description: "Prevent invalid emails from entering your database. Cleaner lists mean better deliverability and less wasted spend."
-          tag_problem: "Email validation"
-          tag_industry: "Marketing"
-          case_anchor: "case-email-bounces"
-          example: "A SaaS signup flow calls email validation after blur. Disposable domains and typos are rejected before the welcome email is sent—support stops fixing “one letter wrong” addresses."
-        - filter_key: "phone_validation"
-          endpoint: "GET /v1/validation/phone"
-          title: "Reach real numbers on SMS and OTP flows"
-          description: "Validate phone numbers for SMS campaigns. Reach real users and cut failed sends."
-          tag_problem: "Phone validation"
-          tag_industry: "E-commerce"
-          case_anchor: "case-sms-delivery"
-          example: "An e-commerce brand validates E.164 and line type on the OTP step. Invalid or landline numbers never hit the SMS gateway, cutting OTP cost and failed-delivery tickets."
-        - filter_key: "profanity_filter"
-          endpoint: "POST /v1/validation/profanity"
-          title: "Keep public feeds and forums civil at scale"
-          description: "Filter profanity in user-generated content. Keep communities safe without manual review on every post."
-          tag_problem: "Content moderation"
-          tag_industry: "Social media"
-          case_anchor: "case-toxic-comments"
-          example: "A community app runs comment text through a profanity filter server-side. Obvious abuse is blocked; borderline posts queue for moderator review instead of going live."
-        - filter_key: "email_validator"
-          endpoint: "POST /v1/validation/email"
-          title: "Faster corporate signup with fewer IT retries"
-          description: "Streamline onboarding with email checks at the edge. Fewer retries, fewer support tickets."
-          tag_problem: "User experience"
-          tag_industry: "SaaS"
-          case_anchor: "case-email-bounces"
-          example: "Enterprise self-serve checks domain and MX before sending SSO invites. Dead hosts and typos fail fast so IT is not waiting on bounces that never surface in the UI."
-        - filter_key: "phone_validation"
-          endpoint: "GET /v1/validation/phone"
-          title: "Validate subscriber data before porting and tickets"
-          description: "Catch phone errors before they cause issues downstream. Support spends time on real problems."
-          tag_problem: "Data quality"
-          tag_industry: "Telecom"
-          case_anchor: "case-sms-delivery"
-          example: "A carrier portal validates subscriber numbers when a customer files a porting request. Bad inputs return same-day instead of after a week of “number not found” churn."
-        - filter_key: "profanity_filter"
-          endpoint: "POST /v1/validation/profanity"
-          title: "In-game chat moderation without huge client blocklists"
-          description: "Moderate text automatically for safer platforms. Scale trust and safety with your product."
-          tag_problem: "Content safety"
-          tag_industry: "Gaming"
-          case_anchor: "case-toxic-comments"
-          example: "In-game chat is checked on send. High-risk strings are dropped or masked; repeat senders get a cooldown without shipping a huge blocklist in the client bundle."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "10,000+"
-          label: "Peak validations per minute (tier-dependent)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where you lose time today (bounces, SMS failures, or noisy UGC). Each outcome maps to endpoints you can try with a small change in your form or pipeline."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
-      industries:
-        - "SaaS & startups"
-        - "E-commerce"
-        - "Marketing teams"
-        - "Social & community"
-        - "Gaming"
-        - "Telecom"
-      testimonials:
-        - name: "Verigeo"
-          role: "verigeo.pe"
-          quote: "Fake signups were a real problem for us. Requiems validation APIs stopped bad data at the door without adding friction for real users."
-        - name: "CompilStrength"
-          role: "compilestrength.com"
-          quote: "We rely on Requiems validation to keep our user database clean and their recognition services to deliver a tailored experience to every athlete."
-      final_cta:
-        headline: "Start validating data today."
-        subheadline: "Integrate in minutes. Catch issues before they cost you."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+        label: Book a strategy call
+      view_division: View division
     networking:
-      meta_title: "Networking & Internet APIs | Requiems API"
-      hero:
-        headline: "Secure your network with real-time intelligence."
-        subheadline: "IP geolocation, domain lookups, and threat detection for infrastructure and security teams."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about what happens at the edge of your network: risky sessions, unclear geography, and brittle domain work. They highlight APIs you can integrate faster than you can staff a full signals team."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "ip_geo"
-          label: "IP geolocation"
-        - key: "asn"
-          label: "ASN lookup"
-        - key: "vpn"
-          label: "VPN & proxy detection"
-        - key: "whois"
-          label: "WHOIS lookup"
-        - key: "domain"
-          label: "Domain info"
-        - key: "mx"
-          label: "MX lookup"
-        - key: "disposable"
-          label: "Disposable domain checker"
       featured_cases: []
-      use_cases:
-        - filter_key: "vpn"
-          endpoint: "GET /v1/networking/ip/vpn/{ip}"
-          title: "Flag risky login sessions behind VPNs and proxies"
-          description: "Detect VPNs and proxies for secure logins. Stop scripted attacks before they reach your app."
-          tag_problem: "Threat detection"
-          tag_industry: "Cybersecurity"
-          case_anchor: "case-fraud"
-          example: "On each login, the API scores the client IP for VPN, Tor, and datacenter signals. High-risk sessions get step-up MFA; clean residential traffic stays frictionless."
-        - filter_key: "ip_geo"
-          endpoint: "GET /v1/networking/ip/{ip}"
-          title: "Personalize by country without asking for GPS"
-          description: "Target users by location for personalized services. Fewer mismatched offers and clearer analytics."
-          tag_problem: "IP intelligence"
-          tag_industry: "E-commerce"
-          case_anchor: "case-geo"
-          example: "A storefront resolves country and region from the browser IP to show shipping estimates and tax copy without asking for GPS. A/B tests use the same signal for geo-bucketed conversion."
-        - filter_key: "domain"
-          endpoint: "GET /v1/networking/domain/{domain}"
-          title: "Automate domain checks in registration flows"
-          description: "Verify domains instantly for registration platforms. Move faster than manual lookups."
-          tag_problem: "Domain lookup"
-          tag_industry: "SaaS"
-          case_anchor: "case-domain"
-          example: "A registrar workflow calls domain info before charging the card. Parked, suspended, or typo-squat patterns fail early instead of after the fulfillment queue runs."
-        - filter_key: "asn"
-          endpoint: "GET /v1/networking/ip/asn/{ip}"
-          title: "Enrich NOC tickets with ASN and upstream context"
-          description: "Optimize network performance with routing data. Debug peering and path issues with confidence."
-          tag_problem: "Network analysis"
-          tag_industry: "Telecom"
-          case_anchor: "case-fraud"
-          example: "When traceroute looks wrong, ops pastes the suspicious IP’s ASN into an internal tool. Organization name and upstreams land in the ticket so peers answer with context, not screenshots."
-        - filter_key: "whois"
-          endpoint: "GET /v1/networking/whois/{domain}"
-          title: "Exportable WHOIS history for brand and legal audits"
-          description: "Automate domain audits for regulatory requirements. Keep records consistent and searchable."
-          tag_problem: "Domain management"
-          tag_industry: "Legal"
-          case_anchor: "case-domain"
-          example: "Brand protection runs a weekly job on AbuseDB domains: WHOIS fields are normalized and stored so legal can export a dated CSV for takedown evidence."
-        - filter_key: "mx"
-          endpoint: "GET /v1/networking/mx/{domain}"
-          title: "Validate mail hosts before big sends"
-          description: "Ensure email deliverability with server checks. Catch misconfigured mail before send."
-          tag_problem: "Email infrastructure"
-          tag_industry: "Marketing"
-          case_anchor: "case-domain"
-          example: "Before a 50k-send campaign, marketing validates each recipient domain has live MX hosts. Rows missing mail exchange are quarantined so the ESP reputation does not tank."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "200+"
-          label: "Countries & territories in directory"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how traffic hits your edge (fraud signals, country context, or domain checks). Each outcome maps to endpoints that are easier to run here than to own long-term."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      filters:
+      - key: all
+        label: All cases
+      - key: ip_geo
+        label: IP geolocation
+      - key: asn
+        label: ASN lookup
+      - key: vpn
+        label: VPN & proxy detection
+      - key: whois
+        label: WHOIS lookup
+      - key: domain
+        label: Domain info
+      - key: mx
+        label: MX lookup
+      - key: disposable
+        label: Disposable domain checker
       industries:
-        - "Cybersecurity"
-        - "E-commerce"
-        - "SaaS platforms"
-        - "Marketing & email"
-        - "Telecom"
-        - "Legal & compliance"
+      - Cybersecurity
+      - E-commerce
+      - SaaS platforms
+      - Marketing & email
+      - Telecom
+      - Legal & compliance
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: 200+
+        label: Countries & territories in directory
       testimonials: []
-      final_cta:
-        headline: "Secure your network today."
-        subheadline: "Integrate in minutes. Protect against threats instantly."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      use_cases:
+      - filter_key: vpn
+        endpoint: GET /v1/networking/ip/vpn/{ip}
+        title: Flag risky login sessions behind VPNs and proxies
+        description: Detect VPNs and proxies for secure logins. Stop scripted attacks
+          before they reach your app.
+        tag_problem: Threat detection
+        tag_industry: Cybersecurity
+        case_anchor: case-fraud
+        example: On each login, the API scores the client IP for VPN, Tor, and datacenter
+          signals. High-risk sessions get step-up MFA; clean residential traffic stays
+          frictionless.
+      - filter_key: ip_geo
+        endpoint: GET /v1/networking/ip/{ip}
+        title: Personalize by country without asking for GPS
+        description: Target users by location for personalized services. Fewer mismatched
+          offers and clearer analytics.
+        tag_problem: IP intelligence
+        tag_industry: E-commerce
+        case_anchor: case-geo
+        example: A storefront resolves country and region from the browser IP to show
+          shipping estimates and tax copy without asking for GPS. A/B tests use the
+          same signal for geo-bucketed conversion.
+      - filter_key: domain
+        endpoint: GET /v1/networking/domain/{domain}
+        title: Automate domain checks in registration flows
+        description: Verify domains instantly for registration platforms. Move faster
+          than manual lookups.
+        tag_problem: Domain lookup
+        tag_industry: SaaS
+        case_anchor: case-domain
+        example: A registrar workflow calls domain info before charging the card.
+          Parked, suspended, or typo-squat patterns fail early instead of after the
+          fulfillment queue runs.
+      - filter_key: asn
+        endpoint: GET /v1/networking/ip/asn/{ip}
+        title: Enrich NOC tickets with ASN and upstream context
+        description: Optimize network performance with routing data. Debug peering
+          and path issues with confidence.
+        tag_problem: Network analysis
+        tag_industry: Telecom
+        case_anchor: case-fraud
+        example: When traceroute looks wrong, ops pastes the suspicious IP’s ASN into
+          an internal tool. Organization name and upstreams land in the ticket so
+          peers answer with context, not screenshots.
+      - filter_key: whois
+        endpoint: GET /v1/networking/whois/{domain}
+        title: Exportable WHOIS history for brand and legal audits
+        description: Automate domain audits for regulatory requirements. Keep records
+          consistent and searchable.
+        tag_problem: Domain management
+        tag_industry: Legal
+        case_anchor: case-domain
+        example: 'Brand protection runs a weekly job on AbuseDB domains: WHOIS fields
+          are normalized and stored so legal can export a dated CSV for takedown evidence.'
+      - filter_key: mx
+        endpoint: GET /v1/networking/mx/{domain}
+        title: Validate mail hosts before big sends
+        description: Ensure email deliverability with server checks. Catch misconfigured
+          mail before send.
+        tag_problem: Email infrastructure
+        tag_industry: Marketing
+        case_anchor: case-domain
+        example: Before a 50k-send campaign, marketing validates each recipient domain
+          has live MX hosts. Rows missing mail exchange are quarantined so the ESP
+          reputation does not tank.
     places:
-      meta_title: "Places APIs | Requiems API"
-      hero:
-        headline: "Build global apps without location friction."
-        subheadline: "Timezone, holiday, and geolocation APIs for world-ready products that work everywhere."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about clocks, calendars, and addresses that break when you go global. They highlight APIs that carry regional nuance so your product does not have to."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "timezone"
-          label: "Timezone"
-        - key: "world_time"
-          label: "World time"
-        - key: "working_days"
-          label: "Working days calculator"
-        - key: "holidays"
-          label: "Holidays"
-        - key: "geocode"
-          label: "Geocode"
-        - key: "postal"
-          label: "Postal code"
-        - key: "cities"
-          label: "Cities"
       featured_cases: []
-      use_cases:
-        - filter_key: "timezone"
-          endpoint: "GET /v1/places/timezone"
-          title: "Local check-in and reminders that match property time"
-          description: "Align schedules with local timezones. Reduce confusion for travelers and distributed teams."
-          tag_problem: "Time management"
-          tag_industry: "Travel"
-          case_anchor: "case-timezone"
-          example: "A vacation rental stores each property in an IANA timezone. Confirmation emails and SMS use server-side conversion so “4pm check-in” always means local wall clock."
-        - filter_key: "geocode"
-          endpoint: "GET /v1/places/geocode"
-          title: "Turn addresses into pins dispatch can route to"
-          description: "Convert addresses to coordinates instantly. Speed up maps, delivery, and search."
-          tag_problem: "Geocoding"
-          tag_industry: "Logistics"
-          case_anchor: "case-geo"
-          example: "Dispatch receives “123 Main St, Austin.” Geocode returns lat/lng and normalized address; the driver app routes to the pin instead of ambiguous city center."
-        - filter_key: "postal"
-          endpoint: "GET /v1/places/postal/{code}"
-          title: "Block bad postal codes before labels print"
-          description: "Validate postal codes for global shipping. Catch bad addresses before they leave the warehouse."
-          tag_problem: "Address validation"
-          tag_industry: "E-commerce"
-          case_anchor: "case-geo"
-          example: "Checkout validates postal format against the selected country before label purchase. German 5-digit PLZ mismatches block the order with a field-level error instead of a return label."
-        - filter_key: "holidays"
-          endpoint: "GET /v1/places/holidays"
-          title: "Ship and support when each market is actually open"
-          description: "Avoid holidays in every market with date rules. Ship confidently across regions."
-          tag_problem: "Localization"
-          tag_industry: "Global SaaS"
-          case_anchor: "case-holidays"
-          example: "Release automation checks holidays for DE, BR, and JP. Deployments that would land on a public holiday are pushed to the next business day with a Slack summary for PMs."
-        - filter_key: "working_days"
-          endpoint: "GET /v1/places/working-days"
-          title: "SLA dates that respect regional weekends and holidays"
-          description: "Calculate working days across countries. HR and ops stop spreadsheet gymnastics."
-          tag_problem: "Work scheduling"
-          tag_industry: "HR"
-          case_anchor: "case-timezone"
-          example: "HRIS computes case SLA due dates excluding weekends and country-specific holidays for each employee’s site. Reps get the same number in the UI and in the exported audit log."
-        - filter_key: "world_time"
-          endpoint: "GET /v1/places/time/{timezone}"
-          title: "Market clocks that survive DST without hotfixes"
-          description: "Show accurate clocks for every city. Build trust in trading, support, and scheduling UIs."
-          tag_problem: "World time"
-          tag_industry: "Fintech"
-          case_anchor: "case-timezone"
-          example: "A trading dashboard footer calls world-time for New York, London, and Tokyo venue codes. DST changes track automatically; engineers do not ship emergency hotfixes twice a year."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "250+"
-          label: "Countries & regions in data products"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where logistics or calendars hurt you (timezones, addresses, or launch windows). Each outcome maps to endpoints that bake in regional rules."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
-      industries:
-        - "Travel & hospitality"
-        - "Logistics"
-        - "E-commerce"
-        - "Global SaaS"
-        - "HR tech"
-        - "Fintech"
-      testimonials: []
-      final_cta:
-        headline: "Build world-ready apps today."
-        subheadline: "Integrate in minutes. Make every location feel local."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
-    text:
-      meta_title: "Text & Language APIs | Requiems API"
-      hero:
-        headline: "Improve every text interaction with a single API suite."
-        subheadline: "Spell checking, content moderation, language analysis, and text utilities that power better user experiences."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about language work that should not become a science project: guardrails, quality, detection, and helpers. They highlight APIs you can wire next to your existing editors and queues."
       filters:
-        - key: "all"
-          label: "All cases"
-        - key: "profanity"
-          label: "Profanity filter"
-        - key: "spell"
-          label: "Spell check"
-        - key: "thesaurus"
-          label: "Thesaurus"
-        - key: "dictionary"
-          label: "Dictionary"
-        - key: "sentiment"
-          label: "Sentiment analysis"
-        - key: "language"
-          label: "Language detection"
-        - key: "similarity"
-          label: "Text similarity"
-        - key: "markdown"
-          label: "Markdown to HTML"
-        - key: "lorem"
-          label: "Lorem ipsum"
-        - key: "random_words"
-          label: "Random words"
-        - key: "email_normalize"
-          label: "Email normalize"
-      featured_cases: []
-      use_cases:
-        - filter_key: "profanity"
-          endpoint: "POST /v1/validation/profanity"
-          title: "Moderate submissions before they go public"
-          description: "Moderate user text automatically. Keep communities healthy without scaling headcount linearly."
-          tag_problem: "Content moderation"
-          tag_industry: "Social media"
-          case_anchor: "case-moderation"
-          example: "Forum posts run through a profanity API on submit. Blocked posts return an inline reason; moderators only review the flagged queue instead of every thread."
-        - filter_key: "spell"
-          endpoint: "POST /v1/text/spellcheck"
-          title: "Catch typos at publish time in docs and CMS"
-          description: "Fix typos before publishing. Reduce brand risk in emails, docs, and in-app copy."
-          tag_problem: "Writing quality"
-          tag_industry: "SaaS"
-          case_anchor: "case-spell"
-          example: "Help-center “Publish” runs spellcheck on Markdown. Editors see suggested fixes in the sidebar before the article goes public and is indexed."
-        - filter_key: "similarity"
-          endpoint: "POST /v1/text/similarity"
-          title: "Dedupe macros and near-duplicate knowledge"
-          description: "Match similar content with text similarity. Improve recommendations and deduplication."
-          tag_problem: "Search relevance"
-          tag_industry: "E-commerce"
-          case_anchor: "case-language"
-          example: "Support ingests new macros and scores them against existing ones. Duplicates above 0.9 cosine merge automatically so agents stop picking near-identical snippets."
-        - filter_key: "language"
-          endpoint: "POST /v1/text/detect-language"
-          title: "Route pasted content to the right locale pipeline"
-          description: "Identify language automatically for localization. Route users to the right experience faster."
-          tag_problem: "Localization"
-          tag_industry: "Global apps"
-          case_anchor: "case-language"
-          example: "A docs site detects language from the first pasted paragraph. Non-English source routes to the translation vendor queue with locale metadata attached."
-        - filter_key: "thesaurus"
-          endpoint: "GET /v1/text/thesaurus/{word}"
-          title: "Stronger headlines and copy without tab-switching"
-          description: "Find stronger synonyms instantly. Help marketing and product ship sharper copy."
-          tag_problem: "Copywriting"
-          tag_industry: "Marketing"
-          case_anchor: "case-spell"
-          example: "Landing-page builder offers three headline variants: each word flagged as weak gets synonym suggestions from the thesaurus API before A/B allocation."
-        - filter_key: "dictionary"
-          endpoint: "GET /v1/text/dictionary/{word}"
-          title: "One canonical definition in help center and chat"
-          description: "Validate terms and definitions for support content. Reduce confusion in help centers."
-          tag_problem: "Knowledge base"
-          tag_industry: "Customer support"
-          case_anchor: "case-spell"
-          example: "Glossary tooltips resolve legal terms to dictionary entries on hover. CSR chats link the same definition so customers and agents share one canonical wording."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "Millions"
-          label: "Text operations per day (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors where language hurts quality or trust (moderation, spelling, detection, or synonyms). Each outcome maps to endpoints you can layer into editors or queues."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      - key: all
+        label: All cases
+      - key: timezone
+        label: Timezone
+      - key: world_time
+        label: World time
+      - key: working_days
+        label: Working days calculator
+      - key: holidays
+        label: Holidays
+      - key: geocode
+        label: Geocode
+      - key: postal
+        label: Postal code
+      - key: cities
+        label: Cities
       industries:
-        - "Publishing & media"
-        - "SaaS"
-        - "E-commerce"
-        - "Global apps"
-        - "Marketing"
-        - "Customer support"
+      - Travel & hospitality
+      - Logistics
+      - E-commerce
+      - Global SaaS
+      - HR tech
+      - Fintech
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: 250+
+        label: Countries & regions in data products
       testimonials: []
-      final_cta:
-        headline: "Turn text into better experiences today."
-        subheadline: "Integrate in minutes. Improve every interaction with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
+      use_cases:
+      - filter_key: timezone
+        endpoint: GET /v1/places/timezone
+        title: Local check-in and reminders that match property time
+        description: Align schedules with local timezones. Reduce confusion for travelers
+          and distributed teams.
+        tag_problem: Time management
+        tag_industry: Travel
+        case_anchor: case-timezone
+        example: A vacation rental stores each property in an IANA timezone. Confirmation
+          emails and SMS use server-side conversion so “4pm check-in” always means
+          local wall clock.
+      - filter_key: geocode
+        endpoint: GET /v1/places/geocode
+        title: Turn addresses into pins dispatch can route to
+        description: Convert addresses to coordinates instantly. Speed up maps, delivery,
+          and search.
+        tag_problem: Geocoding
+        tag_industry: Logistics
+        case_anchor: case-geo
+        example: Dispatch receives “123 Main St, Austin.” Geocode returns lat/lng
+          and normalized address; the driver app routes to the pin instead of ambiguous
+          city center.
+      - filter_key: postal
+        endpoint: GET /v1/places/postal/{code}
+        title: Block bad postal codes before labels print
+        description: Validate postal codes for global shipping. Catch bad addresses
+          before they leave the warehouse.
+        tag_problem: Address validation
+        tag_industry: E-commerce
+        case_anchor: case-geo
+        example: Checkout validates postal format against the selected country before
+          label purchase. German 5-digit PLZ mismatches block the order with a field-level
+          error instead of a return label.
+      - filter_key: holidays
+        endpoint: GET /v1/places/holidays
+        title: Ship and support when each market is actually open
+        description: Avoid holidays in every market with date rules. Ship confidently
+          across regions.
+        tag_problem: Localization
+        tag_industry: Global SaaS
+        case_anchor: case-holidays
+        example: Release automation checks holidays for DE, BR, and JP. Deployments
+          that would land on a public holiday are pushed to the next business day
+          with a Slack summary for PMs.
+      - filter_key: working_days
+        endpoint: GET /v1/places/working-days
+        title: SLA dates that respect regional weekends and holidays
+        description: Calculate working days across countries. HR and ops stop spreadsheet
+          gymnastics.
+        tag_problem: Work scheduling
+        tag_industry: HR
+        case_anchor: case-timezone
+        example: HRIS computes case SLA due dates excluding weekends and country-specific
+          holidays for each employee’s site. Reps get the same number in the UI and
+          in the exported audit log.
+      - filter_key: world_time
+        endpoint: GET /v1/places/time/{timezone}
+        title: Market clocks that survive DST without hotfixes
+        description: Show accurate clocks for every city. Build trust in trading,
+          support, and scheduling UIs.
+        tag_problem: World time
+        tag_industry: Fintech
+        case_anchor: case-timezone
+        example: A trading dashboard footer calls world-time for New York, London,
+          and Tokyo venue codes. DST changes track automatically; engineers do not
+          ship emergency hotfixes twice a year.
     technology:
-      meta_title: "Developer tools APIs | Requiems API"
-      hero:
-        headline: "Build developer-ready features faster."
-        subheadline: "Utility APIs for encoding, parsing, conversion, and developer workflows that ship in minutes."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about the small utilities that still steal sprint time: encodings, conversions, and shareable links. They highlight APIs that exist so you can keep building your differentiator."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "markdown"
-          label: "Markdown to HTML"
-        - key: "qr"
-          label: "QR code generator"
-        - key: "barcode"
-          label: "Barcode generator"
-        - key: "password"
-          label: "Password generator"
-        - key: "user_agent"
-          label: "User agent parser"
-        - key: "counter"
-          label: "Counter"
-        - key: "random_user"
-          label: "Random user"
-        - key: "base64"
-          label: "Base64 encode/decode"
-        - key: "number_base"
-          label: "Number base conversion"
-        - key: "color"
-          label: "Color format conversion"
-        - key: "unit"
-          label: "Unit conversion"
-        - key: "format_conversion"
-          label: "Data format conversion"
       featured_cases: []
-      use_cases:
-        - filter_key: "format_conversion"
-          endpoint: "POST /v1/technology/format"
-          title: "Normalize CSV, JSON, and XML in pipelines without one-off parsers"
-          description: "Convert data formats reliably across services. Stop shipping one-off parsers per integration."
-          tag_problem: "Data workflows"
-          tag_industry: "SaaS"
-          case_anchor: "case-formats"
-          example: "A vendor drops CSV with odd quoting; a worker calls format conversion to normalized JSON before loading the warehouse. BI stops failing mid-batch on delimiter edge cases."
-        - filter_key: "password"
-          endpoint: "GET /v1/technology/password"
-          title: "Generated passwords that meet policy on first try"
-          description: "Remove manual password generation from onboarding. Ship security defaults without reinventing crypto utilities."
-          tag_problem: "Security"
-          tag_industry: "Developer tools"
-          case_anchor: "case-ua"
-          example: "Tenant admin “reset service account” hits an API that returns a 24-character password meeting complexity rules. The secret is shown once in the UI; the user never invents “Summer2024!”."
-        - filter_key: "base64"
-          endpoint: "POST /v1/technology/base64/encode"
-          title: "Decode mobile photo payloads before storage"
-          description: "Support Base64 payloads without custom code. Reduce subtle encoding bugs across teams."
-          tag_problem: "Integration"
-          tag_industry: "APIs"
-          case_anchor: "case-formats"
-          example: "Mobile uploads a profile photo as Base64 in JSON. The API decodes, runs virus scan, then writes to object storage—no custom binary multipart shim in the middle tier."
-        - filter_key: "user_agent"
-          endpoint: "GET /v1/technology/useragent"
-          title: "Stable browser and OS fields for analytics and funnels"
-          description: "Detect browser, OS, and device accurately. Improve analytics and fraud signals."
-          tag_problem: "Analytics"
-          tag_industry: "SaaS"
-          case_anchor: "case-ua"
-          example: "The web SDK posts raw User-Agent strings with each event. The parser stores browser family, major version, and OS for dashboards; Safari variants stop collapsing into “Other.”"
-        - filter_key: "qr"
-          endpoint: "GET /v1/technology/qr"
-          title: "Scannable check-in and menu links from one URL"
-          description: "Turn links into mobile-ready codes with one call. Perfect for events, menus, and payments."
-          tag_problem: "Commerce"
-          tag_industry: "Retail"
-          case_anchor: "case-qr"
-          example: "Event check-in generates a PNG QR from a signed ticket URL. Door staff scan with the existing camera app; validation resolves attendee id in one round trip."
-        - filter_key: "unit"
-          endpoint: "GET /v1/technology/convert/units"
-          title: "One source of truth for kg vs lb in catalog and PDP"
-          description: "Avoid unit mismatch bugs in product data. Keep catalogs and IoT payloads aligned."
-          tag_problem: "Engineering"
-          tag_industry: "IoT"
-          case_anchor: "case-formats"
-          example: "Product master stores weight in kilograms. The US storefront converts to pounds at render time with shared rounding rules so PDP, cart, and label APIs never disagree."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "Millions"
-          label: "Utility conversions per month (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors chores your team keeps postponing (format conversion, QR codes, user-agent analytics). Each outcome maps to utility endpoints that stay boring on purpose."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      filters:
+      - key: all
+        label: All cases
+      - key: markdown
+        label: Markdown to HTML
+      - key: qr
+        label: QR code generator
+      - key: barcode
+        label: Barcode generator
+      - key: password
+        label: Password generator
+      - key: user_agent
+        label: User agent parser
+      - key: counter
+        label: Counter
+      - key: random_user
+        label: Random user
+      - key: base64
+        label: Base64 encode/decode
+      - key: number_base
+        label: Number base conversion
+      - key: color
+        label: Color format conversion
+      - key: unit
+        label: Unit conversion
+      - key: format_conversion
+        label: Data format conversion
       industries:
-        - "SaaS engineering"
-        - "DevOps & platform"
-        - "Agencies"
-        - "Retail & events"
-        - "Analytics"
-        - "IoT"
+      - SaaS engineering
+      - DevOps & platform
+      - Agencies
+      - Retail & events
+      - Analytics
+      - IoT
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: Millions
+        label: Utility conversions per month (platform scale)
       testimonials:
-        - name: "Franzua"
-          role: "Founder, Flyver"
-          quote: "We build digital tools that work. Requiems is part of that toolkit—reliable, fast, and out of our way."
-      final_cta:
-        headline: "Ship developer features faster today."
-        subheadline: "Integrate in minutes. Turn routine utilities into production-ready APIs."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
-    entertainment:
-      meta_title: "Entertainment APIs | Requiems API"
-      hero:
-        headline: "Make every experience more fun with instant entertainment APIs."
-        subheadline: "Trivia, quotes, jokes, and games that bring apps to life with one integration."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about lightweight delight that still needs uptime: games, quotes, and snackable content. They highlight APIs that make engagement tangible without a content org."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "quotes"
-          label: "Random quotes"
-        - key: "trivia"
-          label: "Trivia"
-        - key: "facts"
-          label: "Random facts"
-        - key: "emoji"
-          label: "Emoji"
-        - key: "horoscope"
-          label: "Horoscope"
-        - key: "sudoku"
-          label: "Sudoku"
-        - key: "dad_jokes"
-          label: "Dad jokes"
-        - key: "chuck"
-          label: "Chuck Norris facts"
-        - key: "advice"
-          label: "Random advice"
-      featured_cases: []
+      - name: Franzua
+        role: Founder, Flyver
+        quote: We build digital tools that work. Requiems is part of that toolkit—reliable,
+          fast, and out of our way.
       use_cases:
-        - filter_key: "trivia"
-          endpoint: "GET /v1/entertainment/trivia"
-          title: "Daily questions that bring users back between core tasks"
-          description: "Add daily trivia to increase engagement. Give users a lightweight reason to return."
-          tag_problem: "Engagement"
-          tag_industry: "Media"
-          case_anchor: "case-trivia"
-          example: "The home screen shows one trivia question on cold start, difficulty based on yesterday’s streak. Answering logs locally; wrong answers unlock a hint API call—still under the same rate limit."
-        - filter_key: "quotes"
-          endpoint: "GET /v1/entertainment/quotes/random"
-          title: "Share-ready quotes without a copy desk"
-          description: "Generate fun quotes for social sharing. Reduce creative burden for growth teams."
-          tag_problem: "Social content"
-          tag_industry: "Apps"
-          case_anchor: "case-quotes"
-          example: "Share sheet pulls a random quote tagged “motivation,” pre-fills attribution, and opens the native share dialog. Marketing stops manually pasting text into Figma every Monday."
-        - filter_key: "dad_jokes"
-          endpoint: "GET /v1/entertainment/jokes/dad"
-          title: "Lightweight laughs on loading or between chapters"
-          description: "Offer new jokes each visit. Keep lightweight apps feeling fresh without a content team."
-          tag_problem: "Retention"
-          tag_industry: "Entertainment"
-          case_anchor: "case-trivia"
-          example: "A kids’ reading app shows one dad joke on the loading screen between chapters. Cache TTL is 6 hours so repeat opens in the same afternoon do not hammer the API."
-        - filter_key: "emoji"
-          endpoint: "GET /v1/entertainment/emoji/random"
-          title: "Fresh reactions per channel without new asset packs"
-          description: "Keep users in chat with emoji reactions. Make conversations feel human."
-          tag_problem: "UX"
-          tag_industry: "Messaging"
-          case_anchor: "case-emoji"
-          example: "Reaction bar requests “trending reactions” for the channel topic. Server returns 12 emoji ids; client maps to local sprites so chats feel fresh without shipping asset packs."
-        - filter_key: "facts"
-          endpoint: "GET /v1/entertainment/facts"
-          title: "Celebration modals that teach something in one call"
-          description: "Add random facts to gamified learning. Turn study breaks into habit loops."
-          tag_problem: "Education"
-          tag_industry: "Games"
-          case_anchor: "case-trivia"
-          example: "After each quiz level, the client fetches one science fact for the celebration modal. Parents see “learned something new” in session replays without a CMS."
-        - filter_key: "horoscope"
-          endpoint: "GET /v1/entertainment/horoscope/{sign}"
-          title: "Personalized morning copy from sun sign and date"
-          description: "Create personalized horoscopes for daily users. Add lifestyle hooks without heavy content ops."
-          tag_problem: "Lifestyle"
-          tag_industry: "Wellness"
-          case_anchor: "case-quotes"
-          example: "Morning push job reads the user’s sun sign from profile, requests today’s horoscope copy, and stores the rendered paragraph in the notification payload—no manual copy deck."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "Thousands"
-          label: "Content responses served daily (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how you want retention to feel (trivia, quotes, reactions). Each outcome maps to lightweight content endpoints you can swap in quickly."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      - filter_key: format_conversion
+        endpoint: POST /v1/technology/format
+        title: Normalize CSV, JSON, and XML in pipelines without one-off parsers
+        description: Convert data formats reliably across services. Stop shipping
+          one-off parsers per integration.
+        tag_problem: Data workflows
+        tag_industry: SaaS
+        case_anchor: case-formats
+        example: A vendor drops CSV with odd quoting; a worker calls format conversion
+          to normalized JSON before loading the warehouse. BI stops failing mid-batch
+          on delimiter edge cases.
+      - filter_key: password
+        endpoint: GET /v1/technology/password
+        title: Generated passwords that meet policy on first try
+        description: Remove manual password generation from onboarding. Ship security
+          defaults without reinventing crypto utilities.
+        tag_problem: Security
+        tag_industry: Developer tools
+        case_anchor: case-ua
+        example: Tenant admin “reset service account” hits an API that returns a 24-character
+          password meeting complexity rules. The secret is shown once in the UI; the
+          user never invents “Summer2024!”.
+      - filter_key: base64
+        endpoint: POST /v1/technology/base64/encode
+        title: Decode mobile photo payloads before storage
+        description: Support Base64 payloads without custom code. Reduce subtle encoding
+          bugs across teams.
+        tag_problem: Integration
+        tag_industry: APIs
+        case_anchor: case-formats
+        example: Mobile uploads a profile photo as Base64 in JSON. The API decodes,
+          runs virus scan, then writes to object storage—no custom binary multipart
+          shim in the middle tier.
+      - filter_key: user_agent
+        endpoint: GET /v1/technology/useragent
+        title: Stable browser and OS fields for analytics and funnels
+        description: Detect browser, OS, and device accurately. Improve analytics
+          and fraud signals.
+        tag_problem: Analytics
+        tag_industry: SaaS
+        case_anchor: case-ua
+        example: The web SDK posts raw User-Agent strings with each event. The parser
+          stores browser family, major version, and OS for dashboards; Safari variants
+          stop collapsing into “Other.”
+      - filter_key: qr
+        endpoint: GET /v1/technology/qr
+        title: Scannable check-in and menu links from one URL
+        description: Turn links into mobile-ready codes with one call. Perfect for
+          events, menus, and payments.
+        tag_problem: Commerce
+        tag_industry: Retail
+        case_anchor: case-qr
+        example: Event check-in generates a PNG QR from a signed ticket URL. Door
+          staff scan with the existing camera app; validation resolves attendee id
+          in one round trip.
+      - filter_key: unit
+        endpoint: GET /v1/technology/convert/units
+        title: One source of truth for kg vs lb in catalog and PDP
+        description: Avoid unit mismatch bugs in product data. Keep catalogs and IoT
+          payloads aligned.
+        tag_problem: Engineering
+        tag_industry: IoT
+        case_anchor: case-formats
+        example: Product master stores weight in kilograms. The US storefront converts
+          to pounds at render time with shared rounding rules so PDP, cart, and label
+          APIs never disagree.
+    text:
+      featured_cases: []
+      filters:
+      - key: all
+        label: All cases
+      - key: profanity
+        label: Profanity filter
+      - key: spell
+        label: Spell check
+      - key: thesaurus
+        label: Thesaurus
+      - key: dictionary
+        label: Dictionary
+      - key: sentiment
+        label: Sentiment analysis
+      - key: language
+        label: Language detection
+      - key: similarity
+        label: Text similarity
+      - key: markdown
+        label: Markdown to HTML
+      - key: lorem
+        label: Lorem ipsum
+      - key: random_words
+        label: Random words
+      - key: email_normalize
+        label: Email normalize
       industries:
-        - "Consumer apps"
-        - "Media"
-        - "Messaging"
-        - "Games"
-        - "Wellness"
-        - "Growth teams"
+      - Publishing & media
+      - SaaS
+      - E-commerce
+      - Global apps
+      - Marketing
+      - Customer support
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: Millions
+        label: Text operations per day (platform scale)
       testimonials: []
-      final_cta:
-        headline: "Add instant entertainment to your app today."
-        subheadline: "Integrate in minutes. Make your product more engaging with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
-    health:
-      meta_title: "Health APIs | Requiems API"
-      hero:
-        headline: "Make health apps smarter with instant fitness and nutrition APIs."
-        subheadline: "Exercise guidance, nutrition insights, and wellness tools that improve retention and user outcomes."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "These stories are about helping people finish routines: workouts, planning moments, and gentle accountability. They highlight health APIs that pair with your coaching or benefits story."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "fitness"
-          label: "Fitness exercises"
-      featured_cases: []
       use_cases:
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises"
-          title: "Workout lists filtered by equipment, duration, and goal"
-          description: "Deliver personalized exercise routines instantly. Help users progress without manual programming."
-          tag_problem: "Fitness"
-          tag_industry: "Wellness"
-          case_anchor: "case-fitness"
-          example: "User picks duration, equipment “dumbbells only,” and goal “strength.” API returns ordered exercises with sets and rest; the app logs completed set toggles back to your DB."
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises/random"
-          title: "Surprise-me sessions for meal planning and variety"
-          description: "Generate nutrition facts and meal suggestions automatically. Reduce friction in health journeys."
-          tag_problem: "Nutrition"
-          tag_industry: "Health"
-          case_anchor: "case-nutrition"
-          example: "Meal-plan step sends target calories plus “vegetarian.” Response lists three dinner ideas with macro summaries; user swaps one slot and re-fetches for the same day."
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises/random"
-          title: "Micro-workouts when streaks break"
-          description: "Keep users engaged with goal-tracking reminders. Make habits stick with timely prompts."
-          tag_problem: "Retention"
-          tag_industry: "Fitness"
-          case_anchor: "case-habits"
-          example: "Streak widget notices two missed days and requests a 7-minute “micro” workout. Push copy uses the API blurb so messaging stays consistent with in-app coaching."
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises"
-          title: "Onboarding flows backed by real exercise catalog data"
-          description: "Provide trusted wellness calculations for every user. Reduce guesswork in dashboards."
-          tag_problem: "Health metrics"
-          tag_industry: "Apps"
-          case_anchor: "case-fitness"
-          example: "Onboarding collects height in cm and weight in kg; BMI streams to the chart with a standard disclaimer string from product legal. Historical points store raw inputs for audit."
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises/random"
-          title: "Ideas for healthier swaps at checkout"
-          description: "Recommend nutrition facts during checkout. Nudge better decisions at the point of sale."
-          tag_problem: "Food tech"
-          tag_industry: "Nutrition"
-          case_anchor: "case-nutrition"
-          example: "Barcode scan returns sugar per serving; checkout suggests one lower-sugar swap from the same aisle category using the nutrition hint block in the response."
-        - filter_key: "fitness"
-          endpoint: "GET /v1/health/exercises"
-          title: "Daily tips tied to your exercise catalog"
-          description: "Surface bite-sized health tips that users actually follow. Build routines without heavy content."
-          tag_problem: "Wellness"
-          tag_industry: "Lifestyle"
-          case_anchor: "case-habits"
-          example: "Daily 7am local notification pulls “tip of the day,” stores idempotency key per user+date, and skips send if the user already completed a logged workout."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "Thousands"
-          label: "Health plans generated daily (platform scale)"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how people stick with your product (workouts, nutrition nudges, habits). Each outcome maps to health endpoints you can pair with your own coaching UX."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
-      industries:
-        - "Fitness & coaching"
-        - "Wellness apps"
-        - "Nutrition"
-        - "Healthcare platforms"
-        - "Employer wellness"
-        - "Lifestyle brands"
-      testimonials:
-        - name: "CompileStrength"
-          role: "compilestrength.com"
-          quote: "The fitness data from Requiems powers our core features. We didn't have to build or maintain any of that infrastructure."
-      final_cta:
-        headline: "Launch smarter health experiences today."
-        subheadline: "Integrate in minutes. Help users stay healthy with one API suite."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
-
-    finance:
-      meta_title: "Finance APIs | Requiems API"
-      hero:
-        headline: "Move money with cleaner data and fewer surprises."
-        subheadline: "BIN, IBAN, SWIFT, crypto, and exchange-rate APIs built for checkout, payouts, and compliance workflows."
-        primary_cta: "Get API key"
-        secondary_cta: "Start free"
-      strategy_call:
-        label: "Book a strategy call"
-      tagline: "The headline covers what you can integrate. The examples below are checkout, payout, and FX—short situations where validation or reference data changed the outcome."
-      filters:
-        - key: "all"
-          label: "All cases"
-        - key: "bin"
-          label: "BIN lookup"
-        - key: "iban"
-          label: "IBAN validator"
-        - key: "swift"
-          label: "SWIFT code"
-        - key: "crypto"
-          label: "Crypto prices"
-        - key: "fx"
-          label: "Exchange rates"
-        - key: "inflation"
-          label: "Inflation"
-        - key: "commodities"
-          label: "Commodities"
-        - key: "mortgage"
-          label: "Mortgage"
+      - filter_key: profanity
+        endpoint: POST /v1/validation/profanity
+        title: Moderate submissions before they go public
+        description: Moderate user text automatically. Keep communities healthy without
+          scaling headcount linearly.
+        tag_problem: Content moderation
+        tag_industry: Social media
+        case_anchor: case-moderation
+        example: Forum posts run through a profanity API on submit. Blocked posts
+          return an inline reason; moderators only review the flagged queue instead
+          of every thread.
+      - filter_key: spell
+        endpoint: POST /v1/text/spellcheck
+        title: Catch typos at publish time in docs and CMS
+        description: Fix typos before publishing. Reduce brand risk in emails, docs,
+          and in-app copy.
+        tag_problem: Writing quality
+        tag_industry: SaaS
+        case_anchor: case-spell
+        example: Help-center “Publish” runs spellcheck on Markdown. Editors see suggested
+          fixes in the sidebar before the article goes public and is indexed.
+      - filter_key: similarity
+        endpoint: POST /v1/text/similarity
+        title: Dedupe macros and near-duplicate knowledge
+        description: Match similar content with text similarity. Improve recommendations
+          and deduplication.
+        tag_problem: Search relevance
+        tag_industry: E-commerce
+        case_anchor: case-language
+        example: Support ingests new macros and scores them against existing ones.
+          Duplicates above 0.9 cosine merge automatically so agents stop picking near-identical
+          snippets.
+      - filter_key: language
+        endpoint: POST /v1/text/detect-language
+        title: Route pasted content to the right locale pipeline
+        description: Identify language automatically for localization. Route users
+          to the right experience faster.
+        tag_problem: Localization
+        tag_industry: Global apps
+        case_anchor: case-language
+        example: A docs site detects language from the first pasted paragraph. Non-English
+          source routes to the translation vendor queue with locale metadata attached.
+      - filter_key: thesaurus
+        endpoint: GET /v1/text/thesaurus/{word}
+        title: Stronger headlines and copy without tab-switching
+        description: Find stronger synonyms instantly. Help marketing and product
+          ship sharper copy.
+        tag_problem: Copywriting
+        tag_industry: Marketing
+        case_anchor: case-spell
+        example: 'Landing-page builder offers three headline variants: each word flagged
+          as weak gets synonym suggestions from the thesaurus API before A/B allocation.'
+      - filter_key: dictionary
+        endpoint: GET /v1/text/dictionary/{word}
+        title: One canonical definition in help center and chat
+        description: Validate terms and definitions for support content. Reduce confusion
+          in help centers.
+        tag_problem: Knowledge base
+        tag_industry: Customer support
+        case_anchor: case-spell
+        example: Glossary tooltips resolve legal terms to dictionary entries on hover.
+          CSR chats link the same definition so customers and agents share one canonical
+          wording.
+    validation:
       featured_cases: []
-      use_cases:
-        - filter_key: "bin"
-          endpoint: "GET /v1/finance/bin/{bin}"
-          title: "Fewer false declines at checkout"
-          description: "Enrich card metadata for risk and routing. Reduce good-customer friction while staying compliant."
-          tag_problem: "Payments"
-          tag_industry: "Fintech"
-          case_anchor: "case-bin"
-          example: "Authorization sends the first 8 PAN digits (or token equivalent) to BIN lookup; issuer country and product type feed your rules engine so domestic debit stops scoring like cross-border credit."
-        - filter_key: "iban"
-          endpoint: "GET /v1/finance/iban/{iban}"
-          title: "Cleaner payouts with IBAN validation"
-          description: "Validate bank accounts before money moves. Stop expensive repair loops after the fact."
-          tag_problem: "Payouts"
-          tag_industry: "Marketplaces"
-          case_anchor: "case-iban"
-          example: "Seller onboarding validates IBAN checksum and length for the selected country before creating a payout profile. Invalid accounts return field errors instead of failed batch files from the bank."
-        - filter_key: "swift"
-          endpoint: "GET /v1/finance/swift/{code}"
-          title: "Faster bank routing with SWIFT lookups"
-          description: "Confirm institution metadata for wires and compliance. Reduce manual research for finance teams."
-          tag_problem: "Banking data"
-          tag_industry: "Finance ops"
-          case_anchor: "case-swift"
-          example: "Analyst pastes BIC into ops tooling; lookup returns institution name, city, and branch metadata for the wire confirmation PDF. CSV exports include the same fields for auditors."
-        - filter_key: "crypto"
-          endpoint: "GET /v1/finance/crypto/{symbol}"
-          title: "Real-time pricing for digital assets"
-          description: "Show trustworthy crypto prices in-app. Keep quotes aligned with what users expect."
-          tag_problem: "Pricing"
-          tag_industry: "Crypto apps"
-          case_anchor: "case-fx"
-          example: "Wallet home polls spot prices for BTC and ETH every 30s with shared cache keys. Trade review shows the same snapshot id as the portfolio tile so users do not see two different numbers."
-        - filter_key: "fx"
-          endpoint: "GET /v1/finance/exchange-rate"
-          title: "Fairer checkout totals worldwide"
-          description: "Convert with transparent rates. Reduce disputes and abandoned carts on international orders."
-          tag_problem: "Multi-currency"
-          tag_industry: "E-commerce"
-          case_anchor: "case-fx"
-          example: "Cart subtotal is stored in merchant EUR; pay button refresh pulls USD mid-market rate plus your rounding rule. Email receipt lists rate timestamp so CS matches the charged amount."
-        - filter_key: "inflation"
-          endpoint: "GET /v1/finance/inflation"
-          title: "Better planning data for finance teams"
-          description: "Inflation and reference data for models and disclosures. Ship insights without building data pipelines."
-          tag_problem: "Analytics"
-          tag_industry: "Finance"
-          case_anchor: "case-fx"
-          example: "FP&A sheet runs Monday cron: pull YoY CPI for US and EU, write cells used by forecast macros. Decks cite the same series id as the internal wiki without copy-paste from random news sites."
-      scale_metrics:
-        - value: "99.99%"
-          label: "Platform uptime target"
-        - value: "~500ms"
-          label: "Average API response time"
-        - value: "Global"
-          label: "Major payment & reference schemes in catalog"
-      how_it_works:
-        step1_title: "Pick a pattern that sounds familiar"
-        step1_body: "Choose a card that mirrors how money moves through your product (cards, bank rails, FX). Each outcome maps to finance endpoints you validate before funds leave the building."
-        step2_title: "Wire it into your stack"
-        step2_body: "Use the reference examples, add your API key, and call the HTTPS endpoints from your backend or edge. Most teams ship the first version the same week they read the docs."
-        step3_title: "Prove it with your own metrics"
-        step3_body: "Compare before and after in dashboards you already trust: fewer failures, shorter queues, calmer support, or faster pages once bad inputs stop propagating."
+      filters:
+      - key: all
+        label: All cases
+      - key: email_validator
+        label: Email validator
+      - key: phone_validation
+        label: Phone validation
+      - key: profanity_filter
+        label: Profanity filter
+      hero:
+        headline: Validate data before it breaks your app
+        primary_cta: Get started free
+        subheadline: Catch bad emails, invalid phones, and toxic content at the edge—before
+          it hits your database.
       industries:
-        - "Fintech"
-        - "E-commerce"
-        - "Marketplaces"
-        - "Banking & payouts"
-        - "Crypto apps"
-        - "Finance operations"
+      - SaaS & startups
+      - E-commerce
+      - Marketing teams
+      - Social & community
+      - Gaming
+      - Telecom
+      scale_metrics:
+      - value: 99.99%
+        label: Platform uptime target
+      - value: "~500ms"
+        label: Average API response time
+      - value: 10,000+
+        label: Peak validations per minute (tier-dependent)
       testimonials:
-        - name: "Verigeo"
-          role: "verigeo.pe"
-          quote: "We use Requiems for financial data in our widgets and to block fake signups at registration. The recognition layer helped us personalize marketing without building anything from scratch."
-      final_cta:
-        headline: "Ship payments data you can trust today."
-        subheadline: "Integrate in minutes. Reduce fraud, rejects, and manual fixes."
-        primary_cta: "Get API key"
-        secondary_cta: "Explore all APIs"
-      view_case: "View case"
+      - name: Verigeo
+        role: verigeo.pe
+        quote: Fake signups were a real problem for us. Requiems validation APIs stopped
+          bad data at the door without adding friction for real users.
+      - name: CompilStrength
+        role: compilestrength.com
+        quote: We rely on Requiems validation to keep our user database clean and
+          their recognition services to deliver a tailored experience to every athlete.
+      use_cases:
+      - filter_key: email_validator
+        endpoint: POST /v1/validation/email
+        title: Catch bad addresses before campaigns and CRM sync
+        description: Prevent invalid emails from entering your database. Cleaner lists
+          mean better deliverability and less wasted spend.
+        tag_problem: Email validation
+        tag_industry: Marketing
+        case_anchor: case-email-bounces
+        example: A SaaS signup flow calls email validation after blur. Disposable
+          domains and typos are rejected before the welcome email is sent—support
+          stops fixing “one letter wrong” addresses.
+      - filter_key: phone_validation
+        endpoint: GET /v1/validation/phone
+        title: Reach real numbers on SMS and OTP flows
+        description: Validate phone numbers for SMS campaigns. Reach real users and
+          cut failed sends.
+        tag_problem: Phone validation
+        tag_industry: E-commerce
+        case_anchor: case-sms-delivery
+        example: An e-commerce brand validates E.164 and line type on the OTP step.
+          Invalid or landline numbers never hit the SMS gateway, cutting OTP cost
+          and failed-delivery tickets.
+      - filter_key: profanity_filter
+        endpoint: POST /v1/validation/profanity
+        title: Keep public feeds and forums civil at scale
+        description: Filter profanity in user-generated content. Keep communities
+          safe without manual review on every post.
+        tag_problem: Content moderation
+        tag_industry: Social media
+        case_anchor: case-toxic-comments
+        example: A community app runs comment text through a profanity filter server-side.
+          Obvious abuse is blocked; borderline posts queue for moderator review instead
+          of going live.
+      - filter_key: email_validator
+        endpoint: POST /v1/validation/email
+        title: Faster corporate signup with fewer IT retries
+        description: Streamline onboarding with email checks at the edge. Fewer retries,
+          fewer support tickets.
+        tag_problem: User experience
+        tag_industry: SaaS
+        case_anchor: case-email-bounces
+        example: Enterprise self-serve checks domain and MX before sending SSO invites.
+          Dead hosts and typos fail fast so IT is not waiting on bounces that never
+          surface in the UI.
+      - filter_key: phone_validation
+        endpoint: GET /v1/validation/phone
+        title: Validate subscriber data before porting and tickets
+        description: Catch phone errors before they cause issues downstream. Support
+          spends time on real problems.
+        tag_problem: Data quality
+        tag_industry: Telecom
+        case_anchor: case-sms-delivery
+        example: A carrier portal validates subscriber numbers when a customer files
+          a porting request. Bad inputs return same-day instead of after a week of
+          “number not found” churn.
+      - filter_key: profanity_filter
+        endpoint: POST /v1/validation/profanity
+        title: In-game chat moderation without huge client blocklists
+        description: Moderate text automatically for safer platforms. Scale trust
+          and safety with your product.
+        tag_problem: Content safety
+        tag_industry: Gaming
+        case_anchor: case-toxic-comments
+        example: In-game chat is checked on send. High-risk strings are dropped or
+          masked; repeat senders get a cooldown without shipping a huge blocklist
+          in the client bundle.

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::ReferralsController < Dashboard::BaseController
-
   def show
     @referral_link = new_user_registration_url(
       ref: current_user.referral_token,

@@ -26,8 +26,8 @@
       <!-- API Cards Grid -->
       <% if @category["coming_soon"] %>
         <div class="text-center py-16">
-          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Coming Soon</h2>
-          <p class="text-gray-500 dark:text-gray-400">We're working on bringing APIs to this category. Check back soon!</p>
+          <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2"><%= t('comparisons.hub.card_coming_soon') %></h2>
+          <p class="text-gray-500 dark:text-gray-400"><%= t('categories.show.we_re_working_on_bringing_apis_to_this') %></p>
         </div>
       <% elsif @apis.any? %>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
@@ -37,7 +37,7 @@
         </div>
       <% else %>
         <div class="text-center py-16">
-          <p class="text-gray-500 dark:text-gray-400">No APIs available in this category yet.</p>
+          <p class="text-gray-500 dark:text-gray-400"><%= t('categories.show.no_apis_available_in_this_category_yet') %></p>
         </div>
       <% end %>
     </div>
