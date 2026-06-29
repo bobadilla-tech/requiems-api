@@ -230,21 +230,10 @@ The controller does **only** client-side validation and loading state. No
 ## 4. i18n requirements
 
 All user-facing strings in tool pages must use `t()`. Add keys to
-`apps/dashboard/config/locales/en/tools.en.yml` only. Run **rori18n** to fill
-ES/FR automatically — do not write manual stubs.
-
-```bash
-cd /path/to/rori18n   # repo: github.com/bobadilla-tech/rori18n
-GOOGLE_APPLICATION_CREDENTIALS=google.json go run . translate \
-  --root ../requiems-api/apps/dashboard \
-  --from en --to es \
-  --protect-file ../requiems-api/apps/dashboard/.translate-dictionary.txt
-# repeat with --to fr
-```
-
-rori18n only writes keys that are empty or machine-placeholder (`TODO: ...`,
-`FIXME: ...`). It never overwrites a real translation. Brand names in
-`.translate-dictionary.txt` (NeverBounce, Requiems API, etc.) are shielded.
+`apps/dashboard/config/locales/en/tools.en.yml` only. **Do not create ES or FR
+files.** Translation into other languages is handled by the maintainer using
+rori18n — a project-specific CLI that calls Google Cloud Translation and
+protects brand names automatically.
 
 ### Key structure
 
@@ -366,7 +355,7 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] All user-facing strings go through `t()` — no hardcoded English in JS or
       ERB
 - [ ] New locale keys added to `en/tools.en.yml`
-- [ ] ES/FR translations filled via `rori18n translate` (see §4) — no manual stubs
+- [ ] New locale keys added to `en/tools.en.yml` only (ES/FR handled by maintainer)
 - [ ] Input types are semantically correct (no `type="text"` for enumerated
       values)
 - [ ] CTA buttons use `render "partials/shared/button"` — not raw `link_to` with
