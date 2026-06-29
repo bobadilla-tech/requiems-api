@@ -260,12 +260,13 @@ git diff --name-only origin/main | \
 ```
 
 One pass does three things:
+
 1. Finds remaining hardcoded strings in your changed files
 2. Writes the EN key to the correct YAML file and injects the `t()` call
 3. Creates matching empty entries in `es/tools.es.yml` and `fr/tools.fr.yml`
 
 For `t()` calls you wrote manually, also add the key with an empty value `""`
-to the ES and FR files — the maintainer fills them after merge.
+to the ES and FR files, the maintainer fills them after merge.
 
 #### Step 3 — lint before opening the PR
 
