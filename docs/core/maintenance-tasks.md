@@ -43,6 +43,31 @@ This updates:
 The Auth Gateway serves this generated spec as `/openapi.json`. Do not edit the
 generated TypeScript file by hand.
 
+## Fill Missing Translations (rori18n)
+
+Run after adding new EN locale keys (new tool pages, new UI text, etc.) to
+fill matching ES and FR files automatically.
+
+```bash
+cd /path/to/rori18n   # repo: github.com/bobadilla-tech/rori18n
+GOOGLE_APPLICATION_CREDENTIALS=google.json go run . translate \
+  --root ../requiems-api/apps/dashboard \
+  --from en --to es,fr \
+  --protect-file ../requiems-api/apps/dashboard/.translate-dictionary.txt
+```
+
+Use `--dry-run` to preview without writing. rori18n only fills empty or
+`TODO: ...` placeholder values — never overwrites a real translation.
+
+The `.translate-dictionary.txt` file at `apps/dashboard/` lists brand names
+that must not be translated (Requiems API, NeverBounce, IPstack, etc.).
+
+To check what's missing before translating:
+
+```bash
+go run . audit --root ../requiems-api/apps/dashboard
+```
+
 ## Generated File Checklist
 
 Before committing generated-file updates:
