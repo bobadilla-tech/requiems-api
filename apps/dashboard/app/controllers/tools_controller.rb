@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
       name: "Email Validator",
       description: "Syntax check, MX lookup, disposable detection, and typo correction in one call.",
       icon_classes: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
+    },
+    "bin-lookup" => {
+      name: "BIN Lookup",
+      description: "Card network, type, issuing bank, and country from the first 6–8 digits of any payment card.",
+      icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
     },
     "sentiment-analysis" => {
       name: "Sentiment Analysis",
