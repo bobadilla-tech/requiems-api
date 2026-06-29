@@ -1,33 +1,22 @@
----
 es:
   tools:
     domain_checker:
       api_combinations:
-        email_validator_benefit: Valida tanto el dominio como la dirección de correo
-          electrónico específica.
+        email_validator_benefit: Valida tanto el dominio como la dirección de correo electrónico específica.
         email_validator_name: Verificador de dominios + Validador de correo electrónico
-        email_validator_outcome: 'Garantía total de entregabilidad del correo electrónico:
-          comprobaciones del estado del dominio y del buzón de correo.'
+        email_validator_outcome: 'Garantía total de entregabilidad del correo electrónico: comprobaciones del estado del dominio y del buzón de correo.'
         heading: Combínalo con otras API
         label_benefit: 'Beneficio:'
         label_outcome: 'Resultado:'
-        phone_validator_benefit: Verifique el estado del dominio y el número de teléfono
-          en el mismo paso del proceso de incorporación.
+        phone_validator_benefit: Verifique el estado del dominio y el número de teléfono en el mismo paso del proceso de incorporación.
         phone_validator_name: Verificador de dominio + Validador de teléfono
-        phone_validator_outcome: Validación de contacto multipunto —presencia digital
-          confirmada y teléfono localizable— antes de conceder el acceso.
-        subheading: Domain Checker es más potente en combinación con otras API de
-          Requiems. Combínalo con otras API de Requiems para integrar la validación
-          multipunto en un único flujo de trabajo.
-        vpn_detection_benefit: Verifique el estado del dominio al tiempo que identifica
-          el tráfico VPN o proxy de la misma solicitud.
+        phone_validator_outcome: Validación de contacto multipunto —presencia digital confirmada y teléfono localizable— antes de conceder el acceso.
+        subheading: Domain Checker es más potente en combinación con otras API de Requiems. Combínalo con otras API de Requiems para integrar la validación multipunto en un único flujo de trabajo.
+        vpn_detection_benefit: Verifique el estado del dominio al tiempo que identifica el tráfico VPN o proxy de la misma solicitud.
         vpn_detection_name: Verificador de dominio + Detección de VPN
-        vpn_detection_outcome: 'Señal de fraude de doble capa: un dominio marcado
-          como sospechoso combinado con tráfico anonimizado constituye un fuerte desencadenante
-          de bloqueo.'
+        vpn_detection_outcome: 'Señal de fraude de doble capa: un dominio marcado como sospechoso combinado con tráfico anonimizado constituye un fuerte desencadenante de bloqueo.'
       cta:
-        body: Una clave API. Disponibilidad de dominio, datos WHOIS y más de 50 API
-          adicionales relacionadas con validación, redes, finanzas y mucho más.
+        body: Una clave API. Disponibilidad de dominio, datos WHOIS y más de 50 API adicionales relacionadas con validación, redes, finanzas y mucho más.
         cta_docs: Lee la documentación →
         cta_primary: Obtén tu clave API gratuita.
         heading: Automatiza esto con Requiems.
@@ -40,8 +29,7 @@ es:
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_invalid: Introduzca un nombre de dominio válido, por ejemplo, example.com.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de
-          nuevo.
+        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         label_available: Disponible
         label_dns_a: Un registro
         label_dns_mx: Registros MX
@@ -50,20 +38,11 @@ es:
         result_heading: Verificación de dominio
         submit: Controlar
       faq:
-        a1: Comprueba la existencia de registros DNS, la presencia de registros MX,
-          la validez del certificado SSL y la reputación del dominio comparándolas
-          con listas de amenazas conocidas.
-        a2: Sí. El campo mx_valid indica si el dominio tiene registros MX válidos
-          configurados, un requisito previo para recibir correo electrónico.
-        a3: Sí. ssl_valid devuelve verdadero si el dominio tiene un certificado SSL
-          válido y no caducado. No comprueba la profundidad de la cadena ni el estado
-          de validación extendida.
-        a4: El punto final acepta un dominio por solicitud. Para la validación masiva,
-          realice llamadas en paralelo o utilice el punto final de procesamiento por
-          lotes si está disponible en su plan.
-        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede
-          acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte
-          la página de precios para conocer los límites.
+        a1: Comprueba la existencia de registros DNS, la presencia de registros MX, la validez del certificado SSL y la reputación del dominio comparándolas con listas de amenazas conocidas.
+        a2: Sí. El campo mx_valid indica si el dominio tiene registros MX válidos configurados, un requisito previo para recibir correo electrónico.
+        a3: Sí. ssl_valid devuelve verdadero si el dominio tiene un certificado SSL válido y no caducado. No comprueba la profundidad de la cadena ni el estado de validación extendida.
+        a4: El punto final acepta un dominio por solicitud. Para la validación masiva, realice llamadas en paralelo o utilice el punto final de procesamiento por lotes si está disponible en su plan.
+        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte la página de precios para conocer los límites.
         heading: Preguntas frecuentes
         q1: "¿Qué comprueba exactamente Domain Checker?"
         q2: "¿Verifica si el dominio tiene un servidor de correo?"
@@ -79,83 +58,52 @@ es:
         label_input: nombre de dominio
         no_account: No se requiere cuenta
         placeholder: p. ej. example.com
-        subtitle: 'Disponibilidad, datos WHOIS, información del registrador y fechas
-          de vencimiento: todo con una sola llamada a la API. Sin extracción de datos
-          ni límites de uso por tu parte.'
+        subtitle: 'Disponibilidad, datos WHOIS, información del registrador y fechas de vencimiento: todo con una sola llamada a la API. Sin extracción de datos ni límites de uso por tu parte.'
         title: Comprobar cualquier dominio
         title_highlight: en milisegundos
         try_live: Pruébalo en vivo
       show:
-        free_domain_checker_availability_dns: 'Comprobador de dominios gratuito: disponibilidad,
-          DNS y WHOIS | API de Requiems'
+        free_domain_checker_availability_dns: 'Comprobador de dominios gratuito: disponibilidad, DNS y WHOIS | API de Requiems'
       use_cases:
-        auth_body: Verifique el estado del dominio antes de aceptarlo como dominio
-          comercial proporcionado por el usuario. Rechace los dominios caducados,
-          aparcados o marcados como sospechosos.
+        auth_body: Verifique el estado del dominio antes de aceptarlo como dominio comercial proporcionado por el usuario. Rechace los dominios caducados, aparcados o marcados como sospechosos.
         auth_context: Autenticación / Registro
         auth_title: Evita los dominios riesgosos antes de registrarte.
-        devops_body: Detecte los registros DNS faltantes o los certificados SSL caducados
-          antes de que provoquen interrupciones del servicio o errores para el usuario.
+        devops_body: Detecte los registros DNS faltantes o los certificados SSL caducados antes de que provoquen interrupciones del servicio o errores para el usuario.
         devops_context: DevOps / Monitorización
         devops_title: Detectar problemas de DNS o SSL faltantes
-        email_marketing_body: Verifique los registros MX y la reputación del dominio
-          antes de enviar una lista de direcciones. Reduzca el riesgo de rebotes en
-          dominios de envío completos.
+        email_marketing_body: Verifique los registros MX y la reputación del dominio antes de enviar una lista de direcciones. Reduzca el riesgo de rebotes en dominios de envío completos.
         email_marketing_context: Marketing por correo electrónico
-        email_marketing_title: Inspeccione el estado del dominio antes de realizar
-          campañas de correo electrónico.
-        fraud_body: Detecta dominios marcados como spam o phishing, o aquellos con
-          registros caducados. Evita que personas malintencionadas abusen de tu plataforma.
+        email_marketing_title: Inspeccione el estado del dominio antes de realizar campañas de correo electrónico.
+        fraud_body: Detecta dominios marcados como spam o phishing, o aquellos con registros caducados. Evita que personas malintencionadas abusen de tu plataforma.
         fraud_context: Prevención del fraude
         fraud_title: Bloquear dominios maliciosos o caducados
         heading: Diseñado para cada flujo de trabajo de dominio
-        integrations_body: Antes de integrarlos en flujos de trabajo automatizados,
-          verifique que los dominios de los socios o proveedores estén activos y configurados
-          correctamente.
+        integrations_body: Antes de integrarlos en flujos de trabajo automatizados, verifique que los dominios de los socios o proveedores estén activos y configurados correctamente.
         integrations_context: Integraciones
-        integrations_title: Verificar los dominios de los socios en los flujos de
-          trabajo.
-        onboarding_body: Durante el proceso de incorporación de clientes, solo se
-          permiten dominios con DNS verificado, MX activo y buena reputación. Se bloquean
-          los dominios temporales o recién registrados.
+        integrations_title: Verificar los dominios de los socios en los flujos de trabajo.
+        onboarding_body: Durante el proceso de incorporación de clientes, solo se permiten dominios con DNS verificado, MX activo y buena reputación. Se bloquean los dominios temporales o recién registrados.
         onboarding_context: Incorporación
         onboarding_title: Incorporación segura con dominios de confianza
-        subheading: Desde la prevención del fraude hasta la incorporación de nuevos
-          usuarios, si tiene que ver con un nombre de dominio, esta API lo cubre todo.
+        subheading: Desde la prevención del fraude hasta la incorporación de nuevos usuarios, si tiene que ver con un nombre de dominio, esta API lo cubre todo.
       what_it_does:
-        accuracy_body: Cada respuesta incluye datos WHOIS analizados (registros de
-          propiedad y registro del dominio), estado del DNS (si existen registros
-          de enrutamiento de tráfico), validez del certificado SSL (certificado HTTPS
-          activo), registros MX (configuración del servidor de correo) y una puntuación
-          de reputación, todo ello normalizado en una estructura JSON coherente.
+        accuracy_body: Cada respuesta incluye datos WHOIS analizados (registros de propiedad y registro del dominio), estado del DNS (si existen registros de enrutamiento de tráfico), validez del certificado SSL (certificado HTTPS activo), registros MX (configuración del servidor de correo) y una puntuación de reputación, todo ello normalizado en una estructura JSON coherente.
         accuracy_heading: Exactitud
         heading: "¿Qué hace la API de verificación de dominios?"
-        simplicity_body: 'Basta con una única solicitud POST con tu clave API. Sin
-          SDK, sin configuración, sin ajustes: solo una llamada HTTP y una respuesta
-          JSON.'
+        simplicity_body: 'Basta con una única solicitud POST con tu clave API. Sin SDK, sin configuración, sin ajustes: solo una llamada HTTP y una respuesta JSON.'
         simplicity_heading: Sencillez
-        subheading: 'Un único punto de acceso. Todo lo que necesitas saber sobre un
-          dominio: disponibilidad, propiedad e historial de registro.'
+        subheading: 'Un único punto de acceso. Todo lo que necesitas saber sobre un dominio: disponibilidad, propiedad e historial de registro.'
     email_normalizer:
       api_combinations:
-        domain_benefit: Normalizar el correo electrónico y verificar la salud de su
-          dominio simultáneamente.
-        domain_outcome: 'Correo electrónico canónico combinado con una puntuación
-          de confianza del dominio: mayor confianza antes de contactar con el usuario.'
+        domain_benefit: Normalizar el correo electrónico y verificar la salud de su dominio simultáneamente.
+        domain_outcome: 'Correo electrónico canónico combinado con una puntuación de confianza del dominio: mayor confianza antes de contactar con el usuario.'
         domain_pair: Normalizador de correo electrónico + Verificador de dominio
         heading: Utilizar junto con las API complementarias.
-        phone_benefit: Normaliza el correo electrónico y valida el número de teléfono
-          en el mismo paso.
-        phone_outcome: Datos de contacto consistentes y verificados en ambos canales
-          a partir de una única llamada de incorporación.
+        phone_benefit: Normaliza el correo electrónico y valida el número de teléfono en el mismo paso.
+        phone_outcome: Datos de contacto consistentes y verificados en ambos canales a partir de una única llamada de incorporación.
         phone_pair: Normalizador de correo electrónico + Validador de teléfono
-        subheading: Las API de Requiems están diseñadas para integrarse. Combina Email
-          Normalizer con otros puntos finales para crear un sistema completo de validación
-          de contactos con una sola clave API.
-        validator_benefit: Normalice y luego valide para garantizar una higiene completa
-          del correo electrónico.
-        validator_outcome: 'Correo electrónico limpio y canónico, cuya entrega está
-          confirmada: ideal para procesos de registro e importación.'
+        subheading: Las API de Requiems están diseñadas para integrarse. Combina Email Normalizer con otros puntos finales para crear un sistema completo de validación de contactos con una sola clave API.
+        validator_benefit: Normalice y luego valide para garantizar una higiene completa del correo electrónico.
+        validator_outcome: 'Correo electrónico limpio y canónico, cuya entrega está confirmada: ideal para procesos de registro e importación.'
         validator_pair: Normalizador de correo electrónico + Validador de correo electrónico
       cta:
         body: Una clave API. Normalización de correo electrónico y más en Requiems.
@@ -168,8 +116,7 @@ es:
         error_empty: Introduce una dirección de correo electrónico para normalizar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de
-          nuevo.
+        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         label_change_canonicalised_domain: alias resuelto
         label_change_lowercased: minúsculas
         label_change_removed_dots: puntos eliminados
@@ -182,23 +129,11 @@ es:
         no_changes: ninguno
         submit: Normalizar
       faq:
-        a1: Elimina las etiquetas (por ejemplo, +label), convierte la dirección a
-          minúsculas y elimina las peculiaridades de formato específicas del proveedor
-          para que las variantes de la misma dirección se correspondan con una forma
-          canónica.
-        a2: Sí. Ambos están normalizados. La parte local se convierte a minúsculas
-          y se eliminan los sufijos específicos del proveedor. El dominio se convierte
-          a minúsculas y se resuelve mediante alias cuando es posible.
-        a3: La capitalización se corrige mediante la conversión a minúsculas. Los
-          espacios no son válidos en las direcciones de correo electrónico según la
-          RFC 5321 y se eliminan si están presentes.
-        a4: Sí. Se admiten direcciones de correo electrónico Unicode en dominios internacionalizados.
-          La normalización del dominio aplica la conversión a minúsculas y la resolución
-          de alias; la codificación de los nombres de dominio internacionalizados
-          depende del proveedor de correo subyacente.
-        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede
-          acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte
-          la página de precios para conocer los límites.
+        a1: Elimina las etiquetas (por ejemplo, +label), convierte la dirección a minúsculas y elimina las peculiaridades de formato específicas del proveedor para que las variantes de la misma dirección se correspondan con una forma canónica.
+        a2: Sí. Ambos están normalizados. La parte local se convierte a minúsculas y se eliminan los sufijos específicos del proveedor. El dominio se convierte a minúsculas y se resuelve mediante alias cuando es posible.
+        a3: La capitalización se corrige mediante la conversión a minúsculas. Los espacios no son válidos en las direcciones de correo electrónico según la RFC 5321 y se eliminan si están presentes.
+        a4: Sí. Se admiten direcciones de correo electrónico Unicode en dominios internacionalizados. La normalización del dominio aplica la conversión a minúsculas y la resolución de alias; la codificación de los nombres de dominio internacionalizados depende del proveedor de correo subyacente.
+        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte la página de precios para conocer los límites.
         heading: Preguntas frecuentes
         q1: "¿Qué hace exactamente Email Normalizer?"
         q2: "¿Normaliza el dominio y la parte local?"
@@ -206,68 +141,42 @@ es:
         q4: "¿Funciona con correos electrónicos internacionales?"
         q5: "¿Es gratuita la versión de demostración?"
       hero:
-        subtitle: Normaliza, convierte a minúsculas, recorta y canonicaliza las direcciones
-          de correo electrónico en una sola llamada a la API.
+        subtitle: Normaliza, convierte a minúsculas, recorta y canonicaliza las direcciones de correo electrónico en una sola llamada a la API.
         title: Limpia automáticamente las direcciones de correo electrónico, siempre.
       show:
-        free_email_normalizer_lowercase_trim: 'Normalizador de correo electrónico
-          gratuito: convierte a minúsculas, recorta y canonicaliza direcciones de
-          correo electrónico | API de Requiems'
+        free_email_normalizer_lowercase_trim: 'Normalizador de correo electrónico gratuito: convierte a minúsculas, recorta y canonicaliza direcciones de correo electrónico | API de Requiems'
       use_cases:
         analytics_context: Analítica
-        analytics_desc: Estandarice los datos en el punto de captura. Mantenga la
-          coherencia en los análisis y la segmentación, independientemente de cómo
-          los usuarios escriban su dirección.
+        analytics_desc: Estandarice los datos en el punto de captura. Mantenga la coherencia en los análisis y la segmentación, independientemente de cómo los usuarios escriban su dirección.
         analytics_title: Normalizar los correos electrónicos de registro para análisis
         crm_dedup_context: CRM / Datos
-        crm_dedup_desc: Utilice el formato normalizado como clave de deduplicación.
-          Identifique las cuentas que pertenecen a la misma persona en diferentes
-          formatos de correo electrónico.
+        crm_dedup_desc: Utilice el formato normalizado como clave de deduplicación. Identifique las cuentas que pertenecen a la misma persona en diferentes formatos de correo electrónico.
         crm_dedup_title: Combinar cuentas duplicadas con correos electrónicos normalizados
         crm_dup_context: CRM / Datos
-        crm_dup_desc: Deja de tratar las variantes de correo electrónico como contactos
-          separados. La normalización reduce el número excesivo de contactos y mejora
-          la higiene de las listas.
+        crm_dup_desc: Deja de tratar las variantes de correo electrónico como contactos separados. La normalización reduce el número excesivo de contactos y mejora la higiene de las listas.
         crm_dup_title: Reduzca los duplicados falsos en CRM.
         heading: Problemas reales, usuarios reales.
         import_context: Importación de datos
-        import_desc: Normaliza los correos electrónicos antes de importarlos masivamente
-          a tu base de datos. Evita que las variaciones de formato creen registros
-          duplicados.
+        import_desc: Normaliza los correos electrónicos antes de importarlos masivamente a tu base de datos. Evita que las variaciones de formato creen registros duplicados.
         import_title: Estandarizar los datos de correo electrónico antes de la importación.
         integrations_context: Integraciones
-        integrations_desc: Normalice antes de realizar búsquedas entre sistemas. Asegúrese
-          de que User.Name@Gmail.com y username@gmail.com coincidan como la misma
-          identidad.
-        integrations_title: Mejorar la coincidencia de correos electrónicos en todos
-          los sistemas.
+        integrations_desc: Normalice antes de realizar búsquedas entre sistemas. Asegúrese de que User.Name@Gmail.com y username@gmail.com coincidan como la misma identidad.
+        integrations_title: Mejorar la coincidencia de correos electrónicos en todos los sistemas.
         outreach_context: Marketing por correo electrónico
-        outreach_desc: Procesa tu lista con el normalizador antes de enviarla. Detecta
-          los rebotes causados por variaciones antes de que afecten la reputación
-          del remitente.
-        outreach_title: Limpia tus registros de correo electrónico antes de contactar
-          con otras personas.
-        subheading: Email Normalizer es ideal para cualquier aplicación donde la calidad
-          de los datos de contacto sea importante.
+        outreach_desc: Procesa tu lista con el normalizador antes de enviarla. Detecta los rebotes causados por variaciones antes de que afecten la reputación del remitente.
+        outreach_title: Limpia tus registros de correo electrónico antes de contactar con otras personas.
+        subheading: Email Normalizer es ideal para cualquier aplicación donde la calidad de los datos de contacto sea importante.
       what_it_does:
         clean_data_badge: Datos limpios
-        clean_data_body: La API elimina los espacios en blanco, convierte la dirección
-          a minúsculas, corrige los alias de proveedor comunes y devuelve un correo
-          electrónico canónico, de modo que todas las direcciones almacenadas en su
-          sistema sean coherentes.
-        clean_data_heading: Normaliza la entrada de correo electrónico con una sola
-          llamada.
+        clean_data_body: La API elimina los espacios en blanco, convierte la dirección a minúsculas, corrige los alias de proveedor comunes y devuelve un correo electrónico canónico, de modo que todas las direcciones almacenadas en su sistema sean coherentes.
+        clean_data_heading: Normaliza la entrada de correo electrónico con una sola llamada.
         integration_badge: Integración
-        integration_body: Envía una solicitud POST a /v1/validation/email-normalize
-          con el correo electrónico en el cuerpo y tu clave API en el encabezado.
-          No se requiere SDK.
+        integration_body: Envía una solicitud POST a /v1/validation/email-normalize con el correo electrónico en el cuerpo y tu clave API en el encabezado. No se requiere SDK.
         integration_heading: 'Una petición: normalización instantánea.'
-        post_v1_validation_email_normalize_200: POST /v1/validation/email-normalize
-          → 200 OK
+        post_v1_validation_email_normalize_200: POST /v1/validation/email-normalize → 200 OK
     email_validator:
       api_combinations:
-        email_validator_works_even_better_when: Email Validator funciona aún mejor
-          cuando se combina con otras API de Requiems.
+        email_validator_works_even_better_when: Email Validator funciona aún mejor cuando se combina con otras API de Requiems.
         heading: Utilizar junto con las API complementarias.
       demo:
         badge_disposable: "✗ Desechable"
@@ -280,8 +189,7 @@ es:
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_network: No se pudo acceder a la API. Compruebe su conexión.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de
-          nuevo.
+        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         label_disposable: Dominio desechable
         label_domain: Dominio
         label_mx_record: MX Record
@@ -295,71 +203,49 @@ es:
       hero:
         get_api_key: Obtén la clave API
         read_the_docs: Lee la documentación
-        syntax_check_live_mx_lookup_disposable: Verificación de sintaxis, búsqueda
-          MX en tiempo real, detección de elementos desechables y corrección de errores
-          tipográficos, todo en una sola llamada a la API.
+        syntax_check_live_mx_lookup_disposable: Verificación de sintaxis, búsqueda MX en tiempo real, detección de elementos desechables y corrección de errores tipográficos, todo en una sola llamada a la API.
         verify: Verificar
       show:
-        description: 'Valida cualquier dirección de correo electrónico al instante.
-          Verificación de sintaxis RFC 5322, consulta de registros MX en tiempo real,
-          detección de dominios desechables y corrección de errores tipográficos:
-          gratis, sin necesidad de cuenta.'
-        free_email_validator_syntax_mx_record: 'Validador de correo electrónico gratuito:
-          comprobación de sintaxis, registro MX y comprobación de correo desechable
-          | API de Requiems'
+        description: 'Valida cualquier dirección de correo electrónico al instante. Verificación de sintaxis RFC 5322, consulta de registros MX en tiempo real, detección de dominios desechables y corrección de errores tipográficos: gratis, sin necesidad de cuenta.'
+        free_email_validator_syntax_mx_record: 'Validador de correo electrónico gratuito: comprobación de sintaxis, registro MX y comprobación de correo desechable | API de Requiems'
       use_cases:
         conversion: Conversión
-        email_validator_fits_wherever_contact: Email Validator es ideal para cualquier
-          aplicación donde la calidad de los datos de contacto sea importante.
+        email_validator_fits_wherever_contact: Email Validator es ideal para cualquier aplicación donde la calidad de los datos de contacto sea importante.
         growth: Crecimiento
         heading: Problemas reales, usuarios reales.
         marketing: Marketing
         operations: Operaciones
       what_it_does:
-        accurate_and_fast_every_single_check: 'Precisión y rapidez: en cada una de
-          las comprobaciones.'
+        accurate_and_fast_every_single_check: 'Precisión y rapidez: en cada una de las comprobaciones.'
         fast_uncomplicated_easy_to_integrate: Rápido, sencillo y fácil de integrar.
         post_v1_validation_email_200_ok: POST /v1/validation/email → 200 OK
     index:
       interactive_api_tools: Herramientas API interactivas
-      one_api_key_unlocks_all_tools_plus_50: Una sola clave API desbloquea todas las
-        herramientas, además de más de 50 API adicionales en áreas como validación,
-        finanzas, redes y mucho más.
+      one_api_key_unlocks_all_tools_plus_50: Una sola clave API desbloquea todas las herramientas, además de más de 50 API adicionales en áreas como validación, finanzas, redes y mucho más.
       tools_requiems_api: Herramientas — API de Requiems
     phone_validator:
       api_combinations:
-        domain_checker_benefit: Verifica el número de teléfono y comprueba la reputación
-          del dominio al mismo tiempo.
+        domain_checker_benefit: Verifica el número de teléfono y comprueba la reputación del dominio al mismo tiempo.
         domain_checker_name: Validador de teléfono + Verificador de dominio
-        domain_checker_outcome: Confianza en la identidad en múltiples puntos (teléfono
-          confirmado, dominio seguro) para registros de alto riesgo.
-        email_normalizer_benefit: Normalizar el correo electrónico y validar el teléfono
-          simultáneamente.
+        domain_checker_outcome: Confianza en la identidad en múltiples puntos (teléfono confirmado, dominio seguro) para registros de alto riesgo.
+        email_normalizer_benefit: Normalizar el correo electrónico y validar el teléfono simultáneamente.
         email_normalizer_name: Validador de teléfono + Normalizador de correo electrónico
-        email_normalizer_outcome: Datos de contacto consistentes y verificados en
-          ambos canales a partir de una única llamada a la API.
-        email_validator_benefit: Valida el número de teléfono y el correo electrónico
-          en el mismo paso del proceso de incorporación.
+        email_normalizer_outcome: Datos de contacto consistentes y verificados en ambos canales a partir de una única llamada a la API.
+        email_validator_benefit: Valida el número de teléfono y el correo electrónico en el mismo paso del proceso de incorporación.
         email_validator_name: Validador de teléfono + Validador de correo electrónico
-        email_validator_outcome: 'Antes de conceder el acceso, deberá realizar una
-          verificación completa de los datos de contacto: teléfono de contacto y correo
-          electrónico válido.'
+        email_validator_outcome: 'Antes de conceder el acceso, deberá realizar una verificación completa de los datos de contacto: teléfono de contacto y correo electrónico válido.'
         heading: Combínalo con otras API
         label_benefit: 'Beneficio:'
         label_outcome: 'Resultado:'
-        subheading: Combine Phone Validator con otras API de Requiems para integrar
-          la validación multipunto en un único flujo de trabajo.
+        subheading: Combine Phone Validator con otras API de Requiems para integrar la validación multipunto en un único flujo de trabajo.
       cta:
-        body: Una sola clave API. Validación telefónica, verificación de correo electrónico,
-          comprobación de dominio y más de 50 API adicionales en áreas como validación,
-          redes, finanzas y mucho más.
+        body: Una sola clave API. Validación telefónica, verificación de correo electrónico, comprobación de dominio y más de 50 API adicionales en áreas como validación, redes, finanzas y mucho más.
         heading: Automatiza esto con Requiems.
       demo:
         error_empty: Introduce un número de teléfono para validar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Se ha alcanzado el límite de solicitudes. Espere un momento
-          e inténtelo de nuevo.
+        error_rate_limit: Se ha alcanzado el límite de solicitudes. Espere un momento e inténtelo de nuevo.
         label_carrier: Transportador
         label_country: País
         label_formatted: Formateado
@@ -368,23 +254,11 @@ es:
         label_voip: VoIP
         result_failed_heading: La validación falló.
       faq:
-        a1: Devuelve si el número es válido y accesible, el país y el código de país,
-          el nombre del operador, el tipo de línea (móvil, fija, VoIP, gratuita o
-          de tarificación especial) y el número formateado según el estándar E.164
-          y los estándares locales.
-        a2: Sí. Admite números de teléfono de más de 200 países y territorios. Introduce
-          el número en formato E.164 con el código de país, o deja que la API detecte
-          el país a partir del patrón del número.
-        a3: Sí. El campo line_type distingue entre números móviles, fijos, VoIP, gratuitos
-          y de tarificación especial. Úselo para marcar los números virtuales o desechables
-          para la detección de fraude.
-        a4: La detección de operadores se obtiene de bases de datos globales y es
-          precisa para la mayoría de los principales operadores de Norteamérica, Europa
-          y Asia. La precisión puede variar para los operadores móviles virtuales
-          (OMV) y los operadores regionales más pequeños.
-        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede
-          acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte
-          la página de precios para conocer los límites.
+        a1: Devuelve si el número es válido y accesible, el país y el código de país, el nombre del operador, el tipo de línea (móvil, fija, VoIP, gratuita o de tarificación especial) y el número formateado según el estándar E.164 y los estándares locales.
+        a2: Sí. Admite números de teléfono de más de 200 países y territorios. Introduce el número en formato E.164 con el código de país, o deja que la API detecte el país a partir del patrón del número.
+        a3: Sí. El campo line_type distingue entre números móviles, fijos, VoIP, gratuitos y de tarificación especial. Úselo para marcar los números virtuales o desechables para la detección de fraude.
+        a4: La detección de operadores se obtiene de bases de datos globales y es precisa para la mayoría de los principales operadores de Norteamérica, Europa y Asia. La precisión puede variar para los operadores móviles virtuales (OMV) y los operadores regionales más pequeños.
+        a5: La demostración interactiva no requiere cuenta. Tras registrarse, puede acceder a un plan gratuito con un límite de solicitudes mensuales. Consulte la página de precios para conocer los límites.
         heading: Preguntas frecuentes
         q1: "¿Qué información devuelve Phone Validator?"
         q2: "¿Funciona con números de teléfono internacionales?"
@@ -401,316 +275,270 @@ es:
         no_account: No se requiere cuenta
         placeholder: "+14155552671"
         submit: Validar
-        subtitle: 'Búsqueda de operador, detección de tipo de línea, normalización
-          de formato y análisis de código de país: todo ello mediante una única llamada
-          a la API.'
+        subtitle: 'Búsqueda de operador, detección de tipo de línea, normalización de formato y análisis de código de país: todo ello mediante una única llamada a la API.'
         title: Validar números de teléfono
         title_highlight: en tiempo real
         try_live: Pruébalo en vivo
       show:
-        phone_validator_carrier_lookup_line: 'Validador de teléfono: búsqueda de operador,
-          tipo de línea y normalización de formato | API de Requiems'
+        phone_validator_carrier_lookup_line: 'Validador de teléfono: búsqueda de operador, tipo de línea y normalización de formato | API de Requiems'
       use_cases:
-        auth_body: Asegúrese de que cada número de teléfono sea real, accesible y
-          tenga el formato correcto antes de aceptarlo durante el registro del usuario.
+        auth_body: Asegúrese de que cada número de teléfono sea real, accesible y tenga el formato correcto antes de aceptarlo durante el registro del usuario.
         auth_context: Autenticación / Registro
         auth_title: Verifique los números de teléfono al registrarse.
-        fraud_body: Marcar los números de teléfono desechables o virtuales utilizados
-          por personas malintencionadas. Bloquear los tipos de líneas de alto riesgo
-          durante operaciones delicadas.
+        fraud_body: Marcar los números de teléfono desechables o virtuales utilizados por personas malintencionadas. Bloquear los tipos de líneas de alto riesgo durante operaciones delicadas.
         fraud_context: Prevención del fraude
         fraud_title: Detectar VoIP y números virtuales
         heading: Validar números de teléfono en cualquier flujo de trabajo
-        integrations_body: Normalice y valide los números de teléfono proporcionados
-          por sus socios antes de que ingresen a sus sistemas CRM, de facturación
-          o de soporte.
+        integrations_body: Normalice y valide los números de teléfono proporcionados por sus socios antes de que ingresen a sus sistemas CRM, de facturación o de soporte.
         integrations_context: Integraciones
         integrations_title: Validar los datos telefónicos en los flujos de trabajo.
-        onboarding_body: Convierte automáticamente los números de teléfono de cualquier
-          país al formato E.164. Un formato uniforme para todos tus usuarios.
+        onboarding_body: Convierte automáticamente los números de teléfono de cualquier país al formato E.164. Un formato uniforme para todos tus usuarios.
         onboarding_context: Incorporación
         onboarding_title: Estandarizar los números internacionales
-        sms_body: Filtra los tipos de línea exclusivamente móvil antes de enviar SMS.
-          Reduce los mensajes no entregados y protege la reputación del remitente.
+        sms_body: Filtra los tipos de línea exclusivamente móvil antes de enviar SMS. Reduce los mensajes no entregados y protege la reputación del remitente.
         sms_context: Marketing por SMS
         sms_title: Confirmar los números de teléfono móvil para las campañas.
-        subheading: Desde la prevención del fraude hasta la incorporación de nuevos
-          usuarios, si implica un número de teléfono, esta API lo cubre todo.
-        support_body: Identifica el operador y el país a partir del número de teléfono
-          entrante durante las llamadas de soporte. Dirige la llamada al equipo correcto
-          al instante.
+        subheading: Desde la prevención del fraude hasta la incorporación de nuevos usuarios, si implica un número de teléfono, esta API lo cubre todo.
+        support_body: Identifica el operador y el país a partir del número de teléfono entrante durante las llamadas de soporte. Dirige la llamada al equipo correcto al instante.
         support_context: Apoyo
         support_title: Consulta la información de la persona que llama en tiempo real.
       what_it_does:
-        accuracy_body: Cada respuesta incluye la detección del país y la región, el
-          nombre del operador, la clasificación del tipo de línea (móvil, fija, VoIP)
-          y el número de teléfono formateado según el estándar internacional E.164,
-          todo ello normalizado en una estructura JSON coherente.
+        accuracy_body: Cada respuesta incluye la detección del país y la región, el nombre del operador, la clasificación del tipo de línea (móvil, fija, VoIP) y el número de teléfono formateado según el estándar internacional E.164, todo ello normalizado en una estructura JSON coherente.
         accuracy_heading: Exactitud
         heading: "¿Qué hace la API de validación de teléfonos?"
-        simplicity_body: 'Basta con una única solicitud GET con tu clave API. Sin
-          SDK, sin configuración, sin ajustes: solo una llamada HTTP y una respuesta
-          JSON.'
+        simplicity_body: 'Basta con una única solicitud GET con tu clave API. Sin SDK, sin configuración, sin ajustes: solo una llamada HTTP y una respuesta JSON.'
         simplicity_heading: Sencillez
-        subheading: 'Un único punto de acceso. Todo lo que necesitas saber sobre un
-          número de teléfono: validez, operador, tipo de línea y formato normalizado.'
+        subheading: 'Un único punto de acceso. Todo lo que necesitas saber sobre un número de teléfono: validez, operador, tipo de línea y formato normalizado.'
     bin_lookup:
       seo:
-        title: "TODO: translate"
-        description: "TODO: translate"
+        title: "Consulta gratuita del BIN: esquema de tarjeta, banco emisor y país | Requiems API"
+        description: "Consulta al instante cualquier número de identificación bancaria. Obtén información sobre la red, el tipo, el banco emisor, el país y el estado de prepago de cualquier tarjeta de pago (de forma gratuita y sin necesidad de crear una cuenta)."
       logo_marquee:
-        trusted_by: "TODO: translate"
+        trusted_by: "Con la confianza de los equipos en"
       demo:
-        error_empty: "TODO: translate"
-        error_invalid: "TODO: translate"
-        error_rate_limit: "TODO: translate"
-        error_generic: "TODO: translate"
-        error_no_data: "TODO: translate"
-        badge_found: "TODO: translate"
-        badge_yes: "TODO: translate"
-        badge_no: "TODO: translate"
-        label_scheme: "TODO: translate"
-        label_card_type: "TODO: translate"
-        label_card_level: "TODO: translate"
-        label_issuer_name: "TODO: translate"
-        label_issuer_url: "TODO: translate"
-        label_country: "TODO: translate"
-        label_prepaid: "TODO: translate"
-        label_luhn: "TODO: translate"
-        label_confidence: "TODO: translate"
+        error_empty: "Introduzca un BIN de 6 a 8 dígitos para realizar la búsqueda."
+        error_invalid: "Introduzca un BIN numérico válido de 6 a 8 dígitos (por ejemplo, 424242)."
+        error_rate_limit: "Demasiadas solicitudes. Espere un momento e inténtelo de nuevo."
+        error_generic: "Algo salió mal. Inténtalo de nuevo."
+        error_no_data: "No se encontraron datos para ese BIN."
+        badge_found: "Encontró"
+        badge_yes: "✓ Sí"
+        badge_no: "✗ No"
+        label_scheme: "Red de tarjetas"
+        label_card_type: "Tipo de tarjeta"
+        label_card_level: "Nivel de tarjeta"
+        label_issuer_name: "Banco emisor"
+        label_issuer_url: "Sitio web del banco"
+        label_country: "País"
+        label_prepaid: "Pagado"
+        label_luhn: "Luhn válido"
+        label_confidence: "Confianza"
       hero:
-        title: "TODO: translate"
-        subtitle: "TODO: translate"
-        cta_primary: "TODO: translate"
-        cta_docs: "TODO: translate"
-        placeholder: "TODO: translate"
-        submit: "TODO: translate"
-        no_account: "TODO: translate"
-        label_input: "TODO: translate"
+        title: "Conozca la tarjeta antes de procesar el pago."
+        subtitle: "Red de tarjetas, tipo, banco emisor y país: a partir de los primeros 6-8 dígitos de cualquier tarjeta de pago, en una sola llamada a la API."
+        cta_primary: "Obtén la clave API"
+        cta_docs: "Lee la documentación"
+        placeholder: "Introduzca un BIN de 6 a 8 dígitos (por ejemplo, 424242)."
+        submit: "Buscar"
+        no_account: "No se requiere cuenta para la demostración."
+        label_input: "Número BIN"
       what_it_does:
-        coverage_badge: "TODO: translate"
-        coverage_heading: "TODO: translate"
-        coverage_body: "TODO: translate"
-        simplicity_badge: "TODO: translate"
-        simplicity_heading: "TODO: translate"
-        simplicity_body: "TODO: translate"
+        coverage_badge: "Cobertura"
+        coverage_heading: "Más de 500.000 BINs procedentes de múltiples fuentes agregadas."
+        coverage_body: "La función de búsqueda de BIN abarca Visa, Mastercard, Amex, Discover, UnionPay y otras tarjetas. Cada registro incluye la red de la tarjeta, el tipo, el nivel, el nombre y la URL del banco emisor, el país emisor, el indicador de prepago y un índice de confianza. Se admiten BIN de 6 y 8 dígitos según la norma ISO 7812-1:2017."
+        simplicity_badge: "Sencillez"
+        simplicity_heading: "Una solicitud GET. Sin cuerpo, sin análisis."
+        simplicity_body: "Incluya el BIN en la ruta de la URL. Su clave API en el encabezado. Sin SDK, sin configuración, sin cuerpo de solicitud. La respuesta es JSON plano: léala directamente sin desenrollar estructuras anidadas."
       use_cases:
-        heading: "TODO: translate"
-        subheading: "TODO: translate"
-        ux_title: "TODO: translate"
-        ux_desc: "TODO: translate"
-        ux_tags: "TODO: translate"
-        risk_title: "TODO: translate"
-        risk_desc: "TODO: translate"
-        risk_tags: "TODO: translate"
-        type_title: "TODO: translate"
-        type_desc: "TODO: translate"
-        type_tags: "TODO: translate"
-        prepaid_title: "TODO: translate"
-        prepaid_desc: "TODO: translate"
-        prepaid_tags: "TODO: translate"
-        enrich_title: "TODO: translate"
-        enrich_desc: "TODO: translate"
-        enrich_tags: "TODO: translate"
-        score_title: "TODO: translate"
-        score_desc: "TODO: translate"
-        score_tags: "TODO: translate"
+        heading: "Diseñado para flujos de pago."
+        subheading: "La función de búsqueda BIN se adapta a cualquier ámbito donde los metadatos de la tarjeta sean importantes: en el proceso de pago, en la detección de fraudes y en las operaciones."
+        ux_title: "Mostrar el logotipo de la tarjeta mientras el usuario escribe."
+        ux_desc: "Detecta la red de la tarjeta a partir de los primeros 6 dígitos y muestra el logotipo de la marca correcta en tiempo real, antes de que el usuario termine de introducir el número de la tarjeta."
+        ux_tags: "Experiencia de usuario en el proceso de pago"
+        risk_title: "Bloquear los orígenes de tarjetas de alto riesgo"
+        risk_desc: "Rechace o marque las tarjetas emitidas en países restringidos en el momento del pago, antes de que se intente realizar cualquier cargo."
+        risk_tags: "Prevención del fraude, Cumplimiento normativo"
+        type_title: "Valida el tipo de tarjeta al finalizar la compra."
+        type_desc: "Algunos productos solo aceptan tarjeta de débito o solo tarjeta de crédito. Verifique el tipo de tarjeta al ingresar y muestre un mensaje claro antes de que el usuario envíe el formulario."
+        type_tags: "Pagos, Procesos de pago"
+        prepaid_title: "Marcar tarjetas prepago para flujos de suscripción"
+        prepaid_desc: "Las tarjetas prepago suelen fallar en los cargos recurrentes. Detecte estos fallos con antelación e indique al usuario que utilice otra tarjeta."
+        prepaid_tags: "Suscripciones, Facturación"
+        enrich_title: "Enriquezca los registros de pago con datos del emisor."
+        enrich_desc: "Adjunte el nombre del banco y el país a cada registro de transacción para los flujos de trabajo de informes, conciliación y disputas."
+        enrich_tags: "Operaciones, Finanzas"
+        score_title: "Califica el riesgo de la transacción por BIN"
+        score_desc: "Combine los metadatos BIN con otras señales (ubicación IP, huella digital del dispositivo) para generar una puntuación de fraude compuesta por transacción."
+        score_tags: "Evaluación de riesgos, prevención del fraude"
       api_combinations:
-        heading: "TODO: translate"
-        subheading: "TODO: translate"
-        ip_pair: "TODO: translate"
-        ip_benefit: "TODO: translate"
-        iban_pair: "TODO: translate"
-        iban_benefit: "TODO: translate"
-        email_pair: "TODO: translate"
-        email_benefit: "TODO: translate"
+        heading: "Utilizar junto con las API complementarias."
+        subheading: "La función de búsqueda BIN funciona aún mejor cuando se combina con otros Requiems API."
+        ip_pair: "Búsqueda de BIN + Reputación de IP"
+        ip_benefit: "Comparar el país emisor de la tarjeta con la ubicación IP del usuario para detectar discrepancias y reducir las devoluciones de cargo."
+        iban_pair: "Búsqueda de BIN + Validador IBAN"
+        iban_benefit: "Valida tanto los datos de la tarjeta como los de la cuenta bancaria en el mismo proceso de incorporación para garantizar una cobertura completa de los instrumentos de pago."
+        email_pair: "Búsqueda de BIN + Validador de correo electrónico"
+        email_benefit: "Combine la verificación de la tarjeta de pago con la validación del correo electrónico para generar una señal de fraude más sólida al registrarse o al finalizar la compra."
       faq:
-        heading: "TODO: translate"
-        support_prompt: "TODO: translate"
-        support_link: "TODO: translate"
-        q1: "TODO: translate"
-        a1: "TODO: translate"
-        q2: "TODO: translate"
-        a2: "TODO: translate"
-        q3: "TODO: translate"
-        a3: "TODO: translate"
-        q4: "TODO: translate"
-        a4: "TODO: translate"
-        q5: "TODO: translate"
-        a5: "TODO: translate"
+        heading: "Preguntas frecuentes"
+        support_prompt: "¿Aún tienes preguntas?"
+        support_link: "Contacta con soporte"
+        q1: "¿Qué es un BIN?"
+        a1: "El BIN (Número de Identificación Bancaria), también llamado IIN (Número de Identificación del Emisor), son los primeros 6 a 8 dígitos de una tarjeta de pago. Identifica la red de la tarjeta (Visa, Mastercard, etc.), el banco emisor, el tipo de tarjeta (crédito/débito) y el país de emisión."
+        q2: "¿La API admite BIN de 8 dígitos?"
+        a2: "Sí. El punto final acepta prefijos de 6 a 8 dígitos. Para entradas de 8 dígitos, primero intenta una coincidencia exacta y, si no encuentra ningún registro de 8 dígitos, recurre al prefijo de 6 dígitos."
+        q3: "¿Qué significa el índice de confianza?"
+        a3: "El indicador de confianza (0,00–1,00) refleja la calidad de los datos. Los registros confirmados a través de múltiples fuentes de datos independientes obtienen una puntuación más alta. Una puntuación superior a 0,85 indica datos de alta confianza, con información bancaria y de país verificada a partir de más de una fuente."
+        q4: "¿Por qué a veces el campo issuer_name está vacío?"
+        a4: "No todos los BIN del conjunto de datos público tienen información asociada del nombre del banco. El índice de confianza será menor para estos registros. Los campos de cadena vacía indican que los datos no están disponibles para ese BIN."
+        q5: "¿Es de uso gratuito?"
+        a5: "La demostración anterior funciona sin necesidad de una cuenta. Existen planes de pago para escalado a producción con límites de uso más altos y acceso completo a la API."
       cta:
-        heading: "TODO: translate"
-        body: "TODO: translate"
-
+        heading: "Automatiza esto con Requiems."
+        body: "Una clave API. Búsqueda de BIN, además de más de 50 API adicionales en áreas como validación, finanzas, redes y mucho más."
     inflation:
       demo:
-        error_empty: "TODO: translate"
-        error_invalid: "TODO: translate"
-        error_rate_limit: "TODO: translate"
-        error_generic: "TODO: translate"
-        error_no_data: "TODO: translate"
-        badge_live: "TODO: translate"
-        label_annual_cpi: "TODO: translate"
-        label_historical: "TODO: translate"
+        error_empty: "Introduzca un código de país de 2 letras (por ejemplo, EE. UU.)."
+        error_invalid: "Introduzca un código de país ISO válido, por ejemplo, EE. UU., GB, DE."
+        error_rate_limit: "Demasiadas solicitudes. Espere un momento e inténtelo de nuevo."
+        error_generic: "Algo salió mal. Inténtalo de nuevo."
+        error_no_data: "No se encontraron datos de inflación para ese país."
+        badge_live: "Vivir"
+        label_annual_cpi: "Inflación anual del IPC —"
+        label_historical: "Tasas históricas"
       seo:
-        title: "TODO: translate"
-        description: "TODO: translate"
+        title: "API gratuita de tasa de inflación: datos del IPC para 241 países | Requiems API"
+        description: "Consulta las tasas de inflación del IPC actuales e históricas de cualquiera de los 241 países. Información proporcionada por el Banco Mundial. Acceso gratuito disponible; no se requiere tarjeta de crédito."
       logo_marquee:
-        trusted_by: "TODO: translate"
+        trusted_by: "Con la confianza de los equipos en"
       hero:
-        title: "TODO: translate"
-        subtitle: "TODO: translate"
-        cta_primary: "TODO: translate"
-        cta_docs: "TODO: translate"
-        try_live: "TODO: translate"
-        placeholder: "TODO: translate"
-        submit: "TODO: translate"
-        no_account: "TODO: translate"
-        label_input: "TODO: translate"
+        title: "Índice de precios al consumidor (IPC) para cualquier país, al instante."
+        subtitle: "Tasa actual y datos históricos de 10 años para 241 países, obtenidos del Banco Mundial, en una sola llamada a la API."
+        cta_primary: "Obtén la clave API"
+        cta_docs: "Lee la documentación"
+        try_live: "Pruébalo en vivo"
+        placeholder: "Introduzca un código de país de 2 letras (por ejemplo, EE. UU.)."
+        submit: "Buscar"
+        no_account: "No se requiere cuenta para la demostración."
+        label_input: "Código del país"
       what_it_does:
-        heading: "TODO: translate"
-        subheading: "TODO: translate"
-        coverage_heading: "TODO: translate"
-        coverage_body: "TODO: translate"
-        simplicity_heading: "TODO: translate"
-        simplicity_body: "TODO: translate"
+        heading: "¿Qué hace la API de Inflation?"
+        subheading: "Un único punto de acceso. Tasa de IPC actual y hasta 10 años de historial para cualquiera de los 241 países, normalizados en una estructura JSON consistente."
+        coverage_heading: "Cobertura"
+        coverage_body: "Cubre 241 países y territorios, con datos del indicador FP.CPI.TOTL.ZG del Banco Mundial, considerado el referente en datos de inflación del IPC. Cada respuesta incluye la tasa anual más reciente y datos de hasta 10 años anteriores, lo que permite visualizar las tendencias sin necesidad de realizar múltiples consultas."
+        simplicity_heading: "Sencillez"
+        simplicity_body: "Ingresa un código de país ISO de dos letras y obtén un JSON estructurado. No es necesario registrarse para la demostración. Para producción, solo necesitas una clave API: sin SDK, sin configuración, sin tener que extraer manualmente los datos de las páginas del Banco Mundial."
       use_cases:
-        heading: "TODO: translate"
-        subheading: "TODO: translate"
-        finance_context: "TODO: translate"
-        finance_title: "TODO: translate"
-        finance_body: "TODO: translate"
-        risk_context: "TODO: translate"
-        risk_title: "TODO: translate"
-        risk_body: "TODO: translate"
-        ecommerce_context: "TODO: translate"
-        ecommerce_title: "TODO: translate"
-        ecommerce_body: "TODO: translate"
-        research_context: "TODO: translate"
-        research_title: "TODO: translate"
-        research_body: "TODO: translate"
-        education_context: "TODO: translate"
-        education_title: "TODO: translate"
-        education_body: "TODO: translate"
-        lending_context: "TODO: translate"
-        lending_title: "TODO: translate"
-        lending_body: "TODO: translate"
+        heading: "Utilice los datos de inflación en cualquier flujo de trabajo."
+        subheading: "Desde la modelización financiera hasta la fijación de precios en el comercio electrónico, si tiene que ver con datos macroeconómicos, la API de inflación lo cubre todo."
+        finance_context: "Finanzas"
+        finance_title: "Rentabilidad histórica ajustada a la inflación"
+        finance_body: "Obtenga los índices de precios al consumidor (IPC) de cualquier país y aplíquelos a los datos históricos de la cartera para calcular la rentabilidad real (ajustada a la inflación)."
+        risk_context: "Análisis de riesgos"
+        risk_title: "Marcar mercados con alta inflación"
+        risk_body: "Integrar los datos del IPC en los modelos de riesgo país. Identificar automáticamente los mercados donde la inflación supere un umbral configurable."
+        ecommerce_context: "Comercio electrónico"
+        ecommerce_title: "Localizar los precios de forma dinámica"
+        ecommerce_body: "Utilice datos de inflación actuales e históricos como referencia para tomar decisiones sobre precios al ingresar o modificar los precios en los mercados internacionales."
+        research_context: "Investigación"
+        research_title: "Paneles de control económicos de energía"
+        research_body: "Crea gráficos y herramientas de comparación sin necesidad de extraer datos del Banco Mundial. Obtén datos JSON limpios y estructurados de 241 países con una sola llamada."
+        education_context: "Educación"
+        education_title: "Enseñar macroeconomía de forma interactiva"
+        education_body: "Proporcione a los estudiantes datos reales y actualizados del IPC de cualquier país para que los utilicen en ejercicios, modelos y comparaciones entre países."
+        lending_context: "Préstamo"
+        lending_title: "Incluya la inflación en las decisiones crediticias."
+        lending_body: "Enriquecer los perfiles de los prestatarios con información sobre el entorno inflacionario de su país para ajustar la calificación de riesgo en los préstamos internacionales."
       api_combinations:
-        heading: "TODO: translate"
-        subheading: "TODO: translate"
-        label_benefit: "TODO: translate"
-        label_outcome: "TODO: translate"
-        bin_pair: "TODO: translate"
-        bin_benefit: "TODO: translate"
-        bin_outcome: "TODO: translate"
-        currency_pair: "TODO: translate"
-        currency_benefit: "TODO: translate"
-        currency_outcome: "TODO: translate"
-        ip_pair: "TODO: translate"
-        ip_benefit: "TODO: translate"
-        ip_outcome: "TODO: translate"
+        heading: "Utilizar junto con las API complementarias."
+        subheading: "La API de inflación funciona aún mejor cuando se combina con otros Requiems API."
+        label_benefit: "Beneficio:"
+        label_outcome: "Resultado:"
+        bin_pair: "Inflación + Búsqueda BIN"
+        bin_benefit: "Combine el IPC del país del titular de la tarjeta con el origen de la tarjeta de pago."
+        bin_outcome: "Señale las transacciones procedentes de mercados con alta inflación donde el riesgo de fraude con tarjetas es elevado."
+        currency_pair: "Inflación + Cambio de divisas"
+        currency_benefit: "Superponga los tipos de cambio reales sobre los datos de inflación."
+        currency_outcome: "Elabore modelos de paridad del poder adquisitivo que tengan en cuenta tanto las fluctuaciones monetarias como los cambios en los precios locales."
+        ip_pair: "Inflación + geolocalización IP"
+        ip_benefit: "Detecta automáticamente el país del usuario y, a continuación, obtiene su IPC."
+        ip_outcome: "Ofrecer precios ajustados a la inflación o información del mercado local sin necesidad de que el usuario seleccione su país."
       faq:
-        heading: "TODO: translate"
-        support_prompt: "TODO: translate"
-        support_link: "TODO: translate"
-        q1: "TODO: translate"
-        a1: "TODO: translate"
-        q2: "TODO: translate"
-        a2: "TODO: translate"
-        q3: "TODO: translate"
-        a3: "TODO: translate"
-        q4: "TODO: translate"
-        a4: "TODO: translate"
-        q5: "TODO: translate"
-        a5: "TODO: translate"
+        heading: "Preguntas frecuentes"
+        support_prompt: "¿Aún tienes preguntas?"
+        support_link: "Contacta con soporte"
+        q1: "¿Con qué frecuencia se actualizan los datos?"
+        a1: "Los datos provienen del Banco Mundial y se actualizan anualmente cuando se publican nuevas cifras, generalmente a mediados del año calendario anterior. La API siempre devuelve los datos más recientes disponibles."
+        q2: "¿Qué representa la tasa?"
+        a2: "La tasa representa la variación porcentual anual del Índice de Precios al Consumidor (IPC), según el indicador FP.CPI.TOTL.ZG del Banco Mundial. Una tasa de 8,0 indica que los precios aumentaron un 8 % de media durante ese año. Los valores se almacenan con cuatro decimales de precisión."
+        q3: "¿Por qué mi país devuelve un error 404?"
+        a3: "Es posible que algunos territorios o estados recientemente reconocidos no tengan datos del IPC en el conjunto de datos del Banco Mundial. La API solo incluye países con datos disponibles de la fuente del Banco Mundial."
+        q4: "¿Las tasas están expresadas en porcentaje o en forma decimal?"
+        a4: "Porcentaje. Una tasa de 2,9495 significa 2,9495%, no 0,029495. Nunca es necesario multiplicar por 100, ya que el valor ya es el porcentaje."
+        q5: "¿Cómo funciona la facturación por lotes en el punto final?"
+        a5: "Cada país del lote cuenta como 1 crédito. Una solicitud con 10 países cuesta 10 créditos, lo mismo que 10 solicitudes individuales. El procesamiento por lotes reduce la sobrecarga HTTP, pero no el consumo de créditos."
       cta:
-        heading: "TODO: translate"
-        body: "TODO: translate"
-        cta_primary: "TODO: translate"
-        cta_docs: "TODO: translate"
+        heading: "Automatiza esto con Requiems."
+        body: "Una clave API. Datos de inflación, búsqueda BIN, validación de correo electrónico y más de 50 API adicionales en finanzas, validación, redes y mucho más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     quotes:
       api_combinations:
-        combine_the_quotes_api_with_other: Combina la API de cotizaciones con otros
-          puntos finales para crear experiencias más completas.
+        combine_the_quotes_api_with_other: Combina la API de cotizaciones con otros puntos finales para crear experiencias más completas.
         detect_language: Detectar idioma
-        filter_or_route_quotes_by_language: Filtre o redirija las citas por idioma
-          antes de presentarlas a una audiencia multilingüe.
+        filter_or_route_quotes_by_language: Filtre o redirija las citas por idioma antes de presentarlas a una audiencia multilingüe.
         lorem_ipsum: Lorem Ipsum
-        mix_real_quotes_with_generated_filler: Combina citas reales con texto de relleno
-          generado automáticamente para obtener diseños de contenido y sistemas de
-          diseño flexibles.
+        mix_real_quotes_with_generated_filler: Combina citas reales con texto de relleno generado automáticamente para obtener diseños de contenido y sistemas de diseño flexibles.
         pairs_well_with: Combina bien con
-        score_the_emotional_tone_of_a_quote: 'Analiza el tono emocional de una cita
-          antes de mostrarla: destaca solo los resultados positivos y alentadores.'
+        score_the_emotional_tone_of_a_quote: 'Analiza el tono emocional de una cita antes de mostrarla: destaca solo los resultados positivos y alentadores.'
         sentiment_analysis: Análisis de sentimientos
       cta:
         ready_to_add_quotes_to_your_app: "¿Listo para agregar citas a tu aplicación?"
-        sign_up_for_free_and_start_fetching: Regístrate gratis y empieza a recibir
-          citas inspiradoras en minutos. No se requiere tarjeta de crédito.
+        sign_up_for_free_and_start_fetching: Regístrate gratis y empieza a recibir citas inspiradoras en minutos. No se requiere tarjeta de crédito.
       demo:
         error_generic: Algo salió mal. Por favor, inténtalo de nuevo.
         error_network: Error de red. Por favor, compruebe su conexión.
-        error_rate_limit: Se ha alcanzado el límite de solicitudes. Por favor, espere
-          un momento e inténtelo de nuevo.
-        error_security_token: Falta el token de seguridad. Por favor, actualice la
-          página.
+        error_rate_limit: Se ha alcanzado el límite de solicitudes. Por favor, espere un momento e inténtelo de nuevo.
+        error_security_token: Falta el token de seguridad. Por favor, actualice la página.
         error_unexpected: Respuesta inesperada de la API.
       faq:
         heading: Preguntas frecuentes
       show:
-        random_quote_generator_free_quotes_api: 'Generador de citas aleatorias: herramienta
-          API gratuita para citas'
+        random_quote_generator_free_quotes_api: 'Generador de citas aleatorias: herramienta API gratuita para citas'
       use_cases:
-        add_a_rotating_quote_to_transactional: Agregue una cita que se vaya rotando
-          a los correos electrónicos transaccionales, los resúmenes semanales o las
-          firmas de los boletines informativos.
+        add_a_rotating_quote_to_transactional: Agregue una cita que se vaya rotando a los correos electrónicos transaccionales, los resúmenes semanales o las firmas de los boletines informativos.
         ai_amp_chatbot_enrichment: Enriquecimiento mediante IA y chatbots
-        auto_generate_quote_cards_for_twitter_x: Genera automáticamente tarjetas de
-          citas para Twitter/X, Instagram o LinkedIn sin necesidad de un equipo de
-          contenido.
+        auto_generate_quote_cards_for_twitter_x: Genera automáticamente tarjetas de citas para Twitter/X, Instagram o LinkedIn sin necesidad de un equipo de contenido.
         design_placeholders: Marcadores de posición de diseño
-        email_footers_amp_newsletters: Pies de página de correo electrónico y boletines
-          informativos
-        fuel_daily_check_in_screens_push: Alimenta las pantallas de registro diario,
-          las notificaciones push o las pantallas de inicio de las aplicaciones de
-          meditación con sabiduría seleccionada.
+        email_footers_amp_newsletters: Pies de página de correo electrónico y boletines informativos
+        fuel_daily_check_in_screens_push: Alimenta las pantallas de registro diario, las notificaciones push o las pantallas de inicio de las aplicaciones de meditación con sabiduría seleccionada.
         motivation_amp_wellness_apps: Aplicaciones de motivación y bienestar
         quote_of_the_day: Frase del día
-        replace_lorem_ipsum_with_real: Reemplace Lorem Ipsum con texto real y significativo
-          en wireframes, maquetas y demostraciones de UI.
-        seed_prompts_conversation_starters_or: Ideas para iniciar conversaciones,
-          temas de conversación o capas de personalidad para asistentes de IA y chatbots.
-        show_a_fresh_inspirational_quote_on: 'Muestra una cita inspiradora diferente
-          en cada visita: en los paneles de control, las páginas de inicio y las pantallas
-          de bienvenida.'
+        replace_lorem_ipsum_with_real: Reemplace Lorem Ipsum con texto real y significativo en wireframes, maquetas y demostraciones de UI.
+        seed_prompts_conversation_starters_or: Ideas para iniciar conversaciones, temas de conversación o capas de personalidad para asistentes de IA y chatbots.
+        show_a_fresh_inspirational_quote_on: 'Muestra una cita inspiradora diferente en cada visita: en los paneles de control, las páginas de inicio y las pantallas de bienvenida.'
         social_media_content: Contenido de redes sociales
         what_can_you_build_with_it: "¿Qué se puede construir con él?"
       what_it_does:
         attributed: Atribuido
         batch_endpoint: punto final del lote
         batch_ready: Lote listo
-        every_quote_includes_the_author_s_name: Cada cita incluye el nombre del autor,
-          lista para ser mostrada.
+        every_quote_includes_the_author_s_name: Cada cita incluye el nombre del autor, lista para ser mostrada.
         fast: Rápido
-        fetch_up_to_50_quotes_per_request_with: Obtenga hasta 50 cotizaciones por
-          solicitud con el punto final de procesamiento por lotes.
-        median_response_under_1_second_quotes: Tiempo de respuesta medio inferior
-          a 1 segundo. Cotizaciones disponibles a nivel mundial.
+        fetch_up_to_50_quotes_per_request_with: Obtenga hasta 50 cotizaciones por solicitud con el punto final de procesamiento por lotes.
+        median_response_under_1_second_quotes: Tiempo de respuesta medio inferior a 1 segundo. Cotizaciones disponibles a nivel mundial.
         random_quotes_api: API de citas aleatorias
         what_is_the_random_quotes_api: "¿Qué es la API de citas aleatorias?"
     sentiment_analysis:
       api_combinations:
         pair_it_with_other_apis: Combínalo con otras API.
-        sentiment_works_best_as_part_of_a: El análisis de sentimientos funciona mejor
-          como parte de un proceso integrado. Aquí presentamos tres combinaciones
-          naturales.
+        sentiment_works_best_as_part_of_a: El análisis de sentimientos funciona mejor como parte de un proceso integrado. Aquí presentamos tres combinaciones naturales.
       demo:
         error_empty: Introduce un texto para analizar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_network: No se pudo acceder a la API. Compruebe su conexión.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de
-          nuevo.
+        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         input_placeholder: Pega cualquier texto, reseña, comentario o sugerencia...
         label_breakdown: Descomponer
         label_confident: seguro
@@ -726,29 +554,23 @@ es:
         know_how_your_text_lands: Conoce el impacto que tiene tu texto.
         read_the_docs: Lee la documentación
       show:
-        free_sentiment_analysis_tool_positive: 'Herramienta gratuita de análisis de
-          sentimientos: detección de texto positivo, negativo y neutro | API de Requiems'
+        free_sentiment_analysis_tool_positive: 'Herramienta gratuita de análisis de sentimientos: detección de texto positivo, negativo y neutro | API de Requiems'
       use_cases:
-        anywhere_text_flows_through_your_system: En cualquier parte de tu sistema
-          donde fluye texto, el análisis de sentimientos te da una señal.
+        anywhere_text_flows_through_your_system: En cualquier parte de tu sistema donde fluye texto, el análisis de sentimientos te da una señal.
         built_for_real_use_cases: Diseñado para casos de uso reales.
       what_it_does:
-        one_call_three_values_enough_signal_to: Una llamada. Tres valores. Señal suficiente
-          para actuar.
+        one_call_three_values_enough_signal_to: Una llamada. Tres valores. Señal suficiente para actuar.
         positive_negative_or_neutral: Positivo, negativo o neutral
-        proportional_scores_across_all_classes: Puntuaciones proporcionales en todas
-          las clases
+        proportional_scores_across_all_classes: Puntuaciones proporcionales en todas las clases
         what_it_does: Lo que hace
     unit_conversion:
       api_combinations:
-        unit_conversion_becomes_even_more: La conversión de unidades resulta aún más
-          útil cuando se combina con otras API de Requiems.
+        unit_conversion_becomes_even_more: La conversión de unidades resulta aún más útil cuando se combina con otras API de Requiems.
       demo:
         error_fill_all_fields: Rellene todos los campos.
         error_generic: Algo salió mal. Inténtalo de nuevo.
         error_no_data: No se han devuelto datos.
-        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de
-          nuevo.
+        error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         input_placeholder: Introduzca un valor
         label_formula: Fórmula
         label_from: De
@@ -802,9 +624,7 @@ es:
         tons_metric: Toneladas (sistema métrico)
         yards: Yardas
       show:
-        free_unit_conversion_api_miles_to_km_kg: 'API gratuita de conversión de unidades:
-          millas a kilómetros, kilogramos a libras, grados Celsius a grados Fahrenheit
-          | API de Requiems'
+        free_unit_conversion_api_miles_to_km_kg: 'API gratuita de conversión de unidades: millas a kilómetros, kilogramos a libras, grados Celsius a grados Fahrenheit | API de Requiems'
       use_cases:
         development: Desarrollo
         education: Educación
@@ -812,10 +632,8 @@ es:
         food: Alimento
         real_problems_real_conversions: Problemas reales, conversiones reales.
         science: Ciencia
-        unit_conversion_fits_anywhere: La conversión de unidades es útil en cualquier
-          situación donde se necesite traducir medidas de forma precisa e instantánea.
+        unit_conversion_fits_anywhere: La conversión de unidades es útil en cualquier situación donde se necesite traducir medidas de forma precisa e instantánea.
       what_it_does:
         get_v1_technology_convert_200_ok: GET /v1/technology/convert → 200 OK
         reliable_conversions_with_transparent: Conversiones fiables con fórmulas transparentes.
-        simple_api_requests_instant_results: Solicitudes API sencillas, resultados
-          instantáneos.
+        simple_api_requests_instant_results: Solicitudes API sencillas, resultados instantáneos.
