@@ -1,0 +1,6 @@
+---
+es:
+  private_deployment_request:
+    must_be_lowercase_letters_numbers_and: Debe contener únicamente letras minúsculas,
+      números y guiones (de 2 a 40 caracteres).
+    must_include_at_least_one_service: debe incluir al menos un servicio

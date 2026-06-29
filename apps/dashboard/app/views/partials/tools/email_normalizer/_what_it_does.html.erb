@@ -17,7 +17,7 @@
 
         <!-- Mock response card -->
         <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">POST /v1/validation/email-normalize → 200 OK</div>
+          <div class="text-gray-500 mb-2 text-[11px]"><%= t('tools.email_normalizer.what_it_does.post_v1_validation_email_normalize_200') %></div>
           <div>
             <span class="text-gray-500">{</span><br>
             &nbsp;&nbsp;<span class="text-sky-300">"email"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"  User+tag@Googlemail.COM  "</span><span class="text-gray-500">,</span><br>
@@ -44,7 +44,7 @@
 
         <!-- Mock request card -->
         <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
+          <div class="text-gray-500 mb-2 text-[11px]"><%= t('systems.show.request_label') %></div>
           <div>
             <span class="text-sky-300">POST</span> <span class="text-gray-300">/v1/validation/email-normalize</span><br><br>
             <span class="text-gray-500"># Headers</span><br>

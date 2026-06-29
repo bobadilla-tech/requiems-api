@@ -1,0 +1,4 @@
+---
+en:
+  tools_controller:
+    tool_not_found: Tool not found.

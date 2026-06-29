@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::DashboardController < Admin::BaseController
-
   STATS_CACHE_TTL = 5.minutes
 
   def index

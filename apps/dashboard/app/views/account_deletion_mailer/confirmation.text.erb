@@ -1,7 +1,7 @@
 <%= t("dashboard.mailers.account_deletion.header_title") %> — Requiems API
 ==========================================
 
-Hi <%= @user.email %>,
+<%= t('account_deletion_mailer.confirmation.hi_email', email: @user.email) %>
 
 <%= t("dashboard.mailers.account_deletion.intro") %>
 

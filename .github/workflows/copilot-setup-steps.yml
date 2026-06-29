@@ -36,7 +36,7 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Load env defaults
         run: grep -v '^#' infra/docker/.env.example | grep -v '^$' | grep -v '=\s*$' >> $GITHUB_ENV

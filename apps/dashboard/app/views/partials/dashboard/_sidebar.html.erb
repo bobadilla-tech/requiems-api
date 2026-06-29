@@ -16,7 +16,7 @@
             size: "xs",
             class_names: "mt-1" %>
         <% else %>
-          <%= render "partials/shared/badge", text: "Free", variant: "default", size: "xs", class_names: "mt-1" %>
+          <%= render "partials/shared/badge", text: t('dashboard.plans.free'), variant: "default", size: "xs", class_names: "mt-1" %>
         <% end %>
       </div>
     </div>
@@ -27,43 +27,43 @@
     <ul class="space-y-1">
       <%= render "partials/dashboard/sidebar_link",
         icon: "chart-bar",
-        text: "Dashboard",
+        text: t('shared.nav.dashboard'),
         path: dashboard_root_path,
         active: controller_name == "overview" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "key",
-        text: "API Keys",
+        text: t('shared.nav.api_keys'),
         path: dashboard_api_keys_path,
         active: controller_name == "api_keys" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "chart-line",
-        text: "Usage & Analytics",
+        text: t('dashboard.usage.title'),
         path: dashboard_usage_path,
         active: controller_name == "usage" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "credit-card",
-        text: "Billing",
+        text: t('dashboard.overview.billing'),
         path: dashboard_billing_path,
         active: controller_name == "billing" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "users",
-        text: "Referrals",
+        text: t('dashboard.sidebar.referrals'),
         path: dashboard_referral_path,
         active: controller_name == "referrals" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "cog",
-        text: "Settings",
+        text: t('shared.nav.settings'),
         path: dashboard_settings_path,
         active: controller_name == "settings" %>
 
       <%= render "partials/dashboard/sidebar_link",
         icon: "rocket",
-        text: "Quick Start",
+        text: t('dashboard.quick_start.title'),
         path: dashboard_quick_start_path,
         active: controller_name == "quick_start" %>
     </ul>

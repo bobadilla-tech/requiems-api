@@ -13,7 +13,10 @@
 
         <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-600 p-4 mb-8">
           <p class="text-gray-700 dark:text-gray-300">
-            <%= t("home.about.company_info_html").html_safe %>
+            <%= t("home.about.company_info_html",
+                  company_link: link_to("Bobadilla Technologies", "https://bobadilla.tech",
+                    target: "_blank", rel: "noopener noreferrer",
+                    class: "text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold")) %>
           </p>
         </div>
 

@@ -22,7 +22,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "email_normalizer renders result on success" do
     payload = { "original" => "Test@Gmail.com", "normalized" => "test@gmail.com",
-                "local" => "test", "domain" => "gmail.com", "changes" => ["lowercased"] }
+                "local" => "test", "domain" => "gmail.com", "changes" => [ "lowercased" ] }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/email-normalizer", params: { email: "Test@Gmail.com" }
     end
@@ -106,7 +106,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "sentiment_analysis renders result on success" do
     payload = { "sentiment" => "positive", "score" => 0.92, "comparative" => 0.46,
-                "positive" => ["great"], "negative" => [] }
+                "positive" => [ "great" ], "negative" => [] }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/sentiment-analysis", params: { text: "This is great!" }
     end
@@ -148,7 +148,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "domain_checker renders result on success" do
     payload = { "domain" => "example.com", "available" => false,
-                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+                "dns" => { "a" => [ "93.184.216.34" ], "mx" => [], "ns" => [ "a.iana-servers.net" ] } }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/domain-checker", params: { domain: "example.com" }
     end
@@ -164,7 +164,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
 
   test "domain_checker normalizes URL input" do
     payload = { "domain" => "example.com", "available" => false,
-                "dns" => { "a" => ["93.184.216.34"], "mx" => [], "ns" => ["a.iana-servers.net"] } }
+                "dns" => { "a" => [ "93.184.216.34" ], "mx" => [], "ns" => [ "a.iana-servers.net" ] } }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/domain-checker", params: { domain: "https://example.com/some/path?q=1" }
     end
@@ -369,5 +369,73 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_match "2.95", response.body
+  end
+
+  # ── bin_lookup ───────────────────────────────────────────────────────────────
+
+  test "bin_lookup renders result on success" do
+    data = {
+      "bin" => "424242", "scheme" => "visa", "card_type" => "credit",
+      "card_level" => "classic", "issuer_name" => "Chase",
+      "issuer_url" => "www.chase.com", "issuer_phone" => "+18002324000",
+      "country_code" => "US", "country_name" => "United States",
+      "prepaid" => false, "luhn" => true, "confidence" => 0.92
+    }
+    stub_api(200, success_data(data)) do
+      post "/tools/demos/bin-lookup", params: { bin: "424242" }
+    end
+    assert_response :success
+    assert_match "424242", response.body
+    assert_match "visa", response.body
+  end
+
+  test "bin_lookup renders error when bin is blank" do
+    post "/tools/demos/bin-lookup", params: { bin: "" }
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_empty"), response.body
+  end
+
+  test "bin_lookup renders error when bin is whitespace" do
+    post "/tools/demos/bin-lookup", params: { bin: "   " }
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_empty"), response.body
+  end
+
+  test "bin_lookup renders error when bin has invalid format" do
+    post "/tools/demos/bin-lookup", params: { bin: "ABCDEF" }
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_invalid"), response.body
+  end
+
+  test "bin_lookup renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/bin-lookup", params: { bin: "000000" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_no_data"), response.body
+  end
+
+  test "bin_lookup renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/bin-lookup", params: { bin: "424242" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_rate_limit"), response.body
+  end
+
+  test "bin_lookup renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/bin-lookup", params: { bin: "424242" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_generic"), response.body
+  end
+
+  test "bin_lookup renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/bin-lookup", params: { bin: "424242" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.bin_lookup.demo.error_no_data"), response.body
   end
 end

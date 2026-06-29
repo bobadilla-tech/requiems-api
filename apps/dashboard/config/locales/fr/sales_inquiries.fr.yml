@@ -1,0 +1,33 @@
+---
+fr:
+  sales_inquiries:
+    new:
+      acme_corporation: Acme Corporation
+      anything_specific_you_want_to_share: Souhaitez-vous partager quelque chose de
+        précis ?
+      cancel: Annuler
+      company: Entreprise
+      contact_support: contacter l'assistance
+      description: Obtenez un devis personnalisé et discutez de vos besoins en matière
+        d'API avec notre équipe commerciale.
+      enterprise_dedicated_support: Support dédié aux entreprises
+      enterprise_security_privacy_and: Sécurité, confidentialité et conformité de
+        l'entreprise
+      faq_link: FAQ
+      fill_out_the_form_below_and_our_sales: Remplissez le formulaire ci-dessous et
+        notre équipe commerciale vous contactera pour discuter de vos besoins en matière
+        d'API.
+      get_in_touch_with_our_sales_team: Contactez notre équipe commerciale
+      have_questions_html: Vous avez des questions d'ordre général ? %{faq_link} ou
+        %{contact_link}.
+      heading: Parlez au service commercial
+      optional_share_any_details_that_will: Facultatif - N'hésitez pas à partager
+        tout détail qui nous permettra de mieux vous aider.
+      secure_info_notice: Vos informations sont sécurisées et ne seront utilisées
+        que pour vous contacter au sujet de votre demande.
+      sending: Envoi en cours...
+      talk_to_sales_requiems_api: Contactez le service commercial - Requiems API
+      tell_us_about_your_api_needs_expected: Parlez-nous de vos besoins en matière
+        d'API, du volume attendu, des exigences spécifiques ou de toute question que
+        vous pourriez avoir...
+      we_usually_reply_within_24_hours: Nous répondons généralement sous 24 heures.

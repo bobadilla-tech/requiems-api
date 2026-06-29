@@ -1,108 +1,127 @@
+---
 en:
   shared:
-    nav:
-      docs: "Docs"
-      docs_apis_desc: "Browse every endpoint"
-      docs_examples_desc: "Copy-paste integrations"
-      docs_divisions_desc: "APIs by category"
-      compare: "Compare"
-      docs_compare_desc: "Requiems API vs competitors"
-      industries: "Industries"
-      docs_industries_desc: "APIs mapped to your vertical"
-      divisions: "Divisions"
-      systems: "Systems"
-      divisions_hub: "Overview of all divisions"
-      divisions_panel_heading: "Jump to a division"
-      divisions_all: "All divisions"
-      apis: "APIs"
-      examples: "Examples"
-      tools: "Tools"
-      docs_tools_desc: "Interactive API demos"
-      case_studies: "Case studies"
-      pricing: "Pricing"
-      dashboard: "Dashboard"
-      api_keys: "API Keys"
-      usage: "Usage"
-      settings: "Settings"
-      sign_out: "Sign Out"
-      sign_in: "Sign In"
-      sign_up: "Sign Up"
-      get_started: "Get Started"
-      dark_mode: "Dark Mode"
-      light_mode: "Light Mode"
-      open_menu: "Open main menu"
-      close_menu: "Close main menu"
-      mobile_menu_title: "Menu"
-      mobile_menu_close: "Close"
-      search_placeholder: "APIs, examples, docs..."
-      search_no_results: "No results found"
-      search_try_different: "Try different keywords"
-      language: "Language"
-      clear_search: "Clear search"
-      toggle_dark_mode: "Toggle dark mode"
-      breadcrumb: "Breadcrumb"
-    footer:
-      tagline: "Backend infrastructure for SaaS products, delivered through one unified API"
-      copyright: "© %{year} Bobadilla Tech. All rights reserved."
-      sections:
-        get_started: "Get Started"
-        api_categories: "API Categories"
-        about: "About"
-        developers: "Developers"
-      links:
-        api_directory: "API Directory"
-        api_status: "API Status"
-        blog: "Blog"
-        example_apps: "Example Apps"
-        api_glossary: "API Glossary"
-        error_codes: "Error Codes"
-        pricing: "Pricing"
-        our_team: "Our Team"
-        suggest_api: "Suggest an API"
-        faq: "FAQ"
-        for_llms: "For LLMs & AI Tools"
-        privacy_policy: "Privacy Policy"
-        terms_of_service: "Terms of Service"
-        contact_us: "Contact Us"
-        talk_to_sales: "Talk to Sales"
-        github: "GitHub"
-        contributing: "Contributing"
-        changelog: "Changelog"
-        finance: "Finance"
-        technology: "Developer Tools"
-        ai_vision: "AI & Computer Vision"
-        nature: "Nature"
-        entertainment: "Entertainment"
-        health: "Health/Wellness"
-        miscellaneous: "Miscellaneous"
-        places: "Places"
-        text: "Text"
-        transportation: "Transportation"
-        tax: "Tax"
-        validation: "Validation"
-        data: "Data"
-        security: "Security & Privacy"
-        media: "Media Generation"
-    close: "Close"
-    dismiss: "Dismiss"
-    dismiss_banner: "Dismiss banner"
-    yes_label: "Yes"
-    no_label: "No"
-    text_to_analyze: "Text to analyze"
+    app_name: Requiems API
+    buttons:
+      cancel: Cancel
+      close: Close
+      dismiss: Dismiss
+      dismiss_banner: Dismiss banner
+    common:
+      all: All
+      invalid: Invalid
+      json_response: JSON response
+      latency: "< 300ms avg latency"
+      'no': "✗ No"
+      performance: Performance
+      rest_api: REST API
+      uptime: 99.9% uptime
+      utilities: Browse utilities
+      valid: Valid
+      view: View
+      'yes': "✓ Yes"
     danger_zone:
-      heading: "Danger Zone"
-      subheading: "Irreversible actions that permanently affect your account"
-      default_title: "Delete Account"
-      default_description: "Permanently delete your account and all associated data. This action cannot be undone."
+      cancel_btn: Cancel
       default_bullets:
-        - "All API keys will be revoked immediately"
-        - "Your subscription will be canceled"
-        - "All usage data will be permanently deleted"
-      delete_btn: "Delete Account"
-      modal_title: "Delete your account?"
-      modal_body: "We'll send a confirmation link to %{email}. The link expires in %{expiry}."
-      reason_label: "Why are you leaving?"
-      reason_placeholder: "Tell us what we could have done better..."
-      cancel_btn: "Cancel"
-      send_confirmation_btn: "Send Confirmation Email"
-      sending: "Sending..."
+      - All API keys will be revoked immediately
+      - Your subscription will be canceled
+      - All usage data will be permanently deleted
+      default_description: Permanently delete your account and all associated data.
+        This action cannot be undone.
+      default_title: Delete Account
+      delete_btn: Delete Account
+      heading: Danger Zone
+      modal_body: We'll send a confirmation link to %{email}. The link expires in
+        %{expiry}.
+      modal_title: Delete your account?
+      reason_label: Why are you leaving?
+      reason_placeholder: Tell us what we could have done better...
+      send_confirmation_btn: Send Confirmation Email
+      sending: Sending...
+      subheading: Irreversible actions that permanently affect your account
+    faq_heading: Frequently Asked Questions
+    footer:
+      copyright: "© %{year} Bobadilla Tech. All rights reserved."
+      links:
+        api_directory: API Directory
+        api_glossary: API Glossary
+        api_status: API Status
+        blog: Blog
+        changelog: Changelog
+        contact_us: Contact Us
+        contributing: Contributing
+        error_codes: Error Codes
+        example_apps: Example Apps
+        faq: FAQ
+        for_llms: For LLMs & AI Tools
+        github: GitHub
+        our_team: Our Team
+        pricing: Pricing
+        privacy_policy: Privacy Policy
+        suggest_api: Suggest an API
+        talk_to_sales: Talk to Sales
+        terms_of_service: Terms of Service
+      sections:
+        about: About
+        api_categories: API Categories
+        developers: Developers
+        get_started: Get Started
+      tagline: Backend infrastructure for SaaS products, delivered through one unified
+        API
+    forms:
+      email_placeholder: Enter any email address
+      text_to_analyze: Text to analyze
+    headings:
+      accuracy: Accuracy
+      simplicity: Simplicity
+    info:
+      no_account_demo: No account required for the demo.
+    labels:
+      are_you_sure_suspend: Are you sure you want to suspend this user? All their
+        API keys will be revoked.
+      col_status: Status
+      environment: Environment
+      joined: Joined
+      monthly: Monthly
+      'no': 'No'
+      'yes': 'Yes'
+    nav:
+      api_keys: API Keys
+      apis: APIs
+      breadcrumb: Breadcrumb
+      case_studies: Case studies
+      clear_search: Clear search
+      close_menu: Close main menu
+      compare: Compare
+      dark_mode: Dark Mode
+      dashboard: Dashboard
+      divisions: Divisions
+      docs: Docs
+      docs_apis_desc: Browse every endpoint
+      docs_compare_desc: Requiems API vs competitors
+      docs_divisions_desc: APIs by category
+      docs_examples_desc: Copy-paste integrations
+      docs_industries_desc: APIs mapped to your vertical
+      docs_tools_desc: Interactive API demos
+      examples: Examples
+      get_started: Get Started
+      industries: Industries
+      language: Language
+      light_mode: Light Mode
+      mobile_menu_title: Menu
+      open_menu: Open main menu
+      pricing: Pricing
+      search_no_results: No results found
+      search_placeholder: APIs, examples, docs...
+      search_try_different: Try different keywords
+      settings: Settings
+      sign_in: Sign In
+      sign_out: Sign Out
+      sign_up: Sign Up
+      systems: Systems
+      toggle_dark_mode: Toggle dark mode
+      tools: Tools
+      usage: Usage
+    status:
+      active: Active
+      suspended: Suspended

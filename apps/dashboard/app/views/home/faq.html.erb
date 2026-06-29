@@ -55,7 +55,10 @@
             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"><%= t("home.faq.authentication.q2") %></h3>
               <p class="text-gray-700 dark:text-gray-300">
-                <%= t("home.faq.authentication.a2_html").html_safe %>
+                <% code_cls = "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded" %>
+                <%= t("home.faq.authentication.a2_html",
+                      test_key: content_tag(:code, "rq_test_", class: code_cls),
+                      live_key: content_tag(:code, "rq_live_", class: code_cls)) %>
               </p>
             </div>
 
@@ -121,7 +124,9 @@
             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2"><%= t("home.faq.rate_limits.q2") %></h3>
               <p class="text-gray-700 dark:text-gray-300">
-                <%= t("home.faq.rate_limits.a2_html").html_safe %>
+                <%= t("home.faq.rate_limits.a2_html",
+                      retry_after_header: content_tag(:code, "Retry-After",
+                        class: "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded")) %>
               </p>
             </div>
           </div>

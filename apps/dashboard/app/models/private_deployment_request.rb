@@ -62,7 +62,7 @@ class PrivateDeploymentRequest < ApplicationRecord
   validates :tenant_secret, length: { minimum: 32 }, if: -> { status == "active" }
   validate :at_least_one_service_selected
   validates :subdomain_slug, uniqueness: true, allow_nil: true,
-            format: { with: /\A[a-z0-9\-]{2,40}\z/, message: "must be lowercase letters, numbers, and hyphens only (2–40 chars)" }
+            format: { with: /\A[a-z0-9\-]{2,40}\z/, message: I18n.t('private_deployment_request.must_be_lowercase_letters_numbers_and') }
   validates :contact_email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   scope :pending,    -> { where(status: "pending") }
@@ -92,7 +92,7 @@ class PrivateDeploymentRequest < ApplicationRecord
 
   def at_least_one_service_selected
     if selected_services.blank? || selected_services.empty?
-      errors.add(:selected_services, "must include at least one service")
+      errors.add(:selected_services, I18n.t("private_deployment_request.must_include_at_least_one_service"))
       return
     end
 

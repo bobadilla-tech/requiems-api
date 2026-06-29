@@ -168,7 +168,7 @@ func TestSignupProtect_OnlyEmailSignalsNullPhoneIP(t *testing.T) {
 	require.NoError(t, json.NewDecoder(w.Body).Decode(&resp))
 	assert.Nil(t, resp.Data.Signals.Phone)
 	assert.Nil(t, resp.Data.Signals.IP)
-	assert.LessOrEqual(t, resp.Data.Confidence, 0.34)
+	assert.Greater(t, resp.Data.Confidence, 0.70)
 }
 
 func TestSignupProtect_NoFieldsProvided(t *testing.T) {

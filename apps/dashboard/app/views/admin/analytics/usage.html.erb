@@ -1,4 +1,4 @@
-<% content_for :title, "Usage Analytics" %>
+<% content_for :title, t('admin.analytics.usage.usage_analytics') %>
 
 <%= render "partials/admin_analytics/nav" %>
 
@@ -6,8 +6,8 @@
 <div class="mb-8">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Usage Analytics</h1>
-      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">API usage patterns and statistics</p>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.usage_analytics') %></h1>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= t('admin.analytics.usage.api_usage_patterns_and_statistics') %></p>
     </div>
 
     <!-- Date Range Selector -->
@@ -16,9 +16,9 @@
         <%= f.select :date_range,
           options_for_select(
             [
-              ["Last 7 Days", "7"],
-              ["Last 30 Days", "30"],
-              ["Last 90 Days", "90"]
+              [t('admin.analytics.usage.last_7_days'), "7"],
+              [t('admin.analytics.usage.last_30_days'), "30"],
+              [t('admin.analytics.usage.last_90_days'), "90"]
             ],
             @date_range
           ),
@@ -34,9 +34,9 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
   <div class="flex items-center justify-between">
     <div>
-      <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Requests</p>
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.usage.cards.total_requests') %></p>
       <p class="text-4xl font-bold text-gray-900 dark:text-gray-100 mt-2"><%= number_with_delimiter(@total_requests) %></p>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">in the last <%= @date_range %> days</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.usage.in_the_last_n_days', n: @date_range) %></p>
     </div>
     <div class="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
       <svg class="h-12 w-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +49,7 @@
 <!-- Requests Over Time Chart -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Requests Over Time</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.requests_over_time') %></h2>
   </div>
   <div class="p-6">
     <%= line_chart @requests_by_day,
@@ -68,7 +68,7 @@
   <!-- Requests by Endpoint -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Top 10 Endpoints</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.top_10_endpoints') %></h2>
     </div>
     <div class="p-6">
       <%= bar_chart @requests_by_endpoint,
@@ -86,7 +86,7 @@
   <!-- Requests by Plan -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Requests by Plan</h2>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.requests_by_plan') %></h2>
     </div>
     <div class="p-6">
       <%= pie_chart @requests_by_plan.transform_keys(&:titleize),
@@ -99,8 +99,8 @@
 <!-- Average Response Times -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Average Response Times by Endpoint</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Top 10 slowest endpoints</p>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.average_response_times_by_endpoint') %></h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t('admin.analytics.usage.top_10_slowest_endpoints') %></p>
   </div>
   <div class="p-6">
     <%= bar_chart @avg_response_by_endpoint,
@@ -119,17 +119,17 @@
 <!-- Top Users by Usage -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
   <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Top 10 Users by Usage</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t('admin.analytics.usage.top_10_users_by_usage') %></h2>
   </div>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
       <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rank</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Requests</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Requests</th>
-          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('admin.analytics.usage.rank') %></th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.referrals.table.user_col') %></th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.overview.requests_col') %></th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.usage.cards.total_requests') %></th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t('dashboard.api_keys.col_actions') %></th>
         </tr>
       </thead>
       <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -148,7 +148,7 @@
               <%= number_with_delimiter(user_stat.total_requests) %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <%= link_to "View User", admin_user_path(user_stat.id), class: "text-blue-600 hover:text-blue-700" %>
+              <%= link_to t('admin.analytics.usage.view_user'), admin_user_path(user_stat.id), class: "text-blue-600 hover:text-blue-700" %>
             </td>
           </tr>
         <% end %>

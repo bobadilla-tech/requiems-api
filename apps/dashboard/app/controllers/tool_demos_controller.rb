@@ -182,6 +182,37 @@ class ToolDemosController < ApplicationController
     render "tool_demos/inflation", locals: { data: data }
   end
 
+  def bin_lookup
+    bin = params[:bin].to_s.strip
+
+    if bin.blank?
+      return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_empty"))
+    end
+
+    unless bin.match?(/\A\d{6,8}\z/)
+      return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/finance/bin/#{bin}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_no_data"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("bin_lookup", t("tools.bin_lookup.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/bin_lookup", locals: { data: data, bin: bin }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)

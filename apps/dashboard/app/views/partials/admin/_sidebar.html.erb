@@ -9,7 +9,7 @@
         <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
           <%= current_user.display_name %>
         </p>
-        <%= render "partials/shared/badge", text: "Admin", variant: "danger", size: "xs", class_names: "mt-1" %>
+        <%= render "partials/shared/badge", text: t('admin.sidebar.admin'), variant: "danger", size: "xs", class_names: "mt-1" %>
       </div>
     </div>
   </div>
@@ -19,11 +19,11 @@
     <ul class="space-y-1">
       <%
         nav_items = [
-          { icon: "chart-bar", text: "Dashboard", path: admin_root_path, controller: "dashboard" },
-          { icon: "users", text: "Users", path: admin_users_path, controller: "users" },
-          { icon: "key", text: "API Keys", path: admin_api_keys_path, controller: "api_keys" },
-          { icon: "chart-line", text: "Analytics", path: admin_analytics_usage_path, controller: "analytics" },
-          { icon: "flag", text: "Abuse Reports", path: admin_abuse_reports_path, controller: "abuse_reports" }
+          { icon: "chart-bar", text: t('shared.nav.dashboard'), path: admin_root_path, controller: "dashboard" },
+          { icon: "users", text: t('admin.sidebar.users'), path: admin_users_path, controller: "users" },
+          { icon: "key", text: t('shared.nav.api_keys'), path: admin_api_keys_path, controller: "api_keys" },
+          { icon: "chart-line", text: t('admin.sidebar.analytics'), path: admin_analytics_usage_path, controller: "analytics" },
+          { icon: "flag", text: t('admin.abuse_reports.index.abuse_reports'), path: admin_abuse_reports_path, controller: "abuse_reports" }
         ]
       %>
 

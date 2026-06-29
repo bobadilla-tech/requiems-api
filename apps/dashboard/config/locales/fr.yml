@@ -1,13 +1,13 @@
+---
 fr:
-  hello: "Bonjour le monde"
-  errors:
-    messages:
-      not_saved:
-        one: "1 erreur a empêché l'enregistrement :"
-        other: "%{count} erreurs ont empêché l'enregistrement :"
   date:
     formats:
       month_year: "%B %Y"
+  errors:
+    messages:
+      not_saved:
+        one: '1 erreur a empêché l''enregistrement :'
+        other: "%{count} erreurs ont empêché l'enregistrement :"
   time:
     formats:
       status_timestamp: "%d %B %Y à %H:%M %Z"

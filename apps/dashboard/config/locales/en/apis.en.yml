@@ -1,0 +1,13 @@
+---
+en:
+  apis:
+    index:
+      api_directory_requiems_api: API Directory | Requiems API
+    show:
+      api_endpoints: API Endpoints
+      ask_chatgpt_about_this_api: Ask ChatGPT about this API
+      ask_claude_about_this_api: Ask Claude about this API
+      copy_full_documentation_as_markdown: Copy full documentation as Markdown
+      copy_the_current_page_url_to_clipboard: Copy the current page URL to clipboard
+      endpoints: Endpoints
+      use_cases: Use Cases
