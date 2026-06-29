@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { tools } from "../generated/index";
+import { tools } from "../generated/index.ts";
 
 
 // Validate required runtime env (used by generated handlers)
