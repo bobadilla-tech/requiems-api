@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -43,6 +43,11 @@ class ToolsController < ApplicationController
       name: "Random Quotes",
       description: "Fetch random inspirational quotes with author attribution in a single API call.",
       icon_classes: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
+    },
+    "inflation" => {
+      name: "Inflation",
+      description: "Historical and current CPI inflation rates for 241 countries, sourced from the World Bank.",
+      icon_classes: "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
     }
   }.freeze
 
