@@ -230,50 +230,54 @@ The controller does **only** client-side validation and loading state. No
 ## 4. i18n requirements
 
 All user-facing strings in tool pages must use `t()`. Use **rori18n** to
-extract strings and generate the locale files. rori18n is a Go CLI in the
-[rori18n repo](https://github.com/bobadilla-tech/rori18n) — `go run . <cmd>`.
+extract strings and generate the locale files.
+
+**Install once** ([rori18n repo](https://github.com/bobadilla-tech/rori18n)):
+
+```sh
+go install github.com/bobadilla-tech/rori18n@latest
+# add ~/go/bin to PATH if not already there
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+Run all commands from inside `apps/dashboard/`:
 
 #### Step 1 — find hardcoded strings
 
 ```sh
-cd path/to/rori18n
 git diff --name-only origin/main | \
-  go run . report --root ../requiems-api/apps/dashboard --changed-files -
+  rori18n report -r . --changed-files -
 ```
 
-Lists every hardcoded user-visible string in your changed files. Fix them with
-`t()` calls and EN keys before moving on.
+Lists every hardcoded user-visible string in your changed files. Fix them
+with `t()` calls and EN keys before moving on.
 
-#### Step 2 — extract and generate locale files
+#### Step 2 — extract + generate locale skeletons
 
 ```sh
 git diff --name-only origin/main | \
-  go run . generate \
-    --root ../requiems-api/apps/dashboard \
-    --fix --languages es,fr \
-    --changed-files -
+  rori18n generate -r . --fix --languages es,fr --changed-files -
 ```
 
-This does three things in one pass:
+One pass does three things:
 1. Finds remaining hardcoded strings in your changed files
 2. Writes the EN key to the correct YAML file and injects the `t()` call
-3. Creates matching empty skeleton entries in `es/tools.es.yml` and `fr/tools.fr.yml`
+3. Creates matching empty entries in `es/tools.es.yml` and `fr/tools.fr.yml`
 
-For keys you already wrote manually with `t()`, also add an empty `""` stub
-to the ES and FR files — the maintainer will fill them.
+For `t()` calls you wrote manually, also add the key with an empty value `""`
+to the ES and FR files — the maintainer fills them after merge.
 
-#### Step 3 — lint
+#### Step 3 — lint before opening the PR
 
 ```sh
-go run . lint --root ../requiems-api/apps/dashboard
+rori18n lint -r .
 ```
 
-Exits 1 with `file:line: missing key` if any `t()` call has no matching YAML
-entry. Fix before opening the PR.
+Exits 1 with `file:line: missing key "..."` if any `t()` call has no matching
+YAML entry. All lint errors must be fixed before opening the PR.
 
-> **Translation** (ES/FR empty values → real text) is run by the maintainer
-> after merge using `go run . translate --to es,fr`. Do not write translations
-> manually.
+> **Translation** (filling ES/FR empty values with real text) is run by the
+> maintainer after merge. Do not write translations manually.
 
 ### Key structure
 
@@ -308,7 +312,7 @@ static values = { errorEmpty: String };
 ```
 
 All other error messages come from the server-rendered result partial and use
-`t()` directly — no JS needed.
+`t()` directly, no JS needed.
 
 ---
 
