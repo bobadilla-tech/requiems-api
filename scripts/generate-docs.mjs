@@ -18,7 +18,12 @@ const EFFECTIVE_DATE_LEGAL = "2026-02-01";
 
 function doc(filename) {
   const pdf = new PDFDocument({ margin: 72, size: "LETTER", bufferPages: true });
-  pdf.pipe(createWriteStream(resolve(OUT_DIR, filename)));
+  const stream = createWriteStream(resolve(OUT_DIR, filename));
+  stream.on("error", (err) => {
+    console.error(`Failed to write ${filename}:`, err);
+    process.exit(1);
+  });
+  pdf.pipe(stream);
   return pdf;
 }
 
