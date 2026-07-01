@@ -11,9 +11,15 @@ fr:
       description: Obtenez un devis personnalisé et discutez de vos besoins en matière
         d'API avec notre équipe commerciale.
       enterprise_dedicated_support: Support dédié aux entreprises
+      enterprise_dedicated_support_desc: "Support dédié, délais de réponse garantis
+        et accès direct à notre équipe d'ingénierie."
       enterprise_scale_apis: APIs à l'échelle entreprise
+      enterprise_scale_apis_desc: "Accès haut volume, limites de débit personnalisées
+        et infrastructure dédiée conçue pour les charges de travail en entreprise."
       enterprise_security_privacy_and: Sécurité, confidentialité et conformité de
         l'entreprise
+      enterprise_security_privacy_desc: "Architecture de sécurité sans état, conception
+        conforme au RGPD et documentation de conformité complète."
       faq_link: FAQ
       fill_out_the_form_below_and_our_sales: Remplissez le formulaire ci-dessous et
         notre équipe commerciale vous contactera pour discuter de vos besoins en matière
