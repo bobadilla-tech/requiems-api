@@ -21,6 +21,18 @@ en:
       table_api: API
       table_benefit: What it unlocks
     compilestrength:
+      meta_title: CompileStrength case study | Requiems API
+      meta_description: CompileStrength builds science-based lifting software. See
+        how the Fitness Exercises API supports programmatic training flows without
+        owning the entire exercise catalog.
+      hero_subheadline: CompileStrength pairs progressive overload and periodization
+        philosophy with product velocity. Requiems delivers structured fitness exercise
+        data so the team can ship AI programming, filters, and analytics without
+        rebuilding health datasets from scratch.
+      quote_text: The fitness data from Requiems powers our core features. We didn't
+        have to build or maintain any of that infrastructure.
+      quote_name: CompileStrength
+      quote_role: compilestrength.com · Science-based training
       api_rows:
       - id: fitness-exercises
         benefit: Exercise names, targets, equipment, and instructions for programmatic
@@ -62,7 +74,25 @@ en:
       partnership_heading: Using Requiems in production?
       partnership_primary_cta: Book a strategy call
       partnership_secondary_cta: Browse API docs
+      verigeo_blurb: Peru's geomarketing leader uses Places, validation, and finance
+        APIs to georeference at scale, keep signups clean, and power customer-facing
+        widgets.
+      compilestrength_blurb: Science-based training software uses our fitness exercise
+        catalog so coaches can focus on programming UX, not maintaining exercise databases.
     verigeo:
+      meta_title: Verigeo case study | Requiems API
+      meta_description: How Verigeo (verigeo.pe) uses Requiems Places, validation,
+        and finance APIs for geomarketing, georeferencing workflows, and trustworthy
+        widgets.
+      hero_subheadline: Verigeo delivers GIS, georeferencing, and geomarketing solutions
+        across Peru. Requiems backs reference data and guardrails so their team can
+        focus on customer workflows, not reinventing global postal, timezone, and
+        validation infrastructure.
+      quote_text: We use Requiems for financial data in our widgets and to block fake
+        signups at registration. The recognition layer helped us personalize marketing
+        without building anything from scratch.
+      quote_name: Verigeo
+      quote_role: verigeo.pe · Geomarketing & GIS
       api_rows:
       - id: geocode
         benefit: Turn addresses into coordinates for maps, routing, and GIS ingestion.
