@@ -10,7 +10,11 @@ es:
       description: Obtén precios personalizados y habla sobre tus necesidades de API
         con nuestro equipo de ventas.
       enterprise_dedicated_support: Soporte empresarial dedicado
+      enterprise_dedicated_support_desc: Soporte dedicado, tiempos de respuesta garantizados
+        y acceso directo a nuestro equipo de ingeniería.
       enterprise_scale_apis: APIs a escala empresarial
+      enterprise_scale_apis_desc: Acceso de alto volumen, límites de velocidad personalizados
+        e infraestructura dedicada diseñada para cargas de trabajo empresariales.
       enterprise_security_privacy_and: Seguridad, privacidad y cumplimiento normativo
         de la empresa
       faq_link: Preguntas frecuentes

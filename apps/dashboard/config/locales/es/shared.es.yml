@@ -41,7 +41,9 @@ es:
       subheading: Acciones irreversibles que afectan permanentemente tu cuenta
     faq_heading: Preguntas frecuentes
     schedule_call_banner:
+      cta: Reservar una llamada
       label: Ventas
+      subtitle: "Alexandra Flores · Responsable de ventas · 15 min · Sin preparación previa"
       text: "¿Quieres hablar? Agenda una llamada de 15 min con Alexandra, nuestra responsable de ventas."
     footer:
       copyright: "© %{year} Bobadilla Tech. Todos los derechos reservados."

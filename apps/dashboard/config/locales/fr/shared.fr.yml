@@ -41,7 +41,9 @@ fr:
       subheading: Actions irréversibles qui affectent définitivement votre compte
     faq_heading: Foire aux questions
     schedule_call_banner:
+      cta: Réserver un appel
       label: Ventes
+      subtitle: "Alexandra Flores · Responsable commerciale · 15 min · Sans préparation"
       text: "Envie d'échanger ? Planifiez un appel de 15 min avec Alexandra, notre responsable commerciale."
     footer:
       copyright: "© %{year} Bobadilla Tech. Tous droits réservés."

@@ -10,8 +10,14 @@ en:
       description: Get personalized pricing and discuss your API needs with our sales
         team.
       enterprise_dedicated_support: Enterprise dedicated support
+      enterprise_dedicated_support_desc: Dedicated support, guaranteed response times,
+        and direct access to our engineering team.
       enterprise_scale_apis: Enterprise-scale APIs
+      enterprise_scale_apis_desc: High-volume access, custom rate limits, and dedicated
+        infrastructure designed for enterprise workloads.
       enterprise_security_privacy_and: Enterprise security, privacy and compliance
+      enterprise_security_privacy_desc: Stateless security architecture, GDPR-aligned
+        design, and full compliance documentation.
       faq_link: FAQ
       fill_out_the_form_below_and_our_sales: Fill out the form below and our sales
         team will reach out to discuss your API needs.

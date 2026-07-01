@@ -41,7 +41,9 @@ en:
       subheading: Irreversible actions that permanently affect your account
     faq_heading: Frequently Asked Questions
     schedule_call_banner:
+      cta: Book a Call
       label: Sales
+      subtitle: "Alexandra Flores · Sales Lead · 15 min · No prep needed"
       text: Want to talk? Schedule a 15-min intro call with Alexandra, our sales lead.
     footer:
       copyright: "© %{year} Bobadilla Tech. All rights reserved."
