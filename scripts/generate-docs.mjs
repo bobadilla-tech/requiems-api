@@ -23,14 +23,19 @@ function doc(filename) {
 }
 
 function finalize(pdf, filename) {
-  // If the last moveDown spilled into a new blank page, remove it before adding footer
-  if (pdf.y === pdf.page.margins.top && pdf._pageBuffer.length > 1) {
-    pdf._pageBuffer.pop();
-  }
   footer(pdf);
   pdf.flushPages();
   pdf.end();
   console.log(`✓ ${filename}`);
+}
+
+// Like moveDown but skips if it would push past the bottom margin (prevents trailing blank pages)
+function safeDown(pdf, lines) {
+  const bottom = pdf.page.height - pdf.page.margins.bottom;
+  const step = pdf.currentLineHeight(true) * lines;
+  if (pdf.y + step < bottom) {
+    pdf.moveDown(lines);
+  }
 }
 
 function header(pdf, title, subtitle) {
@@ -88,7 +93,7 @@ function body(pdf, text) {
     .fillColor("#374151")
     .font("Helvetica")
     .text(text, { lineGap: 3 });
-  pdf.moveDown(0.5);
+  safeDown(pdf, 0.5);
 }
 
 function bullet(pdf, items) {
@@ -99,13 +104,18 @@ function bullet(pdf, items) {
       .font("Helvetica")
       .text(`• ${item}`, { indent: 12, lineGap: 2 });
   });
-  pdf.moveDown(0.5);
+  safeDown(pdf, 0.5);
 }
 
 function footer(pdf) {
   const range = pdf.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     pdf.switchToPage(i);
+    // footer Y (height-40 = 752) is past maxY (height-margins.bottom = 720).
+    // Temporarily remove the bottom margin constraint so pdf.text() doesn't
+    // trigger _nextSection() and create a new overflow page for every page.
+    const savedBottom = pdf.page.margins.bottom;
+    pdf.page.margins.bottom = 0;
     pdf
       .fontSize(8)
       .fillColor("#9ca3af")
@@ -113,8 +123,9 @@ function footer(pdf) {
         `${PRODUCT} Compliance Documentation · Effective ${EFFECTIVE_DATE} · ${CONTACT}`,
         pdf.page.margins.left,
         pdf.page.height - 40,
-        { align: "center", width: pdf.page.width - pdf.page.margins.left - pdf.page.margins.right }
+        { align: "center", width: pdf.page.width - pdf.page.margins.left - pdf.page.margins.right, lineBreak: false }
       );
+    pdf.page.margins.bottom = savedBottom;
   }
 }
 

@@ -185,8 +185,8 @@
           <%= t("home.security.documents.subheading") %>
         </p>
         <div class="space-y-4">
-          <div class="flex items-center justify-between p-5 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-            <div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
               <h3 class="font-semibold text-gray-900 dark:text-gray-100">
                 <%= t("home.security.documents.security_packet.title") %>
               </h3>
@@ -196,7 +196,7 @@
             </div>
             <%= link_to "/documents/security-packet.pdf",
                 target: "_blank",
-                class: "ml-6 flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
               <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -204,8 +204,8 @@
             <% end %>
           </div>
 
-          <div class="flex items-center justify-between p-5 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-            <div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
               <h3 class="font-semibold text-gray-900 dark:text-gray-100">
                 <%= t("home.security.documents.dpa.title") %>
               </h3>
@@ -215,7 +215,7 @@
             </div>
             <%= link_to "/documents/dpa-template.pdf",
                 target: "_blank",
-                class: "ml-6 flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
               <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -223,8 +223,8 @@
             <% end %>
           </div>
 
-          <div class="flex items-center justify-between p-5 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-            <div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
               <h3 class="font-semibold text-gray-900 dark:text-gray-100">
                 <%= t("home.security.documents.api_policy.title") %>
               </h3>
@@ -234,7 +234,7 @@
             </div>
             <%= link_to "/documents/api-auth-policy.pdf",
                 target: "_blank",
-                class: "ml-6 flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
               <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
