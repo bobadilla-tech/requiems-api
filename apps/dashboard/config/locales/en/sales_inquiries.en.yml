@@ -10,15 +10,30 @@ en:
       description: Get personalized pricing and discuss your API needs with our sales
         team.
       enterprise_dedicated_support: Enterprise dedicated support
+      enterprise_dedicated_support_desc: Dedicated support, guaranteed response times,
+        and direct access to our engineering team.
+      enterprise_scale_apis: Enterprise-scale APIs
+      enterprise_scale_apis_desc: High-volume access, custom rate limits, and dedicated
+        infrastructure designed for enterprise workloads.
       enterprise_security_privacy_and: Enterprise security, privacy and compliance
+      enterprise_security_privacy_desc: Stateless security architecture, GDPR-aligned
+        design, and full compliance documentation.
       faq_link: FAQ
       fill_out_the_form_below_and_our_sales: Fill out the form below and our sales
         team will reach out to discuss your API needs.
       get_in_touch_with_our_sales_team: Get in Touch with Our Sales Team
       have_questions_html: Have general questions? %{faq_link} or %{contact_link}.
       heading: Talk to Sales
+      hero_badge: Sales
       optional_share_any_details_that_will: Optional - Share any details that will
         help us assist you better.
+      or_fill_form: or fill out the form and we'll reach out
+      schedule_card:
+        available: Available
+        cta: Book a 15-min Call
+        duration: 15 minutes · No preparation needed
+        heading: Schedule a Strategy Call
+        subtitle: Alexandra Flores · Sales Lead
       secure_info_notice: Your information is secure and will only be used to contact
         you about your inquiry.
       sending: Sending...

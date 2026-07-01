@@ -1,62 +1,116 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-    <style>
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
-      .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-      .header { background-color: #10b981; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
-      .content { background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-      .field { margin-bottom: 20px; }
-      .label { font-weight: 600; color: #1f2937; margin-bottom: 5px; }
-      .value { background-color: white; padding: 15px; border-radius: 6px; border: 1px solid #e5e7eb; }
-      .highlight { background-color: #dbeafe; padding: 15px; border-radius: 6px; border-left: 4px solid #3b82f6; margin: 20px 0; }
-      .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1 style="margin: 0; font-size: 24px;">🚀 Enterprise Inquiry</h1>
-        <p style="margin: 10px 0 0 0; opacity: 0.9;"><%= t('sales_mailer.enterprise_inquiry.a_potential_enterprise_customer_wants') %></p>
-      </div>
+<html lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="margin:0;padding:0;background-color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
 
-      <div class="content">
-        <div class="highlight">
-          <strong>Action Required:</strong> Respond within 24 hours to maintain our commitment.
-        </div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
-        <div class="field">
-          <div class="label"><%= t('admin.private_deployments.index.company') %></div>
-          <div class="value"><strong><%= @inquiry[:company] %></strong></div>
-        </div>
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#059669 0%,#047857 100%);border-radius:12px 12px 0 0;padding:32px 40px;">
+              <p style="margin:0 0 4px 0;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#a7f3d0;">Enterprise Sales</p>
+              <h1 style="margin:0 0 8px 0;font-size:26px;font-weight:700;color:#ffffff;line-height:1.2;">New Enterprise Inquiry</h1>
+              <p style="margin:0;font-size:14px;color:#d1fae5;line-height:1.5;"><%= t('sales_mailer.enterprise_inquiry.a_potential_enterprise_customer_wants') %></p>
+            </td>
+          </tr>
 
-        <div class="field">
-          <div class="label"><%= t('sales_mailer.enterprise_inquiry.contact_person') %></div>
-          <div class="value"><%= @inquiry[:name] %></div>
-        </div>
+          <!-- Action Required Banner -->
+          <tr>
+            <td style="background-color:#fef9c3;border-left:4px solid #eab308;padding:16px 40px;">
+              <p style="margin:0;font-size:13px;color:#713f12;">
+                <strong style="color:#92400e;">⏰ Action Required:</strong>
+                Respond within 24 hours. Reply directly to this email to reach <%= @inquiry[:name] %>.
+              </p>
+            </td>
+          </tr>
 
-        <div class="field">
-          <div class="label"><%= t('home.contact.form.email') %></div>
-          <div class="value">
-            <a href="mailto:<%= @inquiry[:email] %>"><%= @inquiry[:email] %></a>
-          </div>
-        </div>
+          <!-- Body -->
+          <tr>
+            <td style="background-color:#ffffff;padding:32px 40px 8px 40px;">
 
-        <% if @inquiry[:message].present? %>
-          <div class="field">
-            <div class="label"><%= t('sales_mailer.enterprise_inquiry.message_specific_needs') %></div>
-            <div class="value"><%= simple_format(@inquiry[:message]) %></div>
-          </div>
-        <% end %>
+              <!-- Company -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                <tr>
+                  <td style="padding-bottom:6px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#9ca3af;">
+                    <%= t('sales_mailer.enterprise_inquiry.company') %>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px;font-size:15px;font-weight:700;color:#111827;">
+                    <%= @inquiry[:company] %>
+                  </td>
+                </tr>
+              </table>
 
-        <div class="footer">
-          <p><strong>Submitted:</strong> <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %></p>
-          <p style="margin-top: 10px; background-color: #fef3c7; padding: 10px; border-radius: 4px; border-left: 4px solid #f59e0b;">
-            ⏰ <strong><%= t('sales_mailer.enterprise_inquiry.reminder') %></strong> Enterprise inquiries should receive a response within 24 hours.
-          </p>
-        </div>
-      </div>
-    </div>
-  </body>
+              <!-- Name -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                <tr>
+                  <td style="padding-bottom:6px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#9ca3af;">
+                    <%= t('sales_mailer.enterprise_inquiry.contact_person') %>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px;font-size:14px;color:#374151;">
+                    <%= @inquiry[:name] %>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Email -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                <tr>
+                  <td style="padding-bottom:6px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#9ca3af;">
+                    <%= t('sales_mailer.enterprise_inquiry.email') %>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px;font-size:14px;">
+                    <a href="mailto:<%= @inquiry[:email] %>" style="color:#4f46e5;text-decoration:none;font-weight:500;"><%= @inquiry[:email] %></a>
+                  </td>
+                </tr>
+              </table>
+
+              <% if @inquiry[:message].present? %>
+                <!-- Message -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                  <tr>
+                    <td style="padding-bottom:6px;font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#9ca3af;">
+                      <%= t('sales_mailer.enterprise_inquiry.message_specific_needs') %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="background-color:#f9fafb;border:1px solid #e5e7eb;border-left:3px solid #059669;border-radius:8px;padding:14px 16px;font-size:14px;color:#374151;line-height:1.6;">
+                      <%= simple_format(@inquiry[:message]) %>
+                    </td>
+                  </tr>
+                </table>
+              <% end %>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#ffffff;border-top:1px solid #f3f4f6;padding:20px 40px 32px 40px;border-radius:0 0 12px 12px;">
+              <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">
+                <strong style="color:#374151;">Submitted:</strong> <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %>
+              </p>
+              <p style="margin:0;font-size:12px;color:#9ca3af;">
+                Requiems API · <%= t('sales_mailer.enterprise_inquiry.reminder') %>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
 </html>

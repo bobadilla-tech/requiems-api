@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "gen-og-image": "node gen-og-image.mjs"
+    "gen-og-image": "node gen-og-image.mjs",
+    "gen-docs": "node generate-docs.mjs"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^1.0.0"
+    "@napi-rs/canvas": "^1.0.0",
+    "pdfkit": "^0.15.0"
   }
 }
