@@ -216,7 +216,7 @@ es:
           - APIs de imágenes (optimización, marcadores de posición, códigos QR)
           - Soporte para API GraphQL
           - Bibliotecas SDK (Python, JavaScript, Go, Ruby)
-          - Certificación SOC 2 Tipo II
+          - Documentación de cumplimiento de cero retención de datos
       v0_0_1: v0.0.1
       v0_0_2: v0.0.2
       v0_1_0: v0.1.0
@@ -236,9 +236,12 @@ es:
         inquiry_type: Tipo de consulta
         message: "¿Cómo podemos ayudarte?"
         name: Nombre
+        error: Algo salió mal. Por favor escríbenos directamente a eliaz@bobadilla.tech
+        missing_fields: Por favor completa tu nombre, un correo válido y un mensaje.
         paid_notice: Si ya eres suscriptor de pago, envía una solicitud desde la pestaña
           Support Desk de tu perfil de cuenta para obtener una respuesta más rápida.
         submit: Enviar mensaje
+        success: "¡Mensaje enviado! Te responderemos en breve."
       general_questions:
         heading: Preguntas generales
         text: Para consultas sobre nuestro negocio, planes de suscripción, políticas
@@ -700,25 +703,27 @@ es:
           de abusos en el edge.
         api_security_title: Seguridad de la API
         encryption_badge: Activo
-        encryption_desc: TLS 1.3 en tránsito, AES-256 en reposo. Política de cero
-          almacenamiento de datos para entradas/salidas de la API.
+        encryption_desc: TLS 1.3 aplicado en todas las conexiones. Las entradas y
+          salidas de la API nunca se escriben en disco — el procesamiento ocurre
+          completamente en memoria volátil.
         encryption_title: Cifrado de datos
         eu_badge: UE
         eu_desc: Todos los centros de datos ubicados en la Unión Europea. Compatible
           con GDPR.
         eu_title: Infraestructura UE
         gdpr_badge: Cumple
-        gdpr_desc: Cumplimiento total con GDPR, CCPA y regulaciones internacionales
-          de privacidad.
+        gdpr_desc: Alineado con GDPR por diseño — sin almacenamiento de entradas de
+          usuario, infraestructura solo en la UE y minimización de datos en el núcleo.
         gdpr_title: Compatible con GDPR / CCPA
         heading: Seguridad y cumplimiento primero
         payments_badge: LemonSqueezy
         payments_desc: Todos los pagos procesados a través de LemonSqueezy. Nunca
           vemos ni almacenamos tus datos de pago.
         payments_title: Pagos seguros
-        soc2_badge: En progreso
-        soc2_desc: En progreso.
-        soc2_title: Certificación SOC 2
+        soc2_badge: Por Diseño
+        soc2_desc: Las entradas y salidas de la API nunca se almacenan. Todos los
+          payloads se procesan en memoria volátil y se eliminan al entregar la respuesta.
+        soc2_title: Cero Retención de Datos
         subheading: Seguridad de nivel empresarial para equipos de todos los tamaños
       social_proof:
         label: Impulsando productos en empresas como
@@ -878,15 +883,17 @@ es:
           name: Profesional
         save_per_year: Ahorra $%{amount}/año
       security:
-        encryption_desc: TLS 1.3 en tránsito, AES-256 en reposo. Cero registro de
-          datos de solicitudes/respuestas de la API.
+        encryption_desc: TLS 1.3 aplicado en todas las conexiones. Los payloads de
+          la API se procesan en memoria volátil — nunca se escriben en disco.
         encryption_title: Cifrado empresarial
         eu_desc: Todos los centros de datos ubicados en la UE para el cumplimiento
           del GDPR.
         eu_title: Infraestructura UE
         heading: Seguridad y cumplimiento
-        soc2_desc: En progreso.
-        soc2_title: SOC 2 Tipo II
+        soc2_desc: Todos los payloads de la API se procesan completamente en memoria.
+          Ninguna entrada de usuario se almacena, registra o retiene más allá del
+          ciclo de vida de la solicitud.
+        soc2_title: Cero Retención de Datos
       table:
         feature_col: Característica
         heading: Comparar planes
@@ -920,7 +927,7 @@ es:
         heading: Almacenamiento y seguridad de datos
         items:
         - Cifrado TLS 1.3 para datos en tránsito
-        - Cifrado AES-256 para datos en reposo
+        - Cero retención de payloads de API — entradas procesadas solo en memoria volátil
         - Auditorías de seguridad y monitoreo regulares
         - Controles de acceso y mecanismos de autenticación
         text: 'Todos los datos se almacenan en servidores ubicados en la Unión Europea.
@@ -1136,6 +1143,97 @@ es:
         self_cancel: Puedes cancelar tu cuenta en cualquier momento desde la configuración
           de tu panel.
       title: Términos de servicio - Requiems API
+    security:
+      title: Seguridad y Cumplimiento - Requiems API
+      heading: Seguridad y Cumplimiento
+      last_updated: Vigente desde %{date}
+      hero:
+        heading: Seguridad Empresarial por Diseño
+        subheading: Diseñamos Requiems API en torno a un principio simple — los datos
+          que nunca almacenas no pueden filtrarse, vulnerarse ni ser solicitados judicialmente.
+      stateless:
+        heading: Pilar Central — Arquitectura Sin Estado
+        intro: Cada solicitud a la API se procesa completamente en la memoria volátil
+          del servidor (RAM). En el momento en que se entrega tu respuesta HTTP, el
+          payload desaparece. No tenemos mecanismo para recuperarlo porque nunca fue
+          escrito en ningún lugar.
+        points:
+          - Ejecución en memoria — los payloads nunca tocan el disco
+          - Cero retención de datos — no existe base de datos de entradas de usuario
+          - Sin caché de contenido de solicitudes/respuestas
+          - Solo telemetría anonimizada — códigos de respuesta y marcas de tiempo, nunca contenido
+      counter_exception:
+        heading: Transparencia — La Excepción de la API de Contador
+        text: Nuestra API de Contador (/v1/technology/counter/{namespace}) es el único
+          endpoint que persiste datos más allá de una solicitud. Almacena un conteo
+          entero con nombre (ej., "visitas-pagina" → 42). No se almacena payload,
+          contenido de usuario ni datos identificadores — solo el valor del contador.
+          Esta API rara vez se usa y puede evitarse si se requiere cero persistencia.
+      infrastructure:
+        heading: Seguridad de Infraestructura
+        cloudflare:
+          title: Cloudflare — Perímetro de Red
+          points:
+            - Mitigación DDoS en el edge
+            - Firewall de Aplicaciones Web (WAF)
+            - TLS 1.3 aplicado en todas las conexiones
+            - Limitación de tasa y prevención de abuso
+        hetzner:
+          title: Hetzner — Centros de Datos en la UE
+          points:
+            - Todos los servidores ubicados en la Unión Europea
+            - Instalaciones certificadas ISO/IEC 27001
+            - Controles de acceso físico y monitoreo 24/7
+            - Infraestructura de energía y red redundante
+      api_auth:
+        heading: Autenticación y Control de Acceso a la API
+        points:
+          - Claves API de alta entropía emitidas por cuenta
+          - Revocación instantánea de claves desde el panel
+          - TLS 1.3 requerido en cada solicitud
+          - Limitación de tasa aplicada en el perímetro de red
+      compliance_scope:
+        heading: Alcance de Cumplimiento
+        text: Dado que Requiems API mantiene una arquitectura 100% sin estado para
+          los payloads de usuario, una auditoría tradicional de retención de datos
+          SOC 2 no aplica a nuestra operación. Satisfacemos los principios básicos
+          de Seguridad y Confidencialidad de SOC 2 al nunca mantener datos en reposo.
+          El cumplimiento de infraestructura física se hereda a través de la certificación
+          ISO 27001 de Hetzner.
+        gdpr:
+          title: Alineación con GDPR
+          text: No se almacena, perfila ni transfiere ninguna entrada de usuario.
+            Infraestructura solo en la UE. La minimización de datos es estructural,
+            no procedimental.
+        dpa:
+          title: Acuerdo de Procesamiento de Datos
+          text: Si tu organización requiere un DPA firmado antes de la integración,
+            descarga nuestra plantilla pre-completada o envíanos un correo para ejecutar
+            una copia contrafirmada.
+      documents:
+        heading: Documentos de Seguridad
+        subheading: Descarga nuestra documentación de cumplimiento para tu equipo de seguridad.
+        security_packet:
+          title: Paquete de Seguridad y Arquitectura
+          desc: Descripción técnica completa de nuestra arquitectura sin estado, proveedores
+            de infraestructura y controles de seguridad.
+          download: Descargar Paquete de Seguridad
+        dpa:
+          title: Acuerdo de Procesamiento de Datos (Plantilla)
+          desc: Plantilla DPA pre-completada con términos de procesamiento de cero
+            retención. Completa los datos de tu organización y contrafirma.
+          download: Descargar Plantilla DPA
+        api_policy:
+          title: Política de Autenticación y Seguridad de la API
+          desc: Documento de política formal sobre emisión de claves, revocación,
+            aplicación de TLS, limitación de tasa y procedimientos de respuesta a incidentes.
+          download: Descargar Política de Auth API
+        email_cta: "¿Necesitas una copia contrafirmada o un acuerdo personalizado?"
+        email_link: Escríbenos a eliaz@bobadilla.tech
+      contact:
+        heading: Contacto de Seguridad
+        text: Para reportar una vulnerabilidad, solicitar una revisión de seguridad
+          o discutir requisitos de cumplimiento empresarial, contáctanos en
   sales_inquiries:
     flash:
       error: Lo sentimos, hubo un error al enviar tu consulta. Inténtalo de nuevo

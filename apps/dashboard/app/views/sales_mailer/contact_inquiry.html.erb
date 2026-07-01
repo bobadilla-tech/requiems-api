@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+      .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+      .header { background-color: #6366f1; color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+      .content { background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+      .field { margin-bottom: 20px; }
+      .label { font-weight: 600; color: #1f2937; margin-bottom: 5px; }
+      .value { background-color: white; padding: 15px; border-radius: 6px; border: 1px solid #e5e7eb; }
+      .badge { display: inline-block; background-color: #e0e7ff; color: #4338ca; padding: 3px 10px; border-radius: 9999px; font-size: 13px; font-weight: 600; }
+      .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 style="margin: 0; font-size: 24px;">✉️ Contact Form Submission</h1>
+        <p style="margin: 10px 0 0 0; opacity: 0.9;">Someone reached out via requiems.xyz/contact</p>
+      </div>
+
+      <div class="content">
+        <div class="field">
+          <div class="label">Inquiry Type</div>
+          <div class="value"><span class="badge"><%= @inquiry[:inquiry].presence || "General" %></span></div>
+        </div>
+
+        <div class="field">
+          <div class="label">Name</div>
+          <div class="value"><strong><%= @inquiry[:name] %></strong></div>
+        </div>
+
+        <div class="field">
+          <div class="label">Email</div>
+          <div class="value">
+            <a href="mailto:<%= @inquiry[:email] %>"><%= @inquiry[:email] %></a>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">Message</div>
+          <div class="value"><%= simple_format(@inquiry[:message]) %></div>
+        </div>
+
+        <div class="footer">
+          <p><strong>Submitted:</strong> <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %></p>
+          <p>Reply directly to this email to respond to <%= @inquiry[:name] %>.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

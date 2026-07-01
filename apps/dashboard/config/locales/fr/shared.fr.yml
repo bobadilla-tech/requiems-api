@@ -40,6 +40,9 @@ fr:
       sending: Envoi en cours...
       subheading: Actions irréversibles qui affectent définitivement votre compte
     faq_heading: Foire aux questions
+    schedule_call_banner:
+      label: Ventes
+      text: "Envie d'échanger ? Planifiez un appel de 15 min avec Alexandra, notre responsable commerciale."
     footer:
       copyright: "© %{year} Bobadilla Tech. Tous droits réservés."
       links:
@@ -58,6 +61,7 @@ fr:
         our_team: Notre équipe
         pricing: Tarifs
         privacy_policy: Politique de confidentialité
+        security: Sécurité
         suggest_api: Suggérer une API
         talk_to_sales: Parler aux ventes
         terms_of_service: Conditions d'utilisation

@@ -140,7 +140,9 @@ Rails.application.routes.draw do
     get "team", to: "home#team"
     get "privacy", to: "home#privacy"
     get "terms", to: "home#terms"
+    get "security", to: "home#security"
     get "contact", to: "home#contact"
+    post "contact", to: "home#contact_submit"
     get "api_reference", to: "home#api_reference"
     get "changelog", to: "home#changelog"
 

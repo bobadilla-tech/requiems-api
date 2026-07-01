@@ -21,8 +21,16 @@ fr:
       have_questions_html: Vous avez des questions d'ordre général ? %{faq_link} ou
         %{contact_link}.
       heading: Parlez au service commercial
+      hero_badge: Commercial
       optional_share_any_details_that_will: Facultatif - N'hésitez pas à partager
         tout détail qui nous permettra de mieux vous aider.
+      or_fill_form: ou remplissez le formulaire et nous vous recontacterons
+      schedule_card:
+        available: Disponible
+        cta: Réserver un appel de 15 min
+        duration: 15 minutes · Aucune préparation requise
+        heading: Planifier un appel stratégique
+        subtitle: Alexandra Flores · Responsable commerciale
       secure_info_notice: Vos informations sont sécurisées et ne seront utilisées
         que pour vous contacter au sujet de votre demande.
       sending: Envoi en cours...

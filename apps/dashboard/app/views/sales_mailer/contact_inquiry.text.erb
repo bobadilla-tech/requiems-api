@@ -1,0 +1,14 @@
+CONTACT FORM SUBMISSION
+========================
+
+Inquiry Type: <%= @inquiry[:inquiry].presence || "General" %>
+Name: <%= @inquiry[:name] %>
+Email: <%= @inquiry[:email] %>
+
+Message:
+<%= @inquiry[:message] %>
+
+--
+Submitted: <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %>
+
+Reply directly to this email to respond to <%= @inquiry[:name] %>.

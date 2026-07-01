@@ -229,8 +229,8 @@ The controller does **only** client-side validation and loading state. No
 
 ## 4. i18n requirements
 
-All user-facing strings in tool pages must use `t()`. Use **rori18n** to
-extract strings and generate the locale files.
+All user-facing strings in tool pages must use `t()`. Use **rori18n** to extract
+strings and generate the locale files.
 
 **Install once** ([rori18n repo](https://github.com/bobadilla-tech/rori18n)):
 
@@ -249,8 +249,8 @@ git diff --name-only origin/main | \
   rori18n report -r . --changed-files -
 ```
 
-Lists every hardcoded user-visible string in your changed files. Fix them
-with `t()` calls and EN keys before moving on.
+Lists every hardcoded user-visible string in your changed files. Fix them with
+`t()` calls and EN keys before moving on.
 
 #### Step 2 — extract + generate locale skeletons
 
@@ -265,8 +265,8 @@ One pass does three things:
 2. Writes the EN key to the correct YAML file and injects the `t()` call
 3. Creates matching empty entries in `es/tools.es.yml` and `fr/tools.fr.yml`
 
-For `t()` calls you wrote manually, also add the key with an empty value `""`
-to the ES and FR files, the maintainer fills them after merge.
+For `t()` calls you wrote manually, also add the key with an empty value `""` to
+the ES and FR files, the maintainer fills them after merge.
 
 #### Step 3 — lint before opening the PR
 

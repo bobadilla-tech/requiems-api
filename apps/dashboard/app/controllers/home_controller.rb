@@ -47,4 +47,25 @@ class HomeController < ApplicationController
 
   def domain_checker
   end
+
+  def security
+  end
+
+  def contact_submit
+    name    = params[:name].to_s.strip
+    email   = params[:email].to_s.strip
+    inquiry = params[:inquiry_type].to_s.strip
+    message = params[:message].to_s.strip
+
+    unless name.present? && email.match?(URI::MailTo::EMAIL_REGEXP) && message.present?
+      redirect_to contact_path, alert: t("home.contact.form.missing_fields")
+      return
+    end
+
+    SalesMailer.contact_inquiry({ name:, email:, inquiry:, message: }).deliver_now
+    redirect_to root_path, notice: t("home.contact.form.success")
+  rescue => e
+    Rails.logger.error "Contact form error: #{e.message}"
+    redirect_to contact_path, alert: t("home.contact.form.error")
+  end
 end

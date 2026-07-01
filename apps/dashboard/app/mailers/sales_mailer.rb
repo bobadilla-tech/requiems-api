@@ -18,4 +18,15 @@ class SalesMailer < ApplicationMailer
       reply_to: inquiry[:email]
     )
   end
+
+  def contact_inquiry(inquiry)
+    @inquiry = inquiry
+    @timestamp = Time.current
+
+    mail(
+      to: OBSERVER_EMAILS,
+      subject: "Contact Form: [#{inquiry[:inquiry]}] from #{inquiry[:name]}",
+      reply_to: inquiry[:email]
+    )
+  end
 end
