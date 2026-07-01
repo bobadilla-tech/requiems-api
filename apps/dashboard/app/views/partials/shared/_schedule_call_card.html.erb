@@ -1,0 +1,29 @@
+<div class="bg-white dark:bg-gray-800 rounded-xl border border-orange-200 dark:border-orange-800/30 shadow-sm p-5 mb-8">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="flex items-center gap-3 flex-1 min-w-0">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-sm">
+        <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <%= t("shared.schedule_call_banner.text") %>
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Alexandra Flores · Sales Lead · 15 min · No prep needed</p>
+      </div>
+    </div>
+    <a href="<%= cal_com_strategy_url %>"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+      Book a Call
+      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+      </svg>
+    </a>
+  </div>
+</div>
