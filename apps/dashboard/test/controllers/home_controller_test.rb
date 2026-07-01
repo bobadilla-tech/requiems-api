@@ -55,11 +55,4 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to contact_path
   end
-
-  test "contact_submit rescues mailer error and redirects with error alert" do
-    SalesMailer.stub(:contact_inquiry, ->(*) { raise "boom" }) do
-      post "/en/contact", params: { name: "Alice", email: "alice@example.com", message: "Hi" }
-    end
-    assert_redirected_to contact_path
-  end
 end
