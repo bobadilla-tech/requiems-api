@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation profanity-filter].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -48,6 +48,11 @@ class ToolsController < ApplicationController
       name: "Inflation",
       description: "Historical and current CPI inflation rates for 241 countries, sourced from the World Bank.",
       icon_classes: "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
+    },
+    "profanity-filter" => {
+      name: "Profanity Filter",
+      description: "Detect and censor offensive language in any text. Returns flagged words and a clean censored version.",
+      icon_classes: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
     }
   }.freeze
 

@@ -1,0 +1,47 @@
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t("tools.profanity_filter.use_cases.heading") %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        <%= t("tools.profanity_filter.use_cases.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% [
+        { title: t("tools.profanity_filter.use_cases.ugc_title"),
+          desc:  t("tools.profanity_filter.use_cases.ugc_desc"),
+          tags:  t("tools.profanity_filter.use_cases.ugc_tags").split(",").map(&:strip) },
+        { title: t("tools.profanity_filter.use_cases.chat_title"),
+          desc:  t("tools.profanity_filter.use_cases.chat_desc"),
+          tags:  t("tools.profanity_filter.use_cases.chat_tags").split(",").map(&:strip) },
+        { title: t("tools.profanity_filter.use_cases.onboarding_title"),
+          desc:  t("tools.profanity_filter.use_cases.onboarding_desc"),
+          tags:  t("tools.profanity_filter.use_cases.onboarding_tags").split(",").map(&:strip) },
+        { title: t("tools.profanity_filter.use_cases.support_title"),
+          desc:  t("tools.profanity_filter.use_cases.support_desc"),
+          tags:  t("tools.profanity_filter.use_cases.support_tags").split(",").map(&:strip) },
+        { title: t("tools.profanity_filter.use_cases.ai_title"),
+          desc:  t("tools.profanity_filter.use_cases.ai_desc"),
+          tags:  t("tools.profanity_filter.use_cases.ai_tags").split(",").map(&:strip) },
+        { title: t("tools.profanity_filter.use_cases.compliance_title"),
+          desc:  t("tools.profanity_filter.use_cases.compliance_desc"),
+          tags:  t("tools.profanity_filter.use_cases.compliance_tags").split(",").map(&:strip) },
+      ].each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4"><%= uc[:desc] %></p>
+          <div class="flex flex-wrap gap-2">
+            <% uc[:tags].each do |tag| %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <%= tag %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

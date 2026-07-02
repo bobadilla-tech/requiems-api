@@ -4,17 +4,17 @@ fr:
       api_combinations:
         email_validator_benefit: Validez à la fois le domaine et l'adresse électronique spécifique.
         email_validator_name: Vérificateur de domaine + validateur d'email
-        email_validator_outcome: 'Confiance totale en matière de délivrabilité des e-mails : vérifications de l’état du domaine et au niveau de la boîte aux lettres.'
+        email_validator_outcome: "Confiance totale en matière de délivrabilité des e-mails : vérifications de l’état du domaine et au niveau de la boîte aux lettres."
         heading: Associez-le à d'autres API
-        label_benefit: 'Avantage:'
-        label_outcome: 'Résultat:'
+        label_benefit: "Avantage:"
+        label_outcome: "Résultat:"
         phone_validator_benefit: Vérifiez l'état du domaine et le numéro de téléphone lors de la même étape d'intégration.
         phone_validator_name: Vérificateur de domaine + validateur de numéro de téléphone
         phone_validator_outcome: Validation multipoint des contacts — présence numérique confirmée et numéro de téléphone joignable — avant d'accorder l'accès.
         subheading: L'outil Domain Checker est plus puissant lorsqu'il est combiné à d'autres Requiems API. Combinez-le pour intégrer une validation multipoint dans un flux de travail unique.
         vpn_detection_benefit: Vérifiez l'état du domaine tout en identifiant le trafic VPN ou proxy provenant de la même requête.
         vpn_detection_name: Vérificateur de domaine + Détection de VPN
-        vpn_detection_outcome: 'Signal de fraude à double niveau : un domaine signalé combiné à un trafic anonymisé constitue un puissant déclencheur de blocage.'
+        vpn_detection_outcome: "Signal de fraude à double niveau : un domaine signalé combiné à un trafic anonymisé constitue un puissant déclencheur de blocage."
       cta:
         body: Une seule clé API. Disponibilité des domaines, données WHOIS et plus de 50 autres API couvrant la validation, les réseaux, la finance et bien plus encore.
         cta_docs: Lire la documentation →
@@ -89,7 +89,7 @@ fr:
         accuracy_body: Chaque réponse comprend des données WHOIS analysées (enregistrements de propriété et d'enregistrement du domaine), l'état DNS (existence ou non d'enregistrements de routage du trafic), la validité SSL (certificat HTTPS actif), les enregistrements MX (configuration du serveur de messagerie) et un score de réputation — le tout normalisé dans une structure JSON cohérente.
         accuracy_heading: Précision
         heading: Que fait l'API Domain Checker ?
-        simplicity_body: 'Une simple requête POST avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : juste un appel HTTP et une réponse JSON.'
+        simplicity_body: "Une simple requête POST avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : juste un appel HTTP et une réponse JSON."
         simplicity_heading: Simplicité
         subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un domaine : disponibilité, propriétaire et historique d''enregistrement.'
     email_normalizer:
@@ -235,8 +235,8 @@ fr:
         email_validator_name: Validateur de numéro de téléphone + Validateur d'adresse e-mail
         email_validator_outcome: Vérification complète des coordonnées — numéro de téléphone et adresse électronique valides — avant d'accorder l'accès.
         heading: Associez-le à d'autres API
-        label_benefit: 'Avantage:'
-        label_outcome: 'Résultat:'
+        label_benefit: "Avantage:"
+        label_outcome: "Résultat:"
         subheading: Combinez Phone Validator avec d'autres Requiems API pour intégrer une validation multipoint dans un flux de travail unique.
       cta:
         body: Une seule clé API. Validation téléphonique, vérification d'e-mail, contrôle de domaine et plus de 50 autres API dans les domaines de la validation, des réseaux, de la finance et bien plus encore.
@@ -306,7 +306,7 @@ fr:
         accuracy_body: Chaque réponse comprend la détection du pays et de la région, le nom de l'opérateur, la classification du type de ligne (mobile, fixe, VoIP) et le numéro de téléphone formaté selon la norme internationale E.164 — le tout normalisé dans une structure JSON cohérente.
         accuracy_heading: Précision
         heading: Que fait l'API de validation téléphonique ?
-        simplicity_body: 'Une simple requête GET avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : un simple appel HTTP et une réponse JSON suffisent.'
+        simplicity_body: "Une simple requête GET avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : un simple appel HTTP et une réponse JSON suffisent."
         simplicity_heading: Simplicité
         subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un numéro de téléphone : validité, opérateur, type de ligne et format normalisé.'
     bin_lookup:
