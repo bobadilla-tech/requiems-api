@@ -130,8 +130,9 @@ complexity-vs-quality curve for the platform's current needs:
 **Key reasons for selecting AFINN-165:**
 
 - **Direct algorithm compatibility.** AFINN scores are integers in `[−5, +5]`.
-  A single normalisation step at output time maps them to the service's `[0.0,
-  1.0]` response scale: `score_normalised = (raw + 5) / 10`. The negation
+  Each token's raw score is normalised individually — `(raw + 5) / 10` — before
+  being accumulated into `posSum` or `negSum`. The final `Score` is the
+  probability of the dominant class, derived from those sums. The negation
   lookahead, intensity multipliers, and signed accumulation logic inside
   `scoreTokens` are unchanged. The lexicon is a drop-in replacement.
 
@@ -162,34 +163,46 @@ complexity-vs-quality curve for the platform's current needs:
 ## Score Normalisation
 
 AFINN raw scores span `[−5, +5]`. The service response shape requires `Score
-float64` in `[0.0, 1.0]`. The mapping applied at the output layer is:
+float64` in `[0.0, 1.0]`. Normalisation is applied **per token**, before
+accumulation, so that multi-word input never pushes the accumulated sum outside
+a bounded range:
 
+```text
+Per token:
+  normalised = (afinnRaw + 5) / 10        → maps [−5, +5] to [0.0, 1.0]
+  posSum    += normalised  (if valence > 0)
+  negSum    += normalised  (if valence < 0)
+
+Output probabilities:
+  denom  = posSum + negSum + 0.1          → neutralityWeight prevents any class reaching 1.0
+  pos    = posSum / denom
+  neg    = negSum / denom
+  neu    = 1 − pos − neg
+
+Score  = probability of the dominant class
+Label  = "positive" | "neutral" | "negative"  (thresholds unchanged)
 ```
-Score      = (rawScore + 5) / 10
-Comparative = Score normalised per token count
-Label      = "positive" | "neutral" | "negative"  (thresholds unchanged)
-```
 
-Examples:
+Per-token normalisation examples:
 
-| AFINN raw | Normalised Score | Label    |
-| --------- | ---------------- | -------- |
-| +5        | 1.0              | positive |
-| +3        | 0.8              | positive |
-|  0        | 0.5              | neutral  |
-| −3        | 0.2              | negative |
-| −5        | 0.0              | negative |
+| AFINN raw | Per-token normalised | Accumulates into |
+| --------- | -------------------- | ---------------- |
+| +5        | 1.0                  | posSum           |
+| +3        | 0.8                  | posSum           |
+|  0        | 0.5                  | (skipped)        |
+| −3        | 0.2                  | negSum           |
+| −5        | 0.0                  | negSum           |
 
-The internal algorithm operates on raw AFINN integers throughout. Normalisation
-is applied once, at the point where `scoreTokens` results are assembled into the
-final response struct. The response shape (`Score`, `Comparative`, `Label`) does
-not change.
+When no sentiment words are found, the service returns `Score = 1.0` and
+`Sentiment = "neutral"` directly, without going through the probability
+calculation. The response shape (`Score`, `Breakdown`, `Sentiment`) does not
+change.
 
 ---
 
 ## Architecture
 
-```
+```text
 Client
   ↓  HTTP  POST /v1/text/sentiment
 Go API (requiems-api)
@@ -199,7 +212,7 @@ pkg/sentiment
   ├── lexicon.json    (AFINN-165, embedded via //go:embed)
   └── Normalise()     (raw [−5,+5] → response [0.0,1.0])
   ↓
-SentimentResult { Score float64, Comparative float64, Label string }
+SentimentResult { Sentiment string, Score float64, Breakdown Breakdown }
   ↑
 Go API  →  JSON response  →  Client
 ```
@@ -212,7 +225,7 @@ single `Analyze(text string) Result` function.
 
 ## Package Structure
 
-```
+```text
 pkg/
   sentiment/
     analyzer.go      ← tokenize(), scoreTokens(), Analyze() — ported verbatim
