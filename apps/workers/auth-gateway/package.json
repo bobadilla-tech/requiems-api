@@ -27,7 +27,7 @@
     "kv:seed": "node scripts/seed-kv.ts"
   },
   "dependencies": {
-    "@sentry/cloudflare": "^10.58.0",
+    "@sentry/cloudflare": "^10.63.0",
     "hono": "^4.12.27",
     "zod": "^4.4.3"
   },
