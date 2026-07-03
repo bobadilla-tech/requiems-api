@@ -108,11 +108,13 @@ jobs:
         run: go test -race -coverprofile=coverage.out ./...
 
       - name: Upload coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/api/coverage.out
           flags: go
+          fail_ci_if_error: false
 
   go-lint:
     name: Go Lint (Advisory)
@@ -219,11 +221,13 @@ jobs:
         run: bin/rails test
 
       - name: Upload coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/dashboard/coverage/lcov/dashboard.lcov
           flags: rails
+          fail_ci_if_error: false
 
   rails-checks:
     name: Rails Security & Lint
