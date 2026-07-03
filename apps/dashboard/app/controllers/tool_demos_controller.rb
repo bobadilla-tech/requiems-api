@@ -213,6 +213,29 @@ class ToolDemosController < ApplicationController
     render "tool_demos/bin_lookup", locals: { data: data, bin: bin }
   end
 
+  def profanity_filter
+    text = params[:text].to_s.strip
+
+    if text.blank?
+      return render_demo_error("profanity_filter", t("tools.profanity_filter.demo.error_empty"))
+    end
+
+    result = api_call(endpoint: "/v1/validation/profanity", method: "POST", params: { text: text })
+
+    if result.status_code == 429
+      return render_demo_error("profanity_filter", t("tools.profanity_filter.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("profanity_filter", t("tools.profanity_filter.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("profanity_filter", t("tools.profanity_filter.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/profanity_filter", locals: { data: data, text: text }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)

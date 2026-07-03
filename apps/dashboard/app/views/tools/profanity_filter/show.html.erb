@@ -1,0 +1,19 @@
+<% content_for :title, t("tools.profanity_filter.seo.title") %>
+<% content_for :description, t("tools.profanity_filter.seo.description") %>
+
+<%= render "partials/tools/profanity_filter/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.profanity_filter.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/profanity_filter/what_it_does" %>
+<%= render "partials/tools/profanity_filter/use_cases" %>
+<%= render "partials/tools/profanity_filter/api_combinations" %>
+<%= render "partials/tools/profanity_filter/faq" %>
+<%= render "partials/tools/profanity_filter/cta" %>

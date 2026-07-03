@@ -44,4 +44,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/inflation"
     assert_response :success
   end
+
+  test "profanity filter tool page renders successfully" do
+    get "/en/tools/profanity-filter"
+    assert_response :success
+  end
 end
