@@ -78,7 +78,7 @@
 
           <!-- Form -->
           <div class="px-5 pt-5 pb-5">
-            <form data-action="submit->domain-checker-demo#beforeSubmit turbo:submit-start->domain-checker-demo#onSubmitStart turbo:submit-end->domain-checker-demo#onSubmitEnd"
+            <form data-action="turbo:submit-start->domain-checker-demo#onSubmitStart turbo:submit-end->domain-checker-demo#onSubmitEnd"
                   action="<%= tool_demo_domain_checker_path %>"
                   method="post"
                   data-turbo-frame="domain_checker-demo-result"

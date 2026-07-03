@@ -27,7 +27,7 @@
          data-controller="email-validator-demo"
          data-email-validator-demo-error-empty-value="<%= t('tools.email_validator.demo.error_empty') %>">
 
-      <form data-action="submit->email-validator-demo#beforeSubmit turbo:submit-start->email-validator-demo#onSubmitStart turbo:submit-end->email-validator-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->email-validator-demo#onSubmitStart turbo:submit-end->email-validator-demo#onSubmitEnd"
             action="<%= tool_demo_email_validator_path %>"
             method="post"
             data-turbo-frame="email_validator-demo-result"

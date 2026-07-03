@@ -6,7 +6,7 @@ export default class extends Controller {
   static targets = ["from", "to", "value", "button", "errorMessage", "spinner"];
   static values = { errorFillAllFields: String };
 
-  beforeSubmit(event) {
+  onSubmitStart(event) {
     this._clearError();
 
     const from = this.fromTarget.value;
@@ -14,12 +14,11 @@ export default class extends Controller {
     const value = this.valueTarget.value.trim();
 
     if (!from || !to || !value) {
-      event.preventDefault();
+      event.detail.formSubmission.stop();
       this._showError(this.errorFillAllFieldsValue);
+      return;
     }
-  }
 
-  onSubmitStart() {
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
