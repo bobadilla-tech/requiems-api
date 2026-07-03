@@ -27,7 +27,7 @@
          data-controller="profanity-filter-demo"
          data-profanity-filter-demo-error-empty-value="<%= t('tools.profanity_filter.demo.error_empty') %>">
 
-      <form data-action="submit->profanity-filter-demo#beforeSubmit turbo:submit-start->profanity-filter-demo#onSubmitStart turbo:submit-end->profanity-filter-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->profanity-filter-demo#onSubmitStart turbo:submit-end->profanity-filter-demo#onSubmitEnd"
             action="<%= tool_demo_profanity_filter_path %>"
             method="post"
             data-turbo-frame="profanity_filter-demo-result"
