@@ -478,6 +478,8 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_match I18n.t("tools.qr_code.demo.error_no_data"), response.body
+  end
+
   # ── profanity_filter ─────────────────────────────────────────────────────────
 
   test "profanity_filter renders result on success" do

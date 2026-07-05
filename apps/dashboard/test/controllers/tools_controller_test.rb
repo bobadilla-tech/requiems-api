@@ -47,6 +47,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
 
   test "qr code tool page renders successfully" do
     get "/en/tools/qr-code"
+    assert_response :success
+  end
+
   test "profanity filter tool page renders successfully" do
     get "/en/tools/profanity-filter"
     assert_response :success
