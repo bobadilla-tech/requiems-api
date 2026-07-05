@@ -27,7 +27,7 @@
          data-controller="inflation-demo"
          data-inflation-demo-error-empty-value="<%= t('tools.inflation.demo.error_empty') %>">
 
-      <form data-action="submit->inflation-demo#beforeSubmit turbo:submit-start->inflation-demo#onSubmitStart turbo:submit-end->inflation-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->inflation-demo#onSubmitStart turbo:submit-end->inflation-demo#onSubmitEnd"
             action="<%= tool_demo_inflation_path %>"
             method="post"
             data-turbo-frame="inflation-demo-result"

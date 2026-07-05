@@ -4,15 +4,13 @@ export default class extends Controller {
   static targets = ["input", "button", "errorMessage", "spinner"];
   static values = { errorEmpty: String };
 
-  beforeSubmit(event) {
+  onSubmitStart(event) {
     this._clearError();
     if (!this.inputTarget.value.trim()) {
-      event.preventDefault();
+      event.detail.formSubmission.stop();
       this._showError(this.errorEmptyValue);
+      return;
     }
-  }
-
-  onSubmitStart() {
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }

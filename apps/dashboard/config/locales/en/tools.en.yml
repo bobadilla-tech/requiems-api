@@ -5,11 +5,11 @@ en:
       api_combinations:
         email_validator_benefit: Validate both the domain and specific email address.
         email_validator_name: Domain Checker + Email Validator
-        email_validator_outcome: 'Full email deliverability confidence: domain health
-          plus mailbox-level checks.'
+        email_validator_outcome: "Full email deliverability confidence: domain health
+          plus mailbox-level checks."
         heading: Pair It With Other APIs
-        label_benefit: 'Benefit:'
-        label_outcome: 'Outcome:'
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
         phone_validator_benefit: Verify domain health and phone number at the same
           onboarding step.
         phone_validator_name: Domain Checker + Phone Validator
@@ -20,8 +20,8 @@ en:
         vpn_detection_benefit: Check domain health while identifying VPN or proxy
           traffic from the same request.
         vpn_detection_name: Domain Checker + VPN Detection
-        vpn_detection_outcome: 'Double-layered fraud signal: a flagged domain combined
-          with anonymized traffic is a strong block trigger.'
+        vpn_detection_outcome: "Double-layered fraud signal: a flagged domain combined
+          with anonymized traffic is a strong block trigger."
       cta:
         body: One API key. Domain availability, WHOIS data, and 50+ other APIs across
           validation, networking, finance, and more.
@@ -298,8 +298,8 @@ en:
         email_validator_outcome: Complete contact verification — reachable phone and
           deliverable email — before granting access.
         heading: Pair It With Other APIs
-        label_benefit: 'Benefit:'
-        label_outcome: 'Outcome:'
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
         subheading: Combine Phone Validator with other Requiems APIs to build multi-point
           validation into a single workflow.
       cta:
