@@ -29,15 +29,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
-    "@cloudflare/workers-types": "^4.20260619.1",
+    "@biomejs/biome": "^2.5.2",
+    "@cloudflare/workers-types": "^4.20260702.1",
     "@edge-runtime/vm": "^5.0.0",
     "@standard-schema/spec": "^1.1.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.1.0",
     "@vitest/coverage-v8": "^4.1.8",
-    "vite": "^8.0.16",
+    "vite": "^8.1.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8",
-    "wrangler": "^4.98.0"
+    "wrangler": "^4.103.0"
   }
 }

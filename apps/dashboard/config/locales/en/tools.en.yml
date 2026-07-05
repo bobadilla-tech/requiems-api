@@ -750,3 +750,114 @@ en:
         reliable_conversions_with_transparent: Reliable conversions with transparent
           formulas.
         simple_api_requests_instant_results: Simple API requests, instant results.
+    profanity_filter:
+      seo:
+        title: Free Profanity Filter API — Detect & Censor Offensive Language | Requiems API
+        description: Detect profanity and offensive language in any text. Returns flagged
+          words and a censored version. Try the free live demo — no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building safer products
+      hero:
+        title: Detect and Remove Profanity
+        subtitle: Identify offensive language and get a censored version of any text
+          in a single API call. No dictionaries to maintain, no false positives to tune.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_input: Text to check
+        placeholder: e.g. This is a damn good example
+        submit: Check
+        no_account: No account required for the demo
+      what_it_does:
+        detection_badge: Detection
+        detection_heading: Finds What You Miss
+        detection_body: Scans input text for profanity, slurs, and offensive language.
+          Returns a boolean flag and a list of every flagged word — so you know exactly
+          what was found, not just whether something was found.
+        censorship_badge: Censorship
+        censorship_heading: Returns a Clean Version
+        censorship_body: Every response includes a censored copy of the original text
+          with offensive words replaced. Drop it straight into your UI without any
+          client-side string manipulation.
+      use_cases:
+        heading: Built for Content Safety Workflows
+        subheading: From user-generated content to real-time moderation — if text enters
+          your product, this API keeps it clean.
+        ugc_title: Moderate user-generated content
+        ugc_desc: Automatically flag or reject comments, reviews, and posts that contain
+          offensive language before they reach other users.
+        ugc_tags: "UGC, Comments, Reviews"
+        chat_title: Clean up live chat
+        chat_desc: Filter messages in real time for chat apps, gaming platforms, and
+          community tools. Block or replace offensive words before delivery.
+        chat_tags: "Chat, Gaming, Real-time"
+        onboarding_title: Sanitize onboarding inputs
+        onboarding_desc: Check usernames, display names, and bio fields at signup.
+          Reject offensive choices before they ever enter your database.
+        onboarding_tags: "Onboarding, Usernames, Signup"
+        support_title: Screen support tickets
+        support_desc: Identify abusive or offensive language in incoming support messages.
+          Route flagged tickets to specialized agents or apply automatic warnings.
+        support_tags: "Support, CX, Ticketing"
+        ai_title: Sanitize AI outputs
+        ai_desc: Run generated text through the filter before displaying it to users.
+          Catch model hallucinations that produce unexpected offensive content.
+        ai_tags: "AI, LLM, Safety"
+        compliance_title: Meet content compliance requirements
+        compliance_desc: Log flagged content and censored replacements for audit trails.
+          Demonstrate moderation coverage to partners, app stores, and regulators.
+        compliance_tags: "Compliance, Audit, Reporting"
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Profanity Filter is more effective as part of a layered moderation
+          pipeline. Combine it with other Requiems APIs to catch more vectors of abuse.
+        sentiment_pair: Profanity Filter + Sentiment Analysis
+        sentiment_benefit: Catch offensive content missed by each detector alone. Profanity
+          Filter targets explicit words; Sentiment Analysis catches hostile tone in
+          technically clean text.
+        email_pair: Profanity Filter + Email Validator
+        email_benefit: Block offensive usernames and verify the email is real before
+          account creation. Two checks, one onboarding step.
+        domain_pair: Profanity Filter + Domain Checker
+        domain_benefit: Validate submitted domain names for both profanity and DNS
+          health. Useful when accepting user-provided business domains.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What does the API return?
+        a1: Each response includes three fields — has_profanity (boolean), censored
+          (the original text with offensive words replaced by asterisks), and flagged_words
+          (an array of the specific words that were detected).
+        q2: Does it support languages other than English?
+        a2: The filter is optimized for English. Detection accuracy in other languages
+          varies and is not guaranteed. Support for additional languages is on the roadmap.
+        q3: How are words censored?
+        a3: Offensive words are replaced with asterisks in the censored field. The
+          replacement preserves the original word length so surrounding text stays
+          readable.
+        q4: Can I use it to check usernames or short strings?
+        a4: Yes. The API accepts any non-empty string. There is no minimum length requirement,
+          so single words and short phrases work fine.
+        q5: Is there a batch endpoint?
+        a5: Yes — POST /v1/validation/profanity/batch accepts up to 50 texts in a
+          single request. See the API docs for the request format and response schema.
+      cta:
+        heading: Keep your platform clean with Requiems.
+        body: One API key. Profanity detection, email validation, sentiment analysis,
+          and 50+ other APIs for building safer, smarter products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_empty: Please enter some text to check.
+        error_generic: Something went wrong. Try again.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_no_data: No data returned.
+        result_heading: Result
+        label_has_profanity: Contains profanity
+        label_censored: Censored text
+        label_flagged_words: Flagged words
+        badge_clean: Clean
+        badge_flagged: Flagged
+        badge_yes: "Yes"
+        badge_no: "No"
+        badge_none: None detected

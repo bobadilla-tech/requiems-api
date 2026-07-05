@@ -69,7 +69,7 @@
           </div>
 
           <div class="px-5 pt-5 pb-5">
-            <form data-action="submit->phone-validator-demo#beforeSubmit turbo:submit-start->phone-validator-demo#onSubmitStart turbo:submit-end->phone-validator-demo#onSubmitEnd"
+            <form data-action="turbo:submit-start->phone-validator-demo#onSubmitStart turbo:submit-end->phone-validator-demo#onSubmitEnd"
                   action="<%= tool_demo_phone_validator_path %>"
                   method="post"
                   data-turbo-frame="phone_validator-demo-result"

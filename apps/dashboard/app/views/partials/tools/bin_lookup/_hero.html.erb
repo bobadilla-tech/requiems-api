@@ -27,7 +27,7 @@
          data-controller="bin-lookup-demo"
          data-bin-lookup-demo-error-empty-value="<%= t('tools.bin_lookup.demo.error_empty') %>">
 
-      <form data-action="submit->bin-lookup-demo#beforeSubmit turbo:submit-start->bin-lookup-demo#onSubmitStart turbo:submit-end->bin-lookup-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->bin-lookup-demo#onSubmitStart turbo:submit-end->bin-lookup-demo#onSubmitEnd"
             action="<%= tool_demo_bin_lookup_path %>"
             method="post"
             data-turbo-frame="bin_lookup-demo-result"

@@ -68,7 +68,7 @@ in JavaScript.**
      data-controller="{tool-name}-demo"
      data-{tool-name}-demo-error-empty-value="<%= t('tools.{tool_name}.demo.error_empty') %>">
 
-  <form data-action="submit->{tool-name}-demo#beforeSubmit turbo:submit-start->{tool-name}-demo#onSubmitStart turbo:submit-end->{tool-name}-demo#onSubmitEnd"
+  <form data-action="turbo:submit-start->{tool-name}-demo#onSubmitStart turbo:submit-end->{tool-name}-demo#onSubmitEnd"
         action="<%= tool_demo_{tool_name}_path %>"
         method="post"
         data-turbo-frame="{tool_name}-demo-result"
@@ -192,15 +192,15 @@ export default class extends Controller {
   static targets = ["input", "button", "errorMessage", "spinner"];
   static values = { errorEmpty: String };
 
-  beforeSubmit(event) {
+  onSubmitStart(event) {
     this._clearError();
-    if (!this.inputTarget.value.trim()) {
-      event.preventDefault();
-      this._showError(this.errorEmptyValue);
-    }
-  }
 
-  onSubmitStart() {
+    if (!this.inputTarget.value.trim()) {
+      event.detail.formSubmission.stop();
+      this._showError(this.errorEmptyValue);
+      return;
+    }
+
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }

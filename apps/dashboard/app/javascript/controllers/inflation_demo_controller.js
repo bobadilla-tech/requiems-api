@@ -6,11 +6,13 @@ export default class extends Controller {
 
   onSubmitStart(event) {
     this._clearError();
+
     if (!this.inputTarget.value.trim()) {
       event.detail.formSubmission.stop();
       this._showError(this.errorEmptyValue);
       return;
     }
+
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
