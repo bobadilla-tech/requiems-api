@@ -494,7 +494,7 @@ fr:
         title: "API gratuite de génération de codes QR — PNG et Base64 instantanés | Requiems API"
         description: "Générez des codes QR à partir de n'importe quel texte ou URL. Taille et niveau de correction d'erreur configurables. Accès gratuit disponible, aucune carte bancaire requise."
       logo_marquee:
-        trusted_by: "Utilisé en confiance par des équipes chez"
+        trusted_by: "Approuvé par les équipes de"
       hero:
         title: "Transformez n'importe quel texte ou URL en code QR, instantanément."
         subtitle: "Un seul appel API renvoie un code QR scannable au format PNG brut ou en JSON base64 — taille et niveau de correction d'erreur configurables."
@@ -536,8 +536,8 @@ fr:
       api_combinations:
         heading: "Utilisez-la avec des API complémentaires."
         subheading: "L'API de Codes QR fonctionne encore mieux associée à d'autres API Requiems."
-        label_benefit: "Bénéfice :"
-        label_outcome: "Résultat :"
+        label_benefit: "Avantage:"
+        label_outcome: "Résultat:"
         domain_pair: "Codes QR + Vérificateur de Domaine"
         domain_benefit: "Validez le domaine d'une URL avant de l'encoder."
         domain_outcome: "Évitez de générer des codes QR pointant vers des domaines cassés ou non enregistrés."
