@@ -4,17 +4,17 @@ fr:
       api_combinations:
         email_validator_benefit: Validez à la fois le domaine et l'adresse électronique spécifique.
         email_validator_name: Vérificateur de domaine + validateur d'email
-        email_validator_outcome: 'Confiance totale en matière de délivrabilité des e-mails : vérifications de l’état du domaine et au niveau de la boîte aux lettres.'
+        email_validator_outcome: "Confiance totale en matière de délivrabilité des e-mails : vérifications de l’état du domaine et au niveau de la boîte aux lettres."
         heading: Associez-le à d'autres API
-        label_benefit: 'Avantage:'
-        label_outcome: 'Résultat:'
+        label_benefit: "Avantage:"
+        label_outcome: "Résultat:"
         phone_validator_benefit: Vérifiez l'état du domaine et le numéro de téléphone lors de la même étape d'intégration.
         phone_validator_name: Vérificateur de domaine + validateur de numéro de téléphone
         phone_validator_outcome: Validation multipoint des contacts — présence numérique confirmée et numéro de téléphone joignable — avant d'accorder l'accès.
         subheading: L'outil Domain Checker est plus puissant lorsqu'il est combiné à d'autres Requiems API. Combinez-le pour intégrer une validation multipoint dans un flux de travail unique.
         vpn_detection_benefit: Vérifiez l'état du domaine tout en identifiant le trafic VPN ou proxy provenant de la même requête.
         vpn_detection_name: Vérificateur de domaine + Détection de VPN
-        vpn_detection_outcome: 'Signal de fraude à double niveau : un domaine signalé combiné à un trafic anonymisé constitue un puissant déclencheur de blocage.'
+        vpn_detection_outcome: "Signal de fraude à double niveau : un domaine signalé combiné à un trafic anonymisé constitue un puissant déclencheur de blocage."
       cta:
         body: Une seule clé API. Disponibilité des domaines, données WHOIS et plus de 50 autres API couvrant la validation, les réseaux, la finance et bien plus encore.
         cta_docs: Lire la documentation →
@@ -89,7 +89,7 @@ fr:
         accuracy_body: Chaque réponse comprend des données WHOIS analysées (enregistrements de propriété et d'enregistrement du domaine), l'état DNS (existence ou non d'enregistrements de routage du trafic), la validité SSL (certificat HTTPS actif), les enregistrements MX (configuration du serveur de messagerie) et un score de réputation — le tout normalisé dans une structure JSON cohérente.
         accuracy_heading: Précision
         heading: Que fait l'API Domain Checker ?
-        simplicity_body: 'Une simple requête POST avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : juste un appel HTTP et une réponse JSON.'
+        simplicity_body: "Une simple requête POST avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : juste un appel HTTP et une réponse JSON."
         simplicity_heading: Simplicité
         subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un domaine : disponibilité, propriétaire et historique d''enregistrement.'
     email_normalizer:
@@ -235,8 +235,8 @@ fr:
         email_validator_name: Validateur de numéro de téléphone + Validateur d'adresse e-mail
         email_validator_outcome: Vérification complète des coordonnées — numéro de téléphone et adresse électronique valides — avant d'accorder l'accès.
         heading: Associez-le à d'autres API
-        label_benefit: 'Avantage:'
-        label_outcome: 'Résultat:'
+        label_benefit: "Avantage:"
+        label_outcome: "Résultat:"
         subheading: Combinez Phone Validator avec d'autres Requiems API pour intégrer une validation multipoint dans un flux de travail unique.
       cta:
         body: Une seule clé API. Validation téléphonique, vérification d'e-mail, contrôle de domaine et plus de 50 autres API dans les domaines de la validation, des réseaux, de la finance et bien plus encore.
@@ -306,7 +306,7 @@ fr:
         accuracy_body: Chaque réponse comprend la détection du pays et de la région, le nom de l'opérateur, la classification du type de ligne (mobile, fixe, VoIP) et le numéro de téléphone formaté selon la norme internationale E.164 — le tout normalisé dans une structure JSON cohérente.
         accuracy_heading: Précision
         heading: Que fait l'API de validation téléphonique ?
-        simplicity_body: 'Une simple requête GET avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : un simple appel HTTP et une réponse JSON suffisent.'
+        simplicity_body: "Une simple requête GET avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : un simple appel HTTP et une réponse JSON suffisent."
         simplicity_heading: Simplicité
         subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un numéro de téléphone : validité, opérateur, type de ligne et format normalisé.'
     bin_lookup:
@@ -480,6 +480,90 @@ fr:
       cta:
         heading: "Automatisez cela avec Requiems."
         body: "Une seule clé API. Données sur l'inflation, recherche BIN, validation d'e-mails et plus de 50 autres API dans les domaines de la finance, de la validation, des réseaux et bien plus encore."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Lire la documentation →"
+    qr_code:
+      demo:
+        error_empty: "Saisissez un texte ou une URL à encoder."
+        error_rate_limit: "Trop de requêtes. Patientez un instant et réessayez."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_no_data: "Impossible de générer un code QR pour cette saisie."
+        result_heading: "Code QR généré"
+        image_alt: "Code QR généré"
+      seo:
+        title: "API gratuite de génération de codes QR — PNG et Base64 instantanés | Requiems API"
+        description: "Générez des codes QR à partir de n'importe quel texte ou URL. Taille et niveau de correction d'erreur configurables. Accès gratuit disponible, aucune carte bancaire requise."
+      logo_marquee:
+        trusted_by: "Utilisé en confiance par des équipes chez"
+      hero:
+        title: "Transformez n'importe quel texte ou URL en code QR, instantanément."
+        subtitle: "Un seul appel API renvoie un code QR scannable au format PNG brut ou en JSON base64 — taille et niveau de correction d'erreur configurables."
+        cta_primary: "Obtenez votre clé API"
+        cta_docs: "Lire la documentation"
+        try_live: "Essayez-le en direct"
+        placeholder: "Saisissez une URL ou un texte"
+        submit: "Générer"
+        no_account: "Aucun compte requis pour la démo."
+        label_input: "Texte ou URL à encoder"
+      what_it_does:
+        heading: "Ce que fait l'API de Génération de Codes QR"
+        subheading: "Un seul point de terminaison. N'importe quel texte ou URL devient un code QR scannable — en PNG brut pour une intégration directe, ou en JSON base64 pour un usage en ligne."
+        coverage_heading: "Deux formats de réponse"
+        coverage_body: "GET /v1/technology/qr renvoie une image PNG brute, idéale pour un téléchargement direct ou une intégration via une balise <img> pointant vers l'API. GET /v1/technology/qr/base64 renvoie une enveloppe JSON avec l'image déjà encodée en base64, prête à être insérée dans du HTML ou stockée en base de données."
+        simplicity_heading: "Simplicité"
+        simplicity_body: "Envoyez le texte ou l'URL à encoder et récupérez un code QR en retour. La taille configurable (50–1000px) et le niveau de correction d'erreur (bas/moyen/élevé/maximal) permettent d'ajuster le résultat pour l'écran ou l'impression, sans bibliothèque supplémentaire."
+      use_cases:
+        heading: "Utilisez les codes QR dans n'importe quel flux de travail"
+        subheading: "Des factures à l'enregistrement d'événements — si un code scannable est nécessaire, l'API de Codes QR répond au besoin."
+        finance_context: "Finance"
+        finance_title: "Codes QR sur les factures et reçus"
+        finance_body: "Intégrez un code QR renvoyant vers un reçu numérique ou une page de paiement directement sur des factures imprimées ou en PDF."
+        marketing_context: "Marketing"
+        marketing_title: "Liens de campagne traçables"
+        marketing_body: "Générez des codes QR pour des publicités imprimées et des emballages renvoyant vers des URL traçables, afin de mesurer la performance des campagnes hors ligne."
+        events_context: "Événements"
+        events_title: "Billetterie et enregistrement"
+        events_body: "Générez un code QR unique par participant pour un enregistrement rapide à l'entrée."
+        mobile_context: "Mobile"
+        mobile_title: "Distribution de liens profonds d'application"
+        mobile_body: "Transformez des URL de store ou des liens profonds en codes QR pour affiches, cartes et partage in-app."
+        contact_context: "Partage de contact"
+        contact_title: "Partagez des informations de contact par scan"
+        contact_body: "Encodez des données vCard ou des URL de contact dans un code QR pour cartes de visite et signatures d'e-mail."
+        retail_context: "Commerce de détail"
+        retail_title: "Étiquettes produit et inventaire"
+        retail_body: "Générez des codes scannables renvoyant vers des pages produit, des manuels ou des registres d'inventaire."
+      api_combinations:
+        heading: "Utilisez-la avec des API complémentaires."
+        subheading: "L'API de Codes QR fonctionne encore mieux associée à d'autres API Requiems."
+        label_benefit: "Bénéfice :"
+        label_outcome: "Résultat :"
+        domain_pair: "Codes QR + Vérificateur de Domaine"
+        domain_benefit: "Validez le domaine d'une URL avant de l'encoder."
+        domain_outcome: "Évitez de générer des codes QR pointant vers des domaines cassés ou non enregistrés."
+        phone_pair: "Codes QR + Validateur de Téléphone"
+        phone_benefit: "Validez un numéro de téléphone, puis encodez-le en code QR scannable."
+        phone_outcome: "Générez des codes QR fiables « appuyer pour appeler » pour cartes de visite et publicités."
+        email_pair: "Codes QR + Validateur d'Email"
+        email_benefit: "Validez une adresse e-mail avant d'intégrer un lien mailto:."
+        email_outcome: "Évitez d'imprimer des codes QR menant à des adresses e-mail invalides ou rejetées."
+      faq:
+        heading: "Questions fréquentes"
+        support_prompt: "Encore des questions ?"
+        support_link: "Contacter le support"
+        q1: "Quel contenu puis-je encoder dans un code QR ?"
+        a1: "N'importe quel texte UTF-8 — URL, texte brut, numéros de téléphone, adresses e-mail, données vCard, identifiants Wi-Fi, etc. La bibliothèque encode toute chaîne transmise dans le paramètre data."
+        q2: "Quelle est la taille d'image par défaut ?"
+        a2: "256×256 pixels. Vous pouvez la modifier avec le paramètre size (plage : 50–1000 px)."
+        q3: "Quel niveau de correction d'erreur choisir ?"
+        a3: "Utilisez le niveau moyen (par défaut) pour la plupart des cas d'usage numériques. Choisissez élevé ou maximal pour les supports imprimés où le code QR pourrait être partiellement recouvert ou endommagé."
+        q4: "Quelle est la différence entre les deux points de terminaison ?"
+        a4: "GET /v1/technology/qr renvoie un binaire PNG brut — idéal pour un téléchargement direct ou une intégration. GET /v1/technology/qr/base64 renvoie une enveloppe JSON avec l'image encodée en base64 — utile pour l'insérer dans du HTML ou des réponses JSON."
+        q5: "Existe-t-il un point de terminaison pour le traitement par lots ?"
+        a5: "Oui — POST /v1/technology/qr/base64/batch génère jusqu'à 50 codes QR en base64 en une seule requête, avec les résultats renvoyés dans l'ordre de saisie."
+      cta:
+        heading: "Automatisez cela avec Requiems."
+        body: "Une seule clé API. Génération de codes QR, ainsi que plus de 50 autres API dans les domaines de la validation, de la finance, des réseaux et bien plus encore."
         cta_primary: "Obtenez votre clé API gratuite"
         cta_docs: "Lire la documentation →"
     quotes:

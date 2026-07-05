@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   post "tools/demos/phone-validator",  to: "tool_demos#phone_validator",  as: :tool_demo_phone_validator
   post "tools/demos/bin-lookup",        to: "tool_demos#bin_lookup",        as: :tool_demo_bin_lookup
   post "tools/demos/inflation",         to: "tool_demos#inflation",         as: :tool_demo_inflation
+  post "tools/demos/qr-code",           to: "tool_demos#qr_code",           as: :tool_demo_qr_code
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

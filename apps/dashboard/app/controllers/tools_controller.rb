@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -48,6 +48,11 @@ class ToolsController < ApplicationController
       name: "Inflation",
       description: "Historical and current CPI inflation rates for 241 countries, sourced from the World Bank.",
       icon_classes: "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
+    },
+    "qr-code" => {
+      name: "QR Code Generator",
+      description: "Generate scannable QR codes from any text or URL — raw PNG or base64 JSON, configurable size and error correction.",
+      icon_classes: "bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400"
     }
   }.freeze
 

@@ -1,0 +1,41 @@
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t("tools.qr_code.use_cases.heading") %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+        <%= t("tools.qr_code.use_cases.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% [
+        { context: t("tools.qr_code.use_cases.finance_context"),
+          title:   t("tools.qr_code.use_cases.finance_title"),
+          body:    t("tools.qr_code.use_cases.finance_body") },
+        { context: t("tools.qr_code.use_cases.marketing_context"),
+          title:   t("tools.qr_code.use_cases.marketing_title"),
+          body:    t("tools.qr_code.use_cases.marketing_body") },
+        { context: t("tools.qr_code.use_cases.events_context"),
+          title:   t("tools.qr_code.use_cases.events_title"),
+          body:    t("tools.qr_code.use_cases.events_body") },
+        { context: t("tools.qr_code.use_cases.mobile_context"),
+          title:   t("tools.qr_code.use_cases.mobile_title"),
+          body:    t("tools.qr_code.use_cases.mobile_body") },
+        { context: t("tools.qr_code.use_cases.contact_context"),
+          title:   t("tools.qr_code.use_cases.contact_title"),
+          body:    t("tools.qr_code.use_cases.contact_body") },
+        { context: t("tools.qr_code.use_cases.retail_context"),
+          title:   t("tools.qr_code.use_cases.retail_title"),
+          body:    t("tools.qr_code.use_cases.retail_body") },
+      ].each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-6">
+          <span class="inline-block text-xs font-semibold text-brand-primary uppercase tracking-wide mb-2"><%= uc[:context] %></span>
+          <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed"><%= uc[:body] %></p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
