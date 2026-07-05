@@ -1,0 +1,70 @@
+<%
+  has_profanity  = data["has_profanity"]
+  censored       = data["censored"].to_s
+  flagged_words  = Array(data["flagged_words"])
+
+  badge_class = has_profanity \
+    ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" \
+    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300"
+
+  badge_label = has_profanity \
+    ? t("tools.profanity_filter.demo.badge_flagged") \
+    : t("tools.profanity_filter.demo.badge_clean")
+%>
+<turbo-frame id="profanity_filter-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+
+    <!-- Header row -->
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= text %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= badge_class %>">
+        <%= badge_label %>
+      </span>
+    </div>
+
+    <!-- Result rows -->
+    <div class="px-4 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+
+      <!-- has_profanity -->
+      <div class="flex items-center justify-between py-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          <%= t("tools.profanity_filter.demo.label_has_profanity") %>
+        </span>
+        <span class="text-sm font-medium <%= has_profanity ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' %>">
+          <%= has_profanity ? t("tools.profanity_filter.demo.badge_yes") : t("tools.profanity_filter.demo.badge_no") %>
+        </span>
+      </div>
+
+      <!-- censored -->
+      <div class="flex items-start justify-between py-2 gap-4">
+        <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">
+          <%= t("tools.profanity_filter.demo.label_censored") %>
+        </span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200 text-right break-words">
+          <%= censored.presence || "—" %>
+        </span>
+      </div>
+
+      <!-- flagged_words -->
+      <div class="flex items-start justify-between py-2 gap-4">
+        <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">
+          <%= t("tools.profanity_filter.demo.label_flagged_words") %>
+        </span>
+        <div class="flex flex-wrap gap-1 justify-end">
+          <% if flagged_words.any? %>
+            <% flagged_words.each do |word| %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
+                <%= word %>
+              </span>
+            <% end %>
+          <% else %>
+            <span class="text-sm text-gray-400 dark:text-gray-500">
+              <%= t("tools.profanity_filter.demo.badge_none") %>
+            </span>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</turbo-frame>

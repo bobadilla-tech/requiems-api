@@ -27,7 +27,7 @@
          data-controller="sentiment-demo"
          data-sentiment-demo-error-empty-value="<%= t('tools.sentiment_analysis.demo.error_empty') %>">
 
-      <form data-action="submit->sentiment-demo#beforeSubmit turbo:submit-start->sentiment-demo#onSubmitStart turbo:submit-end->sentiment-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->sentiment-demo#onSubmitStart turbo:submit-end->sentiment-demo#onSubmitEnd"
             action="<%= tool_demo_sentiment_analysis_path %>"
             method="post"
             data-turbo-frame="sentiment_analysis-demo-result"

@@ -27,7 +27,7 @@
          data-controller="unit-conversion-demo"
          data-unit-conversion-demo-error-fill-all-fields-value="<%= t('tools.unit_conversion.demo.error_fill_all_fields') %>">
 
-      <form data-action="submit->unit-conversion-demo#beforeSubmit turbo:submit-start->unit-conversion-demo#onSubmitStart turbo:submit-end->unit-conversion-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->unit-conversion-demo#onSubmitStart turbo:submit-end->unit-conversion-demo#onSubmitEnd"
             action="<%= tool_demo_unit_conversion_path %>"
             method="post"
             data-turbo-frame="unit_conversion-demo-result"

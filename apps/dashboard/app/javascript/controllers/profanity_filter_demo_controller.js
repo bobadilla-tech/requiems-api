@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
+// Handles client-side validation and loading state for the Profanity Filter demo.
+// API call and result rendering are handled server-side via Turbo Frames.
 export default class extends Controller {
   static targets = ["input", "button", "errorMessage", "spinner"];
   static values = { errorEmpty: String };

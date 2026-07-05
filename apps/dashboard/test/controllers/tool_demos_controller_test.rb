@@ -478,5 +478,46 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_match I18n.t("tools.qr_code.demo.error_no_data"), response.body
+  # ── profanity_filter ─────────────────────────────────────────────────────────
+
+  test "profanity_filter renders result on success" do
+    payload = { "has_profanity" => true, "censored" => "This is a **** day",
+                "flagged_words" => [ "damn" ] }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/profanity-filter", params: { text: "This is a damn day" }
+    end
+    assert_response :success
+    assert_match "damn", response.body
+    assert_match "This is a **** day", response.body
+  end
+
+  test "profanity_filter renders error when text is blank" do
+    post "/tools/demos/profanity-filter", params: { text: "" }
+    assert_response :success
+    assert_match I18n.t("tools.profanity_filter.demo.error_empty"), response.body
+  end
+
+  test "profanity_filter renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/profanity-filter", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.profanity_filter.demo.error_rate_limit"), response.body
+  end
+
+  test "profanity_filter renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/profanity-filter", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.profanity_filter.demo.error_generic"), response.body
+  end
+
+  test "profanity_filter renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/profanity-filter", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.profanity_filter.demo.error_no_data"), response.body
   end
 end
