@@ -48,7 +48,19 @@ function registerTools(server: McpServer) {
                     // to the process-wide REQUIEMS_API_KEY.
                     const callerKey = extra?.requestInfo?.headers?.["requiems-api-key"] ?? "";
                     try {
-                        return await apiKeyContext.run(callerKey, () => tool.handler(args));
+                        const result = await apiKeyContext.run(callerKey, () => tool.handler(args));
+                        // Generated handlers return the raw Requiems API result, not an MCP
+                        // CallToolResult — wrap it here so clients actually see the data
+                        // (the SDK validates the return against CallToolResultSchema, which
+                        // defaults `content` to [] when it's missing).
+                        return {
+                            content: [
+                                {
+                                    type: "text",
+                                    text: typeof result === "string" ? result : JSON.stringify(result),
+                                },
+                            ],
+                        };
                     } catch (err) {
                         console.error(`[tool:${tool.name}] execution failed`, err);
                         throw err;
