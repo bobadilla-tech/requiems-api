@@ -1,5 +1,8 @@
 ---
 en:
+  date:
+    formats:
+      month_year: "%B %Y"
   errors:
     messages:
       not_saved:
