@@ -28,6 +28,13 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  %w[en es fr].each do |locale|
+    test "status page is successful in #{locale} locale" do
+      get "/#{locale}/status"
+      assert_response :success
+    end
+  end
+
   test "contact_submit with valid params delivers mail and redirects home" do
     assert_emails 1 do
       post "/en/contact", params: { name: "Alice", email: "alice@example.com", inquiry_type: "general", message: "Hello" }

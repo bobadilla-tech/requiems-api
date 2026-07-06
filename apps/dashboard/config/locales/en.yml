@@ -3,6 +3,9 @@ en:
   date:
     formats:
       month_year: "%B %Y"
+  time:
+    formats:
+      status_timestamp: "%B %d, %Y at %H:%M %Z"
   errors:
     messages:
       not_saved:

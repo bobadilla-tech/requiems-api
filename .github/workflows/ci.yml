@@ -220,6 +220,10 @@ jobs:
           BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
         run: bin/rails test
 
+      - name: Check for missing translations
+        working-directory: apps/dashboard
+        run: bundle exec i18n-tasks missing
+
       - name: Upload coverage to Codecov
         if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
