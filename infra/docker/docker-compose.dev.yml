@@ -80,6 +80,34 @@ services:
         condition: service_healthy
         required: false
 
+  mcp:
+    build:
+      context: ../../apps/mcp
+      dockerfile: ../../infra/docker/mcp.dev.Dockerfile
+    networks:
+      - stack
+    working_dir: /app
+    command: >
+      sh -c "
+        bun install &&
+        bun run --watch src/server.ts
+      "
+    environment:
+      - MCP_TRANSPORT=http
+      - MCP_HTTP_PORT=3000
+      - REQUIEMS_BASE_URL=http://auth-gateway:4455
+    env_file:
+      - .env.example
+      - path: .env.local
+        required: false
+    volumes:
+      - ../../apps/mcp:/app
+    ports:
+      - "3100:3000"
+    depends_on:
+      auth-gateway:
+        condition: service_healthy
+
   dashboard:
     build:
       context: ../../apps/dashboard

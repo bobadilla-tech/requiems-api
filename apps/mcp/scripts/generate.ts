@@ -102,7 +102,7 @@ function parseArgs(argv: string[]): CliArgs {
 async function loadSpec(input: string): Promise<OpenApiSpec> {
     let raw: string;
     if (/^https?:\/\//.test(input)) {
-        const res = await fetch(input);
+        const res = await fetch(input, { signal: AbortSignal.timeout(10_000) });
         if (!res.ok) {
             throw new Error(`Failed to fetch spec from ${input}: ${res.status}`);
         }

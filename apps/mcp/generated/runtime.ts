@@ -4,6 +4,11 @@
 // generated (deterministically) so it has no hand-maintained drift, but it
 // contains no per-operation logic — just the plumbing every tool needs.
 
+import { AsyncLocalStorage } from "node:async_hooks";
+
+/** Holds the caller's API key for the duration of one tool call (HTTP transport only). */
+export const apiKeyContext = new AsyncLocalStorage<string>();
+
 export interface RequestOptions {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
@@ -83,7 +88,7 @@ export async function requiemsRequest<T = unknown>(
     const res = await fetch(url, {
       method: options.method,
       headers: {
-        "requiems-api-key": process.env.REQUIEMS_API_KEY ?? "",
+        "requiems-api-key": apiKeyContext.getStore() || process.env.REQUIEMS_API_KEY || "",
         ...(options.body !== undefined
           ? { "Content-Type": "application/json" }
           : {}),

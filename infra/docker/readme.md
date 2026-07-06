@@ -50,6 +50,13 @@ docker compose -f docker-compose.dev.yml up --build
 
 - Processes Rails jobs automatically
 
+✅ **MCP Server** (Bun) on port **3100**
+
+- Exposes the Requiems API as MCP tools over HTTP
+- Forwards the caller's own `requiems-api-key` header to the API — it does not
+  use a shared key (see `apps/mcp/README.md`)
+- Access: http://localhost:3100/healthz
+
 ### Optional: LanguageTool (spell-check)
 
 LanguageTool is **opt-in** — it's a large JVM service and not needed for most
@@ -84,6 +91,7 @@ Rebuild after dependency changes or the first time you start the stack:
    `apps/workers/api-management/wrangler.toml`
 5. `infra/docker/auth-gateway.dev.Dockerfile` or
    `infra/docker/api-management.dev.Dockerfile`
+6. `apps/mcp/package.json` or `infra/docker/mcp.dev.Dockerfile`
 
 ### Worker local state and migrations
 
@@ -127,6 +135,7 @@ docker compose -f docker-compose.dev.yml down -v
 | API Management  | http://localhost:5544 | Internal management service                   |
 | Rails Dashboard | http://localhost:3000 | Sign up, sign in, dashboard                   |
 | Go API          | http://localhost:8080 | Internal API (gateway → backend)              |
+| MCP Server      | http://localhost:3100 | Requiems API as MCP tools (HTTP transport)    |
 | PostgreSQL      | localhost:5432        | User: `requiem`, Password: `requiem`          |
 | Redis           | localhost:6379        | For Sidekiq                                   |
 | LanguageTool    | http://localhost:8010 | Spell-check backend (profile: `languagetool`) |
