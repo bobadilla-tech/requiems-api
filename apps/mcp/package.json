@@ -16,6 +16,7 @@
     "scripts": {
       "fetch-spec": "bun run scripts/fetch-spec.ts",
       "generate": "bun run scripts/generate.ts --input openapi.json --output generated",
-      "start": "bun run src/server.ts"
+      "start": "bun run src/server.ts",
+      "test": "bun test"
     }
 }

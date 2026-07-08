@@ -154,7 +154,7 @@ interface ExtractedOperation {
 const HTTP_METHODS: OpenApiMethod[] = ["get", "post", "put", "patch", "delete"];
 
 /** Only operate on /v1/* paths, and skip any batch variant. */
-function shouldInclude(rawPath: string): boolean {
+export function shouldInclude(rawPath: string): boolean {
     if (!rawPath.startsWith("/v1/")) return false;
     if (rawPath.toLowerCase().includes("/batch")) return false;
     return true;
@@ -164,7 +164,7 @@ function shouldInclude(rawPath: string): boolean {
  * Derive a stable tool name from operationId (preferred) or the path,
  * per the naming rules in the POC spec section 6.
  */
-function deriveToolName(
+export function deriveToolName(
     rawPath: string,
     method: OpenApiMethod,
     operationId?: string,
@@ -190,14 +190,14 @@ function deriveToolName(
     return normalized;
 }
 
-function normalizeName(raw: string): string {
+export function normalizeName(raw: string): string {
     return raw
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "_")
         .replace(/^_+|_+$/g, "");
 }
 
-function extractOperations(spec: OpenApiSpec): ExtractedOperation[] {
+export function extractOperations(spec: OpenApiSpec): ExtractedOperation[] {
     const operations: ExtractedOperation[] = [];
     const seenNames = new Map<string, string>(); // toolName -> rawPath+method, for collision detection
 
@@ -257,7 +257,7 @@ function extractOperations(spec: OpenApiSpec): ExtractedOperation[] {
  * POC scope (section 11): string, number, boolean, integer. Arrays/objects
  * in path/query params are rare in this API and fall back to z.string().
  */
-function zodForParamSchema(schema: OpenApiSchema | undefined): string {
+export function zodForParamSchema(schema: OpenApiSchema | undefined): string {
     if (!schema) return "z.string()";
 
     if (schema.enum && schema.enum.length > 0) {
@@ -290,7 +290,7 @@ function zodForParamSchema(schema: OpenApiSchema | undefined): string {
  * `z.any()` with a comment rather than failing generation, so codegen
  * stays resilient to the long tail of the spec.
  */
-function zodFieldsForRequestBody(
+export function zodFieldsForRequestBody(
     schema: OpenApiSchema,
 ): { name: string; zodExpr: string; optional: boolean; description?: string }[] {
     if (!schema.properties) return [];
@@ -418,7 +418,7 @@ function buildHandlerSource(op: ExtractedOperation): string {
     })`;
 }
 
-function generateToolFileSource(op: ExtractedOperation): string {
+export function generateToolFileSource(op: ExtractedOperation): string {
     const { schemaFieldsSource, fieldNames } = buildInputSchemaSource(op);
     const handlerBody = buildHandlerSource(op);
 
@@ -526,7 +526,9 @@ async function main() {
     console.log(`Wrote index to ${path.join(outputDir, "index.ts")}`);
 }
 
-main().catch((err) => {
-    console.error("Codegen failed:", err);
-    process.exit(1);
-});
+if (import.meta.main) {
+    main().catch((err) => {
+        console.error("Codegen failed:", err);
+        process.exit(1);
+    });
+}
