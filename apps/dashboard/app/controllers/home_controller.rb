@@ -21,6 +21,9 @@ class HomeController < ApplicationController
   def docs
   end
 
+  def ai
+  end
+
   def pricing
   end
 

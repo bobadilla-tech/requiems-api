@@ -30,8 +30,11 @@ jobs:
       dashboard: ${{ steps.filter.outputs.dashboard }}
       auth-gateway: ${{ steps.filter.outputs.auth-gateway }}
       api-management: ${{ steps.filter.outputs.api-management }}
+      mcp: ${{ steps.filter.outputs.mcp }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: dorny/paths-filter@v4
         id: filter
@@ -50,6 +53,9 @@ jobs:
             api-management:
               - 'apps/workers/api-management/**'
               - 'apps/workers/shared/**'
+              - '.github/workflows/ci.yml'
+            mcp:
+              - 'apps/mcp/**'
               - '.github/workflows/ci.yml'
 
   go-test:
@@ -315,6 +321,33 @@ jobs:
       has-lint: true
     secrets: inherit
 
+  mcp-test:
+    name: MCP Tests
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.mcp == 'true'
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/mcp
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bunx tsc --noEmit
+
+      - name: Run tests
+        run: bun test
+
   ci-success:
     name: CI Success
     runs-on: ubuntu-latest
@@ -325,6 +358,7 @@ jobs:
       - rails-checks
       - worker-test
       - api-management-test
+      - mcp-test
     if: always()
 
     steps:
@@ -352,6 +386,11 @@ jobs:
 
           if [[ "${{ needs.api-management-test.result }}" == "failure" ]]; then
             echo "❌ API Management tests failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.mcp-test.result }}" == "failure" ]]; then
+            echo "❌ MCP tests failed"
             exit 1
           fi
 

@@ -1,0 +1,22 @@
+{
+  "name": "mcp",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.76"
+  },
+    "scripts": {
+      "fetch-spec": "bun run scripts/fetch-spec.ts",
+      "generate": "bun run scripts/generate.ts --input openapi.json --output generated",
+      "start": "bun run src/server.ts",
+      "test": "bun test"
+    }
+}

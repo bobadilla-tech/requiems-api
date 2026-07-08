@@ -68,6 +68,50 @@ en:
         reliability_title: Reliability
         transparency_text: Clear pricing, detailed documentation, and honest communication.
         transparency_title: Transparency
+    ai:
+      banner_cta: 'Build with Requiems API faster: connect via MCP or install the
+        AI Skills package for Claude, Gemini, and more'
+      cta:
+        button: Get API key
+        heading: Get your API key
+        text: Free tier, no credit card required.
+      heading: Build with AI
+      intro: Give your coding agent direct access to Requiems API. No copying docs,
+        no writing boilerplate.
+      mcp:
+        compatible_note: Works with any client that supports the MCP Streamable HTTP
+          transport, including Claude Code, Claude Desktop, and Cursor.
+        copy_btn: Copy
+        heading: MCP Server
+        intro: Every Requiems API endpoint is available as an MCP tool. Point any
+          MCP-compatible client at our hosted server and start calling endpoints directly
+          from your agent.
+        key_note: Your key is sent per request via the requiems-api-key header. Nothing
+          is stored server-side on your behalf.
+        quick_start_heading: Quick start
+        quick_start_text: 'Add this to your MCP client''s configuration, using your
+          own API key from the dashboard:'
+      skills:
+        claude_code:
+          heading: Claude Code
+          step1: 'Register this repository as a plugin marketplace:'
+          step2: 'Then browse and install, or install directly:'
+        copilot:
+          heading: GitHub Copilot
+          text: 'Place the skill file in your repo''s custom instructions folder:'
+        heading: AI Skills
+        intro: Prefer a local install? The Requiems API Skills package drops endpoint
+          reference, request examples, and error handling patterns directly into your
+          agent's context.
+        manual:
+          heading: Any other agent
+          text: 'Skills are plain Markdown files. They work anywhere that accepts
+            custom instructions or a SKILL.md convention:'
+        opencode:
+          heading: OpenCode
+          text: 'Copy the skill file into your OpenCode skills directory:'
+        repo_link_text: Full skill list and docs on GitHub
+      title: AI Tools - Requiems API
     api_reference:
       all_api_requests_require_authentication: 'All API requests require authentication
         using an API key in the request header:'
@@ -218,6 +262,7 @@ en:
         talk_to_sales: Talk to Sales
       form:
         email: Email
+        error: Something went wrong. Please email us directly at eliaz@bobadilla.tech
         heading: Let's get in touch
         inquiry_existing_api: Existing API or feature
         inquiry_other: Other
@@ -226,9 +271,8 @@ en:
         inquiry_technical: Technical issue
         inquiry_type: Inquiry type
         message: How can we help you?
-        name: Name
-        error: Something went wrong. Please email us directly at eliaz@bobadilla.tech
         missing_fields: Please fill in your name, a valid email, and a message.
+        name: Name
         paid_notice: If you are already a paid subscriber, please submit a request
           from the Support Desk tab of your account profile to get a faster response.
         submit: Send Message
@@ -689,7 +733,8 @@ en:
         payments_title: Secure Payments
         soc2_badge: By Design
         soc2_desc: API inputs and outputs are never stored. All payloads are processed
-          entirely in volatile memory and purged the moment your HTTP response is delivered.
+          entirely in volatile memory and purged the moment your HTTP response is
+          delivered.
         soc2_title: Zero Data Retention
         subheading: Enterprise-grade security for teams of all sizes
       social_proof:
@@ -899,7 +944,8 @@ en:
         heading: Data Storage and Security
         items:
         - TLS 1.3 encryption for data in transit
-        - Zero API payload retention — request inputs processed in volatile memory only
+        - Zero API payload retention — request inputs processed in volatile memory
+          only
         - Regular security audits and monitoring
         - Access controls and authentication mechanisms
         text: 'All data is stored on servers located in the European Union. We implement
@@ -955,6 +1001,95 @@ en:
           desc: Infrastructure and DDoS protection
         text: 'We use the following third-party services:'
       title: Privacy Policy - Requiems API
+    security:
+      api_auth:
+        heading: API Authentication & Access Control
+        points:
+        - High-entropy API keys issued per account
+        - Instant key revocation via dashboard
+        - TLS 1.3 required on every request
+        - Rate limiting enforced at the network edge
+      compliance_scope:
+        dpa:
+          text: If your organization requires a signed DPA before integration, download
+            our pre-filled template below or email us to execute a countersigned copy.
+          title: Data Processing Agreement
+        gdpr:
+          text: No user input is stored, profiled, or transferred. EU-only infrastructure.
+            Data minimization is structural, not procedural.
+          title: GDPR Alignment
+        heading: Compliance Scope
+        text: Because Requiems API maintains a 100% stateless architecture for user
+          payloads, a traditional SOC 2 data-retention audit does not apply to our
+          operational footprint. We satisfy the core Security and Confidentiality
+          principles of SOC 2 by never keeping data at rest. Physical infrastructure
+          compliance is inherited via Hetzner's ISO 27001 certification.
+      contact:
+        heading: Security Contact
+        text: To report a vulnerability, request a security review, or discuss enterprise
+          compliance requirements, contact us at
+      counter_exception:
+        heading: Transparency — The Counter API Exception
+        text: Our Counter API (/v1/technology/counter/{namespace}) is the only endpoint
+          that persists data beyond a request. It stores a named integer count (e.g.,
+          "page-views" → 42). No request payload, no user content, no identifying
+          data is stored — only the counter value itself. This API is rarely used
+          and can be avoided entirely if zero-persistence is required.
+      documents:
+        api_policy:
+          desc: Formal policy document covering key issuance, revocation, TLS enforcement,
+            rate limiting, and incident response procedures.
+          download: Download API Auth Policy
+          title: API Authentication & Security Policy
+        dpa:
+          desc: Pre-filled DPA template listing Requiems API as Processor with zero-retention
+            processing terms. Fill in your organization details and countersign.
+          download: Download DPA Template
+          title: Data Processing Agreement (Template)
+        email_cta: Need a countersigned copy or custom agreement?
+        email_link: Email us at eliaz@bobadilla.tech
+        heading: Security Documents
+        security_packet:
+          desc: Full technical overview of our stateless architecture, infrastructure
+            providers, and security controls. Share with your security team.
+          download: Download Security Packet
+          title: Security & Architecture Packet
+        subheading: Download our compliance documentation for your security review
+          team.
+      heading: Security & Compliance
+      hero:
+        heading: Enterprise-Grade Security by Design
+        subheading: We designed Requiems API around a simple principle — data you
+          never store cannot be leaked, breached, or subpoenaed.
+      infrastructure:
+        cloudflare:
+          points:
+          - DDoS mitigation at the edge
+          - Web Application Firewall (WAF)
+          - TLS 1.3 enforced on all connections
+          - Rate limiting and abuse prevention
+          title: Cloudflare — Network Perimeter
+        heading: Infrastructure Security
+        hetzner:
+          points:
+          - All servers located in the European Union
+          - ISO/IEC 27001 certified facilities
+          - Physical access controls and 24/7 monitoring
+          - Redundant power and network infrastructure
+          title: Hetzner — EU Data Centers
+      last_updated: Effective %{date}
+      stateless:
+        heading: Core Pillar — Stateless Architecture
+        intro: Every API request is processed entirely in volatile server memory (RAM).
+          The moment your HTTP response is delivered, the payload is gone. We have
+          no mechanism to recover it because it was never written anywhere.
+        points:
+        - In-memory execution — payloads never touch disk
+        - Zero data retention — no database of user inputs exists
+        - No cache of request/response content
+        - Anonymized telemetry only — response codes and timestamps, never payload
+          content
+      title: Security & Compliance - Requiems API
     status:
       all_operational: All Systems Operational
       all_operational_desc: All Requiems API services are running smoothly
@@ -1104,93 +1239,6 @@ en:
         - At our discretion with 30 days notice
         self_cancel: You may cancel your account at any time from your dashboard settings.
       title: Terms of Service - Requiems API
-    security:
-      title: Security & Compliance - Requiems API
-      heading: Security & Compliance
-      last_updated: Effective %{date}
-      hero:
-        heading: Enterprise-Grade Security by Design
-        subheading: We designed Requiems API around a simple principle — data you never
-          store cannot be leaked, breached, or subpoenaed.
-      stateless:
-        heading: Core Pillar — Stateless Architecture
-        intro: Every API request is processed entirely in volatile server memory (RAM).
-          The moment your HTTP response is delivered, the payload is gone. We have
-          no mechanism to recover it because it was never written anywhere.
-        points:
-          - In-memory execution — payloads never touch disk
-          - Zero data retention — no database of user inputs exists
-          - No cache of request/response content
-          - Anonymized telemetry only — response codes and timestamps, never payload content
-      counter_exception:
-        heading: Transparency — The Counter API Exception
-        text: Our Counter API (/v1/technology/counter/{namespace}) is the only endpoint
-          that persists data beyond a request. It stores a named integer count (e.g.,
-          "page-views" → 42). No request payload, no user content, no identifying
-          data is stored — only the counter value itself. This API is rarely used
-          and can be avoided entirely if zero-persistence is required.
-      infrastructure:
-        heading: Infrastructure Security
-        cloudflare:
-          title: Cloudflare — Network Perimeter
-          points:
-            - DDoS mitigation at the edge
-            - Web Application Firewall (WAF)
-            - TLS 1.3 enforced on all connections
-            - Rate limiting and abuse prevention
-        hetzner:
-          title: Hetzner — EU Data Centers
-          points:
-            - All servers located in the European Union
-            - ISO/IEC 27001 certified facilities
-            - Physical access controls and 24/7 monitoring
-            - Redundant power and network infrastructure
-      api_auth:
-        heading: API Authentication & Access Control
-        points:
-          - High-entropy API keys issued per account
-          - Instant key revocation via dashboard
-          - TLS 1.3 required on every request
-          - Rate limiting enforced at the network edge
-      compliance_scope:
-        heading: Compliance Scope
-        text: Because Requiems API maintains a 100% stateless architecture for user
-          payloads, a traditional SOC 2 data-retention audit does not apply to our
-          operational footprint. We satisfy the core Security and Confidentiality
-          principles of SOC 2 by never keeping data at rest. Physical infrastructure
-          compliance is inherited via Hetzner's ISO 27001 certification.
-        gdpr:
-          title: GDPR Alignment
-          text: No user input is stored, profiled, or transferred. EU-only infrastructure.
-            Data minimization is structural, not procedural.
-        dpa:
-          title: Data Processing Agreement
-          text: If your organization requires a signed DPA before integration, download
-            our pre-filled template below or email us to execute a countersigned copy.
-      documents:
-        heading: Security Documents
-        subheading: Download our compliance documentation for your security review team.
-        security_packet:
-          title: Security & Architecture Packet
-          desc: Full technical overview of our stateless architecture, infrastructure
-            providers, and security controls. Share with your security team.
-          download: Download Security Packet
-        dpa:
-          title: Data Processing Agreement (Template)
-          desc: Pre-filled DPA template listing Requiems API as Processor with zero-retention
-            processing terms. Fill in your organization details and countersign.
-          download: Download DPA Template
-        api_policy:
-          title: API Authentication & Security Policy
-          desc: Formal policy document covering key issuance, revocation, TLS enforcement,
-            rate limiting, and incident response procedures.
-          download: Download API Auth Policy
-        email_cta: Need a countersigned copy or custom agreement?
-        email_link: Email us at eliaz@bobadilla.tech
-      contact:
-        heading: Security Contact
-        text: To report a vulnerability, request a security review, or discuss enterprise
-          compliance requirements, contact us at
   sales_inquiries:
     flash:
       error: Sorry, there was an error submitting your inquiry. Please try again later.

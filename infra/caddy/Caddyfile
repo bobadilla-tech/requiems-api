@@ -20,6 +20,12 @@ requiems.xyz {
   reverse_proxy dashboard:80
 }
 
+# MCP server (public — auth is per-request via the requiems-api-key header,
+# validated downstream by the auth-gateway Worker, not gated here)
+mcp.requiems.xyz {
+  reverse_proxy mcp:3000
+}
+
 # Internal backend API (only accessible via Cloudflare Worker)
 internal.requiems.xyz {
   encode gzip
