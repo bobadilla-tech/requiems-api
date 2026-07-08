@@ -771,6 +771,40 @@ en:
         get_in_touch: "Get in touch"
         or_email: "or email us at"
 
+    ai:
+      title: "AI Tools - Requiems API"
+      heading: "Build with AI"
+      intro: "Give your coding agent direct access to Requiems API. No copying docs, no writing boilerplate."
+      mcp:
+        heading: "MCP Server"
+        intro: "Every Requiems API endpoint is available as an MCP tool. Point any MCP-compatible client at our hosted server and start calling endpoints directly from your agent."
+        quick_start_heading: "Quick start"
+        quick_start_text: "Add this to your MCP client's configuration, using your own API key from the dashboard:"
+        key_note: "Your key is sent per request via the requiems-api-key header. Nothing is stored server-side on your behalf."
+        compatible_note: "Works with any client that supports the MCP Streamable HTTP transport, including Claude Code, Claude Desktop, and Cursor."
+        copy_btn: "Copy"
+      skills:
+        heading: "AI Skills"
+        intro: "Prefer a local install? The Requiems API Skills package drops endpoint reference, request examples, and error handling patterns directly into your agent's context."
+        claude_code:
+          heading: "Claude Code"
+          step1: "Register this repository as a plugin marketplace:"
+          step2: "Then browse and install, or install directly:"
+        opencode:
+          heading: "OpenCode"
+          text: "Copy the skill file into your OpenCode skills directory:"
+        copilot:
+          heading: "GitHub Copilot"
+          text: "Place the skill file in your repo's custom instructions folder:"
+        manual:
+          heading: "Any other agent"
+          text: "Skills are plain Markdown files. They work anywhere that accepts custom instructions or a SKILL.md convention:"
+        repo_link_text: "Full skill list and docs on GitHub"
+      cta:
+        heading: "Get your API key"
+        text: "Free tier, no credit card required."
+        button: "Get API key"
+
     faq:
       title: "FAQ - Requiems API"
       heading: "Frequently Asked Questions"

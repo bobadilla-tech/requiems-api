@@ -132,6 +132,7 @@ Rails.application.routes.draw do
     get "docs", to: "home#docs"
     get "pricing", to: "home#pricing"
     get "about", to: "home#about"
+    get "ai", to: "home#ai"
     get "team", to: "home#team"
     get "privacy", to: "home#privacy"
     get "terms", to: "home#terms"

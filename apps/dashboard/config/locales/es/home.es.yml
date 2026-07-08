@@ -771,6 +771,40 @@ es:
         get_in_touch: "Ponte en contacto"
         or_email: "o escríbenos a"
 
+    ai:
+      title: "Herramientas de IA - Requiems API"
+      heading: "Construye con IA"
+      intro: "Dale a tu agente de código acceso directo a Requiems API, sin copiar documentación ni escribir código repetitivo."
+      mcp:
+        heading: "Servidor MCP"
+        intro: "Cada endpoint de Requiems API está disponible como herramienta MCP. Apunta cualquier cliente compatible con MCP a nuestro servidor alojado y empieza a llamar endpoints directamente desde tu agente."
+        quick_start_heading: "Inicio rápido"
+        quick_start_text: "Agrega esto a la configuración de tu cliente MCP, usando tu propia clave de API del panel:"
+        key_note: "Tu clave se envía en cada solicitud mediante el encabezado requiems-api-key. No se almacena nada del lado del servidor en tu nombre."
+        compatible_note: "Funciona con cualquier cliente compatible con el transporte MCP Streamable HTTP, incluidos Claude Code, Claude Desktop y Cursor."
+        copy_btn: "Copiar"
+      skills:
+        heading: "AI Skills"
+        intro: "¿Prefieres una instalación local? El paquete Requiems API Skills coloca la referencia de endpoints, ejemplos de solicitudes y patrones de manejo de errores directamente en el contexto de tu agente."
+        claude_code:
+          heading: "Claude Code"
+          step1: "Registra este repositorio como un marketplace de plugins:"
+          step2: "Luego explora e instala, o instala directamente:"
+        opencode:
+          heading: "OpenCode"
+          text: "Copia el archivo de la skill en tu directorio de skills de OpenCode:"
+        copilot:
+          heading: "GitHub Copilot"
+          text: "Coloca el archivo de la skill en la carpeta de instrucciones personalizadas de tu repositorio:"
+        manual:
+          heading: "Cualquier otro agente"
+          text: "Las skills son archivos Markdown planos. Funcionan en cualquier lugar que acepte instrucciones personalizadas o la convención SKILL.md:"
+        repo_link_text: "Lista completa de skills y documentación en GitHub"
+      cta:
+        heading: "Obtén tu clave de API"
+        text: "Plan gratuito, sin tarjeta de crédito."
+        button: "Obtener clave de API"
+
     faq:
       title: "Preguntas frecuentes - Requiems API"
       heading: "Preguntas frecuentes"

@@ -771,6 +771,40 @@ fr:
         get_in_touch: "Écrivez-nous"
         or_email: "ou par e-mail à"
 
+    ai:
+      title: "Outils IA - Requiems API"
+      heading: "Construisez avec l'IA"
+      intro: "Donnez à votre agent de code un accès direct à Requiems API, sans copier de documentation, sans code répétitif."
+      mcp:
+        heading: "Serveur MCP"
+        intro: "Chaque endpoint de Requiems API est disponible comme outil MCP. Pointez n'importe quel client compatible MCP vers notre serveur hébergé et appelez les endpoints directement depuis votre agent."
+        quick_start_heading: "Démarrage rapide"
+        quick_start_text: "Ajoutez ceci à la configuration de votre client MCP, avec votre propre clé API du tableau de bord :"
+        key_note: "Votre clé est envoyée à chaque requête via l'en-tête requiems-api-key. Rien n'est stocké côté serveur en votre nom."
+        compatible_note: "Fonctionne avec tout client prenant en charge le transport MCP Streamable HTTP, dont Claude Code, Claude Desktop et Cursor."
+        copy_btn: "Copier"
+      skills:
+        heading: "AI Skills"
+        intro: "Vous préférez une installation locale ? Le pack Requiems API Skills place la référence des endpoints, des exemples de requêtes et les schémas de gestion d'erreurs directement dans le contexte de votre agent."
+        claude_code:
+          heading: "Claude Code"
+          step1: "Enregistrez ce dépôt comme marketplace de plugins :"
+          step2: "Parcourez et installez, ou installez directement :"
+        opencode:
+          heading: "OpenCode"
+          text: "Copiez le fichier de la skill dans votre répertoire de skills OpenCode :"
+        copilot:
+          heading: "GitHub Copilot"
+          text: "Placez le fichier de la skill dans le dossier d'instructions personnalisées de votre dépôt :"
+        manual:
+          heading: "Tout autre agent"
+          text: "Les skills sont de simples fichiers Markdown. Elles fonctionnent partout où des instructions personnalisées ou la convention SKILL.md sont acceptées :"
+        repo_link_text: "Liste complète des skills et documentation sur GitHub"
+      cta:
+        heading: "Obtenez votre clé API"
+        text: "Offre gratuite, sans carte bancaire."
+        button: "Obtenir une clé API"
+
     faq:
       title: "FAQ — Requiems API"
       heading: "Questions fréquentes"

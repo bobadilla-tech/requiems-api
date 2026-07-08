@@ -1,0 +1,190 @@
+<% content_for :title, t("home.ai.title") %>
+<% content_for :description, t("home.ai.intro") %>
+
+<% mcp_config = <<~JSON.strip
+  {
+    "mcpServers": {
+      "requiems-api": {
+        "url": "https://mcp.requiems.xyz/mcp",
+        "headers": {
+          "requiems-api-key": "YOUR_API_KEY"
+        }
+      }
+    }
+  }
+JSON
+%>
+<% claude_code_marketplace = "/plugin marketplace add bobadilla-tech/requiems-api-skills" %>
+<% claude_code_install = <<~SH.strip
+  /plugin install identity-skills@requiems-api-skills
+  /plugin install payments-skills@requiems-api-skills
+SH
+%>
+<% opencode_install = <<~SH.strip
+  npm install @requiems/api-skills
+  mkdir -p ~/.opencode/skills/requiems-identity
+  cp node_modules/@requiems/api-skills/skills/identity.md ~/.opencode/skills/requiems-identity/SKILL.md
+SH
+%>
+<% copilot_install = <<~SH.strip
+  npm install @requiems/api-skills
+  mkdir -p .github/copilot-instructions
+  cp node_modules/@requiems/api-skills/skills/identity.md .github/copilot-instructions/requiems-identity.md
+SH
+%>
+<% manual_install = <<~SH.strip
+  npm install @requiems/api-skills
+  # Then copy the .md file from node_modules/@requiems/api-skills/skills/ wherever your agent expects it
+SH
+%>
+<% copy_button = lambda do |text|
+  capture do %>
+    <button type="button"
+            data-controller="copy"
+            data-copy-text-value="<%= text %>"
+            data-action="click->copy#copy"
+            class="absolute top-2 right-2 p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded transition-colors text-xs"
+            title="<%= t("home.ai.mcp.copy_btn") %>">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      </svg>
+    </button>
+  <% end
+end %>
+
+<%# Hero %>
+<div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight"><%= t("home.ai.heading") %></h1>
+    <p class="text-xl text-slate-300 mb-10"><%= t("home.ai.intro") %></p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#mcp" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg">
+        <%= t("home.ai.mcp.heading") %>
+      </a>
+      <a href="#skills" class="inline-flex items-center justify-center px-6 py-3 border-2 border-white/40 text-sm font-medium rounded-lg text-white hover:bg-white/10 transition-colors">
+        <%= t("home.ai.skills.heading") %>
+      </a>
+    </div>
+  </div>
+</div>
+
+<%# MCP Server %>
+<section id="mcp" class="bg-white dark:bg-gray-900 py-20 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3"><%= t("home.ai.mcp.heading") %></h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400"><%= t("home.ai.mcp.intro") %></p>
+    </div>
+
+    <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-6 sm:p-8">
+      <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
+        <%= t("home.ai.mcp.quick_start_heading") %>
+      </h3>
+      <p class="text-gray-700 dark:text-gray-300 mb-4"><%= t("home.ai.mcp.quick_start_text") %></p>
+
+      <div class="relative mb-6" data-controller="highlight">
+        <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-json"><%= mcp_config %></code></pre>
+        <%= copy_button.call(mcp_config) %>
+      </div>
+
+      <ul class="space-y-3">
+        <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <svg class="h-4 w-4 shrink-0 mt-0.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <%= t("home.ai.mcp.key_note") %>
+        </li>
+        <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <svg class="h-4 w-4 shrink-0 mt-0.5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <%= t("home.ai.mcp.compatible_note") %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<%# AI Skills %>
+<section id="skills" class="bg-gray-50 dark:bg-gray-800/30 py-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3"><%= t("home.ai.skills.heading") %></h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"><%= t("home.ai.skills.intro") %></p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-6 mb-10">
+      <!-- Claude Code -->
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-8">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t("home.ai.skills.claude_code.heading") %></h3>
+
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= t("home.ai.skills.claude_code.step1") %></p>
+        <div class="relative mb-4" data-controller="highlight">
+          <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= claude_code_marketplace %></code></pre>
+          <%= copy_button.call(claude_code_marketplace) %>
+        </div>
+
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= t("home.ai.skills.claude_code.step2") %></p>
+        <div class="relative" data-controller="highlight">
+          <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= claude_code_install %></code></pre>
+          <%= copy_button.call(claude_code_install) %>
+        </div>
+      </div>
+
+      <!-- OpenCode -->
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-8">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t("home.ai.skills.opencode.heading") %></h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= t("home.ai.skills.opencode.text") %></p>
+        <div class="relative" data-controller="highlight">
+          <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= opencode_install %></code></pre>
+          <%= copy_button.call(opencode_install) %>
+        </div>
+      </div>
+
+      <!-- GitHub Copilot -->
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-8">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t("home.ai.skills.copilot.heading") %></h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= t("home.ai.skills.copilot.text") %></p>
+        <div class="relative" data-controller="highlight">
+          <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= copilot_install %></code></pre>
+          <%= copy_button.call(copilot_install) %>
+        </div>
+      </div>
+
+      <!-- Manual -->
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-8">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t("home.ai.skills.manual.heading") %></h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= t("home.ai.skills.manual.text") %></p>
+        <div class="relative" data-controller="highlight">
+          <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= manual_install %></code></pre>
+          <%= copy_button.call(manual_install) %>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center">
+      <%= link_to t("home.ai.skills.repo_link_text"),
+                  "https://github.com/bobadilla-tech/requiems-api-skills",
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  class: "text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium" %>
+    </p>
+  </div>
+</section>
+
+<%# CTA %>
+<section class="bg-slate-900 py-16">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-3xl font-bold text-white mb-4"><%= t("home.ai.cta.heading") %></h2>
+    <p class="text-slate-300 mb-8"><%= t("home.ai.cta.text") %></p>
+    <% if user_signed_in? %>
+      <%= link_to dashboard_api_keys_path, class: "inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg" do %>
+        <%= t("home.ai.cta.button") %>
+      <% end %>
+    <% else %>
+      <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-gray-50 transition-colors shadow-lg" do %>
+        <%= t("home.ai.cta.button") %>
+      <% end %>
+    <% end %>
+  </div>
+</section>
