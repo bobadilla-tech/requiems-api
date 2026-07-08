@@ -804,6 +804,7 @@ es:
         heading: "Obtén tu clave de API"
         text: "Plan gratuito, sin tarjeta de crédito."
         button: "Obtener clave de API"
+      banner_cta: "Construye con Requiems API más rápido: conéctate vía MCP o instala el paquete AI Skills para Claude, Gemini y más"
 
     faq:
       title: "Preguntas frecuentes - Requiems API"

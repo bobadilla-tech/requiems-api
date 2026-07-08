@@ -33,6 +33,8 @@ jobs:
       mcp: ${{ steps.filter.outputs.mcp }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - uses: dorny/paths-filter@v4
         id: filter
@@ -323,6 +325,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2

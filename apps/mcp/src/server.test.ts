@@ -27,6 +27,33 @@ async function waitForHealthy(url: string, timeoutMs = 10_000) {
     throw new Error(`Server at ${url} never became healthy within ${timeoutMs}ms`);
 }
 
+/**
+ * Consumes a stream exactly once via async iteration (safe for Bun's
+ * ReadableStream — unlike manually racing individual reader.read() calls,
+ * this never releases a reader lock while a read is still in-flight), until
+ * every needle has appeared or the timeout elapses. Returns whatever was
+ * accumulated either way, so callers get a useful diff on failure.
+ */
+async function readStreamUntil(
+    stream: ReadableStream<Uint8Array>,
+    needles: string[],
+    timeoutMs = 10_000,
+): Promise<string> {
+    const decoder = new TextDecoder();
+    let text = "";
+    const collect = (async () => {
+        for await (const chunk of stream) {
+            text += decoder.decode(chunk, { stream: true });
+            if (needles.every((n) => text.includes(n))) break;
+        }
+        return text;
+    })();
+    return Promise.race([
+        collect,
+        new Promise<string>((resolve) => setTimeout(() => resolve(text), timeoutMs)),
+    ]);
+}
+
 async function callTool(name: string, args: Record<string, unknown>, headers: Record<string, string> = {}) {
     const res = await fetch(`http://localhost:${MCP_PORT}/mcp`, {
         method: "POST",
@@ -73,8 +100,9 @@ beforeAll(async () => {
     await waitForHealthy(`http://localhost:${MCP_PORT}/healthz`);
 });
 
-afterAll(() => {
+afterAll(async () => {
     serverProc.kill();
+    await serverProc.exited;
     mockBackend.stop(true);
 });
 
@@ -154,12 +182,15 @@ describe("stdio transport", () => {
             stderr: "pipe",
         });
 
-        await new Promise((r) => setTimeout(r, 500));
+        const stderr = await readStreamUntil(proc.stderr, [
+            "Registered",
+            "MCP server running (stdio transport)",
+        ]);
+
         proc.kill();
         await proc.exited;
 
         const stdout = await new Response(proc.stdout).text();
-        const stderr = await new Response(proc.stderr).text();
 
         expect(stdout).toBe("");
         expect(stderr).toContain("Registered");

@@ -804,6 +804,7 @@ en:
         heading: "Get your API key"
         text: "Free tier, no credit card required."
         button: "Get API key"
+      banner_cta: "Build with Requiems API faster: connect via MCP or install the AI Skills package for Claude, Gemini, and more"
 
     faq:
       title: "FAQ - Requiems API"
