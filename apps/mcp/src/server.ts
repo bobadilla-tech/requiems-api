@@ -46,9 +46,18 @@ function registerTools(server: McpServer) {
                     // Under HTTP transport, extra.requestInfo.headers carries the caller's
                     // own key; under stdio there's no requestInfo, so runtime.ts falls back
                     // to the process-wide REQUIEMS_API_KEY.
-                    const callerKey = extra?.requestInfo?.headers?.["requiems-api-key"] ?? "";
+                    const requestInfo = extra?.requestInfo;
+                    const callerKey = requestInfo?.headers?.["requiems-api-key"];
+
+                    if (requestInfo && !callerKey) {
+                        return {
+                            content: [{ type: "text", text: "Missing requiems-api-key header" }],
+                            isError: true,
+                        };
+                    }
+
                     try {
-                        const result = await apiKeyContext.run(callerKey, () => tool.handler(args));
+                        const result = await apiKeyContext.run(callerKey ?? "", () => tool.handler(args));
                         // Generated handlers return the raw Requiems API result, not an MCP
                         // CallToolResult — wrap it here so clients actually see the data
                         // (the SDK validates the return against CallToolResultSchema, which
@@ -116,8 +125,24 @@ async function startHttp() {
                 enableJsonResponse: true,
             });
 
-            await server.connect(transport);
-            return transport.handleRequest(req);
+            try {
+                await server.connect(transport);
+                return await transport.handleRequest(req);
+            } finally {
+                await transport.close();
+                await server.close();
+            }
+        },
+        error(err) {
+            console.error("[server] Unhandled HTTP error:", err);
+            return new Response(
+                JSON.stringify({
+                    jsonrpc: "2.0",
+                    id: null,
+                    error: { code: -32603, message: "Internal server error" },
+                }),
+                { status: 500, headers: { "content-type": "application/json" } },
+            );
         },
     });
 
