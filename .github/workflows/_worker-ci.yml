@@ -21,7 +21,7 @@ on:
         default: false
     secrets:
       CODECOV_TOKEN:
-        required: true
+        required: false
 
 jobs:
   test:
@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -64,18 +64,22 @@ jobs:
         run: pnpm exec vitest run --coverage
 
       - name: Upload coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ inputs.app-path }}/coverage/lcov.info
           flags: ${{ inputs.app-name }}
+          fail_ci_if_error: false
 
       - name: Upload shared coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ inputs.app-path }}/coverage/lcov.info
           flags: shared
+          fail_ci_if_error: false
 
       - name: Biome lint
         if: inputs.has-lint && github.actor != 'dependabot[bot]'

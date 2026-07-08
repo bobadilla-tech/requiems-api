@@ -1,0 +1,26 @@
+<section class="bg-gray-900 dark:bg-gray-950 py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h2 class="text-3xl sm:text-4xl font-bold text-white">
+      <%= t("tools.email_normalizer.cta.heading") %>
+    </h2>
+    <p class="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
+      <%= t("tools.email_normalizer.cta.body") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+      <%= render "partials/shared/button",
+            text:    t("tools.email_normalizer.cta.cta_primary"),
+            variant: "brand",
+            href:    new_user_registration_path,
+            size:    "lg" %>
+
+      <%= render "partials/shared/button",
+            text:    t("tools.email_normalizer.cta.cta_docs"),
+            variant: "outline-white",
+            href:    api_path("email-normalize"),
+            size:    "lg" %>
+    </div>
+
+  </div>
+</section>

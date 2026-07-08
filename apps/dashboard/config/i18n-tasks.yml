@@ -3,16 +3,91 @@ locales: [en, es, fr]
 
 data:
   read:
+    # Root flat files: en.yml, fr.yml, es.yml (Rails scaffold errors, date/time formats)
     - config/locales/%{locale}.yml
+    # Root per-gem files: devise.fr.yml etc. — would be missed without this pattern
+    - config/locales/*.%{locale}.yml
+    # Organized per-feature files: en/home.en.yml, fr/admin.fr.yml, etc.
     - config/locales/%{locale}/**/*.%{locale}.yml
   write:
     - config/locales/%{locale}.yml
 
-# Patterns for ignoring false positives (dynamic keys, etc.)
-ignore_missing: []
-ignore_unused: []
+# Mailer views use relative keys (t '.key') resolved from template path — not detectable
+# by the scanner. Slug-based dynamic namespaces also can't be inferred even with strict: false
+# because the entire top-level segment is interpolated (t("#{i18n_scope}.key") where
+# i18n_scope = "case_studies.#{@slug}").
+ignore_unused:
+  - "case_studies.*.*"
+  - "comparisons.competitors.*.*"
+  - "comparisons.competitors.*"
+  - "divisions.*.*"
+  - "industries.*.*"
+  - "systems.*.*"
+  - "categories.*.*"
+  # Systems cards and how_it_works accessed via dynamic t("home.index.#{section}.#{key}") patterns
+  - "home.index.systems.cards.*.*"
+  - "home.index.how_it_works.*"
+  # Tool demo keys accessed via t("tools.#{tool}.demo.#{row[:key]}") and t("tools.#{tool}.demo.result_failed_heading")
+  - "tools.*.demo.*"
+  # Examples accessed dynamically via slug
+  - "examples.*"
+  # Accessed via t("dashboard.api_keys.show_key.security_#{i + 1}")
+  - "dashboard.api_keys.show_key.security_*"
+  # Accessed via t("dashboard.plans.#{@current_plan}") — enterprise is a valid plan tier
+  - "dashboard.plans.enterprise"
+  # Accessed via t("home.faq.rate_limits.#{plan}", rate_limit: ...)
+  - "home.faq.rate_limits.*"
+  # Accessed via t("comparisons.hub.benchmarks_columns.#{slug}")
+  - "comparisons.hub.benchmarks_columns.*"
+  # Devise error messages that happen to be in locale files — already provided by gem at runtime
+  - "errors.messages.*"
+  - "date.*"
+  - "devise.*"
+  - "number.*"
+  - "time.*"
+  - "support.*"
+  - "*_mailer.*"
 
-# Search patterns for t() usage in code
+# Keys used dynamically via full-namespace interpolation (e.g. i18n_scope = "case_studies.#{@slug}")
+# are not resolvable even with strict: false — suppress false missing reports.
+ignore_missing:
+  - "case_studies.*.*"
+  - "comparisons.competitors.*.*"
+  - "comparisons.competitors.*"
+  - "comparisons.hub.*"
+  - "divisions.*.*"
+  - "industries.*.*"
+  - "systems.*.*"
+  - "categories.*.*"
+  # Systems cards and how_it_works: dynamic keys, fr/es gaps are acceptable
+  - "home.index.systems.cards.*.*"
+  - "home.index.how_it_works.*"
+  - "examples.*"
+  - "devise.*"
+  # Rails / devise error messages provided by gem at runtime; not in app locale files
+  - "errors.messages.*"
+  # Admin views are en-only; es/fr don't need admin translations
+  - "admin.*"
+  - "admin_users.*"
+  # Mailer templates are sent in en regardless of recipient locale
+  - "*_mailer.*"
+  # Only the keys activesupport itself ships (see activesupport/lib/active_support/locale/en.yml)
+  # are safe to ignore here. Custom app-added formats (e.g. date.formats.month_year) must stay
+  # tracked so a locale that defines one without the others gets flagged as missing.
+  - "date.formats.default"
+  - "date.formats.short"
+  - "date.formats.long"
+  - "date.day_names"
+  - "date.abbr_day_names"
+  - "date.month_names"
+  - "date.abbr_month_names"
+  - "date.order"
+  - "time.formats.default"
+  - "time.formats.short"
+  - "time.formats.long"
+  - "time.am"
+  - "time.pm"
+
 search:
   paths:
     - app
@@ -21,3 +96,7 @@ search:
     - "*.erb"
     - "*.haml"
     - "*.slim"
+  # Infer dynamic key segments (e.g. t("cards.#{key}.signals")) as wildcards so
+  # remove-unused doesn't delete keys only accessed via string interpolation.
+  strict: false
+  prism: rails

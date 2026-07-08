@@ -1,0 +1,54 @@
+<section class="bg-gray-50 dark:bg-gray-900 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("tools.domain_checker.faq.heading") %>
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+      <% [
+        { q: t("tools.domain_checker.faq.q1"), a: t("tools.domain_checker.faq.a1") },
+        { q: t("tools.domain_checker.faq.q2"), a: t("tools.domain_checker.faq.a2") },
+        { q: t("tools.domain_checker.faq.q3"), a: t("tools.domain_checker.faq.a3") },
+        { q: t("tools.domain_checker.faq.q4"), a: t("tools.domain_checker.faq.a4") },
+        { q: t("tools.domain_checker.faq.q5"), a: t("tools.domain_checker.faq.a5") },
+      ].each_with_index do |item, i| %>
+        <%= render "partials/shared/card", padding: true do %>
+          <div data-controller="faq-accordion">
+            <button id="faq-dc-btn-<%= i %>"
+                    class="w-full flex justify-between items-center text-left gap-4"
+                    aria-expanded="false"
+                    aria-controls="faq-dc-panel-<%= i %>"
+                    data-action="click->faq-accordion#toggle">
+              <span class="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <%= item[:q] %>
+              </span>
+              <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform duration-200"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <div id="faq-dc-panel-<%= i %>"
+                 role="region"
+                 aria-labelledby="faq-dc-btn-<%= i %>"
+                 class="hidden prose text-sm text-gray-600 dark:text-gray-400 mt-3">
+              <%= item[:a] %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-10 text-center">
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-3"><%= t("tools.domain_checker.faq.support_prompt") %></p>
+      <%= link_to contact_path, class: "inline-flex items-center text-sm font-medium hover:underline", style: "color: #1D9E75;" do %>
+        <%= t("tools.domain_checker.faq.support_link") %>
+        <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      <% end %>
+    </div>
+  </div>
+</section>

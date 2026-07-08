@@ -1,9 +1,9 @@
 <section class="bg-white dark:bg-gray-900 pt-20 pb-16">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-      Know how your text lands.
-    </h1>
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight"><%= t('tools.sentiment_analysis.hero.know_how_your_text_lands') %></h1>
+
+
 
     <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
       Classify any text as positive, negative, or neutral — with a confidence score and full breakdown, in a single API call.
@@ -11,12 +11,12 @@
 
     <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
       <%= render "partials/shared/button",
-            text: "Get API Key",
+            text: t('tools.sentiment_analysis.hero.get_api_key'),
             variant: "brand",
             href: new_user_registration_path,
             size: "lg" %>
       <%= render "partials/shared/button",
-            text: "Read the docs",
+            text: t('tools.sentiment_analysis.hero.read_the_docs'),
             variant: "outline",
             href: api_path("sentiment"),
             size: "lg" %>
@@ -27,7 +27,7 @@
          data-controller="sentiment-demo"
          data-sentiment-demo-error-empty-value="<%= t('tools.sentiment_analysis.demo.error_empty') %>">
 
-      <form data-action="submit->sentiment-demo#beforeSubmit turbo:submit-start->sentiment-demo#onSubmitStart turbo:submit-end->sentiment-demo#onSubmitEnd"
+      <form data-action="turbo:submit-start->sentiment-demo#onSubmitStart turbo:submit-end->sentiment-demo#onSubmitEnd"
             action="<%= tool_demo_sentiment_analysis_path %>"
             method="post"
             data-turbo-frame="sentiment_analysis-demo-result"
@@ -36,15 +36,15 @@
         <textarea
           name="text"
           data-sentiment-demo-target="input"
-          aria-label="<%= t('shared.text_to_analyze') %>"
-          placeholder="Paste any text, review, comment, or feedback..."
+          aria-label="<%= t('shared.forms.text_to_analyze') %>"
+          placeholder="<%= t('tools.sentiment_analysis.demo.input_placeholder') %>"
           rows="3"
           class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm resize-none"
         ></textarea>
 
         <div class="mt-2 flex items-center justify-between">
-          <p class="text-xs text-gray-400 dark:text-gray-500">No account required for the demo.</p>
-          <%= render "partials/shared/submit_button", text: "Analyze", controller: "sentiment-demo" %>
+          <p class="text-xs text-gray-400 dark:text-gray-500"><%= t('shared.info.no_account_demo') %></p>
+          <%= render "partials/shared/submit_button", text: t('tools.sentiment_analysis.hero.analyze'), controller: "sentiment-demo" %>
         </div>
 
         <p data-sentiment-demo-target="errorMessage"

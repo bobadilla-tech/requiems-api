@@ -21,6 +21,12 @@ Rails.application.routes.draw do
   post "tools/demos/unit-conversion",   to: "tool_demos#unit_conversion",   as: :tool_demo_unit_conversion
   post "tools/demos/sentiment-analysis", to: "tool_demos#sentiment_analysis", as: :tool_demo_sentiment_analysis
   post "tools/demos/email-validator",    to: "tool_demos#email_validator",    as: :tool_demo_email_validator
+  post "tools/demos/email-normalizer",  to: "tool_demos#email_normalizer",  as: :tool_demo_email_normalizer
+  post "tools/demos/domain-checker",   to: "tool_demos#domain_checker",   as: :tool_demo_domain_checker
+  post "tools/demos/phone-validator",  to: "tool_demos#phone_validator",  as: :tool_demo_phone_validator
+  post "tools/demos/bin-lookup",        to: "tool_demos#bin_lookup",        as: :tool_demo_bin_lookup
+  post "tools/demos/inflation",         to: "tool_demos#inflation",         as: :tool_demo_inflation
+  post "tools/demos/profanity-filter",  to: "tool_demos#profanity_filter",  as: :tool_demo_profanity_filter
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"
@@ -136,7 +142,9 @@ Rails.application.routes.draw do
     get "team", to: "home#team"
     get "privacy", to: "home#privacy"
     get "terms", to: "home#terms"
+    get "security", to: "home#security"
     get "contact", to: "home#contact"
+    post "contact", to: "home#contact_submit"
     get "api_reference", to: "home#api_reference"
     get "changelog", to: "home#changelog"
 
@@ -146,6 +154,7 @@ Rails.application.routes.draw do
     get "error_codes", to: "home#error_codes"
     get "faq", to: "home#faq"
     get "for-llms", to: "home#for_llms"
+    get "domain-checker", to: "home#domain_checker"
 
     get "suggest-an-api", to: "suggestions#new", as: "suggest_api"
     post "suggest-an-api", to: "suggestions#create"

@@ -1,0 +1,267 @@
+<% content_for :title, t("home.security.title") %>
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Hero -->
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        <%= t("home.security.hero.heading") %>
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+        <%= t("home.security.hero.subheading") %>
+      </p>
+      <p class="mt-4 text-sm text-gray-500 dark:text-gray-500">
+        <%= t("home.security.last_updated", date: l(Rails.application.config.x.legal_effective_date, format: :long)) %>
+      </p>
+    </div>
+
+    <div class="space-y-10">
+
+      <!-- Stateless Architecture -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center h-10 w-10 rounded-md bg-blue-600 text-white mr-4">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <%= t("home.security.stateless.heading") %>
+          </h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+          <%= t("home.security.stateless.intro") %>
+        </p>
+        <ul class="space-y-3">
+          <% t("home.security.stateless.points").each do |point| %>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-700 dark:text-gray-300"><%= point %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <!-- Counter API Exception -->
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-6">
+        <div class="flex items-start">
+          <svg class="h-6 w-6 text-amber-500 mt-0.5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h3 class="font-semibold text-amber-900 dark:text-amber-200 mb-2">
+              <%= t("home.security.counter_exception.heading") %>
+            </h3>
+            <p class="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
+              <%= t("home.security.counter_exception.text") %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infrastructure -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center h-10 w-10 rounded-md bg-purple-600 text-white mr-4">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <%= t("home.security.infrastructure.heading") %>
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              <%= t("home.security.infrastructure.cloudflare.title") %>
+            </h3>
+            <ul class="space-y-2">
+              <% t("home.security.infrastructure.cloudflare.points").each do |point| %>
+                <li class="flex items-start text-sm">
+                  <svg class="h-4 w-4 text-purple-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-gray-700 dark:text-gray-300"><%= point %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              <%= t("home.security.infrastructure.hetzner.title") %>
+            </h3>
+            <ul class="space-y-2">
+              <% t("home.security.infrastructure.hetzner.points").each do |point| %>
+                <li class="flex items-start text-sm">
+                  <svg class="h-4 w-4 text-purple-500 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-gray-700 dark:text-gray-300"><%= point %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Authentication -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center h-10 w-10 rounded-md bg-red-600 text-white mr-4">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <%= t("home.security.api_auth.heading") %>
+          </h2>
+        </div>
+        <ul class="space-y-3">
+          <% t("home.security.api_auth.points").each do |point| %>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-700 dark:text-gray-300"><%= point %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <!-- Compliance Scope -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div class="flex items-center mb-6">
+          <div class="flex items-center justify-center h-10 w-10 rounded-md bg-green-600 text-white mr-4">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <%= t("home.security.compliance_scope.heading") %>
+          </h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+          <%= t("home.security.compliance_scope.text") %>
+        </p>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5">
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              <%= t("home.security.compliance_scope.gdpr.title") %>
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              <%= t("home.security.compliance_scope.gdpr.text") %>
+            </p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-5">
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              <%= t("home.security.compliance_scope.dpa.title") %>
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              <%= t("home.security.compliance_scope.dpa.text") %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <%= render 'partials/shared/schedule_call_card' %>
+
+      <!-- Download Documents -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <div class="flex items-center mb-2">
+          <div class="flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white mr-4">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <%= t("home.security.documents.heading") %>
+          </h2>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 mb-8 ml-14">
+          <%= t("home.security.documents.subheading") %>
+        </p>
+        <div class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+                <%= t("home.security.documents.security_packet.title") %>
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <%= t("home.security.documents.security_packet.desc") %>
+              </p>
+            </div>
+            <%= link_to "/documents/security-packet.pdf",
+                target: "_blank",
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+              <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <%= t("home.security.documents.security_packet.download") %>
+            <% end %>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+                <%= t("home.security.documents.dpa.title") %>
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <%= t("home.security.documents.dpa.desc") %>
+              </p>
+            </div>
+            <%= link_to "/documents/dpa-template.pdf",
+                target: "_blank",
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+              <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <%= t("home.security.documents.dpa.download") %>
+            <% end %>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-6 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+                <%= t("home.security.documents.api_policy.title") %>
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <%= t("home.security.documents.api_policy.desc") %>
+              </p>
+            </div>
+            <%= link_to "/documents/api-auth-policy.pdf",
+                target: "_blank",
+                class: "flex-shrink-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors" do %>
+              <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <%= t("home.security.documents.api_policy.download") %>
+            <% end %>
+          </div>
+        </div>
+
+        <p class="mt-6 text-sm text-gray-600 dark:text-gray-400 text-center">
+          <%= t("home.security.documents.email_cta") %>
+          <a href="mailto:eliaz@bobadilla.tech" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium ml-1">
+            <%= t("home.security.documents.email_link") %>
+          </a>
+        </p>
+      </div>
+
+      <!-- Contact -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <%= t("home.security.contact.heading") %>
+        </h2>
+        <p class="text-gray-700 dark:text-gray-300">
+          <%= t("home.security.contact.text") %>
+          <a href="mailto:eliaz@bobadilla.tech" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium ml-1">eliaz@bobadilla.tech</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

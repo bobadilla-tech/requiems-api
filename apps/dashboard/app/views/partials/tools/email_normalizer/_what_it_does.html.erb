@@ -1,0 +1,63 @@
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid md:grid-cols-2 gap-12">
+
+      <!-- Block A: Clean Data -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4"><%= t("tools.email_normalizer.what_it_does.clean_data_badge") %></span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <%= t("tools.email_normalizer.what_it_does.clean_data_heading") %>
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.email_normalizer.what_it_does.clean_data_body") %>
+          </p>
+        </div>
+
+        <!-- Mock response card -->
+        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
+          <div class="text-gray-500 mb-2 text-[11px]"><%= t('tools.email_normalizer.what_it_does.post_v1_validation_email_normalize_200') %></div>
+          <div>
+            <span class="text-gray-500">{</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"email"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"  User+tag@Googlemail.COM  "</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"normalized"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"user@gmail.com"</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"local"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"user"</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"domain"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"gmail.com"</span><span class="text-gray-500">,</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"issues"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"alias_resolved"</span><br>
+            <span class="text-gray-500">}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block B: Integration -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4"><%= t("tools.email_normalizer.what_it_does.integration_badge") %></span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <%= t("tools.email_normalizer.what_it_does.integration_heading") %>
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.email_normalizer.what_it_does.integration_body") %>
+          </p>
+        </div>
+
+        <!-- Mock request card -->
+        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
+          <div class="text-gray-500 mb-2 text-[11px]"><%= t('systems.show.request_label') %></div>
+          <div>
+            <span class="text-sky-300">POST</span> <span class="text-gray-300">/v1/validation/email-normalize</span><br><br>
+            <span class="text-gray-500"># Headers</span><br>
+            <span class="text-sky-300">requiems-api-key</span><span class="text-gray-500">:</span> <span class="text-amber-300">YOUR_API_KEY</span><br>
+            <span class="text-sky-300">Content-Type</span><span class="text-gray-500">:</span> <span class="text-amber-300">application/json</span><br><br>
+            <span class="text-gray-500"># Body</span><br>
+            <span class="text-gray-500">{</span><br>
+            &nbsp;&nbsp;<span class="text-sky-300">"email"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"User@Example.COM"</span><br>
+            <span class="text-gray-500">}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

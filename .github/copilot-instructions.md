@@ -105,6 +105,33 @@ pnpm exec vitest run
 pnpm run typecheck
 ```
 
+## Rails Dashboard — i18n (rori18n)
+
+`apps/dashboard` uses [rori18n](https://github.com/bobadilla-tech/rori18n) — a Go CLI that manages i18n YAML files. Install once:
+
+```bash
+go install github.com/bobadilla-tech/rori18n@latest
+```
+
+Common tasks (run from repo root):
+
+```bash
+# Lint: fail if any t() call has no YAML key
+rori18n lint --root apps/dashboard
+
+# Add a key across all locales
+rori18n add-key --root apps/dashboard --key shared.buttons.save --value "Save changes"
+
+# Rename a key everywhere (YAML + source callers)
+rori18n refactor-key --root apps/dashboard --old shared.old.key --new shared.new.key
+
+# Find orphaned / missing keys
+rori18n audit --root apps/dashboard --all
+```
+
+Brand names protected from translation live in `apps/dashboard/.translate-dictionary.txt`.
+Do not use `i18n-tasks` write commands — use rori18n instead. `bundle exec i18n-tasks health` is still useful as a passive check.
+
 ## Before Marking a Task Done
 
 1. Run the "must pass" checks for every app you touched.

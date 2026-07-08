@@ -1,42 +1,13 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
+---
 en:
-  hello: "Hello world"
-  errors:
-    messages:
-      not_saved:
-        one: "1 error prohibited this record from being saved:"
-        other: "%{count} errors prohibited this record from being saved:"
   date:
     formats:
       month_year: "%B %Y"
   time:
     formats:
-      status_timestamp: "%B %d, %Y at %I:%M %p %Z"
+      status_timestamp: "%B %d, %Y at %H:%M %Z"
+  errors:
+    messages:
+      not_saved:
+        one: '1 error prohibited this record from being saved:'
+        other: "%{count} errors prohibited this record from being saved:"

@@ -32,7 +32,7 @@ jobs:
       api-management: ${{ steps.filter.outputs.api-management }}
       mcp: ${{ steps.filter.outputs.mcp }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -84,7 +84,7 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v6
@@ -93,7 +93,7 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Cache Go build
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/go-build
           key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
@@ -114,11 +114,13 @@ jobs:
         run: go test -race -coverprofile=coverage.out ./...
 
       - name: Upload coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/api/coverage.out
           flags: go
+          fail_ci_if_error: false
 
   go-lint:
     name: Go Lint (Advisory)
@@ -128,7 +130,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Go
         uses: actions/setup-go@v6
@@ -137,7 +139,7 @@ jobs:
           cache-dependency-path: apps/api/go.sum
 
       - name: Cache Go build
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/go-build
           key: go-build-${{ runner.os }}-${{ hashFiles('apps/api/go.sum') }}
@@ -186,7 +188,7 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -196,7 +198,7 @@ jobs:
           working-directory: apps/dashboard
 
       - name: Cache Rails bootsnap
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/cache
           key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
@@ -224,12 +226,18 @@ jobs:
           BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
         run: bin/rails test
 
+      - name: Check for missing translations
+        working-directory: apps/dashboard
+        run: bundle exec i18n-tasks missing
+
       - name: Upload coverage to Codecov
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: apps/dashboard/coverage/lcov/dashboard.lcov
           flags: rails
+          fail_ci_if_error: false
 
   rails-checks:
     name: Rails Security & Lint
@@ -241,7 +249,7 @@ jobs:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -251,7 +259,7 @@ jobs:
           working-directory: apps/dashboard
 
       - name: Cache Rails bootsnap
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/cache
           key: bootsnap-${{ runner.os }}-ruby3.4.8-${{ hashFiles('apps/dashboard/Gemfile.lock') }}
@@ -278,7 +286,7 @@ jobs:
 
       - name: Cache RuboCop
         if: github.actor != 'dependabot[bot]'
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: apps/dashboard/tmp/rubocop
           key: rubocop-${{ runner.os }}-${{ hashFiles('apps/dashboard/.rubocop.yml', 'apps/dashboard/Gemfile.lock') }}
@@ -324,7 +332,7 @@ jobs:
         working-directory: apps/mcp
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 

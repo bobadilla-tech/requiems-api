@@ -1,0 +1,32 @@
+<section class="bg-gray-50 dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t("tools.email_normalizer.api_combinations.heading") %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        <%= t("tools.email_normalizer.api_combinations.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% [
+        { pair:    t("tools.email_normalizer.api_combinations.validator_pair"),
+          benefit: t("tools.email_normalizer.api_combinations.validator_benefit"),
+          outcome: t("tools.email_normalizer.api_combinations.validator_outcome") },
+        { pair:    t("tools.email_normalizer.api_combinations.phone_pair"),
+          benefit: t("tools.email_normalizer.api_combinations.phone_benefit"),
+          outcome: t("tools.email_normalizer.api_combinations.phone_outcome") },
+        { pair:    t("tools.email_normalizer.api_combinations.domain_pair"),
+          benefit: t("tools.email_normalizer.api_combinations.domain_benefit"),
+          outcome: t("tools.email_normalizer.api_combinations.domain_outcome") },
+      ].each do |c| %>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+          <p class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-2"><%= c[:benefit] %></p>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"><%= c[:outcome] %></p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

@@ -68,7 +68,7 @@ in JavaScript.**
      data-controller="{tool-name}-demo"
      data-{tool-name}-demo-error-empty-value="<%= t('tools.{tool_name}.demo.error_empty') %>">
 
-  <form data-action="submit->{tool-name}-demo#beforeSubmit turbo:submit-start->{tool-name}-demo#onSubmitStart turbo:submit-end->{tool-name}-demo#onSubmitEnd"
+  <form data-action="turbo:submit-start->{tool-name}-demo#onSubmitStart turbo:submit-end->{tool-name}-demo#onSubmitEnd"
         action="<%= tool_demo_{tool_name}_path %>"
         method="post"
         data-turbo-frame="{tool_name}-demo-result"
@@ -192,15 +192,15 @@ export default class extends Controller {
   static targets = ["input", "button", "errorMessage", "spinner"];
   static values = { errorEmpty: String };
 
-  beforeSubmit(event) {
+  onSubmitStart(event) {
     this._clearError();
-    if (!this.inputTarget.value.trim()) {
-      event.preventDefault();
-      this._showError(this.errorEmptyValue);
-    }
-  }
 
-  onSubmitStart() {
+    if (!this.inputTarget.value.trim()) {
+      event.detail.formSubmission.stop();
+      this._showError(this.errorEmptyValue);
+      return;
+    }
+
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
@@ -229,9 +229,56 @@ The controller does **only** client-side validation and loading state. No
 
 ## 4. i18n requirements
 
-All user-facing strings in tool pages must use `t()`. Add keys to
-`apps/dashboard/config/locales/en/tools.en.yml` and stub `TODO: translate` in
-the matching `es/tools.es.yml` and `fr/tools.fr.yml` files.
+All user-facing strings in tool pages must use `t()`. Use **rori18n** to extract
+strings and generate the locale files.
+
+**Install once** ([rori18n repo](https://github.com/bobadilla-tech/rori18n)):
+
+```sh
+go install github.com/bobadilla-tech/rori18n@latest
+# add ~/go/bin to PATH if not already there
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+Run all commands from inside `apps/dashboard/`:
+
+#### Step 1 — find hardcoded strings
+
+```sh
+git diff --name-only origin/main | \
+  rori18n report -r . --changed-files -
+```
+
+Lists every hardcoded user-visible string in your changed files. Fix them with
+`t()` calls and EN keys before moving on.
+
+#### Step 2 — extract + generate locale skeletons
+
+```sh
+git diff --name-only origin/main | \
+  rori18n generate -r . --fix --languages es,fr --changed-files -
+```
+
+One pass does three things:
+
+1. Finds remaining hardcoded strings in your changed files
+2. Writes the EN key to the correct YAML file and injects the `t()` call
+3. Creates matching empty entries in `es/tools.es.yml` and `fr/tools.fr.yml`
+
+For `t()` calls you wrote manually, also add the key with an empty value `""` to
+the ES and FR files, the maintainer fills them after merge.
+
+#### Step 3 — lint before opening the PR
+
+```sh
+rori18n lint -r .
+```
+
+Exits 1 with `file:line: missing key "..."` if any `t()` call has no matching
+YAML entry. All lint errors must be fixed before opening the PR.
+
+> **Translation** (filling ES/FR empty values with real text) is run by the
+> maintainer after merge. Do not write translations manually.
 
 ### Key structure
 
@@ -266,7 +313,7 @@ static values = { errorEmpty: String };
 ```
 
 All other error messages come from the server-rendered result partial and use
-`t()` directly — no JS needed.
+`t()` directly, no JS needed.
 
 ---
 
@@ -351,9 +398,10 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] `grep -r "_escapeHtml\|escapeHtml" app/javascript/controllers/{tool_name}*`
       returns nothing
 - [ ] All user-facing strings go through `t()` — no hardcoded English in JS or
-      ERB
-- [ ] New locale keys added to `en/tools.en.yml`, `es/tools.es.yml` (TODO stub),
-      `fr/tools.fr.yml` (TODO stub)
+      ERB (`rori18n report --changed-files -` returns nothing)
+- [ ] `rori18n generate --fix --languages es,fr --changed-files -` run — EN keys
+      written, ES/FR skeleton entries created
+- [ ] `rori18n lint` exits 0
 - [ ] Input types are semantically correct (no `type="text"` for enumerated
       values)
 - [ ] CTA buttons use `render "partials/shared/button"` — not raw `link_to` with

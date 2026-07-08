@@ -2,18 +2,18 @@
   <div class="px-8 py-6">
     <div class="flex items-start justify-between mb-4">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">API Directory</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= t('shared.footer.links.api_directory') %></h1>
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
           Unlock all our APIs with a single API key &mdash;
           <% if user_signed_in? %>
             browse our collection of production-ready APIs.
           <% else %>
-            <%= link_to "sign up for a free API key", new_user_registration_path, class: "font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400" %> to get started.
+            <%= link_to t('apis_index.header.sign_up_for_a_free_api_key'), new_user_registration_path, class: "font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400" %> to get started.
           <% end %>
         </p>
       </div>
       <% unless user_signed_in? %>
-        <%= link_to "Get Free API Key", new_user_registration_path, class: "inline-flex items-center px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
+        <%= link_to t('apis_index.header.get_free_api_key'), new_user_registration_path, class: "inline-flex items-center px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors" %>
       <% end %>
     </div>
   </div>

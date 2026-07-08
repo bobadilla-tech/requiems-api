@@ -20,7 +20,7 @@
             <%= category["name"] %>
           </h3>
           <% if category["coming_soon"] %>
-            <span class="inline-block mt-1 text-[10px] text-gray-400 dark:text-gray-500">Soon</span>
+            <span class="inline-block mt-1 text-[10px] text-gray-400 dark:text-gray-500"><%= t('home_index.categories.soon') %></span>
           <% end %>
         <% end %>
       <% end %>

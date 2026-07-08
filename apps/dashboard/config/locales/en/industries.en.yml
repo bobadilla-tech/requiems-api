@@ -1,914 +1,756 @@
 ---
 en:
   industries:
+    agencies:
+      api_mapping:
+        apis:
+        - title: Validation
+          description: Scrub client email lists and phone databases before campaigns
+            to protect sender reputation and cut costs.
+          division: validation
+        - title: Networking
+          description: Domain and WHOIS lookup for competitive research, brand monitoring,
+            and client audit workflows.
+          division: networking
+        - title: Places
+          description: Timezone and geolocation data for scheduling campaigns, localizing
+            landing pages, and reporting.
+          division: places
+        - title: Text & Language
+          description: Language detection and text utilities for multilingual client
+            projects and content moderation pipelines.
+          division: text
+      proof_points:
+        items:
+        - title: Better email campaign ROI
+          description: Scrub client lists before every send—bounce rates drop, deliverability
+            scores climb, CPL falls.
+          metric: "–50% bounces"
+        - title: Faster client audits
+          description: Automate WHOIS and domain lookups for brand protection reports
+            without manual research.
+          metric: 10× faster
+        - title: Localized campaigns at scale
+          description: Detect user timezone and country to schedule and localize campaigns
+            without manual segmentation.
+          metric: Instant
+        - title: One key for all client projects
+          description: Validation, networking, and text APIs under one account. Bill
+            per call, not per client seat.
+          metric: 1 API key
+    ecommerce:
+      api_mapping:
+        apis:
+        - title: Finance
+          description: BIN lookup and payment card validation to catch bad cards before
+            they hit the payment gateway.
+          division: finance
+        - title: Validation
+          description: Validate customer emails and phones at checkout to reduce failed
+            order confirmations and OTP delivery.
+          division: validation
+        - title: IP Intelligence
+          description: Detect VPN/proxy and geolocate buyers for fraud scoring, geo-pricing,
+            and shipping region detection.
+          division: networking
+        - title: Places
+          description: Geocoding and address data for shipping estimates, tax calculation,
+            and delivery zone assignment.
+          division: places
+      proof_points:
+        items:
+        - title: Higher payment success rate
+          description: BIN-validate cards client-side before submitting to the processor—first-attempt
+            success rates improve.
+          metric: "+15% success"
+        - title: Fewer abandoned confirmations
+          description: Validate email and phone at checkout so order confirmations
+            and tracking links always land.
+          metric: "–35% failures"
+        - title: Real-time fraud scoring
+          description: Flag VPN and datacenter IPs on high-value orders for step-up
+            verification before fulfillment.
+          metric: Real-time
+        - title: Auto-localize shipping and tax
+          description: Resolve country and region from IP to show accurate shipping
+            cost and tax copy without asking for location.
+          metric: 180+ countries
+    edtech:
+      api_mapping:
+        apis:
+        - title: Validation
+          description: Validate student and instructor emails and phones at registration
+            to ensure course access and notifications land.
+          division: validation
+        - title: Places
+          description: Timezone data for live class scheduling, cohort coordination,
+            and deadline display across time zones.
+          division: places
+        - title: Text & Language
+          description: Language detection for adaptive content routing and profanity
+            filtering for student forums and chat.
+          division: text
+        - title: IP Intelligence
+          description: Detect VPN/proxy to enforce proctoring rules and geoblock content
+            for regional licensing.
+          division: networking
+      proof_points:
+        items:
+        - title: Fewer lost learners
+          description: Validate emails at signup so welcome emails, course invites,
+            and certificates all reach the right inbox.
+          metric: "–45% bounces"
+        - title: Timezone-correct scheduling
+          description: Show live class times in each student's local timezone automatically—no
+            missed sessions from time zone math.
+          metric: Instant
+        - title: Safer student communities
+          description: Filter profanity in forum posts and comments server-side before
+            they go live—no client-side blocklists.
+          metric: Real-time
+        - title: Ship in one sprint
+          description: REST endpoints with copy-ready examples. Most EdTech teams
+            go live in under a week.
+          metric: "< 1 week"
+    energy:
+      api_mapping:
+        apis:
+        - title: Places
+          description: Geocoding, address normalization, and timezone data for asset
+            mapping, meter dispatch, and outage routing.
+          division: places
+        - title: Validation
+          description: Validate customer and installer contacts at account creation
+            to keep billing and service comms reliable.
+          division: validation
+        - title: Finance
+          description: Currency data and payment validation for cross-border energy
+            contracts and customer billing.
+          division: finance
+        - title: IP Intelligence
+          description: Geolocation for remote asset portal access control and regulatory
+            jurisdiction detection.
+          division: networking
+      proof_points:
+        items:
+        - title: Accurate asset coordinates
+          description: Geocode meter and turbine addresses at ingest for dispatch
+            routing, outage isolation, and GIS mapping.
+          metric: 99%+ accuracy
+        - title: Fewer billing failures
+          description: Validate customer emails at signup so invoices, outage alerts,
+            and renewal notices are delivered.
+          metric: "–40% failures"
+        - title: Timezone-correct scheduling
+          description: Surface correct local dispatch and maintenance windows for
+            multi-region infrastructure teams.
+          metric: Global coverage
+        - title: Single API key
+          description: Geocoding, validation, and finance APIs behind one key—no multi-vendor
+            complexity.
+          metric: 1 integration
+    fintech:
+      api_mapping:
+        apis:
+        - title: Finance
+          description: BIN/IIN lookup, IBAN validation, SWIFT code verification, and
+            currency data for global payment flows.
+          division: finance
+        - title: IP Intelligence
+          description: VPN/proxy detection, IP geolocation, and ASN lookup for transaction
+            risk scoring and geo-compliance.
+          division: networking
+        - title: Validation
+          description: Email and phone verification for KYC onboarding, 2FA delivery,
+            and account recovery flows.
+          division: validation
+        - title: Places
+          description: Timezone and address data for transaction timestamp normalization
+            and jurisdiction detection.
+          division: places
+      proof_points:
+        items:
+        - title: Real-time fraud scoring
+          description: Score transactions by combining VPN detection, IP geolocation,
+            and BIN country mismatch signals.
+          metric: "< 50ms"
+        - title: Faster KYC onboarding
+          description: Validate email and phone at signup before identity checks—fewer
+            re-verifications and support escalations.
+          metric: "–40% retries"
+        - title: Cleaner payment data
+          description: BIN-validate cards and verify IBANs before submitting to processors—decline
+            rates and dispute costs fall.
+          metric: "+12% success"
+        - title: Jurisdiction detection
+          description: Detect user country from IP for regulatory routing, currency
+            selection, and GDPR/PSD2 compliance.
+          metric: 180+ countries
+    gaming:
+      api_mapping:
+        apis:
+        - title: IP Intelligence
+          description: Geolocate players for region-based content rules, matchmaking
+            pools, and VPN/proxy detection.
+          division: networking
+        - title: Text & Language
+          description: Profanity filtering and language detection for in-game chat,
+            usernames, and community forums.
+          division: text
+        - title: Validation
+          description: Validate player emails and phones at registration to ensure
+            account recovery and notification delivery.
+          division: validation
+        - title: Finance
+          description: BIN lookup and payment validation for in-game purchases and
+            subscription billing.
+          division: finance
+      proof_points:
+        items:
+        - title: Enforce regional content rules
+          description: Block or redirect players by country using real-time IP geolocation—no
+            stale GeoIP databases.
+          metric: Real-time
+        - title: Safer multiplayer chat
+          description: Filter chat server-side on send. High-risk strings drop; repeat
+            senders get cooldown—no client blocklists.
+          metric: Millions/min
+        - title: Reduce free-tier abuse
+          description: Flag VPN and datacenter IPs creating throwaway trial accounts
+            to protect conversion metrics.
+          metric: "–60% abuse"
+        - title: Accounts that actually reach players
+          description: Validate email at signup so password reset and ban appeal emails
+            never bounce.
+          metric: 99%+ delivery
+    government:
+      api_mapping:
+        apis:
+        - title: Places
+          description: Address validation, geocoding, and regional data for permit
+            systems, constituency mapping, and benefits routing.
+          division: places
+        - title: Validation
+          description: Verify citizen emails and phones at form submission to reduce
+            failed notifications and duplicate registrations.
+          division: validation
+        - title: IP Intelligence
+          description: Geolocation and proxy detection for access control, fraud prevention,
+            and jurisdiction enforcement.
+          division: networking
+        - title: Finance
+          description: IBAN and payment validation for tax collection, benefits disbursement,
+            and public tender flows.
+          division: finance
+      proof_points:
+        items:
+        - title: Fewer returned notices
+          description: Validate citizen contacts before sending compliance notices,
+            benefits updates, and voting reminders.
+          metric: "–50% failures"
+        - title: Accurate geocoding at scale
+          description: Normalize and geocode submitted addresses for zone assignment,
+            emergency services routing, and reporting.
+          metric: Millions/day
+        - title: Fraud detection at the door
+          description: Detect VPN/proxy and flag out-of-jurisdiction access attempts
+            on protected portals before authentication.
+          metric: Real-time
+        - title: Secure REST integration
+          description: HTTPS-only endpoints, no PII stored. Compliance-first architecture
+            from day one.
+          metric: SOC-ready
+    healthcare:
+      api_mapping:
+        apis:
+        - title: Validation
+          description: Validate patient emails and phones at registration so appointment
+            reminders and lab results reach the right person.
+          division: validation
+        - title: Places
+          description: Timezone and geocoding data for appointment scheduling, provider
+            mapping, and coverage zone detection.
+          division: places
+        - title: IP Intelligence
+          description: Geolocate patients for telemedicine eligibility rules, licensing
+            compliance, and regional routing.
+          division: networking
+        - title: Text & Language
+          description: Language detection for multilingual patient communications
+            and clinical note processing.
+          division: text
+      proof_points:
+        items:
+        - title: Fewer missed appointments
+          description: Validate patient phone and email at intake—reminder delivery
+            rates climb and no-show rates fall.
+          metric: "–30% no-shows"
+        - title: Correct timezone scheduling
+          description: Resolve patient timezone from address or IP to display appointment
+            slots in local time automatically.
+          metric: Instant
+        - title: Telemedicine compliance signals
+          description: Geolocate sessions to flag out-of-state patients before the
+            consultation starts, not after.
+          metric: Real-time
+        - title: Fast, secure integration
+          description: HTTPS-only endpoints, no PII stored. Typical integration is
+            under a week.
+          metric: "< 1 week"
+    hospitality:
+      api_mapping:
+        apis:
+        - title: Places
+          description: Timezone, geocoding, and regional data for check-in scheduling,
+            local recommendations, and tax display.
+          division: places
+        - title: Validation
+          description: Validate guest emails and phones at reservation to ensure confirmation
+            delivery and pre-arrival comms.
+          division: validation
+        - title: Finance
+          description: BIN lookup and currency data for international guest billing
+            and multi-currency payment flows.
+          division: finance
+        - title: IP Intelligence
+          description: Geo-detect guest origin for personalized language, currency,
+            and regulatory compliance.
+          division: networking
+      proof_points:
+        items:
+        - title: Fewer missed confirmations
+          description: Validate guest contact data at booking—pre-arrival messages
+            and check-in instructions reach the right inbox.
+          metric: "–35% failures"
+        - title: Localized experience without friction
+          description: Detect guest country from IP to serve the right currency, language,
+            and local time automatically.
+          metric: Instant
+        - title: Cleaner payment data
+          description: BIN lookup at checkout so declined card rates drop and the
+            billing form shows the right card type.
+          metric: "+10% success"
+        - title: Deploy in one sprint
+          description: REST endpoints with copy-ready examples in multiple languages—typical
+            integration takes under a week.
+          metric: "< 1 week"
     index:
-      meta_title: "APIs by Industry | Requiems API"
-      hero:
-        headline: "One API key. Every industry."
-        subheadline: "Explore how Requiems APIs solve real workflows in your vertical—from validation to geolocation to finance."
-        cta: "Book a strategy call"
-      strategy_call:
-        label: "Book a strategy call"
-      questions_intro: "Not sure which APIs fit your stack? Let's talk through it."
-      view_industry: "View industry"
       cards:
         travel:
-          title: "Travel"
-          blurb: "Booking flows, geolocation, currency, and fraud detection for travel platforms."
-        telecom:
-          title: "Telecom"
-          blurb: "Phone validation, IP intelligence, and number verification for telco products."
-        saas:
-          title: "SaaS"
-          blurb: "Auth, billing validation, data quality, and spam prevention for SaaS apps."
-        retail:
-          title: "Retail"
-          blurb: "Address validation, inventory enrichment, and checkout data quality for retail."
-        real_estate:
-          title: "Real Estate"
-          blurb: "Property geolocation, address validation, and timezone data for listings platforms."
-        nonprofit:
-          title: "Nonprofit"
-          blurb: "Donor data validation, email deliverability, and contact enrichment for nonprofits."
-        media:
-          title: "Media"
-          blurb: "Geolocation-based content rules, IP routing, and text moderation for media platforms."
-        manufacturing:
-          title: "Manufacturing"
-          blurb: "Address and timezone enrichment, supplier validation, and data quality for ops teams."
-        logistics:
-          title: "Logistics"
-          blurb: "Address validation, geolocation, and timezone APIs for routing and delivery."
-        legal:
-          title: "Legal"
-          blurb: "Document address validation, email verification, and compliance data for legal tech."
-        insurance:
-          title: "Insurance"
-          blurb: "Address and geolocation data, phone and email validation for policy and claims flows."
-        hospitality:
-          title: "Hospitality"
-          blurb: "Booking validation, geolocation, currency, and guest data quality for hotels."
-        healthcare:
-          title: "Healthcare"
-          blurb: "Patient contact validation, timezone scheduling, and HIPAA-safe data checks."
-        government:
-          title: "Government"
-          blurb: "Address verification, identity validation, and geolocation for public services."
-        energy:
-          title: "Energy"
-          blurb: "Asset geolocation, address validation, and timezone data for utilities and smart grids."
-        edtech:
-          title: "EdTech"
-          blurb: "Student contact validation, timezone support, and spam prevention for learning platforms."
-        ecommerce:
-          title: "Ecommerce"
-          blurb: "Checkout validation, fraud signals, address enrichment, and payments data for stores."
-        agencies:
-          title: "Agencies"
-          blurb: "Client data validation, email deliverability, and automation APIs for digital agencies."
-        gaming:
-          title: "Gaming"
-          blurb: "IP geolocation, chat moderation, fraud detection, and region locking for game studios."
-        fintech:
-          title: "Fintech"
-          blurb: "BIN lookup, IBAN/SWIFT validation, KYC signals, and fraud detection for fintech."
-
-    travel:
-      meta_title: "APIs for Travel Businesses | Requiems API"
+          title: Travel
       hero:
-        headline: "APIs for Travel: Personalize, secure, and automate every booking"
-        subheadline: "Power global booking flows with geolocation, validation, and payment APIs built for travel platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for travel workflows"
-        apis:
-          - title: "Places & Geolocation"
-            description: "Timezones, geocoding, and holiday calendars for global itineraries and scheduling."
-            division: "places"
-          - title: "Validation"
-            description: "Catch bad emails and phones before they break booking confirmations and OTP delivery."
-            division: "validation"
-          - title: "Finance"
-            description: "BIN lookup, currency data, and payment validation for global checkout flows."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy, localize pricing by country, and flag high-risk sessions at checkout."
-            division: "networking"
-      proof_points:
-        heading: "What travel teams ship with Requiems"
-        items:
-          - title: "Reduce booking failure rate"
-            description: "Validate emails and phones at input—fewer failed confirmations and support tickets from bad data."
-            metric: "–40%"
-          - title: "Detect fraudulent bookings"
-            description: "Flag VPN and datacenter IPs on checkout and trigger step-up verification automatically."
-            metric: "Real-time"
-          - title: "Auto-localize for every market"
-            description: "Show correct timezone, currency, and holiday data without GPS prompts or manual config."
-            metric: "180+ countries"
-          - title: "Integrate in days, not months"
-            description: "REST endpoints, copy-ready examples, and a single API key across all services."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Build your travel platform faster."
-        subheadline: "Let us map the right APIs to your booking and ops workflows."
-        cta: "Book a strategy call"
-
-    telecom:
-      meta_title: "APIs for Telecom Companies | Requiems API"
-      hero:
-        headline: "APIs for Telecom: Validate numbers, detect threats, route smarter"
-        subheadline: "Phone validation, IP intelligence, and number verification for carriers, MVNOs, and telco platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for telecom workflows"
-        apis:
-          - title: "Validation"
-            description: "Validate phone numbers in E.164, detect line type, and flag invalid or ported numbers before they hit the network."
-            division: "validation"
-          - title: "IP Intelligence"
-            description: "ASN lookup, VPN/proxy detection, and IP geolocation for traffic analysis and fraud signals."
-            division: "networking"
-          - title: "Finance"
-            description: "BIN and payment card validation for billing and top-up flows."
-            division: "finance"
-          - title: "Places"
-            description: "Timezone and regional data for scheduling, roaming alerts, and customer support routing."
-            division: "places"
-      proof_points:
-        heading: "What telecom teams ship with Requiems"
-        items:
-          - title: "Cut invalid number submissions"
-            description: "Validate subscriber numbers at porting and ticket creation—bad inputs fail fast instead of after a week of processing."
-            metric: "–60%"
-          - title: "Enrich NOC tickets automatically"
-            description: "Pull ASN and upstream context for suspicious IPs so ops teams answer with data, not screenshots."
-            metric: "Instant"
-          - title: "Reduce SMS delivery failures"
-            description: "Check E.164 format and line type before sending OTPs—invalid and landline numbers never reach the gateway."
-            metric: "–35%"
-          - title: "Single API key, full suite"
-            description: "One integration unlocks validation, networking, and finance APIs without separate accounts or billing."
-            metric: "1 key"
-      final_cta:
-        headline: "Build smarter telecom products."
-        subheadline: "Let us walk through the APIs that fit your subscriber and network workflows."
-        cta: "Book a strategy call"
-
-    saas:
-      meta_title: "APIs for SaaS Products | Requiems API"
-      hero:
-        headline: "APIs for SaaS: Clean data, secure signups, and fewer support tickets"
-        subheadline: "Validation, spam prevention, and data enrichment APIs for SaaS products that need to scale."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for SaaS workflows"
-        apis:
-          - title: "Validation"
-            description: "Stop disposable emails, fake phones, and profanity from polluting your user database at signup."
-            division: "validation"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy on login, localize by region, and block datacenter traffic from abusing free tiers."
-            division: "networking"
-          - title: "Finance"
-            description: "BIN lookup and card validation for subscription billing and checkout fraud reduction."
-            division: "finance"
-          - title: "Text & Language"
-            description: "Language detection, moderation, and text utilities for user-generated content and onboarding copy."
-            division: "text"
-      proof_points:
-        heading: "What SaaS teams ship with Requiems"
-        items:
-          - title: "Cut fake signup rate"
-            description: "Reject disposable domains and invalid MX records at the form—support stops chasing phantom users."
-            metric: "–70%"
-          - title: "Faster enterprise onboarding"
-            description: "Validate corporate email and domain before SSO invite—IT teams get clean first-try provisioning."
-            metric: "–50% retries"
-          - title: "Abuse-proof free tiers"
-            description: "Flag datacenter and VPN IPs creating trial accounts to protect trial-to-paid conversion metrics."
-            metric: "Real-time"
-          - title: "Ship in one sprint"
-            description: "Copy-ready code examples in five languages. Most teams go live in the same week."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Ship cleaner, more secure SaaS."
-        subheadline: "Let us map the validation and enrichment APIs that fit your product."
-        cta: "Book a strategy call"
-
-    retail:
-      meta_title: "APIs for Retail Businesses | Requiems API"
-      hero:
-        headline: "APIs for Retail: Clean checkout data, fewer returns, happier customers"
-        subheadline: "Address validation, payment checks, and fraud signals for retail platforms and POS systems."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for retail workflows"
-        apis:
-          - title: "Validation"
-            description: "Validate customer emails and phones at checkout to reduce failed delivery notifications and OTP failures."
-            division: "validation"
-          - title: "Finance"
-            description: "BIN lookup and payment card validation to catch declined cards before they frustrate buyers."
-            division: "finance"
-          - title: "Places"
-            description: "Geocoding, timezone, and address data for shipping estimates, tax copy, and geo-bucketed pricing."
-            division: "places"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy and flag high-risk sessions at checkout to reduce card fraud."
-            division: "networking"
-      proof_points:
-        heading: "What retail teams ship with Requiems"
-        items:
-          - title: "Fewer failed deliveries"
-            description: "Catch invalid phones and address anomalies before the order ships—returns and missed delivery attempts drop."
-            metric: "–30%"
-          - title: "Faster checkout"
-            description: "Validate card BIN client-side so the first payment attempt succeeds more often."
-            metric: "+12% success"
-          - title: "Localized pricing instantly"
-            description: "Resolve country and region from IP to show correct currency and shipping cost without asking for GPS."
-            metric: "180+ countries"
-          - title: "One API key, all services"
-            description: "Validation, finance, and geolocation from a single endpoint. No stitching together multiple vendors."
-            metric: "1 integration"
-      final_cta:
-        headline: "Reduce friction at every step of checkout."
-        subheadline: "Let us map the right APIs to your cart and fulfillment workflows."
-        cta: "Book a strategy call"
-
-    real_estate:
-      meta_title: "APIs for Real Estate Platforms | Requiems API"
-      hero:
-        headline: "APIs for Real Estate: Accurate listings, verified contacts, global reach"
-        subheadline: "Address validation, geolocation, and contact verification APIs for property platforms and CRMs."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for real estate workflows"
-        apis:
-          - title: "Places"
-            description: "Geocoding, timezone, and address enrichment for property listings and agent scheduling."
-            division: "places"
-          - title: "Validation"
-            description: "Verify buyer and agent emails and phones before sending listings or contracts."
-            division: "validation"
-          - title: "Networking"
-            description: "IP geolocation for regional property recommendations and GDPR-compliant data display."
-            division: "networking"
-          - title: "Finance"
-            description: "Currency conversion and payment data for cross-border property transactions."
-            division: "finance"
-      proof_points:
-        heading: "What real estate teams ship with Requiems"
-        items:
-          - title: "Cleaner listings data"
-            description: "Geocode and normalize addresses at ingest—map pins land correctly and search results stay accurate."
-            metric: "99%+ accuracy"
-          - title: "Fewer dead-end leads"
-            description: "Validate contact emails and phones at form submission before they enter the CRM pipeline."
-            metric: "–45% bad leads"
-          - title: "Timezone-aware scheduling"
-            description: "Show viewing times in the buyer's local timezone automatically—no manual conversion or missed calls."
-            metric: "Instant"
-          - title: "Fast integration"
-            description: "Geocoding, validation, and finance APIs behind one key—live in a single sprint."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Build more accurate property platforms."
-        subheadline: "Let us map address, geolocation, and contact APIs to your listing workflows."
-        cta: "Book a strategy call"
-
-    nonprofit:
-      meta_title: "APIs for Nonprofits | Requiems API"
-      hero:
-        headline: "APIs for Nonprofits: Reach real donors, keep your CRM clean"
-        subheadline: "Email and phone validation, data quality, and geolocation APIs for nonprofit outreach and donor management."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for nonprofit workflows"
-        apis:
-          - title: "Validation"
-            description: "Catch invalid emails and phones before they bloat your donor list and hurt deliverability."
-            division: "validation"
-          - title: "Places"
-            description: "Geocoding and regional data for donor segmentation, volunteer mapping, and event scheduling."
-            division: "places"
-          - title: "Text & Language"
-            description: "Language detection for multilingual outreach and content moderation for public-facing community platforms."
-            division: "text"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy on donation forms to flag suspicious transactions before they dispute."
-            division: "networking"
-      proof_points:
-        heading: "What nonprofit teams ship with Requiems"
-        items:
-          - title: "Better email deliverability"
-            description: "Remove invalid and disposable addresses before every campaign—fewer bounces, better sender reputation."
-            metric: "+25% open rate"
-          - title: "Cleaner donor database"
-            description: "Validate contacts at point of entry so your CRM stays usable for segmentation and reporting."
-            metric: "–60% bad records"
-          - title: "Smarter regional outreach"
-            description: "Geocode supporter addresses to map coverage gaps and prioritize canvassing regions."
-            metric: "Instant"
-          - title: "Affordable and scalable"
-            description: "Pay per call. No monthly minimums. Fits any nonprofit budget from seed to national scale."
-            metric: "Usage-based"
-      final_cta:
-        headline: "Reach more donors with cleaner data."
-        subheadline: "Let us map validation and outreach APIs to your donor workflows."
-        cta: "Book a strategy call"
-
-    media:
-      meta_title: "APIs for Media Companies | Requiems API"
-      hero:
-        headline: "APIs for Media: Geo-gate content, moderate at scale, localize instantly"
-        subheadline: "IP geolocation, text moderation, and language detection APIs for publishers, streamers, and content platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for media workflows"
-        apis:
-          - title: "IP Intelligence"
-            description: "Geolocate users for content licensing rules, CDN routing, and regional ad targeting without cookies."
-            division: "networking"
-          - title: "Text & Language"
-            description: "Language detection, profanity filtering, and text moderation for comments, captions, and UGC feeds."
-            division: "text"
-          - title: "Validation"
-            description: "Validate subscriber emails at signup to keep deliverability high and billing data accurate."
-            division: "validation"
-          - title: "Places"
-            description: "Timezone data for scheduling live events, show premieres, and time-sensitive push notifications."
-            division: "places"
-      proof_points:
-        heading: "What media teams ship with Requiems"
-        items:
-          - title: "Enforce geo-licensing in real time"
-            description: "Block or reroute content by country using IP geolocation—no VPN bypass loopholes."
-            metric: "Real-time"
-          - title: "Scale comment moderation"
-            description: "Filter profanity and flag borderline content server-side before it goes live—no client blocklists."
-            metric: "Millions/day"
-          - title: "Localize without asking users"
-            description: "Detect language from IP and browser signals to serve the right version automatically."
-            metric: "Instant"
-          - title: "Subscriber data you can trust"
-            description: "Validate emails at registration—fewer bounced newsletters and billing failures."
-            metric: "–35% bounces"
-      final_cta:
-        headline: "Deliver the right content to the right audience."
-        subheadline: "Let us map geolocation, moderation, and language APIs to your platform."
-        cta: "Book a strategy call"
-
-    manufacturing:
-      meta_title: "APIs for Manufacturing Companies | Requiems API"
-      hero:
-        headline: "APIs for Manufacturing: Clean supplier data, smarter ops, global reach"
-        subheadline: "Address validation, geolocation, and contact verification APIs for manufacturing ops and supply chain."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for manufacturing workflows"
-        apis:
-          - title: "Places"
-            description: "Geocoding, timezone, and address data for facility mapping, delivery scheduling, and supplier routing."
-            division: "places"
-          - title: "Validation"
-            description: "Validate supplier and vendor emails and phones before they enter your ERP or procurement system."
-            division: "validation"
-          - title: "Finance"
-            description: "Currency data and payment validation for cross-border supplier payments and invoicing."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "Identify the country and region of partner portals and remote access sessions for access control."
-            division: "networking"
-      proof_points:
-        heading: "What manufacturing teams ship with Requiems"
-        items:
-          - title: "Cleaner supplier records"
-            description: "Validate contact data before it enters the ERP—fewer returned invoices and bounced PO emails."
-            metric: "–50% bad data"
-          - title: "Accurate facility coordinates"
-            description: "Geocode warehouse and supplier addresses at import for logistics, compliance, and dispatch routing."
-            metric: "99%+ accuracy"
-          - title: "Timezone-aware scheduling"
-            description: "Surface correct local times for multi-site shift scheduling and cross-border supplier calls."
-            metric: "Global coverage"
-          - title: "Single API key"
-            description: "Address, contact, and finance APIs behind one integration—no multi-vendor billing headache."
-            metric: "1 integration"
-      final_cta:
-        headline: "Bring data quality to every part of your supply chain."
-        subheadline: "Let us map address, contact, and finance APIs to your ops workflows."
-        cta: "Book a strategy call"
-
-    logistics:
-      meta_title: "APIs for Logistics Companies | Requiems API"
-      hero:
-        headline: "APIs for Logistics: Validate addresses, route smarter, deliver on time"
-        subheadline: "Address validation, geolocation, and timezone APIs for delivery, warehousing, and last-mile logistics."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for logistics workflows"
-        apis:
-          - title: "Places"
-            description: "Geocoding, address normalization, and timezone data for route planning and delivery scheduling."
-            division: "places"
-          - title: "Validation"
-            description: "Validate recipient phones and emails before dispatch to reduce failed delivery notifications."
-            division: "validation"
-          - title: "IP Intelligence"
-            description: "Geolocate driver and customer sessions for access control and real-time location context."
-            division: "networking"
-          - title: "Finance"
-            description: "Currency and payment validation for international freight billing and cross-border customs."
-            division: "finance"
-      proof_points:
-        heading: "What logistics teams ship with Requiems"
-        items:
-          - title: "Fewer failed deliveries"
-            description: "Catch malformed addresses and invalid recipient phones before the order leaves the warehouse."
-            metric: "–25% failures"
-          - title: "Accurate geocoding at scale"
-            description: "Normalize and geocode addresses at batch ingest for route optimization and zone assignment."
-            metric: "Millions/day"
-          - title: "Timezone-correct ETAs"
-            description: "Display delivery windows in the recipient's local timezone automatically—no manual conversion."
-            metric: "Instant"
-          - title: "Live in days"
-            description: "REST endpoints, copy-ready examples, one API key. Most teams integrate in a single sprint."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Deliver on time with clean, accurate data."
-        subheadline: "Let us map address and routing APIs to your delivery workflows."
-        cta: "Book a strategy call"
-
-    legal:
-      meta_title: "APIs for Legal Tech Companies | Requiems API"
-      hero:
-        headline: "APIs for Legal Tech: Accurate contacts, verified addresses, airtight data"
-        subheadline: "Email and address validation, domain lookup, and geolocation APIs for legal platforms and compliance tools."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
-      api_mapping:
-        heading: "APIs built for legal workflows"
-        apis:
-          - title: "Validation"
-            description: "Verify client and counterparty emails and phones before they enter case management or contract workflows."
-            division: "validation"
-          - title: "Networking"
-            description: "WHOIS and domain lookup for brand protection audits, takedown evidence, and due diligence workflows."
-            division: "networking"
-          - title: "Places"
-            description: "Address geocoding and timezone data for jurisdiction detection and cross-border compliance."
-            division: "places"
-          - title: "Finance"
-            description: "IBAN and SWIFT validation for wire transfer instructions and international payment verification."
-            division: "finance"
-      proof_points:
-        heading: "What legal tech teams ship with Requiems"
-        items:
-          - title: "Audit-ready WHOIS history"
-            description: "Run weekly WHOIS jobs on flagged domains, normalize fields, and export CSV evidence for takedown filings."
-            metric: "Automated"
-          - title: "Fewer bounced client communications"
-            description: "Validate contact emails before sending engagement letters, court filings, and invoices."
-            metric: "–45% bounces"
-          - title: "Jurisdiction detection"
-            description: "Geolocate counterparty IPs and addresses to flag applicable jurisdiction before document generation."
-            metric: "Real-time"
-          - title: "Fast integration"
-            description: "REST endpoints with copy-ready examples. Legal tech teams typically go live in under a week."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Build legal tech on data you can trust."
-        subheadline: "Let us map validation and domain APIs to your contract and compliance workflows."
-        cta: "Book a strategy call"
-
+        cta: Book a strategy call
+        headline: One API key. Every industry.
+        subheadline: Explore how Requiems APIs solve real workflows in your vertical—from
+          validation to geolocation to finance.
+      meta_title: APIs by Industry | Requiems API
+      questions_intro: Not sure which APIs fit your stack? Let's talk through it.
+      strategy_call:
+        label: Book a strategy call
+      view_industry: View industry
     insurance:
-      meta_title: "APIs for Insurance Companies | Requiems API"
-      hero:
-        headline: "APIs for Insurance: Accurate risk data, verified contacts, faster claims"
-        subheadline: "Address, phone, and email validation plus geolocation APIs for insurance underwriting, policy, and claims."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
       api_mapping:
-        heading: "APIs built for insurance workflows"
         apis:
-          - title: "Validation"
-            description: "Validate policyholder emails and phones at application to reduce failed renewal notices and claim communications."
-            division: "validation"
-          - title: "Places"
-            description: "Geocoding and address enrichment for property risk scoring, zone assignment, and claims routing."
-            division: "places"
-          - title: "Finance"
-            description: "BIN and payment validation for premium collection and claims payout flows."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy on digital claim submissions to flag potentially fraudulent session origins."
-            division: "networking"
+        - title: Validation
+          description: Validate policyholder emails and phones at application to reduce
+            failed renewal notices and claim communications.
+          division: validation
+        - title: Places
+          description: Geocoding and address enrichment for property risk scoring,
+            zone assignment, and claims routing.
+          division: places
+        - title: Finance
+          description: BIN and payment validation for premium collection and claims
+            payout flows.
+          division: finance
+        - title: IP Intelligence
+          description: Detect VPN/proxy on digital claim submissions to flag potentially
+            fraudulent session origins.
+          division: networking
       proof_points:
-        heading: "What insurance teams ship with Requiems"
         items:
-          - title: "Fewer failed policy renewal notices"
-            description: "Validate contact emails and phones at policy creation—renewal and claims comms reach the right person."
-            metric: "–40% failures"
-          - title: "Accurate property geocoding"
-            description: "Geocode insured addresses at underwriting for zone scoring, catastrophe modeling, and premium calculation."
-            metric: "99%+ accuracy"
-          - title: "Fraud signals at submission"
-            description: "Flag claims submitted from high-risk VPN and datacenter IPs for closer manual review."
-            metric: "Real-time"
-          - title: "One API key, full suite"
-            description: "Validation, geolocation, and finance APIs behind a single integration with one API key."
-            metric: "1 integration"
-      final_cta:
-        headline: "Build insurance products on accurate, verified data."
-        subheadline: "Let us map the right APIs to your underwriting, policy, and claims workflows."
-        cta: "Book a strategy call"
-
-    hospitality:
-      meta_title: "APIs for Hospitality Businesses | Requiems API"
-      hero:
-        headline: "APIs for Hospitality: Personalize every stay, validate every booking"
-        subheadline: "Geolocation, validation, and payment APIs for hotels, resorts, and hospitality platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Fewer failed policy renewal notices
+          description: Validate contact emails and phones at policy creation—renewal
+            and claims comms reach the right person.
+          metric: "–40% failures"
+        - title: Accurate property geocoding
+          description: Geocode insured addresses at underwriting for zone scoring,
+            catastrophe modeling, and premium calculation.
+          metric: 99%+ accuracy
+        - title: Fraud signals at submission
+          description: Flag claims submitted from high-risk VPN and datacenter IPs
+            for closer manual review.
+          metric: Real-time
+        - title: One API key, full suite
+          description: Validation, geolocation, and finance APIs behind a single integration
+            with one API key.
+          metric: 1 integration
+    legal:
       api_mapping:
-        heading: "APIs built for hospitality workflows"
         apis:
-          - title: "Places"
-            description: "Timezone, geocoding, and regional data for check-in scheduling, local recommendations, and tax display."
-            division: "places"
-          - title: "Validation"
-            description: "Validate guest emails and phones at reservation to ensure confirmation delivery and pre-arrival comms."
-            division: "validation"
-          - title: "Finance"
-            description: "BIN lookup and currency data for international guest billing and multi-currency payment flows."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "Geo-detect guest origin for personalized language, currency, and regulatory compliance."
-            division: "networking"
+        - title: Validation
+          description: Verify client and counterparty emails and phones before they
+            enter case management or contract workflows.
+          division: validation
+        - title: Networking
+          description: WHOIS and domain lookup for brand protection audits, takedown
+            evidence, and due diligence workflows.
+          division: networking
+        - title: Places
+          description: Address geocoding and timezone data for jurisdiction detection
+            and cross-border compliance.
+          division: places
+        - title: Finance
+          description: IBAN and SWIFT validation for wire transfer instructions and
+            international payment verification.
+          division: finance
       proof_points:
-        heading: "What hospitality teams ship with Requiems"
         items:
-          - title: "Fewer missed confirmations"
-            description: "Validate guest contact data at booking—pre-arrival messages and check-in instructions reach the right inbox."
-            metric: "–35% failures"
-          - title: "Localized experience without friction"
-            description: "Detect guest country from IP to serve the right currency, language, and local time automatically."
-            metric: "Instant"
-          - title: "Cleaner payment data"
-            description: "BIN lookup at checkout so declined card rates drop and the billing form shows the right card type."
-            metric: "+10% success"
-          - title: "Deploy in one sprint"
-            description: "REST endpoints with copy-ready examples in multiple languages—typical integration takes under a week."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Deliver better guest experiences with accurate data."
-        subheadline: "Let us map geolocation, validation, and payment APIs to your hospitality stack."
-        cta: "Book a strategy call"
-
-    healthcare:
-      meta_title: "APIs for Healthcare Platforms | Requiems API"
-      hero:
-        headline: "APIs for Healthcare: Verified patient contacts, accurate scheduling, clean data"
-        subheadline: "Phone and email validation, timezone scheduling, and geolocation APIs for healthcare platforms and health tech."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Audit-ready WHOIS history
+          description: Run weekly WHOIS jobs on flagged domains, normalize fields,
+            and export CSV evidence for takedown filings.
+          metric: Automated
+        - title: Fewer bounced client communications
+          description: Validate contact emails before sending engagement letters,
+            court filings, and invoices.
+          metric: "–45% bounces"
+        - title: Jurisdiction detection
+          description: Geolocate counterparty IPs and addresses to flag applicable
+            jurisdiction before document generation.
+          metric: Real-time
+        - title: Fast integration
+          description: REST endpoints with copy-ready examples. Legal tech teams typically
+            go live in under a week.
+          metric: "< 1 week"
+    logistics:
       api_mapping:
-        heading: "APIs built for healthcare workflows"
         apis:
-          - title: "Validation"
-            description: "Validate patient emails and phones at registration so appointment reminders and lab results reach the right person."
-            division: "validation"
-          - title: "Places"
-            description: "Timezone and geocoding data for appointment scheduling, provider mapping, and coverage zone detection."
-            division: "places"
-          - title: "IP Intelligence"
-            description: "Geolocate patients for telemedicine eligibility rules, licensing compliance, and regional routing."
-            division: "networking"
-          - title: "Text & Language"
-            description: "Language detection for multilingual patient communications and clinical note processing."
-            division: "text"
+        - title: Places
+          description: Geocoding, address normalization, and timezone data for route
+            planning and delivery scheduling.
+          division: places
+        - title: Validation
+          description: Validate recipient phones and emails before dispatch to reduce
+            failed delivery notifications.
+          division: validation
+        - title: IP Intelligence
+          description: Geolocate driver and customer sessions for access control and
+            real-time location context.
+          division: networking
+        - title: Finance
+          description: Currency and payment validation for international freight billing
+            and cross-border customs.
+          division: finance
       proof_points:
-        heading: "What healthcare teams ship with Requiems"
         items:
-          - title: "Fewer missed appointments"
-            description: "Validate patient phone and email at intake—reminder delivery rates climb and no-show rates fall."
-            metric: "–30% no-shows"
-          - title: "Correct timezone scheduling"
-            description: "Resolve patient timezone from address or IP to display appointment slots in local time automatically."
-            metric: "Instant"
-          - title: "Telemedicine compliance signals"
-            description: "Geolocate sessions to flag out-of-state patients before the consultation starts, not after."
-            metric: "Real-time"
-          - title: "Fast, secure integration"
-            description: "HTTPS-only endpoints, no PII stored. Typical integration is under a week."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Build healthcare products on data you can trust."
-        subheadline: "Let us map validation, scheduling, and geolocation APIs to your clinical workflows."
-        cta: "Book a strategy call"
-
-    government:
-      meta_title: "APIs for Government Services | Requiems API"
-      hero:
-        headline: "APIs for Government: Accurate addresses, verified identities, public trust"
-        subheadline: "Address validation, geolocation, and contact verification APIs for public-sector platforms and e-government services."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Fewer failed deliveries
+          description: Catch malformed addresses and invalid recipient phones before
+            the order leaves the warehouse.
+          metric: "–25% failures"
+        - title: Accurate geocoding at scale
+          description: Normalize and geocode addresses at batch ingest for route optimization
+            and zone assignment.
+          metric: Millions/day
+        - title: Timezone-correct ETAs
+          description: Display delivery windows in the recipient's local timezone
+            automatically—no manual conversion.
+          metric: Instant
+        - title: Live in days
+          description: REST endpoints, copy-ready examples, one API key. Most teams
+            integrate in a single sprint.
+          metric: "< 1 week"
+    manufacturing:
       api_mapping:
-        heading: "APIs built for government workflows"
         apis:
-          - title: "Places"
-            description: "Address validation, geocoding, and regional data for permit systems, constituency mapping, and benefits routing."
-            division: "places"
-          - title: "Validation"
-            description: "Verify citizen emails and phones at form submission to reduce failed notifications and duplicate registrations."
-            division: "validation"
-          - title: "IP Intelligence"
-            description: "Geolocation and proxy detection for access control, fraud prevention, and jurisdiction enforcement."
-            division: "networking"
-          - title: "Finance"
-            description: "IBAN and payment validation for tax collection, benefits disbursement, and public tender flows."
-            division: "finance"
+        - title: Places
+          description: Geocoding, timezone, and address data for facility mapping,
+            delivery scheduling, and supplier routing.
+          division: places
+        - title: Validation
+          description: Validate supplier and vendor emails and phones before they
+            enter your ERP or procurement system.
+          division: validation
+        - title: Finance
+          description: Currency data and payment validation for cross-border supplier
+            payments and invoicing.
+          division: finance
+        - title: IP Intelligence
+          description: Identify the country and region of partner portals and remote
+            access sessions for access control.
+          division: networking
       proof_points:
-        heading: "What government teams ship with Requiems"
         items:
-          - title: "Fewer returned notices"
-            description: "Validate citizen contacts before sending compliance notices, benefits updates, and voting reminders."
-            metric: "–50% failures"
-          - title: "Accurate geocoding at scale"
-            description: "Normalize and geocode submitted addresses for zone assignment, emergency services routing, and reporting."
-            metric: "Millions/day"
-          - title: "Fraud detection at the door"
-            description: "Detect VPN/proxy and flag out-of-jurisdiction access attempts on protected portals before authentication."
-            metric: "Real-time"
-          - title: "Secure REST integration"
-            description: "HTTPS-only endpoints, no PII stored. Compliance-first architecture from day one."
-            metric: "SOC-ready"
-      final_cta:
-        headline: "Build public services on reliable, verified data."
-        subheadline: "Let us map address, contact, and fraud APIs to your government platform."
-        cta: "Book a strategy call"
-
-    energy:
-      meta_title: "APIs for Energy Companies | Requiems API"
-      hero:
-        headline: "APIs for Energy: Accurate asset data, smarter dispatch, global coverage"
-        subheadline: "Geolocation, address validation, and timezone APIs for utilities, renewables, and smart grid platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Cleaner supplier records
+          description: Validate contact data before it enters the ERP—fewer returned
+            invoices and bounced PO emails.
+          metric: "–50% bad data"
+        - title: Accurate facility coordinates
+          description: Geocode warehouse and supplier addresses at import for logistics,
+            compliance, and dispatch routing.
+          metric: 99%+ accuracy
+        - title: Timezone-aware scheduling
+          description: Surface correct local times for multi-site shift scheduling
+            and cross-border supplier calls.
+          metric: Global coverage
+        - title: Single API key
+          description: Address, contact, and finance APIs behind one integration—no
+            multi-vendor billing headache.
+          metric: 1 integration
+    media:
       api_mapping:
-        heading: "APIs built for energy workflows"
         apis:
-          - title: "Places"
-            description: "Geocoding, address normalization, and timezone data for asset mapping, meter dispatch, and outage routing."
-            division: "places"
-          - title: "Validation"
-            description: "Validate customer and installer contacts at account creation to keep billing and service comms reliable."
-            division: "validation"
-          - title: "Finance"
-            description: "Currency data and payment validation for cross-border energy contracts and customer billing."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "Geolocation for remote asset portal access control and regulatory jurisdiction detection."
-            division: "networking"
+        - title: IP Intelligence
+          description: Geolocate users for content licensing rules, CDN routing, and
+            regional ad targeting without cookies.
+          division: networking
+        - title: Text & Language
+          description: Language detection, profanity filtering, and text moderation
+            for comments, captions, and UGC feeds.
+          division: text
+        - title: Validation
+          description: Validate subscriber emails at signup to keep deliverability
+            high and billing data accurate.
+          division: validation
+        - title: Places
+          description: Timezone data for scheduling live events, show premieres, and
+            time-sensitive push notifications.
+          division: places
       proof_points:
-        heading: "What energy teams ship with Requiems"
         items:
-          - title: "Accurate asset coordinates"
-            description: "Geocode meter and turbine addresses at ingest for dispatch routing, outage isolation, and GIS mapping."
-            metric: "99%+ accuracy"
-          - title: "Fewer billing failures"
-            description: "Validate customer emails at signup so invoices, outage alerts, and renewal notices are delivered."
-            metric: "–40% failures"
-          - title: "Timezone-correct scheduling"
-            description: "Surface correct local dispatch and maintenance windows for multi-region infrastructure teams."
-            metric: "Global coverage"
-          - title: "Single API key"
-            description: "Geocoding, validation, and finance APIs behind one key—no multi-vendor complexity."
-            metric: "1 integration"
-      final_cta:
-        headline: "Power smarter energy operations with clean data."
-        subheadline: "Let us map geolocation, address, and validation APIs to your energy platform."
-        cta: "Book a strategy call"
-
-    edtech:
-      meta_title: "APIs for EdTech Platforms | Requiems API"
-      hero:
-        headline: "APIs for EdTech: Verified learners, global reach, fewer support tickets"
-        subheadline: "Email and phone validation, timezone scheduling, and spam prevention APIs for learning platforms and EdTech products."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Enforce geo-licensing in real time
+          description: Block or reroute content by country using IP geolocation—no
+            VPN bypass loopholes.
+          metric: Real-time
+        - title: Scale comment moderation
+          description: Filter profanity and flag borderline content server-side before
+            it goes live—no client blocklists.
+          metric: Millions/day
+        - title: Localize without asking users
+          description: Detect language from IP and browser signals to serve the right
+            version automatically.
+          metric: Instant
+        - title: Subscriber data you can trust
+          description: Validate emails at registration—fewer bounced newsletters and
+            billing failures.
+          metric: "–35% bounces"
+    nonprofit:
       api_mapping:
-        heading: "APIs built for EdTech workflows"
         apis:
-          - title: "Validation"
-            description: "Validate student and instructor emails and phones at registration to ensure course access and notifications land."
-            division: "validation"
-          - title: "Places"
-            description: "Timezone data for live class scheduling, cohort coordination, and deadline display across time zones."
-            division: "places"
-          - title: "Text & Language"
-            description: "Language detection for adaptive content routing and profanity filtering for student forums and chat."
-            division: "text"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy to enforce proctoring rules and geoblock content for regional licensing."
-            division: "networking"
+        - title: Validation
+          description: Catch invalid emails and phones before they bloat your donor
+            list and hurt deliverability.
+          division: validation
+        - title: Places
+          description: Geocoding and regional data for donor segmentation, volunteer
+            mapping, and event scheduling.
+          division: places
+        - title: Text & Language
+          description: Language detection for multilingual outreach and content moderation
+            for public-facing community platforms.
+          division: text
+        - title: IP Intelligence
+          description: Detect VPN/proxy on donation forms to flag suspicious transactions
+            before they dispute.
+          division: networking
       proof_points:
-        heading: "What EdTech teams ship with Requiems"
         items:
-          - title: "Fewer lost learners"
-            description: "Validate emails at signup so welcome emails, course invites, and certificates all reach the right inbox."
-            metric: "–45% bounces"
-          - title: "Timezone-correct scheduling"
-            description: "Show live class times in each student's local timezone automatically—no missed sessions from time zone math."
-            metric: "Instant"
-          - title: "Safer student communities"
-            description: "Filter profanity in forum posts and comments server-side before they go live—no client-side blocklists."
-            metric: "Real-time"
-          - title: "Ship in one sprint"
-            description: "REST endpoints with copy-ready examples. Most EdTech teams go live in under a week."
-            metric: "< 1 week"
-      final_cta:
-        headline: "Build learning platforms that reach every student."
-        subheadline: "Let us map validation, scheduling, and moderation APIs to your EdTech product."
-        cta: "Book a strategy call"
-
-    ecommerce:
-      meta_title: "APIs for Ecommerce Businesses | Requiems API"
-      hero:
-        headline: "APIs for Ecommerce: Fewer failed checkouts, cleaner data, higher conversion"
-        subheadline: "Validation, payment checks, fraud signals, and geolocation APIs for online stores and marketplace platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Better email deliverability
+          description: Remove invalid and disposable addresses before every campaign—fewer
+            bounces, better sender reputation.
+          metric: "+25% open rate"
+        - title: Cleaner donor database
+          description: Validate contacts at point of entry so your CRM stays usable
+            for segmentation and reporting.
+          metric: "–60% bad records"
+        - title: Smarter regional outreach
+          description: Geocode supporter addresses to map coverage gaps and prioritize
+            canvassing regions.
+          metric: Instant
+        - title: Affordable and scalable
+          description: Pay per call. No monthly minimums. Fits any nonprofit budget
+            from seed to national scale.
+          metric: Usage-based
+    real_estate:
       api_mapping:
-        heading: "APIs built for ecommerce workflows"
         apis:
-          - title: "Finance"
-            description: "BIN lookup and payment card validation to catch bad cards before they hit the payment gateway."
-            division: "finance"
-          - title: "Validation"
-            description: "Validate customer emails and phones at checkout to reduce failed order confirmations and OTP delivery."
-            division: "validation"
-          - title: "IP Intelligence"
-            description: "Detect VPN/proxy and geolocate buyers for fraud scoring, geo-pricing, and shipping region detection."
-            division: "networking"
-          - title: "Places"
-            description: "Geocoding and address data for shipping estimates, tax calculation, and delivery zone assignment."
-            division: "places"
+        - title: Places
+          description: Geocoding, timezone, and address enrichment for property listings
+            and agent scheduling.
+          division: places
+        - title: Validation
+          description: Verify buyer and agent emails and phones before sending listings
+            or contracts.
+          division: validation
+        - title: Networking
+          description: IP geolocation for regional property recommendations and GDPR-compliant
+            data display.
+          division: networking
+        - title: Finance
+          description: Currency conversion and payment data for cross-border property
+            transactions.
+          division: finance
       proof_points:
-        heading: "What ecommerce teams ship with Requiems"
         items:
-          - title: "Higher payment success rate"
-            description: "BIN-validate cards client-side before submitting to the processor—first-attempt success rates improve."
-            metric: "+15% success"
-          - title: "Fewer abandoned confirmations"
-            description: "Validate email and phone at checkout so order confirmations and tracking links always land."
-            metric: "–35% failures"
-          - title: "Real-time fraud scoring"
-            description: "Flag VPN and datacenter IPs on high-value orders for step-up verification before fulfillment."
-            metric: "Real-time"
-          - title: "Auto-localize shipping and tax"
-            description: "Resolve country and region from IP to show accurate shipping cost and tax copy without asking for location."
-            metric: "180+ countries"
-      final_cta:
-        headline: "Convert more, refund less, scale further."
-        subheadline: "Let us map checkout, fraud, and validation APIs to your ecommerce stack."
-        cta: "Book a strategy call"
-
-    agencies:
-      meta_title: "APIs for Digital Agencies | Requiems API"
-      hero:
-        headline: "APIs for Agencies: Clean client data, faster automations, better deliverability"
-        subheadline: "Email and phone validation, data enrichment, and automation APIs for digital marketing and development agencies."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Cleaner listings data
+          description: Geocode and normalize addresses at ingest—map pins land correctly
+            and search results stay accurate.
+          metric: 99%+ accuracy
+        - title: Fewer dead-end leads
+          description: Validate contact emails and phones at form submission before
+            they enter the CRM pipeline.
+          metric: "–45% bad leads"
+        - title: Timezone-aware scheduling
+          description: Show viewing times in the buyer's local timezone automatically—no
+            manual conversion or missed calls.
+          metric: Instant
+        - title: Fast integration
+          description: Geocoding, validation, and finance APIs behind one key—live
+            in a single sprint.
+          metric: "< 1 week"
+    retail:
       api_mapping:
-        heading: "APIs built for agency workflows"
         apis:
-          - title: "Validation"
-            description: "Scrub client email lists and phone databases before campaigns to protect sender reputation and cut costs."
-            division: "validation"
-          - title: "Networking"
-            description: "Domain and WHOIS lookup for competitive research, brand monitoring, and client audit workflows."
-            division: "networking"
-          - title: "Places"
-            description: "Timezone and geolocation data for scheduling campaigns, localizing landing pages, and reporting."
-            division: "places"
-          - title: "Text & Language"
-            description: "Language detection and text utilities for multilingual client projects and content moderation pipelines."
-            division: "text"
+        - title: Validation
+          description: Validate customer emails and phones at checkout to reduce failed
+            delivery notifications and OTP failures.
+          division: validation
+        - title: Finance
+          description: BIN lookup and payment card validation to catch declined cards
+            before they frustrate buyers.
+          division: finance
+        - title: Places
+          description: Geocoding, timezone, and address data for shipping estimates,
+            tax copy, and geo-bucketed pricing.
+          division: places
+        - title: IP Intelligence
+          description: Detect VPN/proxy and flag high-risk sessions at checkout to
+            reduce card fraud.
+          division: networking
       proof_points:
-        heading: "What agency teams ship with Requiems"
         items:
-          - title: "Better email campaign ROI"
-            description: "Scrub client lists before every send—bounce rates drop, deliverability scores climb, CPL falls."
-            metric: "–50% bounces"
-          - title: "Faster client audits"
-            description: "Automate WHOIS and domain lookups for brand protection reports without manual research."
-            metric: "10× faster"
-          - title: "Localized campaigns at scale"
-            description: "Detect user timezone and country to schedule and localize campaigns without manual segmentation."
-            metric: "Instant"
-          - title: "One key for all client projects"
-            description: "Validation, networking, and text APIs under one account. Bill per call, not per client seat."
-            metric: "1 API key"
-      final_cta:
-        headline: "Ship better work for every client."
-        subheadline: "Let us map validation, domain, and automation APIs to your agency stack."
-        cta: "Book a strategy call"
-
-    gaming:
-      meta_title: "APIs for Game Studios | Requiems API"
-      hero:
-        headline: "APIs for Gaming: Region locking, chat moderation, and fraud detection at scale"
-        subheadline: "IP geolocation, content moderation, and fraud detection APIs for game studios and multiplayer platforms."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Fewer failed deliveries
+          description: Catch invalid phones and address anomalies before the order
+            ships—returns and missed delivery attempts drop.
+          metric: "–30%"
+        - title: Faster checkout
+          description: Validate card BIN client-side so the first payment attempt
+            succeeds more often.
+          metric: "+12% success"
+        - title: Localized pricing instantly
+          description: Resolve country and region from IP to show correct currency
+            and shipping cost without asking for GPS.
+          metric: 180+ countries
+        - title: One API key, all services
+          description: Validation, finance, and geolocation from a single endpoint.
+            No stitching together multiple vendors.
+          metric: 1 integration
+    saas:
       api_mapping:
-        heading: "APIs built for gaming workflows"
         apis:
-          - title: "IP Intelligence"
-            description: "Geolocate players for region-based content rules, matchmaking pools, and VPN/proxy detection."
-            division: "networking"
-          - title: "Text & Language"
-            description: "Profanity filtering and language detection for in-game chat, usernames, and community forums."
-            division: "text"
-          - title: "Validation"
-            description: "Validate player emails and phones at registration to ensure account recovery and notification delivery."
-            division: "validation"
-          - title: "Finance"
-            description: "BIN lookup and payment validation for in-game purchases and subscription billing."
-            division: "finance"
+        - title: Validation
+          description: Stop disposable emails, fake phones, and profanity from polluting
+            your user database at signup.
+          division: validation
+        - title: IP Intelligence
+          description: Detect VPN/proxy on login, localize by region, and block datacenter
+            traffic from abusing free tiers.
+          division: networking
+        - title: Finance
+          description: BIN lookup and card validation for subscription billing and
+            checkout fraud reduction.
+          division: finance
+        - title: Text & Language
+          description: Language detection, moderation, and text utilities for user-generated
+            content and onboarding copy.
+          division: text
       proof_points:
-        heading: "What game studios ship with Requiems"
         items:
-          - title: "Enforce regional content rules"
-            description: "Block or redirect players by country using real-time IP geolocation—no stale GeoIP databases."
-            metric: "Real-time"
-          - title: "Safer multiplayer chat"
-            description: "Filter chat server-side on send. High-risk strings drop; repeat senders get cooldown—no client blocklists."
-            metric: "Millions/min"
-          - title: "Reduce free-tier abuse"
-            description: "Flag VPN and datacenter IPs creating throwaway trial accounts to protect conversion metrics."
-            metric: "–60% abuse"
-          - title: "Accounts that actually reach players"
-            description: "Validate email at signup so password reset and ban appeal emails never bounce."
-            metric: "99%+ delivery"
-      final_cta:
-        headline: "Ship safer, smarter gaming experiences."
-        subheadline: "Let us map IP intelligence, moderation, and fraud APIs to your game platform."
-        cta: "Book a strategy call"
-
-    fintech:
-      meta_title: "APIs for Fintech Companies | Requiems API"
-      hero:
-        headline: "APIs for Fintech: BIN lookup, IBAN validation, and fraud signals in milliseconds"
-        subheadline: "Payment validation, KYC enrichment, and fraud detection APIs for fintech products and financial infrastructure."
-        cta: "Book a strategy call"
-        secondary_cta: "Browse APIs"
+        - title: Cut fake signup rate
+          description: Reject disposable domains and invalid MX records at the form—support
+            stops chasing phantom users.
+          metric: "–70%"
+        - title: Faster enterprise onboarding
+          description: Validate corporate email and domain before SSO invite—IT teams
+            get clean first-try provisioning.
+          metric: "–50% retries"
+        - title: Abuse-proof free tiers
+          description: Flag datacenter and VPN IPs creating trial accounts to protect
+            trial-to-paid conversion metrics.
+          metric: Real-time
+        - title: Ship in one sprint
+          description: Copy-ready code examples in five languages. Most teams go live
+            in the same week.
+          metric: "< 1 week"
+    telecom:
       api_mapping:
-        heading: "APIs built for fintech workflows"
         apis:
-          - title: "Finance"
-            description: "BIN/IIN lookup, IBAN validation, SWIFT code verification, and currency data for global payment flows."
-            division: "finance"
-          - title: "IP Intelligence"
-            description: "VPN/proxy detection, IP geolocation, and ASN lookup for transaction risk scoring and geo-compliance."
-            division: "networking"
-          - title: "Validation"
-            description: "Email and phone verification for KYC onboarding, 2FA delivery, and account recovery flows."
-            division: "validation"
-          - title: "Places"
-            description: "Timezone and address data for transaction timestamp normalization and jurisdiction detection."
-            division: "places"
+        - title: Validation
+          description: Validate phone numbers in E.164, detect line type, and flag
+            invalid or ported numbers before they hit the network.
+          division: validation
+        - title: IP Intelligence
+          description: ASN lookup, VPN/proxy detection, and IP geolocation for traffic
+            analysis and fraud signals.
+          division: networking
+        - title: Finance
+          description: BIN and payment card validation for billing and top-up flows.
+          division: finance
+        - title: Places
+          description: Timezone and regional data for scheduling, roaming alerts,
+            and customer support routing.
+          division: places
       proof_points:
-        heading: "What fintech teams ship with Requiems"
         items:
-          - title: "Real-time fraud scoring"
-            description: "Score transactions by combining VPN detection, IP geolocation, and BIN country mismatch signals."
-            metric: "< 50ms"
-          - title: "Faster KYC onboarding"
-            description: "Validate email and phone at signup before identity checks—fewer re-verifications and support escalations."
-            metric: "–40% retries"
-          - title: "Cleaner payment data"
-            description: "BIN-validate cards and verify IBANs before submitting to processors—decline rates and dispute costs fall."
-            metric: "+12% success"
-          - title: "Jurisdiction detection"
-            description: "Detect user country from IP for regulatory routing, currency selection, and GDPR/PSD2 compliance."
-            metric: "180+ countries"
-      final_cta:
-        headline: "Build fintech products on payment data you can trust."
-        subheadline: "Let us map BIN, IBAN, fraud, and KYC APIs to your financial workflows."
-        cta: "Book a strategy call"
+        - title: Cut invalid number submissions
+          description: Validate subscriber numbers at porting and ticket creation—bad
+            inputs fail fast instead of after a week of processing.
+          metric: "–60%"
+        - title: Enrich NOC tickets automatically
+          description: Pull ASN and upstream context for suspicious IPs so ops teams
+            answer with data, not screenshots.
+          metric: Instant
+        - title: Reduce SMS delivery failures
+          description: Check E.164 format and line type before sending OTPs—invalid
+            and landline numbers never reach the gateway.
+          metric: "–35%"
+        - title: Single API key, full suite
+          description: One integration unlocks validation, networking, and finance
+            APIs without separate accounts or billing.
+          metric: 1 key
+    travel:
+      api_mapping:
+        apis:
+        - title: Places & Geolocation
+          description: Timezones, geocoding, and holiday calendars for global itineraries
+            and scheduling.
+          division: places
+        - title: Validation
+          description: Catch bad emails and phones before they break booking confirmations
+            and OTP delivery.
+          division: validation
+        - title: Finance
+          description: BIN lookup, currency data, and payment validation for global
+            checkout flows.
+          division: finance
+        - title: IP Intelligence
+          description: Detect VPN/proxy, localize pricing by country, and flag high-risk
+            sessions at checkout.
+          division: networking
+      proof_points:
+        items:
+        - title: Reduce booking failure rate
+          description: Validate emails and phones at input—fewer failed confirmations
+            and support tickets from bad data.
+          metric: "–40%"
+        - title: Detect fraudulent bookings
+          description: Flag VPN and datacenter IPs on checkout and trigger step-up
+            verification automatically.
+          metric: Real-time
+        - title: Auto-localize for every market
+          description: Show correct timezone, currency, and holiday data without GPS
+            prompts or manual config.
+          metric: 180+ countries
+        - title: Integrate in days, not months
+          description: REST endpoints, copy-ready examples, and a single API key across
+            all services.
+          metric: "< 1 week"

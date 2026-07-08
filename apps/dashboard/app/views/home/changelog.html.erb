@@ -5,7 +5,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 md:p-12">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100"><%= t("home.changelog.heading") %></h1>
-        <%= render "partials/shared/badge", text: "v0.1.0", variant: "info", size: "md" %>
+        <%= render "partials/shared/badge", text: t('home.changelog.v0_1_0'), variant: "info", size: "md" %>
       </div>
 
       <p class="text-xl text-gray-600 dark:text-gray-400 mb-12">
@@ -16,7 +16,7 @@
         <!-- v0.1.0 - CI Pipeline -->
         <div class="border-l-4 border-blue-600 pl-6">
           <div class="flex items-center mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">v0.1.0</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.changelog.v0_1_0') %></h2>
             <%= render "partials/shared/badge", text: t("home.changelog.badge_latest"), variant: "success", size: "sm", class_names: "ml-3" %>
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><%= l(Date.new(2026, 2, 17), format: :long) %></p>
@@ -46,7 +46,7 @@
         <!-- v0.0.2 - Initial Deployment -->
         <div class="border-l-4 border-green-600 pl-6">
           <div class="flex items-center mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">v0.0.2</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.changelog.v0_0_2') %></h2>
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><%= l(Date.new(2026, 2, 8), format: :long) %></p>
 
@@ -68,7 +68,7 @@
         <!-- v0.0.1 - Project Kickoff -->
         <div class="border-l-4 border-purple-600 pl-6">
           <div class="flex items-center mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">v0.0.1</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.changelog.v0_0_1') %></h2>
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><%= l(Date.new(2025, 12, 15), format: :long) %></p>
 
@@ -90,7 +90,7 @@
         <!-- Upcoming -->
         <div class="border-l-4 border-gray-300 dark:border-gray-600 pl-6 opacity-75">
           <div class="flex items-center mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">v0.2.0</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= t('home.changelog.v0_2_0') %></h2>
             <%= render "partials/shared/badge", text: t("home.changelog.badge_coming_soon"), variant: "warning", size: "sm", class_names: "ml-3" %>
           </div>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><%= t("home.changelog.v020.planned_release") %></p>

@@ -23,7 +23,7 @@
     <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
       <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= email %></span>
       <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= data["valid"] ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" %>">
-        <%= data["valid"] ? t("tools.email_validator.demo.badge_valid") : t("tools.email_validator.demo.badge_invalid") %>
+        <%= data["valid"] ? t("shared.common.valid") : t("shared.common.invalid") %>
       </span>
     </div>
 
@@ -36,7 +36,7 @@
           <span class="text-sm font-medium <%= value_class.call(row[:type], row[:value]) %>">
             <% case row[:type] %>
             <% when :bool %>
-              <%= row[:value] ? t("tools.email_validator.demo.badge_yes") : t("tools.email_validator.demo.badge_no") %>
+              <%= row[:value] ? t("shared.common.yes") : t("shared.common.no") %>
             <% when :bool_inv %>
               <%= row[:value] ? t("tools.email_validator.demo.badge_disposable") : t("tools.email_validator.demo.badge_not_disposable") %>
             <% when :suggestion %>

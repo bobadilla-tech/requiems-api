@@ -1,49 +1,59 @@
+---
 fr:
   examples:
+    categories:
+      backend: Backend
+      bots_automation: Bots et automatisation
+      cli_tools: Outils CLI
+      mobile_apps: Applications mobiles
+      web_apps: Applications web
+    difficulties:
+      advanced: Avancé
+      beginner: Débutant
+      intermediate: Intermédiaire
     index:
-      title: "Exemples de code | Requiems API"
-      description: "Exemples prêts à l'emploi pour intégrer Requiems API. Tutoriels copier-coller : validation e-mail, géolocalisation IP, codes QR et plus."
-      heading: "Projets exemples et tutoriels"
-      subheading: "Apprenez à intégrer les APIs Requiems dans vos projets avec des exemples concrets et des tutoriels pas à pas."
-      filter_all: "Tous les exemples"
-      empty_heading: "Aucun exemple trouvé"
-      empty_body: "Essayez une autre catégorie."
-      cta_heading: "Vous voulez proposer un exemple ?"
-      cta_body: "Partagez votre projet avec la communauté ! Toutes les contributions sont les bienvenues."
-      cta_github: "Proposer un exemple"
-      cta_contact: "Nous contacter"
-      view_tutorial: "Voir le tutoriel"
-      view_tutorial_aria: "%{title} - Voir le tutoriel"
-      apis_used: "APIs utilisées"
+      apis_used: APIs utilisées
+      cta_body: Partagez votre projet avec la communauté ! Toutes les contributions
+        sont les bienvenues.
+      cta_contact: Nous contacter
+      cta_github: Proposer un exemple
+      cta_heading: Vous voulez proposer un exemple ?
+      description: 'Exemples prêts à l''emploi pour intégrer Requiems API. Tutoriels
+        copier-coller : validation e-mail, géolocalisation IP, codes QR et plus.'
+      empty_body: Essayez une autre catégorie.
+      empty_heading: Aucun exemple trouvé
+      filter_all: Tous les exemples
+      heading: Projets exemples et tutoriels
+      subheading: Apprenez à intégrer les APIs Requiems dans vos projets avec des
+        exemples concrets et des tutoriels pas à pas.
       tech_count:
         one: "%{count} techno"
         other: "%{count} technos"
-    categories:
-      web_apps: "Applications web"
-      mobile_apps: "Applications mobiles"
-      cli_tools: "Outils CLI"
-      bots_automation: "Bots et automatisation"
-      backend: "Backend"
-    difficulties:
-      beginner: "Débutant"
-      intermediate: "Intermédiaire"
-      advanced: "Avancé"
+      title: Exemples de code | Requiems API
+      view_tutorial: Voir le tutoriel
+      view_tutorial_aria: "%{title} - Voir le tutoriel"
     items:
-      email-validator-web-app:
-        title: "Application web de validation e-mail"
-        description: "Créez une application web simple qui valide les adresses e-mail et détecte les e-mails jetables avec l'API Disposable Email Checker."
-      random-quote-generator:
-        title: "Générateur de citations aléatoires"
-        description: "Créez une application de citations inspirantes avec partage social, grâce à l'API Random Quotes."
-      lorem-ipsum-generator:
-        title: "Générateur Lorem Ipsum"
-        description: "Construisez un générateur de texte factice personnalisable pour designers et développeurs avec l'API Lorem Ipsum."
       api-testing-cli:
-        title: "Outil CLI de test d'API"
-        description: "Créez un outil en ligne de commande pour tester et surveiller les points de terminaison Requiems API avec des rapports détaillés."
+        description: Créez un outil en ligne de commande pour tester et surveiller
+          les points de terminaison Requiems API avec des rapports détaillés.
+        title: Outil CLI de test d'API
       daily-advice-bot:
-        title: "Bot Slack conseil du jour"
-        description: "Construisez un bot Slack qui publie un conseil quotidien sur votre canal d'équipe avec l'API Random Advice."
+        description: Construisez un bot Slack qui publie un conseil quotidien sur
+          votre canal d'équipe avec l'API Random Advice.
+        title: Bot Slack conseil du jour
       email-validation-service:
-        title: "Microservice de validation e-mail"
-        description: "Créez un microservice REST qui valide et enrichit les adresses e-mail en utilisant plusieurs APIs Requiems."
+        description: Créez un microservice REST qui valide et enrichit les adresses
+          e-mail en utilisant plusieurs APIs Requiems.
+        title: Microservice de validation e-mail
+      email-validator-web-app:
+        description: Créez une application web simple qui valide les adresses e-mail
+          et détecte les e-mails jetables avec l'API Disposable Email Checker.
+        title: Application web de validation e-mail
+      lorem-ipsum-generator:
+        description: Construisez un générateur de texte factice personnalisable pour
+          designers et développeurs avec l'API Lorem Ipsum.
+        title: Générateur Lorem Ipsum
+      random-quote-generator:
+        description: Créez une application de citations inspirantes avec partage social,
+          grâce à l'API Random Quotes.
+        title: Générateur de citations aléatoires

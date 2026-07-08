@@ -1,0 +1,41 @@
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t("tools.email_normalizer.use_cases.heading") %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        <%= t("tools.email_normalizer.use_cases.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% [
+        { context: t("tools.email_normalizer.use_cases.import_context"),
+          title:   t("tools.email_normalizer.use_cases.import_title"),
+          desc:    t("tools.email_normalizer.use_cases.import_desc") },
+        { context: t("tools.email_normalizer.use_cases.crm_dedup_context"),
+          title:   t("tools.email_normalizer.use_cases.crm_dedup_title"),
+          desc:    t("tools.email_normalizer.use_cases.crm_dedup_desc") },
+        { context: t("tools.email_normalizer.use_cases.integrations_context"),
+          title:   t("tools.email_normalizer.use_cases.integrations_title"),
+          desc:    t("tools.email_normalizer.use_cases.integrations_desc") },
+        { context: t("tools.email_normalizer.use_cases.analytics_context"),
+          title:   t("tools.email_normalizer.use_cases.analytics_title"),
+          desc:    t("tools.email_normalizer.use_cases.analytics_desc") },
+        { context: t("tools.email_normalizer.use_cases.crm_dup_context"),
+          title:   t("tools.email_normalizer.use_cases.crm_dup_title"),
+          desc:    t("tools.email_normalizer.use_cases.crm_dup_desc") },
+        { context: t("tools.email_normalizer.use_cases.outreach_context"),
+          title:   t("tools.email_normalizer.use_cases.outreach_title"),
+          desc:    t("tools.email_normalizer.use_cases.outreach_desc") },
+      ].each do |uc| %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2" style="color:#1D9E75;"><%= uc[:context] %></p>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed"><%= uc[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

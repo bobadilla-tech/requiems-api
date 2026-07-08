@@ -47,4 +47,26 @@ class HomeController < ApplicationController
 
   def for_llms
   end
+
+  def domain_checker
+  end
+
+  def security
+  end
+
+  def contact_submit
+    name    = params[:name].to_s.gsub(/[\r\n\t]/, " ").strip
+    email   = params[:email].to_s.strip
+    inquiry = params[:inquiry_type].to_s.gsub(/[\r\n\t]/, " ").strip
+    message = params[:message].to_s.strip
+
+    unless name.present? && email.match?(URI::MailTo::EMAIL_REGEXP) && message.present?
+      redirect_to contact_path, alert: t("home.contact.form.missing_fields")
+      return
+    end
+
+    # deliver_later — mail failures happen async and won't be caught here
+    SalesMailer.contact_inquiry({ name:, email:, inquiry:, message: }).deliver_later
+    redirect_to root_path, notice: t("home.contact.form.success")
+  end
 end

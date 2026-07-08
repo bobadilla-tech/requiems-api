@@ -1,0 +1,44 @@
+<section class="bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("tools.domain_checker.what_it_does.heading") %>
+      </h2>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <%= t("tools.domain_checker.what_it_does.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- Accuracy block -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.domain_checker.what_it_does.accuracy_heading") %></h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          <%= t("tools.domain_checker.what_it_does.accuracy_body") %>
+        </p>
+        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">{
+  "domain":    "example.com",
+  "available": false,
+  "dns": {
+    "a":  ["93.184.216.34"],
+    "mx": ["mail.example.com"],
+    "ns": ["ns1.example.com"]
+  }
+}</pre>
+      </div>
+
+      <!-- Simplicity block -->
+      <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.domain_checker.what_it_does.simplicity_heading") %></h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          <%= t("tools.domain_checker.what_it_does.simplicity_body") %>
+        </p>
+        <pre class="bg-gray-900 text-green-400 rounded-lg p-4 overflow-x-auto text-sm font-mono">GET /v1/networking/domain/example.com
+Host: api.requiems.xyz
+X-API-Key: your_key</pre>
+      </div>
+
+    </div>
+  </div>
+</section>

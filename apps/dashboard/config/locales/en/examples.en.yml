@@ -1,49 +1,59 @@
+---
 en:
   examples:
     index:
-      title: "Code Examples | Requiems API"
-      description: "Ready-to-run code examples for Requiems API integrations. Copy-paste tutorials for email validation, IP lookup, QR codes, and more."
-      heading: "Example Projects & Tutorials"
-      subheading: "Learn how to integrate Requiems APIs into your projects with these practical examples and step-by-step tutorials."
-      filter_all: "All Examples"
-      empty_heading: "No examples found"
-      empty_body: "Try selecting a different category."
-      cta_heading: "Want to Contribute an Example?"
-      cta_body: "Share your project with the community! We welcome contributions of all kinds."
-      cta_github: "Submit an Example"
-      cta_contact: "Contact Us"
-      view_tutorial: "View Tutorial"
-      view_tutorial_aria: "%{title} - View Tutorial"
-      apis_used: "APIs Used"
+      apis_used: APIs Used
+      cta_body: Share your project with the community! We welcome contributions of
+        all kinds.
+      cta_contact: Contact Us
+      cta_github: Submit an Example
+      cta_heading: Want to Contribute an Example?
+      description: Ready-to-run code examples for Requiems API integrations. Copy-paste
+        tutorials for email validation, IP lookup, QR codes, and more.
+      empty_body: Try selecting a different category.
+      empty_heading: No examples found
+      filter_all: All Examples
+      heading: Example Projects & Tutorials
+      subheading: Learn how to integrate Requiems APIs into your projects with these
+        practical examples and step-by-step tutorials.
       tech_count:
-        one: "%{count} tech"
-        other: "%{count} techs"
+        one: "%{count} technology"
+        other: "%{count} technologies"
+      title: Code Examples | Requiems API
+      view_tutorial: View Tutorial
+      view_tutorial_aria: "%{title} - View Tutorial"
     categories:
-      web_apps: "Web Apps"
-      mobile_apps: "Mobile Apps"
-      cli_tools: "CLI Tools"
-      bots_automation: "Bots & Automation"
-      backend: "Backend"
+      web_apps: Web Apps
+      mobile_apps: Mobile Apps
+      cli_tools: CLI Tools
+      bots_automation: Bots & Automation
+      backend: Backend
     difficulties:
-      beginner: "Beginner"
-      intermediate: "Intermediate"
-      advanced: "Advanced"
+      beginner: Beginner
+      intermediate: Intermediate
+      advanced: Advanced
     items:
       email-validator-web-app:
-        title: "Email Validator Web App"
-        description: "Build a simple web application that validates email addresses and detects disposable emails using the Disposable Email Checker API."
+        title: Email Validator Web App
+        description: Build a simple web application that validates email addresses
+          and detects disposable emails using the Disposable Email Checker API.
       random-quote-generator:
-        title: "Random Quote Generator"
-        description: "Create an inspiring quote generator web app with social sharing capabilities using the Random Quotes API."
+        title: Random Quote Generator
+        description: Create an inspiring quote generator web app with social sharing
+          capabilities using the Random Quotes API.
       lorem-ipsum-generator:
-        title: "Lorem Ipsum Generator"
-        description: "Build a customizable placeholder text generator for designers and developers using the Lorem Ipsum API."
+        title: Lorem Ipsum Generator
+        description: Build a customizable placeholder text generator for designers
+          and developers using the Lorem Ipsum API.
       api-testing-cli:
-        title: "API Testing CLI Tool"
-        description: "Create a command-line tool to test and monitor Requiems API endpoints with detailed reporting."
+        title: API Testing CLI Tool
+        description: Create a command-line tool to test and monitor Requiems API endpoints
+          with detailed reporting.
       daily-advice-bot:
-        title: "Daily Advice Slack Bot"
-        description: "Build a Slack bot that posts daily advice to your team channel using the Random Advice API."
+        title: Daily Advice Slack Bot
+        description: Build a Slack bot that posts daily advice to your team channel
+          using the Random Advice API.
       email-validation-service:
-        title: "Email Validation Microservice"
-        description: "Create a RESTful microservice that validates and enriches email addresses using multiple Requiems APIs."
+        title: Email Validation Microservice
+        description: Create a RESTful microservice that validates and enriches email
+          addresses using multiple Requiems APIs.

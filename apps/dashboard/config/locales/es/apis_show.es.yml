@@ -1,0 +1,28 @@
+---
+es:
+  apis_show:
+    endpoint_documentation:
+      column_description: Descripción
+      column_field: Campo
+      column_name: Nombre
+      column_required: Obligatorio
+      column_type: Tipo
+      copy_code: Copiar código
+      copy_url: Copiar URL
+      error_responses: Respuestas de error
+      examples_title: Ejemplos de código
+      live_demo: Demostración en vivo
+      optional: Opcional
+      parameters_heading: Parámetros
+      response_fields: Campos de respuesta
+      try_it_out: Pruébalo
+    playground:
+      1_request_per_minute: 1 solicitud por minuto
+      4_times_more_requests: 4 veces más solicitudes
+      anonymous_limit_html: La demo permite <strong>%{limit}</strong> a usuarios anónimos.
+      create_free_account: Crea una cuenta gratuita
+      error: Error
+      rate_limit_title: "¡Las pruebas se están realizando demasiado rápido!"
+      signup_benefit_html: Regístrate gratis y obtén <strong>%{requests}</strong>
+        — podrás seguir haciendo pruebas de inmediato.
+      status: 'Estado:'

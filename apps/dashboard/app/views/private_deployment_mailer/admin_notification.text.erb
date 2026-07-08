@@ -1,11 +1,11 @@
 [ ACTION REQUIRED ] New Private Deployment Request
 
-Company:   <%= @deployment_request.company %>
-Contact:   <%= @deployment_request.contact_name %> <<%= @deployment_request.contact_email %>>
-Tier:      <%= @deployment_request.server_tier.capitalize %> ($<%= "%.0f" % @deployment_request.monthly_price_dollars %>/mo)
+<%= t('private_deployment_mailer.admin_notification.company_company', company: @deployment_request.company) %>
+<%= t('private_deployment_mailer.admin_notification.contact_contact_name_contact_email', contact_name: @deployment_request.contact_name, contact_email: @deployment_request.contact_email) %>
+<%= t('private_deployment_mailer.admin_notification.tier_capitalize_monthly_price_dollars__mo', capitalize: @deployment_request.server_tier.capitalize, monthly_price_dollars: "%.0f" % @deployment_request.monthly_price_dollars) %>
 Services:  <%= @deployment_request.selected_services.join(", ") %>
 <% if @deployment_request.admin_notes.present? %>
-Notes:     <%= @deployment_request.admin_notes %>
+<%= t('private_deployment_mailer.admin_notification.notes_admin_notes', admin_notes: @deployment_request.admin_notes) %>
 <% end %>
 Submitted: <%= @deployment_request.created_at.utc.strftime("%B %d, %Y at %H:%M UTC") %>
 

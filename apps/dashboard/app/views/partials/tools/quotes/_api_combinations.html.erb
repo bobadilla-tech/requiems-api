@@ -1,42 +1,42 @@
 <section class="py-20 px-4 bg-white dark:bg-gray-950">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-      Pairs well with
-    </h2>
-    <p class="text-gray-600 dark:text-gray-300 mb-10">
-      Combine the Quotes API with other endpoints to build richer experiences.
-    </p>
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4"><%= t('tools.quotes.api_combinations.pairs_well_with') %></h2>
+
+
+    <p class="text-gray-600 dark:text-gray-300 mb-10"><%= t('tools.quotes.api_combinations.combine_the_quotes_api_with_other') %></p>
+
+
 
     <div class="grid sm:grid-cols-3 gap-6">
       <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-gray-900">
         <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
-          <%= link_to "Sentiment Analysis", api_path("sentiment"),
+          <%= link_to t('tools.quotes.api_combinations.sentiment_analysis'), api_path("sentiment"),
                 class: "hover:underline", style: "color:#1D9E75;" %>
         </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Score the emotional tone of a quote before displaying it — surface only
-          positive, uplifting results.
-        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('tools.quotes.api_combinations.score_the_emotional_tone_of_a_quote') %></p>
+
+
+
       </div>
       <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-gray-900">
         <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
-          <%= link_to "Detect Language", api_path("detect-language"),
+          <%= link_to t('tools.quotes.api_combinations.detect_language'), api_path("detect-language"),
                 class: "hover:underline", style: "color:#1D9E75;" %>
         </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Filter or route quotes by language before presenting them to a
-          multilingual audience.
-        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('tools.quotes.api_combinations.filter_or_route_quotes_by_language') %></p>
+
+
+
       </div>
       <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-6 bg-gray-50 dark:bg-gray-900">
         <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
-          <%= link_to "Lorem Ipsum", api_path("lorem-ipsum"),
+          <%= link_to t('tools.quotes.api_combinations.lorem_ipsum'), api_path("lorem-ipsum"),
                 class: "hover:underline", style: "color:#1D9E75;" %>
         </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Mix real quotes with generated filler text for flexible content layouts
-          and design systems.
-        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('tools.quotes.api_combinations.mix_real_quotes_with_generated_filler') %></p>
+
+
+
       </div>
     </div>
   </div>

@@ -1,0 +1,47 @@
+<section class="bg-gray-50 dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("tools.phone_validator.use_cases.heading") %>
+      </h2>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <%= t("tools.phone_validator.use_cases.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% [
+        { context: t("tools.phone_validator.use_cases.auth_context"),
+          title:   t("tools.phone_validator.use_cases.auth_title"),
+          body:    t("tools.phone_validator.use_cases.auth_body") },
+        { context: t("tools.phone_validator.use_cases.fraud_context"),
+          title:   t("tools.phone_validator.use_cases.fraud_title"),
+          body:    t("tools.phone_validator.use_cases.fraud_body") },
+        { context: t("tools.phone_validator.use_cases.integrations_context"),
+          title:   t("tools.phone_validator.use_cases.integrations_title"),
+          body:    t("tools.phone_validator.use_cases.integrations_body") },
+        { context: t("tools.phone_validator.use_cases.sms_context"),
+          title:   t("tools.phone_validator.use_cases.sms_title"),
+          body:    t("tools.phone_validator.use_cases.sms_body") },
+        { context: t("tools.phone_validator.use_cases.onboarding_context"),
+          title:   t("tools.phone_validator.use_cases.onboarding_title"),
+          body:    t("tools.phone_validator.use_cases.onboarding_body") },
+        { context: t("tools.phone_validator.use_cases.support_context"),
+          title:   t("tools.phone_validator.use_cases.support_title"),
+          body:    t("tools.phone_validator.use_cases.support_body") },
+      ].each do |card| %>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2 text-brand-primary">
+            <%= card[:context] %>
+          </p>
+          <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <%= card[:title] %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            <%= card[:body] %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

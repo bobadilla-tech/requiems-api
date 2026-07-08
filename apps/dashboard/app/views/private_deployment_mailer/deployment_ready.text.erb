@@ -1,8 +1,8 @@
 Your Private API is Live
 
-Hi <%= @deployment_request.contact_name %>,
+<%= t('private_deployment_mailer.deployment_ready.hi_contact_name', contact_name: @deployment_request.contact_name) %>
 
-Your private Requiems API environment for <%= @deployment_request.company %> is deployed and ready.
+<%= t('private_deployment_mailer.deployment_ready.your_private_requiems_api', company: @deployment_request.company) %>
 
 YOUR ENDPOINT
   <%= @deployment_request.live_url %>

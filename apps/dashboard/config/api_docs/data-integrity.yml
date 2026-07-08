@@ -476,7 +476,7 @@ endpoints:
         puts "Phone valid: #{data['phone']['valid']} | Score: #{data['phone']['quality_score']}" if data['phone']
         puts "Text safe: #{data['text']['is_safe']} | Sentiment: #{data['text']['sentiment']}" if data['text']
         puts "Overall quality score: #{data['overall_quality_score']}"
-        
+
   - name: Moderate Content
     method: POST
     path: /v1/systems/content/moderate
@@ -799,7 +799,7 @@ endpoints:
     errors:
       - code: bad_request
         status: 400
-        description: Invalid or malformed domain value in the request path.  
+        description: Invalid or malformed domain value in the request path.
     code_examples:
       curl: |
         curl -X GET https://api.requiems.xyz/v1/systems/domain/trust/github.com \

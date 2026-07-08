@@ -120,6 +120,8 @@ ufw enable
 ufw status
 ```
 
+> **Warning:** Docker inserts iptables rules directly into its own `DOCKER` chain, ahead of UFW's chain — a `ports:` mapping in docker-compose.yml (e.g. exposing `db` on `5432:5432`) publishes to `0.0.0.0` regardless of UFW rules. Never publish datastore ports to the host; see [infrastructure.md](../docs/core/infrastructure.md#firewall-configuration-ufw).
+
 6. **Clone repository:**
 
 ```bash

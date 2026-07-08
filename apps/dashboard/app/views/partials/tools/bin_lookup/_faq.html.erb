@@ -1,0 +1,46 @@
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h2 class="text-3xl font-bold text-gray-900 dark:text-white text-center mb-10"><%= t("tools.bin_lookup.faq.heading") %></h2>
+
+    <div class="space-y-3" data-controller="faq-accordion">
+      <% [
+        { q: t("tools.bin_lookup.faq.q1"), a: t("tools.bin_lookup.faq.a1") },
+        { q: t("tools.bin_lookup.faq.q2"), a: t("tools.bin_lookup.faq.a2") },
+        { q: t("tools.bin_lookup.faq.q3"), a: t("tools.bin_lookup.faq.a3") },
+        { q: t("tools.bin_lookup.faq.q4"), a: t("tools.bin_lookup.faq.a4") },
+        { q: t("tools.bin_lookup.faq.q5"), a: t("tools.bin_lookup.faq.a5") },
+      ].each_with_index do |faq, i| %>
+        <% panel_id  = "bin-lookup-faq-#{i}" %>
+        <% button_id = "#{panel_id}-button" %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <button type="button"
+                  id="<%= button_id %>"
+                  class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-primary"
+                  data-action="click->faq-accordion#toggle"
+                  data-faq-accordion-target="button"
+                  aria-expanded="false"
+                  aria-controls="<%= panel_id %>">
+            <span class="font-medium text-gray-900 dark:text-gray-100"><%= faq[:q] %></span>
+            <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="<%= panel_id %>"
+               class="hidden px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+               role="region"
+               aria-labelledby="<%= button_id %>"
+               data-faq-accordion-target="content">
+            <%= faq[:a] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+      <%= t("tools.bin_lookup.faq.support_prompt") %>
+      <a href="/contact" class="text-brand-primary hover:underline"><%= t("tools.bin_lookup.faq.support_link") %></a>
+    </p>
+
+  </div>
+</section>

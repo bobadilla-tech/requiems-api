@@ -1,13 +1,13 @@
+---
 es:
-  hello: "Hola mundo"
-  errors:
-    messages:
-      not_saved:
-        one: "1 error impidió que este registro se guardara:"
-        other: "%{count} errores impidieron que este registro se guardara:"
   date:
     formats:
       month_year: "%B %Y"
+  errors:
+    messages:
+      not_saved:
+        one: '1 error impidió que este registro se guardara:'
+        other: "%{count} errores impidieron que este registro se guardara:"
   time:
     formats:
       status_timestamp: "%d de %B de %Y a las %H:%M %Z"

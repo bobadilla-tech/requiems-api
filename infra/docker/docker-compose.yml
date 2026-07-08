@@ -67,8 +67,6 @@ services:
     env_file: .env
     volumes:
       - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
@@ -89,6 +87,8 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.Dockerfile
+      additional_contexts:
+        scripts: ../../scripts
     env_file: .env
     environment:
       - RAILS_ENV=production
@@ -110,6 +110,8 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.Dockerfile
+      additional_contexts:
+        scripts: ../../scripts
     env_file: .env
     environment:
       - RAILS_ENV=production

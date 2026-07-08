@@ -19,8 +19,18 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "email normalizer tool page renders successfully" do
+    get "/en/tools/email-normalizer"
+    assert_response :success
+  end
+
   test "quotes tool page renders successfully" do
     get "/en/tools/quotes"
+    assert_response :success
+  end
+
+  test "bin lookup tool page renders successfully" do
+    get "/en/tools/bin-lookup"
     assert_response :success
   end
 
@@ -29,5 +39,14 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal "Tool not found.", flash[:alert]
   end
-end
 
+  test "inflation tool page renders successfully" do
+    get "/en/tools/inflation"
+    assert_response :success
+  end
+
+  test "profanity filter tool page renders successfully" do
+    get "/en/tools/profanity-filter"
+    assert_response :success
+  end
+end

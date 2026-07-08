@@ -1,106 +1,133 @@
+---
 es:
   shared:
-    nav:
-      docs: "Documentación"
-      docs_apis_desc: "Explorar cada endpoint"
-      docs_examples_desc: "Integraciones listas para copiar"
-      docs_divisions_desc: "APIs por categoría"
-      compare: "Comparar"
-      docs_compare_desc: "Requiems API vs competidores"
-      divisions: "Divisiones"
-      systems: "Sistemas"
-      divisions_hub: "Resumen de todas las divisiones"
-      divisions_panel_heading: "Ir a una división"
-      divisions_all: "Todas las divisiones"
-      apis: "APIs"
-      examples: "Ejemplos"
-      tools: "Herramientas"
-      docs_tools_desc: "Demos interactivos de APIs"
-      case_studies: "Casos de estudio"
-      pricing: "Precios"
-      dashboard: "Panel"
-      api_keys: "Claves API"
-      usage: "Uso"
-      settings: "Ajustes"
-      sign_out: "Cerrar sesión"
-      sign_in: "Iniciar sesión"
-      sign_up: "Registrarse"
-      get_started: "Comenzar"
-      dark_mode: "Modo oscuro"
-      light_mode: "Modo claro"
-      open_menu: "Abrir menú principal"
-      close_menu: "Cerrar menú principal"
-      mobile_menu_title: "Menú"
-      mobile_menu_close: "Cerrar"
-      search_placeholder: "APIs, ejemplos, docs..."
-      search_no_results: "Sin resultados"
-      search_try_different: "Prueba otras palabras"
-      language: "Idioma"
-      clear_search: "Borrar búsqueda"
-      toggle_dark_mode: "Cambiar modo oscuro"
-      breadcrumb: "Ruta de navegación"
-    footer:
-      tagline: "Infraestructura backend para productos SaaS, entregada a través de una API unificada"
-      copyright: "© %{year} Bobadilla Tech. Todos los derechos reservados."
-      sections:
-        get_started: "Comenzar"
-        api_categories: "Categorías de APIs"
-        about: "Acerca de"
-        developers: "Desarrolladores"
-      links:
-        api_directory: "Directorio de APIs"
-        api_status: "Estado de la API"
-        blog: "Blog"
-        example_apps: "Apps de ejemplo"
-        api_glossary: "Glosario de APIs"
-        error_codes: "Códigos de error"
-        pricing: "Precios"
-        our_team: "Nuestro equipo"
-        suggest_api: "Sugerir una API"
-        faq: "Preguntas frecuentes"
-        for_llms: "Para LLMs y herramientas de IA"
-        privacy_policy: "Política de privacidad"
-        terms_of_service: "Términos de servicio"
-        contact_us: "Contáctanos"
-        talk_to_sales: "Hablar con ventas"
-        github: "GitHub"
-        contributing: "Contribuir"
-        changelog: "Historial de cambios"
-        finance: "Finanzas"
-        technology: "Herramientas para Desarrolladores"
-        ai_vision: "IA & Visión por Computadora"
-        nature: "Naturaleza"
-        entertainment: "Entretenimiento"
-        health: "Salud/Bienestar"
-        miscellaneous: "Misceláneos"
-        places: "Lugares"
-        text: "Texto"
-        transportation: "Transporte"
-        tax: "Impuestos"
-        validation: "Validación"
-        data: "Datos"
-        security: "Seguridad y Privacidad"
-        media: "Generación de Medios"
-    close: "Cerrar"
-    dismiss: "Descartar"
-    dismiss_banner: "Cerrar banner"
-    yes_label: "Sí"
-    no_label: "No"
-    text_to_analyze: "Texto a analizar"
+    app_name: API de Requiems
+    buttons:
+      cancel: Cancelar
+      close: Cerrar
+      dismiss: Descartar
+      dismiss_banner: Cerrar banner
+    common:
+      all: Todo
+      invalid: Inválido
+      json_response: Respuesta JSON
+      latency: Latencia media inferior a 300 ms
+      'no': "✗ No"
+      performance: Actuación
+      rest_api: API REST
+      uptime: 99,9% de tiempo de actividad
+      utilities: Explorar utilidades
+      valid: Válido
+      view: Vista
+      'yes': "✓ Sí"
     danger_zone:
-      heading: "Zona de peligro"
-      subheading: "Acciones irreversibles que afectan permanentemente tu cuenta"
-      default_title: "Eliminar cuenta"
-      default_description: "Elimina permanentemente tu cuenta y todos los datos asociados. Esta acción no se puede deshacer."
+      cancel_btn: Cancelar
       default_bullets:
-        - "Todas tus claves API serán revocadas inmediatamente"
-        - "Tu suscripción será cancelada"
-        - "Todos los datos de uso serán eliminados permanentemente"
-      delete_btn: "Eliminar cuenta"
+      - Todas tus claves API serán revocadas inmediatamente
+      - Tu suscripción será cancelada
+      - Todos los datos de uso serán eliminados permanentemente
+      default_description: Elimina permanentemente tu cuenta y todos los datos asociados.
+        Esta acción no se puede deshacer.
+      default_title: Eliminar cuenta
+      delete_btn: Eliminar cuenta
+      heading: Zona de peligro
+      modal_body: Te enviaremos un enlace de confirmación a %{email}. El enlace expira
+        en %{expiry}.
       modal_title: "¿Eliminar tu cuenta?"
-      modal_body: "Te enviaremos un enlace de confirmación a %{email}. El enlace expira en %{expiry}."
       reason_label: "¿Por qué te vas?"
-      reason_placeholder: "Cuéntanos qué podríamos haber hecho mejor..."
-      cancel_btn: "Cancelar"
-      send_confirmation_btn: "Enviar correo de confirmación"
-      sending: "Enviando..."
+      reason_placeholder: Cuéntanos qué podríamos haber hecho mejor...
+      send_confirmation_btn: Enviar correo de confirmación
+      sending: Enviando...
+      subheading: Acciones irreversibles que afectan permanentemente tu cuenta
+    faq_heading: Preguntas frecuentes
+    schedule_call_banner:
+      cta: Reservar una llamada
+      label: Ventas
+      subtitle: "Alexandra Flores · Responsable de ventas · 15 min · Sin preparación previa"
+      text: "¿Quieres hablar? Agenda una llamada de 15 min con Alexandra, nuestra responsable de ventas."
+    footer:
+      copyright: "© %{year} Bobadilla Tech. Todos los derechos reservados."
+      links:
+        api_directory: Directorio de APIs
+        api_glossary: Glosario de APIs
+        api_status: Estado de la API
+        blog: Blog
+        changelog: Historial de cambios
+        contact_us: Contáctanos
+        contributing: Contribuir
+        error_codes: Códigos de error
+        example_apps: Apps de ejemplo
+        faq: Preguntas frecuentes
+        for_llms: Para LLMs y herramientas de IA
+        github: GitHub
+        our_team: Nuestro equipo
+        pricing: Precios
+        privacy_policy: Política de privacidad
+        security: Seguridad
+        suggest_api: Sugerir una API
+        talk_to_sales: Hablar con ventas
+        terms_of_service: Términos de servicio
+      sections:
+        about: Acerca de
+        api_categories: Categorías de APIs
+        developers: Desarrolladores
+        get_started: Comenzar
+      tagline: Infraestructura backend para productos SaaS, entregada a través de
+        una API unificada
+    forms:
+      email_placeholder: Ingrese cualquier dirección de correo electrónico
+      text_to_analyze: Texto a analizar
+    headings:
+      accuracy: Exactitud
+      simplicity: Sencillez
+    info:
+      no_account_demo: No se requiere cuenta para la demostración.
+    labels:
+      are_you_sure_suspend: "¿Está seguro de que desea suspender a este usuario? Se
+        revocarán todas sus claves API."
+      col_status: Estado
+      environment: Ambiente
+      joined: Unido
+      monthly: Mensual
+      'no': 'No'
+      'yes': Sí
+    nav:
+      api_keys: Claves API
+      apis: APIs
+      breadcrumb: Ruta de navegación
+      case_studies: Casos de estudio
+      clear_search: Borrar búsqueda
+      close_menu: Cerrar menú principal
+      compare: Comparar
+      dark_mode: Modo oscuro
+      dashboard: Panel
+      divisions: Divisiones
+      docs: Documentación
+      docs_apis_desc: Explorar cada endpoint
+      docs_compare_desc: Requiems API vs competidores
+      docs_divisions_desc: APIs por categoría
+      docs_examples_desc: Integraciones listas para copiar
+      docs_industries_desc: API mapeadas a su sector vertical
+      docs_tools_desc: Demos interactivos de APIs
+      examples: Ejemplos
+      get_started: Comenzar
+      industries: Industrias
+      language: Idioma
+      light_mode: Modo claro
+      mobile_menu_title: Menú
+      open_menu: Abrir menú principal
+      pricing: Precios
+      search_no_results: Sin resultados
+      search_placeholder: APIs, ejemplos, docs...
+      search_try_different: Prueba otras palabras
+      settings: Ajustes
+      sign_in: Iniciar sesión
+      sign_out: Cerrar sesión
+      sign_up: Registrarse
+      systems: Sistemas
+      toggle_dark_mode: Cambiar modo oscuro
+      tools: Herramientas
+      usage: Uso
+    status:
+      active: Activo
+      suspended: Suspendido

@@ -1,0 +1,19 @@
+<% content_for :title, t('tools.domain_checker.show.free_domain_checker_availability_dns') %>
+<% content_for :description, "Check domain availability and DNS records instantly. A, MX, NS lookup in one API call — free, no account required." %>
+
+<%= render "partials/domain_checker/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: "Trusted by teams at",
+      speed: "34s" %>
+<%= render "partials/domain_checker/what_it_does" %>
+<%= render "partials/domain_checker/use_cases" %>
+<%= render "partials/domain_checker/api_combinations" %>
+<%= render "partials/domain_checker/faq" %>
+<%= render "partials/domain_checker/cta" %>

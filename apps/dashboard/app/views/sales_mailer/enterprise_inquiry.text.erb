@@ -3,9 +3,9 @@ ENTERPRISE INQUIRY
 
 !! ACTION REQUIRED: Respond within 24 hours !!
 
-Company: <%= @inquiry[:company] %>
-Contact Person: <%= @inquiry[:name] %>
-Email: <%= @inquiry[:email] %>
+<%= t('sales_mailer.enterprise_inquiry.company_company', company: @inquiry[:company]) %>
+<%= t('sales_mailer.enterprise_inquiry.contact_person_name', name: @inquiry[:name]) %>
+<%= t('sales_mailer.enterprise_inquiry.email_email', email: @inquiry[:email]) %>
 
 <% if @inquiry[:message].present? %>
 Message / Specific Needs:
@@ -17,4 +17,4 @@ Submitted: <%= @timestamp.strftime("%B %d, %Y at %I:%M %p %Z") %>
 
 REMINDER: Enterprise inquiries should receive a response within 24 hours to maintain our commitment to potential customers.
 
-Reply directly to this email to contact: <%= @inquiry[:email] %>
+<%= t('sales_mailer.enterprise_inquiry.reply_directly_to_this', email: @inquiry[:email]) %>

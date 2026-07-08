@@ -1,43 +1,360 @@
+---
 es:
   admin:
-    access_denied: "Acceso denegado. Se requieren privilegios de administrador."
     abuse_reports:
-      investigate_success: "Informe marcado como en investigación."
-      investigate_error: "No se pudo actualizar el estado del informe."
-      resolve_success: "Informe resuelto correctamente."
-      resolve_error: "No se pudo resolver el informe."
-      not_found: "Informe de abuso no encontrado."
+      index:
+        abuse: Abuso
+        abuse_reports: Denuncias de abuso
+        all_statuses: Todos los estados
+        all_types: Todos los tipos
+        apply_filters: Aplicar filtros
+        created_at_ago: "%{created_at} hace un tiempo"
+        investigating: Investigando
+        malicious_activity: Actividad maliciosa
+        monitor_and_manage_abuse_reports: Supervisar y gestionar los informes de abuso
+        no_reports_found: No se encontraron informes
+        reported: Informado
+        reports_count: Informes (%{count})
+        resolved: Resuelto
+        search_by_user_email_or_description: Buscar por correo electrónico o descripción
+          del usuario.
+        spam: Correo basura
+        terms_violation: Incumplimiento de los términos
+        total_reports: Informes totales
+      investigate_error: No se pudo actualizar el estado del informe.
+      investigate_success: Informe marcado como en investigación.
+      not_found: Informe de abuso no encontrado.
+      resolve_error: No se pudo resolver el informe.
+      resolve_success: Informe resuelto correctamente.
+      show:
+        action_guidelines: Directrices de actuación
+        admin: Administración
+        admin_actions: Acciones administrativas
+        are_you_sure_you_want_to_ban_this_user: "¿Seguro que quieres bloquear a este
+          usuario? Esto revocará todas sus claves API y cancelará su suscripción."
+        are_you_sure_you_want_to_resolve_this: "¿Está seguro de que desea cerrar este
+          informe?"
+        ban: 'Prohibición:'
+        by_email: por %{email}
+        created_at_ago: "(%{created_at} hace)"
+        investigate: 'Investigar:'
+        key_prefix: Prefijo de clave
+        last_request: Última solicitud
+        last_request_at_ago: "%{last_request_at} hace un tiempo"
+        other_reports_for_this_user: Otros informes para este usuario
+        report_details: Detalles del informe
+        report_resolved: Informe resuelto
+        report_type: Tipo de informe
+        reported: Informado
+        reported_at: Informado en
+        reported_user: Usuario denunciado
+        resolve: 'Resolver:'
+        suspend: 'Suspender:'
+        suspended: Suspendido
+        take_action_on_this_abuse_report: Tome medidas con respecto a este informe
+          de abuso.
+        this_month: Este mes
+        view_full_profile: Ver perfil completo
+    access_denied: Acceso denegado. Se requieren privilegios de administrador.
+    analytics:
+      revenue:
+        active_subscriptions: Suscripciones activas
+        annual_recurring_revenue: Ingresos recurrentes anuales
+        average_revenue_per_user: Ingresos promedio por usuario
+        avg_revenue_per_customer: Los ingresos promedio por cliente son de $%{amount}/mes.
+        churn_rate_30d: Tasa de abandono (30 días)
+        customer_distribution: Distribución de clientes
+        declining_revenue_description: Investigar las causas e implementar estrategias
+          de crecimiento.
+        declining_revenue_label: 'Disminución de los ingresos:'
+        high_churn_description: Centrarse en la retención y satisfacción del cliente.
+        high_churn_label: 'Alta tasa de abandono:'
+        key_takeaways: Conclusiones clave
+        low_churn_description: Los clientes están satisfechos con el servicio.
+        low_churn_label: 'Baja tasa de abandono:'
+        monthly_recurring_revenue: Ingresos mensuales recurrentes
+        monthly_recurring_revenue_over_time: Ingresos mensuales recurrentes a lo largo
+          del tiempo
+        monthly_revenue_breakdown: Desglose de los ingresos mensuales
+        mrr_growth_last_month: Crecimiento de los ingresos recurrentes mensuales (último
+          mes)
+        new_vs_canceled_subscriptions: Suscripciones nuevas frente a suscripciones
+          canceladas
+        no_subscriptions_body: Aún no hay suscripciones activas; nos centramos en
+          la captación de clientes.
+        paying_customers: clientes que pagan
+        per_month: por mes
+        per_year: por año
+        revenue_analytics: Análisis de ingresos
+        revenue_by_plan: Ingresos por plan
+        revenue_insights: Información sobre ingresos
+        revenue_trend_last_12_months: Tendencia de los ingresos (últimos 12 meses)
+        steady_growth_description: Los ingresos están aumentando de forma constante.
+        steady_growth_label: 'Crecimiento constante:'
+        strong_growth_description: Los ingresos están aumentando rápidamente.
+        strong_growth_label: 'Fuerte crecimiento:'
+        subscription_growth_and_churn_over_time: Crecimiento y abandono de suscripciones
+          a lo largo del tiempo
+        subscription_revenue_and_financial: Ingresos por suscripciones y métricas
+          financieras
+        subscriptions_by_plan: Suscripciones por plan
+      system_health:
+        95th_percentile: percentil 95
+        99th_percentile: percentil 99
+        api_performance_and_reliability_metrics: Métricas de rendimiento y confiabilidad
+          de la API
+        api_uptime: Tiempo de actividad de la API
+        authentication_and_security_events: Eventos de autenticación y seguridad
+        count: Contar
+        error_rate_over_time: Tasa de error a lo largo del tiempo
+        failed_auth_attempts_24h: Intentos de autenticación fallidos (24 h)
+        failed_auth_attempts_detail: "%{count} ha fallado en sus intentos durante
+          las últimas 24 horas."
+        high: Alto
+        last_24_hours: Últimas 24 horas
+        last_hour: Última hora
+        median_response_time: Tiempo de respuesta medio
+        most_common_errors: Errores más comunes
+        no_errors_recorded: "¡No se registraron errores!"
+        normal: Normal
+        p50_response_time: Tiempo de respuesta P50
+        p95_response_time: Tiempo de respuesta P95
+        p99_response_time: Tiempo de respuesta P99
+        percentage_of_requests_resulting_in: Porcentaje de solicitudes que resultan
+          en errores
+        real_time_traffic_monitoring: Monitoreo del tráfico en tiempo real
+        requests_per_minute_last_hour: Solicitudes por minuto (última hora)
+        response_acceptable_description: Considere optimizar los puntos finales lentos.
+        response_acceptable_label: Rendimiento aceptable.
+        response_fast_description: La API está funcionando de manera óptima.
+        response_fast_label: Tiempos de respuesta rápidos.
+        response_slow_description: Se necesita optimización del rendimiento.
+        response_slow_label: Tiempos de respuesta lentos.
+        response_times: Tiempos de respuesta
+        response_times_detail: 'P95: %{p95}ms, P99: %{p99}ms'
+        security_high_description: Supervise posibles amenazas de seguridad.
+        security_high_label: Alto número de intentos de autenticación fallidos.
+        security_label: Seguridad
+        security_metrics: Métricas de seguridad
+        security_monitoring: Vigilancia de seguridad
+        security_monitoring_body: Todas las solicitudes a la API se supervisan para
+          detectar actividades sospechosas. Un alto índice de fallos de autenticación
+          puede indicar una amenaza a la seguridad.
+        security_normal_description: No se detectaron patrones sospechosos.
+        security_normal_label: Actividad de seguridad normal.
+        status_code: Código de estado
+        status_excellent: Excelente
+        status_good: Bien
+        status_needs_attention: Necesita atención
+        system_health: Salud del sistema
+        system_health_insights: Información sobre el estado del sistema
+        the_system_is_running_perfectly: El sistema funciona perfectamente.
+        top_10_error_status_codes: Los 10 códigos de estado de error más comunes
+        uptime_excellent_description: La API es altamente confiable con un tiempo
+          de inactividad mínimo.
+        uptime_excellent_label: Excelente tiempo de actividad.
+        uptime_good_description: La API está funcionando bien con una disponibilidad
+          aceptable.
+        uptime_good_label: Buen tiempo de actividad.
+        uptime_low_description: Investigar incidentes recientes e implementar mejoras.
+        uptime_low_label: Bajo tiempo de actividad.
+      usage:
+        api_usage_patterns_and_statistics: Patrones de uso de la API y estadísticas
+        average_response_times_by_endpoint: Tiempos de respuesta promedio por punto
+          final
+        in_the_last_n_days: en los últimos días de %{n}
+        last_30_days: Últimos 30 días
+        last_7_days: Últimos 7 días
+        last_90_days: Últimos 90 días
+        rank: Rango
+        requests_by_plan: Solicitudes por plan
+        requests_over_time: Solicitudes a lo largo del tiempo
+        top_10_endpoints: Los 10 principales puntos de acceso
+        top_10_slowest_endpoints: Los 10 puntos finales más lentos
+        top_10_users_by_usage: Los 10 usuarios con mayor uso
+        usage_analytics: Análisis de uso
+        view_user: Ver usuario
     api_keys:
-      revoke_success: "Clave API revocada correctamente."
-      revoke_error: "No se pudo revocar la clave API."
-      not_found: "Clave API no encontrada."
+      index:
+        active: Activo
+        apply_filters: Aplicar filtros
+        clear: Claro
+        environment: Ambiente
+        no_api_keys_found: No se encontraron claves API
+        revoked: Revocado
+        search: Buscar
+        search_placeholder: Buscar por prefijo de clave, correo electrónico del usuario
+          o nombre
+        status: Estado
+        try_adjusting_your_search_or_filters: Intenta ajustar tu búsqueda o filtros.
+        view_and_manage_all_api_keys_across: Visualiza y gestiona todas las claves
+          API de los usuarios.
+      not_found: Clave API no encontrada.
+      revoke_error: No se pudo revocar la clave API.
+      revoke_success: Clave API revocada correctamente.
+      show:
+        admin_actions: Acciones administrativas
+        are_you_sure_you_want_to_revoke_this: "¿Está seguro de que desea revocar esta
+          clave API? Esta acción es irreversible."
+        credits: Créditos
+        key_details: Detalles clave
+        key_prefix: Prefijo de clave
+        no_usage_recorded_for_this_key: No se ha registrado ningún uso para esta clave.
+        owner: Dueño
+        recent_usage: Uso reciente
+        revoke_reason: Motivo de la revocación
+        revoked_at: Revocado en
+        used_at: Usado en
+        view_user_profile: Ver perfil de usuario
+    dashboard:
+      index:
+        active_subscriptions_active_active_subscriptions2: "%{active_subscriptions}
+          activo %{active_subscriptions2}"
+        active_users_active_30d: "%{active_users} activo (30 días)"
+        admin_dashboard: Panel de administración
+        created_at_ago: "%{created_at} hace un tiempo"
+        joined: Unido
+        no_api_keys_created_yet: Aún no se han creado claves API
+        no_paid_subscriptions_yet: Aún no hay suscripciones de pago.
+        no_users_yet: Aún no hay usuarios.
+        recent_api_keys: Claves API recientes
+        recent_subscriptions: Suscripciones recientes
+        recent_users: Usuarios recientes
+        requests_today: Solicitudes de hoy
+        system_health: Salud del sistema
+        system_overview_and_key_metrics: Descripción general del sistema y métricas
+          clave
+        titleize_plan: Plan %{titleize}
+        total_api_keys: Claves API totales
+        total_requests_30d_last_30_days: "%{total_requests_30d} Últimos 30 días"
+        total_users: Usuarios totales
     private_deployments:
-      subdomain_required: "El slug del subdominio es obligatorio."
-      secret_required: "El secreto del tenant es obligatorio."
-      activate_success: "Despliegue marcado como activo. Correo de confirmación enviado a %{email}."
-      activate_error: "No se pudo activar el despliegue."
-      cancel_success: "Solicitud de despliegue cancelada."
-      cancel_error: "No se pudo cancelar el despliegue."
-      not_found: "Solicitud de despliegue no encontrada."
+      activate_error: No se pudo activar el despliegue.
+      activate_success: Despliegue marcado como activo. Correo de confirmación enviado
+        a %{email}.
+      cancel_error: No se pudo cancelar el despliegue.
+      cancel_success: Solicitud de despliegue cancelada.
+      index:
+        active: Activo
+        cancelled: Cancelado
+        company: Compañía
+        created_at_ago: "%{created_at} hace un tiempo"
+        deploying: Implementación
+        manage_per_tenant_dedicated_api: Gestionar las solicitudes de implementación
+          de API dedicadas por inquilino
+        no_deployment_requests: No hay solicitudes de despliegue
+        none_yet_in_this_category: Aún no hay ninguno en esta categoría.
+        pending: Pendiente
+        private_deployments: Despliegues privados
+        services: Servicios
+        submitted: Enviado
+        tier: Nivel
+      not_found: Solicitud de despliegue no encontrada.
+      secret_required: El secreto del tenant es obligatorio.
+      show:
+        32_character_secret: Secreto de más de 32 caracteres
+        account: Cuenta
+        activating: Activando...
+        admin_notes: Notas del administrador
+        cancel_deployment_request: Cancelar solicitud de despliegue
+        cancel_request: Solicitud de cancelación
+        deployed_at: Desplegado en
+        enabled_services_value: Valor de SERVICIOS HABILITADOS
+        hetzner_server_id_ip_any_notes: ID del servidor Hetzner, IP, cualquier nota...
+        live_deployment: Implementación en vivo
+        lowercase_letters_numbers_hyphens_2_40: Letras minúsculas, números, guiones.
+          2–40 caracteres.
+        mark_as_deployed_send_email: Marcar como desplegado + Enviar correo electrónico
+        mark_this_request_as_cancelled: "¿Marcar esta solicitud como cancelada?"
+        monthly_price: Precio mensual
+        server_tier: Nivel de servidor
+        subdomain_slug: Slug de subdominio
+        tenant_secret_backend_secret: Secreto del inquilino (BACKEND_SECRET)
+        the_backend_secret_value_set_on_their: El valor BACKEND_SECRET configurado
+          en su VPS. Mínimo 32 caracteres.
+      subdomain_required: El slug del subdominio es obligatorio.
     promotions:
-      invalid_plan: "Plan seleccionado no válido."
-      expiry_past: "La fecha de caducidad debe ser futura."
-      reason_required: "El motivo es obligatorio."
+      expiry_past: La fecha de caducidad debe ser futura.
+      invalid_plan: Plan seleccionado no válido.
+      no_active_promotion: Este usuario no tiene una promoción activa.
+      reason_required: El motivo es obligatorio.
+      revoke_error: No se pudo revocar la promoción.
+      revoke_success: Promoción revocada. %{email} ha vuelto al plan gratuito.
+      upgrade_error: No se pudo aplicar la promoción.
       upgrade_success: "%{email} ha sido actualizado al plan %{plan} hasta el %{date}."
-      upgrade_error: "No se pudo aplicar la promoción."
-      no_active_promotion: "Este usuario no tiene una promoción activa."
-      revoke_success: "Promoción revocada. %{email} ha vuelto al plan gratuito."
-      revoke_error: "No se pudo revocar la promoción."
+    sidebar:
+      admin: Administración
+      analytics: Analítica
+      users: Usuarios
     users:
-      not_found: "Usuario no encontrado."
-      suspend_success: "Usuario suspendido correctamente. Todas las claves API han sido revocadas."
-      suspend_error: "No se pudo suspender al usuario."
-      unsuspend_success: "Usuario reactivado correctamente."
-      unsuspend_error: "No se pudo reactivar al usuario."
-      ban_success: "Usuario bloqueado correctamente. Claves API revocadas y suscripción cancelada."
-      ban_error: "No se pudo bloquear al usuario."
-      make_admin_success: "Privilegios de administrador concedidos al usuario."
-      make_admin_error: "No se pudieron conceder los privilegios de administrador."
-      remove_admin_self: "No puedes quitarte tus propios privilegios de administrador."
-      remove_admin_success: "Privilegios de administrador eliminados del usuario."
-      remove_admin_error: "No se pudieron eliminar los privilegios de administrador."
+      ban_error: No se pudo bloquear al usuario.
+      ban_success: Usuario bloqueado correctamente. Claves API revocadas y suscripción
+        cancelada.
+      index:
+        admin: Administración
+        admins: Administradores
+        all_plans: Todos los planes
+        all_users: Todos los usuarios
+        apply_filters: Aplicar filtros
+        by_name: Por nombre
+        count_active: "%{count} activo"
+        created_at_ago: "%{created_at} hace un tiempo"
+        joined: Unido
+        newest_first: Más recientes primero
+        no_users_found: No se encontraron usuarios
+        oldest_first: Del más antiguo al más antiguo.
+        search_by_email_name_or_company: Buscar por correo electrónico, nombre o empresa.
+        sort: 'Clasificar:'
+        suspended: Suspendido
+        try_adjusting_your_search_or_filters: Intenta ajustar tu búsqueda o filtros.
+        user_management: Gestión de usuarios
+        users_count: Usuarios (%{count})
+        view_and_manage_all_user_accounts: Ver y administrar todas las cuentas de
+          usuario
+      make_admin_error: No se pudieron conceder los privilegios de administrador.
+      make_admin_success: Privilegios de administrador concedidos al usuario.
+      not_found: Usuario no encontrado.
+      remove_admin_error: No se pudieron eliminar los privilegios de administrador.
+      remove_admin_self: No puedes quitarte tus propios privilegios de administrador.
+      remove_admin_success: Privilegios de administrador eliminados del usuario.
+      show:
+        admin: Administración
+        admin_action_guidelines: Directrices de actuación administrativa
+        admin_actions: Acciones administrativas
+        are_you_sure_you_want_to_grant_admin: "¿Está seguro de que desea otorgar privilegios
+          de administrador a este usuario? Tendrá acceso completo al sistema."
+        are_you_sure_you_want_to_unsuspend_this: "¿Está seguro de que desea reactivar
+          la cuenta de este usuario? Recuperará el acceso a su cuenta."
+        avg_response: Respuesta promedio
+        back_to_users: Volver a Usuarios
+        banned_at: Prohibido en
+        billing_cycle: Ciclo de facturación
+        canceling_at_period_end: Cancelación al final del período
+        created_at_ago: "%{created_at} hace un tiempo"
+        environment: Ambiente
+        last_sign_in: Último inicio de sesión
+        last_sign_in_at_ago: "%{last_sign_in_at} hace un tiempo"
+        lemonsqueezy_id: ID de LemonSqueezy
+        make_admin: Hacer administrador
+        no_active_subscription: No hay suscripción activa
+        no_api_keys_created: No se han creado claves API
+        no_recent_activity: No hay actividad reciente
+        page_title: Detalles del usuario - %{email}
+        recent_activity: Actividad reciente
+        started: Comenzó
+        subscription: Suscripción
+        suspend: Suspender
+        suspended: Suspendido
+        suspended_at: Suspendido en
+        these_actions_are_permanent_and_cannot: Estas acciones son permanentes y no
+          se pueden deshacer fácilmente.
+        this_month: Este mes
+        timestamp: Marca de tiempo
+        usage_statistics: Estadísticas de uso
+        user_details: Detalles del usuario
+        user_id: ID de usuario
+      suspend_error: No se pudo suspender al usuario.
+      suspend_success: Usuario suspendido correctamente. Todas las claves API han
+        sido revocadas.
+      unsuspend_error: No se pudo reactivar al usuario.
+      unsuspend_success: Usuario reactivado correctamente.

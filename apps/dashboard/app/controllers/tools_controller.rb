@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis quotes unit-conversion].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation profanity-filter].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -9,10 +9,30 @@ class ToolsController < ApplicationController
       description: "Syntax check, MX lookup, disposable detection, and typo correction in one call.",
       icon_classes: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
     },
+    "bin-lookup" => {
+      name: "BIN Lookup",
+      description: "Card network, type, issuing bank, and country from the first 6–8 digits of any payment card.",
+      icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+    },
     "sentiment-analysis" => {
       name: "Sentiment Analysis",
       description: "Classify text as positive, negative, or neutral with a confidence score.",
       icon_classes: "bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400"
+    },
+    "email-normalizer" => {
+      name: "Email Normalizer",
+      description: "Normalize, lowercase, trim, and canonicalize email addresses in one API call.",
+      icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+    },
+    "domain-checker" => {
+      name: "Domain Checker",
+      description: "Check domain availability, DNS records (A, MX, NS), and WHOIS data in one API call.",
+      icon_classes: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400"
+    },
+    "phone-validator" => {
+      name: "Phone Validator",
+      description: "Validate phone numbers with carrier lookup, line type detection, and format normalization in one API call.",
+      icon_classes: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400"
     },
     "unit-conversion" => {
       name: "Unit Conversion",
@@ -23,6 +43,16 @@ class ToolsController < ApplicationController
       name: "Random Quotes",
       description: "Fetch random inspirational quotes with author attribution in a single API call.",
       icon_classes: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
+    },
+    "inflation" => {
+      name: "Inflation",
+      description: "Historical and current CPI inflation rates for 241 countries, sourced from the World Bank.",
+      icon_classes: "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
+    },
+    "profanity-filter" => {
+      name: "Profanity Filter",
+      description: "Detect and censor offensive language in any text. Returns flagged words and a clean censored version.",
+      icon_classes: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
     }
   }.freeze
 
@@ -34,7 +64,7 @@ class ToolsController < ApplicationController
     @tool_id = params[:id]
 
     unless SUPPORTED_TOOLS.include?(@tool_id)
-      redirect_to root_path, alert: "Tool not found."
+      redirect_to root_path, alert: t("tools_controller.tool_not_found")
       return
     end
 
