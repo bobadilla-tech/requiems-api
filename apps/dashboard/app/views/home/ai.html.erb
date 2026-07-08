@@ -15,11 +15,7 @@
 JSON
 %>
 <% claude_code_marketplace = "/plugin marketplace add bobadilla-tech/requiems-api-skills" %>
-<% claude_code_install = <<~SH.strip
-  /plugin install identity-skills@requiems-api-skills
-  /plugin install payments-skills@requiems-api-skills
-SH
-%>
+<% claude_code_install = "/plugin install requiems-api-skills@requiems-api-skills" %>
 <% opencode_install = <<~SH.strip
   npm install @requiems/api-skills
   mkdir -p ~/.opencode/skills/requiems-identity
