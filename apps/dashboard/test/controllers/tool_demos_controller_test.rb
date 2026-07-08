@@ -439,6 +439,47 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("tools.bin_lookup.demo.error_no_data"), response.body
   end
 
+  # ── qr_code ──────────────────────────────────────────────────────────────────
+
+  test "qr_code renders result on success" do
+    payload = { "image" => "iVBORw0KGgoAAAANSUhEUgAA", "width" => 256, "height" => 256 }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/qr-code", params: { data: "https://example.com" }
+    end
+    assert_response :success
+    assert_match "256", response.body
+  end
+
+  test "qr_code renders error when data is blank" do
+    post "/tools/demos/qr-code", params: { data: "" }
+    assert_response :success
+    assert_match I18n.t("tools.qr_code.demo.error_empty"), response.body
+  end
+
+  test "qr_code renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/qr-code", params: { data: "https://example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.qr_code.demo.error_rate_limit"), response.body
+  end
+
+  test "qr_code renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/qr-code", params: { data: "https://example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.qr_code.demo.error_generic"), response.body
+  end
+
+  test "qr_code renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/qr-code", params: { data: "https://example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.qr_code.demo.error_no_data"), response.body
+  end
+
   # ── profanity_filter ─────────────────────────────────────────────────────────
 
   test "profanity_filter renders result on success" do

@@ -182,6 +182,29 @@ class ToolDemosController < ApplicationController
     render "tool_demos/inflation", locals: { data: data }
   end
 
+  def qr_code
+    data = params[:data].to_s.strip
+
+    if data.blank?
+      return render_demo_error("qr_code", t("tools.qr_code.demo.error_empty"))
+    end
+
+    result = api_call(endpoint: "/v1/technology/qr/base64", method: "GET", params: { data: data })
+
+    if result.status_code == 429
+      return render_demo_error("qr_code", t("tools.qr_code.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("qr_code", t("tools.qr_code.demo.error_generic"))
+    end
+
+    qr_data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("qr_code", t("tools.qr_code.demo.error_no_data")) if qr_data.nil?
+
+    render "tool_demos/qr_code", locals: { data: qr_data }
+  end
+
   def bin_lookup
     bin = params[:bin].to_s.strip
 
