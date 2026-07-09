@@ -9,7 +9,7 @@ requiems.xyz {
   @compressible {
     not path /sitemap*.xml
   }
-  encode @compressible zstd br gzip
+  encode @compressible zstd gzip
 
   # Locale root paths without trailing slash: /en → /en/, /es → /es/, /fr → /fr/
   @locale_bare {
