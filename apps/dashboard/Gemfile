@@ -53,7 +53,7 @@ gem "sitemap_generator"
 
 # Charts and pagination
 gem "chartkick", "~> 5.0"
-gem "pagy", "~> 43.5"
+gem "pagy", "~> 43.6"
 
 # Groupdate for time-series queries
 gem "groupdate", "~> 6.8"
