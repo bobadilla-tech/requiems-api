@@ -54,4 +54,10 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/profanity-filter"
     assert_response :success
   end
+
+  test "thesaurus tool page renders successfully" do
+    get "/en/tools/thesaurus"
+    assert_response :success
+    assert_select "[data-controller='thesaurus-demo']"
+  end
 end

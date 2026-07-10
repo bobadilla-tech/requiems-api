@@ -259,6 +259,37 @@ class ToolDemosController < ApplicationController
     render "tool_demos/profanity_filter", locals: { data: data, text: text }
   end
 
+  def thesaurus
+    word = params[:word].to_s.strip.downcase
+
+    if word.blank?
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_empty"))
+    end
+
+    unless word.match?(/\A[\p{L}'-]+\z/)
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/text/thesaurus/#{ERB::Util.url_encode(word)}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_no_data"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/thesaurus", locals: { data: data }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)

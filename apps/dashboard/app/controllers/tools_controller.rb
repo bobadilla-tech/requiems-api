@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter thesaurus].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -58,6 +58,11 @@ class ToolsController < ApplicationController
       name: "Profanity Filter",
       description: "Detect and censor offensive language in any text. Returns flagged words and a clean censored version.",
       icon_classes: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
+    },
+    "thesaurus" => {
+      name: "Thesaurus",
+      description: "Find synonyms and antonyms for any word to enhance vocabulary and writing.",
+      icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
     }
   }.freeze
 
