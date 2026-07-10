@@ -1,0 +1,35 @@
+<turbo-frame id="trivia-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+
+    <div class="px-4 py-4 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <div>
+        <span class="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+          <%= data["category"] %> · <%= data["difficulty"] %>
+        </span>
+        <p class="mt-1 text-lg font-semibold text-gray-900 dark:text-white leading-snug"><%= data["question"] %></p>
+      </div>
+      <span class="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+        <%= t("tools.trivia.demo.badge_live") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-3">
+      <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+        <%= t("tools.trivia.demo.label_options") %>
+      </p>
+      <div class="divide-y divide-gray-100 dark:divide-gray-700">
+        <% Array(data["options"]).each do |option| %>
+          <div class="flex items-center justify-between py-1.5">
+            <span class="text-sm text-gray-700 dark:text-gray-300"><%= option %></span>
+            <% if option == data["answer"] %>
+              <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <%= t("tools.trivia.demo.label_correct") %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</turbo-frame>
