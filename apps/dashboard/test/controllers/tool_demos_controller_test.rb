@@ -522,4 +522,77 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.profanity_filter.demo.error_no_data"), response.body
   end
+
+  # ── vpn_detection ────────────────────────────────────────────────────────────
+
+  test "vpn_detection renders result on success" do
+    payload = { "ip" => "8.8.8.8", "is_vpn" => false, "is_proxy" => false,
+                "is_tor" => false, "is_hosting" => true, "score" => 1,
+                "threat" => 1, "fraud_score" => 0, "asn_org" => "GOOGLE-ASN" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/vpn-detection", params: { ip: "8.8.8.8" }
+    end
+    assert_response :success
+    assert_match "8.8.8.8", response.body
+    assert_match "GOOGLE-ASN", response.body
+  end
+
+  test "vpn_detection renders error when ip is blank" do
+    post "/tools/demos/vpn-detection", params: { ip: "" }
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_empty"), response.body
+  end
+
+  test "vpn_detection renders error when ip is whitespace" do
+    post "/tools/demos/vpn-detection", params: { ip: "   " }
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_empty"), response.body
+  end
+
+  test "vpn_detection renders error when ip has invalid format" do
+    post "/tools/demos/vpn-detection", params: { ip: "not-an-ip" }
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_invalid"), response.body
+  end
+
+  test "vpn_detection renders error when ip is a CIDR range" do
+    post "/tools/demos/vpn-detection", params: { ip: "192.168.1.0/24" }
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_invalid"), response.body
+  end
+
+  test "vpn_detection accepts a valid IPv6 address" do
+    payload = { "ip" => "2001:db8::1", "is_vpn" => false, "is_proxy" => false,
+                "is_tor" => false, "is_hosting" => false, "score" => 0,
+                "threat" => 0, "fraud_score" => 0, "asn_org" => "" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/vpn-detection", params: { ip: "2001:db8::1" }
+    end
+    assert_response :success
+    assert_match "2001:db8::1", response.body
+  end
+
+  test "vpn_detection renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/vpn-detection", params: { ip: "8.8.8.8" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_rate_limit"), response.body
+  end
+
+  test "vpn_detection renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/vpn-detection", params: { ip: "8.8.8.8" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_generic"), response.body
+  end
+
+  test "vpn_detection renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/vpn-detection", params: { ip: "8.8.8.8" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.vpn_detection.demo.error_no_data"), response.body
+  end
 end

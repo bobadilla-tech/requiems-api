@@ -54,4 +54,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/profanity-filter"
     assert_response :success
   end
+
+  test "vpn detection tool page renders successfully" do
+    get "/en/tools/vpn-detection"
+    assert_response :success
+  end
 end

@@ -1,0 +1,58 @@
+<%
+  flagged = [ data["is_vpn"], data["is_proxy"], data["is_tor"], data["is_hosting"] ].any?
+
+  threat_label = ->(level) {
+    case level.to_i
+    when 0 then t("tools.vpn_detection.demo.threat_none")
+    when 1 then t("tools.vpn_detection.demo.threat_low")
+    when 2, 3 then t("tools.vpn_detection.demo.threat_medium")
+    when 4, 5 then t("tools.vpn_detection.demo.threat_high")
+    else t("tools.vpn_detection.demo.threat_critical")
+    end
+  }
+
+  rows = [
+    { key: "label_is_vpn",     value: data["is_vpn"],     type: :bool },
+    { key: "label_is_proxy",   value: data["is_proxy"],   type: :bool },
+    { key: "label_is_tor",     value: data["is_tor"],     type: :bool },
+    { key: "label_is_hosting", value: data["is_hosting"], type: :bool },
+    { key: "label_score",       value: data["score"] },
+    { key: "label_threat",      value: threat_label.call(data["threat"]) },
+    { key: "label_fraud_score", value: data["fraud_score"] },
+    { key: "label_asn_org",     value: data["asn_org"] },
+  ]
+
+  value_class = ->(type, val) {
+    case type
+    when :bool then val ? "text-red-500 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"
+    else "text-gray-800 dark:text-gray-200"
+    end
+  }
+%>
+<turbo-frame id="vpn_detection-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= ip %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= flagged ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" %>">
+        <%= flagged ? t("tools.vpn_detection.demo.badge_flagged") : t("tools.vpn_detection.demo.badge_clean") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <% rows.each do |row| %>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            <%= t("tools.vpn_detection.demo.#{row[:key]}") %>
+          </span>
+          <span class="text-sm font-medium <%= value_class.call(row[:type], row[:value]) %>">
+            <% if row[:type] == :bool %>
+              <%= row[:value] ? t("tools.vpn_detection.demo.badge_yes") : t("tools.vpn_detection.demo.badge_no") %>
+            <% else %>
+              <%= row[:value].presence || "—" %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

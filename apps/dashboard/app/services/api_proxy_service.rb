@@ -64,7 +64,7 @@ class ApiProxyService
     return false if @endpoint.blank?
     return false if @endpoint.include?("..")
 
-    @endpoint.match?(/\A\/v1\/[a-zA-Z0-9\/\-_.]+\z/)
+    @endpoint.match?(/\A\/v1\/[a-zA-Z0-9\/\-_.:]+\z/)
   end
 
   def build_request(uri)
