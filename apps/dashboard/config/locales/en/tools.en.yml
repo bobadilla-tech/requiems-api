@@ -1066,3 +1066,123 @@ en:
         badge_live: Live
         label_options: Options
         label_correct: Correct
+    vpn_detection:
+      seo:
+        title: Free VPN & Proxy Detection API — IP Threat & Fraud Scoring | Requiems API
+        description: Detect if an IP address belongs to a VPN, proxy, Tor exit node,
+          or hosting provider. Get threat scores and fraud indicators for fraud prevention
+          and risk assessment — free, no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams at
+      hero:
+        title: Know if that IP is hiding something.
+        subtitle: Detect VPNs, proxies, Tor exit nodes, and hosting providers from
+          any IP address — plus a threat score and fraud score, in a single API call.
+        cta_primary: Get API Key
+        cta_docs: Read the docs
+        placeholder: Enter an IP address (e.g. 8.8.8.8)
+        submit: Check IP
+        no_account: No account required for the demo.
+        label_input: IP address
+      what_it_does:
+        coverage_badge: Coverage
+        coverage_heading: VPN, proxy, Tor, and hosting detection in one lookup.
+        coverage_body: VPN & Proxy Detection uses the IP2Proxy database to flag
+          VPN providers, public and web proxies, Tor exit nodes, and data-center
+          or hosting IPs. ASN organization data comes from a separate MaxMind database.
+          Both IPv4 and IPv6 are fully supported.
+        simplicity_badge: Simplicity
+        simplicity_heading: One GET request. No body, no parsing.
+        simplicity_body: Pass the IP address in the URL path. Your API key in the
+          header. The response is flat JSON with boolean flags, a threat score,
+          and a fraud score you can act on directly.
+      use_cases:
+        heading: Built for fraud and risk workflows.
+        subheading: VPN & Proxy Detection fits anywhere IP-based trust matters —
+          signup, auth, bots, and compliance alike.
+        signup_title: Score risk at signup
+        signup_desc: Flag or block registrations coming from VPN, proxy, or Tor
+          IPs — a strong signal for fraud farms and fake account creation.
+        signup_tags: "Fraud prevention, Fintech"
+        auth_title: Add risk signals to authentication
+        auth_desc: Trigger step-up authentication (MFA) when a login attempt comes
+          from a flagged proxy or Tor exit node.
+        auth_tags: "Risk scoring, Authentication"
+        bot_title: Detect bots and crawlers
+        bot_desc: Hosting and data-center IPs correlate strongly with bots and scrapers.
+          Flag or rate-limit traffic from these ranges automatically.
+        bot_tags: "Bot detection, Abuse prevention"
+        compliance_title: Meet compliance and regulatory checks
+        compliance_desc: Regulated services can require confirming that requests
+          aren't coming through anonymizing infrastructure before granting access.
+        compliance_tags: "Compliance, Regulatory"
+        geoblock_title: Prevent geo-blocking circumvention
+        geoblock_desc: Detect users masking their real location with a VPN or proxy
+          to access geo-restricted content or pricing.
+        geoblock_tags: "Content access, Geo-blocking"
+        score_title: Enrich fraud models with a single score
+        score_desc: Combine the fraud score and threat level with other signals
+          — device, card, email — into a composite fraud model per request.
+        score_tags: "Risk scoring, Fraud prevention"
+      api_combinations:
+        heading: Use together with complementary APIs.
+        subheading: VPN & Proxy Detection works even better when paired with other
+          Requiems APIs.
+        bin_pair: VPN Detection + BIN Lookup
+        bin_benefit: Cross-reference IP threat signals with the card's issuing country
+          to catch mismatched, high-risk payment attempts.
+        identity_pair: VPN Detection + Identity Risk
+        identity_benefit: Layer IP-based threat scoring with broader identity risk
+          signals for stronger account-takeover defense.
+        email_pair: VPN Detection + Email Validator
+        email_benefit: Combine anonymized-IP detection with disposable email checks
+          to catch fake account creation at signup.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What is VPN & Proxy Detection?
+        a1: An API that checks whether an IP address belongs to a known VPN provider,
+          public or web proxy, Tor exit node, or hosting/data-center provider. It
+          returns boolean flags for each category plus a threat score and a fraud
+          score.
+        q2: What do the threat scores mean?
+        a2: "The score is calculated as: Tor (+3), VPN (+2), Proxy (+2), Hosting
+          (+1). The threat level is derived from this: 0=None, 1=Low, 2-3=Medium,
+          4-5=High, 6+=Critical."
+        q3: Why is fraud_score 0 for some IPs?
+        a3: The fraud_score is only available when using IP2Proxy database tier
+          PX5 or higher. Lower tiers return 0, indicating the value is unavailable
+          for the current database.
+        q4: Does it support IPv6?
+        a4: Yes, both IPv4 and IPv6 addresses are fully supported.
+        q5: Is it free to use?
+        a5: The demo above works without an account. Paid plans are available for
+          production scale with higher rate limits and full API access.
+      cta:
+        heading: Automate this with Requiems.
+        body: One API key. VPN & Proxy Detection, plus 50+ other APIs across validation,
+          finance, networking, and more.
+      demo:
+        error_empty: Enter an IP address to check.
+        error_invalid: Enter a valid IPv4 or IPv6 address (e.g. 8.8.8.8).
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No data found for that IP.
+        badge_flagged: Flagged
+        badge_clean: Clean
+        badge_yes: "Yes"
+        badge_no: "No"
+        label_is_vpn: VPN
+        label_is_proxy: Proxy
+        label_is_tor: Tor exit node
+        label_is_hosting: Hosting / datacenter
+        label_score: Threat score
+        label_threat: Threat level
+        label_fraud_score: Fraud score
+        label_asn_org: ASN organization
+        threat_none: None
+        threat_low: Low
+        threat_medium: Medium
+        threat_high: High
+        threat_critical: Critical
