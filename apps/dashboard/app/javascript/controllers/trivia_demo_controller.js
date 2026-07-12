@@ -1,13 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = [
-    "category",
-    "difficulty",
-    "button",
-    "errorMessage",
-    "spinner",
-  ];
+  static targets = ["button", "errorMessage", "spinner"];
 
   onSubmitStart() {
     this._clearError();
