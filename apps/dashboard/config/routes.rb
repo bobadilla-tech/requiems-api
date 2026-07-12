@@ -150,7 +150,8 @@ Rails.application.routes.draw do
     get "api_reference", to: "home#api_reference"
     get "changelog", to: "home#changelog"
 
-    get "blog", to: "home#blog"
+    get "blog", to: "blog#index"
+    get "blog/:slug", to: "blog#show", as: :blog_post
     get "status", to: "home#status"
     get "glossary", to: "home#glossary"
     get "error_codes", to: "home#error_codes"

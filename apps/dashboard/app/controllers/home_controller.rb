@@ -27,9 +27,6 @@ class HomeController < ApplicationController
   def pricing
   end
 
-  def blog
-  end
-
   def status
   end
 

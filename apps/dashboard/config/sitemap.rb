@@ -49,6 +49,8 @@ CASE_STUDY_PAGES = [
   { path: "/case-studies/compilestrength", changefreq: "monthly", priority: 0.7 }
 ].freeze
 
+BLOG_POST_PAGES = BlogPost.all.map { |post| { path: "/blog/#{post.slug}", changefreq: "monthly", priority: 0.65 } }.freeze
+
 DIVISION_MARKETING_PAGES = [
   { path: "/divisions", changefreq: "weekly", priority: 0.75 }
 ].concat(
@@ -75,6 +77,18 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     CASE_STUDY_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
+    BLOG_POST_PAGES.each do |page|
       alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
       alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|

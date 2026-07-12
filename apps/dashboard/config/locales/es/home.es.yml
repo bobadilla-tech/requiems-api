@@ -149,22 +149,6 @@ es:
       view_miscellaneous_api_documentation: Ver documentación adicional de la API
       view_pricing_details: Ver detalles de precios
       view_text_api_documentation: Ver documentación de la API de texto
-    blog:
-      cta_apis: Explorar APIs
-      cta_docs: Ver documentación
-      description: Estamos construyendo un centro de recursos para desarrolladores
-        de API. Pronto encontrarás tutoriales, guías y mejores prácticas de API.
-      heading: Blog - Próximamente
-      meanwhile: Mientras tanto, explora nuestra documentación y el directorio de
-        APIs
-      title: Blog - Requiems API
-      what_to_expect:
-        heading: Qué esperar
-        items:
-        - Tutoriales técnicos y guías de integración
-        - Mejores prácticas de desarrollo de API
-        - Actualizaciones de la plataforma y anuncios de nuevas APIs
-        - Casos de éxito de desarrolladores
     changelog:
       badge_coming_soon: Próximamente
       badge_latest: Reciente
