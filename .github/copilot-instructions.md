@@ -4,12 +4,12 @@
 
 Multi-app monorepo with four services:
 
-| App             | Path                           | Language                       |
-| --------------- | ------------------------------ | ------------------------------ |
-| Go API          | `apps/api/`                    | Go 1.26                        |
-| Rails Dashboard | `apps/dashboard/`              | Ruby 3.4.8 / Rails 8           |
-| Auth Gateway    | `apps/workers/auth-gateway/`   | TypeScript (Cloudflare Worker) |
-| API Management  | `apps/workers/api-management/` | TypeScript (Cloudflare Worker) |
+| App                         | Path                           |
+| --------------------------- | ------------------------------ |
+| Go API                      | `apps/api/`                    |
+| Rails Dashboard             | `apps/dashboard/`              |
+| Auth Gateway TS CF Worker   | `apps/workers/auth-gateway/`   |
+| API Management TS CF Worker | `apps/workers/api-management/` |
 
 Shared worker utilities live in `apps/workers/shared/`.
 
@@ -21,7 +21,7 @@ User → Auth Gateway (port 4455) → Go API (port 8080) → PostgreSQL
 Rails Dashboard → API Management (port 5544) → Cloudflare KV/D1
 ```
 
-## Go API — Code Patterns
+## Go API: Code Patterns
 
 Domain-driven design under `services/`. Each feature follows:
 
@@ -107,7 +107,8 @@ pnpm run typecheck
 
 ## Rails Dashboard — i18n (rori18n)
 
-`apps/dashboard` uses [rori18n](https://github.com/bobadilla-tech/rori18n) — a Go CLI that manages i18n YAML files. Install once:
+`apps/dashboard` uses [rori18n](https://github.com/bobadilla-tech/rori18n) — a
+Go CLI that manages i18n YAML files. Install once:
 
 ```bash
 go install github.com/bobadilla-tech/rori18n@latest
@@ -129,8 +130,10 @@ rori18n refactor-key --root apps/dashboard --old shared.old.key --new shared.new
 rori18n audit --root apps/dashboard --all
 ```
 
-Brand names protected from translation live in `apps/dashboard/.translate-dictionary.txt`.
-Do not use `i18n-tasks` write commands — use rori18n instead. `bundle exec i18n-tasks health` is still useful as a passive check.
+Brand names protected from translation live in
+`apps/dashboard/.translate-dictionary.txt`. Do not use `i18n-tasks` write
+commands — use rori18n instead. `bundle exec i18n-tasks health` is still useful
+as a passive check.
 
 ## Before Marking a Task Done
 
