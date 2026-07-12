@@ -1,0 +1,84 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.trivia.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.trivia.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.trivia.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.trivia.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("trivia"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="trivia-demo">
+
+      <form data-action="turbo:submit-start->trivia-demo#onSubmitStart turbo:submit-end->trivia-demo#onSubmitEnd"
+            action="<%= tool_demo_trivia_path %>"
+            method="post"
+            data-turbo-frame="trivia-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+        <div class="flex flex-col sm:flex-row gap-2">
+          <div class="flex-1 text-left">
+            <label for="trivia-demo-category" class="sr-only"><%= t("tools.trivia.hero.label_category") %></label>
+            <select id="trivia-demo-category"
+                    name="category"
+                    data-trivia-demo-target="category"
+                    class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm">
+              <option value=""><%= t("tools.trivia.hero.category_any") %></option>
+              <option value="science"><%= t("tools.trivia.hero.category_science") %></option>
+              <option value="history"><%= t("tools.trivia.hero.category_history") %></option>
+              <option value="geography"><%= t("tools.trivia.hero.category_geography") %></option>
+              <option value="sports"><%= t("tools.trivia.hero.category_sports") %></option>
+              <option value="music"><%= t("tools.trivia.hero.category_music") %></option>
+              <option value="movies"><%= t("tools.trivia.hero.category_movies") %></option>
+              <option value="literature"><%= t("tools.trivia.hero.category_literature") %></option>
+              <option value="math"><%= t("tools.trivia.hero.category_math") %></option>
+              <option value="technology"><%= t("tools.trivia.hero.category_technology") %></option>
+              <option value="nature"><%= t("tools.trivia.hero.category_nature") %></option>
+            </select>
+          </div>
+
+          <div class="flex-1 text-left">
+            <label for="trivia-demo-difficulty" class="sr-only"><%= t("tools.trivia.hero.label_difficulty") %></label>
+            <select id="trivia-demo-difficulty"
+                    name="difficulty"
+                    data-trivia-demo-target="difficulty"
+                    class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm">
+              <option value=""><%= t("tools.trivia.hero.difficulty_any") %></option>
+              <option value="easy"><%= t("tools.trivia.hero.difficulty_easy") %></option>
+              <option value="medium"><%= t("tools.trivia.hero.difficulty_medium") %></option>
+              <option value="hard"><%= t("tools.trivia.hero.difficulty_hard") %></option>
+            </select>
+          </div>
+
+          <%= render "partials/shared/submit_button", text: t("tools.trivia.hero.submit"), controller: "trivia-demo" %>
+        </div>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.trivia.hero.no_account") %></p>
+
+        <p data-trivia-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="trivia-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

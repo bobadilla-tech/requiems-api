@@ -259,6 +259,26 @@ class ToolDemosController < ApplicationController
     render "tool_demos/profanity_filter", locals: { data: data, text: text }
   end
 
+  def trivia
+    category = params[:category].to_s.strip
+    difficulty = params[:difficulty].to_s.strip
+
+    query = {}
+    query[:category] = category if category.present?
+    query[:difficulty] = difficulty if difficulty.present?
+
+    result = api_call(endpoint: "/v1/entertainment/trivia", method: "GET", params: query)
+
+    return render_demo_error("trivia", t("tools.trivia.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("trivia", t("tools.trivia.demo.error_no_data")) if result.status_code == 404
+    return render_demo_error("trivia", t("tools.trivia.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("trivia", t("tools.trivia.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/trivia", locals: { data: data }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)
