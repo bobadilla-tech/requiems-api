@@ -522,4 +522,64 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.profanity_filter.demo.error_no_data"), response.body
   end
+
+  # ── trivia ───────────────────────────────────────────────────────────────────
+
+  test "trivia renders result on success with filters" do
+    payload = {
+      "question" => "What is the largest planet in our solar system?",
+      "options" => [ "Earth", "Jupiter", "Saturn", "Mars" ],
+      "answer" => "Jupiter", "category" => "science", "difficulty" => "easy"
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/trivia", params: { category: "science", difficulty: "easy" }
+    end
+    assert_response :success
+    assert_match "Jupiter", response.body
+    assert_match "largest planet", response.body
+  end
+
+  test "trivia renders result on success with no filters" do
+    payload = {
+      "question" => "What is H2O?", "options" => [ "Water", "Salt", "Sugar", "Oil" ],
+      "answer" => "Water", "category" => "science", "difficulty" => "medium"
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/trivia", params: {}
+    end
+    assert_response :success
+    assert_match "Water", response.body
+  end
+
+  test "trivia renders error on 404 no matching questions" do
+    stub_api(404, nil) do
+      post "/tools/demos/trivia", params: { category: "science", difficulty: "hard" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.trivia.demo.error_no_data"), response.body
+  end
+
+  test "trivia renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/trivia", params: {}
+    end
+    assert_response :success
+    assert_match I18n.t("tools.trivia.demo.error_rate_limit"), response.body
+  end
+
+  test "trivia renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/trivia", params: {}
+    end
+    assert_response :success
+    assert_match I18n.t("tools.trivia.demo.error_generic"), response.body
+  end
+
+  test "trivia renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/trivia", params: {}
+    end
+    assert_response :success
+    assert_match I18n.t("tools.trivia.demo.error_no_data"), response.body
+  end
 end
