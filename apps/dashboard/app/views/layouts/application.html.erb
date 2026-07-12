@@ -25,6 +25,16 @@
       })();
     </script>
 
+    <script>
+      (function() {
+        var mutedUntil = localStorage.getItem('ai-skills-banner-dismissed-until');
+        if (mutedUntil && Date.now() < Number(mutedUntil)) {
+          document.documentElement.classList.add('hide-ai-skills-banner');
+        }
+      })();
+    </script>
+    <style>.hide-ai-skills-banner #ai-skills-banner { display: none; }</style>
+
     <title><%= page_title %></title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
