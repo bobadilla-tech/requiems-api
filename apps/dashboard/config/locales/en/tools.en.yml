@@ -1239,6 +1239,132 @@ en:
         heading: "Automate this with Requiems."
         body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
 
+    spell_check:
+      seo:
+        title: Free Spell Check API — Check Spelling & Get Corrections | Requiems API
+        description:
+          Check spelling and get correction suggestions for misspelled words.
+          Powered by LanguageTool. Try the free live demo — no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building writing tools
+      hero:
+        title: Check Spelling Instantly
+        subtitle:
+          Submit any English text and get a corrected version with per-word
+          suggestions — powered by LanguageTool. No API key needed for the demo.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_input: Text to check
+        placeholder: e.g. Ths is a smiple tset with erors
+        submit: Check Spelling
+        no_account: No account required for the demo
+      what_it_does:
+        accuracy_badge: Correction Engine
+        accuracy_heading: Catches Every Mistake
+        accuracy_body:
+          Scans input text using LanguageTool and returns every misspelled word
+          with its position, the best correction, and up to 3 ranked alternatives.
+        simplicity_badge: Simplicity
+        simplicity_heading: A Single POST Request
+        simplicity_body:
+          Send text, get back the corrected version plus a list of individual
+          corrections. No multi-step workflows, no client-side dictionaries.
+      use_cases:
+        heading: Built for Quality Writing Workflows
+        subheading:
+          From content creation to form validation — if text passes through
+          your product, this API keeps it error-free.
+        writing_title: Power writing assistants
+        writing_desc:
+          Integrate spell checking into text editors, note apps, and publishing
+          platforms. Highlight errors and offer one-click fixes inline.
+        writing_tags: "Editors, Writing Tools, Publishing"
+        ugc_title: Clean up user-generated content
+        ugc_desc:
+          Automatically correct spelling in comments, reviews, and articles
+          before they go live. Improve content quality without manual review.
+        ugc_tags: "UGC, Comments, Reviews"
+        forms_title: Sanitize form inputs
+        forms_desc:
+          Check spelling in submitted text fields — message bodies, descriptions,
+          bio text — and provide real-time correction suggestions.
+        forms_tags: "Forms, Input, Validation"
+        education_title: Support learning platforms
+        education_desc:
+          Help students catch spelling mistakes in assignments and essays.
+          Return suggestions alongside grades for actionable feedback.
+        education_tags: "Education, LMS, Grading"
+        support_title: Improve support tickets
+        support_desc:
+          Clean up typos in incoming support messages before routing to agents.
+          Improve readability and reduce back-and-forth for clarification.
+        support_tags: "Support, CX, Ticketing"
+        ai_title: Polish AI-generated text
+        ai_desc:
+          Run model outputs through spell check before displaying to users.
+          Remove typos and improve fluency of generated content automatically.
+        ai_tags: "AI, LLM, Output Quality"
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading:
+          Spell check is more effective as part of a text-processing pipeline.
+          Combine it with other Requiems APIs for deeper content analysis.
+        sentiment_pair: Spell Check + Sentiment Analysis
+        sentiment_benefit:
+          Clean up spelling errors first, then run sentiment analysis on the
+          corrected text for more accurate tone classification.
+        language_pair: Spell Check + Language Detection
+        language_benefit:
+          Detect the input language before spell-checking. Route text to the
+          right language model automatically.
+        email_pair: Spell Check + Email Normalizer
+        email_benefit:
+          Normalize email addresses and check spelling in the associated
+          display name or message body in one pipeline.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What does the API return?
+        a1:
+          Each response includes corrected (the full text with misspelled words
+          replaced by the best suggestion) and corrections (an array of objects
+          with the original word, suggested replacement, alternative suggestions,
+          and character position).
+        q2: Does it work with languages other than English?
+        a2: The API is optimized for English using LanguageTool. It can process
+          Unicode input including accented and non-Latin characters, but accuracy
+          is highest for English text.
+        q3: What is the batch endpoint?
+        a3: POST /v1/text/spellcheck/batch accepts up to 50 texts in a single
+          request. Each text is checked independently and results are returned
+          as an array in the same order.
+        q4: How accurate is the spell checking?
+        a4: The API uses LanguageTool, an open-source grammar and spell checker
+          that catches mistakes most simple spell checkers miss — including
+          context-sensitive errors, homophones, and compound word issues.
+        q5: Is it free to try?
+        a5: Yes. The live demo on this page is completely free with no account
+          required. For production use, sign up for a free API key with 500
+          requests per month included.
+      cta:
+        heading: Polish your text with Requiems.
+        body: One API key. Spell check, email validation, sentiment analysis,
+          and 50+ other APIs for building smarter products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_empty: Please enter some text to check.
+        error_generic: Something went wrong. Try again.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_no_data: No data returned.
+        result_heading: Result
+        label_corrected: Corrected text
+        label_errors_found: Errors found
+        label_corrections: Corrections
+        label_alternatives: Alternatives
+        badge_clean: No issues found
+        badge_corrected: Corrected
     trivia:
       seo:
         title: Free Trivia API — Random Quiz Questions with Answers | Requiems API

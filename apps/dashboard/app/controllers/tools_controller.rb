@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -78,6 +78,11 @@ class ToolsController < ApplicationController
       name: "Thesaurus",
       description: "Find synonyms and antonyms for any word to enhance vocabulary and writing.",
       icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+    },
+    "spell-check" => {
+      name: "Spell Check",
+      description: "Check spelling and get correction suggestions for misspelled words in any text.",
+      icon_classes: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"
     }
   }.freeze
 

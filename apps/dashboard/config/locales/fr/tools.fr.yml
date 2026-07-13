@@ -938,6 +938,147 @@ fr:
         heading: "Automatisez cela avec Requiems."
         body: "Une seule clé API. Timezone, plus de 50 autres API entre localisation, validation, finance et plus encore."
 
+    spell_check:
+      seo:
+        title: "API gratuite de correction orthographique — Vérifiez l'orthographe et obtenez des corrections | Requiems API"
+        description:
+          "Vérifiez l'orthographe et obtenez des suggestions de correction pour
+          les mots mal orthographiés. Propulsé par LanguageTool. Essayez la démo
+          gratuite en direct — aucun compte requis."
+      logo_marquee:
+        trusted_by: "Utilisé en toute confiance par des équipes qui créent des outils d'écriture"
+      hero:
+        title: "Vérifiez l'orthographe instantanément"
+        subtitle:
+          "Soumettez n'importe quel texte en anglais et obtenez une version
+          corrigée avec des suggestions mot par mot — propulsé par LanguageTool.
+          Aucune clé API nécessaire pour la démo."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Voir la documentation"
+        label_input: "Texte à vérifier"
+        placeholder: "ex : Ths is a smiple tset with erors"
+        submit: "Vérifier l'orthographe"
+        no_account: "Aucun compte requis pour la démo"
+      what_it_does:
+        accuracy_badge: "Moteur de correction"
+        accuracy_heading: "Détecte chaque erreur"
+        accuracy_body:
+          "Analyse le texte saisi à l'aide de LanguageTool et renvoie chaque
+          mot mal orthographié avec sa position, la meilleure correction et
+          jusqu'à 3 alternatives classées."
+        simplicity_badge: "Simplicité"
+        simplicity_heading: "Une seule requête POST"
+        simplicity_body:
+          "Envoyez du texte, recevez la version corrigée ainsi qu'une liste de
+          corrections individuelles. Aucun flux de travail en plusieurs étapes,
+          aucun dictionnaire côté client."
+      use_cases:
+        heading: "Conçu pour des flux d'écriture de qualité"
+        subheading:
+          "De la création de contenu à la validation de formulaires — si du
+          texte passe par votre produit, cette API le garde sans erreur."
+        writing_title: "Alimentez les assistants d'écriture"
+        writing_desc:
+          "Intégrez la correction orthographique dans les éditeurs de texte,
+          les apps de notes et les plateformes de publication. Mettez en
+          évidence les erreurs et offrez des corrections en un clic."
+        writing_tags: "Éditeurs, Outils d'écriture, Publication"
+        ugc_title: "Nettoyez le contenu généré par les utilisateurs"
+        ugc_desc:
+          "Corrigez automatiquement l'orthographe des commentaires, avis et
+          articles avant leur publication. Améliorez la qualité du contenu sans
+          révision manuelle."
+        ugc_tags: "UGC, Commentaires, Avis"
+        forms_title: "Assainissez les saisies de formulaires"
+        forms_desc:
+          "Vérifiez l'orthographe dans les champs de texte soumis — messages,
+          descriptions, biographies — et fournissez des suggestions de
+          correction en temps réel."
+        forms_tags: "Formulaires, Saisie, Validation"
+        education_title: "Soutenez les plateformes d'apprentissage"
+        education_desc:
+          "Aidez les étudiants à détecter les erreurs d'orthographe dans les
+          devoirs et les dissertations. Renvoyez des suggestions avec les notes
+          pour un retour d'information exploitable."
+        education_tags: "Éducation, LMS, Notation"
+        support_title: "Améliorez les tickets d'assistance"
+        support_desc:
+          "Nettoyez les fautes de frappe dans les messages d'assistance
+          entrants avant de les acheminer aux agents. Améliorez la lisibilité
+          et réduisez les échanges pour clarification."
+        support_tags: "Support, CX, Tickets"
+        ai_title: "Peaufinez le texte généré par l'IA"
+        ai_desc:
+          "Exécutez les sorties du modèle via le correcteur orthographique
+          avant de les afficher aux utilisateurs. Supprimez les fautes de
+          frappe et améliorez la fluidité du contenu généré automatiquement."
+        ai_tags: "IA, LLM, Qualité de sortie"
+      api_combinations:
+        heading: "Associez-la à d'autres API"
+        subheading:
+          "La correction orthographique est plus efficace dans un pipeline de
+          traitement de texte. Combinez-la avec d'autres API Requiems pour une
+          analyse de contenu plus approfondie."
+        sentiment_pair: "Correction orthographique + Analyse de sentiment"
+        sentiment_benefit:
+          "Corrigez d'abord les erreurs d'orthographe, puis analysez le
+          sentiment du texte corrigé pour une classification plus précise du
+          ton."
+        language_pair: "Correction orthographique + Détection de langue"
+        language_benefit:
+          "Détectez la langue d'entrée avant la correction orthographique.
+          Acheminez automatiquement le texte vers le modèle de langue approprié."
+        email_pair: "Correction orthographique + Normalisateur d'e-mail"
+        email_benefit:
+          "Normalisez les adresses e-mail et vérifiez l'orthographe du nom
+          associé ou du corps du message en un seul pipeline."
+      faq:
+        heading: "Foire aux questions"
+        support_prompt: "Vous avez encore des questions ?"
+        support_link: "Contacter le support"
+        q1: "Que renvoie l'API ?"
+        a1: "Chaque réponse inclut corrected (le texte complet avec les mots
+          mal orthographiés remplacés par la meilleure suggestion) et
+          corrections (un tableau d'objets avec le mot d'origine, le
+          remplacement suggéré, les alternatives et la position du caractère)."
+        q2: "Fonctionne-t-elle avec d'autres langues que l'anglais ?"
+        a2: "L'API est optimisée pour l'anglais via LanguageTool. Elle peut
+          traiter les caractères Unicode, y compris les caractères accentués et
+          non latins, mais la précision est la plus élevée pour le texte en
+          anglais."
+        q3: "Qu'est-ce que l'endpoint par lots ?"
+        a3: "POST /v1/text/spellcheck/batch accepte jusqu'à 50 textes en une
+          seule requête. Chaque texte est vérifié indépendamment et les
+          résultats sont renvoyés sous forme de tableau dans le même ordre."
+        q4: "Quelle est la précision de la correction orthographique ?"
+        a4: "L'API utilise LanguageTool, un correcteur grammatical et
+          orthographique open source qui détecte les erreurs que les
+          correcteurs simples manquent — y compris les erreurs contextuelles,
+          les homophones et les problèmes de mots composés."
+        q5: "Est-ce gratuit à essayer ?"
+        a5: "Oui. La démo en direct sur cette page est entièrement gratuite et
+          ne nécessite aucun compte. Pour une utilisation en production,
+          inscrivez-vous pour une clé API gratuite avec 500 requêtes par mois
+          incluses."
+      cta:
+        heading: "Peaufinez votre texte avec Requiems."
+        body: "Une clé API. Correction orthographique, validation d'e-mail,
+          analyse de sentiment et plus de 50 API pour créer des produits plus
+          intelligents."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Lire la documentation →"
+      demo:
+        error_empty: "Veuillez saisir du texte à vérifier."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
+        error_no_data: "Aucune donnée renvoyée."
+        result_heading: "Résultat"
+        label_corrected: "Texte corrigé"
+        label_errors_found: "Erreurs trouvées"
+        label_corrections: "Corrections"
+        label_alternatives: "Alternatives"
+        badge_clean: "Aucune erreur"
+        badge_corrected: "Corrigé"
     trivia:
       seo:
         title: "API Trivia gratuite — Questions de quiz aléatoires avec réponses | Requiems API"
