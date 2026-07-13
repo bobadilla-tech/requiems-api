@@ -279,6 +279,25 @@ class ToolDemosController < ApplicationController
     render "tool_demos/trivia", locals: { data: data }
   end
 
+  def sudoku
+    difficulty = params[:difficulty].to_s.strip
+    difficulty = "medium" if difficulty.blank?
+
+    unless %w[easy medium hard].include?(difficulty)
+      return render_demo_error("sudoku", t("tools.sudoku.demo.error_empty"))
+    end
+
+    result = api_call(endpoint: "/v1/entertainment/sudoku", method: "GET", params: { difficulty: difficulty })
+
+    return render_demo_error("sudoku", t("tools.sudoku.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("sudoku", t("tools.sudoku.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("sudoku", t("tools.sudoku.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/sudoku", locals: { data: data }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)
