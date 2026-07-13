@@ -19,6 +19,7 @@ class HomeController < ApplicationController
   end
 
   def docs
+    redirect_to apis_path, status: :moved_permanently
   end
 
   def ai
