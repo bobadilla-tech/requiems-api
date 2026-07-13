@@ -1,5 +1,5 @@
 <% content_for :title, t('tools.sentiment_analysis.show.free_sentiment_analysis_tool_positive') %>
-<% content_for :description, "Analyze the sentiment of any text instantly. Get a positive, negative, or neutral classification with a confidence score and full breakdown — free, no account required." %>
+<% content_for :description, t('tools.sentiment_analysis.seo.description') %>
 
 <%= render "partials/tools/sentiment_analysis/hero" %>
 <%= render "partials/shared/logo_marquee",
@@ -10,7 +10,7 @@
         { file: "companies/korealexa.png",         alt: "Korealexa"        },
         { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
       ],
-      label: "Trusted by teams at",
+      label: t('tools.sentiment_analysis.logo_marquee.trusted_by'),
       speed: "34s" %>
 <%= render "partials/tools/sentiment_analysis/what_it_does" %>
 <%= render "partials/tools/sentiment_analysis/use_cases" %>
