@@ -264,10 +264,10 @@ class ToolDemosController < ApplicationController
     lat  = params[:lat].to_s.strip
     lon  = params[:lon].to_s.strip
 
-    has_city        = city.present?
-    has_coord_input = lat.present? || lon.present?
+    has_city   = city.present?
+    has_coords = lat.present? && lon.present?
 
-    unless has_city || has_coord_input
+    unless has_city || has_coords
       return render_demo_error("timezone", t("tools.timezone.demo.error_empty"))
     end
 
