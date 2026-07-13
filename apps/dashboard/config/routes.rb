@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   post "tools/demos/trivia",            to: "tool_demos#trivia",            as: :tool_demo_trivia
   post "tools/demos/vpn-detection",     to: "tool_demos#vpn_detection",     as: :tool_demo_vpn_detection
   post "tools/demos/thesaurus",         to: "tool_demos#thesaurus",         as: :tool_demo_thesaurus
+  post "tools/demos/random-user",      to: "tool_demos#random_user",      as: :tool_demo_random_user
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

@@ -854,4 +854,52 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.spell_check.demo.error_no_data"), response.body
   end
+
+  # ── random_user ────────────────────────────────────────────────────────────────
+
+  test "random_user renders result on success" do
+    payload = {
+      "name" => "Alice Johnson", "email" => "alice@example.org",
+      "phone" => "+1234567890",
+      "address" => {
+        "street" => "123 Main St",
+        "city" => "Springfield",
+        "state" => "IL",
+        "zip" => "62701",
+        "country" => "US"
+      },
+      "avatar" => "https://api.dicebear.com/7.x/identicon/svg/seed=Alice"
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/random-user"
+    end
+    assert_response :success
+    assert_match "Alice Johnson", response.body
+    assert_match "alice@example.org", response.body
+    assert_match "123 Main St", response.body
+  end
+
+  test "random_user renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/random-user"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.random_user.demo.error_rate_limit"), response.body
+  end
+
+  test "random_user renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/random-user"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.random_user.demo.error_generic"), response.body
+  end
+
+  test "random_user renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/random-user"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.random_user.demo.error_no_data"), response.body
+  end
 end

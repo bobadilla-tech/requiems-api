@@ -1685,3 +1685,93 @@ en:
       cta:
         heading: "Give your content the right words."
         body: "One API key. Thesaurus, spell check, sentiment analysis, and 50+ other APIs for building smarter writing tools."
+    random_user:
+      seo:
+        title: Random User Generator — Generate Fake Profiles for Testing | Requiems API
+        description: Generate random fake user profiles for testing and prototyping. Names, emails, phone numbers, addresses, and avatars — one API call. Try the free live demo, no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building products
+      hero:
+        title: Generate Random User Profiles
+        title_highlight: One API Call
+        subtitle: Instantly generate realistic fake user profiles for testing, prototyping, and demos — names, emails, phone numbers, addresses, and avatars with a single request.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        submit: Generate Random User
+        no_account: No account required for the demo
+      what_it_does:
+        heading: Realistic Fake User Data, Instantly
+        subheading: Each call returns a complete profile with name, email, phone, postal address, and avatar — ready to use in any environment.
+        accuracy_heading: Complete User Profile
+        accuracy_body: Every response includes a unique name, email address, phone number, full mailing address with street and city, and an avatar URL powered by DiceBear. No garbage data, no placeholder text — realistic profiles you can drop straight into a database or UI mockup.
+        simplicity_heading: A Single GET Request
+        simplicity_body: A single GET request with your API key is all it takes. No body payload, no SDK, no configuration — just an HTTP call and a JSON response. Use it anywhere you need test data — local dev, staging environments, or demo applications.
+      use_cases:
+        heading: Built for Testing, Prototyping, and Demos
+        subheading: Anywhere you need realistic fake user data, Random User can provide it instantly.
+        testing_context: Development
+        testing_title: Populate test databases
+        testing_body: Generate unique user records for unit tests, integration tests, and staging environments without writing seed scripts.
+        mockups_context: Mockups
+        mockups_title: UI mockups and design previews
+        mockups_body: Drop realistic names, avatars, and addresses into wireframes and prototypes — no need to fabricate placeholder data.
+        load_context: Load Testing
+        load_title: Load testing with varied payloads
+        load_body: Generate hundreds of unique user profiles to simulate real-world traffic patterns and data diversity in performance tests.
+        demos_context: Demos
+        demos_title: Live demo applications
+        demos_body: Power demo environments and sandbox experiences with fresh user data on every page load — no dummy accounts needed.
+        qa_context: QA Automation
+        qa_title: QA automation fixtures
+        qa_body: Provide deterministic seed data for end-to-end test suites with unique profiles across every test run.
+        design_context: Design
+        design_title: Design system examples
+        design_body: Fill user profile cards, contact lists, and address forms in your design system documentation with consistent fake data.
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Random User is more powerful combined. Stack it with other Requiems APIs to build richer workflows.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        email_normalizer_name: Random User + Email Normalizer
+        email_normalizer_benefit: Generate a fake user profile and normalize the email address — lowercase, trim, and canonicalize it in the same workflow.
+        email_normalizer_outcome: A cleaner data pipeline — randomly generated profiles that are immediately ready for storage or display.
+        domain_checker_name: Random User + Domain Checker
+        domain_checker_benefit: Generate a fake user and verify the domain of their email address in a single session.
+        domain_checker_outcome: More realistic test data — confirm generated domains are real or adjust fake profiles based on DNS feedback.
+        qr_code_name: Random User + QR Code Generator
+        qr_code_benefit: Generate a fake user profile and create a QR code from it — for print, demos, or sharing.
+        qr_code_outcome: Rapid prototyping of user flows — from profile generation to scannable output in two API calls.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What fields does the API return?
+        a1: Each response includes a name, email address, phone number, a full mailing address with street, city, state, zip, and country, plus an avatar URL generated by DiceBear Identicon.
+        q2: Is the data truly random every time?
+        a2: Yes. Each call generates a unique profile using the faker library. No two calls return the same data, and profiles are not cached or stored.
+        q3: Are the email addresses real?
+        a3: No. Generated email addresses use example domains (example.org) and are not valid for sending mail. They are designed for testing and prototyping only.
+        q4: Can I generate multiple users at once?
+        a4: Yes. Use the POST /v1/technology/random-user/batch endpoint to generate up to 50 users in a single request. See the API docs for the request format.
+        q5: How are avatars generated?
+        a5: Each profile includes a DiceBear Identicon URL — a unique geometric SVG generated from the person's name. The avatars are deterministic, so the same name always produces the same avatar.
+      cta:
+        heading: Generate test data with Requiems.
+        body: One API key. Random user profiles, email normalization, domain checking, QR generation, and 50+ other APIs for building and testing better products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_network: Network error. Please check your connection.
+        error_no_data: No data returned.
+        badge_live: Live
+        avatar_alt: User avatar
+        label_name: Name
+        label_email: Email
+        label_phone: Phone
+        label_street: Street
+        label_city: City
+        label_state: State
+        label_zip: Zip
+        label_country: Country

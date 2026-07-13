@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -83,6 +83,11 @@ class ToolsController < ApplicationController
       name: "Spell Check",
       description: "Check spelling and get correction suggestions for misspelled words in any text.",
       icon_classes: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"
+    },
+    "random-user" => {
+      name: "Random User",
+      description: "Generate random fake user profiles for testing and prototyping — names, emails, phone numbers, addresses, and avatars.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
     }
   }.freeze
 
