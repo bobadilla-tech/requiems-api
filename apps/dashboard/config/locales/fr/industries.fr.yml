@@ -3,7 +3,24 @@ fr:
   industries:
     agencies:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Nettoyez les listes d'emails et les bases de données téléphoniques
+            de vos clients avant chaque campagne pour protéger la réputation de l'expéditeur
+            et réduire les coûts.
+          division: validation
+        - title: Réseau
+          description: Recherche de domaine et WHOIS pour la veille concurrentielle,
+            la surveillance de marque et les audits clients.
+          division: networking
+        - title: Localisation
+          description: Données de fuseau horaire et de géolocalisation pour planifier
+            des campagnes, localiser des landing pages et produire des rapports.
+          division: places
+        - title: Texte et langue
+          description: Détection de langue et outils de texte pour les projets multilingues
+            et la modération de contenu.
+          division: text
         heading: Des API conçues pour les flux de travail des agences
       final_cta:
         cta: Réservez un appel stratégique
@@ -21,10 +38,45 @@ fr:
       meta_title: API pour agences numériques | Requiems API
       proof_points:
         heading: Quelles équipes d'agences expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Meilleur ROI des campagnes email
+          description: 'Nettoyez les listes clients avant chaque envoi : le taux de
+            rebond baisse, la délivrabilité grimpe, le CPL chute.'
+          metric: "–50% de rebonds"
+        - title: Audits clients plus rapides
+          description: Automatisez les recherches WHOIS et de domaine pour les rapports
+            de protection de marque, sans recherche manuelle.
+          metric: 10× plus rapide
+        - title: Campagnes localisées à grande échelle
+          description: Détectez le fuseau horaire et le pays de l'utilisateur pour
+            planifier et localiser les campagnes sans segmentation manuelle.
+          metric: Instantané
+        - title: Une seule clé pour tous les projets clients
+          description: APIs de validation, réseau et texte sous un seul compte. Facturation
+            à l'appel, pas par client.
+          metric: 1 clé API
     ecommerce:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Finance
+          description: Recherche de BIN et validation des cartes de paiement pour
+            détecter les cartes invalides avant qu'elles n'atteignent la passerelle
+            de paiement.
+          division: finance
+        - title: Validation
+          description: Validez les emails et téléphones des clients au moment du paiement
+            pour réduire les confirmations de commande échouées et les échecs d'envoi
+            d'OTP.
+          division: validation
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy et géolocalisez les acheteurs pour le
+            scoring de fraude, la tarification géographique et la détection de zone
+            de livraison.
+          division: networking
+        - title: Localisation
+          description: Géocodage et données d'adresse pour les estimations de livraison,
+            le calcul des taxes et l'attribution des zones de livraison.
+          division: places
         heading: API conçues pour les flux de travail du commerce électronique
       final_cta:
         cta: Réservez un appel stratégique
@@ -42,10 +94,42 @@ fr:
       meta_title: API pour les entreprises de commerce électronique | Requiems API
       proof_points:
         heading: Ce que les équipes e-commerce livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Taux de succès des paiements plus élevé
+          description: 'Validez le BIN de la carte côté client avant l''envoi au processeur
+            : le taux de succès au premier essai s''améliore.'
+          metric: "+15% de succès"
+        - title: Moins de confirmations perdues
+          description: Validez l'email et le téléphone au paiement pour que les confirmations
+            de commande et les liens de suivi arrivent toujours.
+          metric: "–35% d'échecs"
+        - title: Scoring de fraude en temps réel
+          description: Signalez les IP VPN et datacenter sur les commandes à forte
+            valeur pour une vérification renforcée avant l'expédition.
+          metric: Temps réel
+        - title: Livraison et taxes auto-localisées
+          description: Déterminez le pays et la région à partir de l'IP pour afficher
+            les frais de livraison et taxes exacts sans demander la position.
+          metric: 180+ pays
     edtech:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Validez les emails et téléphones des étudiants et instructeurs
+            à l'inscription pour garantir l'accès aux cours et la réception des notifications.
+          division: validation
+        - title: Localisation
+          description: Données de fuseau horaire pour planifier les cours en direct,
+            coordonner les cohortes et afficher les échéances entre fuseaux.
+          division: places
+        - title: Texte et langue
+          description: Détection de langue pour le routage de contenu adaptatif et
+            le filtrage de propos injurieux dans les forums étudiants.
+          division: text
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy pour appliquer les règles de surveillance
+            et bloquer le contenu selon les licences régionales.
+          division: networking
         heading: API conçues pour les flux de travail EdTech
       final_cta:
         cta: Réservez un appel stratégique
@@ -64,10 +148,43 @@ fr:
       meta_title: API pour les plateformes EdTech | Requiems API
       proof_points:
         heading: Ce que les équipes EdTech livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins d'apprenants perdus
+          description: Validez les emails à l'inscription pour que les emails de bienvenue,
+            invitations aux cours et certificats arrivent à la bonne boîte.
+          metric: "–45% de rebonds"
+        - title: Planification correcte selon le fuseau horaire
+          description: Affichez les horaires de cours en direct dans le fuseau horaire
+            local de chaque étudiant automatiquement, sans séance manquée.
+          metric: Instantané
+        - title: Communautés étudiantes plus sûres
+          description: Filtrez les propos injurieux dans les publications et commentaires
+            côté serveur avant leur mise en ligne.
+          metric: Temps réel
+        - title: Lancez en un sprint
+          description: Endpoints REST avec exemples prêts à l'emploi. La plupart des
+            équipes EdTech sont en ligne en moins d'une semaine.
+          metric: "< 1 semaine"
     energy:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Géocodage, normalisation d'adresses et données de fuseau horaire
+            pour la cartographie des actifs, le dispatching des compteurs et le routage
+            des coupures.
+          division: places
+        - title: Validation
+          description: Validez les contacts clients et installateurs à la création
+            de compte pour fiabiliser la facturation et les communications de service.
+          division: validation
+        - title: Finance
+          description: Données de devise et validation des paiements pour les contrats
+            énergétiques transfrontaliers et la facturation client.
+          division: finance
+        - title: Intelligence IP
+          description: Géolocalisation pour le contrôle d'accès aux portails d'actifs
+            à distance et la détection de juridiction réglementaire.
+          division: networking
         heading: Des API conçues pour les flux de travail énergétiques
       final_cta:
         cta: Réservez un appel stratégique
@@ -85,10 +202,43 @@ fr:
       meta_title: API pour les entreprises énergétiques | Requiems API
       proof_points:
         heading: Quelles équipes énergétiques transportent les Requiems
-        items: "[tableau]"
+        items:
+        - title: Coordonnées d'actifs précises
+          description: Géocodez les adresses de compteurs et turbines à l'ingestion
+            pour le routage de dispatch, l'isolation des coupures et la cartographie
+            SIG.
+          metric: 99%+ de précision
+        - title: Moins d'échecs de facturation
+          description: Validez les emails clients à l'inscription pour que factures,
+            alertes de coupure et avis de renouvellement soient livrés.
+          metric: "–40% d'échecs"
+        - title: Planification correcte selon le fuseau horaire
+          description: Affichez les bonnes fenêtres locales de dispatch et de maintenance
+            pour les équipes d'infrastructure multi-régions.
+          metric: Couverture mondiale
+        - title: Une seule clé API
+          description: APIs de géolocalisation, validation et finance derrière une
+            seule clé, sans complexité multi-fournisseur.
+          metric: 1 intégration
     fintech:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Finance
+          description: Recherche BIN/IIN, validation IBAN, vérification de code SWIFT
+            et données de devise pour les flux de paiement mondiaux.
+          division: finance
+        - title: Intelligence IP
+          description: Détection VPN/proxy, géolocalisation IP et recherche ASN pour
+            le scoring de risque transactionnel et la conformité géographique.
+          division: networking
+        - title: Validation
+          description: Vérification d'email et de téléphone pour l'onboarding KYC,
+            l'envoi de 2FA et les flux de récupération de compte.
+          division: validation
+        - title: Localisation
+          description: Données de fuseau horaire et d'adresse pour la normalisation
+            des horodatages de transaction et la détection de juridiction.
+          division: places
         heading: API conçues pour les flux de travail fintech
       final_cta:
         cta: Réservez un appel stratégique
@@ -105,10 +255,42 @@ fr:
       meta_title: API pour les entreprises Fintech | Requiems API
       proof_points:
         heading: Ce que les équipes fintech déploient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Scoring de fraude en temps réel
+          description: Notez les transactions en combinant la détection VPN, la géolocalisation
+            IP et les signaux d'incohérence de pays du BIN.
+          metric: "< 50ms"
+        - title: Onboarding KYC plus rapide
+          description: Validez l'email et le téléphone à l'inscription avant les contrôles
+            d'identité, avec moins de re-vérifications.
+          metric: "–40% de reprises"
+        - title: Données de paiement plus propres
+          description: 'Validez les cartes par BIN et vérifiez les IBAN avant l''envoi
+            aux processeurs : les refus et litiges diminuent.'
+          metric: "+12% de succès"
+        - title: Détection de juridiction
+          description: Détectez le pays de l'utilisateur à partir de l'IP pour le
+            routage réglementaire, le choix de devise et la conformité RGPD/DSP2.
+          metric: 180+ pays
     gaming:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Intelligence IP
+          description: Géolocalisez les joueurs pour les règles de contenu régional,
+            les pools de matchmaking et la détection VPN/proxy.
+          division: networking
+        - title: Texte et langue
+          description: Filtrage de propos injurieux et détection de langue pour le
+            chat en jeu, les pseudos et les forums communautaires.
+          division: text
+        - title: Validation
+          description: Validez les emails et téléphones des joueurs à l'inscription
+            pour garantir la récupération de compte et la livraison des notifications.
+          division: validation
+        - title: Finance
+          description: Recherche de BIN et validation des paiements pour les achats
+            en jeu et la facturation d'abonnement.
+          division: finance
         heading: API conçues pour les flux de travail de jeu
       final_cta:
         cta: Réservez un appel stratégique
@@ -125,10 +307,43 @@ fr:
       meta_title: API pour studios de jeux | Requiems API
       proof_points:
         heading: Quels studios de jeux livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Appliquez les règles de contenu régional
+          description: Bloquez ou redirigez les joueurs par pays via la géolocalisation
+            IP en temps réel, sans bases GeoIP obsolètes.
+          metric: Temps réel
+        - title: Chat multijoueur plus sûr
+          description: Filtrez le chat côté serveur à l'envoi. Les termes à haut risque
+            tombent ; les récidivistes reçoivent un délai.
+          metric: Millions/min
+        - title: Réduisez l'abus des offres gratuites
+          description: Signalez les IP VPN et datacenter créant des comptes d'essai
+            jetables pour protéger les métriques de conversion.
+          metric: "–60% d'abus"
+        - title: Des comptes qui atteignent vraiment les joueurs
+          description: Validez l'email à l'inscription pour que les emails de réinitialisation
+            et d'appel de bannissement n'échouent jamais.
+          metric: 99%+ de livraison
     government:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Validation d'adresse, géocodage et données régionales pour
+            les systèmes de permis, la cartographie des circonscriptions et l'attribution
+            des prestations.
+          division: places
+        - title: Validation
+          description: Vérifiez les emails et téléphones des citoyens à la soumission
+            de formulaire pour réduire les notifications échouées et les doublons.
+          division: validation
+        - title: Intelligence IP
+          description: Géolocalisation et détection de proxy pour le contrôle d'accès,
+            la prévention de la fraude et l'application de la juridiction.
+          division: networking
+        - title: Finance
+          description: Validation IBAN et paiement pour la collecte des impôts, le
+            versement des prestations et les appels d'offres publics.
+          division: finance
         heading: API conçues pour les flux de travail gouvernementaux
       final_cta:
         cta: Réservez un appel stratégique
@@ -146,10 +361,44 @@ fr:
       meta_title: API pour les services gouvernementaux | Requiems API
       proof_points:
         heading: Ce que les équipes gouvernementales livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins d'avis retournés
+          description: Validez les contacts des citoyens avant l'envoi d'avis de conformité,
+            de mises à jour de prestations et de rappels de vote.
+          metric: "–50% d'échecs"
+        - title: Géocodage précis à grande échelle
+          description: Normalisez et géocodez les adresses soumises pour l'attribution
+            des zones, le routage des services d'urgence et les rapports.
+          metric: Millions/jour
+        - title: Détection de fraude à l'entrée
+          description: Détectez les VPN/proxy et signalez les tentatives d'accès hors
+            juridiction sur les portails protégés avant l'authentification.
+          metric: Temps réel
+        - title: Intégration REST sécurisée
+          description: Endpoints HTTPS uniquement, aucune donnée personnelle stockée.
+            Architecture axée conformité dès le premier jour.
+          metric: Prêt pour SOC
     healthcare:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Validez les emails et téléphones des patients à l'inscription
+            pour que les rappels de rendez-vous et résultats de labo atteignent la
+            bonne personne.
+          division: validation
+        - title: Localisation
+          description: Données de fuseau horaire et de géocodage pour la planification
+            des rendez-vous, la cartographie des prestataires et la détection de zone
+            de couverture.
+          division: places
+        - title: Intelligence IP
+          description: Géolocalisez les patients pour les règles d'éligibilité à la
+            télémédecine, la conformité des licences et le routage régional.
+          division: networking
+        - title: Texte et langue
+          description: Détection de langue pour les communications patients multilingues
+            et le traitement des notes cliniques.
+          division: text
         heading: API conçues pour les flux de travail du secteur de la santé
       final_cta:
         cta: Réservez un appel stratégique
@@ -168,10 +417,42 @@ fr:
       meta_title: API pour les plateformes de santé | Requiems API
       proof_points:
         heading: Ce que les équipes soignantes expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins de rendez-vous manqués
+          description: 'Validez le téléphone et l''email du patient à l''admission
+            : la livraison des rappels augmente et les absences diminuent.'
+          metric: "–30% d'absences"
+        - title: Planification correcte selon le fuseau horaire
+          description: Déterminez le fuseau horaire du patient à partir de l'adresse
+            ou de l'IP pour afficher les créneaux de rendez-vous automatiquement.
+          metric: Instantané
+        - title: Signaux de conformité en télémédecine
+          description: Géolocalisez les sessions pour signaler les patients hors état
+            avant le début de la consultation, pas après.
+          metric: Temps réel
+        - title: Intégration rapide et sécurisée
+          description: Endpoints HTTPS uniquement, aucune donnée personnelle stockée.
+            L'intégration typique prend moins d'une semaine.
+          metric: "< 1 semaine"
     hospitality:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Fuseau horaire, géocodage et données régionales pour la planification
+            du check-in, les recommandations locales et l'affichage des taxes.
+          division: places
+        - title: Validation
+          description: Validez les emails et téléphones des clients à la réservation
+            pour garantir la livraison des confirmations et communications avant l'arrivée.
+          division: validation
+        - title: Finance
+          description: Recherche de BIN et données de devise pour la facturation internationale
+            des clients et les flux de paiement multi-devises.
+          division: finance
+        - title: Intelligence IP
+          description: Détectez l'origine du client par géolocalisation pour personnaliser
+            la langue, la devise et la conformité réglementaire.
+          division: networking
         heading: Des API conçues pour les flux de travail du secteur de l'hôtellerie
       final_cta:
         cta: Réservez un appel stratégique
@@ -188,7 +469,23 @@ fr:
       meta_title: API pour les entreprises du secteur de l'hôtellerie | Requiems API
       proof_points:
         heading: Ce que les équipes hôtelières expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins de confirmations manquées
+          description: 'Validez les données de contact du client à la réservation
+            : les messages avant l''arrivée et instructions de check-in arrivent bien.'
+          metric: "–35% d'échecs"
+        - title: Expérience localisée sans friction
+          description: Détectez le pays du client à partir de l'IP pour servir automatiquement
+            la bonne devise, langue et heure locale.
+          metric: Instantané
+        - title: Données de paiement plus propres
+          description: 'Recherche de BIN au paiement : les taux de cartes refusées
+            baissent et le formulaire affiche le bon type de carte.'
+          metric: "+10% de succès"
+        - title: Déployez en un sprint
+          description: Endpoints REST avec exemples prêts à l'emploi en plusieurs
+            langues. L'intégration typique prend moins d'une semaine.
+          metric: "< 1 semaine"
     index:
       cards:
         agencies:
@@ -287,7 +584,23 @@ fr:
       view_industry: Voir le secteur
     insurance:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Validez les emails et téléphones des assurés à la souscription
+            pour réduire les avis de renouvellement échoués et communications de sinistres.
+          division: validation
+        - title: Localisation
+          description: Géocodage et enrichissement d'adresses pour le scoring de risque
+            des biens, l'attribution des zones et le routage des sinistres.
+          division: places
+        - title: Finance
+          description: Validation BIN et paiement pour la collecte des primes et les
+            flux de versement des sinistres.
+          division: finance
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy sur les déclarations de sinistres numériques
+            pour signaler des origines de session potentiellement frauduleuses.
+          division: networking
         heading: API conçues pour les flux de travail dans le secteur de l'assurance
       final_cta:
         cta: Réservez un appel stratégique
@@ -306,10 +619,43 @@ fr:
       meta_title: API pour les compagnies d'assurance | Requiems API
       proof_points:
         heading: Ce que les équipes d'assurance expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins d'avis de renouvellement échoués
+          description: 'Validez les emails et téléphones de contact à la création
+            de la police : les communications de renouvellement et sinistres atteignent
+            la bonne personne.'
+          metric: "–40% d'échecs"
+        - title: Géocodage précis des biens
+          description: Géocodez les adresses assurées à la souscription pour le scoring
+            de zone, la modélisation de catastrophes et le calcul des primes.
+          metric: 99%+ de précision
+        - title: Signaux de fraude à la déclaration
+          description: Signalez les sinistres déposés depuis des IP VPN et datacenter
+            à haut risque pour un examen manuel plus poussé.
+          metric: Temps réel
+        - title: Une clé API, suite complète
+          description: APIs de validation, géolocalisation et finance en une seule
+            intégration avec une seule clé API.
+          metric: 1 intégration
     legal:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Vérifiez les emails et téléphones des clients et contreparties
+            avant qu'ils n'entrent dans la gestion de dossiers ou les flux contractuels.
+          division: validation
+        - title: Réseau
+          description: Recherche WHOIS et de domaine pour les audits de protection
+            de marque, les preuves de retrait et les processus de diligence raisonnable.
+          division: networking
+        - title: Localisation
+          description: Géocodage d'adresse et données de fuseau horaire pour la détection
+            de juridiction et la conformité transfrontalière.
+          division: places
+        - title: Finance
+          description: Validation IBAN et SWIFT pour les instructions de virement
+            et la vérification des paiements internationaux.
+          division: finance
         heading: Des API conçues pour les flux de travail juridiques
       final_cta:
         cta: Réservez un appel stratégique
@@ -327,10 +673,42 @@ fr:
       meta_title: API pour les entreprises de technologies juridiques | Requiems API
       proof_points:
         heading: Ce que les équipes de technologies juridiques déploient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Historique WHOIS prêt pour audit
+          description: Exécutez des tâches WHOIS hebdomadaires sur les domaines signalés,
+            normalisez les champs et exportez des preuves CSV pour les retraits.
+          metric: Automatisé
+        - title: Moins de communications clients rebondies
+          description: Validez les emails de contact avant l'envoi de lettres d'engagement,
+            de dépôts judiciaires et de factures.
+          metric: "–45% de rebonds"
+        - title: Détection de juridiction
+          description: Géolocalisez les IP et adresses de la contrepartie pour signaler
+            la juridiction applicable avant la génération du document.
+          metric: Temps réel
+        - title: Intégration rapide
+          description: Endpoints REST avec exemples prêts à l'emploi. Les équipes
+            juridiques sont généralement en ligne en moins d'une semaine.
+          metric: "< 1 semaine"
     logistics:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Géocodage, normalisation d'adresses et données de fuseau horaire
+            pour la planification d'itinéraires et la programmation des livraisons.
+          division: places
+        - title: Validation
+          description: Validez les téléphones et emails du destinataire avant l'expédition
+            pour réduire les notifications de livraison échouées.
+          division: validation
+        - title: Intelligence IP
+          description: Géolocalisez les sessions des chauffeurs et clients pour le
+            contrôle d'accès et le contexte de localisation en temps réel.
+          division: networking
+        - title: Finance
+          description: Validation de devise et de paiement pour la facturation du
+            fret international et les douanes transfrontalières.
+          division: finance
         heading: API conçues pour les flux de travail logistiques
       final_cta:
         cta: Réservez un appel stratégique
@@ -347,10 +725,42 @@ fr:
       meta_title: API pour les entreprises de logistique | Requiems API
       proof_points:
         heading: Ce que les équipes logistiques expédient avec les Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins de livraisons échouées
+          description: Détectez les adresses mal formées et les téléphones de destinataire
+            invalides avant que la commande ne quitte l'entrepôt.
+          metric: "–25% d'échecs"
+        - title: Géocodage précis à grande échelle
+          description: Normalisez et géocodez les adresses lors de l'ingestion par
+            lots pour l'optimisation des itinéraires et l'attribution des zones.
+          metric: Millions/jour
+        - title: ETA corrects selon le fuseau horaire
+          description: Affichez les fenêtres de livraison dans le fuseau horaire local
+            du destinataire automatiquement, sans conversion manuelle.
+          metric: Instantané
+        - title: En ligne en quelques jours
+          description: Endpoints REST, exemples prêts à l'emploi, une seule clé API.
+            La plupart des équipes s'intègrent en un seul sprint.
+          metric: "< 1 semaine"
     manufacturing:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Géocodage, fuseau horaire et données d'adresse pour la cartographie
+            des sites, la programmation des livraisons et le routage fournisseurs.
+          division: places
+        - title: Validation
+          description: Validez les emails et téléphones des fournisseurs avant leur
+            entrée dans votre ERP ou système d'achat.
+          division: validation
+        - title: Finance
+          description: Données de devise et validation des paiements pour les paiements
+            fournisseurs transfrontaliers et la facturation.
+          division: finance
+        - title: Intelligence IP
+          description: Identifiez le pays et la région des portails partenaires et
+            des sessions d'accès à distance pour le contrôle d'accès.
+          division: networking
         heading: API conçues pour les flux de production
       final_cta:
         cta: Réservez un appel stratégique
@@ -367,10 +777,42 @@ fr:
       meta_title: API pour les entreprises manufacturières | Requiems API
       proof_points:
         heading: Ce que les équipes de production livrent avec les Requiems
-        items: "[tableau]"
+        items:
+        - title: Fiches fournisseurs plus propres
+          description: 'Validez les données de contact avant leur entrée dans l''ERP
+            : moins de factures retournées et d''emails de bon de commande rebondis.'
+          metric: "–50% de données erronées"
+        - title: Coordonnées de sites précises
+          description: Géocodez les adresses d'entrepôts et fournisseurs à l'import
+            pour la logistique, la conformité et le routage des dispatchs.
+          metric: 99%+ de précision
+        - title: Planification sensible au fuseau horaire
+          description: Affichez les heures locales correctes pour la planification
+            des équipes multi-sites et les appels fournisseurs transfrontaliers.
+          metric: Couverture mondiale
+        - title: Une seule clé API
+          description: APIs d'adresse, de contact et de finance en une seule intégration,
+            sans casse-tête de facturation multi-fournisseur.
+          metric: 1 intégration
     media:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Intelligence IP
+          description: Géolocalisez les utilisateurs pour les règles de licence de
+            contenu, le routage CDN et le ciblage publicitaire régional sans cookies.
+          division: networking
+        - title: Texte et langue
+          description: Détection de langue, filtrage de propos injurieux et modération
+            de texte pour commentaires, sous-titres et contenu généré par les utilisateurs.
+          division: text
+        - title: Validation
+          description: Validez les emails des abonnés à l'inscription pour maintenir
+            une délivrabilité élevée et des données de facturation précises.
+          division: validation
+        - title: Localisation
+          description: Données de fuseau horaire pour planifier des événements en
+            direct, des premières et des notifications push sensibles au temps.
+          division: places
         heading: API conçues pour les flux de travail multimédias
       final_cta:
         cta: Réservez un appel stratégique
@@ -387,10 +829,42 @@ fr:
       meta_title: API pour les entreprises de médias | Requiems API
       proof_points:
         heading: Ce que les équipes médias livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Appliquez le géo-licensing en temps réel
+          description: Bloquez ou redirigez le contenu par pays via la géolocalisation
+            IP, sans failles de contournement VPN.
+          metric: Temps réel
+        - title: Passez à l'échelle la modération des commentaires
+          description: Filtrez les propos injurieux et signalez le contenu limite
+            côté serveur avant sa mise en ligne.
+          metric: Millions/jour
+        - title: Localisez sans interroger les utilisateurs
+          description: Détectez la langue à partir de l'IP et des signaux du navigateur
+            pour servir automatiquement la bonne version.
+          metric: Instantané
+        - title: Des données d'abonnés fiables
+          description: 'Validez les emails à l''inscription : moins de newsletters
+            rebondies et d''échecs de facturation.'
+          metric: "–35% de rebonds"
     nonprofit:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Détectez les emails et téléphones invalides avant qu'ils ne
+            gonflent votre liste de donateurs et nuisent à la délivrabilité.
+          division: validation
+        - title: Localisation
+          description: Géocodage et données régionales pour la segmentation des donateurs,
+            la cartographie des bénévoles et la planification d'événements.
+          division: places
+        - title: Texte et langue
+          description: Détection de langue pour la diffusion multilingue et la modération
+            de contenu sur les plateformes communautaires publiques.
+          division: text
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy sur les formulaires de don pour signaler
+            les transactions suspectes avant qu'elles ne soient contestées.
+          division: networking
         heading: Des API conçues pour les flux de travail des organisations à but
           non lucratif
       final_cta:
@@ -409,10 +883,42 @@ fr:
       meta_title: API pour les organisations à but non lucratif | Requiems API
       proof_points:
         heading: Ce que les équipes à but non lucratif expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Meilleure délivrabilité des emails
+          description: 'Retirez les adresses invalides et jetables avant chaque campagne
+            : moins de rebonds, meilleure réputation d''expéditeur.'
+          metric: "+25% de taux d'ouverture"
+        - title: Base de donateurs plus propre
+          description: Validez les contacts au point d'entrée pour que votre CRM reste
+            exploitable pour la segmentation et les rapports.
+          metric: "–60% de mauvais enregistrements"
+        - title: Diffusion régionale plus intelligente
+          description: Géocodez les adresses des donateurs pour cartographier les
+            zones non couvertes et prioriser les régions de prospection.
+          metric: Instantané
+        - title: Abordable et évolutif
+          description: Payez à l'appel. Aucun minimum mensuel. S'adapte à tout budget
+            associatif, de la phase initiale à l'échelle nationale.
+          metric: À l'usage
     real_estate:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation
+          description: Géocodage, fuseau horaire et enrichissement d'adresses pour
+            les annonces immobilières et la planification des agents.
+          division: places
+        - title: Validation
+          description: Vérifiez les emails et téléphones des acheteurs et agents avant
+            l'envoi d'annonces ou de contrats.
+          division: validation
+        - title: Réseau
+          description: Géolocalisation IP pour des recommandations de propriétés régionales
+            et un affichage de données conforme au RGPD.
+          division: networking
+        - title: Finance
+          description: Conversion de devise et données de paiement pour les transactions
+            immobilières transfrontalières.
+          division: finance
         heading: API conçues pour les flux de travail immobiliers
       final_cta:
         cta: Réservez un appel stratégique
@@ -429,10 +935,42 @@ fr:
       meta_title: API pour les plateformes immobilières | Requiems API
       proof_points:
         heading: Ce que les équipes immobilières expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Données d'annonces plus propres
+          description: 'Géocodez et normalisez les adresses à l''ingestion : les repères
+            sur la carte sont corrects et les résultats de recherche précis.'
+          metric: 99%+ de précision
+        - title: Moins de prospects sans issue
+          description: Validez les emails et téléphones de contact à la soumission
+            du formulaire avant leur entrée dans le pipeline CRM.
+          metric: "–45% de mauvais prospects"
+        - title: Planification sensible au fuseau horaire
+          description: Affichez les horaires de visite dans le fuseau horaire local
+            de l'acheteur automatiquement, sans conversion manuelle.
+          metric: Instantané
+        - title: Intégration rapide
+          description: APIs de géocodage, validation et finance derrière une seule
+            clé, en ligne en un seul sprint.
+          metric: "< 1 semaine"
     retail:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Validez les emails et téléphones des clients au paiement pour
+            réduire les notifications de livraison échouées et les échecs d'OTP.
+          division: validation
+        - title: Finance
+          description: Recherche de BIN et validation des cartes de paiement pour
+            détecter les cartes refusées avant qu'elles ne frustrent les acheteurs.
+          division: finance
+        - title: Localisation
+          description: Géocodage, fuseau horaire et données d'adresse pour les estimations
+            de livraison, les textes de taxes et la tarification géographique.
+          division: places
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy et signalez les sessions à haut risque
+            au paiement pour réduire la fraude à la carte.
+          division: networking
         heading: API conçues pour les flux de travail du commerce de détail
       final_cta:
         cta: Réservez un appel stratégique
@@ -450,10 +988,42 @@ fr:
       meta_title: API pour les entreprises de vente au détail | Requiems API
       proof_points:
         heading: Ce que les équipes de vente au détail livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Moins de livraisons échouées
+          description: 'Détectez les téléphones invalides et anomalies d''adresse
+            avant l''expédition de la commande : retours et livraisons manquées diminuent.'
+          metric: "–30%"
+        - title: Paiement plus rapide
+          description: Validez le BIN de la carte côté client pour que le premier
+            essai de paiement réussisse plus souvent.
+          metric: "+12% de succès"
+        - title: Tarification localisée instantanément
+          description: Déterminez le pays et la région à partir de l'IP pour afficher
+            la devise et le coût de livraison corrects sans demander le GPS.
+          metric: 180+ pays
+        - title: Une clé API, tous les services
+          description: Validation, finance et géolocalisation depuis un seul endpoint,
+            sans assembler plusieurs fournisseurs.
+          metric: 1 intégration
     saas:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Arrêtez les emails jetables, faux numéros et propos injurieux
+            qui polluent votre base d'utilisateurs à l'inscription.
+          division: validation
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy à la connexion, localisez par région
+            et bloquez le trafic datacenter qui abuse des offres gratuites.
+          division: networking
+        - title: Finance
+          description: Recherche de BIN et validation de carte pour la facturation
+            d'abonnement et la réduction de la fraude au paiement.
+          division: finance
+        - title: Texte et langue
+          description: Détection de langue, modération et outils de texte pour le
+            contenu généré par les utilisateurs et les textes d'onboarding.
+          division: text
         heading: API conçues pour les flux de travail SaaS
       final_cta:
         cta: Réservez un appel stratégique
@@ -470,10 +1040,43 @@ fr:
       meta_title: API pour produits SaaS | Requiems API
       proof_points:
         heading: Ce que les équipes SaaS déploient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Réduisez le taux de faux comptes
+          description: 'Rejetez les domaines jetables et enregistrements MX invalides
+            au formulaire : le support arrête de poursuivre des utilisateurs fantômes.'
+          metric: "–70%"
+        - title: Onboarding entreprise plus rapide
+          description: 'Validez l''email et le domaine d''entreprise avant l''invitation
+            SSO : les équipes IT obtiennent un provisionnement propre du premier coup.'
+          metric: "–50% de reprises"
+        - title: Offres gratuites à l'épreuve de l'abus
+          description: Signalez les IP datacenter et VPN créant des comptes d'essai
+            pour protéger les métriques de conversion vers le payant.
+          metric: Temps réel
+        - title: Lancez en un sprint
+          description: Exemples de code prêts à l'emploi en cinq langues. La plupart
+            des équipes sont en ligne la même semaine.
+          metric: "< 1 semaine"
     telecom:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Validation
+          description: Validez les numéros de téléphone au format E.164, détectez
+            le type de ligne et signalez les numéros invalides ou portés avant qu'ils
+            n'atteignent le réseau.
+          division: validation
+        - title: Intelligence IP
+          description: Recherche ASN, détection VPN/proxy et géolocalisation IP pour
+            l'analyse du trafic et les signaux de fraude.
+          division: networking
+        - title: Finance
+          description: Validation BIN et carte de paiement pour les flux de facturation
+            et de recharge.
+          division: finance
+        - title: Localisation
+          description: Données de fuseau horaire et régionales pour la planification,
+            les alertes d'itinérance et le routage du support client.
+          division: places
         heading: API conçues pour les flux de travail des télécommunications
       final_cta:
         cta: Réservez un appel stratégique
@@ -491,10 +1094,44 @@ fr:
       meta_title: API pour les entreprises de télécommunications | Requiems API
       proof_points:
         heading: Ce que les équipes de télécommunications livrent avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Réduisez les soumissions de numéros invalides
+          description: 'Validez les numéros d''abonnés à la portabilité et à la création
+            de tickets : les données erronées échouent vite, pas après une semaine
+            de traitement.'
+          metric: "–60%"
+        - title: Enrichissez automatiquement les tickets NOC
+          description: Récupérez le contexte ASN et amont pour les IP suspectes afin
+            que les équipes opérations répondent avec des données, pas des captures
+            d'écran.
+          metric: Instantané
+        - title: Réduisez les échecs de livraison SMS
+          description: 'Vérifiez le format E.164 et le type de ligne avant l''envoi
+            des OTP : les numéros invalides et fixes n''atteignent jamais la passerelle.'
+          metric: "–35%"
+        - title: Une clé API, suite complète
+          description: Une intégration débloque les APIs de validation, réseau et
+            finance sans comptes ni facturation séparés.
+          metric: 1 clé
     travel:
       api_mapping:
-        apis: "[tableau]"
+        apis:
+        - title: Localisation et géolocalisation
+          description: Fuseaux horaires, géocodage et calendriers de jours fériés
+            pour les itinéraires mondiaux et la planification.
+          division: places
+        - title: Validation
+          description: Détectez les emails et téléphones invalides avant qu'ils ne
+            cassent les confirmations de réservation et la livraison d'OTP.
+          division: validation
+        - title: Finance
+          description: Recherche de BIN, données de devise et validation des paiements
+            pour les flux de paiement mondiaux.
+          division: finance
+        - title: Intelligence IP
+          description: Détectez les VPN/proxy, localisez les prix par pays et signalez
+            les sessions à haut risque au paiement.
+          division: networking
         heading: API conçues pour les flux de travail liés aux voyages
       final_cta:
         cta: Réservez un appel stratégique
@@ -512,4 +1149,20 @@ fr:
       meta_title: API pour les entreprises du secteur du voyage | Requiems API
       proof_points:
         heading: Ce que les équipes de voyage expédient avec Requiems
-        items: "[tableau]"
+        items:
+        - title: Réduisez le taux d'échec des réservations
+          description: 'Validez les emails et téléphones à la saisie : moins de confirmations
+            échouées et de tickets de support liés à de mauvaises données.'
+          metric: "–40%"
+        - title: Détectez les réservations frauduleuses
+          description: Signalez les IP VPN et datacenter au paiement et déclenchez
+            automatiquement une vérification renforcée.
+          metric: Temps réel
+        - title: Auto-localisez pour chaque marché
+          description: Affichez le fuseau horaire, la devise et les jours fériés corrects
+            sans demande GPS ni configuration manuelle.
+          metric: 180+ pays
+        - title: Intégrez en quelques jours, pas en mois
+          description: Endpoints REST, exemples prêts à l'emploi et une seule clé
+            API sur tous les services.
+          metric: "< 1 semaine"

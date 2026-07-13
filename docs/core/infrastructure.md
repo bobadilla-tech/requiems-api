@@ -329,7 +329,12 @@ ufw enable
 ufw status
 ```
 
-**Warning:** Docker writes iptables DNAT rules directly into its own `DOCKER` chain, ahead of UFW's chain. Any service with a `ports:` mapping in docker-compose is published to `0.0.0.0` regardless of UFW rules — UFW does NOT protect published container ports. Never add a `ports:` entry for `db` (or any datastore); use `docker compose exec` for one-off host access, or bind explicitly to `127.0.0.1:<port>:<port>` if local tooling truly needs it.
+**Warning:** Docker writes iptables DNAT rules directly into its own `DOCKER`
+chain, ahead of UFW's chain. Any service with a `ports:` mapping in
+docker-compose is published to `0.0.0.0` regardless of UFW rules — UFW does NOT
+protect published container ports. Never add a `ports:` entry for `db` (or any
+datastore); use `docker compose exec` for one-off host access, or bind
+explicitly to `127.0.0.1:<port>:<port>` if local tooling truly needs it.
 
 ### Environment Variables
 
@@ -343,7 +348,8 @@ Never commit secrets to git. Use:
 
 - Change default credentials in production
 - Use SSL connections in production
-- Restrict PostgreSQL to local connections — enforced by NOT publishing a `ports:` entry on `db` in docker-compose.yml (see UFW warning above)
+- Restrict PostgreSQL to local connections — enforced by NOT publishing a
+  `ports:` entry on `db` in docker-compose.yml (see UFW warning above)
 - Regular backups
 
 ## Related Documentation

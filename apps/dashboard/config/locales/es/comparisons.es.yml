@@ -9,10 +9,10 @@ es:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes unificadas
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~20 API (claves separadas)"
+          latency: ~120 ms p50
+          their_coverage: ~20 API (claves separadas)
           their_free_tier: Varía según el API (100–250)
-          their_latency: "~150 ms p50 (est.)"
+          their_latency: ~150 ms p50 (est.)
           their_uptime: 99,99%
           uptime: 99,9%
         card_blurb: AbstractAPI ofrece más de 20 API especializadas (verificación
@@ -23,7 +23,37 @@ es:
         display_name: AbstractAPI
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Verificación de correo electrónico
+            ours: true
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: true
+          - feature: Validación telefónica
+            ours: true
+            theirs: true
+          - feature: Enriquecimiento de empresas
+            ours: false
+            theirs: true
+          - feature: Días festivos públicos
+            ours: true
+            theirs: true
+          - feature: Tipos de cambio / finanzas
+            ours: true
+            theirs: true
+          - feature: Una sola clave API para todos los servicios
+            ours: true
+            theirs: false
+          - feature: Facturación unificada
+            ours: true
+            theirs: false
+          - feature: Esquema de respuesta consistente
+            ours: true
+            theirs: false
+          - feature: Más de 100 endpoints
+            ours: true
+            theirs: false
         hero_context: Plataforma API multipropósito
         hero_headline: Requiems API vs AbstractAPI
         meta_description: Compara Requiems API y AbstractAPI en cuanto a funcionalidades,
@@ -31,7 +61,13 @@ es:
         meta_title: 'Requiems API vs AbstractAPI: Comparación de plataformas API 2026'
         migration:
           heading: Migración desde AbstractAPI
-          steps: "[formación]"
+          steps:
+          - Reemplaza `emailvalidation.abstractapi.com`, `ipgeolocation.abstractapi.com`,
+            etc. por `api.requiems.dev/v1/{category}/{endpoint}`
+          - 'Cambia el parámetro de consulta `api_key` por el encabezado `Authorization:
+            Bearer <clave>`: la misma clave funciona para todos los endpoints'
+          - Los nombres de los campos de respuesta son similares; consulta las notas
+            de migración por endpoint en nuestra documentación
         philosophy:
           body: 'AbstractAPI ha creado excelentes productos API individuales; sus
             productos de correo electrónico e IP, en particular, gozan de gran prestigio.
@@ -40,13 +76,23 @@ es:
             API que necesites compartieran una sola cuenta? Cambiamos el refinamiento
             de cada producto por la simplicidad operativa de una plataforma unificada.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: AbstractAPI te da una clave por cada producto de API. Requiems API
+            te da una sola clave para más de 100 endpoints.
+          title: Una clave, no veinte
+        - body: AbstractAPI tiene un plan separado por producto, así que terminas
+            con múltiples suscripciones. Requiems API es una sola factura.
+          title: Una sola factura
+        - body: Las respuestas de AbstractAPI varían según el producto. Requiems API
+            usa un formato de respuesta, códigos de error y método de autenticación
+            consistentes en todo.
+          title: Esquema consistente
       api_ninjas:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
+          latency: ~120 ms p50
           their_coverage: Más de 135 API
           their_free_tier: Nivel gratuito (sin tarjeta)
           their_latency: Mediana de 243 ms
@@ -60,7 +106,37 @@ es:
         display_name: API Ninjas
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de correo electrónico
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: true
+          - feature: Datos financieros / bursátiles / cripto
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP en vivo
+            ours: true
+            theirs: false
+          - feature: Detección de amenazas IP
+            ours: true
+            theirs: false
+          - feature: Transcripciones de resultados financieros
+            ours: false
+            theirs: true
+          - feature: Disponibilidad de dominio
+            ours: true
+            theirs: true
+          - feature: Más de 135 endpoints
+            ours: false
+            theirs: true
+          - feature: Especificación OpenAPI 3.1
+            ours: true
+            theirs: false
         hero_context: Plataforma API multipropósito
         hero_headline: API de Réquiems vs. API Ninjas
         meta_description: Compara Requiems API y API Ninjas en cuanto a cobertura,
@@ -69,7 +145,10 @@ es:
           2026'
         migration:
           heading: Migrando desde API Ninjas
-          steps: "[formación]"
+          steps:
+          - Reemplaza `api.api-ninjas.com/v1/{endpoint}` por `api.requiems.dev/v1/{category}/{endpoint}`
+          - 'Cambia el encabezado `X-Api-Key` por `Authorization: Bearer <clave>`'
+          - Consulta la documentación de migración por endpoint para el mapeo de campos
         philosophy:
           body: 'API Ninjas es un catálogo de datos con miles de datos disponibles
             a través de REST. Requiems API es una plataforma de validación y enriquecimiento:
@@ -79,14 +158,24 @@ es:
             Si necesita saber si una dirección de correo electrónico recibe correos
             en este momento, Requiems API es la herramienta adecuada.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: 'API Ninjas tiene amplitud, pero sus API de validación son superficiales.
+            La validación de correo, teléfono e IP de Requiems API llega más profundo:
+            verificación SMTP, búsqueda HLR y puntuación de amenazas.'
+          title: Profundidad de validación
+        - body: API Ninjas obtiene parte de sus datos de conjuntos estáticos. Requiems
+            API realiza verificaciones en vivo de correo, teléfono e IP en cada llamada.
+          title: Datos en tiempo real
+        - body: Ambas ofrecen precios por volumen. Requiems API añade paneles de uso
+            por equipo, límites de tasa por clave y facturación basada en facturas.
+          title: Facturación lista para empresas
       bouncify:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~9 comprobaciones de correo electrónico"
+          latency: ~120 ms p50
+          their_coverage: ~9 comprobaciones de correo electrónico
           their_free_tier: créditos de registro
           their_latency: Procesamiento por lotes
           their_uptime: No aplica (cargas SaaS)
@@ -100,7 +189,40 @@ es:
         display_name: Bouncify
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de sintaxis
+            ours: true
+            theirs: true
+          - feature: Verificación de registros DNS/MX
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP
+            ours: true
+            theirs: true
+          - feature: Detección de catch-all
+            ours: true
+            theirs: true
+          - feature: Detección de correos desechables
+            ours: true
+            theirs: true
+          - feature: Eliminación de trampas de spam
+            ours: true
+            theirs: true
+          - feature: Anti-greylisting
+            ours: false
+            theirs: true
+          - feature: API en tiempo real
+            ours: true
+            theirs: true
+          - feature: Carga masiva de listas
+            ours: true
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
         hero_context: Verificación de correo electrónico
         hero_headline: API de Requiems vs Bouncify
         meta_description: Compara Requiems API y Bouncify en cuanto a características,
@@ -109,7 +231,12 @@ es:
           vs. Bouncify (2026)'
         migration:
           heading: Migrando desde Bouncify
-          steps: "[formación]"
+          steps:
+          - Pasa de un flujo de carga por lotes a una llamada API en tiempo real al
+            enviar el formulario
+          - 'Usa el encabezado `Authorization: Bearer <clave>` con `api.requiems.dev/v1/email/validate`'
+          - 'Mapea los campos de resultado: `deliverable` se mantiene; `invalid` →
+            `undeliverable`; `accept_all` → `catch_all`'
         philosophy:
           body: 'Bouncify es una herramienta para equipos de marketing: sube una lista
             y obtén una lista limpia. La API de Requiems es una herramienta para desarrolladores:
@@ -117,16 +244,25 @@ es:
             tiempo real. Ambos enfoques funcionan; depende de en qué punto del embudo
             de ventas quieras implementar el control de calidad.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: 'Bouncify está optimizado para cargas CSV. Requiems API está diseñado
+            para llamadas API en tiempo real: valida en el registro, no después.'
+          title: API primero vs carga primero
+        - body: Bouncify vende créditos que caducan si no se usan. Requiems API cobra
+            por llamada con una cuota mensual gratuita que se renueva.
+          title: Sin caducidad de créditos
+        - body: Bouncify solo cubre correo electrónico. Requiems API cubre correo,
+            teléfono, IP y finanzas en una sola suscripción.
+          title: Más de 100 endpoints
       ipstack:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~90 ms p50"
-          their_coverage: "~3 puntos finales de IP"
+          latency: ~90 ms p50
+          their_coverage: ~3 puntos finales de IP
           their_free_tier: 100 solicitudes/mes
-          their_latency: "~120 ms p50 (est.)"
+          their_latency: ~120 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: 'IPstack (un producto de APILayer) ofrece geolocalización IP en
@@ -137,7 +273,40 @@ es:
         display_name: IPstack
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: País / región / ciudad
+            ours: true
+            theirs: true
+          - feature: Latitud / longitud
+            ours: true
+            theirs: true
+          - feature: Detección de zona horaria
+            ours: true
+            theirs: true
+          - feature: Información de moneda
+            ours: true
+            theirs: true
+          - feature: Búsqueda de ISP / ASN
+            ours: true
+            theirs: true
+          - feature: Detección de proxy / VPN / Tor
+            ours: true
+            theirs: true
+          - feature: Puntuación de nivel de amenaza
+            ours: true
+            theirs: true
+          - feature: Compatibilidad con IPv6
+            ours: true
+            theirs: true
+          - feature: Búsqueda masiva de IP
+            ours: true
+            theirs: false
+          - feature: Verificación de correo electrónico
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
         hero_context: Geolocalización IP
         hero_headline: API Requiems vs IPstack
         meta_description: Compara Requiems API e IPstack en cuanto a características,
@@ -146,7 +315,12 @@ es:
           IP (2026)'
         migration:
           heading: Migración desde IPstack
-          steps: "[formación]"
+          steps:
+          - Reemplaza `api.ipstack.com/{ip}` por `api.requiems.dev/v1/ip/lookup?ip={ip}`
+          - 'Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
+            Bearer <clave>`'
+          - La mayoría de los campos de respuesta son idénticos; mapea `location.geoname_id`
+            a `geoname_id` en el nivel raíz
         philosophy:
           body: 'IPstack es un producto de geolocalización consolidado de APILayer.
             Si solo necesitas datos de IP a ubicación y prefieres una marca reconocida,
@@ -154,16 +328,26 @@ es:
             ya utiliza —o necesitará en el futuro— correo electrónico, teléfono u
             otras señales de validación: una clave, una factura, un sitio de documentación.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: IPstack solo ofrece geolocalización. Requiems API ofrece los mismos
+            datos de ubicación, además de verificación de correo, validación telefónica
+            y más.
+          title: Un solo proveedor para IP, correo y teléfono
+        - body: IPstack funciona sobre la infraestructura de APILayer, con un ritmo
+            de lanzamientos lento. Requiems API lanza mejoras de forma continua.
+          title: Sin el peso de APILayer
+        - body: El nivel gratuito de IPstack es de 100 solicitudes/mes. El de Requiems
+            API es de 500 solicitudes/mes en todos los tipos de endpoint.
+          title: Nivel gratuito más generoso
       kickbox:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~6 puntos finales de correo electrónico"
+          latency: ~120 ms p50
+          their_coverage: ~6 puntos finales de correo electrónico
           their_free_tier: 100 verificaciones gratuitas
-          their_latency: "~130 ms p50 (est.)"
+          their_latency: ~130 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: Kickbox es una plataforma de verificación de correo electrónico
@@ -174,7 +358,43 @@ es:
         display_name: Kickbox
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de sintaxis
+            ours: true
+            theirs: true
+          - feature: Verificación de registros DNS/MX
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP
+            ours: true
+            theirs: true
+          - feature: Detección de catch-all
+            ours: true
+            theirs: true
+          - feature: Detección de correos desechables
+            ours: true
+            theirs: true
+          - feature: Detección de direcciones basadas en roles
+            ours: true
+            theirs: true
+          - feature: Puntuación de entregabilidad
+            ours: true
+            theirs: true
+          - feature: Limpieza masiva de listas
+            ours: true
+            theirs: true
+          - feature: API en tiempo real
+            ours: true
+            theirs: true
+          - feature: Consultoría de entregabilidad
+            ours: false
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
         hero_context: Verificación de correo electrónico
         hero_headline: Requiems API vs Kickbox
         meta_description: Compara Requiems API y Kickbox en cuanto a características,
@@ -183,7 +403,12 @@ es:
           API y Kickbox (2026)
         migration:
           heading: Migración desde Kickbox
-          steps: "[formación]"
+          steps:
+          - Reemplaza la URL base `api.kickbox.com` por `api.requiems.dev`
+          - 'Cambia el parámetro de consulta `apikey` por el encabezado `Authorization:
+            Bearer <clave>`'
+          - 'Mapea el campo `result`: `deliverable` se mantiene; `undeliverable` se
+            mantiene; `risky` se mapea al `risky` de Requiems'
         philosophy:
           body: 'Kickbox es un producto de verificación de correo electrónico de alta
             calidad con servicios de consultoría de entregabilidad de primer nivel.
@@ -191,16 +416,25 @@ es:
             y sin procesar, y deja que los ingenieros decidan cómo ponderarlas. Somos
             la opción ideal cuando lo que busca son datos, no consejos.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: La puntuación Sendex de Kickbox es una caja negra. Requiems API devuelve
+            señales sin procesar para que construyas tu propia lógica de entregabilidad.
+          title: Sin dependencia de una puntuación propietaria
+        - body: Kickbox solo cubre correo electrónico. Requiems API cubre teléfono,
+            IP, finanzas y más, en la misma suscripción.
+          title: Más allá del correo
+        - body: Ambas plataformas cumplen con SOC 2 y el RGPD. Requiems API añade
+            registros de auditoría por llamada de forma nativa.
+          title: SOC 2 + RGPD
       mailboxlayer:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
+          latency: ~120 ms p50
           their_coverage: 1 punto final
           their_free_tier: 100 solicitudes/mes
-          their_latency: "~200 ms p50 (est.)"
+          their_latency: ~200 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: Mailboxlayer (un producto de APILayer) ofrece validación de correo
@@ -211,7 +445,40 @@ es:
         display_name: Mailboxlayer
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de sintaxis
+            ours: true
+            theirs: true
+          - feature: Verificación de registros DNS/MX
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP
+            ours: true
+            theirs: true
+          - feature: Detección de catch-all
+            ours: true
+            theirs: false
+          - feature: Detección de correos desechables
+            ours: true
+            theirs: true
+          - feature: Detección de direcciones basadas en roles
+            ours: true
+            theirs: true
+          - feature: Puntuación de calidad / entregabilidad
+            ours: true
+            theirs: true
+          - feature: Sugerencias de "¿quisiste decir?"
+            ours: false
+            theirs: true
+          - feature: Endpoint de listas masivas
+            ours: true
+            theirs: false
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
         hero_context: Validación de correo electrónico
         hero_headline: API de Requiems frente a Mailboxlayer
         meta_description: Compara Requiems API y Mailboxlayer en cuanto a características,
@@ -220,7 +487,12 @@ es:
           vs. Mailboxlayer (2026)'
         migration:
           heading: Migración desde Mailboxlayer
-          steps: "[formación]"
+          steps:
+          - Reemplaza `apilayer.net/api/check` por `api.requiems.dev/v1/email/validate`
+          - 'Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
+            Bearer <clave>`'
+          - Mapea `format_valid` → `syntax_valid`; `smtp_check` → `smtp_valid`; `score`
+            → `deliverability_score`
         philosophy:
           body: 'Mailboxlayer es un punto final de validación ligero y económico,
             ideal para comprobaciones sencillas de sintaxis y SMTP. La API de Requiems
@@ -228,16 +500,25 @@ es:
             electrónico que necesitas, además de API para IP, teléfono, finanzas y
             mensajes de texto, todo ello a través de la misma experiencia de desarrollo.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: Mailboxlayer tiene un solo endpoint. Requiems API tiene más de 100
+            con la misma simplicidad basada en URL.
+          title: Más endpoints, la misma simplicidad
+        - body: El nivel gratuito de Mailboxlayer es de 100 solicitudes/mes. El de
+            Requiems API es de 500 solicitudes/mes sin necesidad de tarjeta de crédito.
+          title: Mejor nivel gratuito
+        - body: Mailboxlayer es un producto heredado de APILayer con actualizaciones
+            lentas. Requiems API lanza nuevas API cada mes.
+          title: Desarrollo activo
       neutrinoapi:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~30 puntos finales"
+          latency: ~120 ms p50
+          their_coverage: ~30 puntos finales
           their_free_tier: créditos de prueba
-          their_latency: "~200 ms p50 (est.)"
+          their_latency: ~200 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: Neutrinoapi es un conjunto de herramientas API de propósito general
@@ -249,7 +530,43 @@ es:
         display_name: Neutrinoapi
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de correo electrónico
+            ours: true
+            theirs: true
+          - feature: Validación telefónica
+            ours: true
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: true
+          - feature: Lista negra de IP / reputación
+            ours: true
+            theirs: true
+          - feature: Búsqueda de dominio / DNS
+            ours: true
+            theirs: true
+          - feature: Automatización de navegador
+            ours: false
+            theirs: true
+          - feature: Renderizado HTML / PDF
+            ours: false
+            theirs: true
+          - feature: SMS / reproducción telefónica
+            ours: false
+            theirs: true
+          - feature: Generación de códigos QR
+            ours: true
+            theirs: true
+          - feature: Finanzas / búsqueda BIN
+            ours: true
+            theirs: true
+          - feature: Más de 100 endpoints
+            ours: true
+            theirs: false
+          - feature: Especificación OpenAPI 3.1
+            ours: true
+            theirs: false
         hero_context: API multipropósito
         hero_headline: Requiems API vs Neutrinoapi
         meta_description: Compara Requiems API y Neutrinoapi en cuanto a características,
@@ -258,7 +575,12 @@ es:
           general (2026)'
         migration:
           heading: Migrando desde Neutrinoapi
-          steps: "[formación]"
+          steps:
+          - Reemplaza `neutrinoapi.net/api/{endpoint}` por `api.requiems.dev/v1/{category}/{endpoint}`
+          - 'Cambia la combinación de user-id + api-key por el encabezado `Authorization:
+            Bearer <clave>`'
+          - Mapea los límites basados en créditos a la medición por llamada en tu
+            panel de Requiems
         philosophy:
           body: 'Neutrinoapi fue pionera en el concepto de API de propósito general
             y ofrece un conjunto de herramientas realmente amplio. Requiems API se
@@ -267,16 +589,26 @@ es:
             reales de los equipos en 2026: especificaciones OpenAPI, esquemas consistentes
             y precios basados en el uso, sin cálculos de créditos.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: Neutrinoapi cubre unos 30 endpoints. Requiems API cubre más de 100
+            con un ritmo de lanzamientos más rápido.
+          title: Más endpoints
+        - body: El diseño de la API de Neutrinoapi refleja sus orígenes de 2013. Requiems
+            API usa convenciones REST modernas, formatos de respuesta inspirados en
+            JSON:API y documentación OpenAPI 3.1.
+          title: DX moderna
+        - body: Neutrinoapi usa un sistema de créditos con costos por endpoint. Requiems
+            API factura de forma uniforme por llamada a la API.
+          title: Precios transparentes
       neverbounce:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~5 puntos finales de correo electrónico"
+          latency: ~120 ms p50
+          their_coverage: ~5 puntos finales de correo electrónico
           their_free_tier: 1.000 créditos al registrarte
-          their_latency: "~150 ms p50 (est.)"
+          their_latency: ~150 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: NeverBounce (una empresa de ZoomInfo) procesa miles de millones
@@ -287,7 +619,43 @@ es:
         display_name: NeverBounce
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de sintaxis
+            ours: true
+            theirs: true
+          - feature: Verificación de registros DNS/MX
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP
+            ours: true
+            theirs: true
+          - feature: Detección de catch-all
+            ours: true
+            theirs: true
+          - feature: Detección de correos desechables
+            ours: true
+            theirs: true
+          - feature: Detección de direcciones basadas en roles
+            ours: true
+            theirs: true
+          - feature: Limpieza masiva de listas
+            ours: true
+            theirs: true
+          - feature: API en tiempo real
+            ours: true
+            theirs: true
+          - feature: Más de 85 integraciones de marketing
+            ours: false
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
+          - feature: Finanzas / búsqueda BIN
+            ours: true
+            theirs: false
         hero_context: Verificación de correo electrónico
         hero_headline: API de Requiems frente a NeverBounce
         meta_description: Compara Requiems API y NeverBounce en cuanto a características,
@@ -296,7 +664,12 @@ es:
           vs NeverBounce (2026)'
         migration:
           heading: Migración desde NeverBounce
-          steps: "[formación]"
+          steps:
+          - Reemplaza la URL base `api.neverbounce.com` por `api.requiems.dev`
+          - 'Cambia la clave API del parámetro de consulta al encabezado `Authorization:
+            Bearer <clave>`'
+          - 'Mapea los códigos de resultado: `valid` → `deliverable`; `invalid` →
+            `undeliverable`; `disposable` → `risky`'
         philosophy:
           body: 'NeverBounce destaca por su gestión integral de listas de correo electrónico
             y cuenta con el ecosistema de integración más completo en marketing por
@@ -305,16 +678,27 @@ es:
             que buscan acceso directo a múltiples señales de datos mediante API: menos
             clics, más código y mayor cobertura.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: NeverBounce solo cubre correo electrónico. Requiems API añade teléfono,
+            IP, finanzas y más de 80 endpoints adicionales bajo una sola clave.
+          title: Cobertura más amplia
+        - body: NeverBounce es propiedad de ZoomInfo; sus precios y hoja de ruta siguen
+            prioridades empresariales. Requiems API es independiente y está centrado
+            en el desarrollador.
+          title: Sin ataduras corporativas
+        - body: Un solo patrón de autenticación, un solo formato de error, un solo
+            SDK para todas las API. NeverBounce requiere una integración separada
+            por producto.
+          title: Integración más simple
       numverify:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~110 ms p50"
+          latency: ~110 ms p50
           their_coverage: 1 punto final
           their_free_tier: 100 solicitudes/mes
-          their_latency: "~180 ms p50 (est.)"
+          their_latency: ~180 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: Numverify (un producto de APILayer) es una API de validación y
@@ -325,7 +709,34 @@ es:
         display_name: Numverify
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Formato de números telefónicos
+            ours: true
+            theirs: true
+          - feature: Detección de país / ubicación
+            ours: true
+            theirs: true
+          - feature: Identificación de operador
+            ours: true
+            theirs: true
+          - feature: Tipo de línea (móvil/fija/VoIP)
+            ours: true
+            theirs: true
+          - feature: Cobertura en 232 países
+            ours: true
+            theirs: true
+          - feature: Verificación HLR / alcanzabilidad en vivo
+            ours: true
+            theirs: false
+          - feature: Validación telefónica masiva
+            ours: true
+            theirs: false
+          - feature: Verificación de correo electrónico
+            ours: true
+            theirs: false
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
         hero_context: Validación del número de teléfono
         hero_headline: API de Requiems vs Numverify
         meta_description: Compara Requiems API y Numverify en cuanto a funciones de
@@ -334,7 +745,12 @@ es:
           (2026)'
         migration:
           heading: Migración desde Numverify
-          steps: "[formación]"
+          steps:
+          - Reemplaza `apilayer.net/api/validate` por `api.requiems.dev/v1/phone/validate`
+          - 'Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
+            Bearer <clave>`'
+          - 'Mapea los valores de `line_type`: `mobile` se mantiene; `landline` se
+            mantiene; `special_services` → `other`'
         philosophy:
           body: 'Numverify se centra en una única función: validar un número de teléfono
             con una base de datos. La API de Requiems realiza consultas HLR en tiempo
@@ -342,16 +758,25 @@ es:
             datos de operador y formato, así como cualquier otra señal de validación
             que tu aplicación necesite. Una sola suscripción, sin proveedores adicionales.'
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: Numverify solo cubre teléfono. Requiems API añade verificación de
+            correo, geolocalización IP, finanzas y más de 80 endpoints adicionales.
+          title: Más allá del teléfono
+        - body: El nivel gratuito de Numverify es de 100 solicitudes/mes. El de Requiems
+            API es de 500 solicitudes/mes, sin tarjeta de crédito.
+          title: Mejor nivel gratuito
+        - body: Numverify es un producto heredado de APILayer. Requiems API lanza
+            nuevas API y mejoras en cada sprint.
+          title: Desarrollo activo
       zerobounce:
         benchmarks:
           coverage: Más de 100 API
           free_tier: 500 solicitudes/mes
           heading: Puntos de referencia
-          latency: "~120 ms p50"
-          their_coverage: "~8 puntos finales de correo electrónico"
+          latency: ~120 ms p50
+          their_coverage: ~8 puntos finales de correo electrónico
           their_free_tier: 100 créditos
-          their_latency: "~180 ms p50 (est.)"
+          their_latency: ~180 ms p50 (est.)
           their_uptime: 99,9%
           uptime: 99,9%
         card_blurb: ZeroBounce se centra exclusivamente en la verificación de correo
@@ -362,7 +787,43 @@ es:
         display_name: ZeroBounce
         features:
           heading: Comparación de características
-          rows: "[formación]"
+          rows:
+          - feature: Validación de sintaxis
+            ours: true
+            theirs: true
+          - feature: Verificación de registros DNS/MX
+            ours: true
+            theirs: true
+          - feature: Verificación SMTP
+            ours: true
+            theirs: true
+          - feature: Detección de catch-all
+            ours: true
+            theirs: true
+          - feature: Detección de correos desechables
+            ours: true
+            theirs: true
+          - feature: Detección de direcciones basadas en roles
+            ours: true
+            theirs: true
+          - feature: Verificación masiva de listas
+            ours: true
+            theirs: true
+          - feature: API en tiempo real
+            ours: true
+            theirs: true
+          - feature: Webhook al finalizar
+            ours: true
+            theirs: true
+          - feature: Geolocalización IP
+            ours: true
+            theirs: false
+          - feature: Validación telefónica
+            ours: true
+            theirs: false
+          - feature: Finanzas / búsqueda BIN
+            ours: true
+            theirs: false
         hero_context: Verificación de correo electrónico
         hero_headline: API Requiems vs ZeroBounce
         meta_description: Compara Requiems API y ZeroBounce en cuanto a funcionalidades,
@@ -372,7 +833,12 @@ es:
           correo electrónico (2026)'
         migration:
           heading: Migración desde ZeroBounce
-          steps: "[formación]"
+          steps:
+          - Reemplaza la URL base `api.zerobounce.net` por `api.requiems.dev`
+          - 'Cambia el parámetro de consulta `apikey` por el encabezado `Authorization:
+            Bearer <clave>`'
+          - 'Mapea el campo `status`: ZeroBounce `valid` → Requiems `deliverable`;
+            `invalid` → `undeliverable`'
         philosophy:
           body: ZeroBounce ha creado una herramienta premium especializada. Requiems
             API se basa en la idea de que los desarrolladores no deberían tener que
@@ -381,7 +847,17 @@ es:
             teléfono, IP y más) a través de una interfaz coherente, con precios basados
             en el uso real.
           heading: Filosofía
-        tldr: "[formación]"
+        tldr:
+        - body: 'ZeroBounce solo cubre correo electrónico. Requiems API cubre correo,
+            teléfono, IP, finanzas y más: una sola suscripción, una sola integración.'
+          title: Una clave para todo
+        - body: Cada endpoint de Requiems API comparte la misma autenticación, códigos
+            de error y estructura de respuesta. En ZeroBounce, cada producto tiene
+            sus propias particularidades.
+          title: Forma de API consistente
+        - body: 'ZeroBounce vende créditos que caducan. Requiems API factura por llamada
+            con un nivel gratuito mensual: úsalo cuando lo necesites.'
+          title: Sin ansiedad por el pool de créditos
     hub:
       benchmarks_caption: Requiems API frente a los principales especialistas según
         criterios clave de decisión.
@@ -393,7 +869,49 @@ es:
       benchmarks_feature: Característica
       benchmarks_heading: De un vistazo
       benchmarks_ours: API de Requiems
-      benchmarks_rows: "[formación]"
+      benchmarks_rows:
+      - abstractapi: ~20
+        ipstack: ~3
+        label: Endpoints de API
+        neverbounce: ~5
+        ours: 100+
+        zerobounce: ~8
+      - abstractapi: false
+        ipstack: false
+        label: Una sola clave API para todos los servicios
+        neverbounce: false
+        ours: true
+        zerobounce: false
+      - abstractapi: Varía según la API
+        ipstack: 100 solicitudes/mes
+        label: Nivel gratuito
+        neverbounce: 1.000 créditos
+        ours: 500 solicitudes/mes
+        zerobounce: 100 créditos
+      - abstractapi: 99,99%
+        ipstack: 99,9%
+        label: SLA de disponibilidad
+        neverbounce: 99,9%
+        ours: 99,9%
+        zerobounce: 99,9%
+      - abstractapi: false
+        ipstack: false
+        label: Esquema de respuesta consistente
+        neverbounce: false
+        ours: true
+        zerobounce: false
+      - abstractapi: true
+        ipstack: true
+        label: HTTPS / TLS 1.3
+        neverbounce: true
+        ours: true
+        zerobounce: true
+      - abstractapi: false
+        ipstack: false
+        label: Endpoint masivo / por lotes
+        neverbounce: true
+        ours: true
+        zerobounce: true
       card_coming_soon: Muy pronto
       card_cta: Ver comparación completa
       competitors_heading: Elige tu comparación
@@ -421,7 +939,7 @@ es:
         formatos de respuesta consistentes en todos los puntos finales. Incorpórelas
         una vez y luego agregue más API sin tener que volver a aprender nada.
       philosophy_dx_title: DX centrado en el desarrollador
-      philosophy_heading: "¿Por qué los equipos cambian a la API de Requiems?"
+      philosophy_heading: ¿Por qué los equipos cambian a la API de Requiems?
       philosophy_pricing_body: Pago por llamada, no por producto. Sin suscripciones
         separadas para cada tipo de dato. Su presupuesto rinde más al no tener que
         dividirlo entre diferentes proveedores.
@@ -430,7 +948,7 @@ es:
       api_coverage: Cobertura de API
       cta_body: 500 llamadas API gratuitas al mes, sin necesidad de tarjeta de crédito.
         La migración tarda menos de una hora.
-      cta_headline: "¿Listo para cambiar de %{competitor}?"
+      cta_headline: ¿Listo para cambiar de %{competitor}?
       cta_primary: Comienza gratis
       cta_secondary: Ver la documentación de la API
       cta_see_all: Ver todas las comparaciones

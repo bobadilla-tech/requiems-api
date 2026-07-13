@@ -2,6 +2,8 @@
 
 require "yaml"
 require_relative "../lib/division_slugs.rb"
+require_relative "../lib/comparison_slugs.rb"
+require_relative "../lib/industry_slugs.rb"
 
 SitemapGenerator::Sitemap.default_host = "https://requiems.xyz"
 SitemapGenerator::Sitemap.compress      = false # write .xml, not .xml.gz
@@ -22,25 +24,30 @@ SYSTEM_SLUGS = %w[
 ].freeze
 
 STATIC_PAGES = [
-  { path: "/",               changefreq: "weekly",  priority: 1.0 },
-  { path: "/apis",           changefreq: "weekly",  priority: 0.9 },
-  { path: "/systems",        changefreq: "weekly",  priority: 0.85 },
-  { path: "/pricing",        changefreq: "monthly", priority: 0.8 },
-  { path: "/api_reference",  changefreq: "monthly", priority: 0.7 },
-  { path: "/faq",            changefreq: "monthly", priority: 0.6 },
-  { path: "/changelog",      changefreq: "weekly",  priority: 0.6 },
-  { path: "/blog",           changefreq: "weekly",  priority: 0.6 },
-  { path: "/examples",       changefreq: "weekly",  priority: 0.65 },
-  { path: "/about",          changefreq: "monthly", priority: 0.5 },
-  { path: "/team",           changefreq: "monthly", priority: 0.5 },
-  { path: "/contact",        changefreq: "monthly", priority: 0.5 },
-  { path: "/glossary",       changefreq: "monthly", priority: 0.5 },
-  { path: "/error_codes",    changefreq: "monthly", priority: 0.5 },
-  { path: "/suggest-an-api", changefreq: "monthly", priority: 0.4 },
-  { path: "/talk-to-sales",  changefreq: "monthly", priority: 0.4 },
-  { path: "/status",         changefreq: "always",  priority: 0.4 },
-  { path: "/privacy",        changefreq: "monthly", priority: 0.3 },
-  { path: "/terms",          changefreq: "monthly", priority: 0.3 }
+  { path: "",                    changefreq: "weekly",  priority: 1.0 },
+  { path: "/apis",               changefreq: "weekly",  priority: 0.9 },
+  { path: "/systems",            changefreq: "weekly",  priority: 0.85 },
+  { path: "/pricing",            changefreq: "monthly", priority: 0.8 },
+  { path: "/api_reference",      changefreq: "monthly", priority: 0.7 },
+  { path: "/faq",                changefreq: "monthly", priority: 0.6 },
+  { path: "/changelog",          changefreq: "weekly",  priority: 0.6 },
+  { path: "/blog",               changefreq: "weekly",  priority: 0.6 },
+  { path: "/examples",           changefreq: "weekly",  priority: 0.65 },
+  { path: "/domain-checker",     changefreq: "weekly",  priority: 0.55 },
+  { path: "/ai",                 changefreq: "monthly", priority: 0.55 },
+  { path: "/for-llms",           changefreq: "monthly", priority: 0.5 },
+  { path: "/about",              changefreq: "monthly", priority: 0.5 },
+  { path: "/security",           changefreq: "monthly", priority: 0.5 },
+  { path: "/team",               changefreq: "monthly", priority: 0.5 },
+  { path: "/contact",            changefreq: "monthly", priority: 0.5 },
+  { path: "/glossary",           changefreq: "monthly", priority: 0.5 },
+  { path: "/error_codes",        changefreq: "monthly", priority: 0.5 },
+  { path: "/suggest-an-api",     changefreq: "monthly", priority: 0.4 },
+  { path: "/talk-to-sales",      changefreq: "monthly", priority: 0.4 },
+  { path: "/private-deployment", changefreq: "monthly", priority: 0.4 },
+  { path: "/status",             changefreq: "always",  priority: 0.4 },
+  { path: "/privacy",            changefreq: "monthly", priority: 0.3 },
+  { path: "/terms",              changefreq: "monthly", priority: 0.3 }
 ].freeze
 
 CASE_STUDY_PAGES = [
@@ -49,11 +56,29 @@ CASE_STUDY_PAGES = [
   { path: "/case-studies/compilestrength", changefreq: "monthly", priority: 0.7 }
 ].freeze
 
+BLOG_POST_PAGES = BlogPost.all.map { |post| { path: "/blog/#{post.slug}", changefreq: "monthly", priority: 0.65 } }.freeze
+
 DIVISION_MARKETING_PAGES = [
   { path: "/divisions", changefreq: "weekly", priority: 0.75 }
 ].concat(
   DivisionSlugs::ALL.map do |slug|
     { path: "/#{slug}", changefreq: "weekly", priority: 0.72 }
+  end
+).freeze
+
+COMPARISON_PAGES = [
+  { path: "/compare", changefreq: "weekly", priority: 0.75 }
+].concat(
+  ComparisonSlugs::ALL.map do |slug|
+    { path: "/compare/#{slug}", changefreq: "monthly", priority: 0.68 }
+  end
+).freeze
+
+INDUSTRY_PAGES = [
+  { path: "/industries", changefreq: "weekly", priority: 0.75 }
+].concat(
+  IndustrySlugs::ALL.map do |slug|
+    { path: "/industries/#{slug}", changefreq: "monthly", priority: 0.68 }
   end
 ).freeze
 
@@ -86,7 +111,43 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
       end
     end
 
+    BLOG_POST_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
     DIVISION_MARKETING_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
+    COMPARISON_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+
+    INDUSTRY_PAGES.each do |page|
       alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
       alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|

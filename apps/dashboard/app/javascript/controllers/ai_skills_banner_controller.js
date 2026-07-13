@@ -13,11 +13,12 @@ const HIDE_CLASS = "hide-ai-skills-banner";
 // (see the inline script in application.html.erb's <head> that reads this
 // back before paint, mirroring the dark-mode FOUC-avoidance pattern).
 //
-// That head script only runs on a full page load, not on Turbo visits
-// (Turbo swaps <body> — including a fresh banner partial — without
-// re-running already-present <head> scripts). connect() re-syncs the same
-// hide class on every Turbo visit, since Stimulus reconnects controllers
-// whenever their element is (re)inserted by a Turbo body swap.
+// connect() re-applies the same hide class on every Turbo visit (Stimulus
+// reconnects controllers whenever their element is (re)inserted by a Turbo
+// body swap). Verified against Turbo's own head-diffing that in practice a
+// byte-identical inline <head> script does get re-run on each visit here —
+// but that's an internal implementation detail Turbo doesn't document as
+// guaranteed, so this makes the sync explicit rather than relying on it.
 export default class extends Controller {
   connect() {
     let mutedUntil;
