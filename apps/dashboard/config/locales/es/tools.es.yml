@@ -617,6 +617,18 @@ es:
       api_combinations:
         pair_it_with_other_apis: Combínalo con otras API.
         sentiment_works_best_as_part_of_a: El análisis de sentimientos funciona mejor como parte de un proceso integrado. Aquí presentamos tres combinaciones naturales.
+        spell_check_title: Análisis de sentimientos + Corrección ortográfica
+        spell_check_body: Ejecuta primero una corrección ortográfica para limpiar el texto de entrada ruidoso y luego analiza los sentimientos sobre el texto corregido para obtener resultados más precisos.
+        spell_check_link: API de corrección ortográfica
+        language_title: Análisis de sentimientos + Detección de idioma
+        language_body: Detecta el idioma antes de enrutar el texto al modelo de sentimientos adecuado. Útil para colas de soporte multilingüe y plataformas de reseñas globales.
+        language_link: API de detección de idioma
+        email_title: Análisis de sentimientos + Validador de email
+        email_body: Valida el email del remitente y analiza el tono de su mensaje en una sola pasada, antes de almacenar comentarios o abrir un ticket de soporte.
+        email_link: API de validación de email
+      cta:
+        heading: Automatiza esto con Requiems.
+        body: Una clave API. Análisis de sentimientos, más de 50 API adicionales en validación, finanzas, redes y más.
       demo:
         error_empty: Introduce un texto para analizar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
@@ -624,7 +636,7 @@ es:
         error_no_data: No se han devuelto datos.
         error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         input_placeholder: Pega cualquier texto, reseña, comentario o sugerencia...
-        label_breakdown: Descomponer
+        label_breakdown: Desglose
         label_confident: seguro
         label_negative: Negativo
         label_neutral: Neutral
@@ -632,21 +644,52 @@ es:
         result_heading: Análisis de sentimientos
       faq:
         heading: Preguntas frecuentes
+        q1: "¿Cuáles son los posibles valores de sentimiento?"
+        a1: El campo de sentimiento devuelve uno de tres valores (positivo, negativo o neutro) según la clase con la puntuación de confianza más alta.
+        q2: "¿Qué representa el desglose?"
+        a2: Los tres valores del desglose (positivo, negativo, neutro) siempre suman 1.0. Muestran la confianza proporcional en todas las clases, no solo en la dominante. Una puntuación de 0.97 positiva significa que el modelo está muy seguro; 0.51 significa que se inclina hacia lo positivo, pero el texto es ambiguo.
+        q3: "¿Cuánto puede medir el texto de entrada?"
+        a3: No hay un límite estricto de caracteres a nivel de API, pero las entradas muy largas pueden truncarse según el modelo subyacente. Se recomienda mantener las entradas por debajo de 512 tokens (aproximadamente 400 palabras) para obtener la mejor precisión.
+        q4: "¿Puedo analizar varios textos a la vez?"
+        a4: Sí. El endpoint por lotes (POST /v1/text/sentiment/batch) acepta hasta 50 textos por solicitud. Los resultados se devuelven en el mismo orden que la entrada y cada texto cuenta como una unidad de uso.
+        q5: "¿Es gratuito?"
+        a5: La demo de arriba funciona sin necesidad de cuenta. Los planes de pago ofrecen límites de velocidad más altos y acceso completo a la API para uso en producción.
       hero:
         analyze: Analizar
         get_api_key: Obtén la clave API
         know_how_your_text_lands: Conoce el impacto que tiene tu texto.
         read_the_docs: Lee la documentación
+        subtitle: Clasifica cualquier texto como positivo, negativo o neutro, con una puntuación de confianza y un desglose completo, en una sola llamada a la API.
+      logo_marquee:
+        trusted_by: Usado por equipos de
+      seo:
+        description: Analiza el sentimiento de cualquier texto al instante. Obtén una clasificación positiva, negativa o neutra con una puntuación de confianza y un desglose completo, gratis, sin necesidad de cuenta.
       show:
         free_sentiment_analysis_tool_positive: "Herramienta gratuita de análisis de sentimientos: detección de texto positivo, negativo y neutro | API de Requiems"
       use_cases:
         anywhere_text_flows_through_your_system: En cualquier parte de tu sistema donde fluye texto, el análisis de sentimientos te da una señal.
         built_for_real_use_cases: Diseñado para casos de uso reales.
+        customer_support_title: Atención al cliente
+        customer_support_body: Enruta tickets automáticamente. Marca a los clientes frustrados para atención prioritaria antes de que se vayan.
+        product_reviews_title: Reseñas de productos
+        product_reviews_body: Agrega opiniones de miles de reseñas sin tener que leerlas una por una.
+        social_media_title: Monitoreo de redes sociales
+        social_media_body: Rastrea menciones de marca en tiempo real y detecta cambios de sentimiento antes de que se conviertan en problemas de relaciones públicas.
+        content_moderation_title: Moderación de contenido
+        content_moderation_body: Filtra contenido generado por usuarios en busca de un tono hostil o dañino antes de que llegue a otros usuarios.
+        nlp_pipelines_title: Pipelines de PLN
+        nlp_pipelines_body: Usa el sentimiento como una característica en modelos de ML, como preprocesamiento para clasificación de texto, recomendación o tareas de ranking.
+        survey_analysis_title: Análisis de encuestas
+        survey_analysis_body: Convierte respuestas abiertas de encuestas en datos estructurados de sentimiento sin necesidad de etiquetado manual.
       what_it_does:
         one_call_three_values_enough_signal_to: Una llamada. Tres valores. Señal suficiente para actuar.
         positive_negative_or_neutral: Positivo, negativo o neutral
         proportional_scores_across_all_classes: Puntuaciones proporcionales en todas las clases
         what_it_does: Lo que hace
+        instant_classification: Clasificación instantánea
+        classification_body: Cada texto recibe una etiqueta dominante más una puntuación de confianza entre 0.0 y 1.0, lo que permite establecer umbrales de resultados con precisión.
+        full_breakdown: Desglose completo
+        breakdown_body: El desglose muestra cómo el modelo distribuye la confianza entre las tres clases, sumando siempre 1.0. Útil para textos ambiguos o de tono mixto.
     unit_conversion:
       api_combinations:
         unit_conversion_becomes_even_more: La conversión de unidades resulta aún más útil cuando se combina con otras API de Requiems.

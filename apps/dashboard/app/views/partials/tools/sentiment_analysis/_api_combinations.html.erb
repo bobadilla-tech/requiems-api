@@ -1,20 +1,20 @@
 <% combos = [
   {
-    title: "Sentiment + Spell Check",
-    body: "Run spell check first to clean up noisy user input, then analyze sentiment on the corrected text for more accurate results.",
-    link_text: "Spell Check API",
+    title: t('tools.sentiment_analysis.api_combinations.spell_check_title'),
+    body: t('tools.sentiment_analysis.api_combinations.spell_check_body'),
+    link_text: t('tools.sentiment_analysis.api_combinations.spell_check_link'),
     link_id: "spell-check"
   },
   {
-    title: "Sentiment + Language Detection",
-    body: "Detect the language before routing text to the right sentiment model. Useful for multilingual support queues and global review platforms.",
-    link_text: "Language Detection API",
+    title: t('tools.sentiment_analysis.api_combinations.language_title'),
+    body: t('tools.sentiment_analysis.api_combinations.language_body'),
+    link_text: t('tools.sentiment_analysis.api_combinations.language_link'),
     link_id: "language-detection"
   },
   {
-    title: "Sentiment + Email Validator",
-    body: "Validate the sender's email and analyze the tone of their message in one pass — before storing feedback or opening a support ticket.",
-    link_text: "Email Validator API",
+    title: t('tools.sentiment_analysis.api_combinations.email_title'),
+    body: t('tools.sentiment_analysis.api_combinations.email_body'),
+    link_text: t('tools.sentiment_analysis.api_combinations.email_link'),
     link_id: "email-validate"
   }
 ] %>

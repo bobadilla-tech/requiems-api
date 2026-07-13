@@ -1,23 +1,23 @@
 <% faqs = [
   {
-    q: "What are the possible sentiment values?",
-    a: "The sentiment field returns one of three values — positive, negative, or neutral — based on whichever class has the highest confidence score."
+    q: t('tools.sentiment_analysis.faq.q1'),
+    a: t('tools.sentiment_analysis.faq.a1')
   },
   {
-    q: "What does the breakdown represent?",
-    a: "The three breakdown values (positive, negative, neutral) always sum to 1.0. They show the proportional confidence across all classes, not just the dominant one. A score of 0.97 positive means the model is highly certain; 0.51 means it's leaning positive but the text is ambiguous."
+    q: t('tools.sentiment_analysis.faq.q2'),
+    a: t('tools.sentiment_analysis.faq.a2')
   },
   {
-    q: "How long can the input text be?",
-    a: "There is no strict character limit enforced at the API level, but very long inputs may be truncated by the underlying model. Aim for inputs under 512 tokens (roughly 400 words) for best accuracy."
+    q: t('tools.sentiment_analysis.faq.q3'),
+    a: t('tools.sentiment_analysis.faq.a3')
   },
   {
-    q: "Can I analyze multiple texts at once?",
-    a: "Yes. The batch endpoint (POST /v1/text/sentiment/batch) accepts up to 50 texts per request. Results are returned in the same order as the input and each text counts as one unit of usage."
+    q: t('tools.sentiment_analysis.faq.q4'),
+    a: t('tools.sentiment_analysis.faq.a4')
   },
   {
-    q: "Is it free to use?",
-    a: "The demo above works without an account. Paid plans offer higher rate limits and full API access for production use."
+    q: t('tools.sentiment_analysis.faq.q5'),
+    a: t('tools.sentiment_analysis.faq.a5')
   }
 ] %>
 
