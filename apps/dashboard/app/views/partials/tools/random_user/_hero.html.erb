@@ -41,7 +41,8 @@
 
     <!-- Live demo -->
     <div class="mt-12 max-w-xl mx-auto"
-         data-controller="random-user-demo">
+         data-controller="random-user-demo"
+         data-random-user-demo-error-network-value="<%= t('tools.random_user.demo.error_network') %>">
 
       <form data-action="turbo:submit-start->random-user-demo#onSubmitStart turbo:submit-end->random-user-demo#onSubmitEnd"
             action="<%= tool_demo_random_user_path %>"

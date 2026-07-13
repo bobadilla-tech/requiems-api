@@ -5,6 +5,9 @@ import { Controller } from "@hotwired/stimulus";
 // and renders the result. No user input is required — just click and fetch.
 export default class extends Controller {
   static targets = ["button", "errorMessage", "spinner"];
+  static values = {
+    errorNetwork: String,
+  };
 
   onSubmitStart() {
     this._clearError();
@@ -17,7 +20,7 @@ export default class extends Controller {
     this.spinnerTarget.classList.add("hidden");
 
     if (!event.detail.success) {
-      this.errorMessageTarget.textContent = "Failed to fetch a random user. Please try again.";
+      this.errorMessageTarget.textContent = this.errorNetworkValue;
       this.errorMessageTarget.classList.remove("hidden");
     }
   }

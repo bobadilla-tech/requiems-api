@@ -1020,6 +1020,7 @@ fr:
       demo:
         error_rate_limit: "Trop de requêtes. Attendez un instant et réessayez."
         error_generic: "Une erreur s'est produite. Réessayez."
+        error_network: "Erreur réseau. Veuillez vérifier votre connexion."
         error_no_data: "Aucune donnée retournée."
         badge_live: "En direct"
         avatar_alt: "Avatar de l'utilisateur"

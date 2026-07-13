@@ -1349,6 +1349,7 @@ en:
       demo:
         error_rate_limit: Too many requests. Wait a moment and try again.
         error_generic: Something went wrong. Try again.
+        error_network: Network error. Please check your connection.
         error_no_data: No data returned.
         badge_live: Live
         avatar_alt: User avatar
