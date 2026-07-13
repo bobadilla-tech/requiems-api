@@ -737,7 +737,6 @@ fr:
         celsius: Celsius
         centimeters: Centimètres
         convert: Convertir
-        cubic_meters: Mètres cubes
         cups: Tasses
         fahrenheit: Fahrenheit
         feet: Pieds
@@ -753,7 +752,6 @@ fr:
         km_hour: km/heure
         knots: Nœuds
         liters: Litres
-        long_tons_uk: Long Tons (Royaume-Uni)
         meters: Mètres
         meters_second: Mètres/seconde
         miles: Miles
@@ -766,12 +764,10 @@ fr:
         pounds: Livres
         quarts: Quarts
         read_the_docs: Lisez les documents
-        short_tons_us: Short Tons (États-Unis)
         source_unit: Unité source
         square_feet: Pieds carrés
         square_kilometers: Kilomètres carrés
         square_meters: Mètres carrés
-        square_miles: Miles carrés
         target_unit: Unité cible
         tons_metric: Tonnes (métriques)
         yards: Cours

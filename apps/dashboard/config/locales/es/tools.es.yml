@@ -737,7 +737,6 @@ es:
         celsius: Celsius
         centimeters: centímetros
         convert: Convertir
-        cubic_meters: Metros cúbicos
         cups: Tazas
         fahrenheit: Fahrenheit
         feet: Pies
@@ -753,7 +752,6 @@ es:
         km_hour: km/hora
         knots: Nudos
         liters: litros
-        long_tons_uk: Toneladas largas (Reino Unido)
         meters: Medidores
         meters_second: Metros por segundo
         miles: Millas
@@ -766,12 +764,10 @@ es:
         pounds: Libras
         quarts: cuartos
         read_the_docs: Lee la documentación
-        short_tons_us: Toneladas cortas (EE. UU.)
         source_unit: Unidad fuente
         square_feet: pies cuadrados
         square_kilometers: kilómetros cuadrados
         square_meters: metros cuadrados
-        square_miles: millas cuadradas
         target_unit: Unidad objetivo
         tons_metric: Toneladas (sistema métrico)
         yards: Yardas
