@@ -962,7 +962,7 @@ es:
         accuracy_heading: "Perfil de Usuario Completo"
         accuracy_body: "Cada respuesta incluye un nombre único, dirección de correo, número telefónico, dirección postal completa con calle y ciudad, y una URL de avatar generada por DiceBear. Perfiles realistas que puedes insertar directamente en una base de datos o maqueta de interfaz."
         simplicity_heading: "Una Sola Solicitud GET"
-        simplicity_body: "Sin flujo de autenticación, sin cuerpo de solicitud. Una solicitud GET a /v1/technology/random-user devuelve un perfil de usuario completo. Úsalo donde necesites datos de prueba — desarrollo local, entornos de staging o aplicaciones demo."
+        simplicity_body: "Basta con una única solicitud GET con tu clave API. Sin cuerpo de solicitud, sin SDK, sin configuración — solo una llamada HTTP y una respuesta JSON. Úsalo donde necesites datos de prueba — desarrollo local, entornos de staging o aplicaciones demo."
       use_cases:
         heading: "Diseñado para Pruebas, Prototipado y Demos"
         subheading: "En cualquier lugar donde necesites datos de usuario falsos realistas, Random User puede proporcionarlos al instante."

@@ -1291,7 +1291,7 @@ en:
         accuracy_heading: Complete User Profile
         accuracy_body: Every response includes a unique name, email address, phone number, full mailing address with street and city, and an avatar URL powered by DiceBear. No garbage data, no placeholder text — realistic profiles you can drop straight into a database or UI mockup.
         simplicity_heading: A Single GET Request
-        simplicity_body: No authentication flow, no body payload. One GET request to /v1/technology/random-user returns a full user profile. Use it anywhere you need test data — local dev, staging environments, or demo applications.
+        simplicity_body: A single GET request with your API key is all it takes. No body payload, no SDK, no configuration — just an HTTP call and a JSON response. Use it anywhere you need test data — local dev, staging environments, or demo applications.
       use_cases:
         heading: Built for Testing, Prototyping, and Demos
         subheading: Anywhere you need realistic fake user data, Random User can provide it instantly.
