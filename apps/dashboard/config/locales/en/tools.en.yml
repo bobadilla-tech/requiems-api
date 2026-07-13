@@ -1147,10 +1147,98 @@ en:
         label_flagged_words: Flagged words
         badge_clean: Clean
         badge_flagged: Flagged
-        badge_none: None
         badge_yes: "Yes"
         badge_no: "No"
         badge_none: None detected
+
+    timezone:
+      seo:
+        title: "Free Timezone API — IANA Timezone, UTC Offset & DST by City or Coordinates | Requiems API"
+        description: "Get the IANA timezone identifier, UTC offset, current time, and DST status for any city or geographic coordinates. Free tier available — no credit card required."
+      logo_marquee:
+        trusted_by: "Trusted by teams at"
+      demo:
+        error_empty: "Enter a city name, or latitude and longitude, to look up a timezone."
+        error_invalid: "Enter a valid latitude (-90 to 90) and longitude (-180 to 180)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No timezone data found for that location."
+        badge_found: "Found"
+        badge_yes: "✓ Yes"
+        badge_no: "✗ No"
+        label_timezone: "Timezone"
+        label_offset: "UTC offset"
+        label_current_time: "Current time"
+        label_is_dst: "Observing DST"
+      hero:
+        title: "Know the local time, anywhere."
+        subtitle: "IANA timezone, UTC offset, current time, and DST status — for any city or coordinates, in a single API call."
+        cta_primary: "Get API Key"
+        cta_docs: "Read the docs"
+        placeholder: "Enter a city (e.g. Tokyo)"
+        submit: "Look up"
+        no_account: "No account required for the demo."
+        label_input: "City name"
+        coords_divider: "...or by coordinates:"
+        label_lat: "Latitude"
+        label_lon: "Longitude"
+        placeholder_lat: "Latitude (e.g. 51.5)"
+        placeholder_lon: "Longitude (e.g. -0.1)"
+      what_it_does:
+        coverage_badge: "Coverage"
+        coverage_heading: "Lookup by city name or geographic coordinates."
+        coverage_body: "Timezone resolves any point on Earth by latitude/longitude, or any of 150+ major cities by name. Every response includes the IANA identifier, UTC offset, current UTC time, and whether the location is currently observing daylight saving time."
+        simplicity_badge: "Simplicity"
+        simplicity_heading: "One GET request. No body, no parsing."
+        simplicity_body: "Pass a city name or lat/lon as query parameters. Your API key in the header. No SDK, no setup, no request body. The response is JSON, with the timezone fields nested one level under data."
+      use_cases:
+        heading: "Built for location-aware apps."
+        subheading: "Timezone fits anywhere local time matters — scheduling, notifications, and travel alike."
+        schedule_title: "Show the correct local time in scheduling tools"
+        schedule_desc: "Resolve a user's timezone from their city or coordinates and render meeting times, deadlines, and calendar events correctly across regions."
+        schedule_tags: "Scheduling, Calendars"
+        notif_title: "Send notifications at the right local hour"
+        notif_desc: "Avoid waking users at 3am. Compute the local time for each recipient before triggering push notifications or emails."
+        notif_tags: "Notifications, Growth"
+        travel_title: "Display arrival and departure times correctly"
+        travel_desc: "Travel and logistics platforms need to show times in the traveler's local timezone at each leg of a trip, not just UTC."
+        travel_tags: "Travel, Logistics"
+        dst_title: "Handle daylight saving time transitions"
+        dst_desc: "Avoid off-by-one-hour bugs around DST changeovers by checking is_dst directly instead of hardcoding offset tables."
+        dst_tags: "Data Quality, Scheduling"
+        onboarding_title: "Set a sensible default timezone at signup"
+        onboarding_desc: "Look up the timezone from the user's city or IP-derived coordinates to pre-fill their account settings correctly."
+        onboarding_tags: "Onboarding, UX"
+        support_title: "Route support tickets by local business hours"
+        support_desc: "Combine customer location with timezone data to route tickets to on-shift support agents in the right region."
+        support_tags: "Operations, Support"
+      api_combinations:
+        heading: "Use together with complementary APIs."
+        subheading: "Timezone works even better when paired with other Requiems APIs."
+        worldtime_pair: "Timezone + World Time"
+        worldtime_benefit: "Resolve the IANA timezone name first, then query World Time directly by name for lightweight repeated lookups."
+        geocode_pair: "Timezone + Geocoding"
+        geocode_benefit: "Convert a free-form address to coordinates, then feed those coordinates into Timezone for a complete location-to-time pipeline."
+        cities_pair: "Timezone + Cities"
+        cities_benefit: "Look up city metadata — population, country, coordinates — alongside timezone information in the same request flow."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "Should I use a city name or coordinates?"
+        a1: "Use coordinates (lat/lon) for precise lookups anywhere in the world. Use the city name for a quick lookup when you have a well-known city. Coordinate-based lookup works for any point on Earth, while city-based lookup is limited to the ~150+ cities in our database."
+        q2: "Is the city parameter case-sensitive?"
+        a2: "No. City names are normalized to lowercase before lookup, so \"Tokyo\", \"TOKYO\", and \"tokyo\" all work."
+        q3: "What does is_dst mean?"
+        a3: "is_dst indicates whether the location is currently observing Daylight Saving Time. For locations that do not use DST (e.g. Japan, most of Africa), this is always false."
+        q4: "What format is the UTC offset returned in?"
+        a4: "The offset field uses the format +HH:MM or -HH:MM (e.g. '+05:30' for India, '-05:00' for US Eastern Standard Time)."
+        q5: "Is it free to use?"
+        a5: "The demo above works without an account. Paid plans are available for production scale with higher rate limits and full API access."
+      cta:
+        heading: "Automate this with Requiems."
+        body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
+
     trivia:
       seo:
         title: Free Trivia API — Random Quiz Questions with Answers | Requiems API

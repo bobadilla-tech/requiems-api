@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   post "tools/demos/inflation",         to: "tool_demos#inflation",         as: :tool_demo_inflation
   post "tools/demos/qr-code",           to: "tool_demos#qr_code",           as: :tool_demo_qr_code
   post "tools/demos/profanity-filter",  to: "tool_demos#profanity_filter",  as: :tool_demo_profanity_filter
+  post "tools/demos/timezone",          to: "tool_demos#timezone",          as: :tool_demo_timezone
   post "tools/demos/trivia",            to: "tool_demos#trivia",            as: :tool_demo_trivia
   post "tools/demos/vpn-detection",     to: "tool_demos#vpn_detection",     as: :tool_demo_vpn_detection
   post "tools/demos/thesaurus",         to: "tool_demos#thesaurus",         as: :tool_demo_thesaurus

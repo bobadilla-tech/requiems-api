@@ -1,0 +1,42 @@
+<%
+  rows = [
+    { key: "label_timezone",     value: data["timezone"] },
+    { key: "label_offset",       value: data["offset"] },
+    { key: "label_current_time", value: data["current_time"] },
+    { key: "label_is_dst",       value: data["is_dst"], type: :bool },
+  ]
+
+  value_class = ->(type, val) {
+    case type
+    when :bool then val ? "text-emerald-600 dark:text-emerald-400" : "text-gray-500 dark:text-gray-400"
+    else "text-gray-800 dark:text-gray-200"
+    end
+  }
+%>
+<turbo-frame id="timezone-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= label %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+        <%= t("tools.timezone.demo.badge_found") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <% rows.each do |row| %>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            <%= t("tools.timezone.demo.#{row[:key]}") %>
+          </span>
+          <span class="text-sm font-medium <%= value_class.call(row[:type], row[:value]) %>">
+            <% if row[:type] == :bool %>
+              <%= row[:value] ? t("tools.timezone.demo.badge_yes") : t("tools.timezone.demo.badge_no") %>
+            <% else %>
+              <%= row[:value].presence || "—" %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>
