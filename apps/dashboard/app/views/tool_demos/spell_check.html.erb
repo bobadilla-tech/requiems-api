@@ -1,0 +1,79 @@
+<%
+  corrected    = data["corrected"].to_s
+  corrections  = Array(data["corrections"])
+
+  has_issues = corrections.any?
+
+  badge_class = has_issues \
+    ? "bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300" \
+    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300"
+
+  badge_label = has_issues \
+    ? t("tools.spell_check.demo.badge_corrected") \
+    : t("tools.spell_check.demo.badge_clean")
+%>
+<turbo-frame id="spell_check-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+
+    <!-- Header row -->
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= text.truncate(60) %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= badge_class %>">
+        <%= badge_label %>
+      </span>
+    </div>
+
+    <!-- Result rows -->
+    <div class="px-4 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+
+      <!-- Corrected text -->
+      <div class="flex items-start justify-between py-2 gap-4">
+        <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">
+          <%= t("tools.spell_check.demo.label_corrected") %>
+        </span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200 text-right break-words max-w-xs">
+          <%= corrected.presence || "—" %>
+        </span>
+      </div>
+
+      <!-- Corrections count -->
+      <div class="flex items-center justify-between py-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          <%= t("tools.spell_check.demo.label_errors_found") %>
+        </span>
+        <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+          <%= corrections.length %>
+        </span>
+      </div>
+    </div>
+
+    <!-- Corrections detail -->
+    <% if corrections.any? %>
+      <div class="border-t border-gray-100 dark:border-gray-700 px-4 py-3">
+        <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+          <%= t("tools.spell_check.demo.label_corrections") %>
+        </div>
+        <div class="space-y-2">
+          <% corrections.each do |c| %>
+            <div class="text-sm px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-900">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-red-500 dark:text-red-400 line-through"><%= c["original"] %></span>
+                <span class="text-gray-400">→</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-medium"><%= c["suggested"] %></span>
+              </div>
+              <% if c["suggestions"].is_a?(Array) && c["suggestions"].any? %>
+                <div class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                  <%= t("tools.spell_check.demo.label_alternatives") %>
+                  <% c["suggestions"].each_with_index do |s, si| %>
+                    <span class="inline-block px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 ml-1"><%= s %></span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</turbo-frame>

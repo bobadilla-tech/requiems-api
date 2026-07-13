@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter trivia].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter trivia spell-check].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -63,6 +63,11 @@ class ToolsController < ApplicationController
       name: "Trivia",
       description: "Random trivia questions with multiple-choice answers, filterable by category and difficulty.",
       icon_classes: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400"
+    },
+    "spell-check" => {
+      name: "Spell Check",
+      description: "Check spelling and get correction suggestions for misspelled words in any text.",
+      icon_classes: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"
     }
   }.freeze
 
