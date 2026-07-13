@@ -47,7 +47,7 @@
                   <%= ri == 2 || ri == 5 ? "border-b-2 border-b-gray-400 dark:border-b-gray-500" : "border-b border-gray-200 dark:border-gray-700" %>
                   <%= ci == 8 ? "border-r-0" : "" %>
                   <%= ri == 8 ? "border-b-0" : "" %>">
-                  <%= cell %>
+                  <%= cell == 0 ? "" : cell %>
                 </div>
               <% end %>
             <% end %>
