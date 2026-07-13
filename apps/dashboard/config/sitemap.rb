@@ -22,7 +22,7 @@ SYSTEM_SLUGS = %w[
 ].freeze
 
 STATIC_PAGES = [
-  { path: "/",               changefreq: "weekly",  priority: 1.0 },
+  { path: "",                changefreq: "weekly",  priority: 1.0 },
   { path: "/apis",           changefreq: "weekly",  priority: 0.9 },
   { path: "/systems",        changefreq: "weekly",  priority: 0.85 },
   { path: "/pricing",        changefreq: "monthly", priority: 0.8 },

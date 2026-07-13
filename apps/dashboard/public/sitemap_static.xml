@@ -11,80 +11,80 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
 >
   <url>
-    <loc>https://requiems.xyz/en//</loc>
+    <loc>https://requiems.xyz/en/</loc>
     <lastmod>2026-06-08T20:42:50-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="en"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/es//"
+      href="https://requiems.xyz/es/"
       hreflang="es"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/fr//"
+      href="https://requiems.xyz/fr/"
       hreflang="fr"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="x-default"
     />
   </url>
   <url>
-    <loc>https://requiems.xyz/es//</loc>
+    <loc>https://requiems.xyz/es/</loc>
     <lastmod>2026-06-08T20:42:50-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="en"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/es//"
+      href="https://requiems.xyz/es/"
       hreflang="es"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/fr//"
+      href="https://requiems.xyz/fr/"
       hreflang="fr"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="x-default"
     />
   </url>
   <url>
-    <loc>https://requiems.xyz/fr//</loc>
+    <loc>https://requiems.xyz/fr/</loc>
     <lastmod>2026-06-08T20:42:50-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="en"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/es//"
+      href="https://requiems.xyz/es/"
       hreflang="es"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/fr//"
+      href="https://requiems.xyz/fr/"
       hreflang="fr"
     />
     <xhtml:link
       rel="alternate"
-      href="https://requiems.xyz/en//"
+      href="https://requiems.xyz/en/"
       hreflang="x-default"
     />
   </url>
