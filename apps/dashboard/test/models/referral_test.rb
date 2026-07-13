@@ -29,7 +29,9 @@ class ReferralTest < ActiveSupport::TestCase
   test "blocks self-referral at model validation level" do
     self_referral = Referral.new(referrer: @referrer, referred_user: @referrer)
     assert_not self_referral.valid?
-    assert_includes self_referral.errors[:referred_user], "cannot be the same as referrer"
+    I18n.with_locale(:en) do
+      assert_includes self_referral.errors[:referred_user], "cannot be the same as referrer"
+    end
   end
 
   test "referred_user_id has unique index — second referral for same user is invalid" do
