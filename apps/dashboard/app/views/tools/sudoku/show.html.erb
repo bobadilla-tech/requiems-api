@@ -1,0 +1,19 @@
+<% content_for :title, t("tools.sudoku.seo.title") %>
+<% content_for :description, t("tools.sudoku.seo.description") %>
+
+<%= render "partials/tools/sudoku/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.sudoku.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/sudoku/what_it_does" %>
+<%= render "partials/tools/sudoku/use_cases" %>
+<%= render "partials/tools/sudoku/api_combinations" %>
+<%= render "partials/tools/sudoku/faq" %>
+<%= render "partials/tools/sudoku/cta" %>

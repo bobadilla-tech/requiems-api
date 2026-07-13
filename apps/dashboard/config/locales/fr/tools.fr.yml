@@ -846,10 +846,239 @@ fr:
         label_flagged_words: "Mots signalés"
         badge_clean: "Propre"
         badge_flagged: "Signalé"
-        badge_none: "Aucun"
         badge_yes: "Oui"
         badge_no: "Non"
         badge_none: "Aucun détecté"
+
+    timezone:
+      seo:
+        title: "API Timezone gratuite — Fuseau horaire IANA, décalage UTC et heure d'été par ville ou coordonnées | Requiems API"
+        description: "Obtenez l'identifiant de fuseau horaire IANA, le décalage UTC, l'heure actuelle et le statut de l'heure d'été pour n'importe quelle ville ou coordonnées géographiques. Formule gratuite disponible, sans carte de crédit."
+      logo_marquee:
+        trusted_by: "La confiance des équipes chez"
+      demo:
+        error_empty: "Saisissez une ville, ou une latitude et une longitude, pour consulter un fuseau horaire."
+        error_invalid: "Saisissez une latitude valide (-90 à 90) et une longitude valide (-180 à 180)."
+        error_rate_limit: "Trop de requêtes. Attendez un instant et réessayez."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_no_data: "Aucune donnée de fuseau horaire trouvée pour cet emplacement."
+        badge_found: "Trouvé"
+        badge_yes: "✓ Oui"
+        badge_no: "✗ Non"
+        label_timezone: "Fuseau horaire"
+        label_offset: "Décalage UTC"
+        label_current_time: "Heure actuelle"
+        label_is_dst: "Heure d'été en vigueur"
+      hero:
+        title: "Connaissez l'heure locale, partout."
+        subtitle: "Fuseau horaire IANA, décalage UTC, heure actuelle et statut de l'heure d'été — pour n'importe quelle ville ou coordonnées, en un seul appel API."
+        cta_primary: "Obtenez votre clé API"
+        cta_docs: "Voir la documentation"
+        placeholder: "Saisissez une ville (ex : Tokyo)"
+        submit: "Rechercher"
+        no_account: "Aucun compte requis pour la démo."
+        label_input: "Nom de la ville"
+        coords_divider: "...ou par coordonnées :"
+        label_lat: "Latitude"
+        label_lon: "Longitude"
+        placeholder_lat: "Latitude (ex : 51.5)"
+        placeholder_lon: "Longitude (ex : -0.1)"
+      what_it_does:
+        coverage_badge: "Couverture"
+        coverage_heading: "Recherche par nom de ville ou coordonnées géographiques."
+        coverage_body: "Timezone résout n'importe quel point du globe par latitude/longitude, ou l'une des 150+ grandes villes par son nom. Chaque réponse inclut l'identifiant IANA, le décalage UTC, l'heure UTC actuelle et si le lieu observe actuellement l'heure d'été."
+        simplicity_badge: "Simplicité"
+        simplicity_heading: "Une seule requête GET. Pas de corps, pas d'analyse."
+        simplicity_body: "Passez le nom d'une ville ou lat/lon en paramètres de requête. Votre clé API dans l'en-tête. Pas de SDK, pas de configuration, pas de corps de requête. La réponse est un JSON, avec les champs de fuseau horaire imbriqués sous data."
+      use_cases:
+        heading: "Conçu pour les applications sensibles à la localisation."
+        subheading: "Timezone s'adapte partout où l'heure locale compte — planification, notifications et voyage."
+        schedule_title: "Afficher la bonne heure locale dans les outils de planification"
+        schedule_desc: "Résolvez le fuseau horaire d'un utilisateur à partir de sa ville ou de ses coordonnées et affichez correctement les horaires de réunions, les échéances et les événements de calendrier selon les régions."
+        schedule_tags: "Planification, Calendriers"
+        notif_title: "Envoyer des notifications à la bonne heure locale"
+        notif_desc: "Évitez de réveiller les utilisateurs à 3h du matin. Calculez l'heure locale de chaque destinataire avant de déclencher des notifications push ou des e-mails."
+        notif_tags: "Notifications, Croissance"
+        travel_title: "Afficher correctement les heures d'arrivée et de départ"
+        travel_desc: "Les plateformes de voyage et de logistique doivent afficher les heures dans le fuseau horaire local du voyageur à chaque étape du trajet, pas seulement en UTC."
+        travel_tags: "Voyage, Logistique"
+        dst_title: "Gérer les transitions de l'heure d'été"
+        dst_desc: "Évitez les bugs de décalage d'une heure lors des changements d'heure d'été en vérifiant is_dst directement plutôt qu'en codant en dur des tables de décalage."
+        dst_tags: "Qualité des données, Planification"
+        onboarding_title: "Définir un fuseau horaire par défaut sensé à l'inscription"
+        onboarding_desc: "Recherchez le fuseau horaire à partir de la ville de l'utilisateur ou de coordonnées dérivées de son IP pour préremplir correctement les paramètres de son compte."
+        onboarding_tags: "Inscription, UX"
+        support_title: "Acheminer les tickets de support selon les horaires locaux"
+        support_desc: "Combinez la localisation du client avec les données de fuseau horaire pour acheminer les tickets vers des agents de support disponibles dans la bonne région."
+        support_tags: "Opérations, Support"
+      api_combinations:
+        heading: "Utilisez-la avec des API complémentaires."
+        subheading: "Timezone fonctionne encore mieux associée à d'autres API Requiems."
+        worldtime_pair: "Timezone + World Time"
+        worldtime_benefit: "Résolvez d'abord le nom du fuseau horaire IANA, puis interrogez World Time directement par son nom pour des recherches répétées plus légères."
+        geocode_pair: "Timezone + Geocoding"
+        geocode_benefit: "Convertissez une adresse en texte libre en coordonnées, puis utilisez ces coordonnées dans Timezone pour un pipeline complet de localisation à l'heure."
+        cities_pair: "Timezone + Cities"
+        cities_benefit: "Consultez les métadonnées de la ville — population, pays, coordonnées — en même temps que les informations de fuseau horaire, dans le même flux de requête."
+      faq:
+        heading: "Foire aux questions"
+        support_prompt: "Vous avez encore des questions ?"
+        support_link: "Contacter le support"
+        q1: "Dois-je utiliser un nom de ville ou des coordonnées ?"
+        a1: "Utilisez les coordonnées (lat/lon) pour des recherches précises partout dans le monde. Utilisez le nom de la ville pour une recherche rapide lorsque vous connaissez une ville bien identifiée. La recherche par coordonnées fonctionne pour n'importe quel point du globe, tandis que la recherche par ville est limitée aux ~150+ villes de notre base de données."
+        q2: "Le paramètre city est-il sensible à la casse ?"
+        a2: "Non. Les noms de ville sont normalisés en minuscules avant la recherche, donc \"Tokyo\", \"TOKYO\" et \"tokyo\" fonctionnent tous."
+        q3: "Que signifie is_dst ?"
+        a3: "is_dst indique si le lieu observe actuellement l'heure d'été. Pour les lieux qui n'appliquent pas l'heure d'été (par exemple le Japon, la majeure partie de l'Afrique), cette valeur est toujours false."
+        q4: "Dans quel format le décalage UTC est-il renvoyé ?"
+        a4: "Le champ offset utilise le format +HH:MM ou -HH:MM (par exemple '+05:30' pour l'Inde, '+01:00' pour la France)."
+        q5: "Est-ce gratuit à utiliser ?"
+        a5: "La démo ci-dessus fonctionne sans compte. Des forfaits payants sont disponibles pour une échelle de production, avec des limites de débit plus élevées et un accès complet à l'API."
+      cta:
+        heading: "Automatisez cela avec Requiems."
+        body: "Une seule clé API. Timezone, plus de 50 autres API entre localisation, validation, finance et plus encore."
+
+    spell_check:
+      seo:
+        title: "API gratuite de correction orthographique — Vérifiez l'orthographe et obtenez des corrections | Requiems API"
+        description:
+          "Vérifiez l'orthographe et obtenez des suggestions de correction pour
+          les mots mal orthographiés. Propulsé par LanguageTool. Essayez la démo
+          gratuite en direct — aucun compte requis."
+      logo_marquee:
+        trusted_by: "Utilisé en toute confiance par des équipes qui créent des outils d'écriture"
+      hero:
+        title: "Vérifiez l'orthographe instantanément"
+        subtitle:
+          "Soumettez n'importe quel texte en anglais et obtenez une version
+          corrigée avec des suggestions mot par mot — propulsé par LanguageTool.
+          Aucune clé API nécessaire pour la démo."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Voir la documentation"
+        label_input: "Texte à vérifier"
+        placeholder: "ex : Ths is a smiple tset with erors"
+        submit: "Vérifier l'orthographe"
+        no_account: "Aucun compte requis pour la démo"
+      what_it_does:
+        accuracy_badge: "Moteur de correction"
+        accuracy_heading: "Détecte chaque erreur"
+        accuracy_body:
+          "Analyse le texte saisi à l'aide de LanguageTool et renvoie chaque
+          mot mal orthographié avec sa position, la meilleure correction et
+          jusqu'à 3 alternatives classées."
+        simplicity_badge: "Simplicité"
+        simplicity_heading: "Une seule requête POST"
+        simplicity_body:
+          "Envoyez du texte, recevez la version corrigée ainsi qu'une liste de
+          corrections individuelles. Aucun flux de travail en plusieurs étapes,
+          aucun dictionnaire côté client."
+      use_cases:
+        heading: "Conçu pour des flux d'écriture de qualité"
+        subheading:
+          "De la création de contenu à la validation de formulaires — si du
+          texte passe par votre produit, cette API le garde sans erreur."
+        writing_title: "Alimentez les assistants d'écriture"
+        writing_desc:
+          "Intégrez la correction orthographique dans les éditeurs de texte,
+          les apps de notes et les plateformes de publication. Mettez en
+          évidence les erreurs et offrez des corrections en un clic."
+        writing_tags: "Éditeurs, Outils d'écriture, Publication"
+        ugc_title: "Nettoyez le contenu généré par les utilisateurs"
+        ugc_desc:
+          "Corrigez automatiquement l'orthographe des commentaires, avis et
+          articles avant leur publication. Améliorez la qualité du contenu sans
+          révision manuelle."
+        ugc_tags: "UGC, Commentaires, Avis"
+        forms_title: "Assainissez les saisies de formulaires"
+        forms_desc:
+          "Vérifiez l'orthographe dans les champs de texte soumis — messages,
+          descriptions, biographies — et fournissez des suggestions de
+          correction en temps réel."
+        forms_tags: "Formulaires, Saisie, Validation"
+        education_title: "Soutenez les plateformes d'apprentissage"
+        education_desc:
+          "Aidez les étudiants à détecter les erreurs d'orthographe dans les
+          devoirs et les dissertations. Renvoyez des suggestions avec les notes
+          pour un retour d'information exploitable."
+        education_tags: "Éducation, LMS, Notation"
+        support_title: "Améliorez les tickets d'assistance"
+        support_desc:
+          "Nettoyez les fautes de frappe dans les messages d'assistance
+          entrants avant de les acheminer aux agents. Améliorez la lisibilité
+          et réduisez les échanges pour clarification."
+        support_tags: "Support, CX, Tickets"
+        ai_title: "Peaufinez le texte généré par l'IA"
+        ai_desc:
+          "Exécutez les sorties du modèle via le correcteur orthographique
+          avant de les afficher aux utilisateurs. Supprimez les fautes de
+          frappe et améliorez la fluidité du contenu généré automatiquement."
+        ai_tags: "IA, LLM, Qualité de sortie"
+      api_combinations:
+        heading: "Associez-la à d'autres API"
+        subheading:
+          "La correction orthographique est plus efficace dans un pipeline de
+          traitement de texte. Combinez-la avec d'autres API Requiems pour une
+          analyse de contenu plus approfondie."
+        sentiment_pair: "Correction orthographique + Analyse de sentiment"
+        sentiment_benefit:
+          "Corrigez d'abord les erreurs d'orthographe, puis analysez le
+          sentiment du texte corrigé pour une classification plus précise du
+          ton."
+        language_pair: "Correction orthographique + Détection de langue"
+        language_benefit:
+          "Détectez la langue d'entrée avant la correction orthographique.
+          Acheminez automatiquement le texte vers le modèle de langue approprié."
+        email_pair: "Correction orthographique + Normalisateur d'e-mail"
+        email_benefit:
+          "Normalisez les adresses e-mail et vérifiez l'orthographe du nom
+          associé ou du corps du message en un seul pipeline."
+      faq:
+        heading: "Foire aux questions"
+        support_prompt: "Vous avez encore des questions ?"
+        support_link: "Contacter le support"
+        q1: "Que renvoie l'API ?"
+        a1: "Chaque réponse inclut corrected (le texte complet avec les mots
+          mal orthographiés remplacés par la meilleure suggestion) et
+          corrections (un tableau d'objets avec le mot d'origine, le
+          remplacement suggéré, les alternatives et la position du caractère)."
+        q2: "Fonctionne-t-elle avec d'autres langues que l'anglais ?"
+        a2: "L'API est optimisée pour l'anglais via LanguageTool. Elle peut
+          traiter les caractères Unicode, y compris les caractères accentués et
+          non latins, mais la précision est la plus élevée pour le texte en
+          anglais."
+        q3: "Qu'est-ce que l'endpoint par lots ?"
+        a3: "POST /v1/text/spellcheck/batch accepte jusqu'à 50 textes en une
+          seule requête. Chaque texte est vérifié indépendamment et les
+          résultats sont renvoyés sous forme de tableau dans le même ordre."
+        q4: "Quelle est la précision de la correction orthographique ?"
+        a4: "L'API utilise LanguageTool, un correcteur grammatical et
+          orthographique open source qui détecte les erreurs que les
+          correcteurs simples manquent — y compris les erreurs contextuelles,
+          les homophones et les problèmes de mots composés."
+        q5: "Est-ce gratuit à essayer ?"
+        a5: "Oui. La démo en direct sur cette page est entièrement gratuite et
+          ne nécessite aucun compte. Pour une utilisation en production,
+          inscrivez-vous pour une clé API gratuite avec 500 requêtes par mois
+          incluses."
+      cta:
+        heading: "Peaufinez votre texte avec Requiems."
+        body: "Une clé API. Correction orthographique, validation d'e-mail,
+          analyse de sentiment et plus de 50 API pour créer des produits plus
+          intelligents."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Lire la documentation →"
+      demo:
+        error_empty: "Veuillez saisir du texte à vérifier."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
+        error_no_data: "Aucune donnée renvoyée."
+        result_heading: "Résultat"
+        label_corrected: "Texte corrigé"
+        label_errors_found: "Erreurs trouvées"
+        label_corrections: "Corrections"
+        label_alternatives: "Alternatives"
+        badge_clean: "Aucune erreur"
+        badge_corrected: "Corrigé"
     trivia:
       seo:
         title: "API Trivia gratuite — Questions de quiz aléatoires avec réponses | Requiems API"
@@ -1114,3 +1343,185 @@ fr:
       cta:
         heading: "Donnez à votre contenu les mots justes."
         body: "Une clé API. Thesaurus, correcteur orthographique, analyse de sentiment et plus de 50 autres API pour créer des outils d'écriture plus intelligents."
+
+    random_user:
+      seo:
+        title: "Générateur d'Utilisateurs Aléatoires — Profils Factices pour Tests | Requiems API"
+        description: "Générez des profils d'utilisateurs factices aléatoires pour les tests et le prototypage. Noms, e-mails, téléphones, adresses et avatars — un seul appel API. Essayez la démo gratuite, sans compte requis."
+      logo_marquee:
+        trusted_by: "Des équipes qui construisent des produits font confiance à"
+      hero:
+        title: "Générez des Profils d'Utilisateurs Aléatoires"
+        title_highlight: "Un Seul Appel API"
+        subtitle: "Générez instantanément des profils d'utilisateurs factices réalistes pour les tests, le prototypage et les démos — noms, e-mails, téléphones, adresses et avatars en une seule requête."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Voir la documentation"
+        submit: "Générer un Utilisateur Aléatoire"
+        no_account: "Aucun compte requis pour la démo"
+      what_it_does:
+        heading: "Données Factices Réalistes, Instantanément"
+        subheading: "Chaque appel retourne un profil complet avec nom, e-mail, téléphone, adresse postale et avatar — prêt à l'emploi dans n'importe quel environnement."
+        accuracy_heading: "Profil d'Utilisateur Complet"
+        accuracy_body: "Chaque réponse inclut un nom unique, une adresse e-mail, un numéro de téléphone, une adresse postale complète avec rue et ville, et une URL d'avatar générée par DiceBear. Des profils réalistes que vous pouvez insérer directement dans une base de données ou une maquette d'interface."
+        simplicity_heading: "Une Seule Requête GET"
+        simplicity_body: "Une simple requête GET avec votre clé API suffit. Aucun corps de requête, aucun SDK, aucune configuration — juste un appel HTTP et une réponse JSON. Utilisez-le partout où vous avez besoin de données de test — développement local, environnements de staging ou applications de démonstration."
+      use_cases:
+        heading: "Conçu pour les Tests, le Prototypage et les Démos"
+        subheading: "Partout où vous avez besoin de données utilisateur factices réalistes, Random User peut les fournir instantanément."
+        testing_context: "Développement"
+        testing_title: "Peupler les bases de données de test"
+        testing_body: "Générez des enregistrements utilisateur uniques pour les tests unitaires, les tests d'intégration et les environnements de staging sans écrire de scripts d'initialisation."
+        mockups_context: "Maquettes"
+        mockups_title: "Maquettes d'interface et aperçus de conception"
+        mockups_body: "Insérez des noms, avatars et adresses réalistes dans des wireframes et prototypes — sans avoir à inventer des données de remplissage."
+        load_context: "Tests de Charge"
+        load_title: "Tests de charge avec des charges utiles variées"
+        load_body: "Générez des centaines de profils utilisateur uniques pour simuler des modèles de trafic réels et une diversité de données dans les tests de performance."
+        demos_context: "Démonstrations"
+        demos_title: "Applications de démonstration en direct"
+        demos_body: "Alimentez des environnements de démonstration et des expériences sandbox avec des données utilisateur fraîches à chaque chargement de page — sans avoir besoin de comptes fictifs."
+        qa_context: "Automatisation QA"
+        qa_title: "Accessoires d'automatisation QA"
+        qa_body: "Fournissez des données de départ déterministes pour les suites de tests de bout en bout avec des profils uniques à chaque exécution de test."
+        design_context: "Conception"
+        design_title: "Exemples de systèmes de conception"
+        design_body: "Remplissez les cartes de profil utilisateur, les listes de contacts et les formulaires d'adresse dans la documentation de votre système de conception avec des données factices cohérentes."
+      api_combinations:
+        heading: "Combinez-le avec d'Autres API"
+        subheading: "Random User est plus puissant combiné. Empilez-le avec d'autres API Requiems pour construire des flux de travail plus riches."
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        email_normalizer_name: "Random User + Normalisateur d'E-mail"
+        email_normalizer_benefit: "Générez un profil utilisateur factice et normalisez l'adresse e-mail — minuscules, suppression des espaces et canonicalisation dans le même flux de travail."
+        email_normalizer_outcome: "Un pipeline de données plus propre — des profils générés aléatoirement qui sont immédiatement prêts pour le stockage ou l'affichage."
+        domain_checker_name: "Random User + Vérificateur de Domaine"
+        domain_checker_benefit: "Générez un utilisateur factice et vérifiez le domaine de son adresse e-mail en une seule session."
+        domain_checker_outcome: "Des données de test plus réalistes — confirmez si les domaines générés sont réels ou ajustez les profils fictifs en fonction des retours DNS."
+        qr_code_name: "Random User + Générateur de QR Code"
+        qr_code_benefit: "Générez un profil utilisateur factice et créez un QR code à partir de celui-ci — pour l'impression, les démos ou le partage."
+        qr_code_outcome: "Prototypage rapide de flux utilisateur — de la génération de profil à la sortie scannable en deux appels API."
+      faq:
+        heading: "Questions Fréquentes"
+        support_prompt: "Encore des questions ?"
+        support_link: "Contactez le support"
+        q1: "Quels champs l'API retourne-t-elle ?"
+        a1: "Chaque réponse inclut un nom, une adresse e-mail, un numéro de téléphone, une adresse postale complète avec rue, ville, état, code postal et pays, plus une URL d'avatar générée par DiceBear Identicon."
+        q2: "Les données sont-elles vraiment aléatoires à chaque fois ?"
+        a2: "Oui. Chaque appel génère un profil unique en utilisant la bibliothèque faker. Aucun appel ne retourne les mêmes données, et les profils ne sont pas mis en cache."
+        q3: "Les adresses e-mail sont-elles réelles ?"
+        a3: "Non. Les adresses e-mail générées utilisent des domaines d'exemple (example.org) et ne sont pas valides pour envoyer des courriels. Elles sont conçues uniquement pour les tests et le prototypage."
+        q4: "Puis-je générer plusieurs utilisateurs à la fois ?"
+        a4: "Oui. Utilisez le endpoint POST /v1/technology/random-user/batch pour générer jusqu'à 50 utilisateurs en une seule requête. Consultez la documentation de l'API pour le format de la requête."
+        q5: "Comment les avatars sont-ils générés ?"
+        a5: "Chaque profil inclut une URL DiceBear Identicon — un SVG géométrique unique généré à partir du nom de la personne. Les avatars sont déterministes, donc le même nom produit toujours le même avatar."
+      cta:
+        heading: "Générez des données de test avec Requiems."
+        body: "Une clé API. Profils utilisateur aléatoires, normalisation d'e-mail, vérification de domaine, génération de QR et plus de 50 autres API pour construire et tester de meilleurs produits."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Lire la documentation →"
+      demo:
+        error_rate_limit: "Trop de requêtes. Attendez un instant et réessayez."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_network: "Erreur réseau. Veuillez vérifier votre connexion."
+        error_no_data: "Aucune donnée retournée."
+        badge_live: "En direct"
+        avatar_alt: "Avatar de l'utilisateur"
+        label_name: "Nom"
+        label_email: "E-mail"
+        label_phone: "Téléphone"
+        label_street: "Rue"
+        label_city: "Ville"
+        label_state: "État"
+        label_zip: "Code Postal"
+        label_country: "Pays"
+
+    sudoku:
+      seo:
+        title: "API Sudoku — Générez des grilles avec solutions | Requiems API"
+        description: "Générez des grilles de Sudoku inédites en niveau facile, moyen ou difficile avec solutions complètes. Essayez la démo interactive gratuite — sans compte requis."
+      logo_marquee:
+        trusted_by: "Équipes de puzzles et de jeux nous font confiance"
+      hero:
+        title: "Générez des Sudokus en un appel API"
+        subtitle: "Des grilles de Sudoku 9×9 fraîches à toute difficulté — facile, moyen ou difficile — chacune avec la solution complète incluse."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Voir la documentation"
+        label_difficulty: "Difficulté"
+        difficulty_easy: "Facile"
+        difficulty_medium: "Moyen"
+        difficulty_hard: "Difficile"
+        submit: "Générer le Sudoku"
+        no_account: "Aucun compte requis pour la démo"
+      demo:
+        error_empty: "Sélectionnez un niveau de difficulté."
+        error_invalid_difficulty: "Sélectionnez un niveau de difficulté valide (facile, moyen ou difficile)."
+        error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
+        error_generic: "Une erreur s'est produite. Réessayez."
+        error_no_data: "Impossible de générer la grille. Réessayez."
+        badge_easy: "Facile"
+        badge_medium: "Moyen"
+        badge_hard: "Difficile"
+        label_difficulty: "Difficulté"
+        label_puzzle: "Grille"
+        label_solution: "Voir la solution"
+      what_it_does:
+        heading: "Grilles fraîches, solutions complètes"
+        subheading: "Chaque appel API renvoie une grille de Sudoku 9×9 générée aléatoirement avec la solution correspondante — prête à être affichée dans votre application."
+        accuracy_heading: "Grilles validées"
+        accuracy_body: "Chaque grille est générée avec une solution unique garantie. La réponse inclut à la fois la grille du puzzle (avec des 0 pour les cellules vides) et la solution complète."
+        simplicity_heading: "Une seule requête GET"
+        simplicity_body: "Pas d'état de session, ni d'identifiants. Chaque appel à GET /v1/entertainment/sudoku renvoie une grille inédite selon la difficulté choisie."
+      use_cases:
+        heading: "Conçu pour les jeux, l'éducation et le contenu"
+        subheading: "Partout où un puzzle logique stimule l'engagement, cette API peut l'alimenter."
+        puzzle_gen_context: "Génération de grilles"
+        puzzle_gen_title: "Alimentez les applications et sites de puzzles"
+        puzzle_gen_body: "Proposez des grilles inédites à la demande sans maintenir votre propre algorithme de génération."
+        education_context: "Éducation"
+        education_title: "Enseignez la logique et la résolution de problèmes"
+        education_body: "Générez des grilles à plusieurs niveaux de difficulté pour des exercices en classe, des devoirs ou des applications d'entraînement cérébral."
+        gaming_context: "Jeux"
+        gaming_title: "Ajoutez des puzzles aux jeux mobiles et web"
+        gaming_body: "Intégrez des sudokus quotidiens, des défis chronométrés ou des niveaux débloquables dans votre jeu."
+        accessibility_context: "Accessibilité"
+        accessibility_title: "Imprimable et hors ligne"
+        accessibility_body: "Utilisez le résultat JSON pour afficher des grilles en formats imprimés, PDF ou en mode hors connexion."
+        content_context: "Contenu"
+        content_title: "Sudokus quotidiens pour les éditeurs"
+        content_body: "Ajoutez une colonne Sudoku quotidienne à votre site d'actualités, blog ou newsletter en un seul appel API."
+        integrations_context: "Intégrations"
+        integrations_title: "Intégrez des puzzles dans les flux de travail"
+        integrations_body: "Générez des puzzles par programmation pour des bots Slack, des commandes Discord ou des défis d'équipe internes."
+      api_combinations:
+        heading: "Associez-le à d'autres API"
+        subheading: "Le Sudoku est plus engageant en combinaison. Associez-le à d'autres API Requiems pour créer des expériences de jeu plus riches."
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        trivia_name: "Sudoku + Trivia"
+        trivia_benefit: "Mélangez puzzles logiques et questions de trivia dans la même session."
+        trivia_outcome: "Un flux d'entraînement cérébral varié — puzzles et quiz d'un seul fournisseur."
+        quotes_name: "Sudoku + Citations aléatoires"
+        quotes_benefit: "Suivez un puzzle terminé par une citation inspirante."
+        quotes_outcome: "Un flux gratifiant — résolvez, lisez, répétez."
+        qr_name: "Sudoku + Générateur de QR code"
+        qr_benefit: "Transformez un lien de puzzle en QR code scannable pour distribution imprimée."
+        qr_outcome: "Connectez l'en ligne et l'imprimé — un scan emmène le joueur directement au sudoku quotidien."
+      faq:
+        heading: "Questions fréquentes"
+        support_prompt: "Encore des questions ?"
+        support_link: "Contactez le support"
+        q1: "Quels niveaux de difficulté sont disponibles ?"
+        a1: "Trois niveaux sont proposés — facile (45 indices), moyen (35 indices) et difficile (29 indices). Les grilles faciles ont plus de chiffres de départ, tandis que les difficiles en ont moins."
+        q2: "Chaque grille a-t-elle une solution garantie ?"
+        a2: "Oui. Chaque grille est générée à partir d'une solution de Sudoku complète et valide. Une solution unique existe toujours et est incluse dans la réponse de l'API."
+        q3: "La solution est-elle toujours incluse dans la réponse ?"
+        a3: "Oui. La grille de solution est renvoyée avec la grille du puzzle dans le champ solution. Utilisez-la pour valider les réponses ou révéler la solution à l'utilisateur."
+        q4: "Puis-je générer plusieurs grilles à la fois ?"
+        a4: "Oui. L'endpoint POST /v1/entertainment/sudoku/batch accepte jusqu'à 20 niveaux de difficulté et renvoie chaque grille avec sa solution dans le même ordre."
+        q5: "Est-ce gratuit à essayer ?"
+        a5: "La démo interactive ne nécessite pas de compte. Un niveau gratuit est disponible après inscription avec un quota mensuel de requêtes. Consultez la page de tarification pour les limites."
+      cta:
+        heading: "Ajoutez le Sudoku à votre produit avec Requiems."
+        body: "Une clé API. Grilles de Sudoku, questions de trivia, citations aléatoires et plus de 50 API supplémentaires pour créer des jeux et des produits riches en contenu."
+        cta_primary: "Obtenez votre clé API gratuite"
+        cta_docs: "Lisez la documentation →"

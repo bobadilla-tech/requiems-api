@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter trivia vpn-detection thesaurus].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -59,6 +59,11 @@ class ToolsController < ApplicationController
       description: "Detect and censor offensive language in any text. Returns flagged words and a clean censored version.",
       icon_classes: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
     },
+    "timezone" => {
+      name: "Timezone",
+      description: "IANA timezone, UTC offset, current time, and DST status for any city or coordinates.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
     "trivia" => {
       name: "Trivia",
       description: "Random trivia questions with multiple-choice answers, filterable by category and difficulty.",
@@ -73,6 +78,21 @@ class ToolsController < ApplicationController
       name: "Thesaurus",
       description: "Find synonyms and antonyms for any word to enhance vocabulary and writing.",
       icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+    },
+    "spell-check" => {
+      name: "Spell Check",
+      description: "Check spelling and get correction suggestions for misspelled words in any text.",
+      icon_classes: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"
+    },
+    "random-user" => {
+      name: "Random User",
+      description: "Generate random fake user profiles for testing and prototyping — names, emails, phone numbers, addresses, and avatars.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "sudoku" => {
+      name: "Sudoku",
+      description: "Generate Sudoku puzzles with solutions across multiple difficulty levels.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
     }
   }.freeze
 

@@ -1,0 +1,55 @@
+<section class="bg-gray-50 dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <%= t("tools.sudoku.what_it_does.heading") %>
+      </h2>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <%= t("tools.sudoku.what_it_does.subheading") %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.sudoku.what_it_does.accuracy_heading") %></h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          <%= t("tools.sudoku.what_it_does.accuracy_body") %>
+        </p>
+        <div data-controller="highlight">
+          <pre><code class="language-json">{
+  "difficulty": "medium",
+  "puzzle": [
+    [0, 0, 3, 0, 0, 0, 0, 4, 0],
+    [0, 0, 0, 5, 0, 8, 0, 0, 0],
+    [5, 0, 0, 6, 0, 0, 0, 7, 3],
+    [9, 0, 0, 0, 6, 0, 0, 2, 0],
+    [0, 0, 8, 0, 0, 0, 1, 0, 0],
+    [0, 3, 0, 0, 5, 0, 0, 0, 8],
+    [3, 7, 0, 0, 0, 9, 0, 0, 6],
+    [0, 0, 0, 4, 0, 7, 0, 0, 0],
+    [0, 8, 0, 0, 0, 0, 9, 0, 0]
+  ],
+  "solution": [
+    [7, 6, 3, 1, 9, 2, 8, 4, 5],
+    [2, 9, 1, 5, 4, 8, 6, 3, 7],
+    [5, 4, 8, 6, 7, 3, 2, 1, 9],
+    ...
+  ]
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("tools.sudoku.what_it_does.simplicity_heading") %></h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+          <%= t("tools.sudoku.what_it_does.simplicity_body") %>
+        </p>
+        <div data-controller="highlight">
+          <pre><code class="language-http">GET /v1/entertainment/sudoku?difficulty=medium
+Host: api.requiems.xyz
+X-API-Key: your_key</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

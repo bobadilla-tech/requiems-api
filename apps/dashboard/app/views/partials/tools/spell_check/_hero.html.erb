@@ -1,0 +1,60 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.spell_check.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.spell_check.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.spell_check.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.spell_check.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("spell-check"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="spell-check-demo"
+         data-spell-check-demo-error-empty-value="<%= t('tools.spell_check.demo.error_empty') %>">
+
+      <form data-action="turbo:submit-start->spell-check-demo#onSubmitStart turbo:submit-end->spell-check-demo#onSubmitEnd"
+            action="<%= tool_demo_spell_check_path %>"
+            method="post"
+            data-turbo-frame="spell_check-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <label for="spell-check-demo-input" class="sr-only"><%= t("tools.spell_check.hero.label_input") %></label>
+        <textarea
+          id="spell-check-demo-input"
+          name="text"
+          rows="3"
+          data-spell-check-demo-target="input"
+          placeholder="<%= t('tools.spell_check.hero.placeholder') %>"
+          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm resize-none"
+        ></textarea>
+        <div class="mt-2 flex items-center gap-2">
+          <%= render "partials/shared/submit_button", text: t("tools.spell_check.hero.submit"), controller: "spell-check-demo" %>
+        </div>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.spell_check.hero.no_account") %></p>
+
+        <p data-spell-check-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="spell_check-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

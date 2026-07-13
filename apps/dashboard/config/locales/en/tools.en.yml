@@ -1147,10 +1147,224 @@ en:
         label_flagged_words: Flagged words
         badge_clean: Clean
         badge_flagged: Flagged
-        badge_none: None
         badge_yes: "Yes"
         badge_no: "No"
         badge_none: None detected
+
+    timezone:
+      seo:
+        title: "Free Timezone API — IANA Timezone, UTC Offset & DST by City or Coordinates | Requiems API"
+        description: "Get the IANA timezone identifier, UTC offset, current time, and DST status for any city or geographic coordinates. Free tier available — no credit card required."
+      logo_marquee:
+        trusted_by: "Trusted by teams at"
+      demo:
+        error_empty: "Enter a city name, or latitude and longitude, to look up a timezone."
+        error_invalid: "Enter a valid latitude (-90 to 90) and longitude (-180 to 180)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No timezone data found for that location."
+        badge_found: "Found"
+        badge_yes: "✓ Yes"
+        badge_no: "✗ No"
+        label_timezone: "Timezone"
+        label_offset: "UTC offset"
+        label_current_time: "Current time"
+        label_is_dst: "Observing DST"
+      hero:
+        title: "Know the local time, anywhere."
+        subtitle: "IANA timezone, UTC offset, current time, and DST status — for any city or coordinates, in a single API call."
+        cta_primary: "Get API Key"
+        cta_docs: "Read the docs"
+        placeholder: "Enter a city (e.g. Tokyo)"
+        submit: "Look up"
+        no_account: "No account required for the demo."
+        label_input: "City name"
+        coords_divider: "...or by coordinates:"
+        label_lat: "Latitude"
+        label_lon: "Longitude"
+        placeholder_lat: "Latitude (e.g. 51.5)"
+        placeholder_lon: "Longitude (e.g. -0.1)"
+      what_it_does:
+        coverage_badge: "Coverage"
+        coverage_heading: "Lookup by city name or geographic coordinates."
+        coverage_body: "Timezone resolves any point on Earth by latitude/longitude, or any of 150+ major cities by name. Every response includes the IANA identifier, UTC offset, current UTC time, and whether the location is currently observing daylight saving time."
+        simplicity_badge: "Simplicity"
+        simplicity_heading: "One GET request. No body, no parsing."
+        simplicity_body: "Pass a city name or lat/lon as query parameters. Your API key in the header. No SDK, no setup, no request body. The response is JSON, with the timezone fields nested one level under data."
+      use_cases:
+        heading: "Built for location-aware apps."
+        subheading: "Timezone fits anywhere local time matters — scheduling, notifications, and travel alike."
+        schedule_title: "Show the correct local time in scheduling tools"
+        schedule_desc: "Resolve a user's timezone from their city or coordinates and render meeting times, deadlines, and calendar events correctly across regions."
+        schedule_tags: "Scheduling, Calendars"
+        notif_title: "Send notifications at the right local hour"
+        notif_desc: "Avoid waking users at 3am. Compute the local time for each recipient before triggering push notifications or emails."
+        notif_tags: "Notifications, Growth"
+        travel_title: "Display arrival and departure times correctly"
+        travel_desc: "Travel and logistics platforms need to show times in the traveler's local timezone at each leg of a trip, not just UTC."
+        travel_tags: "Travel, Logistics"
+        dst_title: "Handle daylight saving time transitions"
+        dst_desc: "Avoid off-by-one-hour bugs around DST changeovers by checking is_dst directly instead of hardcoding offset tables."
+        dst_tags: "Data Quality, Scheduling"
+        onboarding_title: "Set a sensible default timezone at signup"
+        onboarding_desc: "Look up the timezone from the user's city or IP-derived coordinates to pre-fill their account settings correctly."
+        onboarding_tags: "Onboarding, UX"
+        support_title: "Route support tickets by local business hours"
+        support_desc: "Combine customer location with timezone data to route tickets to on-shift support agents in the right region."
+        support_tags: "Operations, Support"
+      api_combinations:
+        heading: "Use together with complementary APIs."
+        subheading: "Timezone works even better when paired with other Requiems APIs."
+        worldtime_pair: "Timezone + World Time"
+        worldtime_benefit: "Resolve the IANA timezone name first, then query World Time directly by name for lightweight repeated lookups."
+        geocode_pair: "Timezone + Geocoding"
+        geocode_benefit: "Convert a free-form address to coordinates, then feed those coordinates into Timezone for a complete location-to-time pipeline."
+        cities_pair: "Timezone + Cities"
+        cities_benefit: "Look up city metadata — population, country, coordinates — alongside timezone information in the same request flow."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "Should I use a city name or coordinates?"
+        a1: "Use coordinates (lat/lon) for precise lookups anywhere in the world. Use the city name for a quick lookup when you have a well-known city. Coordinate-based lookup works for any point on Earth, while city-based lookup is limited to the ~150+ cities in our database."
+        q2: "Is the city parameter case-sensitive?"
+        a2: "No. City names are normalized to lowercase before lookup, so \"Tokyo\", \"TOKYO\", and \"tokyo\" all work."
+        q3: "What does is_dst mean?"
+        a3: "is_dst indicates whether the location is currently observing Daylight Saving Time. For locations that do not use DST (e.g. Japan, most of Africa), this is always false."
+        q4: "What format is the UTC offset returned in?"
+        a4: "The offset field uses the format +HH:MM or -HH:MM (e.g. '+05:30' for India, '-05:00' for US Eastern Standard Time)."
+        q5: "Is it free to use?"
+        a5: "The demo above works without an account. Paid plans are available for production scale with higher rate limits and full API access."
+      cta:
+        heading: "Automate this with Requiems."
+        body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
+
+    spell_check:
+      seo:
+        title: Free Spell Check API — Check Spelling & Get Corrections | Requiems API
+        description:
+          Check spelling and get correction suggestions for misspelled words.
+          Powered by LanguageTool. Try the free live demo — no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building writing tools
+      hero:
+        title: Check Spelling Instantly
+        subtitle:
+          Submit any English text and get a corrected version with per-word
+          suggestions — powered by LanguageTool. No API key needed for the demo.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_input: Text to check
+        placeholder: e.g. Ths is a smiple tset with erors
+        submit: Check Spelling
+        no_account: No account required for the demo
+      what_it_does:
+        accuracy_badge: Correction Engine
+        accuracy_heading: Catches Every Mistake
+        accuracy_body:
+          Scans input text using LanguageTool and returns every misspelled word
+          with its position, the best correction, and up to 3 ranked alternatives.
+        simplicity_badge: Simplicity
+        simplicity_heading: A Single POST Request
+        simplicity_body:
+          Send text, get back the corrected version plus a list of individual
+          corrections. No multi-step workflows, no client-side dictionaries.
+      use_cases:
+        heading: Built for Quality Writing Workflows
+        subheading:
+          From content creation to form validation — if text passes through
+          your product, this API keeps it error-free.
+        writing_title: Power writing assistants
+        writing_desc:
+          Integrate spell checking into text editors, note apps, and publishing
+          platforms. Highlight errors and offer one-click fixes inline.
+        writing_tags: "Editors, Writing Tools, Publishing"
+        ugc_title: Clean up user-generated content
+        ugc_desc:
+          Automatically correct spelling in comments, reviews, and articles
+          before they go live. Improve content quality without manual review.
+        ugc_tags: "UGC, Comments, Reviews"
+        forms_title: Sanitize form inputs
+        forms_desc:
+          Check spelling in submitted text fields — message bodies, descriptions,
+          bio text — and provide real-time correction suggestions.
+        forms_tags: "Forms, Input, Validation"
+        education_title: Support learning platforms
+        education_desc:
+          Help students catch spelling mistakes in assignments and essays.
+          Return suggestions alongside grades for actionable feedback.
+        education_tags: "Education, LMS, Grading"
+        support_title: Improve support tickets
+        support_desc:
+          Clean up typos in incoming support messages before routing to agents.
+          Improve readability and reduce back-and-forth for clarification.
+        support_tags: "Support, CX, Ticketing"
+        ai_title: Polish AI-generated text
+        ai_desc:
+          Run model outputs through spell check before displaying to users.
+          Remove typos and improve fluency of generated content automatically.
+        ai_tags: "AI, LLM, Output Quality"
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading:
+          Spell check is more effective as part of a text-processing pipeline.
+          Combine it with other Requiems APIs for deeper content analysis.
+        sentiment_pair: Spell Check + Sentiment Analysis
+        sentiment_benefit:
+          Clean up spelling errors first, then run sentiment analysis on the
+          corrected text for more accurate tone classification.
+        language_pair: Spell Check + Language Detection
+        language_benefit:
+          Detect the input language before spell-checking. Route text to the
+          right language model automatically.
+        email_pair: Spell Check + Email Normalizer
+        email_benefit:
+          Normalize email addresses and check spelling in the associated
+          display name or message body in one pipeline.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What does the API return?
+        a1:
+          Each response includes corrected (the full text with misspelled words
+          replaced by the best suggestion) and corrections (an array of objects
+          with the original word, suggested replacement, alternative suggestions,
+          and character position).
+        q2: Does it work with languages other than English?
+        a2: The API is optimized for English using LanguageTool. It can process
+          Unicode input including accented and non-Latin characters, but accuracy
+          is highest for English text.
+        q3: What is the batch endpoint?
+        a3: POST /v1/text/spellcheck/batch accepts up to 50 texts in a single
+          request. Each text is checked independently and results are returned
+          as an array in the same order.
+        q4: How accurate is the spell checking?
+        a4: The API uses LanguageTool, an open-source grammar and spell checker
+          that catches mistakes most simple spell checkers miss — including
+          context-sensitive errors, homophones, and compound word issues.
+        q5: Is it free to try?
+        a5: Yes. The live demo on this page is completely free with no account
+          required. For production use, sign up for a free API key with 500
+          requests per month included.
+      cta:
+        heading: Polish your text with Requiems.
+        body: One API key. Spell check, email validation, sentiment analysis,
+          and 50+ other APIs for building smarter products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_empty: Please enter some text to check.
+        error_generic: Something went wrong. Try again.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_no_data: No data returned.
+        result_heading: Result
+        label_corrected: Corrected text
+        label_errors_found: Errors found
+        label_corrections: Corrections
+        label_alternatives: Alternatives
+        badge_clean: No issues found
+        badge_corrected: Corrected
     trivia:
       seo:
         title: Free Trivia API — Random Quiz Questions with Answers | Requiems API
@@ -1471,3 +1685,183 @@ en:
       cta:
         heading: "Give your content the right words."
         body: "One API key. Thesaurus, spell check, sentiment analysis, and 50+ other APIs for building smarter writing tools."
+    random_user:
+      seo:
+        title: Random User Generator — Generate Fake Profiles for Testing | Requiems API
+        description: Generate random fake user profiles for testing and prototyping. Names, emails, phone numbers, addresses, and avatars — one API call. Try the free live demo, no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building products
+      hero:
+        title: Generate Random User Profiles
+        title_highlight: One API Call
+        subtitle: Instantly generate realistic fake user profiles for testing, prototyping, and demos — names, emails, phone numbers, addresses, and avatars with a single request.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        submit: Generate Random User
+        no_account: No account required for the demo
+      what_it_does:
+        heading: Realistic Fake User Data, Instantly
+        subheading: Each call returns a complete profile with name, email, phone, postal address, and avatar — ready to use in any environment.
+        accuracy_heading: Complete User Profile
+        accuracy_body: Every response includes a unique name, email address, phone number, full mailing address with street and city, and an avatar URL powered by DiceBear. No garbage data, no placeholder text — realistic profiles you can drop straight into a database or UI mockup.
+        simplicity_heading: A Single GET Request
+        simplicity_body: A single GET request with your API key is all it takes. No body payload, no SDK, no configuration — just an HTTP call and a JSON response. Use it anywhere you need test data — local dev, staging environments, or demo applications.
+      use_cases:
+        heading: Built for Testing, Prototyping, and Demos
+        subheading: Anywhere you need realistic fake user data, Random User can provide it instantly.
+        testing_context: Development
+        testing_title: Populate test databases
+        testing_body: Generate unique user records for unit tests, integration tests, and staging environments without writing seed scripts.
+        mockups_context: Mockups
+        mockups_title: UI mockups and design previews
+        mockups_body: Drop realistic names, avatars, and addresses into wireframes and prototypes — no need to fabricate placeholder data.
+        load_context: Load Testing
+        load_title: Load testing with varied payloads
+        load_body: Generate hundreds of unique user profiles to simulate real-world traffic patterns and data diversity in performance tests.
+        demos_context: Demos
+        demos_title: Live demo applications
+        demos_body: Power demo environments and sandbox experiences with fresh user data on every page load — no dummy accounts needed.
+        qa_context: QA Automation
+        qa_title: QA automation fixtures
+        qa_body: Provide deterministic seed data for end-to-end test suites with unique profiles across every test run.
+        design_context: Design
+        design_title: Design system examples
+        design_body: Fill user profile cards, contact lists, and address forms in your design system documentation with consistent fake data.
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Random User is more powerful combined. Stack it with other Requiems APIs to build richer workflows.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        email_normalizer_name: Random User + Email Normalizer
+        email_normalizer_benefit: Generate a fake user profile and normalize the email address — lowercase, trim, and canonicalize it in the same workflow.
+        email_normalizer_outcome: A cleaner data pipeline — randomly generated profiles that are immediately ready for storage or display.
+        domain_checker_name: Random User + Domain Checker
+        domain_checker_benefit: Generate a fake user and verify the domain of their email address in a single session.
+        domain_checker_outcome: More realistic test data — confirm generated domains are real or adjust fake profiles based on DNS feedback.
+        qr_code_name: Random User + QR Code Generator
+        qr_code_benefit: Generate a fake user profile and create a QR code from it — for print, demos, or sharing.
+        qr_code_outcome: Rapid prototyping of user flows — from profile generation to scannable output in two API calls.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What fields does the API return?
+        a1: Each response includes a name, email address, phone number, a full mailing address with street, city, state, zip, and country, plus an avatar URL generated by DiceBear Identicon.
+        q2: Is the data truly random every time?
+        a2: Yes. Each call generates a unique profile using the faker library. No two calls return the same data, and profiles are not cached or stored.
+        q3: Are the email addresses real?
+        a3: No. Generated email addresses use example domains (example.org) and are not valid for sending mail. They are designed for testing and prototyping only.
+        q4: Can I generate multiple users at once?
+        a4: Yes. Use the POST /v1/technology/random-user/batch endpoint to generate up to 50 users in a single request. See the API docs for the request format.
+        q5: How are avatars generated?
+        a5: Each profile includes a DiceBear Identicon URL — a unique geometric SVG generated from the person's name. The avatars are deterministic, so the same name always produces the same avatar.
+      cta:
+        heading: Generate test data with Requiems.
+        body: One API key. Random user profiles, email normalization, domain checking, QR generation, and 50+ other APIs for building and testing better products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_network: Network error. Please check your connection.
+        error_no_data: No data returned.
+        badge_live: Live
+        avatar_alt: User avatar
+        label_name: Name
+        label_email: Email
+        label_phone: Phone
+        label_street: Street
+        label_city: City
+        label_state: State
+        label_zip: Zip
+        label_country: Country
+    sudoku:
+      seo:
+        title: "Sudoku API — Generate Puzzles with Solutions | Requiems API"
+        description: "Generate fresh Sudoku puzzles at easy, medium, or hard difficulty with complete solutions. Try the free live demo — no account required."
+      logo_marquee:
+        trusted_by: "Trusted by puzzle and gaming teams"
+      hero:
+        title: "Generate Sudoku Puzzles, One API Call"
+        subtitle: "Fresh 9×9 Sudoku puzzles at any difficulty — easy, medium, or hard — each with the complete solution included."
+        cta_primary: "Get your free API key"
+        cta_docs: "View docs"
+        label_difficulty: "Difficulty"
+        difficulty_easy: "Easy"
+        difficulty_medium: "Medium"
+        difficulty_hard: "Hard"
+        submit: "Generate Puzzle"
+        no_account: "No account required for the demo"
+      demo:
+        error_empty: "Select a difficulty level."
+        error_invalid_difficulty: "Select a valid difficulty level (easy, medium, or hard)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "Could not generate a puzzle. Try again."
+        badge_easy: "Easy"
+        badge_medium: "Medium"
+        badge_hard: "Hard"
+        label_difficulty: "Difficulty"
+        label_puzzle: "Puzzle"
+        label_solution: "View solution"
+      what_it_does:
+        heading: "Fresh Puzzles, Complete Solutions"
+        subheading: "Every API call returns a randomly generated 9×9 Sudoku grid with the corresponding solution — ready to render in your app."
+        accuracy_heading: "Validated Puzzles"
+        accuracy_body: "Each puzzle is generated with a unique solution guaranteed. The response includes both the puzzle grid (with 0s for empty cells) and the complete solution grid — no solving required on your end."
+        simplicity_heading: "A Single GET Request"
+        simplicity_body: "No session state, no puzzle IDs. Every call to GET /v1/entertainment/sudoku returns a freshly generated puzzle based on your chosen difficulty — easy, medium, or hard."
+      use_cases:
+        heading: "Built for Games, Education, and Content"
+        subheading: "Anywhere a logic puzzle adds engagement, this API can power it."
+        puzzle_gen_context: "Puzzle Generation"
+        puzzle_gen_title: "Power puzzle apps and websites"
+        puzzle_gen_body: "Serve fresh puzzles on demand without maintaining your own generation algorithm."
+        education_context: "Education"
+        education_title: "Teach logic and problem-solving"
+        education_body: "Generate puzzles at multiple difficulty levels for classroom exercises, homework, or brain-training apps."
+        gaming_context: "Gaming"
+        gaming_title: "Add puzzles to mobile and web games"
+        gaming_body: "Integrate daily puzzles, timed challenges, or unlockable levels into your game loop."
+        accessibility_context: "Accessibility"
+        accessibility_title: "Printable and offline-friendly"
+        accessibility_body: "Use the plain JSON output to render puzzles in print formats, PDFs, or offline-friendly layouts."
+        content_context: "Content"
+        content_title: "Daily puzzle features for publishers"
+        content_body: "Add a daily Sudoku column to your news site, blog, or newsletter with a single API call."
+        integrations_context: "Integrations"
+        integrations_title: "Embed puzzles into workflows"
+        integrations_body: "Generate puzzles programmatically for Slack bots, Discord commands, or internal team challenges."
+      api_combinations:
+        heading: "Pair It With Other APIs"
+        subheading: "Sudoku is more engaging combined. Stack it with other Requiems APIs to build richer game and puzzle experiences."
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        trivia_name: "Sudoku + Trivia"
+        trivia_benefit: "Mix logic puzzles with trivia questions in the same session."
+        trivia_outcome: "A varied brain-training feed — puzzles and quizzes from a single provider."
+        quotes_name: "Sudoku + Random Quotes"
+        quotes_benefit: "Follow up a completed puzzle with an inspirational quote."
+        quotes_outcome: "A rewarding flow — solve, read, repeat."
+        qr_name: "Sudoku + QR Code Generator"
+        qr_benefit: "Turn a puzzle link into a scannable QR code for print distribution."
+        qr_outcome: "Bridge online and offline — one scan takes players straight to the daily puzzle."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "What difficulty levels are available?"
+        a1: "Three levels are supported — easy (45 givens), medium (35 givens), and hard (29 givens). Easy puzzles have more starting numbers, while hard puzzles have fewer."
+        q2: "Is every puzzle guaranteed to have a solution?"
+        a2: "Yes. Every puzzle is generated from a complete, valid Sudoku solution. A unique solution always exists, and it is included in the API response."
+        q3: "Is the solution always included in the response?"
+        a3: "Yes. The solution grid is returned alongside the puzzle grid under the solution field. Use it to validate answers or reveal the solution to the user."
+        q4: "Can I generate multiple puzzles at once?"
+        a4: "Yes. The POST /v1/entertainment/sudoku/batch endpoint accepts up to 20 difficulty levels and returns each puzzle with its solution in the same order."
+        q5: "Is it free to try?"
+        a5: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
+      cta:
+        heading: "Add Sudoku to your product with Requiems."
+        body: "One API key. Sudoku puzzles, trivia questions, random quotes, and 50+ other APIs for building games and content-rich products."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
