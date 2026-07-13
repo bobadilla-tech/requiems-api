@@ -954,10 +954,11 @@ en:
       logo_marquee:
         trusted_by: "Trusted by teams at"
       demo:
-        error_empty: "Enter a city name to look up its timezone."
+        error_empty: "Enter a city name, or latitude and longitude, to look up a timezone."
+        error_invalid: "Enter a valid latitude (-90 to 90) and longitude (-180 to 180)."
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_generic: "Something went wrong. Try again."
-        error_no_data: "No timezone data found for that city."
+        error_no_data: "No timezone data found for that location."
         badge_found: "Found"
         badge_yes: "✓ Yes"
         badge_no: "✗ No"
@@ -985,7 +986,7 @@ en:
         coverage_body: "Timezone resolves any point on Earth by latitude/longitude, or any of 150+ major cities by name. Every response includes the IANA identifier, UTC offset, current UTC time, and whether the location is currently observing daylight saving time."
         simplicity_badge: "Simplicity"
         simplicity_heading: "One GET request. No body, no parsing."
-        simplicity_body: "Pass a city name or lat/lon as query parameters. Your API key in the header. No SDK, no setup, no request body. The response is flat JSON — read it directly without unwrapping nested structures."
+        simplicity_body: "Pass a city name or lat/lon as query parameters. Your API key in the header. No SDK, no setup, no request body. The response is JSON, with the timezone fields nested one level under data."
       use_cases:
         heading: "Built for location-aware apps."
         subheading: "Timezone fits anywhere local time matters — scheduling, notifications, and travel alike."
@@ -1033,3 +1034,124 @@ en:
       cta:
         heading: "Automate this with Requiems."
         body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
+
+    trivia:
+      seo:
+        title: Free Trivia API — Random Quiz Questions with Answers | Requiems API
+        description: Get random trivia questions with multiple-choice answers.
+          Filter by category and difficulty. Try the free live demo — no account
+          required.
+      logo_marquee:
+        trusted_by: Trusted by teams building quizzes and games
+      hero:
+        title: Random Trivia Questions, One API Call
+        subtitle: Get a random multiple-choice trivia question — ten categories,
+          three difficulty levels, always includes the correct answer.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_category: Category
+        label_difficulty: Difficulty
+        category_any: Any category
+        category_science: Science
+        category_history: History
+        category_geography: Geography
+        category_sports: Sports
+        category_music: Music
+        category_movies: Movies
+        category_literature: Literature
+        category_math: Math
+        category_technology: Technology
+        category_nature: Nature
+        difficulty_any: Any difficulty
+        difficulty_easy: Easy
+        difficulty_medium: Medium
+        difficulty_hard: Hard
+        submit: Get a Question
+        no_account: No account required for the demo
+      what_it_does:
+        heading: One Question, Four Options, No Guesswork
+        subheading: Every response includes the question, four answer options,
+          and the correct answer — ready to render directly in your UI.
+        coverage_heading: Ten Categories, Three Difficulties
+        coverage_body: Choose from science, history, geography, sports, music,
+          movies, literature, math, technology, and nature. Filter by easy,
+          medium, or hard — or leave both filters out for a fully random pick.
+        simplicity_heading: A Single GET Request
+        simplicity_body: No pagination, no session state. Every call returns one
+          randomly selected question from the matching pool, with the correct
+          answer always present among the four options.
+      use_cases:
+        heading: Built for Games, Quizzes, and Learning
+        subheading: Anywhere a knowledge check adds engagement, this API can
+          power it.
+        quiz_context: Gaming
+        quiz_title: Quiz games and trivia apps
+        quiz_body: Power multiple-choice quiz screens without maintaining your
+          own question bank.
+        education_context: Education
+        education_title: Educational platforms and learning apps
+        education_body: Add knowledge checks to lessons and courses, filtered by
+          subject and difficulty.
+        social_context: Social
+        social_title: Social and party game features
+        social_body: Drop trivia rounds into chat apps, group games, or
+          community features.
+        daily_challenge_context: Engagement
+        daily_challenge_title: Daily challenge widgets
+        daily_challenge_body: Show a fresh random question each day to bring
+          users back to your product.
+        knowledge_context: Integrations
+        knowledge_title: Knowledge-testing integrations
+        knowledge_body: Embed a quick knowledge check into onboarding flows,
+          newsletters, or internal tools.
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Trivia is more engaging combined. Stack it with other
+          Requiems APIs to build richer game and content experiences.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        quotes_pair: Trivia + Random Quotes
+        quotes_benefit: Mix quiz rounds with inspirational quote breaks in the
+          same session.
+        quotes_outcome: A more varied content feed — questions and quotes from a
+          single provider.
+        facts_pair: Trivia + Random Facts
+        facts_benefit: Follow up a trivia question with a related fun fact from
+          the same category.
+        facts_outcome: Deeper engagement — players learn something even when
+          they get a question wrong.
+        qr_pair: Trivia + QR Code Generator
+        qr_benefit: Turn a trivia question link into a scannable QR code for
+          print or in-person events.
+        qr_outcome: Bridge online and offline trivia — one scan takes players
+          straight to the question.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What categories are available?
+        a1: Ten categories are supported — science, history, geography, sports,
+          music, movies, literature, math, technology, and nature.
+        q2: What difficulty levels are available?
+        a2: Three levels are supported — easy, medium, and hard. Leave both
+          filters out for a question selected at random from the entire pool.
+        q3: Is the correct answer always one of the options?
+        a3: Yes. The answer field always matches one of the values in the options
+          array.
+        q4: What happens if no questions match my filters?
+        a4: The API returns a 404 not_found error. Try broadening your filter —
+          for example, drop the difficulty filter or use a different category.
+      cta:
+        heading: Add trivia to your product with Requiems.
+        body: One API key. Trivia questions, random quotes, random facts, and
+          50+ other APIs for building games and content-rich products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No question matched those filters. Try a different
+          category or difficulty.
+        badge_live: Live
+        label_options: Options
+        label_correct: Correct

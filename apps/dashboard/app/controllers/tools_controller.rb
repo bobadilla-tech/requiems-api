@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -63,6 +63,11 @@ class ToolsController < ApplicationController
       name: "Timezone",
       description: "IANA timezone, UTC offset, current time, and DST status for any city or coordinates.",
       icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "trivia" => {
+      name: "Trivia",
+      description: "Random trivia questions with multiple-choice answers, filterable by category and difficulty.",
+      icon_classes: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400"
     }
   }.freeze
 

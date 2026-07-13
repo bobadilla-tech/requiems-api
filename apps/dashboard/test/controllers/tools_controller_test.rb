@@ -59,4 +59,10 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/timezone"
     assert_response :success
   end
+
+  test "trivia tool page renders successfully" do
+    get "/en/tools/trivia"
+    assert_response :success
+    assert_select "[data-controller='trivia-demo']"
+  end
 end
