@@ -9,7 +9,7 @@
         <%= t("tools.sudoku.demo.badge_#{data["difficulty"]}") %>
       </span>
       <span class="text-xs text-gray-500 dark:text-gray-400">
-        <%= t("tools.sudoku.demo.label_difficulty") %>: <%= data["difficulty"] %>
+        <%= t("tools.sudoku.demo.label_difficulty") %>: <%= t("tools.sudoku.demo.badge_#{data["difficulty"]}", default: data["difficulty"]) %>
       </span>
     </div>
 

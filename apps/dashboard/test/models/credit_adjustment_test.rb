@@ -14,32 +14,32 @@ class CreditAdjustmentTest < ActiveSupport::TestCase
 
   test "requires user_id" do
     adjustment = CreditAdjustment.new(amount: 10, adjustment_type: "bonus")
-    assert_not adjustment.valid?
     I18n.with_locale(:en) do
+      assert_not adjustment.valid?
       assert_includes adjustment.errors[:user], "must exist"
     end
   end
 
   test "requires amount" do
     adjustment = CreditAdjustment.new(user: @user, adjustment_type: "bonus")
-    assert_not adjustment.valid?
     I18n.with_locale(:en) do
+      assert_not adjustment.valid?
       assert_includes adjustment.errors[:amount], "can't be blank"
     end
   end
 
   test "requires adjustment_type" do
     adjustment = CreditAdjustment.new(user: @user, amount: 10)
-    assert_not adjustment.valid?
     I18n.with_locale(:en) do
+      assert_not adjustment.valid?
       assert_includes adjustment.errors[:adjustment_type], "can't be blank"
     end
   end
 
   test "amount must be numeric" do
     adjustment = CreditAdjustment.new(user: @user, amount: "abc", adjustment_type: "bonus")
-    assert_not adjustment.valid?
     I18n.with_locale(:en) do
+      assert_not adjustment.valid?
       assert_includes adjustment.errors[:amount], "is not a number"
     end
   end
