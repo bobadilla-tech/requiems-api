@@ -13,11 +13,11 @@
       <!-- Block 1: Classification -->
       <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-sm">
         <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 mb-4">
-          Instant classification
+          <%= t('tools.sentiment_analysis.what_it_does.instant_classification') %>
         </div>
         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2"><%= t('tools.sentiment_analysis.what_it_does.positive_negative_or_neutral') %></h3>
         <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">
-          Every text gets a dominant label plus a confidence score between 0.0 and 1.0, so you can threshold results with precision.
+          <%= t('tools.sentiment_analysis.what_it_does.classification_body') %>
         </p>
         <div class="rounded-xl bg-gray-900 p-4 font-mono text-xs text-left overflow-x-auto">
           <pre class="text-gray-300">{
@@ -30,11 +30,11 @@
       <!-- Block 2: Breakdown -->
       <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-sm">
         <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 mb-4">
-          Full breakdown
+          <%= t('tools.sentiment_analysis.what_it_does.full_breakdown') %>
         </div>
         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2"><%= t('tools.sentiment_analysis.what_it_does.proportional_scores_across_all_classes') %></h3>
         <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">
-          The breakdown shows how the model distributes confidence across all three classes — always summing to 1.0. Useful for ambiguous or mixed-tone text.
+          <%= t('tools.sentiment_analysis.what_it_does.breakdown_body') %>
         </p>
         <div class="rounded-xl bg-gray-900 p-4 font-mono text-xs text-left overflow-x-auto">
           <pre class="text-gray-300">{
