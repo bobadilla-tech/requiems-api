@@ -582,4 +582,137 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.trivia.demo.error_no_data"), response.body
   end
+
+  # ── sudoku ─────────────────────────────────────────────────────────────────────
+
+  test "sudoku renders result on success with default difficulty" do
+    payload = {
+      "difficulty" => "medium",
+      "puzzle" => [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+      ],
+      "solution" => [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 4],
+        [2, 8, 7, 4, 1, 9, 6, 3, 5],
+        [3, 4, 5, 2, 8, 6, 1, 7, 9]
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/sudoku", params: {}
+    end
+    assert_response :success
+    assert_match "medium", response.body
+    assert_match "5", response.body
+    assert_match I18n.t("tools.sudoku.demo.label_solution"), response.body
+  end
+
+  test "sudoku renders result on success with easy difficulty" do
+    payload = {
+      "difficulty" => "easy",
+      "puzzle" => [
+        [0, 0, 4, 0, 5, 0, 0, 0, 0],
+        [9, 0, 0, 7, 3, 4, 6, 0, 0],
+        [0, 0, 3, 0, 2, 1, 0, 4, 9],
+        [0, 3, 5, 0, 9, 0, 4, 8, 0],
+        [6, 0, 0, 0, 0, 0, 0, 0, 7],
+        [0, 7, 9, 0, 8, 0, 1, 3, 0],
+        [4, 5, 0, 9, 1, 0, 7, 0, 0],
+        [0, 0, 2, 4, 7, 8, 0, 0, 3],
+        [0, 0, 0, 0, 4, 0, 9, 0, 0]
+      ],
+      "solution" => [
+        [2, 6, 4, 8, 5, 9, 3, 7, 1],
+        [9, 1, 8, 7, 3, 4, 6, 5, 2],
+        [7, 0, 3, 6, 2, 1, 8, 4, 9],
+        [1, 3, 5, 2, 9, 7, 4, 8, 6],
+        [6, 8, 0, 3, 0, 5, 2, 0, 7],
+        [0, 7, 9, 4, 8, 6, 1, 3, 5],
+        [4, 5, 6, 9, 1, 3, 7, 2, 8],
+        [0, 9, 2, 4, 7, 8, 5, 6, 3],
+        [3, 0, 7, 5, 4, 2, 9, 1, 0]
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/sudoku", params: { difficulty: "easy" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.badge_easy"), response.body
+  end
+
+  test "sudoku renders result on success with hard difficulty" do
+    payload = {
+      "difficulty" => "hard",
+      "puzzle" => [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 3, 0, 8, 5],
+        [0, 0, 1, 0, 2, 0, 0, 0, 0],
+        [0, 0, 0, 5, 0, 7, 0, 0, 0],
+        [0, 0, 4, 0, 0, 0, 1, 0, 0],
+        [0, 9, 0, 0, 0, 0, 0, 0, 0],
+        [5, 0, 0, 0, 0, 0, 0, 7, 3],
+        [0, 0, 2, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 4, 0, 0, 0, 9]
+      ],
+      "solution" => [
+        [9, 8, 7, 6, 5, 4, 3, 2, 1],
+        [2, 4, 6, 1, 7, 3, 9, 8, 5],
+        [3, 5, 1, 9, 2, 8, 7, 4, 6],
+        [1, 2, 3, 5, 9, 7, 4, 6, 8],
+        [7, 6, 4, 2, 8, 0, 1, 9, 0],
+        [8, 9, 5, 4, 6, 1, 2, 3, 7],
+        [5, 1, 9, 8, 0, 6, 0, 7, 3],
+        [4, 7, 2, 3, 1, 9, 8, 5, 0],
+        [6, 3, 8, 7, 4, 5, 0, 1, 9]
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/sudoku", params: { difficulty: "hard" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.badge_hard"), response.body
+  end
+
+  test "sudoku renders error when difficulty is invalid" do
+    post "/tools/demos/sudoku", params: { difficulty: "extreme" }
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.error_empty"), response.body
+  end
+
+  test "sudoku renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/sudoku", params: { difficulty: "medium" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.error_rate_limit"), response.body
+  end
+
+  test "sudoku renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/sudoku", params: { difficulty: "medium" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.error_generic"), response.body
+  end
+
+  test "sudoku renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/sudoku", params: { difficulty: "medium" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.sudoku.demo.error_no_data"), response.body
+  end
 end
