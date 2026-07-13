@@ -1147,7 +1147,6 @@ en:
         label_flagged_words: Flagged words
         badge_clean: Clean
         badge_flagged: Flagged
-        badge_none: None
         badge_yes: "Yes"
         badge_no: "No"
         badge_none: None detected

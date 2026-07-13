@@ -846,7 +846,6 @@ fr:
         label_flagged_words: "Mots signalés"
         badge_clean: "Propre"
         badge_flagged: "Signalé"
-        badge_none: "Aucun"
         badge_yes: "Oui"
         badge_no: "Non"
         badge_none: "Aucun détecté"

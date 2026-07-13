@@ -846,7 +846,6 @@ es:
         label_flagged_words: "Palabras marcadas"
         badge_clean: "Limpio"
         badge_flagged: "Marcado"
-        badge_none: "Ninguna"
         badge_yes: "Sí"
         badge_no: "No"
         badge_none: "Ninguna detectada"
