@@ -31,7 +31,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 					httpx.Error(w, http.StatusNotFound, "not_found", "no MX records found for domain")
 					return
 				}
-				
+
 				httpx.Error(w, http.StatusInternalServerError, "internal_error", "internal error")
 				return
 			}
