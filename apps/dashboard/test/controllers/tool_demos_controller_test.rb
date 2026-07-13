@@ -588,9 +588,15 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
   test "random_user renders result on success" do
     payload = {
       "name" => "Alice Johnson", "email" => "alice@example.org",
-      "phone" => "+1234567890", "street" => "123 Main St",
-      "city" => "Springfield", "state" => "IL", "zip" => "62701",
-      "country" => "US", "avatar" => "https://api.dicebear.com/7.x/identicon/svg/seed=Alice"
+      "phone" => "+1234567890",
+      "address" => {
+        "street" => "123 Main St",
+        "city" => "Springfield",
+        "state" => "IL",
+        "zip" => "62701",
+        "country" => "US"
+      },
+      "avatar" => "https://api.dicebear.com/7.x/identicon/svg/seed=Alice"
     }
     stub_api(200, success_data(payload)) do
       post "/tools/demos/random-user"
@@ -598,7 +604,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match "Alice Johnson", response.body
     assert_match "alice@example.org", response.body
-  end
+    assert_match "123 Main St", response.body
 
   test "random_user renders error on 429" do
     stub_api(429, nil) do
