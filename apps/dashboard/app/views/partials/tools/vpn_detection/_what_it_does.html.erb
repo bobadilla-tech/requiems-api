@@ -3,7 +3,6 @@
 
     <div class="grid md:grid-cols-2 gap-12">
 
-      <!-- Coverage -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">
@@ -17,26 +16,21 @@
           </p>
         </div>
 
-        <!-- Mock response card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">GET /v1/networking/ip/vpn/8.8.8.8 → 200 OK</div>
-          <div>
-            <span class="text-gray-500">{</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"ip"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"8.8.8.8"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"is_vpn"</span><span class="text-gray-500">:</span> <span class="text-purple-400">false</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"is_proxy"</span><span class="text-gray-500">:</span> <span class="text-purple-400">false</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"is_tor"</span><span class="text-gray-500">:</span> <span class="text-purple-400">false</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"is_hosting"</span><span class="text-gray-500">:</span> <span class="text-purple-400">true</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"score"</span><span class="text-gray-500">:</span> <span class="text-purple-400">1</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"threat"</span><span class="text-gray-500">:</span> <span class="text-purple-400">1</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"fraud_score"</span><span class="text-gray-500">:</span> <span class="text-purple-400">0</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"asn_org"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"GOOGLE-ASN"</span><br>
-            <span class="text-gray-500">}</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "ip": "8.8.8.8",
+  "is_vpn": false,
+  "is_proxy": false,
+  "is_tor": false,
+  "is_hosting": true,
+  "score": 1,
+  "threat": 1,
+  "fraud_score": 0,
+  "asn_org": "GOOGLE-ASN"
+}
+        <% end %>
       </div>
 
-      <!-- Simplicity -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">
@@ -50,15 +44,11 @@
           </p>
         </div>
 
-        <!-- Mock request card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
-          <div>
-            <span class="text-sky-300">GET</span> <span class="text-gray-300">/v1/networking/ip/vpn/8.8.8.8</span><br><br>
-            <span class="text-gray-500"># Headers</span><br>
-            <span class="text-sky-300">requiems-api-key</span><span class="text-gray-500">:</span> <span class="text-amber-300">YOUR_API_KEY</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/networking/ip/vpn/8.8.8.8
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+        <% end %>
       </div>
 
     </div>

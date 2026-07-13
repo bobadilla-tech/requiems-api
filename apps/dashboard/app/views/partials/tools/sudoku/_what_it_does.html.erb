@@ -15,8 +15,8 @@
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
           <%= t("tools.sudoku.what_it_does.accuracy_body") %>
         </p>
-        <div data-controller="highlight">
-          <pre><code class="language-json">{
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
   "difficulty": "medium",
   "puzzle": [
     [0, 0, 3, 0, 0, 0, 0, 4, 0],
@@ -32,11 +32,10 @@
   "solution": [
     [7, 6, 3, 1, 9, 2, 8, 4, 5],
     [2, 9, 1, 5, 4, 8, 6, 3, 7],
-    [5, 4, 8, 6, 7, 3, 2, 1, 9],
-    ...
+    [5, 4, 8, 6, 7, 3, 2, 1, 9]
   ]
-}</code></pre>
-        </div>
+}
+        <% end %>
       </div>
 
       <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
@@ -44,11 +43,11 @@
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
           <%= t("tools.sudoku.what_it_does.simplicity_body") %>
         </p>
-        <div data-controller="highlight">
-          <pre><code class="language-http">GET /v1/entertainment/sudoku?difficulty=medium
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/entertainment/sudoku?difficulty=medium
 Host: api.requiems.xyz
-requiems-api-key: YOUR_API_KEY</code></pre>
-        </div>
+requiems-api-key: YOUR_API_KEY
+        <% end %>
       </div>
     </div>
   </div>

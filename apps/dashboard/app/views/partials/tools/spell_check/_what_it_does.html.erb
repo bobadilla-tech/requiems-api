@@ -3,7 +3,6 @@
 
     <div class="grid md:grid-cols-2 gap-12">
 
-      <!-- Accuracy -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">
@@ -17,26 +16,21 @@
           </p>
         </div>
 
-        <!-- Mock response card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">POST /v1/text/spellcheck → 200 OK</div>
-          <div>
-            <span class="text-gray-500">{</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"corrected"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"This is a simple test"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"corrections"</span><span class="text-gray-500">: [</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500">{</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-sky-300">"original"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"smiple"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-sky-300">"suggested"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"simple"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-sky-300">"suggestions"</span><span class="text-gray-500">: [</span><span class="text-amber-300">"simple"</span><span class="text-gray-500">,</span> <span class="text-amber-300">"smile"</span><span class="text-gray-500">],</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-sky-300">"position"</span><span class="text-gray-500">:</span> <span class="text-purple-400">9</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray-500">}</span><br>
-            &nbsp;&nbsp;<span class="text-gray-500">]</span><br>
-            <span class="text-gray-500">}</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "corrected": "This is a simple test",
+  "corrections": [
+    {
+      "original": "smiple",
+      "suggested": "simple",
+      "suggestions": ["simple", "smile"],
+      "position": 9
+    }
+  ]
+}
+        <% end %>
       </div>
 
-      <!-- Simplicity -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">
@@ -50,16 +44,14 @@
           </p>
         </div>
 
-        <!-- Mock request card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
-          <div>
-            <span class="text-gray-500">curl -X POST</span> https://api.requiems.xyz/v1/text/spellcheck \<br>
-            &nbsp;&nbsp;-H <span class="text-amber-300">"requiems-api-key: YOUR_API_KEY"</span> \<br>
-            &nbsp;&nbsp;-H <span class="text-amber-300">"Content-Type: application/json"</span> \<br>
-            &nbsp;&nbsp;-d <span class="text-green-400">'{"text": "Ths is a smiple tset"}'</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+POST /v1/text/spellcheck
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+Content-Type: application/json
+
+{"text": "Ths is a smiple tset"}
+        <% end %>
       </div>
 
     </div>
