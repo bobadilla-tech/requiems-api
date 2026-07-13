@@ -582,4 +582,63 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.trivia.demo.error_no_data"), response.body
   end
+
+  # ── spell_check ───────────────────────────────────────────────────────────────
+
+  test "spell_check renders result on success with corrections" do
+    payload = {
+      "corrected" => "This is a simple test with errors",
+      "corrections" => [
+        { "original" => "simiple", "suggested" => "simple", "suggestions" => [ "sample" ] },
+        { "original" => "erors", "suggested" => "errors", "suggestions" => [ "errs" ] }
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/spell-check", params: { text: "This is a simiple test with erors" }
+    end
+    assert_response :success
+    assert_match "simple", response.body
+    assert_match "errors", response.body
+    assert_match "simiple", response.body
+    assert_match "erors", response.body
+  end
+
+  test "spell_check renders result on success with no errors" do
+    payload = { "corrected" => "Clean text here", "corrections" => [] }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/spell-check", params: { text: "Clean text here" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.spell_check.demo.badge_clean"), response.body
+  end
+
+  test "spell_check renders error when text is blank" do
+    post "/tools/demos/spell-check", params: { text: "" }
+    assert_response :success
+    assert_match I18n.t("tools.spell_check.demo.error_empty"), response.body
+  end
+
+  test "spell_check renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/spell-check", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.spell_check.demo.error_rate_limit"), response.body
+  end
+
+  test "spell_check renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/spell-check", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.spell_check.demo.error_generic"), response.body
+  end
+
+  test "spell_check renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/spell-check", params: { text: "hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.spell_check.demo.error_no_data"), response.body
+  end
 end
