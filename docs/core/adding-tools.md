@@ -166,12 +166,32 @@ grid pattern overlay. Get the gradient values from the design spec.
 Two cards side-by-side on desktop, stacked on mobile:
 
 - **Accuracy card** (`bg-white dark:bg-gray-800 rounded-xl shadow p-6`):
-  Explanatory paragraph + mock JSON response in a `<pre><code>` block
+  Explanatory paragraph + mock JSON response
 - **Simplicity card** (`bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6`):
-  Explanatory paragraph + mock HTTP request in a `<pre><code>` block
+  Explanatory paragraph + mock HTTP request
 
-Use `data-controller="highlight"` on the code block wrapper for syntax
-highlighting.
+**Code samples MUST use the shared Highlight.js wrapper** — never hand-roll
+colors with Tailwind spans (`text-sky-300`, `text-amber-300`, …) or a flat
+`bg-gray-900 text-green-400` mono block:
+
+```erb
+<%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "ok": true
+}
+<% end %>
+
+<%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/…/…
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+<% end %>
+```
+
+The partial wraps `<pre><code class="language-…">` in
+`data-controller="highlight"` so Highlight.js colors the sample. Languages used
+on tool pages: `json` (responses) and `http` (requests). Auth header in samples
+is always `requiems-api-key`, never `X-API-Key`.
 
 Layout: `grid grid-cols-1 lg:grid-cols-2 gap-8`
 
@@ -224,13 +244,13 @@ and optional links.
 `/apis/:id`, and `ApisController#show` looks up `config/api_catalog.yml` by
 `id`. Tool page IDs often differ:
 
-| Tool slug (`/tools/...`) | Catalog id (`api_path(...)`) |
-| ------------------------ | ---------------------------- |
-| `email-normalizer`       | `email-normalize`            |
-| `domain-checker`         | `domain-info`                |
-| `email-validator`        | `email-validate`             |
-| `phone-validator`        | `phone-validation`           |
-| `language-detection` (wrong) | `detect-language`        |
+| Tool slug (`/tools/...`)     | Catalog id (`api_path(...)`) |
+| ---------------------------- | ---------------------------- |
+| `email-normalizer`           | `email-normalize`            |
+| `domain-checker`             | `domain-info`                |
+| `email-validator`            | `email-validate`             |
+| `phone-validator`            | `phone-validation`           |
+| `language-detection` (wrong) | `detect-language`            |
 
 Always prefer `api_path("catalog-id")` over hardcoded `/apis/...` so locale
 prefixes are preserved. Omit `:href` only when the card should not link.
@@ -269,8 +289,8 @@ end`.
 All answers start collapsed (`hidden` class).
 
 Include a "Still have questions? Contact support" section at the bottom. Use
-`contact_path` (or `link_to ... contact_path`) — never hardcoded `href="/contact"`,
-which drops the locale prefix for ES/FR visitors.
+`contact_path` (or `link_to ... contact_path`) — never hardcoded
+`href="/contact"`, which drops the locale prefix for ES/FR visitors.
 
 #### _cta — Closing call-to-action
 
@@ -345,9 +365,9 @@ Key points:
   can be human-readable via `t()`, but `value=` must be a canonical key (or a
   documented alias). Example: the Units API uses `m` / `km`, not `meters` /
   `kilometers` — sending the label form caused live demos to fail with
-  `unknown unit: "meters"`. Prefer canonical keys from the API docs /
-  discovery endpoint; if you add long-form aliases in Go, keep the demo on
-  canonical keys and document aliases separately.
+  `unknown unit: "meters"`. Prefer canonical keys from the API docs / discovery
+  endpoint; if you add long-form aliases in Go, keep the demo on canonical keys
+  and document aliases separately.
 
 ### 5b. Route — outside locale scope
 
@@ -846,28 +866,30 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 
 ## 13. Anti-patterns
 
-| Anti-pattern                                       | Correct approach                               |
-| -------------------------------------------------- | ---------------------------------------------- |
-| `innerHTML = \`<div>...\``                         | Render result via Rails + Turbo Frame          |
-| `_escapeHtml()` on API response fields             | Remove it — Rails ERB escapes at render time   |
-| Hardcoded English error strings in JS              | Pass via `data-*-value` from ERB using `t()`   |
-| `type="text"` for unit/category selectors          | Use `<select>` with `<optgroup>`               |
-| Raw `link_to` with inline Tailwind classes for CTA | Use `render "partials/shared/button"`          |
-| Copy-pasting the CTA section HTML per tool         | Use `render "partials/tools/shared/cta"`       |
-| Defining `def method_name` inside ERB              | Use a local lambda: `helper = ->(arg) { ... }` |
-| `fetch()` to `/api/proxy` + JS result rendering    | Submit form to `ToolDemosController` action    |
-| Omitting `content_for :title` / `:description`     | Set both in the show view                      |
-| Superlatives in headings ("best", "most powerful") | Use factual, active-voice descriptions         |
-| Unresponsive grid (no `md:` / `lg:` prefixes)      | Add responsive breakpoints to all card grids   |
-| No keyboard focus indicators on interactive elems  | Use `focus:ring-2 focus:ring-brand-primary`    |
-| Skipping ES/FR locale stubs                        | Run `rori18n generate --fix --languages es,fr` |
-| Hardcoded `/apis/...` or `/contact` links          | Use `api_path("catalog-id")` / `contact_path`  |
-| `api_path` with tool slug (`email-normalizer`)     | Use catalog id from `api_catalog.yml`          |
-| Sample request showing `X-API-Key`                 | Product header is `requiems-api-key`           |
-| Dark-only inline styles on Turbo result cards      | Match light/dark Tailwind pattern of other demos |
-| Omitting `demo.result_failed_heading`              | Add it — otherwise error UI shows English fallback |
+| Anti-pattern                                       | Correct approach                                      |
+| -------------------------------------------------- | ----------------------------------------------------- |
+| `innerHTML = \`<div>...\``                         | Render result via Rails + Turbo Frame                 |
+| `_escapeHtml()` on API response fields             | Remove it — Rails ERB escapes at render time          |
+| Hardcoded English error strings in JS              | Pass via `data-*-value` from ERB using `t()`          |
+| `type="text"` for unit/category selectors          | Use `<select>` with `<optgroup>`                      |
+| Raw `link_to` with inline Tailwind classes for CTA | Use `render "partials/shared/button"`                 |
+| Copy-pasting the CTA section HTML per tool         | Use `render "partials/tools/shared/cta"`              |
+| Defining `def method_name` inside ERB              | Use a local lambda: `helper = ->(arg) { ... }`        |
+| `fetch()` to `/api/proxy` + JS result rendering    | Submit form to `ToolDemosController` action           |
+| Omitting `content_for :title` / `:description`     | Set both in the show view                             |
+| Superlatives in headings ("best", "most powerful") | Use factual, active-voice descriptions                |
+| Unresponsive grid (no `md:` / `lg:` prefixes)      | Add responsive breakpoints to all card grids          |
+| No keyboard focus indicators on interactive elems  | Use `focus:ring-2 focus:ring-brand-primary`           |
+| Skipping ES/FR locale stubs                        | Run `rori18n generate --fix --languages es,fr`        |
+| Hardcoded `/apis/...` or `/contact` links          | Use `api_path("catalog-id")` / `contact_path`         |
+| `api_path` with tool slug (`email-normalizer`)     | Use catalog id from `api_catalog.yml`                 |
+| Sample request showing `X-API-Key`                 | Product header is `requiems-api-key`                  |
+| Dark-only inline styles on Turbo result cards      | Match light/dark Tailwind pattern of other demos      |
+| Omitting `demo.result_failed_heading`              | Add it — otherwise error UI shows English fallback    |
 | Copy-pasting `_api_combinations` markup per tool   | Use `render "partials/tools/shared/api_combinations"` |
-| Demo `<option value="meters">` when API wants `m`  | Option values = API keys (labels via `t()`)    |
+| Demo `<option value="meters">` when API wants `m`  | Option values = API keys (labels via `t()`)           |
+| Hand-rolled code colors (`text-sky-300` spans or   | `render "partials/tools/shared/code_sample"`          |
+| `bg-gray-900 text-green-400` mono `<pre>`)         | with `language: "json"` / `"http"`                    |
 
 ---
 
@@ -905,6 +927,8 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] FAQ support link uses `contact_path` (locale-safe)
 - [ ] `tools.{tool}.demo.result_failed_heading` present in EN (+ ES/FR stubs)
 - [ ] Mock HTTP samples use `requiems-api-key`, not `X-API-Key`
+- [ ] Code samples use `render "partials/tools/shared/code_sample"`
+      (`language: "json"` / `"http"`) — no hand-rolled Tailwind colors
 - [ ] Show-page render test added in `tools_controller_test.rb`
 - [ ] `ApiProxyService.call` used — no duplicate HTTP logic
 - [ ] `layout false` on `ToolDemosController` actions

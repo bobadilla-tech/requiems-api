@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-primary: #17855E;
+  --color-brand-primary: #17855e;
 }
 
 /* Date Picker */

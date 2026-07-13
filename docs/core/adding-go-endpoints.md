@@ -1004,8 +1004,8 @@ contract in YAML examples and in any Rails tool demo. Marketing labels belong in
 UI copy (`t("…")`), not in request payloads.
 
 When short keys are harsh DX for callers, add **aliases in the service** that
-resolve to the canonical key before validation (see
-`services/technology/units` — `meters` → `m`). Rules:
+resolve to the canonical key before validation (see `services/technology/units`
+— `meters` → `m`). Rules:
 
 1. Discovery / list endpoints return **canonical** keys only.
 2. Convert/lookup accepts both canonical and aliases (case-insensitive).

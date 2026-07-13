@@ -15,17 +15,17 @@
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
           <%= t("tools.phone_validator.what_it_does.accuracy_body") %>
         </p>
-        <div data-controller="highlight">
-          <pre><code class="language-json">{
-  "valid":       true,
-  "country":     "US",
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "valid": true,
+  "country": "US",
   "country_code": 1,
-  "carrier":     "Verizon",
-  "line_type":   "mobile",
-  "e164":        "+14155552671",
-  "local":       "(415) 555-2671"
-}</code></pre>
-        </div>
+  "carrier": "Verizon",
+  "line_type": "mobile",
+  "e164": "+14155552671",
+  "local": "(415) 555-2671"
+}
+        <% end %>
       </div>
 
       <div class="bg-gray-50 dark:bg-gray-900 rounded-xl shadow p-6">
@@ -33,11 +33,11 @@
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
           <%= t("tools.phone_validator.what_it_does.simplicity_body") %>
         </p>
-        <div data-controller="highlight">
-          <pre><code class="language-http">GET /v1/validation/phone/%2B14155552671
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/validation/phone?number=%2B14155552671
 Host: api.requiems.xyz
-X-API-Key: your_key</code></pre>
-        </div>
+requiems-api-key: YOUR_API_KEY
+        <% end %>
       </div>
     </div>
   </div>

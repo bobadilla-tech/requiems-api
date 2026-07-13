@@ -7,8 +7,8 @@ en:
     mailer:
       confirmation_instructions:
         confirm_my_account: Confirm my account
-        you_can_confirm_your_account_email: 'You can confirm your account email through
-          the link below:'
+        you_can_confirm_your_account_email: "You can confirm your account email through
+          the link below:"
       password_change:
         we_re_contacting_you_to_notify_you_that: We're contacting you to notify you
           that your password has been changed.
@@ -21,8 +21,8 @@ en:
         your_password_won_t_change_until_you: Your password won't change until you
           access the link above and create a new one.
       unlock_instructions:
-        click_the_link_below_to_unlock_your: 'Click the link below to unlock your
-          account:'
+        click_the_link_below_to_unlock_your: "Click the link below to unlock your
+          account:"
         unlock_my_account: Unlock my account
         your_account_has_been_locked_due_to_an: Your account has been locked due to
           an excessive number of unsuccessful sign in attempts.

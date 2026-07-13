@@ -12,20 +12,20 @@ en:
       invalid: Invalid
       json_response: JSON response
       latency: "< 300ms avg latency"
-      'no': "✗ No"
+      "no": "✗ No"
       performance: Performance
       rest_api: REST API
       uptime: 99.9% uptime
       utilities: Browse utilities
       valid: Valid
       view: View
-      'yes': "✓ Yes"
+      "yes": "✓ Yes"
     danger_zone:
       cancel_btn: Cancel
       default_bullets:
-      - All API keys will be revoked immediately
-      - Your subscription will be canceled
-      - All usage data will be permanently deleted
+        - All API keys will be revoked immediately
+        - Your subscription will be canceled
+        - All usage data will be permanently deleted
       default_description: Permanently delete your account and all associated data.
         This action cannot be undone.
       default_title: Delete Account
@@ -89,8 +89,8 @@ en:
       environment: Environment
       joined: Joined
       monthly: Monthly
-      'no': 'No'
-      'yes': 'Yes'
+      "no": "No"
+      "yes": "Yes"
     nav:
       api_keys: API Keys
       apis: APIs

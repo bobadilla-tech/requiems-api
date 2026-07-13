@@ -15,7 +15,7 @@ en:
       back: Back to Examples
       breadcrumb_examples: Examples
       breadcrumb_home: Home
-      in_the_meantime: 'In the meantime:'
+      in_the_meantime: "In the meantime:"
       tip_demo: Try out the live demo to see it in action
       tip_docs_html: Explore the %{docs_link} for the APIs used in this project
       tip_github: Check out the source code on GitHub to see how it's built
@@ -45,15 +45,15 @@ en:
       offerings:
         heading: What We Offer
         items:
-        - Email and phone validation, disposable detection, and related networking
-          checks
-        - 'Text and content APIs: profanity filter, sentiment, lorem ipsum, dictionary,
-          and more'
-        - QR and barcode generation, plus finance helpers (IBAN, SWIFT, BIN, and more)
-        - 'Places and scheduling: timezones, working days, holidays, geocoding'
-        - EU-hosted infrastructure with transparent pricing
-        - Documentation and examples built for real shipping, including AI-friendly
-          formats
+          - Email and phone validation, disposable detection, and related networking
+            checks
+          - "Text and content APIs: profanity filter, sentiment, lorem ipsum, dictionary,
+            and more"
+          - QR and barcode generation, plus finance helpers (IBAN, SWIFT, BIN, and more)
+          - "Places and scheduling: timezones, working days, holidays, geocoding"
+          - EU-hosted infrastructure with transparent pricing
+          - Documentation and examples built for real shipping, including AI-friendly
+            formats
       title: About Us - Requiems API
       values:
         dx_text: We obsess over making our APIs easy to integrate and delightful to
@@ -69,8 +69,8 @@ en:
         transparency_text: Clear pricing, detailed documentation, and honest communication.
         transparency_title: Transparency
     ai:
-      banner_cta: 'Build with Requiems API faster: connect via MCP or install the
-        AI Skills package for Claude, Gemini, and more'
+      banner_cta: "Build with Requiems API faster: connect via MCP or install the
+        AI Skills package for Claude, Gemini, and more"
       cta:
         button: Get API key
         heading: Get your API key
@@ -94,8 +94,8 @@ en:
       skills:
         claude_code:
           heading: Claude Code
-          step1: 'Register this repository as a plugin marketplace:'
-          step2: 'Then browse and install, or install directly:'
+          step1: "Register this repository as a plugin marketplace:"
+          step2: "Then browse and install, or install directly:"
         copilot:
           heading: GitHub Copilot
           text: 'Place the skill file in your repo''s custom instructions folder:'
@@ -105,16 +105,16 @@ en:
           agent's context.
         manual:
           heading: Any other agent
-          text: 'Skills are plain Markdown files. They work anywhere that accepts
-            custom instructions or a SKILL.md convention:'
+          text: "Skills are plain Markdown files. They work anywhere that accepts
+            custom instructions or a SKILL.md convention:"
         opencode:
           heading: OpenCode
-          text: 'Copy the skill file into your OpenCode skills directory:'
+          text: "Copy the skill file into your OpenCode skills directory:"
         repo_link_text: Full skill list and docs on GitHub
       title: AI Tools - Requiems API
     api_reference:
-      all_api_requests_require_authentication: 'All API requests require authentication
-        using an API key in the request header:'
+      all_api_requests_require_authentication: "All API requests require authentication
+        using an API key in the request header:"
       api_reference: API Reference
       api_reference_requiems_api: API Reference - Requiems API
       available_apis: Available APIs
@@ -160,83 +160,83 @@ en:
         gateway:
           heading: Cloudflare Worker Gateway
           items:
-          - API key validation using Cloudflare KV
-          - Rate limiting with KV counters
-          - Request usage tracking with D1 SQLite
-          - Request proxying to backend API
-          - Usage analytics and logging
+            - API key validation using Cloudflare KV
+            - Rate limiting with KV counters
+            - Request usage tracking with D1 SQLite
+            - Request proxying to backend API
+            - Usage analytics and logging
         init:
           heading: Project Initialization
           items:
-          - Multi-language monorepo architecture established
-          - Technology stack selection (Go, Rails 8, Cloudflare Workers)
-          - 'Three-tier architecture design: Edge Gateway → Backend API → Database'
-          - Database schema and API endpoint planning
+            - Multi-language monorepo architecture established
+            - Technology stack selection (Go, Rails 8, Cloudflare Workers)
+            - "Three-tier architecture design: Edge Gateway → Backend API → Database"
+            - Database schema and API endpoint planning
       v002:
         deploy:
           heading: Production Deployment
           items:
-          - Go Backend API deployed with PostgreSQL database
-          - Rails 8 Dashboard application with user authentication
-          - API key management and usage tracking system
-          - Admin panel for user and subscription management
-          - Docker Compose development environment
+            - Go Backend API deployed with PostgreSQL database
+            - Rails 8 Dashboard application with user authentication
+            - API key management and usage tracking system
+            - Admin panel for user and subscription management
+            - Docker Compose development environment
         features:
           heading: Features
           items:
-          - Email validation endpoints (disposable email detection)
-          - Text utility APIs (advice, lorem ipsum, quotes, random words)
-          - User registration and authentication (Devise)
-          - Usage analytics dashboard
-          - Subscription and billing integration
-          - Health check and monitoring endpoints
+            - Email validation endpoints (disposable email detection)
+            - Text utility APIs (advice, lorem ipsum, quotes, random words)
+            - User registration and authentication (Devise)
+            - Usage analytics dashboard
+            - Subscription and billing integration
+            - Health check and monitoring endpoints
       v010:
         bugs:
           heading: Bug Fixes
           items:
-          - Fixed API key generation callback execution order
-          - Resolved Devise mapping initialization in test environment
-          - Corrected user status field handling for suspended/banned states
-          - Added HTTP server timeout configurations for security compliance
-          - Fixed code formatting across all applications
+            - Fixed API key generation callback execution order
+            - Resolved Devise mapping initialization in test environment
+            - Corrected user status field handling for suspended/banned states
+            - Added HTTP server timeout configurations for security compliance
+            - Fixed code formatting across all applications
         ci:
           heading: Continuous Integration
           items:
-          - Established comprehensive CI pipeline with automated testing across all
-            applications
-          - 'Go API: Tests with race detection, golangci-lint (21 linters), code coverage'
-          - 'Rails Dashboard: Full test suite (60 tests, 207 assertions), security
-            scans'
-          - 'Cloudflare Worker: TypeScript checks, Vitest suite (71 tests), Biome
-            linting'
-          - Path-based execution for efficient builds
-          - Security scans as blocking requirements (Brakeman, bundler-audit)
+            - Established comprehensive CI pipeline with automated testing across all
+              applications
+            - "Go API: Tests with race detection, golangci-lint (21 linters), code coverage"
+            - "Rails Dashboard: Full test suite (60 tests, 207 assertions), security
+              scans"
+            - "Cloudflare Worker: TypeScript checks, Vitest suite (71 tests), Biome
+              linting"
+            - Path-based execution for efficient builds
+            - Security scans as blocking requirements (Brakeman, bundler-audit)
         coverage:
           heading: Test Coverage
           items:
-          - 'Rails Dashboard: 100% test pass rate (60 tests)'
-          - 'Cloudflare Worker: 71 passing tests with 29% coverage'
-          - 'Go API: Comprehensive test suite with race detection'
+            - "Rails Dashboard: 100% test pass rate (60 tests)"
+            - "Cloudflare Worker: 71 passing tests with 29% coverage"
+            - "Go API: Comprehensive test suite with race detection"
       v020:
         features:
           heading: Planned Features
           items:
-          - Enhanced API documentation with interactive playground
-          - Usage webhooks for real-time notifications
-          - Advanced rate limiting controls per API key
-          - API usage export and reporting
-          - Team collaboration features (shared workspaces)
-          - Additional validation APIs (phone numbers, credit cards)
-        planned_release: 'Planned Release: Q1 2026'
+            - Enhanced API documentation with interactive playground
+            - Usage webhooks for real-time notifications
+            - Advanced rate limiting controls per API key
+            - API usage export and reporting
+            - Team collaboration features (shared workspaces)
+            - Additional validation APIs (phone numbers, credit cards)
+        planned_release: "Planned Release: Q1 2026"
         roadmap:
           heading: Future Roadmap (v1.0.0+)
           items:
-          - Data APIs (IP geolocation, currency conversion)
-          - Finance APIs (stock quotes, crypto prices)
-          - Image APIs (optimization, placeholders, QR codes)
-          - GraphQL API support
-          - SDK libraries (Python, JavaScript, Go, Ruby)
-          - Zero-data retention compliance documentation
+            - Data APIs (IP geolocation, currency conversion)
+            - Finance APIs (stock quotes, crypto prices)
+            - Image APIs (optimization, placeholders, QR codes)
+            - GraphQL API support
+            - SDK libraries (Python, JavaScript, Go, Ruby)
+            - Zero-data retention compliance documentation
       v0_0_1: v0.0.1
       v0_0_2: v0.0.2
       v0_1_0: v0.1.0
@@ -292,76 +292,76 @@ en:
         heading: Best Practices for Error Handling
         help_text: Need help troubleshooting?
         items:
-        - Always check the status code before processing the response
-        - Implement exponential backoff for retry logic on 5xx errors
-        - Log error details for debugging but never expose sensitive data
-        - Handle rate limits gracefully by respecting retry-after headers
-        - Show user-friendly error messages instead of raw API responses
+          - Always check the status code before processing the response
+          - Implement exponential backoff for retry logic on 5xx errors
+          - Log error details for debugging but never expose sensitive data
+          - Handle rate limits gracefully by respecting retry-after headers
+          - Show user-friendly error messages instead of raw API responses
       client_errors_heading: Client Errors
       codes:
         client_errors:
-        - code: '400'
-          name: Bad Request
-          description: The request was malformed or contains invalid parameters.
-          note: 'Common causes: Missing required fields, invalid JSON, incorrect data
-            types'
-        - code: '401'
-          name: Unauthorized
-          description: Authentication is required or has failed. Your API key may
-            be missing or invalid.
-          note: 'Common causes: Missing API key, invalid API key, expired key'
-        - code: '403'
-          name: Forbidden
-          description: You don't have permission to access this resource. Your API
-            key may lack the required permissions.
-          note: 'Common causes: Insufficient permissions, suspended account, accessing
-            test endpoint with live key'
-        - code: '404'
-          name: Not Found
-          description: The requested resource doesn't exist. Check your endpoint URL.
-          note: 'Common causes: Incorrect URL, typo in endpoint path, resource was
-            deleted'
-        - code: '422'
-          name: Unprocessable Entity
-          description: The request was well-formed but contains semantic errors or
-            validation failures.
-          note: 'Common causes: Invalid email format, out-of-range values, business
-            logic validation failures'
-        - code: '429'
-          name: Too Many Requests
-          description: You've exceeded your rate limit. Wait before making more requests
-            or upgrade your plan.
-          note: 'Common causes: Too many requests per minute, exceeded daily quota'
+          - code: "400"
+            name: Bad Request
+            description: The request was malformed or contains invalid parameters.
+            note: "Common causes: Missing required fields, invalid JSON, incorrect data
+              types"
+          - code: "401"
+            name: Unauthorized
+            description: Authentication is required or has failed. Your API key may
+              be missing or invalid.
+            note: "Common causes: Missing API key, invalid API key, expired key"
+          - code: "403"
+            name: Forbidden
+            description: You don't have permission to access this resource. Your API
+              key may lack the required permissions.
+            note: "Common causes: Insufficient permissions, suspended account, accessing
+              test endpoint with live key"
+          - code: "404"
+            name: Not Found
+            description: The requested resource doesn't exist. Check your endpoint URL.
+            note: "Common causes: Incorrect URL, typo in endpoint path, resource was
+              deleted"
+          - code: "422"
+            name: Unprocessable Entity
+            description: The request was well-formed but contains semantic errors or
+              validation failures.
+            note: "Common causes: Invalid email format, out-of-range values, business
+              logic validation failures"
+          - code: "429"
+            name: Too Many Requests
+            description: You've exceeded your rate limit. Wait before making more requests
+              or upgrade your plan.
+            note: "Common causes: Too many requests per minute, exceeded daily quota"
         server_errors:
-        - code: '500'
-          name: Internal Server Error
-          description: An unexpected error occurred on our servers. This is a temporary
-            issue.
-          note: 'Action: Retry the request. If the issue persists, contact support.'
-        - code: '502'
-          name: Bad Gateway
-          description: The gateway received an invalid response from the backend server.
-          note: 'Action: Retry the request after a brief delay.'
-        - code: '503'
-          name: Service Unavailable
-          description: The service is temporarily unavailable, usually due to maintenance
-            or overload.
-          note: 'Action: Check our status page and retry after a delay.'
-        - code: '504'
-          name: Gateway Timeout
-          description: The gateway didn't receive a response from the backend server
-            in time.
-          note: 'Action: Retry the request. Consider implementing exponential backoff.'
+          - code: "500"
+            name: Internal Server Error
+            description: An unexpected error occurred on our servers. This is a temporary
+              issue.
+            note: "Action: Retry the request. If the issue persists, contact support."
+          - code: "502"
+            name: Bad Gateway
+            description: The gateway received an invalid response from the backend server.
+            note: "Action: Retry the request after a brief delay."
+          - code: "503"
+            name: Service Unavailable
+            description: The service is temporarily unavailable, usually due to maintenance
+              or overload.
+            note: "Action: Check our status page and retry after a delay."
+          - code: "504"
+            name: Gateway Timeout
+            description: The gateway didn't receive a response from the backend server
+              in time.
+            note: "Action: Retry the request. Consider implementing exponential backoff."
         success:
-        - code: '200'
-          name: OK
-          description: The request was successful and the response contains the requested
-            data.
-          note: 'Common with: GET, POST, PUT requests'
-        - code: '201'
-          name: Created
-          description: A new resource was successfully created.
-          note: 'Common with: POST requests for creating resources'
+          - code: "200"
+            name: OK
+            description: The request was successful and the response contains the requested
+              data.
+            note: "Common with: GET, POST, PUT requests"
+          - code: "201"
+            name: Created
+            description: A new resource was successfully created.
+            note: "Common with: POST requests for creating resources"
       description: Understanding HTTP status codes and how to handle them
       heading: Error Codes Reference
       server_errors_heading: Server Errors
@@ -369,7 +369,7 @@ en:
       title: Error Codes Reference - Requiems API
     faq:
       authentication:
-        a1: 'Include your API key in the Authorization header as a Bearer token:'
+        a1: "Include your API key in the Authorization header as a Bearer token:"
         a2_html: Test keys (starting with %{test_key}) are for development and testing.
           Live keys (%{live_key}) are for production use. Both key types count against
           your monthly request quota.
@@ -418,16 +418,16 @@ en:
       intro: Billing, auth, rate limits, and how to get from signup to production
         quickly.
       rate_limits:
-        a1: 'Rate limits vary by plan:'
+        a1: "Rate limits vary by plan:"
         a2_html: When you receive a 429 error, implement exponential backoff. Wait
           a few seconds and retry. Check the %{retry_after_header} header for the
           recommended wait time. Consider upgrading your plan if you consistently
           hit rate limits.
-        business: 'Business: %{rate_limit} requests/minute'
-        developer: 'Developer: %{rate_limit} requests/minute'
-        free: 'Free: %{rate_limit} requests/minute'
+        business: "Business: %{rate_limit} requests/minute"
+        developer: "Developer: %{rate_limit} requests/minute"
+        free: "Free: %{rate_limit} requests/minute"
         heading: Rate Limits
-        professional: 'Professional: %{rate_limit} requests/minute'
+        professional: "Professional: %{rate_limit} requests/minute"
         q1: What are the rate limits?
         q2: How should I handle rate limit errors?
       still_questions:
@@ -438,12 +438,12 @@ en:
       subheading: Answers to common questions about billing, auth, rate limits, and
         integration.
       support:
-        a1: 'We offer multiple support channels:'
-        a2: 'Response times vary by plan:'
+        a1: "We offer multiple support channels:"
+        a2: "Response times vary by plan:"
         a3_html: Yes! Enterprise customers get dedicated support with guaranteed response
           times, direct access to our engineering team, and priority assistance. %{sales_link}
           to learn more.
-        business_time: 'Business: 24 hours'
+        business_time: "Business: 24 hours"
         contact_channel:
           description: Email support (24-48 hour response)
           label: Contact Form
@@ -451,12 +451,12 @@ en:
         docs_channel:
           description: Comprehensive guides and API reference
           label: Documentation
-        free_dev: 'Free & Developer: 48 hours'
+        free_dev: "Free & Developer: 48 hours"
         github_channel:
           description: Report bugs or request features
           label: GitHub Issues
         heading: Support
-        professional_time: 'Professional: 12 hours (priority support)'
+        professional_time: "Professional: 12 hours (priority support)"
         q1: How can I get help?
         q2: What are your support response times?
         q3: Do you offer enterprise support?
@@ -466,7 +466,7 @@ en:
         description: Get the complete documentation for any single API in Markdown
           format by appending /index.md to its URL.
         heading: Per-API Markdown
-        pattern: 'Pattern: /apis/{api-id}/index.md'
+        pattern: "Pattern: /apis/{api-id}/index.md"
       cta:
         browse_apis: Browse APIs
         full_docs: Download llms-full.txt
@@ -502,75 +502,75 @@ en:
         heading: Need More Help?
         text: Check out our comprehensive documentation or contact our support team
       terms:
-      - name: API (Application Programming Interface)
-        definition: A set of definitions and protocols that allows different software
-          applications to communicate with each other. APIs define the methods and
-          data formats that applications can use to request and exchange information.
-        example_prefix: 'Example: Requiems API provides a REST API for validating
-          email addresses programmatically.'
-      - name: Endpoint
-        definition: A specific URL where an API can access the resources it needs.
-          Each endpoint corresponds to a specific function or resource in the API.
-        example_prefix: 'Example:'
-        example_code: POST /v1/networking/disposable/check
-      - name: Authentication
-        definition: The process of verifying the identity of a user or application.
-          APIs typically require authentication to ensure only authorized users can
-          access the service.
-        example_prefix: 'Example: Including your API key in the Authorization header:'
-        example_code: 'Authorization: Bearer YOUR_API_KEY'
-      - name: API Key
-        definition: A unique identifier used to authenticate requests to an API. API
-          keys act as both an identifier and a secret token for authentication.
-        example_prefix: 'Example:'
-        example_code: rq_live_1234567890abcdef
-      - name: Rate Limiting
-        definition: A technique used to control the number of requests a user can
-          make to an API within a given time period. This helps prevent abuse and
-          ensures fair usage.
-        example_prefix: 'Example: Free plan allows 30 requests per minute'
-      - name: Requests
-        definition: The unit of API usage. Each API call counts as 1 request against
-          your monthly plan allowance. Some endpoints may count as more than 1 request;
-          this is always stated explicitly in that endpoint's documentation.
-        example_prefix: 'Example: Calling the email validation endpoint once uses
-          1 request from your monthly allowance.'
-      - name: REST (Representational State Transfer)
-        definition: An architectural style for designing networked applications. REST
-          APIs use HTTP requests to perform CRUD (Create, Read, Update, Delete) operations
-          on resources.
-        example_prefix: 'Example: Using GET to retrieve data, POST to create, PUT
-          to update, DELETE to remove'
-      - name: JSON (JavaScript Object Notation)
-        definition: A lightweight data interchange format that's easy for humans to
-          read and write, and easy for machines to parse and generate. Most modern
-          APIs use JSON for request and response bodies.
-        example_prefix: 'Example:'
-        example_code: '{"email": "test@example.com", "is_disposable": false}'
-      - name: HTTP Status Codes
-        definition: Three-digit codes returned by web servers to indicate the result
-          of an HTTP request. Common codes include 200 (success), 404 (not found),
-          and 500 (server error).
-        example_prefix: 'Learn more:'
-        example_link_href: "/error_codes"
-        example_link_text: Error Codes Reference
-      - name: Webhook
-        definition: A method for an application to provide real-time information to
-          other applications. Instead of you making repeated API requests, the server
-          sends data to your specified URL when an event occurs.
-        example_prefix: 'Example: Receive a notification when your request balance
-          drops below a threshold'
-      - name: Query Parameters
-        definition: Key-value pairs appended to a URL to filter, sort, or modify the
-          API response. They appear after a question mark (?) in the URL.
-        example_prefix: 'Example:'
-        example_code: "/v1/words?limit=10&min_length=5"
-      - name: Headers
-        definition: Additional information sent with HTTP requests and responses.
-          Headers can contain authentication tokens, content types, custom metadata,
-          and more.
-        example_prefix: 'Example:'
-        example_code: 'Content-Type: application/json'
+        - name: API (Application Programming Interface)
+          definition: A set of definitions and protocols that allows different software
+            applications to communicate with each other. APIs define the methods and
+            data formats that applications can use to request and exchange information.
+          example_prefix: "Example: Requiems API provides a REST API for validating
+            email addresses programmatically."
+        - name: Endpoint
+          definition: A specific URL where an API can access the resources it needs.
+            Each endpoint corresponds to a specific function or resource in the API.
+          example_prefix: "Example:"
+          example_code: POST /v1/networking/disposable/check
+        - name: Authentication
+          definition: The process of verifying the identity of a user or application.
+            APIs typically require authentication to ensure only authorized users can
+            access the service.
+          example_prefix: "Example: Including your API key in the Authorization header:"
+          example_code: "Authorization: Bearer YOUR_API_KEY"
+        - name: API Key
+          definition: A unique identifier used to authenticate requests to an API. API
+            keys act as both an identifier and a secret token for authentication.
+          example_prefix: "Example:"
+          example_code: rq_live_1234567890abcdef
+        - name: Rate Limiting
+          definition: A technique used to control the number of requests a user can
+            make to an API within a given time period. This helps prevent abuse and
+            ensures fair usage.
+          example_prefix: "Example: Free plan allows 30 requests per minute"
+        - name: Requests
+          definition: The unit of API usage. Each API call counts as 1 request against
+            your monthly plan allowance. Some endpoints may count as more than 1 request;
+            this is always stated explicitly in that endpoint's documentation.
+          example_prefix: "Example: Calling the email validation endpoint once uses
+            1 request from your monthly allowance."
+        - name: REST (Representational State Transfer)
+          definition: An architectural style for designing networked applications. REST
+            APIs use HTTP requests to perform CRUD (Create, Read, Update, Delete) operations
+            on resources.
+          example_prefix: "Example: Using GET to retrieve data, POST to create, PUT
+            to update, DELETE to remove"
+        - name: JSON (JavaScript Object Notation)
+          definition: A lightweight data interchange format that's easy for humans to
+            read and write, and easy for machines to parse and generate. Most modern
+            APIs use JSON for request and response bodies.
+          example_prefix: "Example:"
+          example_code: '{"email": "test@example.com", "is_disposable": false}'
+        - name: HTTP Status Codes
+          definition: Three-digit codes returned by web servers to indicate the result
+            of an HTTP request. Common codes include 200 (success), 404 (not found),
+            and 500 (server error).
+          example_prefix: "Learn more:"
+          example_link_href: "/error_codes"
+          example_link_text: Error Codes Reference
+        - name: Webhook
+          definition: A method for an application to provide real-time information to
+            other applications. Instead of you making repeated API requests, the server
+            sends data to your specified URL when an event occurs.
+          example_prefix: "Example: Receive a notification when your request balance
+            drops below a threshold"
+        - name: Query Parameters
+          definition: Key-value pairs appended to a URL to filter, sort, or modify the
+            API response. They appear after a question mark (?) in the URL.
+          example_prefix: "Example:"
+          example_code: "/v1/words?limit=10&min_length=5"
+        - name: Headers
+          definition: Additional information sent with HTTP requests and responses.
+            Headers can contain authentication tokens, content types, custom metadata,
+            and more.
+          example_prefix: "Example:"
+          example_code: "Content-Type: application/json"
       title: API Glossary - Requiems API
     index:
       categories:
@@ -614,16 +614,16 @@ en:
           APIs in parallel, then returns a single structured decision. No scoring
           logic to build. No pipeline to maintain.
         value_table:
-        - field: risk_score
-          plain: How risky is this signup? 0 is clean, 1 is high risk.
-        - field: is_safe
-          plain: Single yes/no decision. Use this to block or allow the signup.
-        - field: confidence
-          plain: How sure the engine is. Higher means fewer false positives.
-        - field: flags
-          plain: The specific reasons the user was flagged.
-        - field: signals
-          plain: Raw results from each check run in the background.
+          - field: risk_score
+            plain: How risky is this signup? 0 is clean, 1 is high risk.
+          - field: is_safe
+            plain: Single yes/no decision. Use this to block or allow the signup.
+          - field: confidence
+            plain: How sure the engine is. Higher means fewer false positives.
+          - field: flags
+            plain: The specific reasons the user was flagged.
+          - field: signals
+            plain: Raw results from each check run in the background.
         value_table_heading: What each field means
       faq:
         a1: Yes! You get 500 requests per month completely free with no credit card
@@ -660,23 +660,23 @@ en:
         playground_desc: Test every endpoint directly in the docs. See real responses
           instantly, no code required.
         playground_title: Live API Playground
-        subheading: 'From solo founders to agencies: precise docs, live playgrounds,
-          and copy-paste examples. Ship integrations in minutes, not days.'
+        subheading: "From solo founders to agencies: precise docs, live playgrounds,
+          and copy-paste examples. Ship integrations in minutes, not days."
       hero:
         cta_primary: Get API key
         cta_secondary: Explore systems
         description: Authentication, validation, fraud detection, payments intelligence,
           and global data, delivered through one unified API.
         proof_badges:
-        - Proprietary data pipelines
-        - Real-time processing
-        - Built for production
+          - Proprietary data pipelines
+          - Real-time processing
+          - Built for production
         title_line1: All-in-one backend
         title_line2: for SaaS products.
       how_it_works:
         heading: How it works
-        step1_body: 'Pick the problem to solve: identity, payments, global data, or
-          data integrity.'
+        step1_body: "Pick the problem to solve: identity, payments, global data, or
+          data integrity."
         step1_title: Choose a system
         step2_body: Use high-level endpoints or compose flows as needed.
         step2_title: Call a single endpoint
@@ -729,66 +729,66 @@ en:
           data_integrity:
             blurb: Validate and normalize email, phone, and text inputs on submission.
             signals:
-            - Input validation
-            - Text normalization
-            - Content moderation
+              - Input validation
+              - Text normalization
+              - Content moderation
             title: Data Integrity
           developer_utilities:
             blurb: Useful tools you shouldn't have to rebuild.
             signals:
-            - QR codes
-            - Encoding & conversions
-            - Misc utilities
+              - QR codes
+              - Encoding & conversions
+              - Misc utilities
             title: Developer Utilities
           global_data:
             blurb: Geocoding, timezones, and public holiday calendars for 100+ countries.
             signals:
-            - Geocoding
-            - Timezones & holidays
-            - Address intelligence
+              - Geocoding
+              - Timezones & holidays
+              - Address intelligence
             title: Global Data
           identity_risk:
             blurb: Block fraud at signup with email, phone, IP, and behavioral signals.
             signals:
-            - Risk scoring
-            - Email, phone, and IP intelligence
-            - Domain and behavioral signals
+              - Risk scoring
+              - Email, phone, and IP intelligence
+              - Domain and behavioral signals
             title: Identity & Risk
           payments_intelligence:
             blurb: Validate BIN, IBAN, and SWIFT data with geolocation mismatch detection.
             signals:
-            - BIN & card validation
-            - IBAN / SWIFT checks
-            - Transaction risk signals
+              - BIN & card validation
+              - IBAN / SWIFT checks
+              - Transaction risk signals
             title: Payments Intelligence
         explore_cta: Explore system
         heading: Production-grade systems
         subheading: Each system composes proprietary signals into a single structured
           decision, delivered in one API call.
         utilities_label: Extras
-      title: 'Requiems API: All-in-one backend for SaaS products'
+      title: "Requiems API: All-in-one backend for SaaS products"
       trusted_by:
         label: Trusted by teams shipping real products
       use_cases:
         heading: Built for real products
         items:
-        - title: SaaS signup protection
-          body: Prevent fake accounts, bots, and abuse from day one.
-        - title: Fintech onboarding
-          body: Validate financial data and reduce onboarding friction.
-        - title: Marketplace fraud prevention
-          body: Detect risky users and transactions in real time.
-        - title: Global product support
-          body: Handle international users with accurate data everywhere.
+          - title: SaaS signup protection
+            body: Prevent fake accounts, bots, and abuse from day one.
+          - title: Fintech onboarding
+            body: Validate financial data and reduce onboarding friction.
+          - title: Marketplace fraud prevention
+            body: Detect risky users and transactions in real time.
+          - title: Global product support
+            body: Handle international users with accurate data everywhere.
         subheading: Concrete problems, solved.
       why_different:
         heading: Infrastructure, not integration glue
         points:
-        - No reliance on third-party APIs
-        - Proprietary scoring and validation systems
-        - Unified schema across all endpoints
-        - Low-latency, high-throughput design
-        - Built for developers shipping real products
+          - No reliance on third-party APIs
+          - Proprietary scoring and validation systems
+          - Unified schema across all endpoints
+          - Low-latency, high-throughput design
+          - Built for developers shipping real products
         subheading: Most API aggregators resell third-party calls. We build proprietary
           pipelines.
     pricing:
@@ -821,32 +821,32 @@ en:
           cta: Start Free Trial
           description: For growing businesses and teams
           features:
-          - 1,000,000 requests/month
-          - 10,000 requests/minute
-          - All API endpoints
-          - Priority email support (4h response)
-          - EU data centers
-          - Custom SLAs available
+            - 1,000,000 requests/month
+            - 10,000 requests/minute
+            - All API endpoints
+            - Priority email support (4h response)
+            - EU data centers
+            - Custom SLAs available
           name: Business
         developer:
           cta: Start Free Trial
           description: For developers building production apps
           features:
-          - 100,000 requests/month
-          - 5,000 requests/minute
-          - All API endpoints
-          - Email support (24h response)
-          - EU data centers
+            - 100,000 requests/month
+            - 5,000 requests/minute
+            - All API endpoints
+            - Email support (24h response)
+            - EU data centers
           name: Developer
         free:
           cta: Start Free
           description: Perfect for testing and small projects
           features:
-          - 500 requests/month
-          - 30 requests/minute
-          - All API endpoints
-          - Community support
-          - EU data centers
+            - 500 requests/month
+            - 30 requests/minute
+            - All API endpoints
+            - Community support
+            - EU data centers
           name: Free
         per_month: "/month"
         popular_badge: Most Popular
@@ -860,14 +860,14 @@ en:
             accessible at yourcompany.requiems.xyz. Flat monthly or yearly billing.
             Zero overage fees, unlimited requests.
           features:
-          - Dedicated Hetzner VPS
-          - Select only the APIs you need
-          - Direct HTTPS, no Cloudflare layer
-          - Your subdomain on requiems.xyz
-          - Unlimited requests
-          - Monthly or yearly subscription
-          - Ready in 24-48 hours
-          - 15% off with yearly billing
+            - Dedicated Hetzner VPS
+            - Select only the APIs you need
+            - Direct HTTPS, no Cloudflare layer
+            - Your subdomain on requiems.xyz
+            - Unlimited requests
+            - Monthly or yearly subscription
+            - Ready in 24-48 hours
+            - 15% off with yearly billing
           heading: Your own dedicated API instance
           units:
             ram: RAM
@@ -878,12 +878,12 @@ en:
           cta: Start Free Trial
           description: For high-volume applications
           features:
-          - 10,000,000 requests/month
-          - 50,000 requests/minute
-          - All API endpoints
-          - Priority support (1h response)
-          - EU data centers
-          - Custom SLAs
+            - 10,000,000 requests/month
+            - 50,000 requests/minute
+            - All API endpoints
+            - Priority support (1h response)
+            - EU data centers
+            - Custom SLAs
           name: Professional
         save_per_year: Save $%{amount}/year
       security:
@@ -918,8 +918,8 @@ en:
     privacy:
       contact:
         heading: Contact Us
-        text: 'For privacy-related questions or to exercise your rights, contact us
-          at:'
+        text: "For privacy-related questions or to exercise your rights, contact us
+          at:"
       data_retention:
         heading: Data Retention
         text: We retain your account information for as long as your account is active.
@@ -928,34 +928,34 @@ en:
       data_storage:
         heading: Data Storage and Security
         items:
-        - TLS 1.3 encryption for data in transit
-        - Zero API payload retention — request inputs processed in volatile memory
-          only
-        - Regular security audits and monitoring
-        - Access controls and authentication mechanisms
-        text: 'All data is stored on servers located in the European Union. We implement
-          industry-standard security measures including:'
+          - TLS 1.3 encryption for data in transit
+          - Zero API payload retention — request inputs processed in volatile memory
+            only
+          - Regular security audits and monitoring
+          - Access controls and authentication mechanisms
+        text: "All data is stored on servers located in the European Union. We implement
+          industry-standard security measures including:"
       gdpr:
         heading: Your Rights (GDPR)
-        intro: 'If you are located in the European Economic Area, you have the following
-          rights:'
+        intro: "If you are located in the European Economic Area, you have the following
+          rights:"
         items:
-        - Right to access your personal data
-        - Right to rectification of inaccurate data
-        - Right to erasure ("right to be forgotten")
-        - Right to restrict processing
-        - Right to data portability
-        - Right to object to processing
+          - Right to access your personal data
+          - Right to rectification of inaccurate data
+          - Right to erasure ("right to be forgotten")
+          - Right to restrict processing
+          - Right to data portability
+          - Right to object to processing
       heading: Privacy Policy
       how_we_use:
         heading: How We Use Your Information
         items:
-        - Provide, maintain, and improve our services
-        - Process your transactions and send related information
-        - Send you technical notices, updates, and support messages
-        - Monitor and analyze usage patterns and trends
-        - Detect, prevent, and address technical issues and fraud
-        - Comply with legal obligations
+          - Provide, maintain, and improve our services
+          - Process your transactions and send related information
+          - Send you technical notices, updates, and support messages
+          - Monitor and analyze usage patterns and trends
+          - Detect, prevent, and address technical issues and fraud
+          - Comply with legal obligations
       information_we_collect:
         account:
           heading: Account Information
@@ -971,7 +971,7 @@ en:
           heading: Technical Information
           text: We automatically collect IP addresses, user agent strings, and other
             technical information for security and operational purposes.
-      last_updated: 'Last updated: %{date}'
+      last_updated: "Last updated: %{date}"
       overview:
         heading: Overview
         text: Requiems API ("we", "our", or "us") is committed to protecting your
@@ -980,20 +980,20 @@ en:
       third_party:
         heading: Third-Party Services
         items:
-        - name: LemonSqueezy
-          desc: Payment processing (see their privacy policy)
-        - name: Cloudflare
-          desc: Infrastructure and DDoS protection
-        text: 'We use the following third-party services:'
+          - name: LemonSqueezy
+            desc: Payment processing (see their privacy policy)
+          - name: Cloudflare
+            desc: Infrastructure and DDoS protection
+        text: "We use the following third-party services:"
       title: Privacy Policy - Requiems API
     security:
       api_auth:
         heading: API Authentication & Access Control
         points:
-        - High-entropy API keys issued per account
-        - Instant key revocation via dashboard
-        - TLS 1.3 required on every request
-        - Rate limiting enforced at the network edge
+          - High-entropy API keys issued per account
+          - Instant key revocation via dashboard
+          - TLS 1.3 required on every request
+          - Rate limiting enforced at the network edge
       compliance_scope:
         dpa:
           text: If your organization requires a signed DPA before integration, download
@@ -1049,18 +1049,18 @@ en:
       infrastructure:
         cloudflare:
           points:
-          - DDoS mitigation at the edge
-          - Web Application Firewall (WAF)
-          - TLS 1.3 enforced on all connections
-          - Rate limiting and abuse prevention
+            - DDoS mitigation at the edge
+            - Web Application Firewall (WAF)
+            - TLS 1.3 enforced on all connections
+            - Rate limiting and abuse prevention
           title: Cloudflare — Network Perimeter
         heading: Infrastructure Security
         hetzner:
           points:
-          - All servers located in the European Union
-          - ISO/IEC 27001 certified facilities
-          - Physical access controls and 24/7 monitoring
-          - Redundant power and network infrastructure
+            - All servers located in the European Union
+            - ISO/IEC 27001 certified facilities
+            - Physical access controls and 24/7 monitoring
+            - Redundant power and network infrastructure
           title: Hetzner — EU Data Centers
       last_updated: Effective %{date}
       stateless:
@@ -1069,18 +1069,18 @@ en:
           The moment your HTTP response is delivered, the payload is gone. We have
           no mechanism to recover it because it was never written anywhere.
         points:
-        - In-memory execution — payloads never touch disk
-        - Zero data retention — no database of user inputs exists
-        - No cache of request/response content
-        - Anonymized telemetry only — response codes and timestamps, never payload
-          content
+          - In-memory execution — payloads never touch disk
+          - Zero data retention — no database of user inputs exists
+          - No cache of request/response content
+          - Anonymized telemetry only — response codes and timestamps, never payload
+            content
       title: Security & Compliance - Requiems API
     status:
       all_operational: All Systems Operational
       all_operational_desc: All Requiems API services are running smoothly
       contact_support: Contact support
       having_issues: Having issues?
-      last_updated: 'Last updated: %{datetime}'
+      last_updated: "Last updated: %{datetime}"
       metrics:
         data_centers: Data Centers
         heading: Performance Metrics
@@ -1139,14 +1139,14 @@ en:
       api_access:
         acceptable_use:
           heading: 2.3 Acceptable Use
-          intro: 'You agree not to use the API for:'
+          intro: "You agree not to use the API for:"
           items:
-          - Illegal activities or to violate any laws
-          - Attempting to gain unauthorized access to our systems
-          - Transmitting malware, viruses, or harmful code
-          - Harassment, spam, or abusive behavior
-          - Reselling or redistributing API access without permission
-          - Reverse engineering or attempting to extract source code
+            - Illegal activities or to violate any laws
+            - Attempting to gain unauthorized access to our systems
+            - Transmitting malware, viruses, or harmful code
+            - Harassment, spam, or abusive behavior
+            - Reselling or redistributing API access without permission
+            - Reverse engineering or attempting to extract source code
         heading: 2. API Access and Usage
         keys:
           heading: 2.1 API Keys
@@ -1198,7 +1198,7 @@ en:
         text: The API, documentation, and all related materials are owned by Bobadilla
           Tech and protected by copyright and other intellectual property laws. You
           may not copy, modify, or create derivative works without permission.
-      last_updated: 'Last updated: %{date}'
+      last_updated: "Last updated: %{date}"
       liability:
         heading: 8. Limitation of Liability
         text: TO THE MAXIMUM EXTENT PERMITTED BY LAW, BOBADILLA TECH SHALL NOT BE
@@ -1207,21 +1207,21 @@ en:
           INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
       sla:
         heading: 4. Service Level and Uptime
-        intro: 'We target 99.99% uptime but do not guarantee uninterrupted service.
-          We are not liable for:'
+        intro: "We target 99.99% uptime but do not guarantee uninterrupted service.
+          We are not liable for:"
         items:
-        - Scheduled maintenance windows
-        - Force majeure events
-        - Third-party service failures
-        - Issues caused by your misuse of the API
+          - Scheduled maintenance windows
+          - Force majeure events
+          - Third-party service failures
+          - Issues caused by your misuse of the API
       termination:
         heading: 7. Termination
-        intro: 'We may suspend or terminate your access to the API at any time for:'
+        intro: "We may suspend or terminate your access to the API at any time for:"
         items:
-        - Violation of these terms
-        - Non-payment of fees
-        - Fraudulent or illegal activity
-        - At our discretion with 30 days notice
+          - Violation of these terms
+          - Non-payment of fees
+          - Fraudulent or illegal activity
+          - At our discretion with 30 days notice
         self_cancel: You may cancel your account at any time from your dashboard settings.
       title: Terms of Service - Requiems API
   sales_inquiries:

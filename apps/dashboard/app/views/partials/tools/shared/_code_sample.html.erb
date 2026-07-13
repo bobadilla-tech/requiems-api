@@ -1,19 +1,5 @@
-<%#
-  Standard syntax-highlighted code sample for tool pages.
-
-  Required local: language — highlight.js language id ("json" or "http")
-  Block: raw sample source (JSON payload or HTTP request)
-
-  Do NOT hand-roll colors (text-sky-300 / text-green-400 spans) or wrap
-  samples in bg-gray-900 text-green-400. Highlight.js via the highlight
-  Stimulus controller owns coloring.
-
-  <%= render "partials/tools/shared/code_sample", language: "json" do %>
-{
-  "ok": true
-}
-  <% end %>
-%>
+<%# Standard Highlight.js code sample. Locals: language ("json" or "http"). %>
+<%# Pass sample source as the block body. Do not hand-roll Tailwind color spans. %>
 <div data-controller="highlight">
   <pre><code class="language-<%= language %>"><%== capture { yield }.to_s.sub(/\A\n/, "") %></code></pre>
 </div>

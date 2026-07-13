@@ -33,10 +33,10 @@ en:
           user? This will revoke all API keys and cancel their subscription.
         are_you_sure_you_want_to_resolve_this: Are you sure you want to resolve this
           report?
-        ban: 'Ban:'
+        ban: "Ban:"
         by_email: by %{email}
         created_at_ago: "(%{created_at} ago)"
-        investigate: 'Investigate:'
+        investigate: "Investigate:"
         key_prefix: Key Prefix
         last_request: Last Request
         last_request_at_ago: "%{last_request_at} ago"
@@ -47,8 +47,8 @@ en:
         reported: Reported
         reported_at: Reported At
         reported_user: Reported User
-        resolve: 'Resolve:'
-        suspend: 'Suspend:'
+        resolve: "Resolve:"
+        suspend: "Suspend:"
         suspended: Suspended
         take_action_on_this_abuse_report: Take action on this abuse report
         this_month: This Month
@@ -63,12 +63,12 @@ en:
         churn_rate_30d: Churn Rate (30d)
         customer_distribution: Customer distribution
         declining_revenue_description: Investigate causes and implement growth strategies.
-        declining_revenue_label: 'Declining revenue:'
+        declining_revenue_label: "Declining revenue:"
         high_churn_description: Focus on customer retention and satisfaction.
-        high_churn_label: 'High churn rate:'
+        high_churn_label: "High churn rate:"
         key_takeaways: Key Takeaways
         low_churn_description: Customers are satisfied with the service.
-        low_churn_label: 'Low churn rate:'
+        low_churn_label: "Low churn rate:"
         monthly_recurring_revenue: Monthly Recurring Revenue
         monthly_recurring_revenue_over_time: Monthly recurring revenue over time
         monthly_revenue_breakdown: Monthly revenue breakdown
@@ -83,9 +83,9 @@ en:
         revenue_insights: Revenue Insights
         revenue_trend_last_12_months: Revenue Trend (Last 12 Months)
         steady_growth_description: Revenue is increasing consistently.
-        steady_growth_label: 'Steady growth:'
+        steady_growth_label: "Steady growth:"
         strong_growth_description: Revenue is increasing rapidly.
-        strong_growth_label: 'Strong growth:'
+        strong_growth_label: "Strong growth:"
         subscription_growth_and_churn_over_time: Subscription growth and churn over
           time
         subscription_revenue_and_financial: Subscription revenue and financial metrics
@@ -120,7 +120,7 @@ en:
         response_slow_description: Performance optimization is needed.
         response_slow_label: Slow response times.
         response_times: Response Times
-        response_times_detail: 'P95: %{p95}ms, P99: %{p99}ms'
+        response_times_detail: "P95: %{p95}ms, P99: %{p99}ms"
         security_high_description: Monitor for potential security threats.
         security_high_label: High failed auth attempts.
         security_label: Security
@@ -285,7 +285,7 @@ en:
         no_users_found: No users found
         oldest_first: Oldest First
         search_by_email_name_or_company: Search by email, name, or company
-        sort: 'Sort:'
+        sort: "Sort:"
         suspended: Suspended
         try_adjusting_your_search_or_filters: Try adjusting your search or filters.
         user_management: User Management

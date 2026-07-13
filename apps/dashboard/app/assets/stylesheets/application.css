@@ -9,8 +9,7 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
-
- /* Remove arrows from number inputs */
+/* Remove arrows from number inputs */
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
   -webkit-appearance: none;

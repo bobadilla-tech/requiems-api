@@ -22,23 +22,23 @@ es:
       flash:
         cannot_regenerate_revoked: No se puede regenerar una clave revocada. Crea
           una nueva.
-        created: 'Clave API creada correctamente. Cópiala ahora: no podrás verla de
-          nuevo.'
+        created: "Clave API creada correctamente. Cópiala ahora: no podrás verla de
+          nuevo."
         not_found: Clave API no encontrada.
-        regenerated: 'Clave API regenerada correctamente. Cópiala ahora: no podrás
-          verla de nuevo.'
+        regenerated: "Clave API regenerada correctamente. Cópiala ahora: no podrás
+          verla de nuevo."
         revoke_error: No se pudo revocar la clave API.
         revoked: Clave API revocada correctamente.
       info_heading: Información importante
-      info_one_time_label: 'Visualización única:'
+      info_one_time_label: "Visualización única:"
       info_one_time_text: Las claves API completas se muestran solo una vez al crearlas.
         Guárdalas de forma segura.
-      info_regenerate_label: 'Regenerar si está comprometida:'
+      info_regenerate_label: "Regenerar si está comprometida:"
       info_regenerate_text: Revoca y regenera de inmediato si una clave se expone.
-      info_security_label: 'Seguridad:'
+      info_security_label: "Seguridad:"
       info_security_text: Nunca expongas tus claves API en código del lado del cliente
         o repositorios públicos.
-      info_shared_label: 'Cuota compartida:'
+      info_shared_label: "Cuota compartida:"
       info_shared_text: Todas tus claves API comparten la misma cuota mensual de solicitudes
         según tu plan.
       last_used_never: Nunca
@@ -70,10 +70,10 @@ es:
         back_btn: "← Volver a claves API"
         copied_btn: "¡Copiado!"
         copy_btn: Copiar
-        curl_example: 'Ejemplo con cURL:'
+        curl_example: "Ejemplo con cURL:"
         go_dashboard_btn: Ir al panel
-        header_example: 'Inclúyela en tus encabezados HTTP:'
-        js_example: 'Ejemplo en JavaScript:'
+        header_example: "Inclúyela en tus encabezados HTTP:"
+        js_example: "Ejemplo en JavaScript:"
         key_hint: Haz clic en el código para seleccionarlo todo, o usa el botón Copiar
         key_label: Tu clave API
         security_1: Nunca expongas tu clave API en código del lado del cliente, repositorios
@@ -189,7 +189,7 @@ es:
         consequence_1: Todas tus claves API serán revocadas inmediatamente
         consequence_2: Tu suscripción activa será cancelada
         consequence_3: Todos los datos de uso e historial serán eliminados permanentemente
-        consequences_heading: 'Al eliminar tu cuenta:'
+        consequences_heading: "Al eliminar tu cuenta:"
         contact_notice_html: Si tienes dudas, contáctanos en %{email_link}.
         expiry_html: Este enlace expira el <strong>%{expires_at}</strong>. Después
           de eso deberás solicitar un nuevo correo de confirmación.
@@ -220,8 +220,8 @@ es:
           questions_html: "¿Preguntas? Responde a este correo o escríbenos a %{email}."
           selected_services: Servicios seleccionados
           server_tier: Nivel de servidor
-          subject: 'Solicitud recibida: despliegue privado de Requiems'
-          what_next: 'Qué ocurre a continuación:'
+          subject: "Solicitud recibida: despliegue privado de Requiems"
+          what_next: "Qué ocurre a continuación:"
           what_next_detail: Aprovisionaremos tu VPS en Hetzner, configuraremos tu
             API Go privada solo con los servicios elegidos y tu subdominio en yourcompany.requiems.xyz.
             Cuando esté activo recibirás un segundo correo con la URL y los datos
@@ -312,10 +312,10 @@ es:
         body: Ve a Claves de API para crear una clave. La incluirás en cada solicitud
           como encabezado.
         cta: Administrar Claves de API
-        header_label: 'Incluye este encabezado en cada solicitud:'
+        header_label: "Incluye este encabezado en cada solicitud:"
         heading: 2. Obtén Tu Clave de API
       step_3:
-        body: 'Prueba esta solicitud de ejemplo para obtener un consejo aleatorio:'
+        body: "Prueba esta solicitud de ejemplo para obtener un consejo aleatorio:"
         heading: 3. Haz Tu Primera Llamada a la API
         note: Reemplaza YOUR_API_KEY con una clave activa de tu página de Claves de
           API.
@@ -398,8 +398,8 @@ es:
         other: "%{count} errores impidieron guardar estos ajustes:"
       flash:
         deleted: Tu cuenta se ha eliminado permanentemente. Lamentamos verte marchar.
-        deletion_email_sent: 'Revisa tu correo: te enviamos un enlace de confirmación.
-          Expira en 1 hora.'
+        deletion_email_sent: "Revisa tu correo: te enviamos un enlace de confirmación.
+          Expira en 1 hora."
         email_confirm: Ajustes actualizados. Revisa tu correo para confirmar la nueva
           dirección.
         error: No se pudieron actualizar los ajustes. Revisa el formulario.

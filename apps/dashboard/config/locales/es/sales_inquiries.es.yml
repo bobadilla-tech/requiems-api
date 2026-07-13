@@ -27,8 +27,8 @@ es:
       have_questions_html: "¿Tienes preguntas generales? %{faq_link} o %{contact_link}."
       heading: Habla con Ventas
       hero_badge: Ventas
-      optional_share_any_details_that_will: 'Opcional: Comparta cualquier detalle
-        que nos ayude a brindarle una mejor asistencia.'
+      optional_share_any_details_that_will: "Opcional: Comparta cualquier detalle
+        que nos ayude a brindarle una mejor asistencia."
       or_fill_form: o rellena el formulario y te contactaremos
       schedule_card:
         available: Disponible

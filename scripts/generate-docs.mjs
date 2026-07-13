@@ -1,6 +1,6 @@
 import PDFDocument from "pdfkit";
 import { createWriteStream, mkdirSync } from "fs";
-import { resolve, dirname } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -17,7 +17,11 @@ const EFFECTIVE_DATE_LEGAL = "2026-02-01";
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
 function doc(filename) {
-  const pdf = new PDFDocument({ margin: 72, size: "LETTER", bufferPages: true });
+  const pdf = new PDFDocument({
+    margin: 72,
+    size: "LETTER",
+    bufferPages: true,
+  });
   const stream = createWriteStream(resolve(OUT_DIR, filename));
   stream.on("error", (err) => {
     console.error(`Failed to write ${filename}:`, err);
@@ -128,7 +132,12 @@ function footer(pdf) {
         `${PRODUCT} Compliance Documentation · Effective ${EFFECTIVE_DATE} · ${CONTACT}`,
         pdf.page.margins.left,
         pdf.page.height - 40,
-        { align: "center", width: pdf.page.width - pdf.page.margins.left - pdf.page.margins.right, lineBreak: false }
+        {
+          align: "center",
+          width: pdf.page.width - pdf.page.margins.left -
+            pdf.page.margins.right,
+          lineBreak: false,
+        },
       );
     pdf.page.margins.bottom = savedBottom;
   }
@@ -142,17 +151,17 @@ function generateSecurityPacket() {
   header(
     pdf,
     `${PRODUCT} — Security & Architecture Packet`,
-    "For enterprise security reviews and procurement teams"
+    "For enterprise security reviews and procurement teams",
   );
 
   section(pdf, "1. Core Security Model — Stateless Architecture");
   body(
     pdf,
     `${PRODUCT} is engineered as a zero-trust, stateless processing engine. Every API ` +
-    `request is processed entirely in volatile server memory (RAM). The moment your HTTP ` +
-    `response is delivered, the payload is permanently purged. We have no mechanism to ` +
-    `recover submitted data because it was never written to disk, a database, or any ` +
-    `persistent medium.`
+      `request is processed entirely in volatile server memory (RAM). The moment your HTTP ` +
+      `response is delivered, the payload is permanently purged. We have no mechanism to ` +
+      `recover submitted data because it was never written to disk, a database, or any ` +
+      `persistent medium.`,
   );
   bullet(pdf, [
     "In-memory execution — payloads never touch disk or any persistent layer",
@@ -165,15 +174,18 @@ function generateSecurityPacket() {
   body(
     pdf,
     `Our Counter API endpoint (/v1/technology/counter/{namespace}) is the only endpoint ` +
-    `that persists data beyond a single request. It stores a named integer count value ` +
-    `(e.g., namespace "page-views" maps to an integer). No request payload, no user ` +
-    `content, and no identifying data is stored — only the counter value itself. ` +
-    `This endpoint is rarely used and can be avoided entirely if zero-persistence is ` +
-    `required by your organization.`
+      `that persists data beyond a single request. It stores a named integer count value ` +
+      `(e.g., namespace "page-views" maps to an integer). No request payload, no user ` +
+      `content, and no identifying data is stored — only the counter value itself. ` +
+      `This endpoint is rarely used and can be avoided entirely if zero-persistence is ` +
+      `required by your organization.`,
   );
 
   section(pdf, "3. Network Perimeter — Cloudflare");
-  body(pdf, "All inbound traffic is routed through Cloudflare before reaching our origin servers.");
+  body(
+    pdf,
+    "All inbound traffic is routed through Cloudflare before reaching our origin servers.",
+  );
   bullet(pdf, [
     "Enterprise-grade DDoS mitigation at the edge",
     "Web Application Firewall (WAF) filtering on all requests",
@@ -186,7 +198,7 @@ function generateSecurityPacket() {
   body(
     pdf,
     `Our custom datasets and processing code are hosted on servers in European Union ` +
-    `data centers operated by Hetzner Online GmbH, an ISO/IEC 27001-certified provider.`
+      `data centers operated by Hetzner Online GmbH, an ISO/IEC 27001-certified provider.`,
   );
   bullet(pdf, [
     "All data centers located in the European Union",
@@ -209,11 +221,11 @@ function generateSecurityPacket() {
   body(
     pdf,
     `Because ${PRODUCT} maintains a 100% stateless architecture for user payloads, a ` +
-    `traditional SOC 2 data-retention audit does not apply to our operational footprint. ` +
-    `We satisfy the core Security and Confidentiality principles of SOC 2 by design — ` +
-    `never retaining data at rest. Physical infrastructure compliance is inherited via ` +
-    `Hetzner's ISO 27001 certification. Network compliance is inherited via Cloudflare's ` +
-    `enterprise security controls.`
+      `traditional SOC 2 data-retention audit does not apply to our operational footprint. ` +
+      `We satisfy the core Security and Confidentiality principles of SOC 2 by design — ` +
+      `never retaining data at rest. Physical infrastructure compliance is inherited via ` +
+      `Hetzner's ISO 27001 certification. Network compliance is inherited via Cloudflare's ` +
+      `enterprise security controls.`,
   );
   bullet(pdf, [
     "GDPR: No user input stored or profiled. EU-only infrastructure. Data minimization is structural.",
@@ -226,7 +238,7 @@ function generateSecurityPacket() {
   body(
     pdf,
     `In the event of a security incident, we commit to notifying affected clients within ` +
-    `72 hours of discovery. Contact: ${CONTACT}`
+      `72 hours of discovery. Contact: ${CONTACT}`,
   );
 
   finalize(pdf, "security-packet.pdf");
@@ -240,34 +252,36 @@ function generateDPA() {
   header(
     pdf,
     `Data Processing Agreement`,
-    `${PRODUCT} — Template · Effective ${EFFECTIVE_DATE}`
+    `${PRODUCT} — Template · Effective ${EFFECTIVE_DATE}`,
   );
 
   body(
     pdf,
     `This Data Processing Agreement ("DPA") is entered into between:\n\n` +
-    `Data Controller ("Client"): [CLIENT COMPANY NAME], [CLIENT ADDRESS]\n\n` +
-    `Data Processor ("Processor"): ${COMPANY}, operated by Eliaz Bobadilla, ` +
-    `contact: ${CONTACT}, providing the ${PRODUCT} service.\n\n` +
-    `This DPA supplements and forms part of the Master Subscription Agreement or ` +
-    `Terms of Service between the parties. In the event of conflict, this DPA prevails ` +
-    `with respect to data processing matters.`
+      `Data Controller ("Client"): [CLIENT COMPANY NAME], [CLIENT ADDRESS]\n\n` +
+      `Data Processor ("Processor"): ${COMPANY}, operated by Eliaz Bobadilla, ` +
+      `contact: ${CONTACT}, providing the ${PRODUCT} service.\n\n` +
+      `This DPA supplements and forms part of the Master Subscription Agreement or ` +
+      `Terms of Service between the parties. In the event of conflict, this DPA prevails ` +
+      `with respect to data processing matters.`,
   );
 
   section(pdf, "1. Definitions");
-  body(pdf,
+  body(
+    pdf,
     '"Personal Data" means any information relating to an identified or identifiable natural person.\n\n' +
-    '"Processing" means any operation performed on Personal Data.\n\n' +
-    '"Controller" means the entity that determines the purposes and means of processing Personal Data.\n\n' +
-    '"Processor" means the entity that processes Personal Data on behalf of the Controller.\n\n' +
-    '"Sub-processor" means any third party engaged by the Processor to process Personal Data.'
+      '"Processing" means any operation performed on Personal Data.\n\n' +
+      '"Controller" means the entity that determines the purposes and means of processing Personal Data.\n\n' +
+      '"Processor" means the entity that processes Personal Data on behalf of the Controller.\n\n' +
+      '"Sub-processor" means any third party engaged by the Processor to process Personal Data.',
   );
 
   section(pdf, "2. Subject Matter and Duration");
-  body(pdf,
+  body(
+    pdf,
     `The Processor provides API-based data processing services as described in the ` +
-    `service agreement. This DPA remains in effect for the duration of the service ` +
-    `agreement and terminates automatically upon its expiration or termination.`
+      `service agreement. This DPA remains in effect for the duration of the service ` +
+      `agreement and terminates automatically upon its expiration or termination.`,
   );
 
   section(pdf, "3. Nature and Purpose of Processing");
@@ -278,12 +292,13 @@ function generateDPA() {
     "Retention Period: 0 seconds — data is purged instantly from volatile server memory upon HTTP response delivery",
   ]);
 
-  body(pdf,
+  body(
+    pdf,
     `IMPORTANT: The Processor's architecture is stateless. Submitted payloads are ` +
-    `processed entirely in volatile server memory (RAM) and are permanently purged ` +
-    `the moment the HTTP response is delivered. The Processor maintains no database, ` +
-    `cache, or log of submitted payload content. The Processor cannot recover, produce, ` +
-    `or disclose submitted data because it does not persist beyond the request lifecycle.`
+      `processed entirely in volatile server memory (RAM) and are permanently purged ` +
+      `the moment the HTTP response is delivered. The Processor maintains no database, ` +
+      `cache, or log of submitted payload content. The Processor cannot recover, produce, ` +
+      `or disclose submitted data because it does not persist beyond the request lifecycle.`,
   );
 
   section(pdf, "4. Processor Obligations");
@@ -297,14 +312,18 @@ function generateDPA() {
   ]);
 
   section(pdf, "5. Sub-processors");
-  body(pdf, "The Processor engages the following sub-processors in delivering the service:");
+  body(
+    pdf,
+    "The Processor engages the following sub-processors in delivering the service:",
+  );
   bullet(pdf, [
     "Hetzner Online GmbH (Germany/EU) — Compute infrastructure. ISO/IEC 27001 certified.",
     "Cloudflare, Inc. (USA, EU data routing) — Network perimeter, TLS termination, DDoS protection.",
   ]);
-  body(pdf,
+  body(
+    pdf,
     `The Processor will notify the Controller of any intended changes to sub-processors ` +
-    `with reasonable advance notice, providing the Controller the opportunity to object.`
+      `with reasonable advance notice, providing the Controller the opportunity to object.`,
   );
 
   section(pdf, "6. Security Measures");
@@ -318,48 +337,53 @@ function generateDPA() {
   ]);
 
   section(pdf, "7. Data Breach Notification");
-  body(pdf,
+  body(
+    pdf,
     `In the event of a personal data breach, the Processor shall notify the Controller ` +
-    `without undue delay and, where feasible, within 72 hours of becoming aware of the ` +
-    `breach. Notification shall be sent to the Controller's designated contact. ` +
-    `Security contact: ${CONTACT}`
+      `without undue delay and, where feasible, within 72 hours of becoming aware of the ` +
+      `breach. Notification shall be sent to the Controller's designated contact. ` +
+      `Security contact: ${CONTACT}`,
   );
 
   section(pdf, "8. Data Subject Rights");
-  body(pdf,
+  body(
+    pdf,
     `Given the stateless architecture, the Processor does not retain submitted payload data. ` +
-    `The Processor cannot fulfill data subject access, erasure, or portability requests ` +
-    `for submitted payload content because such data does not persist beyond the request ` +
-    `lifecycle. The Controller is responsible for exercising data subject rights with ` +
-    `respect to data they control.`
+      `The Processor cannot fulfill data subject access, erasure, or portability requests ` +
+      `for submitted payload content because such data does not persist beyond the request ` +
+      `lifecycle. The Controller is responsible for exercising data subject rights with ` +
+      `respect to data they control.`,
   );
 
   section(pdf, "9. Termination and Data Deletion");
-  body(pdf,
+  body(
+    pdf,
     `Upon termination of the service agreement, the Processor confirms that no submitted ` +
-    `payload data persists to delete, given the stateless architecture. Account metadata ` +
-    `(email, API keys, usage counts) will be deleted within 30 days of written request.`
+      `payload data persists to delete, given the stateless architecture. Account metadata ` +
+      `(email, API keys, usage counts) will be deleted within 30 days of written request.`,
   );
 
   section(pdf, "10. Governing Law");
-  body(pdf,
+  body(
+    pdf,
     `This DPA shall be governed by [JURISDICTION — e.g., the laws of the Republic of ` +
-    `Peru / the European Union / the State of Delaware]. Any disputes shall be resolved ` +
-    `in the courts of [JURISDICTION].`
+      `Peru / the European Union / the State of Delaware]. Any disputes shall be resolved ` +
+      `in the courts of [JURISDICTION].`,
   );
 
   section(pdf, "Signatures");
-  body(pdf,
+  body(
+    pdf,
     `For the Data Controller:\n\n` +
-    `Name: _______________________________\n` +
-    `Title: _______________________________\n` +
-    `Date:  _______________________________\n` +
-    `Signature: ___________________________\n\n` +
-    `For ${COMPANY} (Data Processor):\n\n` +
-    `Name: Eliaz Bobadilla\n` +
-    `Title: Founder\n` +
-    `Date:  _______________________________\n` +
-    `Signature: ___________________________`
+      `Name: _______________________________\n` +
+      `Title: _______________________________\n` +
+      `Date:  _______________________________\n` +
+      `Signature: ___________________________\n\n` +
+      `For ${COMPANY} (Data Processor):\n\n` +
+      `Name: Eliaz Bobadilla\n` +
+      `Title: Founder\n` +
+      `Date:  _______________________________\n` +
+      `Signature: ___________________________`,
   );
 
   finalize(pdf, "dpa-template.pdf");
@@ -373,14 +397,15 @@ function generateApiAuthPolicy() {
   header(
     pdf,
     `${PRODUCT} — API Authentication & Security Policy`,
-    `Effective ${EFFECTIVE_DATE} · ${COMPANY}`
+    `Effective ${EFFECTIVE_DATE} · ${COMPANY}`,
   );
 
   section(pdf, "1. Purpose and Scope");
-  body(pdf,
+  body(
+    pdf,
     `This document defines the authentication mechanisms, access controls, and security ` +
-    `procedures governing the ${PRODUCT} API platform. It applies to all API consumers ` +
-    `and governs ${PRODUCT}'s obligations with respect to API access security.`
+      `procedures governing the ${PRODUCT} API platform. It applies to all API consumers ` +
+      `and governs ${PRODUCT}'s obligations with respect to API access security.`,
   );
 
   section(pdf, "2. API Key Issuance");
@@ -436,12 +461,13 @@ function generateApiAuthPolicy() {
   ]);
 
   section(pdf, "8. Data Handling During Authentication");
-  body(pdf,
+  body(
+    pdf,
     `Authentication is validated at the middleware layer before any request payload is ` +
-    `processed. If authentication fails, the request is rejected immediately and no ` +
-    `payload processing occurs. Successful authentication does not result in any logging ` +
-    `of the request payload — only the API key hash, endpoint, response code, and ` +
-    `timestamp are recorded for usage metering.`
+      `processed. If authentication fails, the request is rejected immediately and no ` +
+      `payload processing occurs. Successful authentication does not result in any logging ` +
+      `of the request payload — only the API key hash, endpoint, response code, and ` +
+      `timestamp are recorded for usage metering.`,
   );
 
   section(pdf, "9. Incident Response Procedures");
@@ -454,10 +480,11 @@ function generateApiAuthPolicy() {
   ]);
 
   section(pdf, "10. Policy Review");
-  body(pdf,
+  body(
+    pdf,
     `This policy is reviewed at minimum annually and updated as required when the ` +
-    `authentication infrastructure changes. The current effective date is ${EFFECTIVE_DATE}. ` +
-    `For the latest version, visit requiems.xyz/en/security`
+      `authentication infrastructure changes. The current effective date is ${EFFECTIVE_DATE}. ` +
+      `For the latest version, visit requiems.xyz/en/security`,
   );
 
   finalize(pdf, "api-auth-policy.pdf");
@@ -469,4 +496,6 @@ console.log(`Generating compliance documents → ${OUT_DIR}\n`);
 generateSecurityPacket();
 generateDPA();
 generateApiAuthPolicy();
-console.log("\nDone. Add to git if you want to ship them, or run before deploy.");
+console.log(
+  "\nDone. Add to git if you want to ship them, or run before deploy.",
+);

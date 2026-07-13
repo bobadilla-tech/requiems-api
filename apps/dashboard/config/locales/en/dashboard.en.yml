@@ -30,15 +30,15 @@ en:
         revoke_error: Failed to revoke API key.
         revoked: API key revoked successfully.
       info_heading: Important Information
-      info_one_time_label: 'One-Time Display:'
+      info_one_time_label: "One-Time Display:"
       info_one_time_text: Full API keys are shown only once during creation. Store
         them securely.
-      info_regenerate_label: 'Regenerate if Compromised:'
+      info_regenerate_label: "Regenerate if Compromised:"
       info_regenerate_text: Revoke and regenerate immediately if a key is exposed.
-      info_security_label: 'Security:'
+      info_security_label: "Security:"
       info_security_text: Never expose your API keys in client-side code or public
         repositories.
-      info_shared_label: 'Shared Quota:'
+      info_shared_label: "Shared Quota:"
       info_shared_text: All your API keys share the same monthly request quota based
         on your plan.
       last_used_never: Never
@@ -69,10 +69,10 @@ en:
         back_btn: "← Back to API Keys"
         copied_btn: Copied!
         copy_btn: Copy
-        curl_example: 'Example cURL request:'
+        curl_example: "Example cURL request:"
         go_dashboard_btn: Go to Dashboard
-        header_example: 'Include it in your HTTP headers:'
-        js_example: 'Example in JavaScript:'
+        header_example: "Include it in your HTTP headers:"
+        js_example: "Example in JavaScript:"
         key_hint: Click the code to select all, or use the Copy button
         key_label: Your API Key
         security_1: Never expose your API key in client-side code, public repositories,
@@ -187,7 +187,7 @@ en:
         consequence_1: Revoke all your API keys immediately
         consequence_2: Cancel your active subscription
         consequence_3: Permanently delete all usage data and history
-        consequences_heading: 'Deleting your account will:'
+        consequences_heading: "Deleting your account will:"
         contact_notice_html: If you have concerns, contact us at %{email_link}.
         expiry_html: This link expires at <strong>%{expires_at}</strong>. After that
           you will need to request a new confirmation email.
@@ -217,8 +217,8 @@ en:
           questions_html: Questions? Reply to this email or reach us at %{email}.
           selected_services: Selected services
           server_tier: Server tier
-          subject: 'Request Received: Requiems Private Deployment'
-          what_next: 'What happens next:'
+          subject: "Request Received: Requiems Private Deployment"
+          what_next: "What happens next:"
           what_next_detail: We'll provision your Hetzner VPS, set up your private
             Go API with only your selected services, and configure your subdomain
             at yourcompany.requiems.xyz. Once live you'll receive a second email with
@@ -309,10 +309,10 @@ en:
         body: Go to API Keys to create a key. You'll include it in every request as
           a header.
         cta: Manage API Keys
-        header_label: 'Include this header in every request:'
+        header_label: "Include this header in every request:"
         heading: 2. Get Your API Key
       step_3:
-        body: 'Try this example request to get a random piece of advice:'
+        body: "Try this example request to get a random piece of advice:"
         heading: 3. Make Your First API Call
         note: Replace YOUR_API_KEY with an active key from your API Keys page.
       step_4:
