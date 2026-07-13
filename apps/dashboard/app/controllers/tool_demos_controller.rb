@@ -259,6 +259,40 @@ class ToolDemosController < ApplicationController
     render "tool_demos/profanity_filter", locals: { data: data, text: text }
   end
 
+  def timezone
+    city = params[:city].to_s.strip
+    lat  = params[:lat].to_s.strip
+    lon  = params[:lon].to_s.strip
+
+    has_city   = city.present?
+    has_coords = lat.present? && lon.present?
+
+    unless has_city || has_coords
+      return render_demo_error("timezone", t("tools.timezone.demo.error_empty"))
+    end
+
+    query_params = has_city ? { city: city } : { lat: lat, lon: lon }
+    result = api_call(endpoint: "/v1/places/timezone", method: "GET", params: query_params)
+
+    if result.status_code == 429
+      return render_demo_error("timezone", t("tools.timezone.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("timezone", t("tools.timezone.demo.error_no_data"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("timezone", t("tools.timezone.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("timezone", t("tools.timezone.demo.error_no_data")) if data.nil?
+
+    label = has_city ? city : "#{lat}, #{lon}"
+    render "tool_demos/timezone", locals: { data: data, label: label }
+  end
+
   private
 
   def api_call(endpoint:, method:, params:)

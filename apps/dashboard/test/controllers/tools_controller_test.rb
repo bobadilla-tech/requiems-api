@@ -54,4 +54,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/profanity-filter"
     assert_response :success
   end
+
+  test "timezone tool page renders successfully" do
+    get "/en/tools/timezone"
+    assert_response :success
+  end
 end

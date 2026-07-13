@@ -522,4 +522,70 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.profanity_filter.demo.error_no_data"), response.body
   end
+
+  # ── timezone ─────────────────────────────────────────────────────────────────
+
+  test "timezone renders result on success by city" do
+    payload = { "timezone" => "Asia/Tokyo", "offset" => "+09:00",
+                "current_time" => "2026-07-11T23:00:00Z", "is_dst" => false }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/timezone", params: { city: "Tokyo" }
+    end
+    assert_response :success
+    assert_match "Asia/Tokyo", response.body
+  end
+
+  test "timezone renders result on success by coordinates" do
+    payload = { "timezone" => "Europe/London", "offset" => "+00:00",
+                "current_time" => "2026-07-11T23:00:00Z", "is_dst" => false }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/timezone", params: { lat: "51.5", lon: "-0.1" }
+    end
+    assert_response :success
+    assert_match "Europe/London", response.body
+  end
+
+  test "timezone renders error when city and coordinates are all blank" do
+    post "/tools/demos/timezone", params: { city: "" }
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_empty"), response.body
+  end
+
+  test "timezone renders error when only one coordinate is given" do
+    post "/tools/demos/timezone", params: { lat: "51.5" }
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_empty"), response.body
+  end
+
+  test "timezone renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/timezone", params: { city: "Nowhereville" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_no_data"), response.body
+  end
+
+  test "timezone renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/timezone", params: { city: "Tokyo" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_rate_limit"), response.body
+  end
+
+  test "timezone renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/timezone", params: { city: "Tokyo" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_generic"), response.body
+  end
+
+  test "timezone renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/timezone", params: { city: "Tokyo" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.timezone.demo.error_no_data"), response.body
+  end
 end
