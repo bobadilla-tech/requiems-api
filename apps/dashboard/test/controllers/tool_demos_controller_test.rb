@@ -655,4 +655,66 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.vpn_detection.demo.error_no_data"), response.body
   end
+
+  # ── thesaurus ────────────────────────────────────────────────────────────────
+
+  test "thesaurus renders result on success" do
+    payload = { "word" => "happy", "synonyms" => [ "joyful", "cheerful" ], "antonyms" => [ "sad", "unhappy" ] }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/thesaurus", params: { word: "happy" }
+    end
+    assert_response :success
+    assert_match "joyful", response.body
+    assert_match "sad", response.body
+  end
+
+  test "thesaurus renders error when word is blank" do
+    post "/tools/demos/thesaurus", params: { word: "" }
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_empty"), response.body
+  end
+
+  test "thesaurus renders error when word is whitespace" do
+    post "/tools/demos/thesaurus", params: { word: "   " }
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_empty"), response.body
+  end
+
+  test "thesaurus renders error when word has invalid format" do
+    post "/tools/demos/thesaurus", params: { word: "happy123" }
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_invalid"), response.body
+  end
+
+  test "thesaurus renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/thesaurus", params: { word: "notaword" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_no_data"), response.body
+  end
+
+  test "thesaurus renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/thesaurus", params: { word: "happy" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_rate_limit"), response.body
+  end
+
+  test "thesaurus renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/thesaurus", params: { word: "happy" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_generic"), response.body
+  end
+
+  test "thesaurus renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/thesaurus", params: { word: "happy" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.thesaurus.demo.error_no_data"), response.body
+  end
 end
