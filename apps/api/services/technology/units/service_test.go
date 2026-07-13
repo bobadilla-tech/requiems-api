@@ -187,6 +187,16 @@ func TestService_Convert(t *testing.T) {
 	}
 }
 
+func TestAliases_ResolveToKnownUnits(t *testing.T) {
+	t.Parallel()
+
+	for alias, canonical := range aliases {
+		if _, ok := units[canonical]; !ok {
+			t.Errorf("alias %q maps to unknown unit %q", alias, canonical)
+		}
+	}
+}
+
 func TestService_Units(t *testing.T) {
 	t.Parallel()
 	svc := NewService()
