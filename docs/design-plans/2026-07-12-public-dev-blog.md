@@ -17,12 +17,12 @@ to build authority as an API platform.
 
 ## Problem
 
-| What existed                              | What was missing                          |
-| ------------------------------------------ | ------------------------------------------ |
-| `/blog` route → static "coming soon" view  | Any way to publish and list real posts     |
-| `sitemap.rb` `/blog` entry at priority 0.6 | Per-post sitemap entries                   |
-| `case_studies` content pattern (i18n+ERB)  | A pattern that works for code-heavy posts  |
-| `highlight.js` wired via Stimulus          | A markdown → HTML pipeline to feed it      |
+| What existed                               | What was missing                          |
+| ------------------------------------------ | ----------------------------------------- |
+| `/blog` route → static "coming soon" view  | Any way to publish and list real posts    |
+| `sitemap.rb` `/blog` entry at priority 0.6 | Per-post sitemap entries                  |
+| `case_studies` content pattern (i18n+ERB)  | A pattern that works for code-heavy posts |
+| `highlight.js` wired via Stimulus          | A markdown → HTML pipeline to feed it     |
 
 The closest existing content pattern is `case_studies` — controller + hardcoded
 slug array + ERB views + i18n copy. That pattern is a poor fit for technical
@@ -40,8 +40,8 @@ migration, no admin UI — appropriate for a single-author technical blog that
 publishes occasionally. Fast to write, git-diff friendly, real code blocks.
 
 **English-only article body.** Site chrome (nav/footer/breadcrumbs) stays
-translated via the existing i18n system; the post body itself is not
-translated. The audience is developers reading English docs anyway.
+translated via the existing i18n system; the post body itself is not translated.
+The audience is developers reading English docs anyway.
 
 **No new syntax-highlighting dependency.** The site already ships
 `highlight.js` + a `github-dark` theme (preloaded in the layout) and a Stimulus
@@ -58,8 +58,8 @@ v4 runs via the `tailwindcss-rails` gem's bundled CLI (`@import "tailwindcss"`
 only, no `package.json` plugins). Markdown-rendered HTML has no classes on its
 tags (`<h2>`, `<p>`, `<pre>`), so utility classes can't be hand-placed per
 element the way they are in authored ERB. A `.blog-prose` block in
-`app/assets/tailwind/application.css` styles the bare tags instead, matching
-the site's existing dark-mode conventions.
+`app/assets/tailwind/application.css` styles the bare tags instead, matching the
+site's existing dark-mode conventions.
 
 ---
 
@@ -87,24 +87,29 @@ description: "..." # meta description, OG description, index-card excerpt
 ### `app/models/blog_post.rb` — PORO, not ActiveRecord
 
 - `BlogPost.all` — globs `content/blog/*.md`, splits frontmatter from body via
-  `FRONTMATTER_RE`, parses frontmatter with `YAML.safe_load(permitted_classes:
-  [Date])`, memoizes the list sorted by date descending.
+  `FRONTMATTER_RE`, parses frontmatter with
+  `YAML.safe_load(permitted_classes:
+  [Date])`, memoizes the list sorted by
+  date descending.
 - `BlogPost.find(slug)` — linear lookup over `.all`, `nil` if missing.
-- `#to_html` — `Kramdown::Document.new(body, input: "GFM", hard_wrap:
-  false).to_html`, memoized per instance.
+- `#to_html` —
+  `Kramdown::Document.new(body, input: "GFM", hard_wrap:
+  false).to_html`,
+  memoized per instance.
 - `#reading_time_minutes` — word count / 200, minimum 1.
 
-**`hard_wrap: false` is load-bearing.** Kramdown's GFM input mode follows GitHub's
-behavior of turning every single newline into `<br>`. Markdown source files are
-word-wrapped at ~80 columns for readable diffs, so without `hard_wrap: false`
-every wrapped line inside a paragraph rendered as a hard break — paragraphs came
-out as a stack of one-line fragments instead of flowing text. Caught during
-verification (`bin/rails runner` against the real post), fixed by disabling
-hard wrap explicitly.
+**`hard_wrap: false` is load-bearing.** Kramdown's GFM input mode follows
+GitHub's behavior of turning every single newline into `<br>`. Markdown source
+files are word-wrapped at ~80 columns for readable diffs, so without
+`hard_wrap: false` every wrapped line inside a paragraph rendered as a hard
+break — paragraphs came out as a stack of one-line fragments instead of flowing
+text. Caught during verification (`bin/rails runner` against the real post),
+fixed by disabling hard wrap explicitly.
 
 ### `app/controllers/blog_controller.rb`
 
-Mirrors `case_studies_controller.rb`'s shape: `index` sets `@posts =
+Mirrors `case_studies_controller.rb`'s shape: `index` sets
+`@posts =
 BlogPost.all`; `show` sets `@post = BlogPost.find(params[:slug])` and
 `head :not_found` if missing.
 
@@ -121,11 +126,11 @@ article body.
 
 ### Views
 
-- `app/views/blog/index.html.erb` — card list: title, date, description,
-  reading time, link. Follows the `case_studies/index.html.erb` card styling
-  (rounded border, hover elevation, dark-mode variants).
-- `app/views/blog/show.html.erb` — `content_for :title`/`:description` from
-  post frontmatter (drives `page_title`/`og_meta_tags` automatically), byline
+- `app/views/blog/index.html.erb` — card list: title, date, description, reading
+  time, link. Follows the `case_studies/index.html.erb` card styling (rounded
+  border, hover elevation, dark-mode variants).
+- `app/views/blog/show.html.erb` — `content_for :title`/`:description` from post
+  frontmatter (drives `page_title`/`og_meta_tags` automatically), byline
   (author, date, reading time), article body rendered inside
   `<div class="blog-prose" data-controller="highlight">`.
 
@@ -144,8 +149,8 @@ article body.
 `config/sitemap.rb` gained a `BLOG_POST_PAGES` array built from `BlogPost.all`,
 looped the same way as `CASE_STUDY_PAGES` and `DIVISION_MARKETING_PAGES` —
 locale-prefixed URLs with hreflang alternates, reduced priority for non-`en`
-locales. New posts appear in the sitemap automatically without editing this
-file again.
+locales. New posts appear in the sitemap automatically without editing this file
+again.
 
 ---
 
@@ -153,26 +158,26 @@ file again.
 
 ### Created
 
-| File | Purpose |
-| ---- | ------- |
-| `app/models/blog_post.rb` | Frontmatter parsing, markdown rendering, reading time |
-| `app/controllers/blog_controller.rb` | `index`/`show` |
-| `app/views/blog/index.html.erb` | Post list |
-| `app/views/blog/show.html.erb` | Article page |
-| `content/blog/2026-07-12-building-an-mcp-server-on-top-of-87-rest-endpoints.md` | First post |
+| File                                                                            | Purpose                                               |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `app/models/blog_post.rb`                                                       | Frontmatter parsing, markdown rendering, reading time |
+| `app/controllers/blog_controller.rb`                                            | `index`/`show`                                        |
+| `app/views/blog/index.html.erb`                                                 | Post list                                             |
+| `app/views/blog/show.html.erb`                                                  | Article page                                          |
+| `content/blog/2026-07-12-building-an-mcp-server-on-top-of-87-rest-endpoints.md` | First post                                            |
 
 ### Modified
 
-| File | Change |
-| ---- | ------ |
-| `Gemfile` / `Gemfile.lock` | Add `kramdown`, `kramdown-parser-gfm` |
-| `config/routes.rb` | Replace `home#blog` stub with `blog#index`/`blog#show` |
-| `app/controllers/home_controller.rb` | Remove empty `blog` action |
-| `app/views/home/blog.html.erb` | Deleted (dead stub view) |
-| `app/helpers/application_helper.rb` | Add `blog_post_json_ld` |
-| `app/assets/tailwind/application.css` | Add `.blog-prose` block |
-| `config/sitemap.rb` | Add `BLOG_POST_PAGES` + generation loop |
-| `config/locales/{en,es,fr}/home.*.yml` | Remove unused `home.blog.*` "coming soon" keys |
+| File                                   | Change                                                 |
+| -------------------------------------- | ------------------------------------------------------ |
+| `Gemfile` / `Gemfile.lock`             | Add `kramdown`, `kramdown-parser-gfm`                  |
+| `config/routes.rb`                     | Replace `home#blog` stub with `blog#index`/`blog#show` |
+| `app/controllers/home_controller.rb`   | Remove empty `blog` action                             |
+| `app/views/home/blog.html.erb`         | Deleted (dead stub view)                               |
+| `app/helpers/application_helper.rb`    | Add `blog_post_json_ld`                                |
+| `app/assets/tailwind/application.css`  | Add `.blog-prose` block                                |
+| `config/sitemap.rb`                    | Add `BLOG_POST_PAGES` + generation loop                |
+| `config/locales/{en,es,fr}/home.*.yml` | Remove unused `home.blog.*` "coming soon" keys         |
 
 ---
 
