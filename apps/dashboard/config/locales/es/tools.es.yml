@@ -617,6 +617,18 @@ es:
       api_combinations:
         pair_it_with_other_apis: Combínalo con otras API.
         sentiment_works_best_as_part_of_a: El análisis de sentimientos funciona mejor como parte de un proceso integrado. Aquí presentamos tres combinaciones naturales.
+        spell_check_title: Análisis de sentimientos + Corrección ortográfica
+        spell_check_body: Ejecuta primero una corrección ortográfica para limpiar el texto de entrada ruidoso y luego analiza los sentimientos sobre el texto corregido para obtener resultados más precisos.
+        spell_check_link: API de corrección ortográfica
+        language_title: Análisis de sentimientos + Detección de idioma
+        language_body: Detecta el idioma antes de enrutar el texto al modelo de sentimientos adecuado. Útil para colas de soporte multilingüe y plataformas de reseñas globales.
+        language_link: API de detección de idioma
+        email_title: Análisis de sentimientos + Validador de email
+        email_body: Valida el email del remitente y analiza el tono de su mensaje en una sola pasada, antes de almacenar comentarios o abrir un ticket de soporte.
+        email_link: API de validación de email
+      cta:
+        heading: Automatiza esto con Requiems.
+        body: Una clave API. Análisis de sentimientos, más de 50 API adicionales en validación, finanzas, redes y más.
       demo:
         error_empty: Introduce un texto para analizar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
@@ -624,7 +636,7 @@ es:
         error_no_data: No se han devuelto datos.
         error_rate_limit: Demasiadas solicitudes. Espere un momento e inténtelo de nuevo.
         input_placeholder: Pega cualquier texto, reseña, comentario o sugerencia...
-        label_breakdown: Descomponer
+        label_breakdown: Desglose
         label_confident: seguro
         label_negative: Negativo
         label_neutral: Neutral
@@ -632,21 +644,52 @@ es:
         result_heading: Análisis de sentimientos
       faq:
         heading: Preguntas frecuentes
+        q1: "¿Cuáles son los posibles valores de sentimiento?"
+        a1: El campo de sentimiento devuelve uno de tres valores (positivo, negativo o neutro) según la clase con la puntuación de confianza más alta.
+        q2: "¿Qué representa el desglose?"
+        a2: Los tres valores del desglose (positivo, negativo, neutro) siempre suman 1.0. Muestran la confianza proporcional en todas las clases, no solo en la dominante. Una puntuación de 0.97 positiva significa que el modelo está muy seguro; 0.51 significa que se inclina hacia lo positivo, pero el texto es ambiguo.
+        q3: "¿Cuánto puede medir el texto de entrada?"
+        a3: No hay un límite estricto de caracteres a nivel de API, pero las entradas muy largas pueden truncarse según el modelo subyacente. Se recomienda mantener las entradas por debajo de 512 tokens (aproximadamente 400 palabras) para obtener la mejor precisión.
+        q4: "¿Puedo analizar varios textos a la vez?"
+        a4: Sí. El endpoint por lotes (POST /v1/text/sentiment/batch) acepta hasta 50 textos por solicitud. Los resultados se devuelven en el mismo orden que la entrada y cada texto cuenta como una unidad de uso.
+        q5: "¿Es gratuito?"
+        a5: La demo de arriba funciona sin necesidad de cuenta. Los planes de pago ofrecen límites de velocidad más altos y acceso completo a la API para uso en producción.
       hero:
         analyze: Analizar
         get_api_key: Obtén la clave API
         know_how_your_text_lands: Conoce el impacto que tiene tu texto.
         read_the_docs: Lee la documentación
+        subtitle: Clasifica cualquier texto como positivo, negativo o neutro, con una puntuación de confianza y un desglose completo, en una sola llamada a la API.
+      logo_marquee:
+        trusted_by: Usado por equipos de
+      seo:
+        description: Analiza el sentimiento de cualquier texto al instante. Obtén una clasificación positiva, negativa o neutra con una puntuación de confianza y un desglose completo, gratis, sin necesidad de cuenta.
       show:
         free_sentiment_analysis_tool_positive: "Herramienta gratuita de análisis de sentimientos: detección de texto positivo, negativo y neutro | API de Requiems"
       use_cases:
         anywhere_text_flows_through_your_system: En cualquier parte de tu sistema donde fluye texto, el análisis de sentimientos te da una señal.
         built_for_real_use_cases: Diseñado para casos de uso reales.
+        customer_support_title: Atención al cliente
+        customer_support_body: Enruta tickets automáticamente. Marca a los clientes frustrados para atención prioritaria antes de que se vayan.
+        product_reviews_title: Reseñas de productos
+        product_reviews_body: Agrega opiniones de miles de reseñas sin tener que leerlas una por una.
+        social_media_title: Monitoreo de redes sociales
+        social_media_body: Rastrea menciones de marca en tiempo real y detecta cambios de sentimiento antes de que se conviertan en problemas de relaciones públicas.
+        content_moderation_title: Moderación de contenido
+        content_moderation_body: Filtra contenido generado por usuarios en busca de un tono hostil o dañino antes de que llegue a otros usuarios.
+        nlp_pipelines_title: Pipelines de PLN
+        nlp_pipelines_body: Usa el sentimiento como una característica en modelos de ML, como preprocesamiento para clasificación de texto, recomendación o tareas de ranking.
+        survey_analysis_title: Análisis de encuestas
+        survey_analysis_body: Convierte respuestas abiertas de encuestas en datos estructurados de sentimiento sin necesidad de etiquetado manual.
       what_it_does:
         one_call_three_values_enough_signal_to: Una llamada. Tres valores. Señal suficiente para actuar.
         positive_negative_or_neutral: Positivo, negativo o neutral
         proportional_scores_across_all_classes: Puntuaciones proporcionales en todas las clases
         what_it_does: Lo que hace
+        instant_classification: Clasificación instantánea
+        classification_body: Cada texto recibe una etiqueta dominante más una puntuación de confianza entre 0.0 y 1.0, lo que permite establecer umbrales de resultados con precisión.
+        full_breakdown: Desglose completo
+        breakdown_body: El desglose muestra cómo el modelo distribuye la confianza entre las tres clases, sumando siempre 1.0. Útil para textos ambiguos o de tono mixto.
     unit_conversion:
       api_combinations:
         unit_conversion_becomes_even_more: La conversión de unidades resulta aún más útil cuando se combina con otras API de Requiems.
@@ -803,6 +846,7 @@ es:
         label_flagged_words: "Palabras marcadas"
         badge_clean: "Limpio"
         badge_flagged: "Marcado"
+        badge_none: "Ninguna"
         badge_yes: "Sí"
         badge_no: "No"
         badge_none: "Ninguna detectada"
@@ -988,3 +1032,174 @@ es:
         badge_live: "En vivo"
         label_options: "Opciones"
         label_correct: "Correcta"
+    vpn_detection:
+      seo:
+        title: "API gratuita de detección de VPN y proxy — Puntuación de amenaza y fraude por IP | Requiems API"
+        description: "Detecta si una dirección IP pertenece a una VPN, proxy, nodo de salida Tor o proveedor de hosting. Obtén puntuaciones de amenaza e indicadores de fraude para prevención de fraude y evaluación de riesgo — gratis, sin necesidad de cuenta."
+      logo_marquee:
+        trusted_by: "Con la confianza de los equipos en"
+      hero:
+        title: "Descubre si esa IP está ocultando algo."
+        subtitle: "Detecta VPNs, proxies, nodos de salida Tor y proveedores de hosting a partir de cualquier dirección IP, además de una puntuación de amenaza y de fraude, en una sola llamada a la API."
+        cta_primary: "Obtén tu API key gratis"
+        cta_docs: "Ver documentación"
+        placeholder: "Ingresa una dirección IP (ej: 8.8.8.8)"
+        submit: "Verificar IP"
+        no_account: "No se requiere cuenta para la demo."
+        label_input: "Dirección IP"
+      what_it_does:
+        coverage_badge: "Cobertura"
+        coverage_heading: "Detección de VPN, proxy, Tor y hosting en una sola consulta."
+        coverage_body: "VPN & Proxy Detection usa la base de datos IP2Proxy para identificar proveedores de VPN, proxies públicos y web, nodos de salida Tor e IPs de centros de datos o hosting. Los datos de organización ASN provienen de una base de datos MaxMind independiente. Se admiten tanto IPv4 como IPv6."
+        simplicity_badge: "Sencillez"
+        simplicity_heading: "Una solicitud GET. Sin cuerpo, sin análisis."
+        simplicity_body: "Incluye la dirección IP en la ruta de la URL. Tu clave API en el encabezado. La respuesta es JSON plano con indicadores booleanos, una puntuación de amenaza y una puntuación de fraude que puedes usar directamente."
+      use_cases:
+        heading: "Diseñado para flujos de fraude y riesgo."
+        subheading: "VPN & Proxy Detection encaja en cualquier lugar donde importe la confianza basada en IP: registro, autenticación, bots y compliance."
+        signup_title: "Evalúa el riesgo al registrarse"
+        signup_desc: "Marca o bloquea registros provenientes de IPs de VPN, proxy o Tor: una señal fuerte de granjas de fraude y creación de cuentas falsas."
+        signup_tags: "Prevención de fraude, Fintech"
+        auth_title: "Suma señales de riesgo a la autenticación"
+        auth_desc: "Activa autenticación reforzada (MFA) cuando un intento de inicio de sesión provenga de un proxy o nodo Tor marcado."
+        auth_tags: "Evaluación de riesgo, Autenticación"
+        bot_title: "Detecta bots y rastreadores"
+        bot_desc: "Las IPs de hosting y centros de datos se correlacionan fuertemente con bots y scrapers. Marca o limita automáticamente el tráfico de estos rangos."
+        bot_tags: "Detección de bots, Prevención de abuso"
+        compliance_title: "Cumple con requisitos normativos y de compliance"
+        compliance_desc: "Los servicios regulados pueden requerir confirmar que las solicitudes no provienen de infraestructura de anonimización antes de otorgar acceso."
+        compliance_tags: "Compliance, Regulatorio"
+        geoblock_title: "Evita la elusión de restricciones geográficas"
+        geoblock_desc: "Detecta usuarios que ocultan su ubicación real con una VPN o proxy para acceder a contenido o precios restringidos por región."
+        geoblock_tags: "Acceso a contenido, Geo-bloqueo"
+        score_title: "Enriquece modelos de fraude con una sola puntuación"
+        score_desc: "Combina la puntuación de fraude y el nivel de amenaza con otras señales (dispositivo, tarjeta, email) en un modelo de fraude compuesto por solicitud."
+        score_tags: "Evaluación de riesgo, Prevención de fraude"
+      api_combinations:
+        heading: "Combínala con otras APIs."
+        subheading: "VPN & Proxy Detection funciona aún mejor combinada con otras APIs de Requiems."
+        bin_pair: "Detección de VPN + Búsqueda de BIN"
+        bin_benefit: "Cruza las señales de amenaza de la IP con el país emisor de la tarjeta para detectar intentos de pago inconsistentes y de alto riesgo."
+        identity_pair: "Detección de VPN + Identity Risk"
+        identity_benefit: "Combina la puntuación de amenaza basada en IP con señales de riesgo de identidad más amplias para una defensa más sólida contra el robo de cuentas."
+        email_pair: "Detección de VPN + Validador de correo"
+        email_benefit: "Combina la detección de IPs anonimizadas con la verificación de correos desechables para detectar cuentas falsas al registrarse."
+      faq:
+        heading: "Preguntas frecuentes"
+        support_prompt: "¿Aún tienes preguntas?"
+        support_link: "Contactar soporte"
+        q1: "¿Qué es VPN & Proxy Detection?"
+        a1: "Una API que verifica si una dirección IP pertenece a un proveedor de VPN conocido, un proxy público o web, un nodo de salida Tor o un proveedor de hosting/centro de datos. Devuelve indicadores booleanos para cada categoría, además de una puntuación de amenaza y una puntuación de fraude."
+        q2: "¿Qué significan las puntuaciones de amenaza?"
+        a2: "La puntuación se calcula así: Tor (+3), VPN (+2), Proxy (+2), Hosting (+1). El nivel de amenaza se deriva de este valor: 0=Ninguno, 1=Bajo, 2-3=Medio, 4-5=Alto, 6+=Crítico."
+        q3: "¿Por qué fraud_score es 0 para algunas IPs?"
+        a3: "El fraud_score solo está disponible al usar el nivel PX5 o superior de la base de datos IP2Proxy. Los niveles inferiores devuelven 0, lo que indica que el valor no está disponible para la base de datos actual."
+        q4: "¿Es compatible con IPv6?"
+        a4: "Sí, tanto las direcciones IPv4 como IPv6 son totalmente compatibles."
+        q5: "¿Es gratis de usar?"
+        a5: "La demo de arriba funciona sin necesidad de cuenta. Hay planes pagos disponibles para escala de producción con límites de solicitudes más altos y acceso completo a la API."
+      cta:
+        heading: "Automatiza esto con Requiems."
+        body: "Una API key. Detección de VPN y proxy, más de 50 APIs adicionales en validación, finanzas, redes y más."
+      demo:
+        error_empty: "Ingresa una dirección IP para verificar."
+        error_invalid: "Ingresa una dirección IPv4 o IPv6 válida (ej: 8.8.8.8)."
+        error_rate_limit: "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo."
+        error_generic: "Algo salió mal. Inténtalo de nuevo."
+        error_no_data: "No se encontraron datos para esa IP."
+        badge_flagged: "Marcada"
+        badge_clean: "Limpia"
+        badge_yes: "Sí"
+        badge_no: "No"
+        label_is_vpn: "VPN"
+        label_is_proxy: "Proxy"
+        label_is_tor: "Nodo de salida Tor"
+        label_is_hosting: "Hosting / centro de datos"
+        label_score: "Puntuación de amenaza"
+        label_threat: "Nivel de amenaza"
+        label_fraud_score: "Puntuación de fraude"
+        label_asn_org: "Organización ASN"
+        threat_none: "Ninguno"
+        threat_low: "Bajo"
+        threat_medium: "Medio"
+        threat_high: "Alto"
+        threat_critical: "Crítico"
+    thesaurus:
+      seo:
+        title: "API de Sinónimos Gratuita — Sinónimos y Antónimos | Requiems API"
+        description: "Encuentra sinónimos y antónimos de cualquier palabra al instante. Búsqueda que no distingue mayúsculas, con un dataset curado en inglés — gratis, sin necesidad de cuenta."
+      logo_marquee:
+        trusted_by: "Con la confianza de los equipos en"
+      demo:
+        error_empty: "Ingresa una palabra para buscar."
+        error_invalid: "Ingresa una palabra válida — solo letras, apóstrofes y guiones (por ejemplo, happy o well-being)."
+        error_rate_limit: "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo."
+        error_generic: "Algo salió mal. Inténtalo de nuevo."
+        error_no_data: "No se encontraron sinónimos ni antónimos para esa palabra."
+        badge_found: "Encontrado"
+        label_synonyms: "Sinónimos"
+        label_antonyms: "Antónimos"
+        result_failed_heading: "La búsqueda falló"
+      hero:
+        title: "Encuentra la palabra justa, siempre."
+        subtitle: "Sinónimos y antónimos de cualquier palabra, en una sola llamada a la API — perfecto para herramientas de escritura, apps de vocabulario y generación de contenido."
+        cta_primary: "Obtén tu API key"
+        cta_docs: "Leer la documentación"
+        placeholder: "Ingresa una palabra (por ejemplo, happy)"
+        submit: "Buscar"
+        no_account: "No se requiere cuenta para la demo."
+        label_input: "Palabra a buscar"
+      what_it_does:
+        coverage_badge: "Cobertura"
+        coverage_heading: "Un dataset curado de palabras en inglés, listo para producción."
+        coverage_body: "Thesaurus devuelve sinónimos y antónimos de una palabra en una sola solicitud. Las búsquedas no distinguen mayúsculas y se sirven desde un dataset en memoria para respuestas rápidas y de baja latencia."
+        simplicity_badge: "Simplicidad"
+        simplicity_heading: "Una solicitud GET. Sin body, sin parsing."
+        simplicity_body: "Pasa la palabra en la URL. Tu API key en el header. Sin SDK, sin configuración, sin body en la solicitud. La respuesta es JSON plano — se lee directamente sin desanidar estructuras."
+      use_cases:
+        heading: "Pensado para herramientas de escritura y contenido."
+        subheading: "Thesaurus encaja en cualquier lugar donde el vocabulario importe — asistentes de escritura, educación y generación de contenido."
+        writing_title: "Sugiere alternativas mientras el usuario escribe"
+        writing_desc: "Ofrece sugerencias de sinónimos en línea mientras el usuario escribe, ayudando a evitar repetir la misma palabra en un documento."
+        writing_tags: "Asistencia de escritura, Editores"
+        vocab_title: "Potencia apps de vocabulario"
+        vocab_desc: "Construye apps de flashcards o palabra del día que combinan cada palabra con sus sinónimos y antónimos para un aprendizaje más profundo."
+        vocab_tags: "Vocabulario, Educación"
+        games_title: "Genera contenido para juegos de palabras"
+        games_desc: "Usa pares de sinónimos y antónimos para crear juegos de adivinar palabras, crucigramas o cuestionarios de vocabulario sin mantener tu propio dataset."
+        games_tags: "Juegos de palabras, Generación de contenido"
+        education_title: "Apoya plataformas educativas"
+        education_desc: "Dale a los estudiantes búsquedas instantáneas de sinónimos y antónimos dentro de ejercicios de lectura o escritura, sin salir de la plataforma."
+        education_tags: "Educación, Edtech"
+        seo_title: "Diversifica el contenido y mejora el SEO"
+        seo_desc: "Sugiere sinónimos para palabras clave sobreutilizadas y evita la repetición, mejorando la legibilidad del contenido generado o editado."
+        seo_tags: "Creación de contenido, SEO"
+        chatbot_title: "Suma profundidad de vocabulario a los chatbots"
+        chatbot_desc: "Permite que los agentes conversacionales reformulen respuestas con sinónimos para sonar más naturales y evitar frases repetitivas."
+        chatbot_tags: "Chatbots, NLP"
+      api_combinations:
+        heading: "Combínalo con APIs complementarias."
+        subheading: "Thesaurus funciona aún mejor combinado con otras APIs de Requiems."
+        spellcheck_pair: "Thesaurus + Corrector Ortográfico"
+        spellcheck_benefit: "Corrige la ortografía primero y después sugiere palabras más ricas — un flujo completo de asistencia de escritura en dos llamadas."
+        sentiment_pair: "Thesaurus + Análisis de Sentimiento"
+        sentiment_benefit: "Analiza el tono de un texto y luego sugiere sinónimos para suavizar o reforzar palabras específicas según el sentimiento detectado."
+        profanity_pair: "Thesaurus + Filtro de Palabrotas"
+        profanity_benefit: "Sugiere alternativas limpias con sinónimos para las palabras marcadas en lugar de solo censurarlas."
+      faq:
+        heading: "Preguntas Frecuentes"
+        support_prompt: "¿Todavía tienes dudas?"
+        support_link: "Contactar soporte"
+        q1: "¿La búsqueda distingue mayúsculas de minúsculas?"
+        a1: "No, la búsqueda no distingue mayúsculas de minúsculas. Buscar \"Happy\", \"HAPPY\" o \"happy\" devuelve el mismo resultado."
+        q2: "¿Qué pasa si no se encuentra una palabra?"
+        a2: "La API devuelve una respuesta 404 Not Found si la palabra no está en el dataset del tesauro."
+        q3: "¿Cuántas palabras tiene el dataset?"
+        a3: "El dataset contiene más de 50 palabras curadas en inglés con sus sinónimos y antónimos, cubriendo el vocabulario más frecuente."
+        q4: "¿Puedo obtener sinónimos y antónimos por separado?"
+        a4: "El endpoint devuelve sinónimos y antónimos en una sola respuesta para mayor eficiencia. Ambos campos siempre están presentes."
+        q5: "¿Puedo buscar varias palabras a la vez?"
+        a5: "Sí. El endpoint batch (POST /v1/text/thesaurus/batch) acepta hasta 50 palabras por solicitud. Los resultados se devuelven en el mismo orden que la entrada, y las palabras no encontradas devuelven un error individual sin fallar todo el batch."
+      cta:
+        heading: "Dale a tu contenido las palabras justas."
+        body: "Una API key. Thesaurus, corrector ortográfico, análisis de sentimiento y más de 50 APIs para crear herramientas de escritura más inteligentes."

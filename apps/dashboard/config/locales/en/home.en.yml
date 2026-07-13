@@ -145,21 +145,6 @@ en:
       view_miscellaneous_api_documentation: View Miscellaneous API Documentation
       view_pricing_details: View pricing details
       view_text_api_documentation: View Text API Documentation
-    blog:
-      cta_apis: Explore APIs
-      cta_docs: Browse Documentation
-      description: We're building a resource hub for API developers. Stay tuned for
-        tutorials, guides, and API best practices.
-      heading: Blog - Coming Soon
-      meanwhile: In the meantime, explore our documentation and API directory
-      title: Blog - Requiems API
-      what_to_expect:
-        heading: What to Expect
-        items:
-        - Technical tutorials and integration guides
-        - API development best practices
-        - Platform updates and new API announcements
-        - Developer success stories and use cases
     changelog:
       badge_coming_soon: Coming Soon
       badge_latest: Latest

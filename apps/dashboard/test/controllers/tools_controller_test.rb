@@ -65,4 +65,15 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='trivia-demo']"
   end
+
+  test "vpn detection tool page renders successfully" do
+    get "/en/tools/vpn-detection"
+    assert_response :success
+  end
+
+  test "thesaurus tool page renders successfully" do
+    get "/en/tools/thesaurus"
+    assert_response :success
+    assert_select "[data-controller='thesaurus-demo']"
+  end
 end

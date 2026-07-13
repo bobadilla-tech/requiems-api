@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ipaddr"
+
 # Handles server-side demo form submissions for tool pages.
 # Each action calls the internal API via ApiProxyService, then renders a
 # Turbo Frame partial — eliminating innerHTML manipulation in JS controllers.
@@ -317,7 +319,74 @@ class ToolDemosController < ApplicationController
     render "tool_demos/trivia", locals: { data: data }
   end
 
+  def vpn_detection
+    ip = params[:ip].to_s.strip
+
+    if ip.blank?
+      return render_demo_error("vpn_detection", t("tools.vpn_detection.demo.error_empty"))
+    end
+
+    unless valid_ip?(ip)
+      return render_demo_error("vpn_detection", t("tools.vpn_detection.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/networking/ip/vpn/#{ip}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("vpn_detection", t("tools.vpn_detection.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("vpn_detection", t("tools.vpn_detection.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("vpn_detection", t("tools.vpn_detection.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/vpn_detection", locals: { data: data, ip: ip }
+  end
+
+  def thesaurus
+    word = params[:word].to_s.strip.downcase
+
+    if word.blank?
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_empty"))
+    end
+
+    unless word.match?(/\A[\p{L}'-]+\z/)
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/text/thesaurus/#{ERB::Util.url_encode(word)}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_no_data"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("thesaurus", t("tools.thesaurus.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/thesaurus", locals: { data: data }
+  end
+
   private
+
+  def valid_ip?(ip)
+    return false if ip.include?("/")
+
+    IPAddr.new(ip)
+    true
+  rescue IPAddr::Error
+    false
+  end
 
   def api_call(endpoint:, method:, params:)
     ApiProxyService.call(

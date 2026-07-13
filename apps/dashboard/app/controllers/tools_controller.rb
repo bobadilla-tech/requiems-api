@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -68,6 +68,16 @@ class ToolsController < ApplicationController
       name: "Trivia",
       description: "Random trivia questions with multiple-choice answers, filterable by category and difficulty.",
       icon_classes: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400"
+    },
+    "vpn-detection" => {
+      name: "VPN & Proxy Detection",
+      description: "Detect if an IP address belongs to a VPN, proxy, Tor exit node, or hosting provider, with threat and fraud scoring.",
+      icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+    },
+    "thesaurus" => {
+      name: "Thesaurus",
+      description: "Find synonyms and antonyms for any word to enhance vocabulary and writing.",
+      icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
     }
   }.freeze
 

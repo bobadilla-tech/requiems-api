@@ -51,6 +51,10 @@ gem "nanoid", "~> 2.0"
 # Sitemap generation
 gem "sitemap_generator"
 
+# Markdown rendering for the blog
+gem "kramdown"
+gem "kramdown-parser-gfm"
+
 # Charts and pagination
 gem "chartkick", "~> 5.0"
 gem "pagy", "~> 43.6"

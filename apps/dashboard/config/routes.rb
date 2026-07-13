@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   post "tools/demos/profanity-filter",  to: "tool_demos#profanity_filter",  as: :tool_demo_profanity_filter
   post "tools/demos/timezone",          to: "tool_demos#timezone",          as: :tool_demo_timezone
   post "tools/demos/trivia",            to: "tool_demos#trivia",            as: :tool_demo_trivia
+  post "tools/demos/vpn-detection",     to: "tool_demos#vpn_detection",     as: :tool_demo_vpn_detection
+  post "tools/demos/thesaurus",         to: "tool_demos#thesaurus",         as: :tool_demo_thesaurus
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"
@@ -151,7 +153,8 @@ Rails.application.routes.draw do
     get "api_reference", to: "home#api_reference"
     get "changelog", to: "home#changelog"
 
-    get "blog", to: "home#blog"
+    get "blog", to: "blog#index"
+    get "blog/:slug", to: "blog#show", as: :blog_post
     get "status", to: "home#status"
     get "glossary", to: "home#glossary"
     get "error_codes", to: "home#error_codes"
