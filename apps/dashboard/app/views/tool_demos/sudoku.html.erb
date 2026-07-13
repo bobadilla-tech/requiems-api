@@ -1,0 +1,60 @@
+<turbo-frame id="sudoku-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+        <%= data["difficulty"] == "easy" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
+           data["difficulty"] == "medium" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300" :
+           "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" %>">
+        <%= t("tools.sudoku.demo.badge_#{data["difficulty"]}") %>
+      </span>
+      <span class="text-xs text-gray-500 dark:text-gray-400">
+        <%= t("tools.sudoku.demo.label_difficulty") %>: <%= data["difficulty"] %>
+      </span>
+    </div>
+
+    <div class="px-4 py-4">
+      <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+        <%= t("tools.sudoku.demo.label_puzzle") %>
+      </p>
+      <div class="grid grid-cols-9 gap-0 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden w-full max-w-sm mx-auto">
+        <% Array(data["puzzle"]).each_with_index do |row, ri| %>
+          <% Array(row).each_with_index do |cell, ci| %>
+            <div class="flex items-center justify-center h-8 sm:h-10 text-sm font-mono border-r border-b
+              <%= cell == 0 ? "text-gray-400 dark:text-gray-600 bg-gray-50 dark:bg-gray-900" : "text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800" %>
+              <%= ci == 2 || ci == 5 ? "border-r-2 border-r-gray-400 dark:border-r-gray-500" : "" %>
+              <%= ri == 2 || ri == 5 ? "border-b-2 border-b-gray-400 dark:border-b-gray-500" : "" %>
+              <%= ci == 8 ? "border-r-0" : "" %>
+              <%= ri == 8 ? "border-b-0" : "" %>
+              border-gray-200 dark:border-gray-700">
+              <%= cell == 0 ? "" : cell %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <% if data["solution"] %>
+        <details class="mt-4">
+          <summary class="text-sm font-semibold text-brand-primary cursor-pointer hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded">
+            <%= t("tools.sudoku.demo.label_solution") %>
+          </summary>
+          <div class="grid grid-cols-9 gap-0 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden w-full max-w-sm mx-auto mt-3">
+            <% Array(data["solution"]).each_with_index do |row, ri| %>
+              <% Array(row).each_with_index do |cell, ci| %>
+                <div class="flex items-center justify-center h-8 sm:h-10 text-sm font-mono
+                  text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20
+                  <%= ci == 2 || ci == 5 ? "border-r-2 border-r-gray-400 dark:border-r-gray-500" : "border-r border-gray-200 dark:border-gray-700" %>
+                  <%= ri == 2 || ri == 5 ? "border-b-2 border-b-gray-400 dark:border-b-gray-500" : "border-b border-gray-200 dark:border-gray-700" %>
+                  <%= ci == 8 ? "border-r-0" : "" %>
+                  <%= ri == 8 ? "border-b-0" : "" %>">
+                  <%= cell == 0 ? "" : cell %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </details>
+      <% end %>
+    </div>
+
+  </div>
+</turbo-frame>

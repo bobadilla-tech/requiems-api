@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -87,6 +87,11 @@ class ToolsController < ApplicationController
     "random-user" => {
       name: "Random User",
       description: "Generate random fake user profiles for testing and prototyping — names, emails, phone numbers, addresses, and avatars.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "sudoku" => {
+      name: "Sudoku",
+      description: "Generate Sudoku puzzles with solutions across multiple difficulty levels.",
       icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
     }
   }.freeze
