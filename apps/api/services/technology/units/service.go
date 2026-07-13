@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 )
 
 // unit represents a single unit with its conversion factor relative to the base unit.
@@ -70,6 +71,47 @@ var units = map[string]unit{
 	"km_h":  {category: "speed", factor: 1},
 	"mph":   {category: "speed", factor: 1.60934},
 	"knots": {category: "speed", factor: 1.852},
+}
+
+// aliases maps common long-form / plural names onto canonical unit keys.
+// Discovery (Units) still returns only canonical keys; Convert accepts both.
+var aliases = map[string]string{
+	"meter": "m", "meters": "m", "metre": "m", "metres": "m",
+	"kilometer": "km", "kilometers": "km", "kilometre": "km", "kilometres": "km",
+	"centimeter": "cm", "centimeters": "cm", "centimetre": "cm", "centimetres": "cm",
+	"millimeter": "mm", "millimeters": "mm", "millimetre": "mm", "millimetres": "mm",
+	"foot": "ft", "feet": "ft",
+	"inch": "in", "inches": "in",
+	"yard": "yd", "yards": "yd",
+	"nautical_mile": "nmi", "nautical_miles": "nmi",
+	"kilogram": "kg", "kilograms": "kg",
+	"gram": "g", "grams": "g",
+	"milligram": "mg", "milligrams": "mg",
+	"pound": "lb", "pounds": "lb",
+	"ounce": "oz", "ounces": "oz",
+	"ton": "t", "tons": "t", "tonne": "t", "tonnes": "t",
+	"celsius": "c", "fahrenheit": "f", "kelvin": "k",
+	"liter": "l", "liters": "l", "litre": "l", "litres": "l",
+	"milliliter": "ml", "milliliters": "ml", "millilitre": "ml", "millilitres": "ml",
+	"gallon": "gal", "gallons": "gal",
+	"quart": "qt", "quarts": "qt",
+	"pint": "pt", "pints": "pt",
+	"cups": "cup",
+	"fluid_ounce": "fl_oz", "fluid_ounces": "fl_oz",
+	"teaspoon": "tsp", "teaspoons": "tsp",
+	"tablespoon": "tbsp", "tablespoons": "tbsp",
+	"square_meter": "m2", "square_meters": "m2", "square_metre": "m2", "square_metres": "m2",
+	"square_kilometer": "km2", "square_kilometers": "km2", "square_kilometre": "km2", "square_kilometres": "km2",
+	"square_centimeter": "cm2", "square_centimeters": "cm2",
+	"square_millimeter": "mm2", "square_millimeters": "mm2",
+	"square_foot": "ft2", "square_feet": "ft2",
+	"square_inch": "in2", "square_inches": "in2",
+	"square_yard": "yd2", "square_yards": "yd2",
+	"acres": "acre",
+	"hectare": "ha", "hectares": "ha",
+	"meters_per_second": "m_s", "metres_per_second": "m_s",
+	"kilometers_per_hour": "km_h", "kilometres_per_hour": "km_h",
+	"miles_per_hour": "mph",
 }
 
 // ErrUnknownUnit is returned when a unit is not recognised.
@@ -140,13 +182,27 @@ func (s *Service) Units() Results {
 	return result
 }
 
+// resolveUnit maps a caller-supplied unit key (canonical or alias) to the
+// canonical key and its definition.
+func resolveUnit(key string) (canonical string, u unit, ok bool) {
+	key = strings.ToLower(strings.TrimSpace(key))
+	if u, ok = units[key]; ok {
+		return key, u, true
+	}
+	if canonical, ok = aliases[key]; ok {
+		u, ok = units[canonical]
+		return canonical, u, ok
+	}
+	return "", unit{}, false
+}
+
 func (s *Service) Convert(from, to string, value float64) (Result, error) {
-	fromUnit, ok := units[from]
+	fromKey, fromUnit, ok := resolveUnit(from)
 	if !ok {
 		return Result{}, fmt.Errorf("%w: %q", ErrUnknownUnit, from)
 	}
 
-	toUnit, ok := units[to]
+	toKey, toUnit, ok := resolveUnit(to)
 	if !ok {
 		return Result{}, fmt.Errorf("%w: %q", ErrUnknownUnit, to)
 	}
@@ -159,16 +215,16 @@ func (s *Service) Convert(from, to string, value float64) (Result, error) {
 	var formula string
 
 	if fromUnit.category == "temperature" {
-		result, formula = convertTemperature(from, to, value)
+		result, formula = convertTemperature(fromKey, toKey, value)
 	} else {
 		factor := fromUnit.factor / toUnit.factor
 		result = roundTo(value * factor)
-		formula = fmt.Sprintf("%s × %s", from, formatFactor(factor))
+		formula = fmt.Sprintf("%s × %s", fromKey, formatFactor(factor))
 	}
 
 	return Result{
-		From:    from,
-		To:      to,
+		From:    fromKey,
+		To:      toKey,
 		Input:   value,
 		Result:  result,
 		Formula: formula,

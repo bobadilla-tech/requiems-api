@@ -1,45 +1,19 @@
-<% combinations = [
-  {
-    pair:    "Unit Conversion + Exchange Rate",
-    benefit: "Convert physical measurements and currencies in the same workflow. Ideal for international commerce, shipping calculators, and pricing tools.",
-    href:    "/apis/exchange-rate"
-  },
-  {
-    pair:    "Unit Conversion + Geocoding",
-    benefit: "Transform distances and locations together. Convert miles to kilometers while calculating routes, delivery ranges, or travel estimates.",
-    href:    "/apis/geocode"
-  },
-  {
-    pair:    "Unit Conversion + Number Base Conversion",
-    benefit: "Handle both measurement and numeric transformations in engineering, educational, and technical applications.",
-    href:    "/apis/number-base-conversion"
-  }
-] %>
-
-<section class="bg-gray-50 dark:bg-gray-800 py-20">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t('tools.email_normalizer.api_combinations.heading') %></h2>
-
-
-      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto"><%= t('tools.unit_conversion.api_combinations.unit_conversion_becomes_even_more') %></p>
-
-
-    </div>
-
-    <div class="grid sm:grid-cols-3 gap-6">
-      <% combinations.each do |c| %>
-        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
-          <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
-            <%= c[:pair] %>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            <%= c[:benefit] %>
-          </p>
-        </div>
-      <% end %>
-    </div>
-
-  </div>
-</section>
+<%= render "partials/tools/shared/api_combinations",
+      heading:       t("tools.unit_conversion.api_combinations.heading"),
+      subheading:    t("tools.unit_conversion.api_combinations.subheading"),
+      label_benefit: t("tools.unit_conversion.api_combinations.label_benefit"),
+      label_outcome: t("tools.unit_conversion.api_combinations.label_outcome"),
+      combinations: [
+        { name:    t("tools.unit_conversion.api_combinations.exchange_pair"),
+          benefit: t("tools.unit_conversion.api_combinations.exchange_benefit"),
+          outcome: t("tools.unit_conversion.api_combinations.exchange_outcome"),
+          href:    api_path("exchange-rate") },
+        { name:    t("tools.unit_conversion.api_combinations.geocode_pair"),
+          benefit: t("tools.unit_conversion.api_combinations.geocode_benefit"),
+          outcome: t("tools.unit_conversion.api_combinations.geocode_outcome"),
+          href:    api_path("geocode") },
+        { name:    t("tools.unit_conversion.api_combinations.numbase_pair"),
+          benefit: t("tools.unit_conversion.api_combinations.numbase_benefit"),
+          outcome: t("tools.unit_conversion.api_combinations.numbase_outcome"),
+          href:    api_path("number-base-conversion") },
+      ] %>

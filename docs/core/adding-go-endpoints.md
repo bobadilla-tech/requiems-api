@@ -997,6 +997,29 @@ additions required, but this is uncommon.
 
 ---
 
+## Parameter vocabulary for demos and docs
+
+If an endpoint accepts short enum-like keys (`m`, `km`, `c`, `f`), keep that
+contract in YAML examples and in any Rails tool demo. Marketing labels belong in
+UI copy (`t("…")`), not in request payloads.
+
+When short keys are harsh DX for callers, add **aliases in the service** that
+resolve to the canonical key before validation (see
+`services/technology/units` — `meters` → `m`). Rules:
+
+1. Discovery / list endpoints return **canonical** keys only.
+2. Convert/lookup accepts both canonical and aliases (case-insensitive).
+3. Response bodies echo the **canonical** key.
+4. Rails tool demos should prefer canonical `option value=`s so they stay
+   aligned with docs and the discovery endpoint — aliases are for API DX, not a
+   substitute for fixing the demo.
+
+If a tool page ever shows “unknown unit: …” (or similar) for a value listed in
+its own `<select>`, the option values drifted from the Go service — fix the
+dashboard values and/or add aliases, then add a regression test.
+
+---
+
 ## Pre-Merge Verification Checklist
 
 Work through these in order before opening a PR.
@@ -1027,6 +1050,8 @@ Documentation
   [ ] All code examples use requiems-api-key header
   [ ] Path parameters have location: path set
   [ ] Strings with colons are quoted
+  [ ] Enum/unit parameter examples match the keys the service actually accepts
+  [ ] If a Rails tool demo exists, its option values match those keys (or aliases)
   [ ] NO pricing section included (pricing is global)
   [ ] YAML validation passes: docker exec requiem-dev-dashboard-1 ruby -ryaml -e "YAML.load_file('config/api_docs/{name}.yml'); puts 'Valid'"
   [ ] apps/dashboard/config/api_catalog.yml updated (new API only)

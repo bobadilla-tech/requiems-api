@@ -197,25 +197,43 @@ integrations, SMS/marketing, onboarding, support).
 
 #### _api_combinations — 3 cross-API pairs
 
-3 cards in a `grid grid-cols-1 md:grid-cols-3 gap-6` section.
+Do **not** copy-paste a new section from trivia/sudoku. Render the shared
+partial:
 
-Each card shows a pair name, benefit, and outcome. Visually lighter than use
-cases:
-`bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700`.
+```erb
+<%# partials/tools/{tool_name}/_api_combinations.html.erb %>
+<%= render "partials/tools/shared/api_combinations",
+      heading:       t("tools.{tool_name}.api_combinations.heading"),
+      subheading:    t("tools.{tool_name}.api_combinations.subheading"),
+      label_benefit: t("tools.{tool_name}.api_combinations.label_benefit"),
+      label_outcome: t("tools.{tool_name}.api_combinations.label_outcome"),
+      combinations: [
+        { name:    t("tools.{tool_name}.api_combinations.{slug}_pair"),
+          benefit: t("tools.{tool_name}.api_combinations.{slug}_benefit"),
+          outcome: t("tools.{tool_name}.api_combinations.{slug}_outcome"),
+          href:    api_path("catalog-id") },
+        # …2 more
+      ] %>
+```
 
-Section has an intro sentence explaining the API composition concept. Choose 3
-complementary APIs from `api_catalog.yml`.
+The partial lives at `partials/tools/shared/_api_combinations.html.erb`. It
+renders a 3-column grid (`grid-cols-1 md:grid-cols-3`), benefit + outcome rows,
+and optional links.
 
 **Link targets must use catalog IDs, not tool slugs.** `api_path` routes to
 `/apis/:id`, and `ApisController#show` looks up `config/api_catalog.yml` by
-`id`. Tool page IDs often differ (e.g. tool `email-normalizer` → catalog
-`email-normalize`, tool `domain-checker` → catalog `domain-info`,
-`language-detection` is not a catalog id → use `detect-language`). Always
-prefer `api_path("catalog-id")` over hardcoded `/apis/...` so locale prefixes
-are preserved.
+`id`. Tool page IDs often differ:
 
-Reference implementation: `partials/tools/trivia/_api_combinations.html.erb`
-(pair + benefit + outcome + `api_path`).
+| Tool slug (`/tools/...`) | Catalog id (`api_path(...)`) |
+| ------------------------ | ---------------------------- |
+| `email-normalizer`       | `email-normalize`            |
+| `domain-checker`         | `domain-info`                |
+| `email-validator`        | `email-validate`             |
+| `phone-validator`        | `phone-validation`           |
+| `language-detection` (wrong) | `detect-language`        |
+
+Always prefer `api_path("catalog-id")` over hardcoded `/apis/...` so locale
+prefixes are preserved. Omit `:href` only when the card should not link.
 
 #### _faq — 5 Q&A accordion
 
@@ -323,6 +341,13 @@ Key points:
   partial.
 - Use `render "partials/shared/submit_button"` for the submit button — it
   handles the spinner and Stimulus target wiring automatically.
+- **Select option values must match what the Go API accepts.** Display labels
+  can be human-readable via `t()`, but `value=` must be a canonical key (or a
+  documented alias). Example: the Units API uses `m` / `km`, not `meters` /
+  `kilometers` — sending the label form caused live demos to fail with
+  `unknown unit: "meters"`. Prefer canonical keys from the API docs /
+  discovery endpoint; if you add long-form aliases in Go, keep the demo on
+  canonical keys and document aliases separately.
 
 ### 5b. Route — outside locale scope
 
@@ -841,6 +866,8 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 | Sample request showing `X-API-Key`                 | Product header is `requiems-api-key`           |
 | Dark-only inline styles on Turbo result cards      | Match light/dark Tailwind pattern of other demos |
 | Omitting `demo.result_failed_heading`              | Add it — otherwise error UI shows English fallback |
+| Copy-pasting `_api_combinations` markup per tool   | Use `render "partials/tools/shared/api_combinations"` |
+| Demo `<option value="meters">` when API wants `m`  | Option values = API keys (labels via `t()`)    |
 
 ---
 
@@ -870,8 +897,11 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] CTA section uses `render "partials/tools/shared/cta"` (or a deliberate
       custom design with justification)
 - [ ] Demo visible in both light mode and dark mode with sufficient contrast
-- [ ] API combination cards use `api_path("catalog-id")` with IDs from
-      `config/api_catalog.yml` (not tool slugs, not hardcoded `/apis/...`)
+- [ ] API combination cards use
+      `render "partials/tools/shared/api_combinations"` with
+      `api_path("catalog-id")` IDs from `config/api_catalog.yml` (not tool
+      slugs, not hardcoded `/apis/...`)
+- [ ] Demo `<select>` option values match Go API keys (label text via `t()`)
 - [ ] FAQ support link uses `contact_path` (locale-safe)
 - [ ] `tools.{tool}.demo.result_failed_heading` present in EN (+ ES/FR stubs)
 - [ ] Mock HTTP samples use `requiems-api-key`, not `X-API-Key`

@@ -692,7 +692,20 @@ fr:
         breakdown_body: La répartition montre comment le modèle distribue la confiance entre les trois classes — totalisant toujours 1,0. Utile pour les textes ambigus ou au ton mixte.
     unit_conversion:
       api_combinations:
-        unit_conversion_becomes_even_more: La conversion d'unités devient encore plus utile lorsqu'elle est combinée avec d'autres Requiems API.
+        heading: Utilisez-la avec des API complémentaires.
+        subheading: La conversion d'unités devient encore plus utile combinée à d'autres API Requiems.
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        exchange_pair: Conversion d'unités + Taux de change
+        exchange_benefit: Convertissez mesures physiques et devises dans le même flux. Idéal pour le commerce international, les calculateurs d'expédition et les outils de tarification.
+        exchange_outcome: Un seul pipeline pour quantité et argent — poids d'expédition et coût final dans le même flux.
+        geocode_pair: Conversion d'unités + Géocodage
+        geocode_benefit: Transformez distances et emplacements ensemble. Convertissez miles en kilomètres tout en calculant itinéraires, portées de livraison ou estimations de voyage.
+        geocode_outcome: Outils de localisation sensibles à la distance sans coder en dur les calculs d'unités.
+        numbase_pair: Conversion d'unités + Conversion de base numérique
+        numbase_benefit: Gérez les transformations de mesure et numériques dans des applications d'ingénierie, d'éducation et techniques.
+        numbase_outcome: Conversion de mesure et de base depuis un seul fournisseur d'API.
+        unit_conversion_becomes_even_more: La conversion d'unités devient encore plus utile combinée à d'autres API Requiems.
       demo:
         error_fill_all_fields: Remplissez tous les champs.
         error_generic: Une erreur s'est produite. Veuillez réessayer.
@@ -708,6 +721,18 @@ fr:
         result_heading: Résultat de conversion
         value_label: Valeur
       hero:
+        title_html: "Convertissez des mesures instantanément<br class=\"hidden sm:block\"> pour tous les types d'unités."
+        subtitle: "Conversions de longueur, poids, volume, température, surface et vitesse — avec des résultats précis, des formules et des endpoints de découverte d'unités dans une seule API."
+        group_length: "Longueur"
+        group_weight: "Poids"
+        group_temperature: "Température"
+        group_volume: "Volume"
+        group_speed: "Vitesse"
+        group_area: "Surface"
+        stone: "Stone"
+        milligrams: "Milligrammes"
+        teaspoons: "Cuillères à café"
+        tablespoons: "Cuillères à soupe"
         acres: Acres
         celsius: Celsius
         centimeters: Centimètres
