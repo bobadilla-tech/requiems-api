@@ -862,6 +862,7 @@ es:
         error_rate_limit: "Demasiadas solicitudes. Esperá un momento e intentá de nuevo."
         error_generic: "Algo salió mal. Intentá de nuevo."
         error_no_data: "No se encontraron datos de timezone para esa ubicación."
+        result_failed_heading: "La consulta falló"
         badge_found: "Encontrado"
         badge_yes: "✓ Sí"
         badge_no: "✗ No"
@@ -914,12 +915,17 @@ es:
       api_combinations:
         heading: "Usala junto con APIs complementarias."
         subheading: "Timezone funciona todavía mejor combinada con otras APIs de Requiems."
+        label_benefit: "Beneficio:"
+        label_outcome: "Resultado:"
         worldtime_pair: "Timezone + World Time"
         worldtime_benefit: "Resolvé primero el nombre del timezone IANA, y después consultá World Time directamente por nombre para búsquedas repetidas más livianas."
+        worldtime_outcome: "Consultas de seguimiento más rápidas una vez conocido el ID de timezone."
         geocode_pair: "Timezone + Geocoding"
         geocode_benefit: "Convertí una dirección de texto libre en coordenadas, y usá esas coordenadas en Timezone para un pipeline completo de ubicación a hora."
+        geocode_outcome: "Convierte cualquier dirección en la hora local actual en dos llamadas a la API."
         cities_pair: "Timezone + Cities"
         cities_benefit: "Consultá metadata de la ciudad — población, país, coordenadas — junto con la información de timezone en el mismo flujo de solicitud."
+        cities_outcome: "Contexto de ubicación más rico para agendas e interfaces con hora local."
       faq:
         heading: "Preguntas frecuentes"
         support_prompt: "¿Todavía tenés preguntas?"
@@ -1014,24 +1020,27 @@ es:
           mejora la fluidez del contenido generado automáticamente."
         ai_tags: "IA, LLM, Calidad de salida"
       api_combinations:
-        heading: "Combínala con otras APIs"
+        heading: Combínalo con otras API
         subheading:
-          "La corrección ortográfica es más efectiva como parte de un proceso
-          de análisis de texto. Combínala con otras APIs de Requiems para un
-          análisis de contenido más profundo."
-        sentiment_pair: "Corrección ortográfica + Análisis de sentimiento"
+          La corrección ortográfica es más efectiva como parte de un pipeline de procesamiento de texto.
+          Combínala con otras APIs de Requiems para un análisis de contenido más profundo.
+        label_benefit: "Beneficio:"
+        label_outcome: "Resultado:"
+        sentiment_pair: Corrector ortográfico + Análisis de sentimiento
         sentiment_benefit:
-          "Corrige los errores ortográficos primero, luego analiza el
-          sentimiento del texto corregido para una clasificación de tono más
-          precisa."
-        language_pair: "Corrección ortográfica + Detección de idioma"
+          Corrige primero los errores ortográficos y luego analiza el sentimiento
+          del texto corregido para una clasificación de tono más precisa.
+        sentiment_outcome: Puntuaciones de sentimiento más fiables sobre texto limpio.
+        language_pair: Corrector ortográfico + Detección de idioma
         language_benefit:
-          "Detecta el idioma de entrada antes de corregir la ortografía. Enruta
-          el texto al modelo de idioma correcto automáticamente."
-        email_pair: "Corrección ortográfica + Normalizador de correo"
+          Detecta el idioma de entrada antes de corregir. Enruta el texto al
+          modelo lingüístico correcto automáticamente.
+        language_outcome: Corrección adaptada al idioma antes del NLP posterior.
+        email_pair: Corrector ortográfico + Normalizador de correo
         email_benefit:
-          "Normaliza direcciones de correo electrónico y revisa la ortografía
-          en el nombre asociado o el cuerpo del mensaje en un solo proceso."
+          Normaliza direcciones de correo y corrige la ortografía del nombre
+          mostrado o del cuerpo del mensaje en un mismo flujo.
+        email_outcome: Datos de contacto y textos de mensaje más limpios en el mismo flujo.
       faq:
         heading: "Preguntas frecuentes"
         support_prompt: "¿Aún tienes preguntas?"
@@ -1071,6 +1080,7 @@ es:
         error_generic: "Algo salió mal. Inténtalo de nuevo."
         error_rate_limit: "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo."
         error_no_data: "No se devolvieron datos."
+        result_failed_heading: "Falló la corrección ortográfica"
         result_heading: "Resultado"
         label_corrected: "Texto corregido"
         label_errors_found: "Errores encontrados"
@@ -1423,6 +1433,7 @@ es:
         error_generic: "Algo salió mal. Inténtalo de nuevo."
         error_network: "Error de red. Por favor verifica tu conexión."
         error_no_data: "No se devolvieron datos."
+        result_failed_heading: "Falló la generación"
         badge_live: "En vivo"
         avatar_alt: "Avatar de usuario"
         label_name: "Nombre"
@@ -1457,6 +1468,7 @@ es:
         error_rate_limit: "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo."
         error_generic: "Algo salió mal. Inténtalo de nuevo."
         error_no_data: "No se pudo generar el rompecabezas. Inténtalo de nuevo."
+        result_failed_heading: "Falló la generación del rompecabezas"
         badge_easy: "Fácil"
         badge_medium: "Medio"
         badge_hard: "Difícil"

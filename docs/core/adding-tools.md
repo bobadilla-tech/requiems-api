@@ -13,14 +13,14 @@ without an account.
 
 Building a tool page follows these stages:
 
-| Stage | What you do |
-|---|---|
-| **1. Scaffold** | Create show view, register route + controller, create all 7 section partials with placeholder content |
-| **2. Demo form** | Implement the live demo in the hero using Turbo Frame + Stimulus |
-| **3. Section content** | Fill in each section partial with real copy, use cases, and code blocks |
-| **4. i18n** | Extract all strings with `rori18n`, add EN keys and ES/FR stubs |
-| **5. Copy review** | Audit voice, CTAs, superlatives, technical terms across all sections |
-| **6. Validation** | Test responsive layout (375px/768px/1280px), keyboard navigation, contrast |
+| Stage                  | What you do                                                                                           |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| **1. Scaffold**        | Create show view, register route + controller, create all 7 section partials with placeholder content |
+| **2. Demo form**       | Implement the live demo in the hero using Turbo Frame + Stimulus                                      |
+| **3. Section content** | Fill in each section partial with real copy, use cases, and code blocks                               |
+| **4. i18n**            | Extract all strings with `rori18n`, add EN keys and ES/FR stubs                                       |
+| **5. Copy review**     | Audit voice, CTAs, superlatives, technical terms across all sections                                  |
+| **6. Validation**      | Test responsive layout (375px/768px/1280px), keyboard navigation, contrast                            |
 
 ---
 
@@ -158,8 +158,8 @@ Key elements:
 - CTA buttons using `render "partials/shared/button"` with `variant: "brand"`
 - Demo form with `<turbo-frame>` slot (see section 5)
 
-The hero uses a gradient background `linear-gradient(135deg, ...)` with an
-SVG grid pattern overlay. Get the gradient values from the design spec.
+The hero uses a gradient background `linear-gradient(135deg, ...)` with an SVG
+grid pattern overlay. Get the gradient values from the design spec.
 
 #### _what_it_does — Accuracy + Simplicity cards
 
@@ -175,7 +175,8 @@ highlighting.
 
 Layout: `grid grid-cols-1 lg:grid-cols-2 gap-8`
 
-Section wrapper: `bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800`
+Section wrapper:
+`bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:border-gray-800`
 
 #### _use_cases — 6 scenario cards
 
@@ -183,11 +184,13 @@ Section wrapper: `bg-white dark:bg-gray-950 py-20 border-t border-gray-100 dark:
 
 Each card:
 
-- Context label: `text-xs font-semibold uppercase tracking-wide text-brand-primary`
+- Context label:
+  `text-xs font-semibold uppercase tracking-wide text-brand-primary`
 - Result-oriented title (outcome first, not feature-first)
 - 1–2 sentence description
 
-Card style: `bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700`
+Card style:
+`bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700`
 
 Reference the Phone Validator's 6 use cases for the pattern (auth, fraud,
 integrations, SMS/marketing, onboarding, support).
@@ -197,10 +200,22 @@ integrations, SMS/marketing, onboarding, support).
 3 cards in a `grid grid-cols-1 md:grid-cols-3 gap-6` section.
 
 Each card shows a pair name, benefit, and outcome. Visually lighter than use
-cases: `bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700`.
+cases:
+`bg-gray-50 dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700`.
 
 Section has an intro sentence explaining the API composition concept. Choose 3
 complementary APIs from `api_catalog.yml`.
+
+**Link targets must use catalog IDs, not tool slugs.** `api_path` routes to
+`/apis/:id`, and `ApisController#show` looks up `config/api_catalog.yml` by
+`id`. Tool page IDs often differ (e.g. tool `email-normalizer` → catalog
+`email-normalize`, tool `domain-checker` → catalog `domain-info`,
+`language-detection` is not a catalog id → use `detect-language`). Always
+prefer `api_path("catalog-id")` over hardcoded `/apis/...` so locale prefixes
+are preserved.
+
+Reference implementation: `partials/tools/trivia/_api_combinations.html.erb`
+(pair + benefit + outcome + `api_path`).
 
 #### _faq — 5 Q&A accordion
 
@@ -232,9 +247,12 @@ complementary APIs from `api_catalog.yml`.
 ```
 
 Wrap each Q&A pair in `render "partials/shared/card", padding: true do ...
-end`. All answers start collapsed (`hidden` class).
+end`.
+All answers start collapsed (`hidden` class).
 
-Include a "Still have questions? Contact support" section at the bottom.
+Include a "Still have questions? Contact support" section at the bottom. Use
+`contact_path` (or `link_to ... contact_path`) — never hardcoded `href="/contact"`,
+which drops the locale prefix for ES/FR visitors.
 
 #### _cta — Closing call-to-action
 
@@ -557,7 +575,7 @@ en:
         error_generic: "..."
         error_no_data: "..."
         result_heading: "..."
-        result_failed_heading: "..."
+        result_failed_heading: "..."   # required — demo_error.html.erb falls back to English "Request Failed" without it
         label_*: "..."
         badge_*: "..."
       what_it_does:
@@ -818,6 +836,11 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 | Unresponsive grid (no `md:` / `lg:` prefixes)      | Add responsive breakpoints to all card grids   |
 | No keyboard focus indicators on interactive elems  | Use `focus:ring-2 focus:ring-brand-primary`    |
 | Skipping ES/FR locale stubs                        | Run `rori18n generate --fix --languages es,fr` |
+| Hardcoded `/apis/...` or `/contact` links          | Use `api_path("catalog-id")` / `contact_path`  |
+| `api_path` with tool slug (`email-normalizer`)     | Use catalog id from `api_catalog.yml`          |
+| Sample request showing `X-API-Key`                 | Product header is `requiems-api-key`           |
+| Dark-only inline styles on Turbo result cards      | Match light/dark Tailwind pattern of other demos |
+| Omitting `demo.result_failed_heading`              | Add it — otherwise error UI shows English fallback |
 
 ---
 
@@ -847,6 +870,12 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
 - [ ] CTA section uses `render "partials/tools/shared/cta"` (or a deliberate
       custom design with justification)
 - [ ] Demo visible in both light mode and dark mode with sufficient contrast
+- [ ] API combination cards use `api_path("catalog-id")` with IDs from
+      `config/api_catalog.yml` (not tool slugs, not hardcoded `/apis/...`)
+- [ ] FAQ support link uses `contact_path` (locale-safe)
+- [ ] `tools.{tool}.demo.result_failed_heading` present in EN (+ ES/FR stubs)
+- [ ] Mock HTTP samples use `requiems-api-key`, not `X-API-Key`
+- [ ] Show-page render test added in `tools_controller_test.rb`
 - [ ] `ApiProxyService.call` used — no duplicate HTTP logic
 - [ ] `layout false` on `ToolDemosController` actions
 - [ ] Copy review: no superlatives, active voice headings, action-verb CTAs
@@ -857,6 +886,6 @@ In practice: with the Turbo Frame pattern, result data goes through Rails ERB
       reachable via Tab/Enter
 - [ ] FAQ accordion is keyboard-operable: Tab to question, Enter/Space to toggle
 - [ ] All interactive elements have visible focus indicators
-- [ ] Color contrast for primary button text and CTA section text passes
-      WCAG AA (4.5:1)
+- [ ] Color contrast for primary button text and CTA section text passes WCAG AA
+      (4.5:1)
 - [ ] No critical or serious findings in Lighthouse accessibility audit

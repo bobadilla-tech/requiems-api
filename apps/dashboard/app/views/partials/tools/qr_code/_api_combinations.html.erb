@@ -13,15 +13,15 @@
         { pair:    t("tools.qr_code.api_combinations.domain_pair"),
           benefit: t("tools.qr_code.api_combinations.domain_benefit"),
           outcome: t("tools.qr_code.api_combinations.domain_outcome"),
-          href:    api_path("domain-checker") },
+          href:    api_path("domain-info") },
         { pair:    t("tools.qr_code.api_combinations.phone_pair"),
           benefit: t("tools.qr_code.api_combinations.phone_benefit"),
           outcome: t("tools.qr_code.api_combinations.phone_outcome"),
-          href:    api_path("phone-validator") },
+          href:    api_path("phone-validation") },
         { pair:    t("tools.qr_code.api_combinations.email_pair"),
           benefit: t("tools.qr_code.api_combinations.email_benefit"),
           outcome: t("tools.qr_code.api_combinations.email_outcome"),
-          href:    api_path("email-validator") },
+          href:    api_path("email-validate") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></div>

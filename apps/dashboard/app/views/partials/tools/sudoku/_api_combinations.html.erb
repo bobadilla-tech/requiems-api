@@ -13,15 +13,18 @@
       <% [
         { name:    t("tools.sudoku.api_combinations.trivia_name"),
           benefit: t("tools.sudoku.api_combinations.trivia_benefit"),
-          outcome: t("tools.sudoku.api_combinations.trivia_outcome") },
+          outcome: t("tools.sudoku.api_combinations.trivia_outcome"),
+          href:    api_path("trivia") },
         { name:    t("tools.sudoku.api_combinations.quotes_name"),
           benefit: t("tools.sudoku.api_combinations.quotes_benefit"),
-          outcome: t("tools.sudoku.api_combinations.quotes_outcome") },
+          outcome: t("tools.sudoku.api_combinations.quotes_outcome"),
+          href:    api_path("quotes") },
         { name:    t("tools.sudoku.api_combinations.qr_name"),
           benefit: t("tools.sudoku.api_combinations.qr_benefit"),
-          outcome: t("tools.sudoku.api_combinations.qr_outcome") },
+          outcome: t("tools.sudoku.api_combinations.qr_outcome"),
+          href:    api_path("qr-code") },
       ].each do |combo| %>
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
+        <a href="<%= combo[:href] %>" class="block bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow no-underline">
           <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3">
             <%= combo[:name] %>
           </h3>
@@ -33,7 +36,7 @@
             <span class="font-medium text-gray-700 dark:text-gray-300"><%= t("tools.sudoku.api_combinations.label_outcome") %></span>
             <%= combo[:outcome] %>
           </p>
-        </div>
+        </a>
       <% end %>
     </div>
   </div>

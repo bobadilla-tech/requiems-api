@@ -12,20 +12,24 @@
       <% [
         { pair:    t("tools.timezone.api_combinations.worldtime_pair"),
           benefit: t("tools.timezone.api_combinations.worldtime_benefit"),
-          href:    "/apis/world-time" },
+          outcome: t("tools.timezone.api_combinations.worldtime_outcome"),
+          href:    api_path("world-time") },
         { pair:    t("tools.timezone.api_combinations.geocode_pair"),
           benefit: t("tools.timezone.api_combinations.geocode_benefit"),
-          href:    "/apis/geocode" },
+          outcome: t("tools.timezone.api_combinations.geocode_outcome"),
+          href:    api_path("geocode") },
         { pair:    t("tools.timezone.api_combinations.cities_pair"),
           benefit: t("tools.timezone.api_combinations.cities_benefit"),
-          href:    "/apis/cities" },
+          outcome: t("tools.timezone.api_combinations.cities_outcome"),
+          href:    api_path("cities") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
-          <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
-            <%= c[:pair] %>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            <%= c[:benefit] %>
+          <div class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+            <span class="font-medium"><%= t("tools.timezone.api_combinations.label_benefit") %></span> <%= c[:benefit] %>
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            <span class="font-medium"><%= t("tools.timezone.api_combinations.label_outcome") %></span> <%= c[:outcome] %>
           </p>
         </a>
       <% end %>

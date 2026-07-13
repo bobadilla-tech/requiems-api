@@ -862,6 +862,7 @@ fr:
         error_rate_limit: "Trop de requêtes. Attendez un instant et réessayez."
         error_generic: "Une erreur s'est produite. Réessayez."
         error_no_data: "Aucune donnée de fuseau horaire trouvée pour cet emplacement."
+        result_failed_heading: "Échec de la recherche"
         badge_found: "Trouvé"
         badge_yes: "✓ Oui"
         badge_no: "✗ Non"
@@ -914,12 +915,17 @@ fr:
       api_combinations:
         heading: "Utilisez-la avec des API complémentaires."
         subheading: "Timezone fonctionne encore mieux associée à d'autres API Requiems."
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
         worldtime_pair: "Timezone + World Time"
         worldtime_benefit: "Résolvez d'abord le nom du fuseau horaire IANA, puis interrogez World Time directement par son nom pour des recherches répétées plus légères."
+        worldtime_outcome: "Des recherches suivantes plus rapides une fois l'ID de fuseau connu."
         geocode_pair: "Timezone + Geocoding"
         geocode_benefit: "Convertissez une adresse en texte libre en coordonnées, puis utilisez ces coordonnées dans Timezone pour un pipeline complet de localisation à l'heure."
+        geocode_outcome: "Transformez toute adresse en heure locale en deux appels API."
         cities_pair: "Timezone + Cities"
         cities_benefit: "Consultez les métadonnées de la ville — population, pays, coordonnées — en même temps que les informations de fuseau horaire, dans le même flux de requête."
+        cities_outcome: "Un contexte de localisation plus riche pour les agendas et les interfaces horaires."
       faq:
         heading: "Foire aux questions"
         support_prompt: "Vous avez encore des questions ?"
@@ -1014,24 +1020,27 @@ fr:
           frappe et améliorez la fluidité du contenu généré automatiquement."
         ai_tags: "IA, LLM, Qualité de sortie"
       api_combinations:
-        heading: "Associez-la à d'autres API"
+        heading: Associez-la à d'autres API
         subheading:
-          "La correction orthographique est plus efficace dans un pipeline de
-          traitement de texte. Combinez-la avec d'autres API Requiems pour une
-          analyse de contenu plus approfondie."
-        sentiment_pair: "Correction orthographique + Analyse de sentiment"
+          La vérification orthographique est plus efficace dans un pipeline de traitement de texte.
+          Combinez-la avec d'autres API Requiems pour une analyse de contenu plus poussée.
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        sentiment_pair: Correcteur orthographique + Analyse de sentiment
         sentiment_benefit:
-          "Corrigez d'abord les erreurs d'orthographe, puis analysez le
-          sentiment du texte corrigé pour une classification plus précise du
-          ton."
-        language_pair: "Correction orthographique + Détection de langue"
+          Corrigez d'abord les fautes, puis analysez le sentiment du texte
+          corrigé pour une classification de ton plus précise.
+        sentiment_outcome: Des scores de sentiment plus fiables sur un texte nettoyé.
+        language_pair: Correcteur orthographique + Détection de langue
         language_benefit:
-          "Détectez la langue d'entrée avant la correction orthographique.
-          Acheminez automatiquement le texte vers le modèle de langue approprié."
-        email_pair: "Correction orthographique + Normalisateur d'e-mail"
+          Détectez la langue d'entrée avant la correction. Acheminez automatiquement
+          le texte vers le bon modèle linguistique.
+        language_outcome: Correction adaptée à la langue avant le NLP en aval.
+        email_pair: Correcteur orthographique + Normaliseur d'e-mail
         email_benefit:
-          "Normalisez les adresses e-mail et vérifiez l'orthographe du nom
-          associé ou du corps du message en un seul pipeline."
+          Normalisez les adresses e-mail et corrigez l'orthographe du nom affiché
+          ou du corps du message dans un même flux.
+        email_outcome: Des contacts et des textes de message plus propres dans le même flux.
       faq:
         heading: "Foire aux questions"
         support_prompt: "Vous avez encore des questions ?"
@@ -1072,6 +1081,7 @@ fr:
         error_generic: "Une erreur s'est produite. Réessayez."
         error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
         error_no_data: "Aucune donnée renvoyée."
+        result_failed_heading: "Échec de la vérification orthographique"
         result_heading: "Résultat"
         label_corrected: "Texte corrigé"
         label_errors_found: "Erreurs trouvées"
@@ -1424,6 +1434,7 @@ fr:
         error_generic: "Une erreur s'est produite. Réessayez."
         error_network: "Erreur réseau. Veuillez vérifier votre connexion."
         error_no_data: "Aucune donnée retournée."
+        result_failed_heading: "Échec de la génération"
         badge_live: "En direct"
         avatar_alt: "Avatar de l'utilisateur"
         label_name: "Nom"
@@ -1458,6 +1469,7 @@ fr:
         error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
         error_generic: "Une erreur s'est produite. Réessayez."
         error_no_data: "Impossible de générer la grille. Réessayez."
+        result_failed_heading: "Échec de la génération du puzzle"
         badge_easy: "Facile"
         badge_medium: "Moyen"
         badge_hard: "Difficile"

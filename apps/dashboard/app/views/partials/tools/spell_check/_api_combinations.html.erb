@@ -12,20 +12,24 @@
       <% [
         { pair:    t("tools.spell_check.api_combinations.sentiment_pair"),
           benefit: t("tools.spell_check.api_combinations.sentiment_benefit"),
-          href:    "/apis/sentiment" },
+          outcome: t("tools.spell_check.api_combinations.sentiment_outcome"),
+          href:    api_path("sentiment") },
         { pair:    t("tools.spell_check.api_combinations.language_pair"),
           benefit: t("tools.spell_check.api_combinations.language_benefit"),
-          href:    "/apis/language-detection" },
+          outcome: t("tools.spell_check.api_combinations.language_outcome"),
+          href:    api_path("detect-language") },
         { pair:    t("tools.spell_check.api_combinations.email_pair"),
           benefit: t("tools.spell_check.api_combinations.email_benefit"),
-          href:    "/apis/email-normalize" },
+          outcome: t("tools.spell_check.api_combinations.email_outcome"),
+          href:    api_path("email-normalize") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
-          <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
-            <%= c[:pair] %>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            <%= c[:benefit] %>
+          <div class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+            <span class="font-medium"><%= t("tools.spell_check.api_combinations.label_benefit") %></span> <%= c[:benefit] %>
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            <span class="font-medium"><%= t("tools.spell_check.api_combinations.label_outcome") %></span> <%= c[:outcome] %>
           </p>
         </a>
       <% end %>

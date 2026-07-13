@@ -1,22 +1,24 @@
+<%
+  difficulty = %w[easy medium hard].include?(data["difficulty"]) ? data["difficulty"] : "medium"
+  badge_class = case difficulty
+  when "easy" then "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+  when "hard" then "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+  else "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300"
+  end
+%>
 <turbo-frame id="sudoku-demo-result">
   <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
 
     <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-        <%= data["difficulty"] == "easy" ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300" :
-           data["difficulty"] == "medium" ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300" :
-           "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" %>">
-        <%= t("tools.sudoku.demo.badge_#{data["difficulty"]}") %>
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">
+        <%= t("tools.sudoku.demo.label_puzzle") %>
       </span>
-      <span class="text-xs text-gray-500 dark:text-gray-400">
-        <%= t("tools.sudoku.demo.label_difficulty") %>: <%= t("tools.sudoku.demo.badge_#{data["difficulty"]}", default: data["difficulty"]) %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= badge_class %>">
+        <%= t("tools.sudoku.demo.badge_#{difficulty}") %>
       </span>
     </div>
 
     <div class="px-4 py-4">
-      <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-        <%= t("tools.sudoku.demo.label_puzzle") %>
-      </p>
       <div class="grid grid-cols-9 gap-0 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden w-full max-w-sm mx-auto">
         <% Array(data["puzzle"]).each_with_index do |row, ri| %>
           <% Array(row).each_with_index do |cell, ci| %>
