@@ -1,0 +1,59 @@
+<%#
+  Shared "Pair it with other APIs" section for tool pages.
+
+  Required locals:
+    heading         - section H2
+    subheading      - intro paragraph under the heading
+    label_benefit   - "Benefit:" label (i18n)
+    label_outcome   - "Outcome:" label (i18n)
+    combinations    - Array of hashes:
+                        :name     (required) — pair title
+                        :benefit  (required)
+                        :outcome  (optional) — omit to hide outcome row
+                        :href     (optional) — catalog API path via api_path("id");
+                                               omit for non-link cards
+
+  Always pass href via api_path("catalog-id") using ids from
+  config/api_catalog.yml — never tool slugs or hardcoded "/apis/...".
+%>
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= heading %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        <%= subheading %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% combinations.each do |combo| %>
+        <% card_classes = "block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline" %>
+        <% body = capture do %>
+          <div class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug">
+            <%= combo[:name] %>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 <%= combo[:outcome].present? ? 'mb-1' : '' %>">
+            <span class="font-medium text-gray-700 dark:text-gray-300"><%= label_benefit %></span>
+            <%= combo[:benefit] %>
+          </p>
+          <% if combo[:outcome].present? %>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              <span class="font-medium text-gray-700 dark:text-gray-300"><%= label_outcome %></span>
+              <%= combo[:outcome] %>
+            </p>
+          <% end %>
+        <% end %>
+
+        <% if combo[:href].present? %>
+          <%= link_to combo[:href], class: card_classes do %>
+            <%= body %>
+          <% end %>
+        <% else %>
+          <div class="<%= card_classes %>">
+            <%= body %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

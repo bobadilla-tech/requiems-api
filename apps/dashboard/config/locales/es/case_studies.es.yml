@@ -3,8 +3,8 @@ es:
   case_studies:
     common:
       apis_heading: APIs en esta historia
-      apis_intro: 'Endpoints activos de nuestro catálogo: la misma clave API y documentación
-        completa en cada enlace.'
+      apis_intro: "Endpoints activos de nuestro catálogo: la misma clave API y documentación
+        completa en cada enlace."
       back_to_hub: Todos los casos de estudio
       final_cta:
         headline: "¿Listo para conectar los mismos endpoints?"
@@ -22,9 +22,9 @@ es:
       table_benefit: Qué aporta
     compilestrength:
       api_rows:
-      - id: fitness-exercises
-        benefit: Nombres de ejercicios, objetivos, equipo e instrucciones para rutinas
-          programáticas y filtros.
+        - id: fitness-exercises
+          benefit: Nombres de ejercicios, objetivos, equipo e instrucciones para rutinas
+            programáticas y filtros.
       hero_headline: CompileStrength entrena con datos de ejercicio respaldados por
         evidencia
       hero_subheadline: CompileStrength une filosofía de sobrecarga progresiva y periodización
@@ -40,26 +40,26 @@ es:
       quote_text: Los datos de fitness de Requiems impulsan nuestras funciones principales.
         No tuvimos que construir ni mantener esa infraestructura.
       sections:
-      - heading: La ciencia del ejercicio vive en el producto, no solo en hojas de
-          cálculo
-        paragraphs:
-        - Los levantadores esperan movimientos, etiquetas de equipo y señales de progresión
-          que reflejen coaching real, no JSON de relleno.
-        - La API Fitness Exercises aporta metadatos curados para que CompileStrength
-          pueda enfatizar inteligencia de programación, UX y retención propias de
-          su marca.
-      - heading: Lanza funciones de programación más rápido
-        paragraphs:
-        - Generar sesiones por equipo, duración u objetivo requiere un catálogo confiable
-          detrás de escena.
-        - Llamar a Requiems mantiene a CompileStrength alineado con los mismos esquemas
-          documentados en nuestra referencia API, reduciendo sorpresas al expandir
-          locales o modalidades.
-      - heading: Resultados medidos
-        paragraphs:
-        - Los volúmenes de uso específicos de CompileStrength y mejoras de conversión
-          atribuibles a Requiems están TBD. Habla con nosotros si necesitas benchmarking
-          para ventas o compras.
+        - heading: La ciencia del ejercicio vive en el producto, no solo en hojas de
+            cálculo
+          paragraphs:
+            - Los levantadores esperan movimientos, etiquetas de equipo y señales de progresión
+              que reflejen coaching real, no JSON de relleno.
+            - La API Fitness Exercises aporta metadatos curados para que CompileStrength
+              pueda enfatizar inteligencia de programación, UX y retención propias de
+              su marca.
+        - heading: Lanza funciones de programación más rápido
+          paragraphs:
+            - Generar sesiones por equipo, duración u objetivo requiere un catálogo confiable
+              detrás de escena.
+            - Llamar a Requiems mantiene a CompileStrength alineado con los mismos esquemas
+              documentados en nuestra referencia API, reduciendo sorpresas al expandir
+              locales o modalidades.
+        - heading: Resultados medidos
+          paragraphs:
+            - Los volúmenes de uso específicos de CompileStrength y mejoras de conversión
+              atribuibles a Requiems están TBD. Habla con nosotros si necesitas benchmarking
+              para ventas o compras.
     hub:
       card_cta: Leer caso de estudio
       cards_heading: Socios destacados
@@ -85,32 +85,32 @@ es:
         widgets orientados al cliente.
     verigeo:
       api_rows:
-      - id: geocode
-        benefit: Convierte direcciones en coordenadas para mapas, rutas e ingesta
-          GIS.
-      - id: postal-code
-        benefit: Valida y enriquece códigos postales antes de imprimir etiquetas o
-          fijar registros CRM.
-      - id: cities
-        benefit: Metadatos de ciudad (población, zona horaria, coordenadas) para analítica
-          regional.
-      - id: timezone
-        benefit: Contexto de zona horaria para sedes, sucursales y equipos distribuidos.
-      - id: world-time
-        benefit: Relojes seguros ante DST por zonas IANA para paneles operativos.
-      - id: working-days
-        benefit: SLAs que omiten fines de semana y pueden respetar feriados por país.
-      - id: holidays
-        benefit: Saber cuándo paran los mercados para lanzamientos y trabajo de campo
-          realistas.
-      - id: email-validate
-        benefit: Detecta correos mal formados antes de campañas y sincronización CRM.
-      - id: disposable-email
-        benefit: Evita buzones desechables que contaminan pruebas y nurturing.
-      - id: exchange-rate
-        benefit: Instantáneas FX autoritativas para widgets con contexto multimoneda.
-      - id: crypto
-        benefit: Contexto spot de cripto junto a FX cuando los paneles lo requieren.
+        - id: geocode
+          benefit: Convierte direcciones en coordenadas para mapas, rutas e ingesta
+            GIS.
+        - id: postal-code
+          benefit: Valida y enriquece códigos postales antes de imprimir etiquetas o
+            fijar registros CRM.
+        - id: cities
+          benefit: Metadatos de ciudad (población, zona horaria, coordenadas) para analítica
+            regional.
+        - id: timezone
+          benefit: Contexto de zona horaria para sedes, sucursales y equipos distribuidos.
+        - id: world-time
+          benefit: Relojes seguros ante DST por zonas IANA para paneles operativos.
+        - id: working-days
+          benefit: SLAs que omiten fines de semana y pueden respetar feriados por país.
+        - id: holidays
+          benefit: Saber cuándo paran los mercados para lanzamientos y trabajo de campo
+            realistas.
+        - id: email-validate
+          benefit: Detecta correos mal formados antes de campañas y sincronización CRM.
+        - id: disposable-email
+          benefit: Evita buzones desechables que contaminan pruebas y nurturing.
+        - id: exchange-rate
+          benefit: Instantáneas FX autoritativas para widgets con contexto multimoneda.
+        - id: crypto
+          benefit: Contexto spot de cripto junto a FX cuando los paneles lo requieren.
       hero_headline: Verigeo escala geomarketing con APIs listas para ubicación
       hero_subheadline: Verigeo ofrece GIS, georreferenciación y geomarketing en todo
         Perú. Requiems respalda datos de referencia y salvaguardas para que el equipo
@@ -125,32 +125,32 @@ es:
         bloquear registros falsos al registrarse. La capa de reconocimiento nos ayudó
         a personalizar marketing sin construir todo desde cero.
       sections:
-      - heading: Inteligencia de ubicación a escala nacional
-        paragraphs:
-        - El geomarketing depende de convertir direcciones del mundo real y divisiones
-          administrativas en coordenadas y atributos en los que los clientes confían.
-        - Geocodificación, búsqueda postal y metadatos de ciudad ayudan a normalizar
-          entradas antes de llegar a los pipelines GIS de Verigeo, reduciendo limpieza
-          manual cuando provincias y colaboradores envían actualizaciones desde el
-          campo.
-      - heading: Calendarios que respetan cómo funciona Perú
-        paragraphs:
-        - Programar estudios, ventanas de soporte y promesas de entrega falla cuando
-          fines de semana y feriados cambian por región.
-        - Zona horaria, hora mundial, días laborables y feriados llevan el matiz regional
-          que los equipos de producto necesitan sin mantener hojas de calendario.
-      - heading: Confianza en el registro
-        paragraphs:
-        - Los flujos de geomarketing de alto valor atraen registros automatizados
-          y correos desechables.
-        - La validación de correo y los dominios desechables se alinean con el objetivo
-          de Verigeo de bloquear registros falsos manteniendo en marcha a empresas
-          legítimas.
-      - heading: Datos de referencia en widgets orientados al cliente
-        paragraphs:
-        - Los paneles y widgets suelen necesitar puntos de referencia creíbles de
-          FX o cripto, no cotizaciones raspadas.
-        - Los endpoints de tipo de cambio y cripto apoyan contexto financiero ligero
-          junto a los conocimientos propietarios de geomarketing de Verigeo (según
-          retroalimentación del socio; confirma el alcance con nuestro equipo si necesitas
-          detalle de integración).
+        - heading: Inteligencia de ubicación a escala nacional
+          paragraphs:
+            - El geomarketing depende de convertir direcciones del mundo real y divisiones
+              administrativas en coordenadas y atributos en los que los clientes confían.
+            - Geocodificación, búsqueda postal y metadatos de ciudad ayudan a normalizar
+              entradas antes de llegar a los pipelines GIS de Verigeo, reduciendo limpieza
+              manual cuando provincias y colaboradores envían actualizaciones desde el
+              campo.
+        - heading: Calendarios que respetan cómo funciona Perú
+          paragraphs:
+            - Programar estudios, ventanas de soporte y promesas de entrega falla cuando
+              fines de semana y feriados cambian por región.
+            - Zona horaria, hora mundial, días laborables y feriados llevan el matiz regional
+              que los equipos de producto necesitan sin mantener hojas de calendario.
+        - heading: Confianza en el registro
+          paragraphs:
+            - Los flujos de geomarketing de alto valor atraen registros automatizados
+              y correos desechables.
+            - La validación de correo y los dominios desechables se alinean con el objetivo
+              de Verigeo de bloquear registros falsos manteniendo en marcha a empresas
+              legítimas.
+        - heading: Datos de referencia en widgets orientados al cliente
+          paragraphs:
+            - Los paneles y widgets suelen necesitar puntos de referencia creíbles de
+              FX o cripto, no cotizaciones raspadas.
+            - Los endpoints de tipo de cambio y cripto apoyan contexto financiero ligero
+              junto a los conocimientos propietarios de geomarketing de Verigeo (según
+              retroalimentación del socio; confirma el alcance con nuestro equipo si necesitas
+              detalle de integración).

@@ -6,17 +6,17 @@ author: "Eliaz Bobadilla"
 description: "How we turned Requiems API's OpenAPI spec into an MCP server with 87 tools — the codegen approach, the stdio/HTTP transport split, and the bugs we hit shipping it."
 ---
 
-Requiems API is a REST API platform: dozens of small, focused endpoints for things
-like email validation, IBAN checks, geocoding, and fraud scoring. Every one of
-those endpoints is already described by an OpenAPI spec we generate from the API
-itself. When [MCP](https://modelcontextprotocol.io) started showing up in Claude
-Desktop, Cursor, and every other agentic tool, the obvious question was: can an
-LLM just call our API directly, as tools, without us hand-writing 87 tool
-definitions?
+Requiems API is a REST API platform: dozens of small, focused endpoints for
+things like email validation, IBAN checks, geocoding, and fraud scoring. Every
+one of those endpoints is already described by an OpenAPI spec we generate from
+the API itself. When [MCP](https://modelcontextprotocol.io) started showing up
+in Claude Desktop, Cursor, and every other agentic tool, the obvious question
+was: can an LLM just call our API directly, as tools, without us hand-writing 87
+tool definitions?
 
 This is how we built [`mcp.requiems.xyz`](https://mcp.requiems.xyz) — a real MCP
-server sitting in front of our existing API, generated from our OpenAPI spec, and
-what broke along the way.
+server sitting in front of our existing API, generated from our OpenAPI spec,
+and what broke along the way.
 
 ## Codegen over hand-written tools
 
@@ -51,9 +51,9 @@ export const technology_convert = {
 
 Generation is deterministic and idempotent: tools are sorted alphabetically,
 `generated/tools/` is wiped and rewritten on every run, and the whole directory
-is disposable — the spec is the source of truth, not the generated code. The
-one thing codegen doesn't touch is `src/server.ts` and `generated/runtime.ts`,
-which are hand-maintained.
+is disposable — the spec is the source of truth, not the generated code. The one
+thing codegen doesn't touch is `src/server.ts` and `generated/runtime.ts`, which
+are hand-maintained.
 
 That determinism came with an explicit scope cut: `zodForParamSchema()` only
 handles flat objects and primitive types cleanly. Anything using `oneOf`,
@@ -74,9 +74,9 @@ except the handler logic:
 
 The stdio case is the easy one: read `REQUIEMS_API_KEY` from the environment
 once at startup and thread it through. The HTTP case is the interesting one,
-because the *same* generated handler code needs the caller's key, and there's
-no per-process global to put it in — the process is shared across every
-request from every user.
+because the _same_ generated handler code needs the caller's key, and there's no
+per-process global to put it in — the process is shared across every request
+from every user.
 
 We solved this with `AsyncLocalStorage`:
 
@@ -120,9 +120,9 @@ is cheap compared to the request itself hitting our API.
 would succeed with a 200 but return nothing useful to the model. The generated
 handlers were returning raw API JSON straight from `requiemsRequest`, not the
 `{ content: [...] }` shape MCP's `CallToolResultSchema` expects — and the SDK
-doesn't throw when the shape is wrong, it just defaults `content` to `[]`.
-Every tool call "worked" and returned nothing. The fix was wrapping every
-handler's return value:
+doesn't throw when the shape is wrong, it just defaults `content` to `[]`. Every
+tool call "worked" and returned nothing. The fix was wrapping every handler's
+return value:
 
 ```typescript
 return { content: [{ type: "text", text: JSON.stringify(result) }] };
@@ -133,30 +133,30 @@ reject a request that was missing the `requiems-api-key` header — it fell
 through with an empty string, which then failed downstream in a way that was
 harder to debug than a clean 401 at the door. We added an explicit check to
 reject the request immediately if the header is absent, plus a top-level error
-handler on the HTTP server so a thrown exception returns a proper JSON-RPC
-error object instead of a bare 500.
+handler on the HTTP server so a thrown exception returns a proper JSON-RPC error
+object instead of a bare 500.
 
 Both are the kind of bug that only shows up once real traffic — not your own
-manual testing — starts hitting the endpoint, which is exactly why we're
-writing this down.
+manual testing — starts hitting the endpoint, which is exactly why we're writing
+this down.
 
 ## Where it actually runs
 
 Most of Requiems API is built on Cloudflare Workers. The MCP server isn't — it
 runs as a plain **Bun** process in a **Docker** container, reverse-proxied by
 **Caddy** at `mcp.requiems.xyz`. That's a deliberate choice, not an oversight:
-the stateless-per-request model above doesn't need Workers' edge distribution
-to be fast, Bun gives us native `fetch`/`AbortController` without extra
-dependencies, and a single always-on container is simpler to reason about for
-a process that's mostly proxying to our own API anyway. Authentication for the
+the stateless-per-request model above doesn't need Workers' edge distribution to
+be fast, Bun gives us native `fetch`/`AbortController` without extra
+dependencies, and a single always-on container is simpler to reason about for a
+process that's mostly proxying to our own API anyway. Authentication for the
 tools themselves happens per-request via the `requiems-api-key` header, so the
 container itself doesn't need to gate anything at the network layer.
 
 ## What's next
 
 87 tools across categories like validation, finance, networking, and identity
-risk are live today at `mcp.requiems.xyz` — point Claude Desktop, Cursor, or
-any MCP-compatible client at it and the whole Requiems API surface shows up as
+risk are live today at `mcp.requiems.xyz` — point Claude Desktop, Cursor, or any
+MCP-compatible client at it and the whole Requiems API surface shows up as
 callable tools. Batch endpoints and deeply nested schemas are next on the list
 now that the core generation pipeline has proven itself in production.
 

@@ -3,8 +3,8 @@ en:
   case_studies:
     common:
       apis_heading: APIs in this story
-      apis_intro: 'Live endpoints from our catalog: same API key, full documentation
-        at each link.'
+      apis_intro: "Live endpoints from our catalog: same API key, full documentation
+        at each link."
       back_to_hub: All case studies
       final_cta:
         headline: Ready to wire the same endpoints?
@@ -34,29 +34,29 @@ en:
       quote_name: CompileStrength
       quote_role: compilestrength.com · Science-based training
       api_rows:
-      - id: fitness-exercises
-        benefit: Exercise names, targets, equipment, and instructions for programmatic
-          workouts and filters.
+        - id: fitness-exercises
+          benefit: Exercise names, targets, equipment, and instructions for programmatic
+            workouts and filters.
       hero_headline: CompileStrength trains smarter
       sections:
-      - heading: Exercise science belongs in the product, not only in spreadsheets
-        paragraphs:
-        - Lifters expect movements, equipment tags, and progression cues that reflect
-          real coaching, not placeholder JSON.
-        - The Fitness Exercises API supplies curated exercise metadata so CompileStrength
-          can emphasise programming intelligence, UX, and retention loops unique to
-          their brand.
-      - heading: Ship programming features faster
-        paragraphs:
-        - Generating sessions by equipment, duration, or goal requires a trustworthy
-          catalog behind the scenes.
-        - Calling Requiems keeps CompileStrength aligned with the same documented
-          schemas shown in our API reference, reducing surprises when they expand
-          to new locales or modalities.
-      - heading: Measured outcomes
-        paragraphs:
-        - CompileStrength-specific usage volumes and conversion lifts attributed to
-          Requiems are TBD. Talk to us if you need benchmarking for sales or procurement.
+        - heading: Exercise science belongs in the product, not only in spreadsheets
+          paragraphs:
+            - Lifters expect movements, equipment tags, and progression cues that reflect
+              real coaching, not placeholder JSON.
+            - The Fitness Exercises API supplies curated exercise metadata so CompileStrength
+              can emphasise programming intelligence, UX, and retention loops unique to
+              their brand.
+        - heading: Ship programming features faster
+          paragraphs:
+            - Generating sessions by equipment, duration, or goal requires a trustworthy
+              catalog behind the scenes.
+            - Calling Requiems keeps CompileStrength aligned with the same documented
+              schemas shown in our API reference, reducing surprises when they expand
+              to new locales or modalities.
+        - heading: Measured outcomes
+          paragraphs:
+            - CompileStrength-specific usage volumes and conversion lifts attributed to
+              Requiems are TBD. Talk to us if you need benchmarking for sales or procurement.
     hub:
       card_cta: Read case study
       cards_heading: Featured partners
@@ -94,58 +94,58 @@ en:
       quote_name: Verigeo
       quote_role: verigeo.pe · Geomarketing & GIS
       api_rows:
-      - id: geocode
-        benefit: Turn addresses into coordinates for maps, routing, and GIS ingestion.
-      - id: postal-code
-        benefit: Validate and enrich postal inputs before printing labels or locking
-          CRM records.
-      - id: cities
-        benefit: City metadata (population, timezone, coordinates) for analytics and
-          regional reporting.
-      - id: timezone
-        benefit: Resolve timezone context for properties, branches, and dispersed
-          teams.
-      - id: world-time
-        benefit: DST-safe clocks keyed by IANA zones for ops dashboards.
-      - id: working-days
-        benefit: SLA math that skips weekends and optionally honors country holidays.
-      - id: holidays
-        benefit: Know when markets pause so launches and field work stay realistic.
-      - id: email-validate
-        benefit: Catch malformed addresses before campaigns and CRM sync.
-      - id: disposable-email
-        benefit: Stop throwaway inboxes from polluting trials and nurture flows.
-      - id: exchange-rate
-        benefit: Authoritative FX snapshots for widgets that quote multi-currency
-          context.
-      - id: crypto
-        benefit: Spot crypto context alongside traditional FX when dashboards demand
-          both.
+        - id: geocode
+          benefit: Turn addresses into coordinates for maps, routing, and GIS ingestion.
+        - id: postal-code
+          benefit: Validate and enrich postal inputs before printing labels or locking
+            CRM records.
+        - id: cities
+          benefit: City metadata (population, timezone, coordinates) for analytics and
+            regional reporting.
+        - id: timezone
+          benefit: Resolve timezone context for properties, branches, and dispersed
+            teams.
+        - id: world-time
+          benefit: DST-safe clocks keyed by IANA zones for ops dashboards.
+        - id: working-days
+          benefit: SLA math that skips weekends and optionally honors country holidays.
+        - id: holidays
+          benefit: Know when markets pause so launches and field work stay realistic.
+        - id: email-validate
+          benefit: Catch malformed addresses before campaigns and CRM sync.
+        - id: disposable-email
+          benefit: Stop throwaway inboxes from polluting trials and nurture flows.
+        - id: exchange-rate
+          benefit: Authoritative FX snapshots for widgets that quote multi-currency
+            context.
+        - id: crypto
+          benefit: Spot crypto context alongside traditional FX when dashboards demand
+            both.
       hero_headline: Verigeo scales geomarketing
       sections:
-      - heading: Location intelligence at national scale
-        paragraphs:
-        - Geomarketing depends on turning real-world addresses and administrative
-          divisions into coordinates and structured attributes customers can trust.
-        - Geocoding, postal lookup, and city metadata from Requiems help normalize
-          inputs before they reach Verigeo's GIS pipelines, reducing manual cleanup
-          when provinces and collaborators submit updates from the field.
-      - heading: Calendars that respect how Peru works
-        paragraphs:
-        - Scheduling studies, support windows, and delivery promises breaks when weekends
-          and holidays differ by region.
-        - Timezone, world time, working-days, and holidays endpoints carry the regional
-          nuance product teams need without maintaining calendar spreadsheets.
-      - heading: Trust at registration
-        paragraphs:
-        - High-value geomarketing workflows attract automated signups and disposable
-          inboxes.
-        - Email validation and disposable-domain checks align with Verigeo's goal
-          of blocking fake signups while keeping legitimate Peruvian businesses moving.
-      - heading: Reference data in customer-facing widgets
-        paragraphs:
-        - Dashboards and widgets often need credible FX or crypto reference points,
-          not scraped quotes.
-        - Exchange-rate and crypto endpoints support lightweight financial context
-          alongside Verigeo's proprietary geomarketing insights (per partner feedback;
-          confirm scope with our team if you need integration specifics).
+        - heading: Location intelligence at national scale
+          paragraphs:
+            - Geomarketing depends on turning real-world addresses and administrative
+              divisions into coordinates and structured attributes customers can trust.
+            - Geocoding, postal lookup, and city metadata from Requiems help normalize
+              inputs before they reach Verigeo's GIS pipelines, reducing manual cleanup
+              when provinces and collaborators submit updates from the field.
+        - heading: Calendars that respect how Peru works
+          paragraphs:
+            - Scheduling studies, support windows, and delivery promises breaks when weekends
+              and holidays differ by region.
+            - Timezone, world time, working-days, and holidays endpoints carry the regional
+              nuance product teams need without maintaining calendar spreadsheets.
+        - heading: Trust at registration
+          paragraphs:
+            - High-value geomarketing workflows attract automated signups and disposable
+              inboxes.
+            - Email validation and disposable-domain checks align with Verigeo's goal
+              of blocking fake signups while keeping legitimate Peruvian businesses moving.
+        - heading: Reference data in customer-facing widgets
+          paragraphs:
+            - Dashboards and widgets often need credible FX or crypto reference points,
+              not scraped quotes.
+            - Exchange-rate and crypto endpoints support lightweight financial context
+              alongside Verigeo's proprietary geomarketing insights (per partner feedback;
+              confirm scope with our team if you need integration specifics).

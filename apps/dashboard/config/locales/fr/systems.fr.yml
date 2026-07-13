@@ -3,13 +3,13 @@ fr:
   systems:
     data-integrity:
       endpoints:
-      - method: POST
-        path: "/v1/content/moderate"
-        description: Contrôlez toxicité, grossièreté, sentiment et violations de politique.
-      - method: POST
-        path: "/v1/text/normalize"
-        description: 'Nettoyez et standardisez une chaîne : trim, encodage, casse
-          et unicode.'
+        - method: POST
+          path: "/v1/content/moderate"
+          description: Contrôlez toxicité, grossièreté, sentiment et violations de politique.
+        - method: POST
+          path: "/v1/text/normalize"
+          description: "Nettoyez et standardisez une chaîne : trim, encodage, casse
+            et unicode."
       engine:
         endpoint_method: POST
         endpoint_path: "/v1/systems/content/moderate"
@@ -51,29 +51,29 @@ fr:
         invalides, contenu toxique. Le moteur intégrité intercepte et normalise à
         la frontière du produit, sans appels séparés par type de champ.'
       signals:
-      - Validation format et délivrabilité e-mail
-      - Normalisation téléphone et opérateur
-      - Détection grossièreté et toxicité
-      - Analyse de sentiment
-      - Détection de langue
-      - Orthographe et normalisation de texte
+        - Validation format et délivrabilité e-mail
+        - Normalisation téléphone et opérateur
+        - Détection grossièreté et toxicité
+        - Analyse de sentiment
+        - Détection de langue
+        - Orthographe et normalisation de texte
       use_cases:
-      - title: Validation de formulaire
-        body: Validez et normalisez e-mail, téléphone et texte à la soumission.
-      - title: Modération de contenu
-        body: Filtrez grossièreté, toxicité et texte hors politique.
-      - title: Nettoyage de pipeline
-        body: Normalisez et validez en import ou migration massifs.
-      - title: Sanitisation pour l'IA
-        body: Prétraitez et validez l'entrée avant les flux LLM.
+        - title: Validation de formulaire
+          body: Validez et normalisez e-mail, téléphone et texte à la soumission.
+        - title: Modération de contenu
+          body: Filtrez grossièreté, toxicité et texte hors politique.
+        - title: Nettoyage de pipeline
+          body: Normalisez et validez en import ou migration massifs.
+        - title: Sanitisation pour l'IA
+          body: Prétraitez et validez l'entrée avant les flux LLM.
     developer-utilities:
       endpoints:
-      - method: POST
-        path: "/v1/encoding/base64"
-        description: Encodez ou décodez une chaîne en Base64.
-      - method: GET
-        path: "/v1/words/random"
-        description: Mots aléatoires avec longueur et nombre configurables.
+        - method: POST
+          path: "/v1/encoding/base64"
+          description: Encodez ou décodez une chaîne en Base64.
+        - method: GET
+          path: "/v1/words/random"
+          description: Mots aléatoires avec longueur et nombre configurables.
       engine:
         endpoint_method: GET
         endpoint_path: "/v1/technology/qr/base64"
@@ -103,28 +103,28 @@ fr:
         reconstruiriez sinon : QR, encodage, contenu aléatoire et plus. Même clé,
         même auth, zéro config en plus.'
       signals:
-      - Génération de codes QR (PNG, SVG)
-      - Encodage et décodage Base64 et URL
-      - Mots aléatoires et lorem ipsum
-      - APIs trivia, citations et blagues
-      - Utilitaires de conversion d'unités
+        - Génération de codes QR (PNG, SVG)
+        - Encodage et décodage Base64 et URL
+        - Mots aléatoires et lorem ipsum
+        - APIs trivia, citations et blagues
+        - Utilitaires de conversion d'unités
       use_cases:
-      - title: Codes QR
-        body: Générez des QR pour URL, liens de paiement ou identifiants produit.
-      - title: Encodage et décodage
-        body: Base64, encodage URL et conversion de format en un appel.
-      - title: Contenu aléatoire
-        body: Texte factice, mots aléatoires et trivia pour démos et tests.
-      - title: APIs divertissement
-        body: Citations, blagues et trivia sans équipe contenu dédiée.
+        - title: Codes QR
+          body: Générez des QR pour URL, liens de paiement ou identifiants produit.
+        - title: Encodage et décodage
+          body: Base64, encodage URL et conversion de format en un appel.
+        - title: Contenu aléatoire
+          body: Texte factice, mots aléatoires et trivia pour démos et tests.
+        - title: APIs divertissement
+          body: Citations, blagues et trivia sans équipe contenu dédiée.
     global-data:
       endpoints:
-      - method: GET
-        path: "/v1/timezone/resolve"
-        description: Résolvez fuseau et décalage UTC pour tout lieu ou IP.
-      - method: GET
-        path: "/v1/holidays"
-        description: Listez les jours fériés publics par pays et année (100+ pays).
+        - method: GET
+          path: "/v1/timezone/resolve"
+          description: Résolvez fuseau et décalage UTC pour tout lieu ou IP.
+        - method: GET
+          path: "/v1/holidays"
+          description: Listez les jours fériés publics par pays et année (100+ pays).
       engine:
         endpoint_method: POST
         endpoint_path: "/v1/systems/location/resolve"
@@ -161,35 +161,35 @@ fr:
         pour localiser, planifier et respecter la conformité sans assembler plusieurs
         appels.
       signals:
-      - Géocodage et géocodage inverse
-      - Résolution de fuseau par coordonnées ou adresse
-      - Calendriers de jours fériés (100+ pays)
-      - Recherche et validation de codes postaux
-      - Calcul des jours ouvrés
+        - Géocodage et géocodage inverse
+        - Résolution de fuseau par coordonnées ou adresse
+        - Calendriers de jours fériés (100+ pays)
+        - Recherche et validation de codes postaux
+        - Calcul des jours ouvrés
       use_cases:
-      - title: Localisation utilisateur
-        body: Détectez fuseau et locale depuis IP ou adresse.
-      - title: Planification et rappels
-        body: Identifiez jours ouvrés et fériés dans chaque pays.
-      - title: Validation d'adresse
-        body: Standardisez adresses d'expédition ou de facturation dans le monde.
-      - title: Ciblage conformité
-        body: Identifiez la juridiction pour RGPD, fiscalité et réglementation.
+        - title: Localisation utilisateur
+          body: Détectez fuseau et locale depuis IP ou adresse.
+        - title: Planification et rappels
+          body: Identifiez jours ouvrés et fériés dans chaque pays.
+        - title: Validation d'adresse
+          body: Standardisez adresses d'expédition ou de facturation dans le monde.
+        - title: Ciblage conformité
+          body: Identifiez la juridiction pour RGPD, fiscalité et réglementation.
     identity-risk:
       endpoints:
-      - method: POST
-        path: "/v1/risk/score"
-        description: Score un utilisateur selon e-mail, téléphone et IP. Renvoie risk_score
-          et confidence sans l'enveloppe complète.
-      - method: POST
-        path: "/v1/user/verify"
-        description: Vérifie les signaux d'identité et renvoie un score de confiance.
-          Latence réduite, adapté au rescoring en arrière-plan.
+        - method: POST
+          path: "/v1/risk/score"
+          description: Score un utilisateur selon e-mail, téléphone et IP. Renvoie risk_score
+            et confidence sans l'enveloppe complète.
+        - method: POST
+          path: "/v1/user/verify"
+          description: Vérifie les signaux d'identité et renvoie un score de confiance.
+            Latence réduite, adapté au rescoring en arrière-plan.
       engine:
         endpoint_method: POST
         endpoint_path: "/v1/systems/signup/protect"
-        headline: 'Un appel renvoie une image de risque complète : e-mail, IP, téléphone
-          et signaux comportementaux composés en une décision.'
+        headline: "Un appel renvoie une image de risque complète : e-mail, IP, téléphone
+          et signaux comportementaux composés en une décision."
         input: |
           {
             "email": "user@tempmail.io",
@@ -225,21 +225,21 @@ fr:
         d'appeler séparément validation, réseau et texte puis de construire le scoring
         vous-même, le moteur identité et risque renvoie une décision structurée unique.
       signals:
-      - Validation e-mail et détection jetable
-      - Validation téléphone et recherche opérateur
-      - Géolocalisation IP et détection VPN/proxy
-      - ASN et renseignement sur les menaces
-      - Signaux d'âge et réputation de domaine
-      - Score de risque du contenu texte
+        - Validation e-mail et détection jetable
+        - Validation téléphone et recherche opérateur
+        - Géolocalisation IP et détection VPN/proxy
+        - ASN et renseignement sur les menaces
+        - Signaux d'âge et réputation de domaine
+        - Score de risque du contenu texte
       use_cases:
-      - title: Protection à l'inscription
-        body: Bloquez e-mails jetables, inscriptions VPN et IP à haut risque.
-      - title: Détection de fraude
-        body: Scorez les utilisateurs avant transaction ou accès aux fonctions sensibles.
-      - title: Détection de bots
-        body: Identifiez le trafic automatisé via signaux réseau et comportementaux.
-      - title: Score de risque de compte
-        body: Réévaluez les comptes existants en cas d'activité anormale.
+        - title: Protection à l'inscription
+          body: Bloquez e-mails jetables, inscriptions VPN et IP à haut risque.
+        - title: Détection de fraude
+          body: Scorez les utilisateurs avant transaction ou accès aux fonctions sensibles.
+        - title: Détection de bots
+          body: Identifiez le trafic automatisé via signaux réseau et comportementaux.
+        - title: Score de risque de compte
+          body: Réévaluez les comptes existants en cas d'activité anormale.
     index:
       apis_catalog_cta: Parcourir les APIs
       apis_catalog_subtitle: Chaque point de terminaison actif et bêta dans un catalogue
@@ -250,41 +250,41 @@ fr:
           blurb: Nettoyez, validez et standardisez les saisies utilisateur sur toute
             votre plateforme.
           signals:
-          - Validation des entrées
-          - Normalisation de texte
-          - Modération de contenu
+            - Validation des entrées
+            - Normalisation de texte
+            - Modération de contenu
           title: Système intégrité des données
         developer_utilities:
-          blurb: 'Des outils utiles à ne pas reconstruire : QR, encodage, conversions
-            et plus.'
+          blurb: "Des outils utiles à ne pas reconstruire : QR, encodage, conversions
+            et plus."
           signals:
-          - Codes QR
-          - Encodage et conversions
-          - Utilitaires divers
+            - Codes QR
+            - Encodage et conversions
+            - Utilitaires divers
           title: Utilitaires développeur
         global_data:
           blurb: Alimentez des produits internationaux avec des données de localisation
             précises en temps réel et conformes.
           signals:
-          - Géocodage
-          - Fuseaux horaires et jours fériés
-          - Intelligence d'adresse
+            - Géocodage
+            - Fuseaux horaires et jours fériés
+            - Intelligence d'adresse
           title: Système données mondiales
         identity_risk:
           blurb: Protégez votre produit des faux utilisateurs, de la fraude et des
             mauvaises données avant qu'elles n'atteignent votre base.
           signals:
-          - Score de risque
-          - Intelligence e-mail, téléphone et IP
-          - Signaux de domaine et comportementaux
+            - Score de risque
+            - Intelligence e-mail, téléphone et IP
+            - Signaux de domaine et comportementaux
           title: Système identité et risque
         payments_intelligence:
           blurb: Validez et enrichissez les données financières pour réduire les échecs
             de paiement et détecter les transactions à risque.
           signals:
-          - Validation BIN et carte
-          - Contrôles IBAN / SWIFT
-          - Signaux de risque transactionnel
+            - Validation BIN et carte
+            - Contrôles IBAN / SWIFT
+            - Signaux de risque transactionnel
           title: Système intelligence paiements
       explore_cta: Explorer le système
       grid_heading: Systèmes de niveau production
@@ -302,10 +302,10 @@ fr:
       utilities_kicker: Extras
     payments-intelligence:
       endpoints:
-      - method: POST
-        path: "/v1/transaction/risk"
-        description: Score une transaction pour fraude et décalage de pays. À utiliser
-          avant autorisation d'actions à forte valeur.
+        - method: POST
+          path: "/v1/transaction/risk"
+          description: Score une transaction pour fraude et décalage de pays. À utiliser
+            avant autorisation d'actions à forte valeur.
       engine:
         endpoint_method: POST
         endpoint_path: "/v1/systems/payment/validate"
@@ -348,21 +348,21 @@ fr:
         en un appel, en combinant signaux finance et réseau sans orchestration de
         votre part.
       signals:
-      - Recherche BIN et détection de marque
-      - Validation format et checksum IBAN
-      - Vérification code SWIFT/BIC
-      - Géolocalisation IP et correspondance pays
-      - Détection VPN pour anomalies de facturation
+        - Recherche BIN et détection de marque
+        - Validation format et checksum IBAN
+        - Vérification code SWIFT/BIC
+        - Géolocalisation IP et correspondance pays
+        - Détection VPN pour anomalies de facturation
       use_cases:
-      - title: Validation au checkout
-        body: Vérifiez BIN, IBAN et SWIFT avant envoi au processeur.
-      - title: Détection de fraude
-        body: Signalez les transactions dont le pays de facturation ne correspond
-          pas à l'IP.
-      - title: Onboarding fintech
-        body: Validez les identifiants financiers pendant l'inscription.
-      - title: Optimisation du taux de succès
-        body: Réduisez les refus en pré-validant les données avant soumission.
+        - title: Validation au checkout
+          body: Vérifiez BIN, IBAN et SWIFT avant envoi au processeur.
+        - title: Détection de fraude
+          body: Signalez les transactions dont le pays de facturation ne correspond
+            pas à l'IP.
+        - title: Onboarding fintech
+          body: Validez les identifiants financiers pendant l'inscription.
+        - title: Optimisation du taux de succès
+          body: Réduisez les refus en pré-validant les données avant soumission.
     show:
       api_endpoints: Points de terminaison de l'API
       api_reference: Référence API

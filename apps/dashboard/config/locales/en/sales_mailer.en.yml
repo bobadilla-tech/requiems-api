@@ -5,11 +5,11 @@ en:
       a_potential_enterprise_customer_wants: A potential enterprise customer wants
         to talk to sales
       company: Company
-      company_company: 'Company: %{company}'
+      company_company: "Company: %{company}"
       contact_person: Contact Person
-      contact_person_name: 'Contact Person: %{name}'
+      contact_person_name: "Contact Person: %{name}"
       email: Email
-      email_email: 'Email: %{email}'
+      email_email: "Email: %{email}"
       message_specific_needs: Message / Specific Needs
-      reminder: 'Reminder:'
-      reply_directly_to_this: 'Reply directly to this email to contact: %{email}'
+      reminder: "Reminder:"
+      reply_directly_to_this: "Reply directly to this email to contact: %{email}"

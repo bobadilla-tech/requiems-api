@@ -3,7 +3,6 @@
 
     <div class="grid md:grid-cols-2 gap-12">
 
-      <!-- Coverage -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">
@@ -17,20 +16,15 @@
           </p>
         </div>
 
-        <!-- Mock response card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">GET /v1/text/thesaurus/happy → 200 OK</div>
-          <div>
-            <span class="text-gray-500">{</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"word"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"happy"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"synonyms"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span><span class="text-amber-300">"joyful"</span><span class="text-gray-500">,</span> <span class="text-amber-300">"cheerful"</span><span class="text-gray-500">,</span> <span class="text-amber-300">"content"</span><span class="text-gray-500">, …],</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"antonyms"</span><span class="text-gray-500">:</span> <span class="text-gray-500">[</span><span class="text-amber-300">"sad"</span><span class="text-gray-500">,</span> <span class="text-amber-300">"unhappy"</span><span class="text-gray-500">,</span> <span class="text-amber-300">"miserable"</span><span class="text-gray-500">, …]</span><br>
-            <span class="text-gray-500">}</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "word": "happy",
+  "synonyms": ["joyful", "cheerful", "content"],
+  "antonyms": ["sad", "unhappy", "miserable"]
+}
+        <% end %>
       </div>
 
-      <!-- Simplicity -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">
@@ -44,15 +38,11 @@
           </p>
         </div>
 
-        <!-- Mock request card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
-          <div>
-            <span class="text-sky-300">GET</span> <span class="text-gray-300">/v1/text/thesaurus/happy</span><br><br>
-            <span class="text-gray-500"># Headers</span><br>
-            <span class="text-sky-300">requiems-api-key</span><span class="text-gray-500">:</span> <span class="text-amber-300">YOUR_API_KEY</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/text/thesaurus/happy
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+        <% end %>
       </div>
 
     </div>

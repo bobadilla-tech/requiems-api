@@ -12,20 +12,20 @@ es:
       invalid: Inválido
       json_response: Respuesta JSON
       latency: Latencia media inferior a 300 ms
-      'no': "✗ No"
+      "no": "✗ No"
       performance: Actuación
       rest_api: API REST
       uptime: 99,9% de tiempo de actividad
       utilities: Explorar utilidades
       valid: Válido
       view: Vista
-      'yes': "✓ Sí"
+      "yes": "✓ Sí"
     danger_zone:
       cancel_btn: Cancelar
       default_bullets:
-      - Todas tus claves API serán revocadas inmediatamente
-      - Tu suscripción será cancelada
-      - Todos los datos de uso serán eliminados permanentemente
+        - Todas tus claves API serán revocadas inmediatamente
+        - Tu suscripción será cancelada
+        - Todos los datos de uso serán eliminados permanentemente
       default_description: Elimina permanentemente tu cuenta y todos los datos asociados.
         Esta acción no se puede deshacer.
       default_title: Eliminar cuenta
@@ -89,8 +89,8 @@ es:
       environment: Ambiente
       joined: Unido
       monthly: Mensual
-      'no': 'No'
-      'yes': Sí
+      "no": "No"
+      "yes": Sí
     nav:
       api_keys: Claves API
       apis: APIs

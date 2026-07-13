@@ -692,7 +692,20 @@ fr:
         breakdown_body: La répartition montre comment le modèle distribue la confiance entre les trois classes — totalisant toujours 1,0. Utile pour les textes ambigus ou au ton mixte.
     unit_conversion:
       api_combinations:
-        unit_conversion_becomes_even_more: La conversion d'unités devient encore plus utile lorsqu'elle est combinée avec d'autres Requiems API.
+        heading: Utilisez-la avec des API complémentaires.
+        subheading: La conversion d'unités devient encore plus utile combinée à d'autres API Requiems.
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        exchange_pair: Conversion d'unités + Taux de change
+        exchange_benefit: Convertissez mesures physiques et devises dans le même flux. Idéal pour le commerce international, les calculateurs d'expédition et les outils de tarification.
+        exchange_outcome: Un seul pipeline pour quantité et argent — poids d'expédition et coût final dans le même flux.
+        geocode_pair: Conversion d'unités + Géocodage
+        geocode_benefit: Transformez distances et emplacements ensemble. Convertissez miles en kilomètres tout en calculant itinéraires, portées de livraison ou estimations de voyage.
+        geocode_outcome: Outils de localisation sensibles à la distance sans coder en dur les calculs d'unités.
+        numbase_pair: Conversion d'unités + Conversion de base numérique
+        numbase_benefit: Gérez les transformations de mesure et numériques dans des applications d'ingénierie, d'éducation et techniques.
+        numbase_outcome: Conversion de mesure et de base depuis un seul fournisseur d'API.
+        unit_conversion_becomes_even_more: La conversion d'unités devient encore plus utile combinée à d'autres API Requiems.
       demo:
         error_fill_all_fields: Remplissez tous les champs.
         error_generic: Une erreur s'est produite. Veuillez réessayer.
@@ -708,6 +721,18 @@ fr:
         result_heading: Résultat de conversion
         value_label: Valeur
       hero:
+        title_html: "Convertissez des mesures instantanément<br class=\"hidden sm:block\"> pour tous les types d'unités."
+        subtitle: "Conversions de longueur, poids, volume, température, surface et vitesse — avec des résultats précis, des formules et des endpoints de découverte d'unités dans une seule API."
+        group_length: "Longueur"
+        group_weight: "Poids"
+        group_temperature: "Température"
+        group_volume: "Volume"
+        group_speed: "Vitesse"
+        group_area: "Surface"
+        stone: "Stone"
+        milligrams: "Milligrammes"
+        teaspoons: "Cuillères à café"
+        tablespoons: "Cuillères à soupe"
         acres: Acres
         celsius: Celsius
         centimeters: Centimètres
@@ -862,6 +887,7 @@ fr:
         error_rate_limit: "Trop de requêtes. Attendez un instant et réessayez."
         error_generic: "Une erreur s'est produite. Réessayez."
         error_no_data: "Aucune donnée de fuseau horaire trouvée pour cet emplacement."
+        result_failed_heading: "Échec de la recherche"
         badge_found: "Trouvé"
         badge_yes: "✓ Oui"
         badge_no: "✗ Non"
@@ -914,12 +940,17 @@ fr:
       api_combinations:
         heading: "Utilisez-la avec des API complémentaires."
         subheading: "Timezone fonctionne encore mieux associée à d'autres API Requiems."
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
         worldtime_pair: "Timezone + World Time"
         worldtime_benefit: "Résolvez d'abord le nom du fuseau horaire IANA, puis interrogez World Time directement par son nom pour des recherches répétées plus légères."
+        worldtime_outcome: "Des recherches suivantes plus rapides une fois l'ID de fuseau connu."
         geocode_pair: "Timezone + Geocoding"
         geocode_benefit: "Convertissez une adresse en texte libre en coordonnées, puis utilisez ces coordonnées dans Timezone pour un pipeline complet de localisation à l'heure."
+        geocode_outcome: "Transformez toute adresse en heure locale en deux appels API."
         cities_pair: "Timezone + Cities"
         cities_benefit: "Consultez les métadonnées de la ville — population, pays, coordonnées — en même temps que les informations de fuseau horaire, dans le même flux de requête."
+        cities_outcome: "Un contexte de localisation plus riche pour les agendas et les interfaces horaires."
       faq:
         heading: "Foire aux questions"
         support_prompt: "Vous avez encore des questions ?"
@@ -1014,24 +1045,27 @@ fr:
           frappe et améliorez la fluidité du contenu généré automatiquement."
         ai_tags: "IA, LLM, Qualité de sortie"
       api_combinations:
-        heading: "Associez-la à d'autres API"
+        heading: Associez-la à d'autres API
         subheading:
-          "La correction orthographique est plus efficace dans un pipeline de
-          traitement de texte. Combinez-la avec d'autres API Requiems pour une
-          analyse de contenu plus approfondie."
-        sentiment_pair: "Correction orthographique + Analyse de sentiment"
+          La vérification orthographique est plus efficace dans un pipeline de traitement de texte.
+          Combinez-la avec d'autres API Requiems pour une analyse de contenu plus poussée.
+        label_benefit: "Avantage :"
+        label_outcome: "Résultat :"
+        sentiment_pair: Correcteur orthographique + Analyse de sentiment
         sentiment_benefit:
-          "Corrigez d'abord les erreurs d'orthographe, puis analysez le
-          sentiment du texte corrigé pour une classification plus précise du
-          ton."
-        language_pair: "Correction orthographique + Détection de langue"
+          Corrigez d'abord les fautes, puis analysez le sentiment du texte
+          corrigé pour une classification de ton plus précise.
+        sentiment_outcome: Des scores de sentiment plus fiables sur un texte nettoyé.
+        language_pair: Correcteur orthographique + Détection de langue
         language_benefit:
-          "Détectez la langue d'entrée avant la correction orthographique.
-          Acheminez automatiquement le texte vers le modèle de langue approprié."
-        email_pair: "Correction orthographique + Normalisateur d'e-mail"
+          Détectez la langue d'entrée avant la correction. Acheminez automatiquement
+          le texte vers le bon modèle linguistique.
+        language_outcome: Correction adaptée à la langue avant le NLP en aval.
+        email_pair: Correcteur orthographique + Normaliseur d'e-mail
         email_benefit:
-          "Normalisez les adresses e-mail et vérifiez l'orthographe du nom
-          associé ou du corps du message en un seul pipeline."
+          Normalisez les adresses e-mail et corrigez l'orthographe du nom affiché
+          ou du corps du message dans un même flux.
+        email_outcome: Des contacts et des textes de message plus propres dans le même flux.
       faq:
         heading: "Foire aux questions"
         support_prompt: "Vous avez encore des questions ?"
@@ -1072,6 +1106,7 @@ fr:
         error_generic: "Une erreur s'est produite. Réessayez."
         error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
         error_no_data: "Aucune donnée renvoyée."
+        result_failed_heading: "Échec de la vérification orthographique"
         result_heading: "Résultat"
         label_corrected: "Texte corrigé"
         label_errors_found: "Erreurs trouvées"
@@ -1424,6 +1459,7 @@ fr:
         error_generic: "Une erreur s'est produite. Réessayez."
         error_network: "Erreur réseau. Veuillez vérifier votre connexion."
         error_no_data: "Aucune donnée retournée."
+        result_failed_heading: "Échec de la génération"
         badge_live: "En direct"
         avatar_alt: "Avatar de l'utilisateur"
         label_name: "Nom"
@@ -1458,6 +1494,7 @@ fr:
         error_rate_limit: "Trop de requêtes. Attendez un moment et réessayez."
         error_generic: "Une erreur s'est produite. Réessayez."
         error_no_data: "Impossible de générer la grille. Réessayez."
+        result_failed_heading: "Échec de la génération du puzzle"
         badge_easy: "Facile"
         badge_medium: "Moyen"
         badge_hard: "Difficile"

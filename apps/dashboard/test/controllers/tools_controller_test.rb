@@ -76,4 +76,22 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='thesaurus-demo']"
   end
+
+  test "spell check tool page renders successfully" do
+    get "/en/tools/spell-check"
+    assert_response :success
+    assert_select "[data-controller='spell-check-demo']"
+  end
+
+  test "random user tool page renders successfully" do
+    get "/en/tools/random-user"
+    assert_response :success
+    assert_select "[data-controller='random-user-demo']"
+  end
+
+  test "sudoku tool page renders successfully" do
+    get "/en/tools/sudoku"
+    assert_response :success
+    assert_select "[data-controller='sudoku-demo']"
+  end
 end

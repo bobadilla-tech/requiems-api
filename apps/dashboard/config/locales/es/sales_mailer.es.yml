@@ -5,12 +5,12 @@ es:
       a_potential_enterprise_customer_wants: Un cliente empresarial potencial quiere
         hablar con el departamento de ventas.
       company: Empresa
-      company_company: 'Empresa: %{company}'
+      company_company: "Empresa: %{company}"
       contact_person: Persona de contacto
-      contact_person_name: 'Persona de contacto: %{name}'
+      contact_person_name: "Persona de contacto: %{name}"
       email: Correo electrónico
-      email_email: 'Correo electrónico: %{email}'
+      email_email: "Correo electrónico: %{email}"
       message_specific_needs: Mensaje / Necesidades específicas
-      reminder: 'Recordatorio:'
-      reply_directly_to_this: 'Responda directamente a este correo electrónico para
-        contactar con: %{email}'
+      reminder: "Recordatorio:"
+      reply_directly_to_this: "Responda directamente a este correo electrónico para
+        contactar con: %{email}"

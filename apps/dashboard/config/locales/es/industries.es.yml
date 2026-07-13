@@ -4,23 +4,23 @@ es:
     agencies:
       api_mapping:
         apis:
-        - title: Validación
-          description: Depura las listas de correo y las bases de datos telefónicas
-            de tus clientes antes de cada campaña para proteger la reputación del
-            remitente y reducir costos.
-          division: validation
-        - title: Redes
-          description: Búsqueda de dominios y WHOIS para investigación competitiva,
-            monitoreo de marca y auditorías de clientes.
-          division: networking
-        - title: Ubicaciones
-          description: Datos de zona horaria y geolocalización para programar campañas,
-            localizar landing pages y generar reportes.
-          division: places
-        - title: Texto e idioma
-          description: Detección de idioma y utilidades de texto para proyectos multilingües
-            y moderación de contenido.
-          division: text
+          - title: Validación
+            description: Depura las listas de correo y las bases de datos telefónicas
+              de tus clientes antes de cada campaña para proteger la reputación del
+              remitente y reducir costos.
+            division: validation
+          - title: Redes
+            description: Búsqueda de dominios y WHOIS para investigación competitiva,
+              monitoreo de marca y auditorías de clientes.
+            division: networking
+          - title: Ubicaciones
+            description: Datos de zona horaria y geolocalización para programar campañas,
+              localizar landing pages y generar reportes.
+            division: places
+          - title: Texto e idioma
+            description: Detección de idioma y utilidades de texto para proyectos multilingües
+              y moderación de contenido.
+            division: text
         heading: API diseñadas para flujos de trabajo de agencias.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -29,8 +29,8 @@ es:
           con la infraestructura de su agencia.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para agencias: Datos de clientes limpios, automatizaciones
-          más rápidas, mejor capacidad de entrega.'
+        headline: "API para agencias: Datos de clientes limpios, automatizaciones
+          más rápidas, mejor capacidad de entrega."
         secondary_cta: Explorar API
         subheadline: API de validación de correo electrónico y teléfono, enriquecimiento
           de datos y automatización para agencias de marketing y desarrollo digital.
@@ -38,41 +38,41 @@ es:
       proof_points:
         heading: "¿Qué equipos de agencias envían con Requiems?"
         items:
-        - title: Mejor ROI en campañas de email
-          description: 'Depura las listas antes de cada envío: la tasa de rebote baja,
-            la entregabilidad sube y el CPL cae.'
-          metric: "–50% rebotes"
-        - title: Auditorías de clientes más rápidas
-          description: Automatiza las búsquedas de WHOIS y dominios para informes
-            de protección de marca sin investigación manual.
-          metric: 10× más rápido
-        - title: Campañas localizadas a escala
-          description: Detecta la zona horaria y el país del usuario para programar
-            y localizar campañas sin segmentación manual.
-          metric: Instantáneo
-        - title: Una sola clave para todos los proyectos
-          description: APIs de validación, redes y texto bajo una sola cuenta. Pagas
-            por llamada, no por cliente.
-          metric: 1 clave de API
+          - title: Mejor ROI en campañas de email
+            description: "Depura las listas antes de cada envío: la tasa de rebote baja,
+              la entregabilidad sube y el CPL cae."
+            metric: "–50% rebotes"
+          - title: Auditorías de clientes más rápidas
+            description: Automatiza las búsquedas de WHOIS y dominios para informes
+              de protección de marca sin investigación manual.
+            metric: 10× más rápido
+          - title: Campañas localizadas a escala
+            description: Detecta la zona horaria y el país del usuario para programar
+              y localizar campañas sin segmentación manual.
+            metric: Instantáneo
+          - title: Una sola clave para todos los proyectos
+            description: APIs de validación, redes y texto bajo una sola cuenta. Pagas
+              por llamada, no por cliente.
+            metric: 1 clave de API
     ecommerce:
       api_mapping:
         apis:
-        - title: Finanzas
-          description: Búsqueda de BIN y validación de tarjetas para detectar tarjetas
-            inválidas antes de que lleguen a la pasarela de pago.
-          division: finance
-        - title: Validación
-          description: Valida los emails y teléfonos del cliente en el checkout para
-            reducir confirmaciones de pedido fallidas y errores en el envío de OTP.
-          division: validation
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy y geolocaliza a los compradores para scoring
-            de fraude, precios por región y detección de zona de envío.
-          division: networking
-        - title: Ubicaciones
-          description: Geocodificación y datos de dirección para estimaciones de envío,
-            cálculo de impuestos y asignación de zonas de entrega.
-          division: places
+          - title: Finanzas
+            description: Búsqueda de BIN y validación de tarjetas para detectar tarjetas
+              inválidas antes de que lleguen a la pasarela de pago.
+            division: finance
+          - title: Validación
+            description: Valida los emails y teléfonos del cliente en el checkout para
+              reducir confirmaciones de pedido fallidas y errores en el envío de OTP.
+            division: validation
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy y geolocaliza a los compradores para scoring
+              de fraude, precios por región y detección de zona de envío.
+            division: networking
+          - title: Ubicaciones
+            description: Geocodificación y datos de dirección para estimaciones de envío,
+              cálculo de impuestos y asignación de zonas de entrega.
+            division: places
         heading: APIs diseñadas para flujos de trabajo de comercio electrónico
       final_cta:
         cta: Reserva una llamada estratégica
@@ -81,8 +81,8 @@ es:
           plataforma de comercio electrónico.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'APIs para comercio electrónico: Menos fallos en el proceso de compra,
-          datos más limpios, mayor tasa de conversión.'
+        headline: "APIs para comercio electrónico: Menos fallos en el proceso de compra,
+          datos más limpios, mayor tasa de conversión."
         secondary_cta: Explorar API
         subheadline: API de validación, comprobación de pagos, detección de fraudes
           y geolocalización para tiendas online y plataformas de comercio electrónico.
@@ -90,41 +90,41 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de comercio electrónico con Requiems?"
         items:
-        - title: Mayor tasa de éxito en pagos
-          description: 'Valida el BIN de la tarjeta del lado del cliente antes de
-            enviarla al procesador: mejora la tasa de éxito en el primer intento.'
-          metric: "+15% de éxito"
-        - title: Menos confirmaciones perdidas
-          description: Valida email y teléfono en el checkout para que las confirmaciones
-            de pedido y los enlaces de seguimiento siempre lleguen.
-          metric: "–35% de fallos"
-        - title: Scoring de fraude en tiempo real
-          description: Marca IPs de VPN y datacenters en pedidos de alto valor para
-            verificación adicional antes del envío.
-          metric: Tiempo real
-        - title: Envío e impuestos auto-localizados
-          description: Resuelve el país y la región desde la IP para mostrar el costo
-            de envío e impuestos correctos sin pedir ubicación.
-          metric: 180+ países
+          - title: Mayor tasa de éxito en pagos
+            description: "Valida el BIN de la tarjeta del lado del cliente antes de
+              enviarla al procesador: mejora la tasa de éxito en el primer intento."
+            metric: "+15% de éxito"
+          - title: Menos confirmaciones perdidas
+            description: Valida email y teléfono en el checkout para que las confirmaciones
+              de pedido y los enlaces de seguimiento siempre lleguen.
+            metric: "–35% de fallos"
+          - title: Scoring de fraude en tiempo real
+            description: Marca IPs de VPN y datacenters en pedidos de alto valor para
+              verificación adicional antes del envío.
+            metric: Tiempo real
+          - title: Envío e impuestos auto-localizados
+            description: Resuelve el país y la región desde la IP para mostrar el costo
+              de envío e impuestos correctos sin pedir ubicación.
+            metric: 180+ países
     edtech:
       api_mapping:
         apis:
-        - title: Validación
-          description: Valida los emails y teléfonos de estudiantes e instructores
-            en el registro para asegurar el acceso a los cursos y las notificaciones.
-          division: validation
-        - title: Ubicaciones
-          description: Datos de zona horaria para programar clases en vivo, coordinar
-            cohortes y mostrar fechas límite entre zonas horarias.
-          division: places
-        - title: Texto e idioma
-          description: Detección de idioma para enrutar contenido adaptativo y filtrar
-            lenguaje ofensivo en foros de estudiantes.
-          division: text
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy para hacer cumplir reglas de supervisión
-            y bloquear contenido por licencias regionales.
-          division: networking
+          - title: Validación
+            description: Valida los emails y teléfonos de estudiantes e instructores
+              en el registro para asegurar el acceso a los cursos y las notificaciones.
+            division: validation
+          - title: Ubicaciones
+            description: Datos de zona horaria para programar clases en vivo, coordinar
+              cohortes y mostrar fechas límite entre zonas horarias.
+            division: places
+          - title: Texto e idioma
+            description: Detección de idioma para enrutar contenido adaptativo y filtrar
+              lenguaje ofensivo en foros de estudiantes.
+            division: text
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy para hacer cumplir reglas de supervisión
+              y bloquear contenido por licencias regionales.
+            division: networking
         heading: API diseñadas para flujos de trabajo de tecnología educativa.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -133,8 +133,8 @@ es:
           en su producto de tecnología educativa.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para tecnología educativa: estudiantes verificados, alcance
-          global, menos incidencias de soporte.'
+        headline: "API para tecnología educativa: estudiantes verificados, alcance
+          global, menos incidencias de soporte."
         secondary_cta: Explorar API
         subheadline: API para la validación de correo electrónico y teléfono, la programación
           según la zona horaria y la prevención de spam en plataformas de aprendizaje
@@ -143,43 +143,43 @@ es:
       proof_points:
         heading: Lo que los equipos de tecnología educativa envían con Requiems
         items:
-        - title: Menos estudiantes perdidos
-          description: Valida los emails al registrarse para que los correos de bienvenida,
-            invitaciones y certificados lleguen a la bandeja correcta.
-          metric: "–45% rebotes"
-        - title: Programación correcta por zona horaria
-          description: Muestra los horarios de clase en vivo en la zona horaria local
-            de cada estudiante automáticamente, sin sesiones perdidas.
-          metric: Instantáneo
-        - title: Comunidades estudiantiles más seguras
-          description: Filtra el lenguaje ofensivo en publicaciones y comentarios
-            del lado del servidor antes de publicarse.
-          metric: Tiempo real
-        - title: Lanza en un sprint
-          description: Endpoints REST con ejemplos listos para usar. La mayoría de
-            los equipos de EdTech lanzan en menos de una semana.
-          metric: "< 1 semana"
+          - title: Menos estudiantes perdidos
+            description: Valida los emails al registrarse para que los correos de bienvenida,
+              invitaciones y certificados lleguen a la bandeja correcta.
+            metric: "–45% rebotes"
+          - title: Programación correcta por zona horaria
+            description: Muestra los horarios de clase en vivo en la zona horaria local
+              de cada estudiante automáticamente, sin sesiones perdidas.
+            metric: Instantáneo
+          - title: Comunidades estudiantiles más seguras
+            description: Filtra el lenguaje ofensivo en publicaciones y comentarios
+              del lado del servidor antes de publicarse.
+            metric: Tiempo real
+          - title: Lanza en un sprint
+            description: Endpoints REST con ejemplos listos para usar. La mayoría de
+              los equipos de EdTech lanzan en menos de una semana.
+            metric: "< 1 semana"
     energy:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Geocodificación, normalización de direcciones y datos de zona
-            horaria para mapeo de activos, despacho de medidores y enrutamiento de
-            cortes.
-          division: places
-        - title: Validación
-          description: Valida los contactos de clientes e instaladores al crear la
-            cuenta para mantener confiables la facturación y las comunicaciones de
-            servicio.
-          division: validation
-        - title: Finanzas
-          description: Datos de moneda y validación de pagos para contratos energéticos
-            transfronterizos y facturación de clientes.
-          division: finance
-        - title: Inteligencia de IP
-          description: Geolocalización para control de acceso a portales de activos
-            remotos y detección de jurisdicción regulatoria.
-          division: networking
+          - title: Ubicaciones
+            description: Geocodificación, normalización de direcciones y datos de zona
+              horaria para mapeo de activos, despacho de medidores y enrutamiento de
+              cortes.
+            division: places
+          - title: Validación
+            description: Valida los contactos de clientes e instaladores al crear la
+              cuenta para mantener confiables la facturación y las comunicaciones de
+              servicio.
+            division: validation
+          - title: Finanzas
+            description: Datos de moneda y validación de pagos para contratos energéticos
+              transfronterizos y facturación de clientes.
+            division: finance
+          - title: Inteligencia de IP
+            description: Geolocalización para control de acceso a portales de activos
+              remotos y detección de jurisdicción regulatoria.
+            division: networking
         heading: API diseñadas para flujos de trabajo energéticos
       final_cta:
         cta: Reserva una llamada estratégica
@@ -188,8 +188,8 @@ es:
           en su plataforma energética.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para el sector energético: datos precisos de los activos, gestión
-          de envíos más inteligente y cobertura global.'
+        headline: "API para el sector energético: datos precisos de los activos, gestión
+          de envíos más inteligente y cobertura global."
         secondary_cta: Explorar API
         subheadline: API de geolocalización, validación de direcciones y zonas horarias
           para plataformas de servicios públicos, energías renovables y redes inteligentes.
@@ -197,41 +197,41 @@ es:
       proof_points:
         heading: "¿Qué equipos de energía envían con Requiems?"
         items:
-        - title: Coordenadas de activos precisas
-          description: Geocodifica direcciones de medidores y turbinas al ingreso
-            para enrutamiento de despacho, aislamiento de cortes y mapeo GIS.
-          metric: 99%+ de precisión
-        - title: Menos fallas de facturación
-          description: Valida los emails de clientes al registrarse para que las facturas,
-            alertas de corte y avisos de renovación se entreguen.
-          metric: "–40% de fallos"
-        - title: Programación correcta por zona horaria
-          description: Muestra las ventanas correctas de despacho y mantenimiento
-            local para equipos de infraestructura multi-región.
-          metric: Cobertura global
-        - title: Una sola clave de API
-          description: APIs de geolocalización, validación y finanzas bajo una sola
-            clave, sin complejidad multi-proveedor.
-          metric: 1 integración
+          - title: Coordenadas de activos precisas
+            description: Geocodifica direcciones de medidores y turbinas al ingreso
+              para enrutamiento de despacho, aislamiento de cortes y mapeo GIS.
+            metric: 99%+ de precisión
+          - title: Menos fallas de facturación
+            description: Valida los emails de clientes al registrarse para que las facturas,
+              alertas de corte y avisos de renovación se entreguen.
+            metric: "–40% de fallos"
+          - title: Programación correcta por zona horaria
+            description: Muestra las ventanas correctas de despacho y mantenimiento
+              local para equipos de infraestructura multi-región.
+            metric: Cobertura global
+          - title: Una sola clave de API
+            description: APIs de geolocalización, validación y finanzas bajo una sola
+              clave, sin complejidad multi-proveedor.
+            metric: 1 integración
     fintech:
       api_mapping:
         apis:
-        - title: Finanzas
-          description: Búsqueda de BIN/IIN, validación de IBAN, verificación de código
-            SWIFT y datos de moneda para flujos de pago globales.
-          division: finance
-        - title: Inteligencia de IP
-          description: Detección de VPN/proxy, geolocalización de IP y búsqueda de
-            ASN para scoring de riesgo transaccional y cumplimiento geográfico.
-          division: networking
-        - title: Validación
-          description: Verificación de email y teléfono para onboarding KYC, entrega
-            de 2FA y flujos de recuperación de cuenta.
-          division: validation
-        - title: Ubicaciones
-          description: Datos de zona horaria y dirección para normalización de marcas
-            de tiempo de transacciones y detección de jurisdicción.
-          division: places
+          - title: Finanzas
+            description: Búsqueda de BIN/IIN, validación de IBAN, verificación de código
+              SWIFT y datos de moneda para flujos de pago globales.
+            division: finance
+          - title: Inteligencia de IP
+            description: Detección de VPN/proxy, geolocalización de IP y búsqueda de
+              ASN para scoring de riesgo transaccional y cumplimiento geográfico.
+            division: networking
+          - title: Validación
+            description: Verificación de email y teléfono para onboarding KYC, entrega
+              de 2FA y flujos de recuperación de cuenta.
+            division: validation
+          - title: Ubicaciones
+            description: Datos de zona horaria y dirección para normalización de marcas
+              de tiempo de transacciones y detección de jurisdicción.
+            division: places
         heading: API diseñadas para flujos de trabajo fintech
       final_cta:
         cta: Reserva una llamada estratégica
@@ -240,8 +240,8 @@ es:
           de trabajo financieros.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para Fintech: búsqueda de BIN, validación de IBAN y señales
-          de fraude en milisegundos.'
+        headline: "API para Fintech: búsqueda de BIN, validación de IBAN y señales
+          de fraude en milisegundos."
         secondary_cta: Explorar API
         subheadline: API para la validación de pagos, el enriquecimiento de datos
           KYC y la detección de fraudes en productos fintech e infraestructura financiera.
@@ -249,41 +249,41 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de tecnología financiera con Requiems?"
         items:
-        - title: Scoring de fraude en tiempo real
-          description: Puntúa transacciones combinando detección de VPN, geolocalización
-            de IP y señales de discrepancia en el país del BIN.
-          metric: "< 50ms"
-        - title: Onboarding KYC más rápido
-          description: Valida email y teléfono al registrarse antes de los controles
-            de identidad, con menos reverificaciones.
-          metric: "–40% reintentos"
-        - title: Datos de pago más limpios
-          description: 'Valida tarjetas por BIN y verifica IBANs antes de enviarlos
-            a los procesadores: bajan los rechazos y las disputas.'
-          metric: "+12% de éxito"
-        - title: Detección de jurisdicción
-          description: Detecta el país del usuario desde la IP para enrutamiento regulatorio,
-            selección de moneda y cumplimiento GDPR/PSD2.
-          metric: 180+ países
+          - title: Scoring de fraude en tiempo real
+            description: Puntúa transacciones combinando detección de VPN, geolocalización
+              de IP y señales de discrepancia en el país del BIN.
+            metric: "< 50ms"
+          - title: Onboarding KYC más rápido
+            description: Valida email y teléfono al registrarse antes de los controles
+              de identidad, con menos reverificaciones.
+            metric: "–40% reintentos"
+          - title: Datos de pago más limpios
+            description: "Valida tarjetas por BIN y verifica IBANs antes de enviarlos
+              a los procesadores: bajan los rechazos y las disputas."
+            metric: "+12% de éxito"
+          - title: Detección de jurisdicción
+            description: Detecta el país del usuario desde la IP para enrutamiento regulatorio,
+              selección de moneda y cumplimiento GDPR/PSD2.
+            metric: 180+ países
     gaming:
       api_mapping:
         apis:
-        - title: Inteligencia de IP
-          description: Geolocaliza jugadores para reglas de contenido regional, pools
-            de emparejamiento y detección de VPN/proxy.
-          division: networking
-        - title: Texto e idioma
-          description: Filtrado de lenguaje ofensivo y detección de idioma para chat
-            en el juego, nombres de usuario y foros de la comunidad.
-          division: text
-        - title: Validación
-          description: Valida emails y teléfonos de jugadores en el registro para
-            asegurar la recuperación de cuenta y entrega de notificaciones.
-          division: validation
-        - title: Finanzas
-          description: Búsqueda de BIN y validación de pagos para compras dentro del
-            juego y facturación de suscripciones.
-          division: finance
+          - title: Inteligencia de IP
+            description: Geolocaliza jugadores para reglas de contenido regional, pools
+              de emparejamiento y detección de VPN/proxy.
+            division: networking
+          - title: Texto e idioma
+            description: Filtrado de lenguaje ofensivo y detección de idioma para chat
+              en el juego, nombres de usuario y foros de la comunidad.
+            division: text
+          - title: Validación
+            description: Valida emails y teléfonos de jugadores en el registro para
+              asegurar la recuperación de cuenta y entrega de notificaciones.
+            division: validation
+          - title: Finanzas
+            description: Búsqueda de BIN y validación de pagos para compras dentro del
+              juego y facturación de suscripciones.
+            division: finance
         heading: API diseñadas para flujos de trabajo de videojuegos
       final_cta:
         cta: Reserva una llamada estratégica
@@ -292,8 +292,8 @@ es:
           de fraude en su plataforma de juegos.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para juegos: bloqueo regional, moderación de chat y detección
-          de fraude a gran escala.'
+        headline: "API para juegos: bloqueo regional, moderación de chat y detección
+          de fraude a gran escala."
         secondary_cta: Explorar API
         subheadline: API de geolocalización IP, moderación de contenido y detección
           de fraude para estudios de videojuegos y plataformas multijugador.
@@ -301,41 +301,41 @@ es:
       proof_points:
         heading: "¿Qué estudios de videojuegos incluyen Requiems en sus juegos?"
         items:
-        - title: Aplica reglas de contenido regional
-          description: Bloquea o redirige jugadores por país usando geolocalización
-            de IP en tiempo real, sin bases de datos GeoIP obsoletas.
-          metric: Tiempo real
-        - title: Chat multijugador más seguro
-          description: Filtra el chat del lado del servidor al enviarse. Las frases
-            de alto riesgo caen; los reincidentes reciben enfriamiento.
-          metric: Millones/min
-        - title: Reduce el abuso de niveles gratuitos
-          description: Marca IPs de VPN y datacenters que crean cuentas de prueba
-            desechables para proteger las métricas de conversión.
-          metric: "–60% de abuso"
-        - title: Cuentas que sí llegan a los jugadores
-          description: Valida el email en el registro para que los correos de restablecimiento
-            de contraseña y apelación nunca reboten.
-          metric: 99%+ de entrega
+          - title: Aplica reglas de contenido regional
+            description: Bloquea o redirige jugadores por país usando geolocalización
+              de IP en tiempo real, sin bases de datos GeoIP obsoletas.
+            metric: Tiempo real
+          - title: Chat multijugador más seguro
+            description: Filtra el chat del lado del servidor al enviarse. Las frases
+              de alto riesgo caen; los reincidentes reciben enfriamiento.
+            metric: Millones/min
+          - title: Reduce el abuso de niveles gratuitos
+            description: Marca IPs de VPN y datacenters que crean cuentas de prueba
+              desechables para proteger las métricas de conversión.
+            metric: "–60% de abuso"
+          - title: Cuentas que sí llegan a los jugadores
+            description: Valida el email en el registro para que los correos de restablecimiento
+              de contraseña y apelación nunca reboten.
+            metric: 99%+ de entrega
     government:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Validación de direcciones, geocodificación y datos regionales
-            para sistemas de permisos, mapeo de circunscripciones y entrega de beneficios.
-          division: places
-        - title: Validación
-          description: Verifica los emails y teléfonos de los ciudadanos al enviar
-            formularios para reducir notificaciones fallidas y registros duplicados.
-          division: validation
-        - title: Inteligencia de IP
-          description: Geolocalización y detección de proxy para control de acceso,
-            prevención de fraude y cumplimiento de jurisdicción.
-          division: networking
-        - title: Finanzas
-          description: Validación de IBAN y pagos para recaudación de impuestos, desembolso
-            de beneficios y procesos de licitación pública.
-          division: finance
+          - title: Ubicaciones
+            description: Validación de direcciones, geocodificación y datos regionales
+              para sistemas de permisos, mapeo de circunscripciones y entrega de beneficios.
+            division: places
+          - title: Validación
+            description: Verifica los emails y teléfonos de los ciudadanos al enviar
+              formularios para reducir notificaciones fallidas y registros duplicados.
+            division: validation
+          - title: Inteligencia de IP
+            description: Geolocalización y detección de proxy para control de acceso,
+              prevención de fraude y cumplimiento de jurisdicción.
+            division: networking
+          - title: Finanzas
+            description: Validación de IBAN y pagos para recaudación de impuestos, desembolso
+              de beneficios y procesos de licitación pública.
+            division: finance
         heading: API diseñadas para flujos de trabajo gubernamentales
       final_cta:
         cta: Reserva una llamada estratégica
@@ -344,8 +344,8 @@ es:
           de fraude con su plataforma gubernamental.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para el gobierno: Direcciones precisas, identidades verificadas,
-          confianza pública.'
+        headline: "API para el gobierno: Direcciones precisas, identidades verificadas,
+          confianza pública."
         secondary_cta: Explorar API
         subheadline: API de validación de direcciones, geolocalización y verificación
           de contactos para plataformas del sector público y servicios de gobierno
@@ -354,42 +354,42 @@ es:
       proof_points:
         heading: "¿Qué equipos gubernamentales envían con Requiems?"
         items:
-        - title: Menos avisos devueltos
-          description: Valida los contactos de los ciudadanos antes de enviar avisos
-            de cumplimiento, actualizaciones de beneficios y recordatorios de votación.
-          metric: "–50% de fallos"
-        - title: Geocodificación precisa a escala
-          description: Normaliza y geocodifica las direcciones enviadas para asignación
-            de zonas, enrutamiento de emergencias y reportes.
-          metric: Millones/día
-        - title: Detección de fraude en la entrada
-          description: Detecta VPN/proxy y marca intentos de acceso fuera de jurisdicción
-            en portales protegidos antes de la autenticación.
-          metric: Tiempo real
-        - title: Integración REST segura
-          description: Endpoints solo HTTPS, sin datos personales almacenados. Arquitectura
-            orientada al cumplimiento desde el primer día.
-          metric: Listo para SOC
+          - title: Menos avisos devueltos
+            description: Valida los contactos de los ciudadanos antes de enviar avisos
+              de cumplimiento, actualizaciones de beneficios y recordatorios de votación.
+            metric: "–50% de fallos"
+          - title: Geocodificación precisa a escala
+            description: Normaliza y geocodifica las direcciones enviadas para asignación
+              de zonas, enrutamiento de emergencias y reportes.
+            metric: Millones/día
+          - title: Detección de fraude en la entrada
+            description: Detecta VPN/proxy y marca intentos de acceso fuera de jurisdicción
+              en portales protegidos antes de la autenticación.
+            metric: Tiempo real
+          - title: Integración REST segura
+            description: Endpoints solo HTTPS, sin datos personales almacenados. Arquitectura
+              orientada al cumplimiento desde el primer día.
+            metric: Listo para SOC
     healthcare:
       api_mapping:
         apis:
-        - title: Validación
-          description: Valida emails y teléfonos de pacientes en el registro para
-            que los recordatorios de citas y resultados de laboratorio lleguen a la
-            persona correcta.
-          division: validation
-        - title: Ubicaciones
-          description: Datos de zona horaria y geocodificación para programación de
-            citas, mapeo de proveedores y detección de zona de cobertura.
-          division: places
-        - title: Inteligencia de IP
-          description: Geolocaliza pacientes para reglas de elegibilidad de telemedicina,
-            cumplimiento de licencias y enrutamiento regional.
-          division: networking
-        - title: Texto e idioma
-          description: Detección de idioma para comunicaciones multilingües con pacientes
-            y procesamiento de notas clínicas.
-          division: text
+          - title: Validación
+            description: Valida emails y teléfonos de pacientes en el registro para
+              que los recordatorios de citas y resultados de laboratorio lleguen a la
+              persona correcta.
+            division: validation
+          - title: Ubicaciones
+            description: Datos de zona horaria y geocodificación para programación de
+              citas, mapeo de proveedores y detección de zona de cobertura.
+            division: places
+          - title: Inteligencia de IP
+            description: Geolocaliza pacientes para reglas de elegibilidad de telemedicina,
+              cumplimiento de licencias y enrutamiento regional.
+            division: networking
+          - title: Texto e idioma
+            description: Detección de idioma para comunicaciones multilingües con pacientes
+              y procesamiento de notas clínicas.
+            division: text
         heading: API diseñadas para flujos de trabajo en el sector sanitario.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -398,8 +398,8 @@ es:
           en sus flujos de trabajo clínicos.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para el sector sanitario: contactos de pacientes verificados,
-          programación precisa, datos limpios.'
+        headline: "API para el sector sanitario: contactos de pacientes verificados,
+          programación precisa, datos limpios."
         secondary_cta: Explorar API
         subheadline: Validación de teléfono y correo electrónico, programación de
           citas según la zona horaria y API de geolocalización para plataformas de
@@ -408,41 +408,41 @@ es:
       proof_points:
         heading: "¿Qué equipos sanitarios envían con Requiems?"
         items:
-        - title: Menos citas perdidas
-          description: 'Valida el teléfono y email del paciente en la admisión: sube
-            la entrega de recordatorios y bajan las inasistencias.'
-          metric: "–30% inasistencias"
-        - title: Programación correcta por zona horaria
-          description: Resuelve la zona horaria del paciente desde su dirección o
-            IP para mostrar los horarios de cita automáticamente.
-          metric: Instantáneo
-        - title: Señales de cumplimiento en telemedicina
-          description: Geolocaliza las sesiones para marcar pacientes fuera del estado
-            antes de que inicie la consulta, no después.
-          metric: Tiempo real
-        - title: Integración rápida y segura
-          description: Endpoints solo HTTPS, sin datos personales almacenados. La
-            integración típica toma menos de una semana.
-          metric: "< 1 semana"
+          - title: Menos citas perdidas
+            description: "Valida el teléfono y email del paciente en la admisión: sube
+              la entrega de recordatorios y bajan las inasistencias."
+            metric: "–30% inasistencias"
+          - title: Programación correcta por zona horaria
+            description: Resuelve la zona horaria del paciente desde su dirección o
+              IP para mostrar los horarios de cita automáticamente.
+            metric: Instantáneo
+          - title: Señales de cumplimiento en telemedicina
+            description: Geolocaliza las sesiones para marcar pacientes fuera del estado
+              antes de que inicie la consulta, no después.
+            metric: Tiempo real
+          - title: Integración rápida y segura
+            description: Endpoints solo HTTPS, sin datos personales almacenados. La
+              integración típica toma menos de una semana.
+            metric: "< 1 semana"
     hospitality:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Zona horaria, geocodificación y datos regionales para programación
-            de check-in, recomendaciones locales y visualización de impuestos.
-          division: places
-        - title: Validación
-          description: Valida emails y teléfonos de huéspedes en la reserva para asegurar
-            la entrega de confirmaciones y comunicaciones previas a la llegada.
-          division: validation
-        - title: Finanzas
-          description: Búsqueda de BIN y datos de moneda para facturación internacional
-            de huéspedes y flujos de pago multi-moneda.
-          division: finance
-        - title: Inteligencia de IP
-          description: Detecta el origen del huésped por geolocalización para personalizar
-            idioma, moneda y cumplimiento regulatorio.
-          division: networking
+          - title: Ubicaciones
+            description: Zona horaria, geocodificación y datos regionales para programación
+              de check-in, recomendaciones locales y visualización de impuestos.
+            division: places
+          - title: Validación
+            description: Valida emails y teléfonos de huéspedes en la reserva para asegurar
+              la entrega de confirmaciones y comunicaciones previas a la llegada.
+            division: validation
+          - title: Finanzas
+            description: Búsqueda de BIN y datos de moneda para facturación internacional
+              de huéspedes y flujos de pago multi-moneda.
+            division: finance
+          - title: Inteligencia de IP
+            description: Detecta el origen del huésped por geolocalización para personalizar
+              idioma, moneda y cumplimiento regulatorio.
+            division: networking
         heading: API diseñadas para flujos de trabajo en el sector hotelero.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -451,8 +451,8 @@ es:
           plataforma tecnológica para el sector hotelero.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'APIs para el sector hotelero: Personaliza cada estancia, valida
-          cada reserva.'
+        headline: "APIs para el sector hotelero: Personaliza cada estancia, valida
+          cada reserva."
         secondary_cta: Explorar API
         subheadline: API de geolocalización, validación y pago para hoteles, complejos
           turísticos y plataformas de hostelería.
@@ -460,22 +460,22 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de hostelería con Requiems?"
         items:
-        - title: Menos confirmaciones perdidas
-          description: 'Valida los datos de contacto del huésped en la reserva: los
-            mensajes previos a la llegada e instrucciones de check-in llegan bien.'
-          metric: "–35% de fallos"
-        - title: Experiencia localizada sin fricción
-          description: Detecta el país del huésped desde la IP para mostrar la moneda,
-            idioma y hora local correctos automáticamente.
-          metric: Instantáneo
-        - title: Datos de pago más limpios
-          description: 'Búsqueda de BIN en el checkout: bajan las tarjetas rechazadas
-            y el formulario muestra el tipo de tarjeta correcto.'
-          metric: "+10% de éxito"
-        - title: Implementa en un sprint
-          description: Endpoints REST con ejemplos listos en varios idiomas. La integración
-            típica toma menos de una semana.
-          metric: "< 1 semana"
+          - title: Menos confirmaciones perdidas
+            description: "Valida los datos de contacto del huésped en la reserva: los
+              mensajes previos a la llegada e instrucciones de check-in llegan bien."
+            metric: "–35% de fallos"
+          - title: Experiencia localizada sin fricción
+            description: Detecta el país del huésped desde la IP para mostrar la moneda,
+              idioma y hora local correctos automáticamente.
+            metric: Instantáneo
+          - title: Datos de pago más limpios
+            description: "Búsqueda de BIN en el checkout: bajan las tarjetas rechazadas
+              y el formulario muestra el tipo de tarjeta correcto."
+            metric: "+10% de éxito"
+          - title: Implementa en un sprint
+            description: Endpoints REST con ejemplos listos en varios idiomas. La integración
+              típica toma menos de una semana.
+            metric: "< 1 semana"
     index:
       cards:
         agencies:
@@ -573,22 +573,22 @@ es:
     insurance:
       api_mapping:
         apis:
-        - title: Validación
-          description: Valida los emails y teléfonos de asegurados en la solicitud
-            para reducir avisos de renovación fallidos y comunicaciones de siniestros.
-          division: validation
-        - title: Ubicaciones
-          description: Geocodificación y enriquecimiento de direcciones para scoring
-            de riesgo de propiedades, asignación de zonas y enrutamiento de siniestros.
-          division: places
-        - title: Finanzas
-          description: Validación de BIN y pagos para cobro de primas y flujos de
-            pago de siniestros.
-          division: finance
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy en las presentaciones digitales de siniestros
-            para marcar orígenes de sesión potencialmente fraudulentos.
-          division: networking
+          - title: Validación
+            description: Valida los emails y teléfonos de asegurados en la solicitud
+              para reducir avisos de renovación fallidos y comunicaciones de siniestros.
+            division: validation
+          - title: Ubicaciones
+            description: Geocodificación y enriquecimiento de direcciones para scoring
+              de riesgo de propiedades, asignación de zonas y enrutamiento de siniestros.
+            division: places
+          - title: Finanzas
+            description: Validación de BIN y pagos para cobro de primas y flujos de
+              pago de siniestros.
+            division: finance
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy en las presentaciones digitales de siniestros
+              para marcar orígenes de sesión potencialmente fraudulentos.
+            division: networking
         heading: API diseñadas para flujos de trabajo de seguros
       final_cta:
         cta: Reserva una llamada estratégica
@@ -597,8 +597,8 @@ es:
           de suscripción, pólizas y reclamaciones.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para seguros: datos de riesgo precisos, contactos verificados,
-          reclamaciones más rápidas.'
+        headline: "API para seguros: datos de riesgo precisos, contactos verificados,
+          reclamaciones más rápidas."
         secondary_cta: Explorar API
         subheadline: Validación de direcciones, teléfonos y correos electrónicos,
           además de API de geolocalización para la suscripción de seguros, pólizas
@@ -607,41 +607,41 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de seguros con Requiems?"
         items:
-        - title: Menos avisos de renovación fallidos
-          description: 'Valida los emails y teléfonos de contacto al crear la póliza:
-            las comunicaciones de renovación y siniestros llegan a la persona correcta.'
-          metric: "–40% de fallos"
-        - title: Geocodificación de propiedades precisa
-          description: Geocodifica las direcciones aseguradas en la suscripción para
-            scoring de zona, modelado de catástrofes y cálculo de primas.
-          metric: 99%+ de precisión
-        - title: Señales de fraude en la presentación
-          description: Marca los siniestros presentados desde IPs de VPN y datacenters
-            de alto riesgo para una revisión manual más cercana.
-          metric: Tiempo real
-        - title: Una clave de API, suite completa
-          description: APIs de validación, geolocalización y finanzas en una sola
-            integración con una sola clave de API.
-          metric: 1 integración
+          - title: Menos avisos de renovación fallidos
+            description: "Valida los emails y teléfonos de contacto al crear la póliza:
+              las comunicaciones de renovación y siniestros llegan a la persona correcta."
+            metric: "–40% de fallos"
+          - title: Geocodificación de propiedades precisa
+            description: Geocodifica las direcciones aseguradas en la suscripción para
+              scoring de zona, modelado de catástrofes y cálculo de primas.
+            metric: 99%+ de precisión
+          - title: Señales de fraude en la presentación
+            description: Marca los siniestros presentados desde IPs de VPN y datacenters
+              de alto riesgo para una revisión manual más cercana.
+            metric: Tiempo real
+          - title: Una clave de API, suite completa
+            description: APIs de validación, geolocalización y finanzas en una sola
+              integración con una sola clave de API.
+            metric: 1 integración
     legal:
       api_mapping:
         apis:
-        - title: Validación
-          description: Verifica los emails y teléfonos de clientes y contrapartes
-            antes de que entren a la gestión de casos o flujos de contratos.
-          division: validation
-        - title: Redes
-          description: Búsqueda de WHOIS y dominios para auditorías de protección
-            de marca, evidencia de bajas y procesos de debida diligencia.
-          division: networking
-        - title: Ubicaciones
-          description: Geocodificación de direcciones y datos de zona horaria para
-            detección de jurisdicción y cumplimiento transfronterizo.
-          division: places
-        - title: Finanzas
-          description: Validación de IBAN y SWIFT para instrucciones de transferencia
-            bancaria y verificación de pagos internacionales.
-          division: finance
+          - title: Validación
+            description: Verifica los emails y teléfonos de clientes y contrapartes
+              antes de que entren a la gestión de casos o flujos de contratos.
+            division: validation
+          - title: Redes
+            description: Búsqueda de WHOIS y dominios para auditorías de protección
+              de marca, evidencia de bajas y procesos de debida diligencia.
+            division: networking
+          - title: Ubicaciones
+            description: Geocodificación de direcciones y datos de zona horaria para
+              detección de jurisdicción y cumplimiento transfronterizo.
+            division: places
+          - title: Finanzas
+            description: Validación de IBAN y SWIFT para instrucciones de transferencia
+              bancaria y verificación de pagos internacionales.
+            division: finance
         heading: API diseñadas para flujos de trabajo legales
       final_cta:
         cta: Reserva una llamada estratégica
@@ -650,8 +650,8 @@ es:
           de trabajo de contratos y cumplimiento normativo.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para tecnología legal: contactos precisos, direcciones verificadas,
-          datos infalibles.'
+        headline: "API para tecnología legal: contactos precisos, direcciones verificadas,
+          datos infalibles."
         secondary_cta: Explorar API
         subheadline: API de validación de correo electrónico y direcciones, búsqueda
           de dominios y geolocalización para plataformas legales y herramientas de
@@ -660,41 +660,41 @@ es:
       proof_points:
         heading: Qué incluyen los equipos de tecnología legal con Requiems
         items:
-        - title: Historial WHOIS listo para auditoría
-          description: Ejecuta trabajos semanales de WHOIS en dominios marcados, normaliza
-            los campos y exporta evidencia en CSV para bajas.
-          metric: Automatizado
-        - title: Menos comunicaciones rebotadas con clientes
-          description: Valida los emails de contacto antes de enviar cartas de compromiso,
-            presentaciones judiciales y facturas.
-          metric: "–45% rebotes"
-        - title: Detección de jurisdicción
-          description: Geolocaliza las IPs y direcciones de la contraparte para marcar
-            la jurisdicción aplicable antes de generar el documento.
-          metric: Tiempo real
-        - title: Integración rápida
-          description: Endpoints REST con ejemplos listos para usar. Los equipos legales
-            suelen lanzar en menos de una semana.
-          metric: "< 1 semana"
+          - title: Historial WHOIS listo para auditoría
+            description: Ejecuta trabajos semanales de WHOIS en dominios marcados, normaliza
+              los campos y exporta evidencia en CSV para bajas.
+            metric: Automatizado
+          - title: Menos comunicaciones rebotadas con clientes
+            description: Valida los emails de contacto antes de enviar cartas de compromiso,
+              presentaciones judiciales y facturas.
+            metric: "–45% rebotes"
+          - title: Detección de jurisdicción
+            description: Geolocaliza las IPs y direcciones de la contraparte para marcar
+              la jurisdicción aplicable antes de generar el documento.
+            metric: Tiempo real
+          - title: Integración rápida
+            description: Endpoints REST con ejemplos listos para usar. Los equipos legales
+              suelen lanzar en menos de una semana.
+            metric: "< 1 semana"
     logistics:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Geocodificación, normalización de direcciones y datos de zona
-            horaria para planificación de rutas y programación de entregas.
-          division: places
-        - title: Validación
-          description: Valida los teléfonos y emails del destinatario antes del despacho
-            para reducir notificaciones de entrega fallidas.
-          division: validation
-        - title: Inteligencia de IP
-          description: Geolocaliza las sesiones de conductores y clientes para control
-            de acceso y contexto de ubicación en tiempo real.
-          division: networking
-        - title: Finanzas
-          description: Validación de moneda y pagos para facturación de carga internacional
-            y aduanas transfronterizas.
-          division: finance
+          - title: Ubicaciones
+            description: Geocodificación, normalización de direcciones y datos de zona
+              horaria para planificación de rutas y programación de entregas.
+            division: places
+          - title: Validación
+            description: Valida los teléfonos y emails del destinatario antes del despacho
+              para reducir notificaciones de entrega fallidas.
+            division: validation
+          - title: Inteligencia de IP
+            description: Geolocaliza las sesiones de conductores y clientes para control
+              de acceso y contexto de ubicación en tiempo real.
+            division: networking
+          - title: Finanzas
+            description: Validación de moneda y pagos para facturación de carga internacional
+              y aduanas transfronterizas.
+            division: finance
         heading: API diseñadas para flujos de trabajo logísticos
       final_cta:
         cta: Reserva una llamada estratégica
@@ -703,8 +703,8 @@ es:
           flujos de trabajo de entrega.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para logística: valida direcciones, optimiza las rutas y entrega
-          a tiempo.'
+        headline: "API para logística: valida direcciones, optimiza las rutas y entrega
+          a tiempo."
         secondary_cta: Explorar API
         subheadline: API de validación de direcciones, geolocalización y zonas horarias
           para la entrega, el almacenamiento y la logística de última milla.
@@ -712,41 +712,41 @@ es:
       proof_points:
         heading: "¿Qué equipos de logística envían con Requiems?"
         items:
-        - title: Menos entregas fallidas
-          description: Detecta direcciones mal formadas y teléfonos de destinatario
-            inválidos antes de que el pedido salga del almacén.
-          metric: "–25% de fallos"
-        - title: Geocodificación precisa a escala
-          description: Normaliza y geocodifica direcciones en la ingesta por lotes
-            para optimización de rutas y asignación de zonas.
-          metric: Millones/día
-        - title: ETAs correctos por zona horaria
-          description: Muestra las ventanas de entrega en la zona horaria local del
-            destinatario automáticamente, sin conversión manual.
-          metric: Instantáneo
-        - title: En vivo en días
-          description: Endpoints REST, ejemplos listos para usar, una sola clave de
-            API. La mayoría de los equipos integra en un solo sprint.
-          metric: "< 1 semana"
+          - title: Menos entregas fallidas
+            description: Detecta direcciones mal formadas y teléfonos de destinatario
+              inválidos antes de que el pedido salga del almacén.
+            metric: "–25% de fallos"
+          - title: Geocodificación precisa a escala
+            description: Normaliza y geocodifica direcciones en la ingesta por lotes
+              para optimización de rutas y asignación de zonas.
+            metric: Millones/día
+          - title: ETAs correctos por zona horaria
+            description: Muestra las ventanas de entrega en la zona horaria local del
+              destinatario automáticamente, sin conversión manual.
+            metric: Instantáneo
+          - title: En vivo en días
+            description: Endpoints REST, ejemplos listos para usar, una sola clave de
+              API. La mayoría de los equipos integra en un solo sprint.
+            metric: "< 1 semana"
     manufacturing:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Geocodificación, zona horaria y datos de dirección para mapeo
-            de instalaciones, programación de entregas y enrutamiento de proveedores.
-          division: places
-        - title: Validación
-          description: Valida los emails y teléfonos de proveedores antes de que entren
-            a tu sistema de ERP o adquisiciones.
-          division: validation
-        - title: Finanzas
-          description: Datos de moneda y validación de pagos para pagos a proveedores
-            transfronterizos y facturación.
-          division: finance
-        - title: Inteligencia de IP
-          description: Identifica el país y la región de portales de socios y sesiones
-            de acceso remoto para control de acceso.
-          division: networking
+          - title: Ubicaciones
+            description: Geocodificación, zona horaria y datos de dirección para mapeo
+              de instalaciones, programación de entregas y enrutamiento de proveedores.
+            division: places
+          - title: Validación
+            description: Valida los emails y teléfonos de proveedores antes de que entren
+              a tu sistema de ERP o adquisiciones.
+            division: validation
+          - title: Finanzas
+            description: Datos de moneda y validación de pagos para pagos a proveedores
+              transfronterizos y facturación.
+            division: finance
+          - title: Inteligencia de IP
+            description: Identifica el país y la región de portales de socios y sesiones
+              de acceso remoto para control de acceso.
+            division: networking
         heading: API diseñadas para flujos de trabajo de fabricación.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -755,8 +755,8 @@ es:
           con sus flujos de trabajo operativos.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para la fabricación: datos de proveedores limpios, operaciones
-          más inteligentes, alcance global.'
+        headline: "API para la fabricación: datos de proveedores limpios, operaciones
+          más inteligentes, alcance global."
         secondary_cta: Explorar API
         subheadline: API de validación de direcciones, geolocalización y verificación
           de contactos para operaciones de fabricación y cadena de suministro.
@@ -764,41 +764,41 @@ es:
       proof_points:
         heading: "¿Qué equipos de fabricación envían con Requiems?"
         items:
-        - title: Registros de proveedores más limpios
-          description: 'Valida los datos de contacto antes de que entren al ERP: menos
-            facturas devueltas y correos de PO rebotados.'
-          metric: "–50% datos malos"
-        - title: Coordenadas de instalaciones precisas
-          description: Geocodifica direcciones de almacenes y proveedores al importar
-            para logística, cumplimiento y enrutamiento de despacho.
-          metric: 99%+ de precisión
-        - title: Programación con conciencia de zona horaria
-          description: Muestra los horarios locales correctos para programación de
-            turnos multi-sede y llamadas con proveedores transfronterizos.
-          metric: Cobertura global
-        - title: Una sola clave de API
-          description: APIs de dirección, contacto y finanzas en una sola integración,
-            sin dolores de cabeza de facturación multi-proveedor.
-          metric: 1 integración
+          - title: Registros de proveedores más limpios
+            description: "Valida los datos de contacto antes de que entren al ERP: menos
+              facturas devueltas y correos de PO rebotados."
+            metric: "–50% datos malos"
+          - title: Coordenadas de instalaciones precisas
+            description: Geocodifica direcciones de almacenes y proveedores al importar
+              para logística, cumplimiento y enrutamiento de despacho.
+            metric: 99%+ de precisión
+          - title: Programación con conciencia de zona horaria
+            description: Muestra los horarios locales correctos para programación de
+              turnos multi-sede y llamadas con proveedores transfronterizos.
+            metric: Cobertura global
+          - title: Una sola clave de API
+            description: APIs de dirección, contacto y finanzas en una sola integración,
+              sin dolores de cabeza de facturación multi-proveedor.
+            metric: 1 integración
     media:
       api_mapping:
         apis:
-        - title: Inteligencia de IP
-          description: Geolocaliza usuarios para reglas de licencia de contenido,
-            enrutamiento de CDN y segmentación de anuncios regional sin cookies.
-          division: networking
-        - title: Texto e idioma
-          description: Detección de idioma, filtrado de lenguaje ofensivo y moderación
-            de texto para comentarios, subtítulos y contenido de usuarios.
-          division: text
-        - title: Validación
-          description: Valida los emails de suscriptores al registrarse para mantener
-            alta la entregabilidad y precisos los datos de facturación.
-          division: validation
-        - title: Ubicaciones
-          description: Datos de zona horaria para programar eventos en vivo, estrenos
-            y notificaciones push sensibles al tiempo.
-          division: places
+          - title: Inteligencia de IP
+            description: Geolocaliza usuarios para reglas de licencia de contenido,
+              enrutamiento de CDN y segmentación de anuncios regional sin cookies.
+            division: networking
+          - title: Texto e idioma
+            description: Detección de idioma, filtrado de lenguaje ofensivo y moderación
+              de texto para comentarios, subtítulos y contenido de usuarios.
+            division: text
+          - title: Validación
+            description: Valida los emails de suscriptores al registrarse para mantener
+              alta la entregabilidad y precisos los datos de facturación.
+            division: validation
+          - title: Ubicaciones
+            description: Datos de zona horaria para programar eventos en vivo, estrenos
+              y notificaciones push sensibles al tiempo.
+            division: places
         heading: API diseñadas para flujos de trabajo multimedia.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -807,8 +807,8 @@ es:
           en su plataforma.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para medios: Georreferenciación de contenido, moderación a
-          gran escala, localización instantánea.'
+        headline: "API para medios: Georreferenciación de contenido, moderación a
+          gran escala, localización instantánea."
         secondary_cta: Explorar API
         subheadline: API de geolocalización IP, moderación de texto y detección de
           idioma para editores, emisoras de streaming y plataformas de contenido.
@@ -816,41 +816,41 @@ es:
       proof_points:
         heading: "¿Qué equipos de medios envían con Requiems?"
         items:
-        - title: Aplica licencias geográficas en tiempo real
-          description: Bloquea o redirige contenido por país usando geolocalización
-            de IP, sin brechas de bypass por VPN.
-          metric: Tiempo real
-        - title: Escala la moderación de comentarios
-          description: Filtra lenguaje ofensivo y marca contenido límite del lado
-            del servidor antes de publicarse.
-          metric: Millones/día
-        - title: Localiza sin preguntar a los usuarios
-          description: Detecta el idioma desde la IP y señales del navegador para
-            servir la versión correcta automáticamente.
-          metric: Instantáneo
-        - title: Datos de suscriptores confiables
-          description: 'Valida los emails en el registro: menos boletines rebotados
-            y fallas de facturación.'
-          metric: "–35% rebotes"
+          - title: Aplica licencias geográficas en tiempo real
+            description: Bloquea o redirige contenido por país usando geolocalización
+              de IP, sin brechas de bypass por VPN.
+            metric: Tiempo real
+          - title: Escala la moderación de comentarios
+            description: Filtra lenguaje ofensivo y marca contenido límite del lado
+              del servidor antes de publicarse.
+            metric: Millones/día
+          - title: Localiza sin preguntar a los usuarios
+            description: Detecta el idioma desde la IP y señales del navegador para
+              servir la versión correcta automáticamente.
+            metric: Instantáneo
+          - title: Datos de suscriptores confiables
+            description: "Valida los emails en el registro: menos boletines rebotados
+              y fallas de facturación."
+            metric: "–35% rebotes"
     nonprofit:
       api_mapping:
         apis:
-        - title: Validación
-          description: Detecta emails y teléfonos inválidos antes de que inflen tu
-            lista de donantes y afecten la entregabilidad.
-          division: validation
-        - title: Ubicaciones
-          description: Geocodificación y datos regionales para segmentación de donantes,
-            mapeo de voluntarios y programación de eventos.
-          division: places
-        - title: Texto e idioma
-          description: Detección de idioma para difusión multilingüe y moderación
-            de contenido en plataformas comunitarias públicas.
-          division: text
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy en formularios de donación para marcar transacciones
-            sospechosas antes de que se disputen.
-          division: networking
+          - title: Validación
+            description: Detecta emails y teléfonos inválidos antes de que inflen tu
+              lista de donantes y afecten la entregabilidad.
+            division: validation
+          - title: Ubicaciones
+            description: Geocodificación y datos regionales para segmentación de donantes,
+              mapeo de voluntarios y programación de eventos.
+            division: places
+          - title: Texto e idioma
+            description: Detección de idioma para difusión multilingüe y moderación
+              de contenido en plataformas comunitarias públicas.
+            division: text
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy en formularios de donación para marcar transacciones
+              sospechosas antes de que se disputen.
+            division: networking
         heading: API diseñadas para flujos de trabajo de organizaciones sin fines
           de lucro.
       final_cta:
@@ -860,8 +860,8 @@ es:
           en sus flujos de trabajo.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para organizaciones sin fines de lucro: llegue a donantes reales
-          y mantenga su CRM limpio.'
+        headline: "API para organizaciones sin fines de lucro: llegue a donantes reales
+          y mantenga su CRM limpio."
         secondary_cta: Explorar API
         subheadline: Validación de correo electrónico y teléfono, calidad de datos
           y API de geolocalización para la captación de donantes y la gestión de donantes
@@ -870,41 +870,41 @@ es:
       proof_points:
         heading: "¿Qué equipos sin fines de lucro envían con Requiems?"
         items:
-        - title: Mejor entregabilidad de email
-          description: 'Elimina direcciones inválidas y desechables antes de cada
-            campaña: menos rebotes, mejor reputación de remitente.'
-          metric: "+25% de apertura"
-        - title: Base de datos de donantes más limpia
-          description: Valida los contactos en el punto de entrada para que tu CRM
-            se mantenga útil para segmentación y reportes.
-          metric: "–60% registros malos"
-        - title: Difusión regional más inteligente
-          description: Geocodifica las direcciones de tus donantes para mapear vacíos
-            de cobertura y priorizar regiones.
-          metric: Instantáneo
-        - title: Asequible y escalable
-          description: Pagas por llamada. Sin mínimos mensuales. Se adapta a cualquier
-            presupuesto de ONG, desde semilla hasta escala nacional.
-          metric: Según uso
+          - title: Mejor entregabilidad de email
+            description: "Elimina direcciones inválidas y desechables antes de cada
+              campaña: menos rebotes, mejor reputación de remitente."
+            metric: "+25% de apertura"
+          - title: Base de datos de donantes más limpia
+            description: Valida los contactos en el punto de entrada para que tu CRM
+              se mantenga útil para segmentación y reportes.
+            metric: "–60% registros malos"
+          - title: Difusión regional más inteligente
+            description: Geocodifica las direcciones de tus donantes para mapear vacíos
+              de cobertura y priorizar regiones.
+            metric: Instantáneo
+          - title: Asequible y escalable
+            description: Pagas por llamada. Sin mínimos mensuales. Se adapta a cualquier
+              presupuesto de ONG, desde semilla hasta escala nacional.
+            metric: Según uso
     real_estate:
       api_mapping:
         apis:
-        - title: Ubicaciones
-          description: Geocodificación, zona horaria y enriquecimiento de direcciones
-            para listados de propiedades y programación de agentes.
-          division: places
-        - title: Validación
-          description: Verifica los emails y teléfonos de compradores y agentes antes
-            de enviar listados o contratos.
-          division: validation
-        - title: Redes
-          description: Geolocalización de IP para recomendaciones de propiedades regionales
-            y visualización de datos compatible con GDPR.
-          division: networking
-        - title: Finanzas
-          description: Conversión de moneda y datos de pago para transacciones de
-            propiedades transfronterizas.
-          division: finance
+          - title: Ubicaciones
+            description: Geocodificación, zona horaria y enriquecimiento de direcciones
+              para listados de propiedades y programación de agentes.
+            division: places
+          - title: Validación
+            description: Verifica los emails y teléfonos de compradores y agentes antes
+              de enviar listados o contratos.
+            division: validation
+          - title: Redes
+            description: Geolocalización de IP para recomendaciones de propiedades regionales
+              y visualización de datos compatible con GDPR.
+            division: networking
+          - title: Finanzas
+            description: Conversión de moneda y datos de pago para transacciones de
+              propiedades transfronterizas.
+            division: finance
         heading: APIs diseñadas para flujos de trabajo inmobiliarios
       final_cta:
         cta: Reserva una llamada estratégica
@@ -913,8 +913,8 @@ es:
           en los flujos de trabajo de sus anuncios.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'APIs para el sector inmobiliario: listados precisos, contactos
-          verificados, alcance global.'
+        headline: "APIs para el sector inmobiliario: listados precisos, contactos
+          verificados, alcance global."
         secondary_cta: Explorar API
         subheadline: API de validación de direcciones, geolocalización y verificación
           de contactos para plataformas inmobiliarias y CRM.
@@ -922,41 +922,41 @@ es:
       proof_points:
         heading: "¿Qué envían los equipos inmobiliarios con Requiems?"
         items:
-        - title: Datos de listados más limpios
-          description: 'Geocodifica y normaliza direcciones al ingreso: los pines
-            en el mapa quedan correctos y los resultados de búsqueda son precisos.'
-          metric: 99%+ de precisión
-        - title: Menos leads sin salida
-          description: Valida los emails y teléfonos de contacto al enviar el formulario
-            antes de que entren al pipeline del CRM.
-          metric: "–45% leads malos"
-        - title: Programación con conciencia de zona horaria
-          description: Muestra los horarios de visita en la zona horaria local del
-            comprador automáticamente, sin conversión manual.
-          metric: Instantáneo
-        - title: Integración rápida
-          description: APIs de geocodificación, validación y finanzas en una sola
-            clave, en vivo en un solo sprint.
-          metric: "< 1 semana"
+          - title: Datos de listados más limpios
+            description: "Geocodifica y normaliza direcciones al ingreso: los pines
+              en el mapa quedan correctos y los resultados de búsqueda son precisos."
+            metric: 99%+ de precisión
+          - title: Menos leads sin salida
+            description: Valida los emails y teléfonos de contacto al enviar el formulario
+              antes de que entren al pipeline del CRM.
+            metric: "–45% leads malos"
+          - title: Programación con conciencia de zona horaria
+            description: Muestra los horarios de visita en la zona horaria local del
+              comprador automáticamente, sin conversión manual.
+            metric: Instantáneo
+          - title: Integración rápida
+            description: APIs de geocodificación, validación y finanzas en una sola
+              clave, en vivo en un solo sprint.
+            metric: "< 1 semana"
     retail:
       api_mapping:
         apis:
-        - title: Validación
-          description: Valida los emails y teléfonos del cliente en el checkout para
-            reducir notificaciones de entrega fallidas y errores de OTP.
-          division: validation
-        - title: Finanzas
-          description: Búsqueda de BIN y validación de tarjetas para detectar tarjetas
-            rechazadas antes de que frustren a los compradores.
-          division: finance
-        - title: Ubicaciones
-          description: Geocodificación, zona horaria y datos de dirección para estimaciones
-            de envío, textos de impuestos y precios por región.
-          division: places
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy y marca sesiones de alto riesgo en el checkout
-            para reducir el fraude con tarjetas.
-          division: networking
+          - title: Validación
+            description: Valida los emails y teléfonos del cliente en el checkout para
+              reducir notificaciones de entrega fallidas y errores de OTP.
+            division: validation
+          - title: Finanzas
+            description: Búsqueda de BIN y validación de tarjetas para detectar tarjetas
+              rechazadas antes de que frustren a los compradores.
+            division: finance
+          - title: Ubicaciones
+            description: Geocodificación, zona horaria y datos de dirección para estimaciones
+              de envío, textos de impuestos y precios por región.
+            division: places
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy y marca sesiones de alto riesgo en el checkout
+              para reducir el fraude con tarjetas.
+            division: networking
         heading: API diseñadas para flujos de trabajo de venta minorista.
       final_cta:
         cta: Reserva una llamada estratégica
@@ -965,8 +965,8 @@ es:
           carrito y cumplimiento de pedidos.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para el sector minorista: Datos de pago limpios, menos devoluciones,
-          clientes más satisfechos.'
+        headline: "API para el sector minorista: Datos de pago limpios, menos devoluciones,
+          clientes más satisfechos."
         secondary_cta: Explorar API
         subheadline: Validación de direcciones, comprobaciones de pago y detección
           de fraudes en plataformas de venta minorista y sistemas de punto de venta
@@ -975,42 +975,42 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de venta minorista junto con Requiems?"
         items:
-        - title: Menos entregas fallidas
-          description: 'Detecta teléfonos inválidos y anomalías de dirección antes
-            de que el pedido se envíe: bajan las devoluciones e intentos de entrega
-            perdidos.'
-          metric: "–30%"
-        - title: Checkout más rápido
-          description: Valida el BIN de la tarjeta del lado del cliente para que el
-            primer intento de pago tenga más éxito.
-          metric: "+12% de éxito"
-        - title: Precios localizados al instante
-          description: Resuelve el país y la región desde la IP para mostrar la moneda
-            y el costo de envío correctos sin pedir GPS.
-          metric: 180+ países
-        - title: Una clave de API, todos los servicios
-          description: Validación, finanzas y geolocalización desde un solo endpoint,
-            sin combinar varios proveedores.
-          metric: 1 integración
+          - title: Menos entregas fallidas
+            description: "Detecta teléfonos inválidos y anomalías de dirección antes
+              de que el pedido se envíe: bajan las devoluciones e intentos de entrega
+              perdidos."
+            metric: "–30%"
+          - title: Checkout más rápido
+            description: Valida el BIN de la tarjeta del lado del cliente para que el
+              primer intento de pago tenga más éxito.
+            metric: "+12% de éxito"
+          - title: Precios localizados al instante
+            description: Resuelve el país y la región desde la IP para mostrar la moneda
+              y el costo de envío correctos sin pedir GPS.
+            metric: 180+ países
+          - title: Una clave de API, todos los servicios
+            description: Validación, finanzas y geolocalización desde un solo endpoint,
+              sin combinar varios proveedores.
+            metric: 1 integración
     saas:
       api_mapping:
         apis:
-        - title: Validación
-          description: Detiene emails desechables, teléfonos falsos y lenguaje ofensivo
-            antes de que contaminen tu base de usuarios en el registro.
-          division: validation
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy en el login, localiza por región y bloquea
-            tráfico de datacenters que abusa de los niveles gratuitos.
-          division: networking
-        - title: Finanzas
-          description: Búsqueda de BIN y validación de tarjetas para facturación de
-            suscripciones y reducción de fraude en el checkout.
-          division: finance
-        - title: Texto e idioma
-          description: Detección de idioma, moderación y utilidades de texto para
-            contenido generado por usuarios y textos de onboarding.
-          division: text
+          - title: Validación
+            description: Detiene emails desechables, teléfonos falsos y lenguaje ofensivo
+              antes de que contaminen tu base de usuarios en el registro.
+            division: validation
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy en el login, localiza por región y bloquea
+              tráfico de datacenters que abusa de los niveles gratuitos.
+            division: networking
+          - title: Finanzas
+            description: Búsqueda de BIN y validación de tarjetas para facturación de
+              suscripciones y reducción de fraude en el checkout.
+            division: finance
+          - title: Texto e idioma
+            description: Detección de idioma, moderación y utilidades de texto para
+              contenido generado por usuarios y textos de onboarding.
+            division: text
         heading: API diseñadas para flujos de trabajo SaaS
       final_cta:
         cta: Reserva una llamada estratégica
@@ -1019,8 +1019,8 @@ es:
           se adapten a su producto.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para SaaS: Datos limpios, registros seguros y menos incidencias
-          de soporte.'
+        headline: "API para SaaS: Datos limpios, registros seguros y menos incidencias
+          de soporte."
         secondary_cta: Explorar API
         subheadline: API de validación, prevención de spam y enriquecimiento de datos
           para productos SaaS que necesitan escalar.
@@ -1028,42 +1028,42 @@ es:
       proof_points:
         heading: "¿Qué productos envían los equipos de SaaS con Requiems?"
         items:
-        - title: Reduce los registros falsos
-          description: 'Rechaza dominios desechables y registros MX inválidos en el
-            formulario: soporte deja de perseguir usuarios fantasma.'
-          metric: "–70%"
-        - title: Onboarding empresarial más rápido
-          description: 'Valida el email y dominio corporativo antes de la invitación
-            SSO: los equipos de TI logran un aprovisionamiento limpio a la primera.'
-          metric: "–50% reintentos"
-        - title: Niveles gratuitos a prueba de abuso
-          description: Marca IPs de datacenter y VPN que crean cuentas de prueba para
-            proteger las métricas de conversión a pago.
-          metric: Tiempo real
-        - title: Lanza en un sprint
-          description: Ejemplos de código listos para usar en cinco idiomas. La mayoría
-            de los equipos lanza en la misma semana.
-          metric: "< 1 semana"
+          - title: Reduce los registros falsos
+            description: "Rechaza dominios desechables y registros MX inválidos en el
+              formulario: soporte deja de perseguir usuarios fantasma."
+            metric: "–70%"
+          - title: Onboarding empresarial más rápido
+            description: "Valida el email y dominio corporativo antes de la invitación
+              SSO: los equipos de TI logran un aprovisionamiento limpio a la primera."
+            metric: "–50% reintentos"
+          - title: Niveles gratuitos a prueba de abuso
+            description: Marca IPs de datacenter y VPN que crean cuentas de prueba para
+              proteger las métricas de conversión a pago.
+            metric: Tiempo real
+          - title: Lanza en un sprint
+            description: Ejemplos de código listos para usar en cinco idiomas. La mayoría
+              de los equipos lanza en la misma semana.
+            metric: "< 1 semana"
     telecom:
       api_mapping:
         apis:
-        - title: Validación
-          description: Valida números de teléfono en formato E.164, detecta el tipo
-            de línea y marca números inválidos o portados antes de que lleguen a la
-            red.
-          division: validation
-        - title: Inteligencia de IP
-          description: Búsqueda de ASN, detección de VPN/proxy y geolocalización de
-            IP para análisis de tráfico y señales de fraude.
-          division: networking
-        - title: Finanzas
-          description: Validación de BIN y tarjetas de pago para flujos de facturación
-            y recarga.
-          division: finance
-        - title: Ubicaciones
-          description: Datos de zona horaria y regionales para programación, alertas
-            de roaming y enrutamiento de soporte al cliente.
-          division: places
+          - title: Validación
+            description: Valida números de teléfono en formato E.164, detecta el tipo
+              de línea y marca números inválidos o portados antes de que lleguen a la
+              red.
+            division: validation
+          - title: Inteligencia de IP
+            description: Búsqueda de ASN, detección de VPN/proxy y geolocalización de
+              IP para análisis de tráfico y señales de fraude.
+            division: networking
+          - title: Finanzas
+            description: Validación de BIN y tarjetas de pago para flujos de facturación
+              y recarga.
+            division: finance
+          - title: Ubicaciones
+            description: Datos de zona horaria y regionales para programación, alertas
+              de roaming y enrutamiento de soporte al cliente.
+            division: places
         heading: API diseñadas para flujos de trabajo de telecomunicaciones
       final_cta:
         cta: Reserva una llamada estratégica
@@ -1072,8 +1072,8 @@ es:
           sus suscriptores y de su red.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'API para telecomunicaciones: valida números, detecta amenazas y
-          optimiza el enrutamiento.'
+        headline: "API para telecomunicaciones: valida números, detecta amenazas y
+          optimiza el enrutamiento."
         secondary_cta: Explorar API
         subheadline: Validación de teléfonos, inteligencia de IP y verificación de
           números para operadores, OMV y plataformas de telecomunicaciones.
@@ -1081,42 +1081,42 @@ es:
       proof_points:
         heading: "¿Qué equipos de telecomunicaciones envían con Requiems?"
         items:
-        - title: Reduce envíos de números inválidos
-          description: 'Valida los números de suscriptores en la portabilidad y creación
-            de tickets: los datos malos fallan rápido, no después de una semana de
-            proceso.'
-          metric: "–60%"
-        - title: Enriquece tickets NOC automáticamente
-          description: Obtiene contexto de ASN y upstream para IPs sospechosas para
-            que los equipos de operaciones respondan con datos, no capturas de pantalla.
-          metric: Instantáneo
-        - title: Reduce fallas de entrega de SMS
-          description: 'Verifica el formato E.164 y el tipo de línea antes de enviar
-            OTPs: los números inválidos y fijos nunca llegan a la pasarela.'
-          metric: "–35%"
-        - title: Una clave de API, suite completa
-          description: Una integración desbloquea APIs de validación, red y finanzas
-            sin cuentas ni facturación separadas.
-          metric: 1 clave
+          - title: Reduce envíos de números inválidos
+            description: "Valida los números de suscriptores en la portabilidad y creación
+              de tickets: los datos malos fallan rápido, no después de una semana de
+              proceso."
+            metric: "–60%"
+          - title: Enriquece tickets NOC automáticamente
+            description: Obtiene contexto de ASN y upstream para IPs sospechosas para
+              que los equipos de operaciones respondan con datos, no capturas de pantalla.
+            metric: Instantáneo
+          - title: Reduce fallas de entrega de SMS
+            description: "Verifica el formato E.164 y el tipo de línea antes de enviar
+              OTPs: los números inválidos y fijos nunca llegan a la pasarela."
+            metric: "–35%"
+          - title: Una clave de API, suite completa
+            description: Una integración desbloquea APIs de validación, red y finanzas
+              sin cuentas ni facturación separadas.
+            metric: 1 clave
     travel:
       api_mapping:
         apis:
-        - title: Ubicaciones y geolocalización
-          description: Zonas horarias, geocodificación y calendarios de días festivos
-            para itinerarios globales y programación.
-          division: places
-        - title: Validación
-          description: Detecta emails y teléfonos inválidos antes de que rompan las
-            confirmaciones de reserva y la entrega de OTP.
-          division: validation
-        - title: Finanzas
-          description: Búsqueda de BIN, datos de moneda y validación de pagos para
-            flujos de checkout globales.
-          division: finance
-        - title: Inteligencia de IP
-          description: Detecta VPN/proxy, localiza precios por país y marca sesiones
-            de alto riesgo en el checkout.
-          division: networking
+          - title: Ubicaciones y geolocalización
+            description: Zonas horarias, geocodificación y calendarios de días festivos
+              para itinerarios globales y programación.
+            division: places
+          - title: Validación
+            description: Detecta emails y teléfonos inválidos antes de que rompan las
+              confirmaciones de reserva y la entrega de OTP.
+            division: validation
+          - title: Finanzas
+            description: Búsqueda de BIN, datos de moneda y validación de pagos para
+              flujos de checkout globales.
+            division: finance
+          - title: Inteligencia de IP
+            description: Detecta VPN/proxy, localiza precios por país y marca sesiones
+              de alto riesgo en el checkout.
+            division: networking
         heading: APIs diseñadas para flujos de trabajo de viajes
       final_cta:
         cta: Reserva una llamada estratégica
@@ -1125,7 +1125,7 @@ es:
           de reservas y operaciones.
       hero:
         cta: Reserva una llamada estratégica
-        headline: 'APIs para viajes: personaliza, protege y automatiza cada reserva.'
+        headline: "APIs para viajes: personaliza, protege y automatiza cada reserva."
         secondary_cta: Explorar API
         subheadline: Impulsa los flujos de reservas globales con API de geolocalización,
           validación y pago diseñadas para plataformas de viajes.
@@ -1133,19 +1133,19 @@ es:
       proof_points:
         heading: "¿Qué artículos envían los equipos de viajes con Requiems?"
         items:
-        - title: Reduce la tasa de fallas en reservas
-          description: 'Valida emails y teléfonos al ingresarlos: menos confirmaciones
-            fallidas y tickets de soporte por datos incorrectos.'
-          metric: "–40%"
-        - title: Detecta reservas fraudulentas
-          description: Marca IPs de VPN y datacenters en el checkout y activa verificación
-            adicional automáticamente.
-          metric: Tiempo real
-        - title: Auto-localiza para cada mercado
-          description: Muestra la zona horaria, moneda y días festivos correctos sin
-            pedir GPS ni configuración manual.
-          metric: 180+ países
-        - title: Integra en días, no meses
-          description: Endpoints REST, ejemplos listos para usar y una sola clave
-            de API en todos los servicios.
-          metric: "< 1 semana"
+          - title: Reduce la tasa de fallas en reservas
+            description: "Valida emails y teléfonos al ingresarlos: menos confirmaciones
+              fallidas y tickets de soporte por datos incorrectos."
+            metric: "–40%"
+          - title: Detecta reservas fraudulentas
+            description: Marca IPs de VPN y datacenters en el checkout y activa verificación
+              adicional automáticamente.
+            metric: Tiempo real
+          - title: Auto-localiza para cada mercado
+            description: Muestra la zona horaria, moneda y días festivos correctos sin
+              pedir GPS ni configuración manual.
+            metric: 180+ países
+          - title: Integra en días, no meses
+            description: Endpoints REST, ejemplos listos para usar y una sola clave
+              de API en todos los servicios.
+            metric: "< 1 semana"

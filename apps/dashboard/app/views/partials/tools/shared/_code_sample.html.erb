@@ -1,0 +1,5 @@
+<%# Standard Highlight.js code sample. Locals: language ("json" or "http"). %>
+<%# Pass sample source as the block body. Do not hand-roll Tailwind color spans. %>
+<div data-controller="highlight">
+  <pre><code class="language-<%= language %>"><%== capture { yield }.to_s.sub(/\A\n/, "") %></code></pre>
+</div>

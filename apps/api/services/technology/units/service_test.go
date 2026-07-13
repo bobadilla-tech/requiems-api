@@ -153,6 +153,19 @@ func TestService_Convert(t *testing.T) {
 			from: "miles", to: "kg", value: 1,
 			wantErr: ErrIncompatibleUnits,
 		},
+		// Long-form aliases (demo + common API DX)
+		{
+			name: "meters alias to kilometers alias",
+			from: "meters", to: "kilometers", value: 1000,
+			wantResult:  1,
+			wantFormula: "m × 0.001",
+		},
+		{
+			name: "celsius alias to fahrenheit alias",
+			from: "celsius", to: "fahrenheit", value: 0,
+			wantResult:  32,
+			wantFormula: "°C × 9/5 + 32",
+		},
 	}
 
 	for _, tt := range tests {

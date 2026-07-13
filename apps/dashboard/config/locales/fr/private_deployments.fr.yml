@@ -13,7 +13,7 @@ fr:
       only_selected_services_will_be_mounted: Seuls les services sélectionnés seront
         installés sur votre instance. Les autres renverront une erreur 404.
       optional: Facultatif.
-      please_fix_the_following: 'Veuillez corriger les éléments suivants :'
+      please_fix_the_following: "Veuillez corriger les éléments suivants :"
       private_deployment_requiems_api: Déploiement privé — Requiems API
       update_account_details: Mettre à jour les informations du compte →
       yourcompany_requiems_xyz: votreentreprise.requiems.xyz

@@ -10,8 +10,7 @@ export default class extends Controller {
     this._clearError();
 
     const hasCity = this.inputTarget.value.trim().length > 0;
-    const hasCoords =
-      this.latTarget.value.trim().length > 0 &&
+    const hasCoords = this.latTarget.value.trim().length > 0 &&
       this.lonTarget.value.trim().length > 0;
 
     if (!hasCity && !hasCoords) {
@@ -37,8 +36,7 @@ export default class extends Controller {
   }
 
   onCoordsInput() {
-    const hasCoords =
-      this.latTarget.value.trim().length > 0 ||
+    const hasCoords = this.latTarget.value.trim().length > 0 ||
       this.lonTarget.value.trim().length > 0;
     this.inputTarget.disabled = hasCoords;
     if (hasCoords) {

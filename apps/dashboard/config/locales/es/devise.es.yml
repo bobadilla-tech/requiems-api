@@ -24,8 +24,8 @@ es:
       confirmation_instructions:
         confirm_my_account: Confirmar mi cuenta
         subject: Instrucciones de confirmación
-        you_can_confirm_your_account_email: 'Puedes confirmar el correo electrónico
-          de tu cuenta a través del siguiente enlace:'
+        you_can_confirm_your_account_email: "Puedes confirmar el correo electrónico
+          de tu cuenta a través del siguiente enlace:"
       email_changed:
         subject: Correo electrónico cambiado
       password_change:
@@ -42,8 +42,8 @@ es:
         your_password_won_t_change_until_you: Tu contraseña no cambiará hasta que
           accedas al enlace de arriba y crees una nueva.
       unlock_instructions:
-        click_the_link_below_to_unlock_your: 'Haz clic en el siguiente enlace para
-          desbloquear tu cuenta:'
+        click_the_link_below_to_unlock_your: "Haz clic en el siguiente enlace para
+          desbloquear tu cuenta:"
         subject: Instrucciones de desbloqueo
         unlock_my_account: Desbloquea mi cuenta
         your_account_has_been_locked_due_to_an: Tu cuenta ha sido bloqueada debido

@@ -3,7 +3,6 @@
 
     <div class="grid md:grid-cols-2 gap-12">
 
-      <!-- Coverage -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">
@@ -17,25 +16,20 @@
           </p>
         </div>
 
-        <!-- Mock response card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">GET /v1/finance/bin/424242 → 200 OK</div>
-          <div>
-            <span class="text-gray-500">{</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"bin"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"424242"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"scheme"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"visa"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"card_type"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"credit"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"card_level"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"classic"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"issuer_name"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"Chase"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"country_code"</span><span class="text-gray-500">:</span> <span class="text-amber-300">"US"</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"prepaid"</span><span class="text-gray-500">:</span> <span class="text-purple-400">false</span><span class="text-gray-500">,</span><br>
-            &nbsp;&nbsp;<span class="text-sky-300">"confidence"</span><span class="text-gray-500">:</span> <span class="text-purple-400">0.92</span><br>
-            <span class="text-gray-500">}</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "bin": "424242",
+  "scheme": "visa",
+  "card_type": "credit",
+  "card_level": "classic",
+  "issuer_name": "Chase",
+  "country_code": "US",
+  "prepaid": false,
+  "confidence": 0.92
+}
+        <% end %>
       </div>
 
-      <!-- Simplicity -->
       <div class="flex flex-col gap-6">
         <div>
           <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">
@@ -49,15 +43,11 @@
           </p>
         </div>
 
-        <!-- Mock request card -->
-        <div class="rounded-xl bg-gray-900 dark:bg-gray-950 p-5 font-mono text-xs leading-relaxed overflow-x-auto">
-          <div class="text-gray-500 mb-2 text-[11px]">Request</div>
-          <div>
-            <span class="text-sky-300">GET</span> <span class="text-gray-300">/v1/finance/bin/424242</span><br><br>
-            <span class="text-gray-500"># Headers</span><br>
-            <span class="text-sky-300">requiems-api-key</span><span class="text-gray-500">:</span> <span class="text-amber-300">YOUR_API_KEY</span>
-          </div>
-        </div>
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/finance/bin/424242
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+        <% end %>
       </div>
 
     </div>

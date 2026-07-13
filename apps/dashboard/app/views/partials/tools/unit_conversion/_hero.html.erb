@@ -1,28 +1,84 @@
+<%#
+  Unit option values MUST be keys the Units API accepts (canonical or aliases).
+  Labels stay human-readable via t(). Canonical keys come from
+  apps/api/services/technology/units/service.go.
+%>
+<% unit_options = [
+  { group: t("tools.unit_conversion.hero.group_length"), options: [
+    ["m", t("tools.unit_conversion.hero.meters")],
+    ["km", t("tools.unit_conversion.hero.kilometers")],
+    ["miles", t("tools.unit_conversion.hero.miles")],
+    ["ft", t("tools.unit_conversion.hero.feet")],
+    ["in", t("tools.unit_conversion.hero.inches")],
+    ["yd", t("tools.unit_conversion.hero.yards")],
+    ["cm", t("tools.unit_conversion.hero.centimeters")],
+    ["mm", t("tools.unit_conversion.hero.millimeters")],
+    ["nmi", t("tools.unit_conversion.hero.nautical_miles")],
+  ]},
+  { group: t("tools.unit_conversion.hero.group_weight"), options: [
+    ["kg", t("tools.unit_conversion.hero.kilograms")],
+    ["g", t("tools.unit_conversion.hero.grams")],
+    ["lb", t("tools.unit_conversion.hero.pounds")],
+    ["oz", t("tools.unit_conversion.hero.ounces")],
+    ["t", t("tools.unit_conversion.hero.tons_metric")],
+    ["stone", t("tools.unit_conversion.hero.stone")],
+    ["mg", t("tools.unit_conversion.hero.milligrams")],
+  ]},
+  { group: t("tools.unit_conversion.hero.group_temperature"), options: [
+    ["c", t("tools.unit_conversion.hero.celsius")],
+    ["f", t("tools.unit_conversion.hero.fahrenheit")],
+    ["k", t("tools.unit_conversion.hero.kelvin")],
+  ]},
+  { group: t("tools.unit_conversion.hero.group_volume"), options: [
+    ["l", t("tools.unit_conversion.hero.liters")],
+    ["ml", t("tools.unit_conversion.hero.milliliters")],
+    ["gal", t("tools.unit_conversion.hero.gallons_us")],
+    ["qt", t("tools.unit_conversion.hero.quarts")],
+    ["pt", t("tools.unit_conversion.hero.pints")],
+    ["cup", t("tools.unit_conversion.hero.cups")],
+    ["fl_oz", t("tools.unit_conversion.hero.fluid_ounces")],
+    ["tsp", t("tools.unit_conversion.hero.teaspoons")],
+    ["tbsp", t("tools.unit_conversion.hero.tablespoons")],
+  ]},
+  { group: t("tools.unit_conversion.hero.group_speed"), options: [
+    ["m_s", t("tools.unit_conversion.hero.meters_second")],
+    ["km_h", t("tools.unit_conversion.hero.km_hour")],
+    ["mph", t("tools.unit_conversion.hero.miles_hour")],
+    ["knots", t("tools.unit_conversion.hero.knots")],
+  ]},
+  { group: t("tools.unit_conversion.hero.group_area"), options: [
+    ["m2", t("tools.unit_conversion.hero.square_meters")],
+    ["km2", t("tools.unit_conversion.hero.square_kilometers")],
+    ["ft2", t("tools.unit_conversion.hero.square_feet")],
+    ["acre", t("tools.unit_conversion.hero.acres")],
+    ["ha", t("tools.unit_conversion.hero.hectares")],
+  ]},
+] %>
+
 <section class="bg-white dark:bg-gray-900 pt-20 pb-16">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
     <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-      Convert measurements instantly<br class="hidden sm:block">  across every unit type.
+      <%= t("tools.unit_conversion.hero.title_html").html_safe %>
     </h1>
 
     <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-      Length, weight, volume, temperature, area, and speed conversions — with precise results, conversion formulas, and unit discovery endpoints in a single API.
+      <%= t("tools.unit_conversion.hero.subtitle") %>
     </p>
 
     <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
       <%= render "partials/shared/button",
-            text: t('tools.unit_conversion.hero.get_api_key'),
+            text: t("tools.unit_conversion.hero.get_api_key"),
             variant: "brand",
             href: new_user_registration_path,
             size: "lg" %>
       <%= render "partials/shared/button",
-            text: t('tools.unit_conversion.hero.read_the_docs'),
+            text: t("tools.unit_conversion.hero.read_the_docs"),
             variant: "outline",
             href: api_path("unit-conversion"),
             size: "lg" %>
     </div>
 
-    <!-- Live demo -->
     <div class="mt-12 max-w-xl mx-auto"
          data-controller="unit-conversion-demo"
          data-unit-conversion-demo-error-fill-all-fields-value="<%= t('tools.unit_conversion.demo.error_fill_all_fields') %>">
@@ -35,125 +91,41 @@
         <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
         <div class="flex flex-col gap-2">
 
-          <label for="unit-conversion-from-demo-input" class="sr-only"><%= t('tools.unit_conversion.hero.source_unit') %></label>
+          <label for="unit-conversion-from-demo-input" class="sr-only"><%= t("tools.unit_conversion.hero.source_unit") %></label>
           <select
             id="unit-conversion-from-demo-input"
             name="from"
             data-unit-conversion-demo-target="from"
             class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
           >
-            <option value=""><%= t('tools.unit_conversion.hero.source_unit') %></option>
-            <optgroup label="Length">
-              <option value="meters"><%= t('tools.unit_conversion.hero.meters') %></option>
-              <option value="kilometers"><%= t('tools.unit_conversion.hero.kilometers') %></option>
-              <option value="miles"><%= t('tools.unit_conversion.hero.miles') %></option>
-              <option value="feet"><%= t('tools.unit_conversion.hero.feet') %></option>
-              <option value="inches"><%= t('tools.unit_conversion.hero.inches') %></option>
-              <option value="yards"><%= t('tools.unit_conversion.hero.yards') %></option>
-              <option value="centimeters"><%= t('tools.unit_conversion.hero.centimeters') %></option>
-              <option value="millimeters"><%= t('tools.unit_conversion.hero.millimeters') %></option>
-              <option value="nautical_miles"><%= t('tools.unit_conversion.hero.nautical_miles') %></option>
-            </optgroup>
-            <optgroup label="Weight">
-              <option value="kilograms"><%= t('tools.unit_conversion.hero.kilograms') %></option>
-              <option value="grams"><%= t('tools.unit_conversion.hero.grams') %></option>
-              <option value="pounds"><%= t('tools.unit_conversion.hero.pounds') %></option>
-              <option value="ounces"><%= t('tools.unit_conversion.hero.ounces') %></option>
-              <option value="tons"><%= t('tools.unit_conversion.hero.tons_metric') %></option>
-              <option value="short_tons"><%= t('tools.unit_conversion.hero.short_tons_us') %></option>
-              <option value="long_tons"><%= t('tools.unit_conversion.hero.long_tons_uk') %></option>
-            </optgroup>
-            <optgroup label="Temperature">
-              <option value="celsius"><%= t('tools.unit_conversion.hero.celsius') %></option>
-              <option value="fahrenheit"><%= t('tools.unit_conversion.hero.fahrenheit') %></option>
-              <option value="kelvin"><%= t('tools.unit_conversion.hero.kelvin') %></option>
-            </optgroup>
-            <optgroup label="Volume">
-              <option value="liters"><%= t('tools.unit_conversion.hero.liters') %></option>
-              <option value="milliliters"><%= t('tools.unit_conversion.hero.milliliters') %></option>
-              <option value="gallons"><%= t('tools.unit_conversion.hero.gallons_us') %></option>
-              <option value="quarts"><%= t('tools.unit_conversion.hero.quarts') %></option>
-              <option value="pints"><%= t('tools.unit_conversion.hero.pints') %></option>
-              <option value="cups"><%= t('tools.unit_conversion.hero.cups') %></option>
-              <option value="fluid_ounces"><%= t('tools.unit_conversion.hero.fluid_ounces') %></option>
-              <option value="cubic_meters"><%= t('tools.unit_conversion.hero.cubic_meters') %></option>
-            </optgroup>
-            <optgroup label="Speed">
-              <option value="meters_per_second"><%= t('tools.unit_conversion.hero.meters_second') %></option>
-              <option value="kilometers_per_hour"><%= t('tools.unit_conversion.hero.km_hour') %></option>
-              <option value="miles_per_hour"><%= t('tools.unit_conversion.hero.miles_hour') %></option>
-              <option value="knots"><%= t('tools.unit_conversion.hero.knots') %></option>
-            </optgroup>
-            <optgroup label="Area">
-              <option value="square_meters"><%= t('tools.unit_conversion.hero.square_meters') %></option>
-              <option value="square_kilometers"><%= t('tools.unit_conversion.hero.square_kilometers') %></option>
-              <option value="square_miles"><%= t('tools.unit_conversion.hero.square_miles') %></option>
-              <option value="square_feet"><%= t('tools.unit_conversion.hero.square_feet') %></option>
-              <option value="acres"><%= t('tools.unit_conversion.hero.acres') %></option>
-              <option value="hectares"><%= t('tools.unit_conversion.hero.hectares') %></option>
-            </optgroup>
+            <option value=""><%= t("tools.unit_conversion.hero.source_unit") %></option>
+            <% unit_options.each do |group| %>
+              <optgroup label="<%= group[:group] %>">
+                <% group[:options].each do |value, label| %>
+                  <option value="<%= value %>" <%= "selected" if value == "m" %>><%= label %></option>
+                <% end %>
+              </optgroup>
+            <% end %>
           </select>
 
-          <label for="unit-conversion-to-demo-input" class="sr-only"><%= t('tools.unit_conversion.hero.target_unit') %></label>
+          <label for="unit-conversion-to-demo-input" class="sr-only"><%= t("tools.unit_conversion.hero.target_unit") %></label>
           <select
             id="unit-conversion-to-demo-input"
             name="to"
             data-unit-conversion-demo-target="to"
             class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
           >
-            <option value=""><%= t('tools.unit_conversion.hero.target_unit') %></option>
-            <optgroup label="Length">
-              <option value="meters"><%= t('tools.unit_conversion.hero.meters') %></option>
-              <option value="kilometers"><%= t('tools.unit_conversion.hero.kilometers') %></option>
-              <option value="miles"><%= t('tools.unit_conversion.hero.miles') %></option>
-              <option value="feet"><%= t('tools.unit_conversion.hero.feet') %></option>
-              <option value="inches"><%= t('tools.unit_conversion.hero.inches') %></option>
-              <option value="yards"><%= t('tools.unit_conversion.hero.yards') %></option>
-              <option value="centimeters"><%= t('tools.unit_conversion.hero.centimeters') %></option>
-              <option value="millimeters"><%= t('tools.unit_conversion.hero.millimeters') %></option>
-              <option value="nautical_miles"><%= t('tools.unit_conversion.hero.nautical_miles') %></option>
-            </optgroup>
-            <optgroup label="Weight">
-              <option value="kilograms"><%= t('tools.unit_conversion.hero.kilograms') %></option>
-              <option value="grams"><%= t('tools.unit_conversion.hero.grams') %></option>
-              <option value="pounds"><%= t('tools.unit_conversion.hero.pounds') %></option>
-              <option value="ounces"><%= t('tools.unit_conversion.hero.ounces') %></option>
-              <option value="tons"><%= t('tools.unit_conversion.hero.tons_metric') %></option>
-              <option value="short_tons"><%= t('tools.unit_conversion.hero.short_tons_us') %></option>
-              <option value="long_tons"><%= t('tools.unit_conversion.hero.long_tons_uk') %></option>
-            </optgroup>
-            <optgroup label="Temperature">
-              <option value="celsius"><%= t('tools.unit_conversion.hero.celsius') %></option>
-              <option value="fahrenheit"><%= t('tools.unit_conversion.hero.fahrenheit') %></option>
-              <option value="kelvin"><%= t('tools.unit_conversion.hero.kelvin') %></option>
-            </optgroup>
-            <optgroup label="Volume">
-              <option value="liters"><%= t('tools.unit_conversion.hero.liters') %></option>
-              <option value="milliliters"><%= t('tools.unit_conversion.hero.milliliters') %></option>
-              <option value="gallons"><%= t('tools.unit_conversion.hero.gallons_us') %></option>
-              <option value="quarts"><%= t('tools.unit_conversion.hero.quarts') %></option>
-              <option value="pints"><%= t('tools.unit_conversion.hero.pints') %></option>
-              <option value="cups"><%= t('tools.unit_conversion.hero.cups') %></option>
-              <option value="fluid_ounces"><%= t('tools.unit_conversion.hero.fluid_ounces') %></option>
-              <option value="cubic_meters"><%= t('tools.unit_conversion.hero.cubic_meters') %></option>
-            </optgroup>
-            <optgroup label="Speed">
-              <option value="meters_per_second"><%= t('tools.unit_conversion.hero.meters_second') %></option>
-              <option value="kilometers_per_hour"><%= t('tools.unit_conversion.hero.km_hour') %></option>
-              <option value="miles_per_hour"><%= t('tools.unit_conversion.hero.miles_hour') %></option>
-              <option value="knots"><%= t('tools.unit_conversion.hero.knots') %></option>
-            </optgroup>
-            <optgroup label="Area">
-              <option value="square_meters"><%= t('tools.unit_conversion.hero.square_meters') %></option>
-              <option value="square_kilometers"><%= t('tools.unit_conversion.hero.square_kilometers') %></option>
-              <option value="square_miles"><%= t('tools.unit_conversion.hero.square_miles') %></option>
-              <option value="square_feet"><%= t('tools.unit_conversion.hero.square_feet') %></option>
-              <option value="acres"><%= t('tools.unit_conversion.hero.acres') %></option>
-              <option value="hectares"><%= t('tools.unit_conversion.hero.hectares') %></option>
-            </optgroup>
+            <option value=""><%= t("tools.unit_conversion.hero.target_unit") %></option>
+            <% unit_options.each do |group| %>
+              <optgroup label="<%= group[:group] %>">
+                <% group[:options].each do |value, label| %>
+                  <option value="<%= value %>" <%= "selected" if value == "km" %>><%= label %></option>
+                <% end %>
+              </optgroup>
+            <% end %>
           </select>
 
-          <label for="unit-conversion-value-demo-input" class="sr-only"><%= t('tools.unit_conversion.demo.value_label') %></label>
+          <label for="unit-conversion-value-demo-input" class="sr-only"><%= t("tools.unit_conversion.demo.value_label") %></label>
           <input
             id="unit-conversion-value-demo-input"
             type="number"
@@ -165,8 +137,8 @@
           />
 
           <div class="flex justify-between">
-            <p class="mt-2 flex text-xs text-gray-400 dark:text-gray-500 text-left"><%= t('shared.info.no_account_demo') %></p>
-            <%= render "partials/shared/submit_button", text: t('tools.unit_conversion.hero.convert'), controller: "unit-conversion-demo" %>
+            <p class="mt-2 flex text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("shared.info.no_account_demo") %></p>
+            <%= render "partials/shared/submit_button", text: t("tools.unit_conversion.hero.convert"), controller: "unit-conversion-demo" %>
           </div>
         </div>
 

@@ -34,10 +34,10 @@ es:
           usuario? Esto revocará todas sus claves API y cancelará su suscripción."
         are_you_sure_you_want_to_resolve_this: "¿Está seguro de que desea cerrar este
           informe?"
-        ban: 'Prohibición:'
+        ban: "Prohibición:"
         by_email: por %{email}
         created_at_ago: "(%{created_at} hace)"
-        investigate: 'Investigar:'
+        investigate: "Investigar:"
         key_prefix: Prefijo de clave
         last_request: Última solicitud
         last_request_at_ago: "%{last_request_at} hace un tiempo"
@@ -48,8 +48,8 @@ es:
         reported: Informado
         reported_at: Informado en
         reported_user: Usuario denunciado
-        resolve: 'Resolver:'
-        suspend: 'Suspender:'
+        resolve: "Resolver:"
+        suspend: "Suspender:"
         suspended: Suspendido
         take_action_on_this_abuse_report: Tome medidas con respecto a este informe
           de abuso.
@@ -66,12 +66,12 @@ es:
         customer_distribution: Distribución de clientes
         declining_revenue_description: Investigar las causas e implementar estrategias
           de crecimiento.
-        declining_revenue_label: 'Disminución de los ingresos:'
+        declining_revenue_label: "Disminución de los ingresos:"
         high_churn_description: Centrarse en la retención y satisfacción del cliente.
-        high_churn_label: 'Alta tasa de abandono:'
+        high_churn_label: "Alta tasa de abandono:"
         key_takeaways: Conclusiones clave
         low_churn_description: Los clientes están satisfechos con el servicio.
-        low_churn_label: 'Baja tasa de abandono:'
+        low_churn_label: "Baja tasa de abandono:"
         monthly_recurring_revenue: Ingresos mensuales recurrentes
         monthly_recurring_revenue_over_time: Ingresos mensuales recurrentes a lo largo
           del tiempo
@@ -90,9 +90,9 @@ es:
         revenue_insights: Información sobre ingresos
         revenue_trend_last_12_months: Tendencia de los ingresos (últimos 12 meses)
         steady_growth_description: Los ingresos están aumentando de forma constante.
-        steady_growth_label: 'Crecimiento constante:'
+        steady_growth_label: "Crecimiento constante:"
         strong_growth_description: Los ingresos están aumentando rápidamente.
-        strong_growth_label: 'Fuerte crecimiento:'
+        strong_growth_label: "Fuerte crecimiento:"
         subscription_growth_and_churn_over_time: Crecimiento y abandono de suscripciones
           a lo largo del tiempo
         subscription_revenue_and_financial: Ingresos por suscripciones y métricas
@@ -131,7 +131,7 @@ es:
         response_slow_description: Se necesita optimización del rendimiento.
         response_slow_label: Tiempos de respuesta lentos.
         response_times: Tiempos de respuesta
-        response_times_detail: 'P95: %{p95}ms, P99: %{p99}ms'
+        response_times_detail: "P95: %{p95}ms, P99: %{p99}ms"
         security_high_description: Supervise posibles amenazas de seguridad.
         security_high_label: Alto número de intentos de autenticación fallidos.
         security_label: Seguridad
@@ -304,7 +304,7 @@ es:
         no_users_found: No se encontraron usuarios
         oldest_first: Del más antiguo al más antiguo.
         search_by_email_name_or_company: Buscar por correo electrónico, nombre o empresa.
-        sort: 'Clasificar:'
+        sort: "Clasificar:"
         suspended: Suspendido
         try_adjusting_your_search_or_filters: Intenta ajustar tu búsqueda o filtros.
         user_management: Gestión de usuarios

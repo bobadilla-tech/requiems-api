@@ -9,5 +9,5 @@ en:
   errors:
     messages:
       not_saved:
-        one: '1 error prohibited this record from being saved:'
+        one: "1 error prohibited this record from being saved:"
         other: "%{count} errors prohibited this record from being saved:"

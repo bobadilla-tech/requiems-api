@@ -1,20 +1,13 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Handles client-side validation and loading state for the Sudoku demo.
-// API call and result rendering are handled server-side via Turbo Frames.
+// Handles loading state for the Sudoku demo.
+// Difficulty is a required <select> with a default option, so empty-field
+// validation is unnecessary. API call and result rendering are server-side.
 export default class extends Controller {
-  static targets = ["input", "button", "errorMessage", "spinner"];
-  static values = { errorEmpty: String };
+  static targets = ["button", "errorMessage", "spinner"];
 
-  onSubmitStart(event) {
+  onSubmitStart() {
     this._clearError();
-
-    if (!this.inputTarget.value.trim()) {
-      event.detail.formSubmission.stop();
-      this._showError(this.errorEmptyValue);
-      return;
-    }
-
     this.buttonTarget.disabled = true;
     this.spinnerTarget.classList.remove("hidden");
   }
@@ -24,12 +17,8 @@ export default class extends Controller {
     this.spinnerTarget.classList.add("hidden");
   }
 
-  _showError(msg) {
-    this.errorMessageTarget.textContent = msg;
-    this.errorMessageTarget.classList.remove("hidden");
-  }
-
   _clearError() {
+    if (!this.hasErrorMessageTarget) return;
     this.errorMessageTarget.classList.add("hidden");
     this.errorMessageTarget.textContent = "";
   }

@@ -23,9 +23,7 @@
     </div>
 
     <!-- Live demo -->
-    <div class="mt-12 max-w-xl mx-auto"
-         data-controller="sudoku-demo"
-         data-sudoku-demo-error-empty-value="<%= t('tools.sudoku.demo.error_empty') %>">
+    <div class="mt-12 max-w-xl mx-auto" data-controller="sudoku-demo">
 
       <form data-action="turbo:submit-start->sudoku-demo#onSubmitStart turbo:submit-end->sudoku-demo#onSubmitEnd"
             action="<%= tool_demo_sudoku_path %>"
@@ -39,7 +37,6 @@
             <label for="sudoku-demo-difficulty" class="sr-only"><%= t("tools.sudoku.hero.label_difficulty") %></label>
             <select id="sudoku-demo-difficulty"
                     name="difficulty"
-                    data-sudoku-demo-target="input"
                     class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm">
               <option value="easy"><%= t("tools.sudoku.hero.difficulty_easy") %></option>
               <option value="medium" selected><%= t("tools.sudoku.hero.difficulty_medium") %></option>

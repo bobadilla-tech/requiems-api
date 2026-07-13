@@ -4,9 +4,9 @@ en:
     new_suggestion:
       a_user_has_suggested_a_new_api_for: A user has suggested a new API for Requiems
       api_name: API Name
-      api_name_api_name: 'API Name: %{api_name}'
-      consider_creating_an_issue: 'Consider creating an issue or discussion on GitHub:
-        %{repository}'
+      api_name_api_name: "API Name: %{api_name}"
+      consider_creating_an_issue: "Consider creating an issue or discussion on GitHub:
+        %{repository}"
       contact_email_for_follow_up: Contact Email (for follow-up)
       new_api_suggestion: New API Suggestion
       use_case: Use Case

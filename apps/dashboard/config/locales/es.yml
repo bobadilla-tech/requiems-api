@@ -6,7 +6,7 @@ es:
   errors:
     messages:
       not_saved:
-        one: '1 error impidió que este registro se guardara:'
+        one: "1 error impidió que este registro se guardara:"
         other: "%{count} errores impidieron que este registro se guardara:"
   time:
     formats:

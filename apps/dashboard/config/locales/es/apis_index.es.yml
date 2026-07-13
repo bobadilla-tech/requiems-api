@@ -14,5 +14,5 @@ es:
         y la satisfacción del cliente.
     systems_section:
       backend_systems: Sistemas de backend
-      composed_signal_engines_one_call: 'Motores de señalización compuestos: una llamada
-        devuelve una decisión estructurada.'
+      composed_signal_engines_one_call: "Motores de señalización compuestos: una llamada
+        devuelve una decisión estructurada."

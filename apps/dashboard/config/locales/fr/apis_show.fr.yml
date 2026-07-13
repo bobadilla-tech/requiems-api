@@ -26,4 +26,4 @@ fr:
       rate_limit_title: Tests trop rapides !
       signup_benefit_html: Inscrivez-vous gratuitement et obtenez <strong>%{requests}</strong>
         — vous pouvez continuer à tester immédiatement.
-      status: 'Statut:'
+      status: "Statut:"

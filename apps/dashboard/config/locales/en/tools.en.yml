@@ -938,6 +938,19 @@ en:
           text.
     unit_conversion:
       api_combinations:
+        heading: Use together with complementary APIs.
+        subheading: Unit Conversion becomes even more useful when combined with other Requiems APIs.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        exchange_pair: Unit Conversion + Exchange Rate
+        exchange_benefit: Convert physical measurements and currencies in the same workflow. Ideal for international commerce, shipping calculators, and pricing tools.
+        exchange_outcome: One pipeline for quantity and money — shipping weight and landed cost in the same request flow.
+        geocode_pair: Unit Conversion + Geocoding
+        geocode_benefit: Transform distances and locations together. Convert miles to kilometers while calculating routes, delivery ranges, or travel estimates.
+        geocode_outcome: Distance-aware location tools without hardcoding unit math.
+        numbase_pair: Unit Conversion + Number Base Conversion
+        numbase_benefit: Handle both measurement and numeric transformations in engineering, educational, and technical applications.
+        numbase_outcome: Measurement and radix conversion from a single API provider.
         unit_conversion_becomes_even_more:
           Unit Conversion becomes even more useful
           when combined with other Requiems APIs.
@@ -956,11 +969,18 @@ en:
         result_heading: Conversion Result
         value_label: Value
       hero:
+        title_html: Convert measurements instantly<br class="hidden sm:block"> across every unit type.
+        subtitle: Length, weight, volume, temperature, area, and speed conversions — with precise results, conversion formulas, and unit discovery endpoints in a single API.
+        group_length: Length
+        group_weight: Weight
+        group_temperature: Temperature
+        group_volume: Volume
+        group_speed: Speed
+        group_area: Area
         acres: Acres
         celsius: Celsius
         centimeters: Centimeters
         convert: Convert
-        cubic_meters: Cubic Meters
         cups: Cups
         fahrenheit: Fahrenheit
         feet: Feet
@@ -976,11 +996,11 @@ en:
         km_hour: Km/hour
         knots: Knots
         liters: Liters
-        long_tons_uk: Long Tons (UK)
         meters: Meters
         meters_second: Meters/second
         miles: Miles
         miles_hour: Miles/hour
+        milligrams: Milligrams
         milliliters: Milliliters
         millimeters: Millimeters
         nautical_miles: Nautical Miles
@@ -989,13 +1009,14 @@ en:
         pounds: Pounds
         quarts: Quarts
         read_the_docs: Read the docs
-        short_tons_us: Short Tons (US)
         source_unit: Source unit
         square_feet: Square Feet
         square_kilometers: Square Kilometers
         square_meters: Square Meters
-        square_miles: Square Miles
+        stone: Stone
+        tablespoons: Tablespoons
         target_unit: Target unit
+        teaspoons: Teaspoons
         tons_metric: Tons (metric)
         yards: Yards
       show:
@@ -1163,6 +1184,7 @@ en:
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_generic: "Something went wrong. Try again."
         error_no_data: "No timezone data found for that location."
+        result_failed_heading: "Lookup failed"
         badge_found: "Found"
         badge_yes: "✓ Yes"
         badge_no: "✗ No"
@@ -1215,12 +1237,17 @@ en:
       api_combinations:
         heading: "Use together with complementary APIs."
         subheading: "Timezone works even better when paired with other Requiems APIs."
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
         worldtime_pair: "Timezone + World Time"
         worldtime_benefit: "Resolve the IANA timezone name first, then query World Time directly by name for lightweight repeated lookups."
+        worldtime_outcome: "Faster follow-up lookups once the timezone ID is known."
         geocode_pair: "Timezone + Geocoding"
         geocode_benefit: "Convert a free-form address to coordinates, then feed those coordinates into Timezone for a complete location-to-time pipeline."
+        geocode_outcome: "Turn any address into a current local time in two API calls."
         cities_pair: "Timezone + Cities"
         cities_benefit: "Look up city metadata — population, country, coordinates — alongside timezone information in the same request flow."
+        cities_outcome: "Richer location context for scheduling and local-time UIs."
       faq:
         heading: "Frequently Asked Questions"
         support_prompt: "Still have questions?"
@@ -1309,18 +1336,23 @@ en:
         subheading:
           Spell check is more effective as part of a text-processing pipeline.
           Combine it with other Requiems APIs for deeper content analysis.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
         sentiment_pair: Spell Check + Sentiment Analysis
         sentiment_benefit:
           Clean up spelling errors first, then run sentiment analysis on the
           corrected text for more accurate tone classification.
+        sentiment_outcome: More reliable sentiment scores on cleaned text.
         language_pair: Spell Check + Language Detection
         language_benefit:
           Detect the input language before spell-checking. Route text to the
           right language model automatically.
+        language_outcome: Language-aware correction before downstream NLP.
         email_pair: Spell Check + Email Normalizer
         email_benefit:
           Normalize email addresses and check spelling in the associated
           display name or message body in one pipeline.
+        email_outcome: Cleaner contact data and message text in the same flow.
       faq:
         heading: Frequently Asked Questions
         support_prompt: Still have questions?
@@ -1358,6 +1390,7 @@ en:
         error_generic: Something went wrong. Try again.
         error_rate_limit: Too many requests. Wait a moment and try again.
         error_no_data: No data returned.
+        result_failed_heading: Spell check failed
         result_heading: Result
         label_corrected: Corrected text
         label_errors_found: Errors found
@@ -1765,6 +1798,7 @@ en:
         error_generic: Something went wrong. Try again.
         error_network: Network error. Please check your connection.
         error_no_data: No data returned.
+        result_failed_heading: Generation failed
         badge_live: Live
         avatar_alt: User avatar
         label_name: Name
@@ -1798,6 +1832,7 @@ en:
         error_rate_limit: "Too many requests. Wait a moment and try again."
         error_generic: "Something went wrong. Try again."
         error_no_data: "Could not generate a puzzle. Try again."
+        result_failed_heading: "Puzzle generation failed"
         badge_easy: "Easy"
         badge_medium: "Medium"
         badge_hard: "Hard"
