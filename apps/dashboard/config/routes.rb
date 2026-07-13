@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post "tools/demos/qr-code",           to: "tool_demos#qr_code",           as: :tool_demo_qr_code
   post "tools/demos/profanity-filter",  to: "tool_demos#profanity_filter",  as: :tool_demo_profanity_filter
   post "tools/demos/trivia",            to: "tool_demos#trivia",            as: :tool_demo_trivia
+  post "tools/demos/random-user",      to: "tool_demos#random_user",      as: :tool_demo_random_user
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

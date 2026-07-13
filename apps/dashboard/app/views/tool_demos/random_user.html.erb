@@ -1,0 +1,40 @@
+<turbo-frame id="random_user-demo-result">
+  <div class="mt-4 text-left rounded-xl border overflow-hidden"
+       style="background-color: #0d1117; border-color: rgba(255,255,255,0.06);">
+    <div class="px-4 py-3 flex items-center gap-3"
+         style="background-color: #161b22; border-bottom: 1px solid rgba(255,255,255,0.05);">
+      <% if data["avatar"].present? %>
+        <img src="<%= data["avatar"] %>"
+             alt="<%= t("tools.random_user.demo.avatar_alt") %>"
+             class="w-8 h-8 rounded-full shrink-0"
+             loading="lazy">
+      <% end %>
+      <span class="text-sm font-semibold truncate" style="color: #e2e8f0;"><%= data["name"] %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-300">
+        <%= t("tools.random_user.demo.badge_live") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <% fields = [
+        { label: t("tools.random_user.demo.label_name"),    value: data["name"],  color: "text-white" },
+        { label: t("tools.random_user.demo.label_email"),   value: data["email"], color: "text-white" },
+        { label: t("tools.random_user.demo.label_phone"),   value: data["phone"], color: "text-white" },
+        { label: t("tools.random_user.demo.label_street"),  value: data.dig("address", "street"),  color: "text-white" },
+        { label: t("tools.random_user.demo.label_city"),    value: data.dig("address", "city"),    color: "text-white" },
+        { label: t("tools.random_user.demo.label_state"),   value: data.dig("address", "state"),   color: "text-white" },
+        { label: t("tools.random_user.demo.label_zip"),     value: data.dig("address", "zip"),     color: "text-white" },
+        { label: t("tools.random_user.demo.label_country"), value: data.dig("address", "country"), color: "text-white" },
+      ] %>
+      <% fields.each_with_index do |field, i| %>
+        <div class="flex items-center justify-between py-2 <%= i < fields.length - 1 ? 'border-b' : '' %>"
+             style="border-color: rgba(255,255,255,0.04);">
+          <span class="text-sm" style="color: rgba(255,255,255,0.5);"><%= field[:label] %></span>
+          <span class="text-sm font-mono <%= field[:color] %>">
+            <%= field[:value].presence || "—" %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>
