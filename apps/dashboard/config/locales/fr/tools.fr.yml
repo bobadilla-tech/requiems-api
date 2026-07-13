@@ -58,7 +58,7 @@ fr:
         label_input: Nom de domaine
         no_account: Aucun compte requis
         placeholder: par exemple example.com
-        subtitle: 'Disponibilité, données WHOIS, informations sur le registraire et dates d''expiration : tout cela grâce à un seul appel API. Aucun scraping, aucune limite de requêtes de votre côté.'
+        subtitle: "Disponibilité, données WHOIS, informations sur le registraire et dates d'expiration : tout cela grâce à un seul appel API. Aucun scraping, aucune limite de requêtes de votre côté."
         title: Vérifier n'importe quel domaine
         title_highlight: en millisecondes
         try_live: Essayez-le en direct
@@ -91,7 +91,7 @@ fr:
         heading: Que fait l'API Domain Checker ?
         simplicity_body: "Une simple requête POST avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : juste un appel HTTP et une réponse JSON."
         simplicity_heading: Simplicité
-        subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un domaine : disponibilité, propriétaire et historique d''enregistrement.'
+        subheading: "Un seul point d'accès. Tout ce que vous devez savoir sur un domaine : disponibilité, propriétaire et historique d'enregistrement."
     email_normalizer:
       api_combinations:
         domain_benefit: Normalisez les emails et vérifiez simultanément l'intégrité du domaine.
@@ -308,7 +308,7 @@ fr:
         heading: Que fait l'API de validation téléphonique ?
         simplicity_body: "Une simple requête GET avec votre clé API suffit. Aucun SDK, aucune configuration, aucune installation : un simple appel HTTP et une réponse JSON suffisent."
         simplicity_heading: Simplicité
-        subheading: 'Un seul point d''accès. Tout ce que vous devez savoir sur un numéro de téléphone : validité, opérateur, type de ligne et format normalisé.'
+        subheading: "Un seul point d'accès. Tout ce que vous devez savoir sur un numéro de téléphone : validité, opérateur, type de ligne et format normalisé."
     bin_lookup:
       seo:
         title: "Recherche gratuite de BIN — Réseau de cartes, banque émettrice et pays | Requiems API"
@@ -617,6 +617,18 @@ fr:
       api_combinations:
         pair_it_with_other_apis: Associez-le à d'autres API
         sentiment_works_best_as_part_of_a: L'analyse des sentiments est plus efficace lorsqu'elle est intégrée à un processus. Voici trois combinaisons naturelles.
+        spell_check_title: Sentiment + Correction orthographique
+        spell_check_body: Exécutez d'abord une correction orthographique pour nettoyer les entrées utilisateur, puis analysez les sentiments sur le texte corrigé pour des résultats plus précis.
+        spell_check_link: API de correction orthographique
+        language_title: Sentiment + Détection de langue
+        language_body: Détectez la langue avant d'acheminer le texte vers le modèle de sentiment approprié. Utile pour les files d'attente de support multilingue et les plateformes d'avis mondiales.
+        language_link: API de détection de langue
+        email_title: Sentiment + Validateur d'email
+        email_body: Validez l'email de l'expéditeur et analysez le ton de son message en une seule passe — avant de stocker les commentaires ou d'ouvrir un ticket de support.
+        email_link: API de validation d'email
+      cta:
+        heading: Automatisez cela avec Requiems.
+        body: Une clé API. Analyse des sentiments, plus de 50 API supplémentaires dans la validation, la finance, le réseau et plus encore.
       demo:
         error_empty: Saisissez du texte à analyser.
         error_generic: Une erreur s'est produite. Veuillez réessayer.
@@ -624,7 +636,7 @@ fr:
         error_no_data: Aucune donnée n'a été renvoyée.
         error_rate_limit: Trop de requêtes. Veuillez patienter un instant et réessayer.
         input_placeholder: Collez n'importe quel texte, avis, commentaire ou suggestion...
-        label_breakdown: Panne
+        label_breakdown: Répartition
         label_confident: confiant
         label_negative: Négatif
         label_neutral: Neutre
@@ -632,21 +644,52 @@ fr:
         result_heading: Analyse des sentiments
       faq:
         heading: Foire aux questions
+        q1: Quelles sont les valeurs de sentiment possibles ?
+        a1: Le champ de sentiment renvoie l'une des trois valeurs — positif, négatif ou neutre — selon la classe ayant le score de confiance le plus élevé.
+        q2: Que représente la répartition ?
+        a2: Les trois valeurs de répartition (positif, négatif, neutre) totalisent toujours 1,0. Elles montrent la confiance proportionnelle dans toutes les classes, pas seulement la dominante. Un score de 0,97 positif signifie que le modèle est très certain ; 0,51 signifie qu'il penche vers le positif mais que le texte est ambigu.
+        q3: Quelle peut être la longueur du texte d'entrée ?
+        a3: Il n'y a pas de limite stricte de caractères au niveau de l'API, mais les très longues entrées peuvent être tronquées par le modèle sous-jacent. Visez des entrées de moins de 512 tokens (environ 400 mots) pour une meilleure précision.
+        q4: Puis-je analyser plusieurs textes à la fois ?
+        a4: Oui. Le point de terminaison par lot (POST /v1/text/sentiment/batch) accepte jusqu'à 50 textes par requête. Les résultats sont renvoyés dans le même ordre que l'entrée et chaque texte compte comme une unité d'utilisation.
+        q5: Est-ce gratuit ?
+        a5: La démo ci-dessus fonctionne sans compte. Les plans payants offrent des limites de débit plus élevées et un accès complet à l'API pour une utilisation en production.
       hero:
         analyze: Analyser
         get_api_key: Obtenir la clé API
         know_how_your_text_lands: Sachez comment votre texte est perçu.
         read_the_docs: Lisez les documents
+        subtitle: Classez n'importe quel texte comme positif, négatif ou neutre — avec un score de confiance et une répartition complète, en un seul appel API.
+      logo_marquee:
+        trusted_by: Adopté par les équipes de
+      seo:
+        description: Analysez instantanément le sentiment de n'importe quel texte. Obtenez une classification positive, négative ou neutre avec un score de confiance et une répartition complète — gratuit, sans compte requis.
       show:
         free_sentiment_analysis_tool_positive: Outil gratuit d'analyse des sentiments — Détection des textes positifs, négatifs et neutres | Requiems API
       use_cases:
         anywhere_text_flows_through_your_system: Partout où du texte circule dans votre système, le sentiment vous donne un signal.
         built_for_real_use_cases: Conçu pour des cas d'utilisation réels
+        customer_support_title: Support client
+        customer_support_body: Acheminez automatiquement les tickets. Signalez les clients frustrés pour un traitement prioritaire avant qu'ils ne partent.
+        product_reviews_title: Avis produits
+        product_reviews_body: Agrégez les sentiments de milliers d'avis sans les lire un par un.
+        social_media_title: Surveillance des réseaux sociaux
+        social_media_body: Suivez les mentions de marque en temps réel et détectez les changements de sentiment avant qu'ils ne deviennent des problèmes de relations publiques.
+        content_moderation_title: Modération de contenu
+        content_moderation_body: Pré-filtrez le contenu généré par les utilisateurs pour détecter un ton hostile ou nuisible avant qu'il n'atteigne d'autres utilisateurs.
+        nlp_pipelines_title: Pipelines PNL
+        nlp_pipelines_body: Utilisez le sentiment comme caractéristique dans les modèles de ML — prétraitement pour la classification de texte, la recommandation ou les tâches de classement.
+        survey_analysis_title: Analyse d'enquêtes
+        survey_analysis_body: Transformez les réponses ouvertes d'enquêtes en données structurées de sentiment sans étiquetage manuel.
       what_it_does:
         one_call_three_values_enough_signal_to: Un seul appel. Trois valeurs. Un signal suffisant pour agir.
         positive_negative_or_neutral: Positif, négatif ou neutre
         proportional_scores_across_all_classes: Scores proportionnels dans toutes les classes
         what_it_does: Ce que cela fait
+        instant_classification: Classification instantanée
+        classification_body: Chaque texte reçoit une étiquette dominante plus un score de confiance entre 0,0 et 1,0, vous permettant de définir des seuils de résultats avec précision.
+        full_breakdown: Répartition complète
+        breakdown_body: La répartition montre comment le modèle distribue la confiance entre les trois classes — totalisant toujours 1,0. Utile pour les textes ambigus ou au ton mixte.
     unit_conversion:
       api_combinations:
         unit_conversion_becomes_even_more: La conversion d'unités devient encore plus utile lorsqu'elle est combinée avec d'autres Requiems API.
