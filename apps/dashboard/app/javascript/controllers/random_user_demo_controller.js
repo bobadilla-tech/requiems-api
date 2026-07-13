@@ -12,9 +12,14 @@ export default class extends Controller {
     this.spinnerTarget.classList.remove("hidden");
   }
 
-  onSubmitEnd() {
+  onSubmitEnd(event) {
     this.buttonTarget.disabled = false;
     this.spinnerTarget.classList.add("hidden");
+
+    if (!event.detail.success) {
+      this.errorMessageTarget.textContent = "Failed to fetch a random user. Please try again.";
+      this.errorMessageTarget.classList.remove("hidden");
+    }
   }
 
   _clearError() {
