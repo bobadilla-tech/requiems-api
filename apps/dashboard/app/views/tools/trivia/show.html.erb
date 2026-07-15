@@ -1,0 +1,19 @@
+<% content_for :title, t("tools.trivia.seo.title") %>
+<% content_for :description, t("tools.trivia.seo.description") %>
+
+<%= render "partials/tools/trivia/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.trivia.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/trivia/what_it_does" %>
+<%= render "partials/tools/trivia/use_cases" %>
+<%= render "partials/tools/trivia/api_combinations" %>
+<%= render "partials/tools/trivia/faq" %>
+<%= render "partials/tools/trivia/cta" %>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -63,6 +63,41 @@ class ToolsController < ApplicationController
       name: "User Agent Parser",
       description: "Parse user agent strings to extract browser, OS, device type, and bot detection.",
       icon_classes: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400"
+    },
+    "timezone" => {
+      name: "Timezone",
+      description: "IANA timezone, UTC offset, current time, and DST status for any city or coordinates.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "trivia" => {
+      name: "Trivia",
+      description: "Random trivia questions with multiple-choice answers, filterable by category and difficulty.",
+      icon_classes: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400"
+    },
+    "vpn-detection" => {
+      name: "VPN & Proxy Detection",
+      description: "Detect if an IP address belongs to a VPN, proxy, Tor exit node, or hosting provider, with threat and fraud scoring.",
+      icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+    },
+    "thesaurus" => {
+      name: "Thesaurus",
+      description: "Find synonyms and antonyms for any word to enhance vocabulary and writing.",
+      icon_classes: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
+    },
+    "spell-check" => {
+      name: "Spell Check",
+      description: "Check spelling and get correction suggestions for misspelled words in any text.",
+      icon_classes: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400"
+    },
+    "random-user" => {
+      name: "Random User",
+      description: "Generate random fake user profiles for testing and prototyping — names, emails, phone numbers, addresses, and avatars.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "sudoku" => {
+      name: "Sudoku",
+      description: "Generate Sudoku puzzles with solutions across multiple difficulty levels.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
     }
   }.freeze
 

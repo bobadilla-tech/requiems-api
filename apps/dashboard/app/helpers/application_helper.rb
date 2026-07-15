@@ -169,6 +169,25 @@ module ApplicationHelper
     }.to_json
   end
 
+  def blog_post_json_ld(post)
+    url = "#{request.base_url}#{blog_post_path(post.slug)}"
+
+    {
+      "@context" => "https://schema.org",
+      "@type" => "BlogPosting",
+      "headline" => post.title,
+      "description" => post.description,
+      "datePublished" => post.date.iso8601,
+      "author" => { "@type" => "Person", "name" => post.author },
+      "publisher" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      },
+      "mainEntityOfPage" => { "@type" => "WebPage", "@id" => url }
+    }.to_json
+  end
+
   def api_json_ld(api)
     {
       "@context" => "https://schema.org",

@@ -1,0 +1,69 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.random_user.hero.title") %>
+      <span class="block mt-2 text-brand-primary"><%= t("tools.random_user.hero.title_highlight") %></span>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.random_user.hero.subtitle") %>
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-8">
+      <% [
+        t("shared.common.json_response"),
+        t("shared.common.uptime"),
+        t("shared.common.latency"),
+        t("shared.common.rest_api"),
+      ].each do |badge| %>
+        <span class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <svg class="h-4 w-4 shrink-0 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <%= badge %>
+        </span>
+      <% end %>
+    </div>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.random_user.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.random_user.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("random-user"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="random-user-demo"
+         data-random-user-demo-error-network-value="<%= t('tools.random_user.demo.error_network') %>">
+
+      <form data-action="turbo:submit-start->random-user-demo#onSubmitStart turbo:submit-end->random-user-demo#onSubmitEnd"
+            action="<%= tool_demo_random_user_path %>"
+            method="post"
+            data-turbo-frame="random_user-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+        <%= render "partials/shared/submit_button",
+              text: t("tools.random_user.hero.submit"),
+              controller: "random-user-demo" %>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500"><%= t("tools.random_user.hero.no_account") %></p>
+
+        <p data-random-user-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="random_user-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

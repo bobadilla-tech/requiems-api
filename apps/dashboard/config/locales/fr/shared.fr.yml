@@ -12,20 +12,20 @@ fr:
       invalid: Invalide
       json_response: Réponse JSON
       latency: Latence moyenne < 300 ms
-      'no': "✗ Non"
+      "no": "✗ Non"
       performance: Performance
       rest_api: API REST
       uptime: Disponibilité de 99,9 %
       utilities: Parcourir les utilitaires
       valid: Valide
       view: Voir
-      'yes': "✓ Oui"
+      "yes": "✓ Oui"
     danger_zone:
       cancel_btn: Annuler
       default_bullets:
-      - Toutes vos clés API seront immédiatement révoquées
-      - Votre abonnement sera annulé
-      - Toutes les données d'utilisation seront définitivement supprimées
+        - Toutes vos clés API seront immédiatement révoquées
+        - Votre abonnement sera annulé
+        - Toutes les données d'utilisation seront définitivement supprimées
       default_description: Supprime définitivement votre compte et toutes les données
         associées. Cette action est irréversible.
       default_title: Supprimer le compte
@@ -88,8 +88,8 @@ fr:
       environment: Environnement
       joined: Adhésion
       monthly: Mensuel
-      'no': Non
-      'yes': Oui
+      "no": Non
+      "yes": Oui
     nav:
       api_keys: Clés API
       apis: APIs

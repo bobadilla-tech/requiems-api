@@ -12,7 +12,7 @@
 >
   <url>
     <loc>https://requiems.xyz/en/apis/exchange-rate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/exchange-rate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -64,7 +64,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/exchange-rate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -90,7 +90,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/crypto/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -116,7 +116,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/crypto/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -142,7 +142,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/crypto/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -168,7 +168,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/bin-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -194,7 +194,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/bin-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -220,7 +220,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/bin-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -246,7 +246,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/iban/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -272,7 +272,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/iban/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -298,7 +298,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/iban/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -324,7 +324,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/swift-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -350,7 +350,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/swift-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -376,7 +376,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/swift-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -402,7 +402,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/mortgage/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -428,7 +428,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/mortgage/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -454,7 +454,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/mortgage/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -480,7 +480,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/commodities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -506,7 +506,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/commodities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -532,7 +532,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/commodities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -558,7 +558,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/inflation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -584,7 +584,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/inflation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -610,7 +610,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/inflation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -636,7 +636,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/email-validate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -662,7 +662,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/email-validate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -688,7 +688,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/email-validate/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -714,7 +714,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/phone-validation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -740,7 +740,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/phone-validation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -766,7 +766,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/phone-validation/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -792,7 +792,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/profanity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -818,7 +818,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/profanity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -844,7 +844,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/profanity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -870,7 +870,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/ip-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -896,7 +896,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/ip-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -922,7 +922,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/ip-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -948,7 +948,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/ip-asn/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -974,7 +974,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/ip-asn/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1000,7 +1000,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/ip-asn/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1026,7 +1026,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/vpn-detection/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1052,7 +1052,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/vpn-detection/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1078,7 +1078,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/vpn-detection/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1104,7 +1104,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/whois/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1130,7 +1130,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/whois/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1156,7 +1156,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/whois/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1182,7 +1182,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/domain-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1208,7 +1208,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/domain-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1234,7 +1234,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/domain-info/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1260,7 +1260,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/mx-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1286,7 +1286,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/mx-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1312,7 +1312,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/mx-lookup/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1338,7 +1338,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/disposable-email/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1364,7 +1364,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/disposable-email/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1390,7 +1390,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/disposable-email/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1416,7 +1416,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/timezone/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1442,7 +1442,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/timezone/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1468,7 +1468,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/timezone/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1494,7 +1494,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/world-time/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1520,7 +1520,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/world-time/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1546,7 +1546,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/world-time/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1572,7 +1572,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/working-days/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1598,7 +1598,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/working-days/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1624,7 +1624,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/working-days/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1650,7 +1650,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/holidays/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1676,7 +1676,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/holidays/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1702,7 +1702,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/holidays/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1728,7 +1728,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/geocode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1754,7 +1754,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/geocode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1780,7 +1780,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/geocode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1806,7 +1806,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/postal-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1832,7 +1832,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/postal-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1858,7 +1858,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/postal-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1884,7 +1884,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/cities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1910,7 +1910,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/cities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1936,7 +1936,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/cities/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -1962,7 +1962,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/spell-check/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -1988,7 +1988,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/spell-check/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2014,7 +2014,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/spell-check/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2040,7 +2040,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/thesaurus/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2066,7 +2066,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/thesaurus/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2092,7 +2092,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/thesaurus/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2118,7 +2118,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/dictionary/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2144,7 +2144,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/dictionary/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2170,7 +2170,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/dictionary/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2196,7 +2196,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/sentiment/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2222,7 +2222,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/sentiment/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2248,7 +2248,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/sentiment/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2274,7 +2274,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/detect-language/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2300,7 +2300,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/detect-language/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2326,7 +2326,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/detect-language/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2352,7 +2352,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/text-similarity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2378,7 +2378,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/text-similarity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2404,7 +2404,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/text-similarity/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2430,7 +2430,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/markdown/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2456,7 +2456,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/markdown/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2482,7 +2482,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/markdown/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2508,7 +2508,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/lorem-ipsum/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2534,7 +2534,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/lorem-ipsum/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2560,7 +2560,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/lorem-ipsum/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2586,7 +2586,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/words/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2612,7 +2612,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/words/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2638,7 +2638,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/words/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2664,7 +2664,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/email-normalize/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2690,7 +2690,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/email-normalize/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2716,7 +2716,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/email-normalize/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2742,7 +2742,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/qr-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2768,7 +2768,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/qr-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2794,7 +2794,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/qr-code/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2820,7 +2820,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/barcode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2846,7 +2846,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/barcode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2872,7 +2872,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/barcode/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2898,7 +2898,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/password-generator/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -2924,7 +2924,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/password-generator/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2950,7 +2950,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/password-generator/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -2976,7 +2976,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/useragent/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3002,7 +3002,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/useragent/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3028,7 +3028,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/useragent/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3054,7 +3054,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/counter/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3080,7 +3080,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/counter/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3106,7 +3106,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/counter/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3132,7 +3132,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/random-user/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3158,7 +3158,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/random-user/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3184,7 +3184,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/random-user/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3210,7 +3210,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/base64/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3236,7 +3236,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/base64/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3262,7 +3262,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/base64/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3288,7 +3288,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/number-base-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3314,7 +3314,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/number-base-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3340,7 +3340,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/number-base-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3366,7 +3366,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/color-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3392,7 +3392,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/color-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3418,7 +3418,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/color-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3444,7 +3444,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/unit-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3470,7 +3470,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/unit-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3496,7 +3496,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/unit-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3522,7 +3522,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/data-format-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3548,7 +3548,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/data-format-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3574,7 +3574,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/data-format-conversion/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3600,7 +3600,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/quotes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3626,7 +3626,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/quotes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3652,7 +3652,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/quotes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3678,7 +3678,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/trivia/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3704,7 +3704,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/trivia/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3730,7 +3730,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/trivia/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3756,7 +3756,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/facts/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3782,7 +3782,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/facts/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3808,7 +3808,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/facts/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3834,7 +3834,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/emoji/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3860,7 +3860,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/emoji/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3886,7 +3886,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/emoji/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3912,7 +3912,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/horoscope/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -3938,7 +3938,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/horoscope/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3964,7 +3964,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/horoscope/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -3990,7 +3990,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/sudoku/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -4016,7 +4016,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/sudoku/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4042,7 +4042,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/sudoku/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4068,7 +4068,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/dad-jokes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -4094,7 +4094,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/dad-jokes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4120,7 +4120,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/dad-jokes/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4146,7 +4146,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/chuck-norris/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -4172,7 +4172,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/chuck-norris/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4198,7 +4198,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/chuck-norris/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4224,7 +4224,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/advice/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -4250,7 +4250,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/advice/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4276,7 +4276,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/advice/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4302,7 +4302,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/en/apis/fitness-exercises/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link
@@ -4328,7 +4328,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/es/apis/fitness-exercises/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link
@@ -4354,7 +4354,7 @@
   </url>
   <url>
     <loc>https://requiems.xyz/fr/apis/fitness-exercises/</loc>
-    <lastmod>2026-06-08</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
     <xhtml:link

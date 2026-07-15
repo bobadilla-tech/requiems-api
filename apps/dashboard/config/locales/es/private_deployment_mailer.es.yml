@@ -2,14 +2,14 @@
 es:
   private_deployment_mailer:
     admin_notification:
-      company_company: 'Empresa: %{company}'
-      contact_contact_name_contact_email: 'Contacto: %{contact_name} <%{contact_email}>'
+      company_company: "Empresa: %{company}"
+      contact_contact_name_contact_email: "Contacto: %{contact_name} <%{contact_email}>"
       new_private_deployment_request: Nueva solicitud de despliegue privado
-      notes_admin_notes: 'Notas: %{admin_notes}'
+      notes_admin_notes: "Notas: %{admin_notes}"
       server_tier: Nivel de servidor
-      tier_capitalize_monthly_price_dollars__mo: 'Nivel: %{capitalize} ($%{monthly_price_dollars}/mes)'
+      tier_capitalize_monthly_price_dollars__mo: "Nivel: %{capitalize} ($%{monthly_price_dollars}/mes)"
     deployment_ready:
-      example_request: 'Ejemplo de solicitud:'
+      example_request: "Ejemplo de solicitud:"
       hi_contact_name: Hola %{contact_name},
       your_private_api_is_live: Tu API privada ya está activa.
       your_private_requiems_api: Su entorno API privado de Requiems para %{company}

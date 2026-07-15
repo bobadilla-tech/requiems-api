@@ -25,4 +25,4 @@ es:
       rate_limit_title: "¡Las pruebas se están realizando demasiado rápido!"
       signup_benefit_html: Regístrate gratis y obtén <strong>%{requests}</strong>
         — podrás seguir haciendo pruebas de inmediato.
-      status: 'Estado:'
+      status: "Estado:"

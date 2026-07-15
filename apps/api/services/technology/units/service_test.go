@@ -153,6 +153,19 @@ func TestService_Convert(t *testing.T) {
 			from: "miles", to: "kg", value: 1,
 			wantErr: ErrIncompatibleUnits,
 		},
+		// Long-form aliases (demo + common API DX)
+		{
+			name: "meters alias to kilometers alias",
+			from: "meters", to: "kilometers", value: 1000,
+			wantResult:  1,
+			wantFormula: "m × 0.001",
+		},
+		{
+			name: "celsius alias to fahrenheit alias",
+			from: "celsius", to: "fahrenheit", value: 0,
+			wantResult:  32,
+			wantFormula: "°C × 9/5 + 32",
+		},
 	}
 
 	for _, tt := range tests {
@@ -171,6 +184,16 @@ func TestService_Convert(t *testing.T) {
 
 			assert.Equal(t, tt.wantFormula, got.Formula)
 		})
+	}
+}
+
+func TestAliases_ResolveToKnownUnits(t *testing.T) {
+	t.Parallel()
+
+	for alias, canonical := range aliases {
+		if _, ok := units[canonical]; !ok {
+			t.Errorf("alias %q maps to unknown unit %q", alias, canonical)
+		}
 	}
 }
 

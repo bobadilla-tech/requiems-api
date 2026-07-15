@@ -59,4 +59,44 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools/useragent"
     assert_response :success
   end
+
+  test "timezone tool page renders successfully" do
+    get "/en/tools/timezone"
+    assert_response :success
+  end
+
+  test "trivia tool page renders successfully" do
+    get "/en/tools/trivia"
+    assert_response :success
+    assert_select "[data-controller='trivia-demo']"
+  end
+
+  test "vpn detection tool page renders successfully" do
+    get "/en/tools/vpn-detection"
+    assert_response :success
+  end
+
+  test "thesaurus tool page renders successfully" do
+    get "/en/tools/thesaurus"
+    assert_response :success
+    assert_select "[data-controller='thesaurus-demo']"
+  end
+
+  test "spell check tool page renders successfully" do
+    get "/en/tools/spell-check"
+    assert_response :success
+    assert_select "[data-controller='spell-check-demo']"
+  end
+
+  test "random user tool page renders successfully" do
+    get "/en/tools/random-user"
+    assert_response :success
+    assert_select "[data-controller='random-user-demo']"
+  end
+
+  test "sudoku tool page renders successfully" do
+    get "/en/tools/sudoku"
+    assert_response :success
+    assert_select "[data-controller='sudoku-demo']"
+  end
 end

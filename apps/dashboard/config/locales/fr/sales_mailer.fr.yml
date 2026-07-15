@@ -4,13 +4,13 @@ fr:
     enterprise_inquiry:
       a_potential_enterprise_customer_wants: Un client potentiel d'entreprise souhaite
         parler aux commerciaux
-      company_company: 'Société : %{company}'
+      company_company: "Société : %{company}"
       company: "Société"
       contact_person: Personne de contact
-      contact_person_name: 'Personne à contacter : %{name}'
-      email_email: 'Courriel : %{email}'
+      contact_person_name: "Personne à contacter : %{name}"
+      email_email: "Courriel : %{email}"
       email: Courriel
       message_specific_needs: Message / Besoins spécifiques
-      reminder: 'Rappel:'
-      reply_directly_to_this: 'Répondez directement à ce courriel pour contacter :
-        %{email}'
+      reminder: "Rappel:"
+      reply_directly_to_this: "Répondez directement à ce courriel pour contacter :
+        %{email}"

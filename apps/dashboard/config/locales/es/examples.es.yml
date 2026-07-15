@@ -18,9 +18,9 @@ es:
       cta_contact: Contáctanos
       cta_github: Enviar un ejemplo
       cta_heading: "¿Quieres aportar un ejemplo?"
-      description: 'Ejemplos listos para ejecutar integraciones con Requiems API.
+      description: "Ejemplos listos para ejecutar integraciones con Requiems API.
         Tutoriales para copiar y pegar: validación de correo, geolocalización IP,
-        códigos QR y más.'
+        códigos QR y más."
       empty_body: Prueba con otra categoría.
       empty_heading: No se encontraron ejemplos
       filter_all: Todos los ejemplos

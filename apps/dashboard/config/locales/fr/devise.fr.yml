@@ -42,8 +42,8 @@ fr:
         your_password_won_t_change_until_you: Votre mot de passe ne changera pas tant
           que vous n'aurez pas accédé au lien ci-dessus et créé un nouveau.
       unlock_instructions:
-        click_the_link_below_to_unlock_your: 'Cliquez sur le lien ci-dessous pour
-          déverrouiller votre compte :'
+        click_the_link_below_to_unlock_your: "Cliquez sur le lien ci-dessous pour
+          déverrouiller votre compte :"
         subject: Instructions pour le déverrouillage de votre compte
         unlock_my_account: Débloquer mon compte
         your_account_has_been_locked_due_to_an: Votre compte a été bloqué en raison

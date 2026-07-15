@@ -5,25 +5,32 @@ en:
       api_combinations:
         email_validator_benefit: Validate both the domain and specific email address.
         email_validator_name: Domain Checker + Email Validator
-        email_validator_outcome: "Full email deliverability confidence: domain health
+        email_validator_outcome:
+          "Full email deliverability confidence: domain health
           plus mailbox-level checks."
         heading: Pair It With Other APIs
         label_benefit: "Benefit:"
         label_outcome: "Outcome:"
-        phone_validator_benefit: Verify domain health and phone number at the same
+        phone_validator_benefit:
+          Verify domain health and phone number at the same
           onboarding step.
         phone_validator_name: Domain Checker + Phone Validator
-        phone_validator_outcome: Multi-point contact validation — confirmed digital
+        phone_validator_outcome:
+          Multi-point contact validation — confirmed digital
           presence and reachable phone — before granting access.
-        subheading: Domain Checker is more powerful combined. Stack it with other
+        subheading:
+          Domain Checker is more powerful combined. Stack it with other
           Requiems APIs to build multi-point validation into a single workflow.
-        vpn_detection_benefit: Check domain health while identifying VPN or proxy
+        vpn_detection_benefit:
+          Check domain health while identifying VPN or proxy
           traffic from the same request.
         vpn_detection_name: Domain Checker + VPN Detection
-        vpn_detection_outcome: "Double-layered fraud signal: a flagged domain combined
+        vpn_detection_outcome:
+          "Double-layered fraud signal: a flagged domain combined
           with anonymized traffic is a strong block trigger."
       cta:
-        body: One API key. Domain availability, WHOIS data, and 50+ other APIs across
+        body:
+          One API key. Domain availability, WHOIS data, and 50+ other APIs across
           validation, networking, finance, and more.
         cta_docs: Read the docs →
         cta_primary: Get your free API key
@@ -46,15 +53,20 @@ en:
         result_heading: Domain Check
         submit: Check
       faq:
-        a1: It checks DNS record existence, MX record presence, SSL certificate validity,
+        a1:
+          It checks DNS record existence, MX record presence, SSL certificate validity,
           and domain reputation against known threat lists.
-        a2: Yes. The mx_valid field indicates whether the domain has valid MX records
+        a2:
+          Yes. The mx_valid field indicates whether the domain has valid MX records
           configured — a prerequisite for receiving email.
-        a3: Yes. ssl_valid returns true if the domain has a valid, non-expired SSL
+        a3:
+          Yes. ssl_valid returns true if the domain has a valid, non-expired SSL
           certificate. It does not check chain depth or extended validation status.
-        a4: The endpoint accepts one domain per request. For bulk validation, call
+        a4:
+          The endpoint accepts one domain per request. For bulk validation, call
           in parallel or use the batch endpoint if available on your plan.
-        a5: The interactive demo requires no account. A free tier is available after
+        a5:
+          The interactive demo requires no account. A free tier is available after
           signup with a monthly request quota. See the pricing page for limits.
         heading: Frequently Asked Questions
         q1: What does Domain Checker check exactly?
@@ -71,71 +83,87 @@ en:
         label_input: Domain name
         no_account: No account required
         placeholder: e.g. example.com
-        subtitle: Availability, WHOIS data, registrar info, and expiry dates — all
+        subtitle:
+          Availability, WHOIS data, registrar info, and expiry dates — all
           from a single API call. No scraping, no rate limits on your end.
         title: Check Any Domain
         title_highlight: in Milliseconds
         try_live: Try it live
       show:
-        free_domain_checker_availability_dns: Free Domain Checker — Availability,
+        free_domain_checker_availability_dns:
+          Free Domain Checker — Availability,
           DNS & WHOIS | Requiems API
       use_cases:
-        auth_body: Check domain health before accepting it as a user-provided business
+        auth_body:
+          Check domain health before accepting it as a user-provided business
           domain. Reject expired, parked, or flagged domains.
         auth_context: Auth / Signup
         auth_title: Avoid risky domains before signup
-        devops_body: Surface missing DNS records or expired SSL certificates before
+        devops_body:
+          Surface missing DNS records or expired SSL certificates before
           they cause downtime or user-facing errors.
         devops_context: DevOps / Monitoring
         devops_title: Detect missing DNS or SSL issues
-        email_marketing_body: Check MX records and domain reputation before targeting
+        email_marketing_body:
+          Check MX records and domain reputation before targeting
           an address list. Reduce bounce risk from entire sending domains.
         email_marketing_context: Email Marketing
         email_marketing_title: Inspect domain health before email campaigns
-        fraud_body: Detect domains flagged for spam or phishing, or those with lapsed
+        fraud_body:
+          Detect domains flagged for spam or phishing, or those with lapsed
           registrations. Prevent bad actors from abusing your platform.
         fraud_context: Fraud Prevention
         fraud_title: Block malicious or expired domains
         heading: Built for Every Domain Workflow
-        integrations_body: Validate that partner or vendor domains are live and properly
+        integrations_body:
+          Validate that partner or vendor domains are live and properly
           configured before integrating them into automated workflows.
         integrations_context: Integrations
         integrations_title: Verify partner domains in workflows
-        onboarding_body: Allow only domains with verified DNS, active MX, and clean
+        onboarding_body:
+          Allow only domains with verified DNS, active MX, and clean
           reputation during business onboarding. Block throwaway or newly registered
           domains.
         onboarding_context: Onboarding
         onboarding_title: Secure onboarding with trusted domains
-        subheading: From fraud prevention to onboarding — if it touches a domain name,
+        subheading:
+          From fraud prevention to onboarding — if it touches a domain name,
           this API has you covered.
       what_it_does:
-        accuracy_body: Every response includes parsed WHOIS data (domain ownership
+        accuracy_body:
+          Every response includes parsed WHOIS data (domain ownership
           and registration records), DNS status (whether traffic-routing records exist),
           SSL validity (active HTTPS certificate), MX records (mail server configuration),
           and a reputation score — all normalized into a consistent JSON structure.
         accuracy_heading: Accuracy
         heading: What the Domain Checker API Does
-        simplicity_body: A single POST request with your API key is all it takes.
+        simplicity_body:
+          A single POST request with your API key is all it takes.
           No SDK, no configuration, no setup — just an HTTP call and a JSON response.
         simplicity_heading: Simplicity
-        subheading: One endpoint. Everything you need to know about a domain — availability,
+        subheading:
+          One endpoint. Everything you need to know about a domain — availability,
           ownership, and registration history.
     email_normalizer:
       api_combinations:
         domain_benefit: Normalize email and verify its domain health together.
-        domain_outcome: Canonical email paired with domain trust score — higher confidence
+        domain_outcome:
+          Canonical email paired with domain trust score — higher confidence
           before outreach.
         domain_pair: Email Normalizer + Domain Checker
         heading: Use together with complementary APIs.
         phone_benefit: Normalize email and validate phone at the same step.
-        phone_outcome: Consistent, verified contact data across both channels from
+        phone_outcome:
+          Consistent, verified contact data across both channels from
           a single onboarding call.
         phone_pair: Email Normalizer + Phone Validator
-        subheading: Requiems APIs are designed to compose. Combine Email Normalizer
+        subheading:
+          Requiems APIs are designed to compose. Combine Email Normalizer
           with other endpoints to build a complete contact validation pipeline with
           a single API key.
         validator_benefit: Normalize then validate for complete email hygiene.
-        validator_outcome: Clean, canonical email that is also confirmed deliverable
+        validator_outcome:
+          Clean, canonical email that is also confirmed deliverable
           — ideal for signup and import flows.
         validator_pair: Email Normalizer + Email Validator
       cta:
@@ -162,17 +190,22 @@ en:
         no_changes: none
         submit: Normalize
       faq:
-        a1: It strips tags (e.g. +label), lowercases the address, and removes provider-specific
+        a1:
+          It strips tags (e.g. +label), lowercases the address, and removes provider-specific
           formatting quirks so variants of the same address map to one canonical form.
-        a2: Yes. Both are normalized. The local part is lowercased and cleaned of
+        a2:
+          Yes. Both are normalized. The local part is lowercased and cleaned of
           provider-specific suffixes. The domain is lowercased and alias-resolved
           where possible.
-        a3: Capitalization is corrected by lowercasing. Spaces are not valid in email
+        a3:
+          Capitalization is corrected by lowercasing. Spaces are not valid in email
           addresses per RFC 5321 and are stripped if present.
-        a4: Yes. Unicode email addresses in internationalized domains are supported.
+        a4:
+          Yes. Unicode email addresses in internationalized domains are supported.
           Domain normalization applies lowercasing and alias resolution; encoding
           of internationalized domain names depends on the underlying mail provider.
-        a5: The interactive demo requires no account. A free tier is available after
+        a5:
+          The interactive demo requires no account. A free tier is available after
           signup with a monthly request quota. See the pricing page for limits.
         heading: Frequently asked questions
         q1: What does Email Normalizer actually do?
@@ -181,54 +214,66 @@ en:
         q4: Does it work with international emails?
         q5: Is it free to use the demo?
       hero:
-        subtitle: Normalize, lowercase, trim, and canonicalize email addresses in
+        subtitle:
+          Normalize, lowercase, trim, and canonicalize email addresses in
           one API call.
         title: Clean email addresses automatically, every time.
       show:
-        free_email_normalizer_lowercase_trim: Free Email Normalizer — Lowercase, Trim
+        free_email_normalizer_lowercase_trim:
+          Free Email Normalizer — Lowercase, Trim
           & Canonicalize Email Addresses | Requiems API
       use_cases:
         analytics_context: Analytics
-        analytics_desc: Standardize at point of capture. Keep analytics and segmentation
+        analytics_desc:
+          Standardize at point of capture. Keep analytics and segmentation
           consistent regardless of how users type their address.
         analytics_title: Normalize signup emails for analytics
         crm_dedup_context: CRM / Data
-        crm_dedup_desc: Use the normalized form as a deduplication key. Identify accounts
+        crm_dedup_desc:
+          Use the normalized form as a deduplication key. Identify accounts
           that belong to the same person across different email formats.
         crm_dedup_title: Merge duplicate accounts with normalized emails
         crm_dup_context: CRM / Data
-        crm_dup_desc: Stop treating email variants as separate contacts. Normalization
+        crm_dup_desc:
+          Stop treating email variants as separate contacts. Normalization
           reduces bloated contact counts and improves list hygiene.
         crm_dup_title: Reduce false duplicates in CRM
         heading: Real problems, real users.
         import_context: Data Import
-        import_desc: Normalize emails before bulk import into your database. Prevent
+        import_desc:
+          Normalize emails before bulk import into your database. Prevent
           format variations from creating duplicate records.
         import_title: Standardize email data before import
         integrations_context: Integrations
-        integrations_desc: Normalize before cross-system lookups. Ensure User.Name@Gmail.com
+        integrations_desc:
+          Normalize before cross-system lookups. Ensure User.Name@Gmail.com
           and username@gmail.com match as the same identity.
         integrations_title: Improve email matching across systems
         outreach_context: Email Marketing
-        outreach_desc: Run your list through the normalizer before a send. Catch variation-caused
+        outreach_desc:
+          Run your list through the normalizer before a send. Catch variation-caused
           bounces before they affect sender reputation.
         outreach_title: Clean email records before outreach
         subheading: Email Normalizer fits wherever contact data quality matters.
       what_it_does:
         clean_data_badge: Clean data
-        clean_data_body: The API trims whitespace, lowercases the address, fixes common
+        clean_data_body:
+          The API trims whitespace, lowercases the address, fixes common
           provider aliases, and returns a canonical email — so every address stored
           in your system is consistent.
         clean_data_heading: Normalize email input with one call.
         integration_badge: Integration
-        integration_body: POST /v1/validation/email-normalize with the email in the
+        integration_body:
+          POST /v1/validation/email-normalize with the email in the
           body and your API key in the header. No SDK required.
         integration_heading: One request, instant normalization.
-        post_v1_validation_email_normalize_200: POST /v1/validation/email-normalize
+        post_v1_validation_email_normalize_200:
+          POST /v1/validation/email-normalize
           → 200 OK
     email_validator:
       api_combinations:
-        email_validator_works_even_better_when: Email Validator works even better
+        email_validator_works_even_better_when:
+          Email Validator works even better
           when paired with other Requiems APIs.
         heading: Use together with complementary APIs.
       demo:
@@ -256,18 +301,22 @@ en:
       hero:
         get_api_key: Get API Key
         read_the_docs: Read the docs
-        syntax_check_live_mx_lookup_disposable: Syntax check, live MX lookup, disposable
+        syntax_check_live_mx_lookup_disposable:
+          Syntax check, live MX lookup, disposable
           detection, and typo correction — in a single API call.
         verify: Verify
       show:
-        description: Validate any email address instantly. RFC 5322 syntax check,
+        description:
+          Validate any email address instantly. RFC 5322 syntax check,
           live MX record lookup, disposable domain detection, and typo correction
           — free, no account required.
-        free_email_validator_syntax_mx_record: Free Email Validator — Syntax, MX Record
+        free_email_validator_syntax_mx_record:
+          Free Email Validator — Syntax, MX Record
           & Disposable Check | Requiems API
       use_cases:
         conversion: Conversion
-        email_validator_fits_wherever_contact: Email Validator fits wherever contact
+        email_validator_fits_wherever_contact:
+          Email Validator fits wherever contact
           data quality matters.
         growth: Growth
         heading: Real problems, real users.
@@ -279,31 +328,38 @@ en:
         post_v1_validation_email_200_ok: POST /v1/validation/email → 200 OK
     index:
       interactive_api_tools: Interactive API Tools
-      one_api_key_unlocks_all_tools_plus_50: One API key unlocks all tools — plus
+      one_api_key_unlocks_all_tools_plus_50:
+        One API key unlocks all tools — plus
         50+ more APIs across validation, finance, networking, and more.
       tools_requiems_api: Tools — Requiems API
     phone_validator:
       api_combinations:
-        domain_checker_benefit: Verify phone number and check domain reputation at
+        domain_checker_benefit:
+          Verify phone number and check domain reputation at
           once.
         domain_checker_name: Phone Validator + Domain Checker
-        domain_checker_outcome: Multi-point identity confidence — confirmed phone,
+        domain_checker_outcome:
+          Multi-point identity confidence — confirmed phone,
           healthy domain — for high-risk signups.
         email_normalizer_benefit: Normalize email and validate phone together.
         email_normalizer_name: Phone Validator + Email Normalizer
-        email_normalizer_outcome: Consistent, verified contact data across both channels
+        email_normalizer_outcome:
+          Consistent, verified contact data across both channels
           from a single API call.
         email_validator_benefit: Validate phone and email in the same onboarding step.
         email_validator_name: Phone Validator + Email Validator
-        email_validator_outcome: Complete contact verification — reachable phone and
+        email_validator_outcome:
+          Complete contact verification — reachable phone and
           deliverable email — before granting access.
         heading: Pair It With Other APIs
         label_benefit: "Benefit:"
         label_outcome: "Outcome:"
-        subheading: Combine Phone Validator with other Requiems APIs to build multi-point
+        subheading:
+          Combine Phone Validator with other Requiems APIs to build multi-point
           validation into a single workflow.
       cta:
-        body: One API key. Phone validation, email verification, domain checks, and
+        body:
+          One API key. Phone validation, email verification, domain checks, and
           50+ other APIs across validation, networking, finance, and more.
         heading: Automate this with Requiems.
       demo:
@@ -319,19 +375,24 @@ en:
         label_voip: VoIP
         result_failed_heading: Validation failed
       faq:
-        a1: It returns whether the number is valid and reachable, the country and
+        a1:
+          It returns whether the number is valid and reachable, the country and
           country code, the carrier name, the line type (mobile, landline, VoIP, toll-free,
           or premium), and the number formatted to E.164 and local standards.
-        a2: Yes. It supports phone numbers from 200+ countries and territories. Pass
+        a2:
+          Yes. It supports phone numbers from 200+ countries and territories. Pass
           the number in E.164 format with the country code, or let the API detect
           the country from the number pattern.
-        a3: Yes. The line_type field distinguishes mobile, landline, VoIP, toll-free,
+        a3:
+          Yes. The line_type field distinguishes mobile, landline, VoIP, toll-free,
           and premium-rate numbers. Use this to flag virtual or disposable numbers
           for fraud screening.
-        a4: Carrier detection is sourced from global carrier databases and is accurate
+        a4:
+          Carrier detection is sourced from global carrier databases and is accurate
           for most major carriers across North America, Europe, and Asia. Accuracy
           may vary for MVNOs and smaller regional carriers.
-        a5: The interactive demo requires no account. A free tier is available after
+        a5:
+          The interactive demo requires no account. A free tier is available after
           signup with a monthly request quota. See the pricing page for limits.
         heading: Frequently Asked Questions
         q1: What information does Phone Validator return?
@@ -349,53 +410,65 @@ en:
         no_account: No account required
         placeholder: "+14155552671"
         submit: Validate
-        subtitle: Carrier lookup, line type detection, format normalization, and country
+        subtitle:
+          Carrier lookup, line type detection, format normalization, and country
           code parsing — all from a single API call.
         title: Validate Phone Numbers
         title_highlight: in Real Time
         try_live: Try it live
       show:
-        phone_validator_carrier_lookup_line: Phone Validator — Carrier Lookup, Line
+        phone_validator_carrier_lookup_line:
+          Phone Validator — Carrier Lookup, Line
           Type & Format Normalization | Requiems API
       use_cases:
-        auth_body: Ensure every phone number is real, reachable, and correctly formatted
+        auth_body:
+          Ensure every phone number is real, reachable, and correctly formatted
           before accepting it during user signup.
         auth_context: Auth / Signup
         auth_title: Verify phone numbers at registration
-        fraud_body: Flag disposable or virtual phone numbers used by bad actors. Block
+        fraud_body:
+          Flag disposable or virtual phone numbers used by bad actors. Block
           high-risk line types during sensitive operations.
         fraud_context: Fraud Prevention
         fraud_title: Detect VoIP and virtual numbers
         heading: Validate Phone Numbers in Any Workflow
-        integrations_body: Normalize and validate partner-provided phone numbers before
+        integrations_body:
+          Normalize and validate partner-provided phone numbers before
           they enter your CRM, billing, or support systems.
         integrations_context: Integrations
         integrations_title: Validate phone data in workflows
-        onboarding_body: Convert phone numbers from any country into E.164 format
+        onboarding_body:
+          Convert phone numbers from any country into E.164 format
           automatically. One consistent format across your entire user base.
         onboarding_context: Onboarding
         onboarding_title: Standardize international numbers
-        sms_body: Filter for mobile-only line types before sending SMS. Reduce undelivered
+        sms_body:
+          Filter for mobile-only line types before sending SMS. Reduce undelivered
           messages and protect sender reputation.
         sms_context: SMS Marketing
         sms_title: Confirm mobile numbers for campaigns
-        subheading: From fraud prevention to onboarding — if it touches a phone number,
+        subheading:
+          From fraud prevention to onboarding — if it touches a phone number,
           this API has you covered.
-        support_body: Identify carrier and country from an incoming phone number during
+        support_body:
+          Identify carrier and country from an incoming phone number during
           support calls. Route to the right team instantly.
         support_context: Support
         support_title: Look up caller info in real time
       what_it_does:
-        accuracy_body: Every response includes country and region detection, carrier
+        accuracy_body:
+          Every response includes country and region detection, carrier
           name, line type classification (mobile, landline, VoIP), and the phone number
           formatted to E.164 international standard — all normalized into a consistent
           JSON structure.
         accuracy_heading: Accuracy
         heading: What the Phone Validation API Does
-        simplicity_body: A single GET request with your API key is all it takes. No
+        simplicity_body:
+          A single GET request with your API key is all it takes. No
           SDK, no configuration, no setup — just an HTTP call and a JSON response.
         simplicity_heading: Simplicity
-        subheading: One endpoint. Everything you need to know about a phone number
+        subheading:
+          One endpoint. Everything you need to know about a phone number
           — validity, carrier, line type, and normalized format.
     bin_lookup:
       seo:
@@ -659,21 +732,26 @@ en:
 
     quotes:
       api_combinations:
-        combine_the_quotes_api_with_other: Combine the Quotes API with other endpoints
+        combine_the_quotes_api_with_other:
+          Combine the Quotes API with other endpoints
           to build richer experiences.
         detect_language: Detect Language
-        filter_or_route_quotes_by_language: Filter or route quotes by language before
+        filter_or_route_quotes_by_language:
+          Filter or route quotes by language before
           presenting them to a multilingual audience.
         lorem_ipsum: Lorem Ipsum
-        mix_real_quotes_with_generated_filler: Mix real quotes with generated filler
+        mix_real_quotes_with_generated_filler:
+          Mix real quotes with generated filler
           text for flexible content layouts and design systems.
         pairs_well_with: Pairs well with
-        score_the_emotional_tone_of_a_quote: Score the emotional tone of a quote before
+        score_the_emotional_tone_of_a_quote:
+          Score the emotional tone of a quote before
           displaying it — surface only positive, uplifting results.
         sentiment_analysis: Sentiment Analysis
       cta:
         ready_to_add_quotes_to_your_app: Ready to add quotes to your app?
-        sign_up_for_free_and_start_fetching: Sign up for free and start fetching inspirational
+        sign_up_for_free_and_start_fetching:
+          Sign up for free and start fetching inspirational
           quotes in minutes. No credit card required.
       demo:
         error_generic: Something went wrong. Please try again.
@@ -684,25 +762,32 @@ en:
       faq:
         heading: Frequently Asked Questions
       show:
-        random_quote_generator_free_quotes_api: Random Quote Generator — Free Quotes
+        random_quote_generator_free_quotes_api:
+          Random Quote Generator — Free Quotes
           API Tool
       use_cases:
-        add_a_rotating_quote_to_transactional: Add a rotating quote to transactional
+        add_a_rotating_quote_to_transactional:
+          Add a rotating quote to transactional
           emails, weekly digests, or newsletter signatures.
         ai_amp_chatbot_enrichment: AI &amp; chatbot enrichment
-        auto_generate_quote_cards_for_twitter_x: Auto-generate quote cards for Twitter/X,
+        auto_generate_quote_cards_for_twitter_x:
+          Auto-generate quote cards for Twitter/X,
           Instagram, or LinkedIn without a content team.
         design_placeholders: Design placeholders
         email_footers_amp_newsletters: Email footers &amp; newsletters
-        fuel_daily_check_in_screens_push: Fuel daily check-in screens, push notifications,
+        fuel_daily_check_in_screens_push:
+          Fuel daily check-in screens, push notifications,
           or meditation app openers with curated wisdom.
         motivation_amp_wellness_apps: Motivation &amp; wellness apps
         quote_of_the_day: Quote of the day
-        replace_lorem_ipsum_with_real: Replace Lorem Ipsum with real, meaningful text
+        replace_lorem_ipsum_with_real:
+          Replace Lorem Ipsum with real, meaningful text
           in wireframes, mockups, and UI demos.
-        seed_prompts_conversation_starters_or: Seed prompts, conversation starters,
+        seed_prompts_conversation_starters_or:
+          Seed prompts, conversation starters,
           or personality layers for AI assistants and chatbots.
-        show_a_fresh_inspirational_quote_on: Show a fresh inspirational quote on every
+        show_a_fresh_inspirational_quote_on:
+          Show a fresh inspirational quote on every
           visit — dashboards, homepages, onboarding screens.
         social_media_content: Social media content
         what_can_you_build_with_it: What can you build with it?
@@ -710,20 +795,44 @@ en:
         attributed: Attributed
         batch_endpoint: batch endpoint
         batch_ready: Batch ready
-        every_quote_includes_the_author_s_name: Every quote includes the author's
+        every_quote_includes_the_author_s_name:
+          Every quote includes the author's
           name — ready for display.
         fast: Fast
-        fetch_up_to_50_quotes_per_request_with: Fetch up to 50 quotes per request
+        fetch_up_to_50_quotes_per_request_with:
+          Fetch up to 50 quotes per request
           with the batch endpoint.
-        median_response_under_1_second_quotes: Median response under 1 second. Quotes
+        median_response_under_1_second_quotes:
+          Median response under 1 second. Quotes
           served globally.
         random_quotes_api: Random Quotes API
         what_is_the_random_quotes_api: What is the Random Quotes API?
     sentiment_analysis:
       api_combinations:
         pair_it_with_other_apis: Pair it with other APIs
-        sentiment_works_best_as_part_of_a: Sentiment works best as part of a pipeline.
+        sentiment_works_best_as_part_of_a:
+          Sentiment works best as part of a pipeline.
           Here are three natural combinations.
+        spell_check_title: Sentiment + Spell Check
+        spell_check_body:
+          Run spell check first to clean up noisy user input, then
+          analyze sentiment on the corrected text for more accurate results.
+        spell_check_link: Spell Check API
+        language_title: Sentiment + Language Detection
+        language_body:
+          Detect the language before routing text to the right sentiment
+          model. Useful for multilingual support queues and global review platforms.
+        language_link: Language Detection API
+        email_title: Sentiment + Email Validator
+        email_body:
+          Validate the sender's email and analyze the tone of their message
+          in one pass — before storing feedback or opening a support ticket.
+        email_link: Email Validator API
+      cta:
+        heading: Automate this with Requiems.
+        body:
+          One API key. Sentiment analysis, plus 50+ other APIs across validation,
+          finance, networking, and more.
       demo:
         error_empty: Enter some text to analyze.
         error_generic: Something went wrong. Try again.
@@ -739,28 +848,109 @@ en:
         result_heading: Sentiment Analysis
       faq:
         heading: Frequently Asked Questions
+        q1: What are the possible sentiment values?
+        a1:
+          The sentiment field returns one of three values — positive, negative, or
+          neutral — based on whichever class has the highest confidence score.
+        q2: What does the breakdown represent?
+        a2:
+          The three breakdown values (positive, negative, neutral) always sum to 1.0.
+          They show the proportional confidence across all classes, not just the dominant
+          one. A score of 0.97 positive means the model is highly certain; 0.51 means
+          it's leaning positive but the text is ambiguous.
+        q3: How long can the input text be?
+        a3:
+          There is no strict character limit enforced at the API level, but very long
+          inputs may be truncated by the underlying model. Aim for inputs under 512
+          tokens (roughly 400 words) for best accuracy.
+        q4: Can I analyze multiple texts at once?
+        a4:
+          Yes. The batch endpoint (POST /v1/text/sentiment/batch) accepts up to 50
+          texts per request. Results are returned in the same order as the input and
+          each text counts as one unit of usage.
+        q5: Is it free to use?
+        a5:
+          The demo above works without an account. Paid plans offer higher rate limits
+          and full API access for production use.
       hero:
         analyze: Analyze
         get_api_key: Get API Key
         know_how_your_text_lands: Know how your text lands.
         read_the_docs: Read the docs
+        subtitle:
+          Classify any text as positive, negative, or neutral — with a confidence
+          score and full breakdown, in a single API call.
+      logo_marquee:
+        trusted_by: Trusted by teams at
+      seo:
+        description:
+          Analyze the sentiment of any text instantly. Get a positive,
+          negative, or neutral classification with a confidence score and full breakdown
+          — free, no account required.
       show:
-        free_sentiment_analysis_tool_positive: Free Sentiment Analysis Tool — Positive,
+        free_sentiment_analysis_tool_positive:
+          Free Sentiment Analysis Tool — Positive,
           Negative & Neutral Text Detection | Requiems API
       use_cases:
-        anywhere_text_flows_through_your_system: Anywhere text flows through your
+        anywhere_text_flows_through_your_system:
+          Anywhere text flows through your
           system, sentiment gives you signal.
         built_for_real_use_cases: Built for real use cases
+        customer_support_title: Customer support
+        customer_support_body:
+          Route tickets automatically. Flag frustrated customers
+          for priority handling before they churn.
+        product_reviews_title: Product reviews
+        product_reviews_body:
+          Aggregate sentiment across thousands of reviews without
+          reading them one by one.
+        social_media_title: Social media monitoring
+        social_media_body:
+          Track brand mentions in real time and detect sentiment
+          shifts before they become PR issues.
+        content_moderation_title: Content moderation
+        content_moderation_body:
+          Pre-screen user-generated content for hostile or
+          harmful tone before it reaches other users.
+        nlp_pipelines_title: NLP pipelines
+        nlp_pipelines_body:
+          Use sentiment as a feature in ML models — preprocessing
+          text classification, recommendation, or ranking tasks.
+        survey_analysis_title: Survey analysis
+        survey_analysis_body:
+          Turn open-ended survey responses into structured sentiment
+          data without manual tagging.
       what_it_does:
-        one_call_three_values_enough_signal_to: One call. Three values. Enough signal
+        one_call_three_values_enough_signal_to:
+          One call. Three values. Enough signal
           to act.
         positive_negative_or_neutral: Positive, negative, or neutral
         proportional_scores_across_all_classes: Proportional scores across all classes
         what_it_does: What it does
+        instant_classification: Instant classification
+        classification_body:
+          Every text gets a dominant label plus a confidence score
+          between 0.0 and 1.0, so you can threshold results with precision.
+        full_breakdown: Full breakdown
+        breakdown_body:
+          The breakdown shows how the model distributes confidence across
+          all three classes — always summing to 1.0. Useful for ambiguous or mixed-tone
+          text.
     unit_conversion:
       api_combinations:
-        unit_conversion_becomes_even_more: Unit Conversion becomes even more useful
-          when combined with other Requiems APIs.
+        heading: Use together with complementary APIs.
+        subheading: Unit Conversion becomes even more useful when combined with other Requiems APIs.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        exchange_pair: Unit Conversion + Exchange Rate
+        exchange_benefit: Convert physical measurements and currencies in the same workflow. Ideal for international commerce, shipping calculators, and pricing tools.
+        exchange_outcome: One pipeline for quantity and money — shipping weight and landed cost in the same request flow.
+        geocode_pair: Unit Conversion + Geocoding
+        geocode_benefit: Transform distances and locations together. Convert miles to kilometers while calculating routes, delivery ranges, or travel estimates.
+        geocode_outcome: Distance-aware location tools without hardcoding unit math.
+        numbase_pair: Unit Conversion + Number Base Conversion
+        numbase_benefit: Handle both measurement and numeric transformations in engineering, educational, and technical applications.
+        numbase_outcome: Measurement and radix conversion from a single API provider.
       demo:
         error_fill_all_fields: Fill in all fields.
         error_generic: Something went wrong. Try again.
@@ -776,11 +966,18 @@ en:
         result_heading: Conversion Result
         value_label: Value
       hero:
+        title_html: Convert measurements instantly<br class="hidden sm:block"> across every unit type.
+        subtitle: Length, weight, volume, temperature, area, and speed conversions — with precise results, conversion formulas, and unit discovery endpoints in a single API.
+        group_length: Length
+        group_weight: Weight
+        group_temperature: Temperature
+        group_volume: Volume
+        group_speed: Speed
+        group_area: Area
         acres: Acres
         celsius: Celsius
         centimeters: Centimeters
         convert: Convert
-        cubic_meters: Cubic Meters
         cups: Cups
         fahrenheit: Fahrenheit
         feet: Feet
@@ -796,11 +993,11 @@ en:
         km_hour: Km/hour
         knots: Knots
         liters: Liters
-        long_tons_uk: Long Tons (UK)
         meters: Meters
         meters_second: Meters/second
         miles: Miles
         miles_hour: Miles/hour
+        milligrams: Milligrams
         milliliters: Milliliters
         millimeters: Millimeters
         nautical_miles: Nautical Miles
@@ -809,17 +1006,19 @@ en:
         pounds: Pounds
         quarts: Quarts
         read_the_docs: Read the docs
-        short_tons_us: Short Tons (US)
         source_unit: Source unit
         square_feet: Square Feet
         square_kilometers: Square Kilometers
         square_meters: Square Meters
-        square_miles: Square Miles
+        stone: Stone
+        tablespoons: Tablespoons
         target_unit: Target unit
+        teaspoons: Teaspoons
         tons_metric: Tons (metric)
         yards: Yards
       show:
-        free_unit_conversion_api_miles_to_km_kg: Free Unit Conversion API — Miles
+        free_unit_conversion_api_miles_to_km_kg:
+          Free Unit Conversion API — Miles
           to KM, KG to LB, Celsius to Fahrenheit | Requiems API
       use_cases:
         development: Development
@@ -828,23 +1027,27 @@ en:
         food: Food
         real_problems_real_conversions: Real problems, real conversions.
         science: Science
-        unit_conversion_fits_anywhere: Unit Conversion fits anywhere measurements
+        unit_conversion_fits_anywhere:
+          Unit Conversion fits anywhere measurements
           need to be translated accurately and instantly.
       what_it_does:
         get_v1_technology_convert_200_ok: GET /v1/technology/convert → 200 OK
-        reliable_conversions_with_transparent: Reliable conversions with transparent
+        reliable_conversions_with_transparent:
+          Reliable conversions with transparent
           formulas.
         simple_api_requests_instant_results: Simple API requests, instant results.
     profanity_filter:
       seo:
         title: Free Profanity Filter API — Detect & Censor Offensive Language | Requiems API
-        description: Detect profanity and offensive language in any text. Returns flagged
+        description:
+          Detect profanity and offensive language in any text. Returns flagged
           words and a censored version. Try the free live demo — no account required.
       logo_marquee:
         trusted_by: Trusted by teams building safer products
       hero:
         title: Detect and Remove Profanity
-        subtitle: Identify offensive language and get a censored version of any text
+        subtitle:
+          Identify offensive language and get a censored version of any text
           in a single API call. No dictionaries to maintain, no false positives to tune.
         cta_primary: Get your free API key
         cta_docs: View docs
@@ -855,80 +1058,99 @@ en:
       what_it_does:
         detection_badge: Detection
         detection_heading: Finds What You Miss
-        detection_body: Scans input text for profanity, slurs, and offensive language.
+        detection_body:
+          Scans input text for profanity, slurs, and offensive language.
           Returns a boolean flag and a list of every flagged word — so you know exactly
           what was found, not just whether something was found.
         censorship_badge: Censorship
         censorship_heading: Returns a Clean Version
-        censorship_body: Every response includes a censored copy of the original text
+        censorship_body:
+          Every response includes a censored copy of the original text
           with offensive words replaced. Drop it straight into your UI without any
           client-side string manipulation.
       use_cases:
         heading: Built for Content Safety Workflows
-        subheading: From user-generated content to real-time moderation — if text enters
+        subheading:
+          From user-generated content to real-time moderation — if text enters
           your product, this API keeps it clean.
         ugc_title: Moderate user-generated content
-        ugc_desc: Automatically flag or reject comments, reviews, and posts that contain
+        ugc_desc:
+          Automatically flag or reject comments, reviews, and posts that contain
           offensive language before they reach other users.
         ugc_tags: "UGC, Comments, Reviews"
         chat_title: Clean up live chat
-        chat_desc: Filter messages in real time for chat apps, gaming platforms, and
+        chat_desc:
+          Filter messages in real time for chat apps, gaming platforms, and
           community tools. Block or replace offensive words before delivery.
         chat_tags: "Chat, Gaming, Real-time"
         onboarding_title: Sanitize onboarding inputs
-        onboarding_desc: Check usernames, display names, and bio fields at signup.
+        onboarding_desc:
+          Check usernames, display names, and bio fields at signup.
           Reject offensive choices before they ever enter your database.
         onboarding_tags: "Onboarding, Usernames, Signup"
         support_title: Screen support tickets
-        support_desc: Identify abusive or offensive language in incoming support messages.
+        support_desc:
+          Identify abusive or offensive language in incoming support messages.
           Route flagged tickets to specialized agents or apply automatic warnings.
         support_tags: "Support, CX, Ticketing"
         ai_title: Sanitize AI outputs
-        ai_desc: Run generated text through the filter before displaying it to users.
+        ai_desc:
+          Run generated text through the filter before displaying it to users.
           Catch model hallucinations that produce unexpected offensive content.
         ai_tags: "AI, LLM, Safety"
         compliance_title: Meet content compliance requirements
-        compliance_desc: Log flagged content and censored replacements for audit trails.
+        compliance_desc:
+          Log flagged content and censored replacements for audit trails.
           Demonstrate moderation coverage to partners, app stores, and regulators.
         compliance_tags: "Compliance, Audit, Reporting"
       api_combinations:
         heading: Pair It With Other APIs
-        subheading: Profanity Filter is more effective as part of a layered moderation
+        subheading:
+          Profanity Filter is more effective as part of a layered moderation
           pipeline. Combine it with other Requiems APIs to catch more vectors of abuse.
         sentiment_pair: Profanity Filter + Sentiment Analysis
-        sentiment_benefit: Catch offensive content missed by each detector alone. Profanity
+        sentiment_benefit:
+          Catch offensive content missed by each detector alone. Profanity
           Filter targets explicit words; Sentiment Analysis catches hostile tone in
           technically clean text.
         email_pair: Profanity Filter + Email Validator
-        email_benefit: Block offensive usernames and verify the email is real before
+        email_benefit:
+          Block offensive usernames and verify the email is real before
           account creation. Two checks, one onboarding step.
         domain_pair: Profanity Filter + Domain Checker
-        domain_benefit: Validate submitted domain names for both profanity and DNS
+        domain_benefit:
+          Validate submitted domain names for both profanity and DNS
           health. Useful when accepting user-provided business domains.
       faq:
         heading: Frequently Asked Questions
         support_prompt: Still have questions?
         support_link: Contact support
         q1: What does the API return?
-        a1: Each response includes three fields — has_profanity (boolean), censored
+        a1:
+          Each response includes three fields — has_profanity (boolean), censored
           (the original text with offensive words replaced by asterisks), and flagged_words
           (an array of the specific words that were detected).
         q2: Does it support languages other than English?
-        a2: The filter is optimized for English. Detection accuracy in other languages
+        a2:
+          The filter is optimized for English. Detection accuracy in other languages
           varies and is not guaranteed. Support for additional languages is on the roadmap.
         q3: How are words censored?
-        a3: Offensive words are replaced with asterisks in the censored field. The
+        a3:
+          Offensive words are replaced with asterisks in the censored field. The
           replacement preserves the original word length so surrounding text stays
           readable.
         q4: Can I use it to check usernames or short strings?
-        a4: Yes. The API accepts any non-empty string. There is no minimum length requirement,
+        a4:
+          Yes. The API accepts any non-empty string. There is no minimum length requirement,
           so single words and short phrases work fine.
         q5: Is there a batch endpoint?
-        a5: Yes — POST /v1/validation/profanity/batch accepts up to 50 texts in a
+        a5:
+          Yes — POST /v1/validation/profanity/batch accepts up to 50 texts in a
           single request. See the API docs for the request format and response schema.
       cta:
         heading: Keep your platform clean with Requiems.
-        body: One API key. Profanity detection, email validation, sentiment analysis,
+        body:
+          One API key. Profanity detection, email validation, sentiment analysis,
           and 50+ other APIs for building safer, smarter products.
         cta_primary: Get your free API key
         cta_docs: Read the docs →
@@ -1056,3 +1278,732 @@ en:
         badge_human: Human
         badge_yes: "Yes"
         badge_no: "No"
+
+    timezone:
+      seo:
+        title: "Free Timezone API — IANA Timezone, UTC Offset & DST by City or Coordinates | Requiems API"
+        description: "Get the IANA timezone identifier, UTC offset, current time, and DST status for any city or geographic coordinates. Free tier available — no credit card required."
+      logo_marquee:
+        trusted_by: "Trusted by teams at"
+      demo:
+        error_empty: "Enter a city name, or latitude and longitude, to look up a timezone."
+        error_invalid: "Enter a valid latitude (-90 to 90) and longitude (-180 to 180)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No timezone data found for that location."
+        result_failed_heading: "Lookup failed"
+        badge_found: "Found"
+        badge_yes: "✓ Yes"
+        badge_no: "✗ No"
+        label_timezone: "Timezone"
+        label_offset: "UTC offset"
+        label_current_time: "Current time"
+        label_is_dst: "Observing DST"
+      hero:
+        title: "Know the local time, anywhere."
+        subtitle: "IANA timezone, UTC offset, current time, and DST status — for any city or coordinates, in a single API call."
+        cta_primary: "Get API Key"
+        cta_docs: "Read the docs"
+        placeholder: "Enter a city (e.g. Tokyo)"
+        submit: "Look up"
+        no_account: "No account required for the demo."
+        label_input: "City name"
+        coords_divider: "...or by coordinates:"
+        label_lat: "Latitude"
+        label_lon: "Longitude"
+        placeholder_lat: "Latitude (e.g. 51.5)"
+        placeholder_lon: "Longitude (e.g. -0.1)"
+      what_it_does:
+        coverage_badge: "Coverage"
+        coverage_heading: "Lookup by city name or geographic coordinates."
+        coverage_body: "Timezone resolves any point on Earth by latitude/longitude, or any of 150+ major cities by name. Every response includes the IANA identifier, UTC offset, current UTC time, and whether the location is currently observing daylight saving time."
+        simplicity_badge: "Simplicity"
+        simplicity_heading: "One GET request. No body, no parsing."
+        simplicity_body: "Pass a city name or lat/lon as query parameters. Your API key in the header. No SDK, no setup, no request body. The response is JSON, with the timezone fields nested one level under data."
+      use_cases:
+        heading: "Built for location-aware apps."
+        subheading: "Timezone fits anywhere local time matters — scheduling, notifications, and travel alike."
+        schedule_title: "Show the correct local time in scheduling tools"
+        schedule_desc: "Resolve a user's timezone from their city or coordinates and render meeting times, deadlines, and calendar events correctly across regions."
+        schedule_tags: "Scheduling, Calendars"
+        notif_title: "Send notifications at the right local hour"
+        notif_desc: "Avoid waking users at 3am. Compute the local time for each recipient before triggering push notifications or emails."
+        notif_tags: "Notifications, Growth"
+        travel_title: "Display arrival and departure times correctly"
+        travel_desc: "Travel and logistics platforms need to show times in the traveler's local timezone at each leg of a trip, not just UTC."
+        travel_tags: "Travel, Logistics"
+        dst_title: "Handle daylight saving time transitions"
+        dst_desc: "Avoid off-by-one-hour bugs around DST changeovers by checking is_dst directly instead of hardcoding offset tables."
+        dst_tags: "Data Quality, Scheduling"
+        onboarding_title: "Set a sensible default timezone at signup"
+        onboarding_desc: "Look up the timezone from the user's city or IP-derived coordinates to pre-fill their account settings correctly."
+        onboarding_tags: "Onboarding, UX"
+        support_title: "Route support tickets by local business hours"
+        support_desc: "Combine customer location with timezone data to route tickets to on-shift support agents in the right region."
+        support_tags: "Operations, Support"
+      api_combinations:
+        heading: "Use together with complementary APIs."
+        subheading: "Timezone works even better when paired with other Requiems APIs."
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        worldtime_pair: "Timezone + World Time"
+        worldtime_benefit: "Resolve the IANA timezone name first, then query World Time directly by name for lightweight repeated lookups."
+        worldtime_outcome: "Faster follow-up lookups once the timezone ID is known."
+        geocode_pair: "Timezone + Geocoding"
+        geocode_benefit: "Convert a free-form address to coordinates, then feed those coordinates into Timezone for a complete location-to-time pipeline."
+        geocode_outcome: "Turn any address into a current local time in two API calls."
+        cities_pair: "Timezone + Cities"
+        cities_benefit: "Look up city metadata — population, country, coordinates — alongside timezone information in the same request flow."
+        cities_outcome: "Richer location context for scheduling and local-time UIs."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "Should I use a city name or coordinates?"
+        a1: "Use coordinates (lat/lon) for precise lookups anywhere in the world. Use the city name for a quick lookup when you have a well-known city. Coordinate-based lookup works for any point on Earth, while city-based lookup is limited to the ~150+ cities in our database."
+        q2: "Is the city parameter case-sensitive?"
+        a2: "No. City names are normalized to lowercase before lookup, so \"Tokyo\", \"TOKYO\", and \"tokyo\" all work."
+        q3: "What does is_dst mean?"
+        a3: "is_dst indicates whether the location is currently observing Daylight Saving Time. For locations that do not use DST (e.g. Japan, most of Africa), this is always false."
+        q4: "What format is the UTC offset returned in?"
+        a4: "The offset field uses the format +HH:MM or -HH:MM (e.g. '+05:30' for India, '-05:00' for US Eastern Standard Time)."
+        q5: "Is it free to use?"
+        a5: "The demo above works without an account. Paid plans are available for production scale with higher rate limits and full API access."
+      cta:
+        heading: "Automate this with Requiems."
+        body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
+
+    spell_check:
+      seo:
+        title: Free Spell Check API — Check Spelling & Get Corrections | Requiems API
+        description:
+          Check spelling and get correction suggestions for misspelled words.
+          Powered by LanguageTool. Try the free live demo — no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building writing tools
+      hero:
+        title: Check Spelling Instantly
+        subtitle:
+          Submit any English text and get a corrected version with per-word
+          suggestions — powered by LanguageTool. No API key needed for the demo.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_input: Text to check
+        placeholder: e.g. Ths is a smiple tset with erors
+        submit: Check Spelling
+        no_account: No account required for the demo
+      what_it_does:
+        accuracy_badge: Correction Engine
+        accuracy_heading: Catches Every Mistake
+        accuracy_body:
+          Scans input text using LanguageTool and returns every misspelled word
+          with its position, the best correction, and up to 3 ranked alternatives.
+        simplicity_badge: Simplicity
+        simplicity_heading: A Single POST Request
+        simplicity_body:
+          Send text, get back the corrected version plus a list of individual
+          corrections. No multi-step workflows, no client-side dictionaries.
+      use_cases:
+        heading: Built for Quality Writing Workflows
+        subheading:
+          From content creation to form validation — if text passes through
+          your product, this API keeps it error-free.
+        writing_title: Power writing assistants
+        writing_desc:
+          Integrate spell checking into text editors, note apps, and publishing
+          platforms. Highlight errors and offer one-click fixes inline.
+        writing_tags: "Editors, Writing Tools, Publishing"
+        ugc_title: Clean up user-generated content
+        ugc_desc:
+          Automatically correct spelling in comments, reviews, and articles
+          before they go live. Improve content quality without manual review.
+        ugc_tags: "UGC, Comments, Reviews"
+        forms_title: Sanitize form inputs
+        forms_desc:
+          Check spelling in submitted text fields — message bodies, descriptions,
+          bio text — and provide real-time correction suggestions.
+        forms_tags: "Forms, Input, Validation"
+        education_title: Support learning platforms
+        education_desc:
+          Help students catch spelling mistakes in assignments and essays.
+          Return suggestions alongside grades for actionable feedback.
+        education_tags: "Education, LMS, Grading"
+        support_title: Improve support tickets
+        support_desc:
+          Clean up typos in incoming support messages before routing to agents.
+          Improve readability and reduce back-and-forth for clarification.
+        support_tags: "Support, CX, Ticketing"
+        ai_title: Polish AI-generated text
+        ai_desc:
+          Run model outputs through spell check before displaying to users.
+          Remove typos and improve fluency of generated content automatically.
+        ai_tags: "AI, LLM, Output Quality"
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading:
+          Spell check is more effective as part of a text-processing pipeline.
+          Combine it with other Requiems APIs for deeper content analysis.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        sentiment_pair: Spell Check + Sentiment Analysis
+        sentiment_benefit:
+          Clean up spelling errors first, then run sentiment analysis on the
+          corrected text for more accurate tone classification.
+        sentiment_outcome: More reliable sentiment scores on cleaned text.
+        language_pair: Spell Check + Language Detection
+        language_benefit:
+          Detect the input language before spell-checking. Route text to the
+          right language model automatically.
+        language_outcome: Language-aware correction before downstream NLP.
+        email_pair: Spell Check + Email Normalizer
+        email_benefit:
+          Normalize email addresses and check spelling in the associated
+          display name or message body in one pipeline.
+        email_outcome: Cleaner contact data and message text in the same flow.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What does the API return?
+        a1:
+          Each response includes corrected (the full text with misspelled words
+          replaced by the best suggestion) and corrections (an array of objects
+          with the original word, suggested replacement, alternative suggestions,
+          and character position).
+        q2: Does it work with languages other than English?
+        a2: The API is optimized for English using LanguageTool. It can process
+          Unicode input including accented and non-Latin characters, but accuracy
+          is highest for English text.
+        q3: What is the batch endpoint?
+        a3: POST /v1/text/spellcheck/batch accepts up to 50 texts in a single
+          request. Each text is checked independently and results are returned
+          as an array in the same order.
+        q4: How accurate is the spell checking?
+        a4: The API uses LanguageTool, an open-source grammar and spell checker
+          that catches mistakes most simple spell checkers miss — including
+          context-sensitive errors, homophones, and compound word issues.
+        q5: Is it free to try?
+        a5: Yes. The live demo on this page is completely free with no account
+          required. For production use, sign up for a free API key with 500
+          requests per month included.
+      cta:
+        heading: Polish your text with Requiems.
+        body: One API key. Spell check, email validation, sentiment analysis,
+          and 50+ other APIs for building smarter products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_empty: Please enter some text to check.
+        error_generic: Something went wrong. Try again.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_no_data: No data returned.
+        result_failed_heading: Spell check failed
+        result_heading: Result
+        label_corrected: Corrected text
+        label_errors_found: Errors found
+        label_corrections: Corrections
+        label_alternatives: Alternatives
+        badge_clean: No issues found
+        badge_corrected: Corrected
+    trivia:
+      seo:
+        title: Free Trivia API — Random Quiz Questions with Answers | Requiems API
+        description: Get random trivia questions with multiple-choice answers.
+          Filter by category and difficulty. Try the free live demo — no account
+          required.
+      logo_marquee:
+        trusted_by: Trusted by teams building quizzes and games
+      hero:
+        title: Random Trivia Questions, One API Call
+        subtitle: Get a random multiple-choice trivia question — ten categories,
+          three difficulty levels, always includes the correct answer.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_category: Category
+        label_difficulty: Difficulty
+        category_any: Any category
+        category_science: Science
+        category_history: History
+        category_geography: Geography
+        category_sports: Sports
+        category_music: Music
+        category_movies: Movies
+        category_literature: Literature
+        category_math: Math
+        category_technology: Technology
+        category_nature: Nature
+        difficulty_any: Any difficulty
+        difficulty_easy: Easy
+        difficulty_medium: Medium
+        difficulty_hard: Hard
+        submit: Get a Question
+        no_account: No account required for the demo
+      what_it_does:
+        heading: One Question, Four Options, No Guesswork
+        subheading: Every response includes the question, four answer options,
+          and the correct answer — ready to render directly in your UI.
+        coverage_heading: Ten Categories, Three Difficulties
+        coverage_body: Choose from science, history, geography, sports, music,
+          movies, literature, math, technology, and nature. Filter by easy,
+          medium, or hard — or leave both filters out for a fully random pick.
+        simplicity_heading: A Single GET Request
+        simplicity_body: No pagination, no session state. Every call returns one
+          randomly selected question from the matching pool, with the correct
+          answer always present among the four options.
+      use_cases:
+        heading: Built for Games, Quizzes, and Learning
+        subheading: Anywhere a knowledge check adds engagement, this API can
+          power it.
+        quiz_context: Gaming
+        quiz_title: Quiz games and trivia apps
+        quiz_body: Power multiple-choice quiz screens without maintaining your
+          own question bank.
+        education_context: Education
+        education_title: Educational platforms and learning apps
+        education_body: Add knowledge checks to lessons and courses, filtered by
+          subject and difficulty.
+        social_context: Social
+        social_title: Social and party game features
+        social_body: Drop trivia rounds into chat apps, group games, or
+          community features.
+        daily_challenge_context: Engagement
+        daily_challenge_title: Daily challenge widgets
+        daily_challenge_body: Show a fresh random question each day to bring
+          users back to your product.
+        knowledge_context: Integrations
+        knowledge_title: Knowledge-testing integrations
+        knowledge_body: Embed a quick knowledge check into onboarding flows,
+          newsletters, or internal tools.
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Trivia is more engaging combined. Stack it with other
+          Requiems APIs to build richer game and content experiences.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        quotes_pair: Trivia + Random Quotes
+        quotes_benefit: Mix quiz rounds with inspirational quote breaks in the
+          same session.
+        quotes_outcome: A more varied content feed — questions and quotes from a
+          single provider.
+        facts_pair: Trivia + Random Facts
+        facts_benefit: Follow up a trivia question with a related fun fact from
+          the same category.
+        facts_outcome: Deeper engagement — players learn something even when
+          they get a question wrong.
+        qr_pair: Trivia + QR Code Generator
+        qr_benefit: Turn a trivia question link into a scannable QR code for
+          print or in-person events.
+        qr_outcome: Bridge online and offline trivia — one scan takes players
+          straight to the question.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What categories are available?
+        a1: Ten categories are supported — science, history, geography, sports,
+          music, movies, literature, math, technology, and nature.
+        q2: What difficulty levels are available?
+        a2: Three levels are supported — easy, medium, and hard. Leave both
+          filters out for a question selected at random from the entire pool.
+        q3: Is the correct answer always one of the options?
+        a3:
+          Yes. The answer field always matches one of the values in the options
+          array.
+        q4: What happens if no questions match my filters?
+        a4: The API returns a 404 not_found error. Try broadening your filter —
+          for example, drop the difficulty filter or use a different category.
+      cta:
+        heading: Add trivia to your product with Requiems.
+        body: One API key. Trivia questions, random quotes, random facts, and
+          50+ other APIs for building games and content-rich products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No question matched those filters. Try a different
+          category or difficulty.
+        badge_live: Live
+        label_options: Options
+        label_correct: Correct
+    vpn_detection:
+      seo:
+        title: Free VPN & Proxy Detection API — IP Threat & Fraud Scoring | Requiems API
+        description: Detect if an IP address belongs to a VPN, proxy, Tor exit node,
+          or hosting provider. Get threat scores and fraud indicators for fraud prevention
+          and risk assessment — free, no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams at
+      hero:
+        title: Know if that IP is hiding something.
+        subtitle: Detect VPNs, proxies, Tor exit nodes, and hosting providers from
+          any IP address — plus a threat score and fraud score, in a single API call.
+        cta_primary: Get API Key
+        cta_docs: Read the docs
+        placeholder: Enter an IP address (e.g. 8.8.8.8)
+        submit: Check IP
+        no_account: No account required for the demo.
+        label_input: IP address
+      what_it_does:
+        coverage_badge: Coverage
+        coverage_heading: VPN, proxy, Tor, and hosting detection in one lookup.
+        coverage_body: VPN & Proxy Detection uses the IP2Proxy database to flag
+          VPN providers, public and web proxies, Tor exit nodes, and data-center
+          or hosting IPs. ASN organization data comes from a separate MaxMind database.
+          Both IPv4 and IPv6 are fully supported.
+        simplicity_badge: Simplicity
+        simplicity_heading: One GET request. No body, no parsing.
+        simplicity_body: Pass the IP address in the URL path. Your API key in the
+          header. The response is flat JSON with boolean flags, a threat score,
+          and a fraud score you can act on directly.
+      use_cases:
+        heading: Built for fraud and risk workflows.
+        subheading: VPN & Proxy Detection fits anywhere IP-based trust matters —
+          signup, auth, bots, and compliance alike.
+        signup_title: Score risk at signup
+        signup_desc: Flag or block registrations coming from VPN, proxy, or Tor
+          IPs — a strong signal for fraud farms and fake account creation.
+        signup_tags: "Fraud prevention, Fintech"
+        auth_title: Add risk signals to authentication
+        auth_desc: Trigger step-up authentication (MFA) when a login attempt comes
+          from a flagged proxy or Tor exit node.
+        auth_tags: "Risk scoring, Authentication"
+        bot_title: Detect bots and crawlers
+        bot_desc: Hosting and data-center IPs correlate strongly with bots and scrapers.
+          Flag or rate-limit traffic from these ranges automatically.
+        bot_tags: "Bot detection, Abuse prevention"
+        compliance_title: Meet compliance and regulatory checks
+        compliance_desc: Regulated services can require confirming that requests
+          aren't coming through anonymizing infrastructure before granting access.
+        compliance_tags: "Compliance, Regulatory"
+        geoblock_title: Prevent geo-blocking circumvention
+        geoblock_desc: Detect users masking their real location with a VPN or proxy
+          to access geo-restricted content or pricing.
+        geoblock_tags: "Content access, Geo-blocking"
+        score_title: Enrich fraud models with a single score
+        score_desc: Combine the fraud score and threat level with other signals
+          — device, card, email — into a composite fraud model per request.
+        score_tags: "Risk scoring, Fraud prevention"
+      api_combinations:
+        heading: Use together with complementary APIs.
+        subheading: VPN & Proxy Detection works even better when paired with other
+          Requiems APIs.
+        bin_pair: VPN Detection + BIN Lookup
+        bin_benefit: Cross-reference IP threat signals with the card's issuing country
+          to catch mismatched, high-risk payment attempts.
+        identity_pair: VPN Detection + Identity Risk
+        identity_benefit: Layer IP-based threat scoring with broader identity risk
+          signals for stronger account-takeover defense.
+        email_pair: VPN Detection + Email Validator
+        email_benefit: Combine anonymized-IP detection with disposable email checks
+          to catch fake account creation at signup.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What is VPN & Proxy Detection?
+        a1: An API that checks whether an IP address belongs to a known VPN provider,
+          public or web proxy, Tor exit node, or hosting/data-center provider. It
+          returns boolean flags for each category plus a threat score and a fraud
+          score.
+        q2: What do the threat scores mean?
+        a2: "The score is calculated as: Tor (+3), VPN (+2), Proxy (+2), Hosting
+          (+1). The threat level is derived from this: 0=None, 1=Low, 2-3=Medium,
+          4-5=High, 6+=Critical."
+        q3: Why is fraud_score 0 for some IPs?
+        a3: The fraud_score is only available when using IP2Proxy database tier
+          PX5 or higher. Lower tiers return 0, indicating the value is unavailable
+          for the current database.
+        q4: Does it support IPv6?
+        a4: Yes, both IPv4 and IPv6 addresses are fully supported.
+        q5: Is it free to use?
+        a5: The demo above works without an account. Paid plans are available for
+          production scale with higher rate limits and full API access.
+      cta:
+        heading: Automate this with Requiems.
+        body: One API key. VPN & Proxy Detection, plus 50+ other APIs across validation,
+          finance, networking, and more.
+      demo:
+        error_empty: Enter an IP address to check.
+        error_invalid: Enter a valid IPv4 or IPv6 address (e.g. 8.8.8.8).
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_no_data: No data found for that IP.
+        badge_flagged: Flagged
+        badge_clean: Clean
+        badge_yes: "Yes"
+        badge_no: "No"
+        label_is_vpn: VPN
+        label_is_proxy: Proxy
+        label_is_tor: Tor exit node
+        label_is_hosting: Hosting / datacenter
+        label_score: Threat score
+        label_threat: Threat level
+        label_fraud_score: Fraud score
+        label_asn_org: ASN organization
+        threat_none: None
+        threat_low: Low
+        threat_medium: Medium
+        threat_high: High
+        threat_critical: Critical
+    thesaurus:
+      seo:
+        title: "Free Thesaurus API — Synonyms & Antonyms Lookup | Requiems API"
+        description: "Find synonyms and antonyms for any word instantly. Case-insensitive lookup with a curated English dataset — free, no account required."
+      logo_marquee:
+        trusted_by: "Trusted by teams at"
+      demo:
+        error_empty: "Enter a word to look up."
+        error_invalid: "Enter a valid word — letters, apostrophes, and hyphens only (e.g. happy or well-being)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "No synonyms or antonyms found for that word."
+        badge_found: "Found"
+        label_synonyms: "Synonyms"
+        label_antonyms: "Antonyms"
+        result_failed_heading: "Lookup failed"
+      hero:
+        title: "Find the right word, every time."
+        subtitle: "Synonyms and antonyms for any word, in a single API call — perfect for writing tools, vocabulary apps, and content generation."
+        cta_primary: "Get API Key"
+        cta_docs: "Read the docs"
+        placeholder: "Enter a word (e.g. happy)"
+        submit: "Look up"
+        no_account: "No account required for the demo."
+        label_input: "Word to look up"
+      what_it_does:
+        coverage_badge: "Coverage"
+        coverage_heading: "A curated English word dataset, ready for production."
+        coverage_body: "Thesaurus returns both synonyms and antonyms for a word in a single request. Lookups are case-insensitive and served from an in-memory dataset for fast, low-latency responses."
+        simplicity_badge: "Simplicity"
+        simplicity_heading: "One GET request. No body, no parsing."
+        simplicity_body: "Pass the word in the URL path. Your API key in the header. No SDK, no setup, no request body. The response is flat JSON — read it directly without unwrapping nested structures."
+      use_cases:
+        heading: "Built for writing and content tools."
+        subheading: "Thesaurus fits anywhere vocabulary matters — writing assistants, education, and content generation alike."
+        writing_title: "Suggest alternatives while users write"
+        writing_desc: "Offer synonym suggestions inline as users type, helping them avoid repeating the same word across a document."
+        writing_tags: "Writing assistance, Editors"
+        vocab_title: "Power vocabulary-building apps"
+        vocab_desc: "Build flashcard or word-of-the-day apps that pair each word with its synonyms and antonyms for deeper learning."
+        vocab_tags: "Vocabulary, Education"
+        games_title: "Generate word game content"
+        games_desc: "Use synonym and antonym pairs to build word-guessing games, crosswords, or vocabulary quizzes without maintaining your own dataset."
+        games_tags: "Word games, Content generation"
+        education_title: "Support educational platforms"
+        education_desc: "Give students instant synonym and antonym lookups inside reading or writing exercises, without leaving the platform."
+        education_tags: "Education, Edtech"
+        seo_title: "Diversify content and improve SEO"
+        seo_desc: "Suggest synonyms for overused keywords to avoid repetition and improve readability in generated or edited content."
+        seo_tags: "Content creation, SEO"
+        chatbot_title: "Add vocabulary depth to chatbots"
+        chatbot_desc: "Let conversational agents rephrase responses with synonyms to sound more natural and avoid repetitive phrasing."
+        chatbot_tags: "Chatbots, NLP"
+      api_combinations:
+        heading: "Use together with complementary APIs."
+        subheading: "Thesaurus works even better when paired with other Requiems APIs."
+        spellcheck_pair: "Thesaurus + Spell Check"
+        spellcheck_benefit: "Correct spelling first, then suggest richer word choices — a complete writing-assistance pipeline in two calls."
+        sentiment_pair: "Thesaurus + Sentiment Analysis"
+        sentiment_benefit: "Analyze the tone of a text, then suggest synonyms to soften or strengthen specific words based on the detected sentiment."
+        profanity_pair: "Thesaurus + Profanity Filter"
+        profanity_benefit: "Suggest clean synonym alternatives for flagged words instead of just censoring them."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "Is the lookup case-sensitive?"
+        a1: "No, the lookup is case-insensitive. Searching for \"Happy\", \"HAPPY\", or \"happy\" all return the same result."
+        q2: "What happens if a word is not found?"
+        a2: "The API returns a 404 Not Found response if the word is not in the thesaurus dataset."
+        q3: "How many words are in the dataset?"
+        a3: "The dataset contains over 50 curated common English words with their synonyms and antonyms, covering the most frequently used vocabulary."
+        q4: "Can I get synonyms and antonyms separately?"
+        a4: "The endpoint returns both synonyms and antonyms in a single response for efficiency. Both fields are always present in the response."
+        q5: "Can I look up multiple words at once?"
+        a5: "Yes. The batch endpoint (POST /v1/text/thesaurus/batch) accepts up to 50 words per request. Results are returned in the same order as the input, and words not found return an in-band error instead of failing the whole batch."
+      cta:
+        heading: "Give your content the right words."
+        body: "One API key. Thesaurus, spell check, sentiment analysis, and 50+ other APIs for building smarter writing tools."
+    random_user:
+      seo:
+        title: Random User Generator — Generate Fake Profiles for Testing | Requiems API
+        description: Generate random fake user profiles for testing and prototyping. Names, emails, phone numbers, addresses, and avatars — one API call. Try the free live demo, no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building products
+      hero:
+        title: Generate Random User Profiles
+        title_highlight: One API Call
+        subtitle: Instantly generate realistic fake user profiles for testing, prototyping, and demos — names, emails, phone numbers, addresses, and avatars with a single request.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        submit: Generate Random User
+        no_account: No account required for the demo
+      what_it_does:
+        heading: Realistic Fake User Data, Instantly
+        subheading: Each call returns a complete profile with name, email, phone, postal address, and avatar — ready to use in any environment.
+        accuracy_heading: Complete User Profile
+        accuracy_body: Every response includes a unique name, email address, phone number, full mailing address with street and city, and an avatar URL powered by DiceBear. No garbage data, no placeholder text — realistic profiles you can drop straight into a database or UI mockup.
+        simplicity_heading: A Single GET Request
+        simplicity_body: A single GET request with your API key is all it takes. No body payload, no SDK, no configuration — just an HTTP call and a JSON response. Use it anywhere you need test data — local dev, staging environments, or demo applications.
+      use_cases:
+        heading: Built for Testing, Prototyping, and Demos
+        subheading: Anywhere you need realistic fake user data, Random User can provide it instantly.
+        testing_context: Development
+        testing_title: Populate test databases
+        testing_body: Generate unique user records for unit tests, integration tests, and staging environments without writing seed scripts.
+        mockups_context: Mockups
+        mockups_title: UI mockups and design previews
+        mockups_body: Drop realistic names, avatars, and addresses into wireframes and prototypes — no need to fabricate placeholder data.
+        load_context: Load Testing
+        load_title: Load testing with varied payloads
+        load_body: Generate hundreds of unique user profiles to simulate real-world traffic patterns and data diversity in performance tests.
+        demos_context: Demos
+        demos_title: Live demo applications
+        demos_body: Power demo environments and sandbox experiences with fresh user data on every page load — no dummy accounts needed.
+        qa_context: QA Automation
+        qa_title: QA automation fixtures
+        qa_body: Provide deterministic seed data for end-to-end test suites with unique profiles across every test run.
+        design_context: Design
+        design_title: Design system examples
+        design_body: Fill user profile cards, contact lists, and address forms in your design system documentation with consistent fake data.
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: Random User is more powerful combined. Stack it with other Requiems APIs to build richer workflows.
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        email_normalizer_name: Random User + Email Normalizer
+        email_normalizer_benefit: Generate a fake user profile and normalize the email address — lowercase, trim, and canonicalize it in the same workflow.
+        email_normalizer_outcome: A cleaner data pipeline — randomly generated profiles that are immediately ready for storage or display.
+        domain_checker_name: Random User + Domain Checker
+        domain_checker_benefit: Generate a fake user and verify the domain of their email address in a single session.
+        domain_checker_outcome: More realistic test data — confirm generated domains are real or adjust fake profiles based on DNS feedback.
+        qr_code_name: Random User + QR Code Generator
+        qr_code_benefit: Generate a fake user profile and create a QR code from it — for print, demos, or sharing.
+        qr_code_outcome: Rapid prototyping of user flows — from profile generation to scannable output in two API calls.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What fields does the API return?
+        a1: Each response includes a name, email address, phone number, a full mailing address with street, city, state, zip, and country, plus an avatar URL generated by DiceBear Identicon.
+        q2: Is the data truly random every time?
+        a2: Yes. Each call generates a unique profile using the faker library. No two calls return the same data, and profiles are not cached or stored.
+        q3: Are the email addresses real?
+        a3: No. Generated email addresses use example domains (example.org) and are not valid for sending mail. They are designed for testing and prototyping only.
+        q4: Can I generate multiple users at once?
+        a4: Yes. Use the POST /v1/technology/random-user/batch endpoint to generate up to 50 users in a single request. See the API docs for the request format.
+        q5: How are avatars generated?
+        a5: Each profile includes a DiceBear Identicon URL — a unique geometric SVG generated from the person's name. The avatars are deterministic, so the same name always produces the same avatar.
+      cta:
+        heading: Generate test data with Requiems.
+        body: One API key. Random user profiles, email normalization, domain checking, QR generation, and 50+ other APIs for building and testing better products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_generic: Something went wrong. Try again.
+        error_network: Network error. Please check your connection.
+        error_no_data: No data returned.
+        result_failed_heading: Generation failed
+        badge_live: Live
+        avatar_alt: User avatar
+        label_name: Name
+        label_email: Email
+        label_phone: Phone
+        label_street: Street
+        label_city: City
+        label_state: State
+        label_zip: Zip
+        label_country: Country
+    sudoku:
+      seo:
+        title: "Sudoku API — Generate Puzzles with Solutions | Requiems API"
+        description: "Generate fresh Sudoku puzzles at easy, medium, or hard difficulty with complete solutions. Try the free live demo — no account required."
+      logo_marquee:
+        trusted_by: "Trusted by puzzle and gaming teams"
+      hero:
+        title: "Generate Sudoku Puzzles, One API Call"
+        subtitle: "Fresh 9×9 Sudoku puzzles at any difficulty — easy, medium, or hard — each with the complete solution included."
+        cta_primary: "Get your free API key"
+        cta_docs: "View docs"
+        label_difficulty: "Difficulty"
+        difficulty_easy: "Easy"
+        difficulty_medium: "Medium"
+        difficulty_hard: "Hard"
+        submit: "Generate Puzzle"
+        no_account: "No account required for the demo"
+      demo:
+        error_empty: "Select a difficulty level."
+        error_invalid_difficulty: "Select a valid difficulty level (easy, medium, or hard)."
+        error_rate_limit: "Too many requests. Wait a moment and try again."
+        error_generic: "Something went wrong. Try again."
+        error_no_data: "Could not generate a puzzle. Try again."
+        result_failed_heading: "Puzzle generation failed"
+        badge_easy: "Easy"
+        badge_medium: "Medium"
+        badge_hard: "Hard"
+        label_difficulty: "Difficulty"
+        label_puzzle: "Puzzle"
+        label_solution: "View solution"
+      what_it_does:
+        heading: "Fresh Puzzles, Complete Solutions"
+        subheading: "Every API call returns a randomly generated 9×9 Sudoku grid with the corresponding solution — ready to render in your app."
+        accuracy_heading: "Validated Puzzles"
+        accuracy_body: "Each puzzle is generated with a unique solution guaranteed. The response includes both the puzzle grid (with 0s for empty cells) and the complete solution grid — no solving required on your end."
+        simplicity_heading: "A Single GET Request"
+        simplicity_body: "No session state, no puzzle IDs. Every call to GET /v1/entertainment/sudoku returns a freshly generated puzzle based on your chosen difficulty — easy, medium, or hard."
+      use_cases:
+        heading: "Built for Games, Education, and Content"
+        subheading: "Anywhere a logic puzzle adds engagement, this API can power it."
+        puzzle_gen_context: "Puzzle Generation"
+        puzzle_gen_title: "Power puzzle apps and websites"
+        puzzle_gen_body: "Serve fresh puzzles on demand without maintaining your own generation algorithm."
+        education_context: "Education"
+        education_title: "Teach logic and problem-solving"
+        education_body: "Generate puzzles at multiple difficulty levels for classroom exercises, homework, or brain-training apps."
+        gaming_context: "Gaming"
+        gaming_title: "Add puzzles to mobile and web games"
+        gaming_body: "Integrate daily puzzles, timed challenges, or unlockable levels into your game loop."
+        accessibility_context: "Accessibility"
+        accessibility_title: "Printable and offline-friendly"
+        accessibility_body: "Use the plain JSON output to render puzzles in print formats, PDFs, or offline-friendly layouts."
+        content_context: "Content"
+        content_title: "Daily puzzle features for publishers"
+        content_body: "Add a daily Sudoku column to your news site, blog, or newsletter with a single API call."
+        integrations_context: "Integrations"
+        integrations_title: "Embed puzzles into workflows"
+        integrations_body: "Generate puzzles programmatically for Slack bots, Discord commands, or internal team challenges."
+      api_combinations:
+        heading: "Pair It With Other APIs"
+        subheading: "Sudoku is more engaging combined. Stack it with other Requiems APIs to build richer game and puzzle experiences."
+        label_benefit: "Benefit:"
+        label_outcome: "Outcome:"
+        trivia_name: "Sudoku + Trivia"
+        trivia_benefit: "Mix logic puzzles with trivia questions in the same session."
+        trivia_outcome: "A varied brain-training feed — puzzles and quizzes from a single provider."
+        quotes_name: "Sudoku + Random Quotes"
+        quotes_benefit: "Follow up a completed puzzle with an inspirational quote."
+        quotes_outcome: "A rewarding flow — solve, read, repeat."
+        qr_name: "Sudoku + QR Code Generator"
+        qr_benefit: "Turn a puzzle link into a scannable QR code for print distribution."
+        qr_outcome: "Bridge online and offline — one scan takes players straight to the daily puzzle."
+      faq:
+        heading: "Frequently Asked Questions"
+        support_prompt: "Still have questions?"
+        support_link: "Contact support"
+        q1: "What difficulty levels are available?"
+        a1: "Three levels are supported — easy (45 givens), medium (35 givens), and hard (29 givens). Easy puzzles have more starting numbers, while hard puzzles have fewer."
+        q2: "Is every puzzle guaranteed to have a solution?"
+        a2: "Yes. Every puzzle is generated from a complete, valid Sudoku solution. A unique solution always exists, and it is included in the API response."
+        q3: "Is the solution always included in the response?"
+        a3: "Yes. The solution grid is returned alongside the puzzle grid under the solution field. Use it to validate answers or reveal the solution to the user."
+        q4: "Can I generate multiple puzzles at once?"
+        a4: "Yes. The POST /v1/entertainment/sudoku/batch endpoint accepts up to 20 difficulty levels and returns each puzzle with its solution in the same order."
+        q5: "Is it free to try?"
+        a5: "The interactive demo requires no account. A free tier is available after signup with a monthly request quota. See the pricing page for limits."
+      cta:
+        heading: "Add Sudoku to your product with Requiems."
+        body: "One API key. Sudoku puzzles, trivia questions, random quotes, and 50+ other APIs for building games and content-rich products."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"

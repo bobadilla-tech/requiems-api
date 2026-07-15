@@ -22,23 +22,23 @@ fr:
       flash:
         cannot_regenerate_revoked: Impossible de régénérer une clé révoquée. Veuillez
           en créer une nouvelle.
-        created: 'Clé API créée avec succès. Copiez-la maintenant : vous ne pourrez
-          plus la voir.'
+        created: "Clé API créée avec succès. Copiez-la maintenant : vous ne pourrez
+          plus la voir."
         not_found: Clé API introuvable.
-        regenerated: 'Clé API régénérée avec succès. Copiez-la maintenant : vous ne
-          pourrez plus la voir.'
+        regenerated: "Clé API régénérée avec succès. Copiez-la maintenant : vous ne
+          pourrez plus la voir."
         revoke_error: Échec de la révocation de la clé API.
         revoked: Clé API révoquée avec succès.
       info_heading: Informations importantes
-      info_one_time_label: 'Affichage unique :'
+      info_one_time_label: "Affichage unique :"
       info_one_time_text: Les clés complètes ne s'affichent qu'une seule fois à la
         création. Conservez-les en lieu sûr.
-      info_regenerate_label: 'En cas de compromission :'
+      info_regenerate_label: "En cas de compromission :"
       info_regenerate_text: Révoquez et régénérez immédiatement si une clé est exposée.
-      info_security_label: 'Sécurité :'
+      info_security_label: "Sécurité :"
       info_security_text: N'exposez jamais vos clés API dans du code client ou des
         dépôts publics.
-      info_shared_label: 'Quota partagé :'
+      info_shared_label: "Quota partagé :"
       info_shared_text: Toutes vos clés API partagent le même quota mensuel de requêtes
         selon votre formule.
       last_used_never: Jamais
@@ -50,7 +50,7 @@ fr:
           other: "%{count} erreurs ont empêché la création de cette clé API :"
         name_hint: Un nom explicite pour savoir où cette clé est utilisée.
         name_label: Nom de la clé
-        name_placeholder: 'ex. : serveur de production, app mobile, pipeline CI/CD'
+        name_placeholder: "ex. : serveur de production, app mobile, pipeline CI/CD"
         quota_heading: Quota partagé
         quota_text: Toutes vos clés partagent le même quota mensuel selon votre formule.
           Créer plusieurs clés n'augmente pas la limite.
@@ -70,10 +70,10 @@ fr:
         back_btn: "← Retour aux clés API"
         copied_btn: Copié !
         copy_btn: Copier
-        curl_example: 'Exemple cURL :'
+        curl_example: "Exemple cURL :"
         go_dashboard_btn: Aller au tableau de bord
-        header_example: 'Incluez-la dans les en-têtes HTTP :'
-        js_example: 'Exemple JavaScript :'
+        header_example: "Incluez-la dans les en-têtes HTTP :"
+        js_example: "Exemple JavaScript :"
         key_hint: Cliquez sur le code pour tout sélectionner, ou utilisez le bouton
           Copier
         key_label: Votre clé API
@@ -85,8 +85,8 @@ fr:
         security_4: Faites tourner les clés régulièrement dans votre politique de
           sécurité
         security_heading: Bonnes pratiques de sécurité
-        success_body: 'Votre nouvelle clé a été générée. Copiez-la maintenant : vous
-          ne pourrez plus la voir.'
+        success_body: "Votre nouvelle clé a été générée. Copiez-la maintenant : vous
+          ne pourrez plus la voir."
         success_heading: Clé API créée avec succès !
         title: Clé API créée
         usage_heading: Utiliser votre clé API
@@ -143,7 +143,7 @@ fr:
         portal_note: L'historique complet des factures est disponible dans le portail
           client LemonSqueezy via Gérer l'abonnement.
         promoted_expires_on: Fin de la promotion le
-        promoted_note: 'Cette formule est promotionnelle : pas de factures LemonSqueezy.'
+        promoted_note: "Cette formule est promotionnelle : pas de factures LemonSqueezy."
         promoted_status: Promotion
         renews_on: Renouvellement le
         status_label: Statut
@@ -192,7 +192,7 @@ fr:
         consequence_2: Votre abonnement actif sera annulé
         consequence_3: Toutes les données d'utilisation et l'historique seront définitivement
           supprimés
-        consequences_heading: 'En supprimant votre compte :'
+        consequences_heading: "En supprimant votre compte :"
         contact_notice_html: En cas de doute, contactez-nous à %{email_link}.
         expiry_html: Ce lien expire le <strong>%{expires_at}</strong>. Passé ce délai,
           vous devrez demander un nouvel e-mail de confirmation.
@@ -222,8 +222,8 @@ fr:
             %{email}.
           selected_services: Services sélectionnés
           server_tier: Niveau de serveur
-          subject: 'Demande reçue : déploiement privé Requiems'
-          what_next: 'Prochaines étapes :'
+          subject: "Demande reçue : déploiement privé Requiems"
+          what_next: "Prochaines étapes :"
           what_next_detail: Nous provisionnerons votre VPS Hetzner, configurerons
             votre API Go privée avec uniquement les services choisis et votre sous-domaine
             sur yourcompany.requiems.xyz. Une fois en ligne, vous recevrez un second
@@ -239,7 +239,7 @@ fr:
           greeting_html: Bonjour <strong>%{email}</strong>,
           header_subtitle: Requiems API — Votre formule a été mise à niveau
           header_title: Mise à jour de formule
-          intro: 'Bonne nouvelle : votre formule Requiems API a été mise à jour.'
+          intro: "Bonne nouvelle : votre formule Requiems API a été mise à jour."
           plan_label: Votre nouvelle formule
           subject: Votre formule Requiems est passée à %{plan}
       subscription:
@@ -316,10 +316,10 @@ fr:
         body: Allez dans Clés API pour créer une clé. Vous l'inclurez dans chaque
           requête en en-tête.
         cta: Gérer les clés API
-        header_label: 'Incluez cet en-tête dans chaque requête :'
+        header_label: "Incluez cet en-tête dans chaque requête :"
         heading: 2. Obtenez votre clé API
       step_3:
-        body: 'Essayez cet exemple pour obtenir un conseil aléatoire :'
+        body: "Essayez cet exemple pour obtenir un conseil aléatoire :"
         heading: 3. Premier appel API
         note: Remplacez YOUR_API_KEY par une clé active depuis la page Clés API.
       step_4:
@@ -402,8 +402,8 @@ fr:
       flash:
         deleted: Votre compte a été définitivement supprimé. Nous sommes désolés de
           vous voir partir.
-        deletion_email_sent: 'Vérifiez votre e-mail : nous avons envoyé un lien de
-          confirmation. Il expire dans 1 heure.'
+        deletion_email_sent: "Vérifiez votre e-mail : nous avons envoyé un lien de
+          confirmation. Il expire dans 1 heure."
         email_confirm: Paramètres mis à jour. Vérifiez votre e-mail pour confirmer
           la nouvelle adresse.
         error: Échec de la mise à jour des paramètres. Vérifiez le formulaire.

@@ -12,7 +12,7 @@ en:
       only_selected_services_will_be_mounted: Only selected services will be mounted
         on your instance. Others return 404.
       optional: Optional.
-      please_fix_the_following: 'Please fix the following:'
+      please_fix_the_following: "Please fix the following:"
       private_deployment_requiems_api: Private Deployment — Requiems API
       update_account_details: Update account details →
       yourcompany_requiems_xyz: yourcompany.requiems.xyz

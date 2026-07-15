@@ -10,18 +10,19 @@ alternatives were discarded.
 ## Context
 
 The sentiment service currently uses a hardcoded map literal of 170 words with
-`float64` valence scores ranging from `−0.9` to `+0.9`. The algorithm —
-3-token negation lookahead and intensity multipliers — is correct and is not
-being replaced. The problem is data coverage:
+`float64` valence scores ranging from `−0.9` to `+0.9`. The algorithm — 3-token
+negation lookahead and intensity multipliers — is correct and is not being
+replaced. The problem is data coverage:
 
 - Most real-world words are not in the 170-word set and return a score of zero.
 - Everything trends toward neutral regardless of the actual sentiment of the
-  text, making the output unreliable for any text beyond trivially simple inputs.
+  text, making the output unreliable for any text beyond trivially simple
+  inputs.
 - The lexicon is hardcoded in `service.go`, coupling vocabulary updates to API
   deploys.
 
-For context: AFINN-165 has 2,477 words and VADER has 4,000+. The current
-lexicon covers approximately 7% of what AFINN would cover. The algorithm is
+For context: AFINN-165 has 2,477 words and VADER has 4,000+. The current lexicon
+covers approximately 7% of what AFINN would cover. The algorithm is
 data-starved, not broken.
 
 The decision was taken to replace only the lexicon — not the algorithm — and to
@@ -59,8 +60,8 @@ social-media text.
 ### 3. Oyemi
 
 A deterministic semantic encoding system that assigns structured codes to words.
-The last digit of each code encodes valence: `0` = neutral, `1` = positive,
-`2` = negative. Coverage exceeds 145,000 words.
+The last digit of each code encodes valence: `0` = neutral, `1` = positive, `2`
+= negative. Coverage exceeds 145,000 words.
 
 **Rejected because:** Oyemi returns a direction (positive / negative / neutral),
 not a numeric magnitude. The algorithm requires `float64` scores to apply
@@ -95,8 +96,8 @@ that is purely about vocabulary coverage.
 ### 6. Python microservice (Docker)
 
 Packaging any Python sentiment library (VADER, spaCy, KeyNeg) into a small
-FastAPI service, containerising it as a Docker image, and calling it from the
-Go API via HTTP on every analysis request.
+FastAPI service, containerising it as a Docker image, and calling it from the Go
+API via HTTP on every analysis request.
 
 **Rejected for current scope:** introduces a network hop on every sentiment
 call, adds a service dependency that must be operated and monitored, and creates
@@ -109,23 +110,22 @@ transformer-based or ML-based sentiment becomes a future requirement.
 
 ## Decision: AFINN-165 via `//go:embed`
 
-AFINN-165 is an open-source sentiment lexicon assigning integer scores from
-`−5` to `+5` to 2,477 English words, covering a broad range of emotional
-vocabulary including negations, intensifiers, profanity, and domain-specific
-terms.
+AFINN-165 is an open-source sentiment lexicon assigning integer scores from `−5`
+to `+5` to 2,477 English words, covering a broad range of emotional vocabulary
+including negations, intensifiers, profanity, and domain-specific terms.
 
 It was selected because it occupies the optimal point on the
 complexity-vs-quality curve for the platform's current needs:
 
-| Criterion                        | 170-word lexicon | Oyemi   | VADER         | AFINN-165      | Microservice (Python) |
-| -------------------------------- | ---------------- | ------- | ------------- | -------------- | --------------------- |
-| Numeric scores (float64)         | ✅               | ❌      | ✅            | ✅             | ✅                    |
-| Vocabulary coverage              | ❌ (~170 words)  | ✅ 145k | ✅ 4,000+     | ✅ 2,477       | ✅ varies             |
-| Native Go — no external service  | ✅               | ❌      | ❌ (export)   | ✅             | ❌                    |
-| No infrastructure overhead       | ✅               | ❌      | ❌            | ✅             | ❌ (Docker + network) |
-| Independent lexicon update cycle | ❌               | —       | —             | ✅             | ✅                    |
-| Algorithm compatibility          | ✅               | ❌      | ✅ (with work)| ✅             | ✅                    |
-| License                          | —                | OSS     | MIT           | Apache 2.0     | varies                |
+| Criterion                        | 170-word lexicon | Oyemi   | VADER          | AFINN-165  | Microservice (Python) |
+| -------------------------------- | ---------------- | ------- | -------------- | ---------- | --------------------- |
+| Numeric scores (float64)         | ✅               | ❌      | ✅             | ✅         | ✅                    |
+| Vocabulary coverage              | ❌ (~170 words)  | ✅ 145k | ✅ 4,000+      | ✅ 2,477   | ✅ varies             |
+| Native Go — no external service  | ✅               | ❌      | ❌ (export)    | ✅         | ❌                    |
+| No infrastructure overhead       | ✅               | ❌      | ❌             | ✅         | ❌ (Docker + network) |
+| Independent lexicon update cycle | ❌               | —       | —              | ✅         | ✅                    |
+| Algorithm compatibility          | ✅               | ❌      | ✅ (with work) | ✅         | ✅                    |
+| License                          | —                | OSS     | MIT            | Apache 2.0 | varies                |
 
 **Key reasons for selecting AFINN-165:**
 
@@ -148,11 +148,11 @@ complexity-vs-quality curve for the platform's current needs:
 
 - **Independent test surface.** Extracting the algorithm and lexicon into
   `pkg/sentiment` allows the negation lookahead, intensity multipliers, and
-  score normalisation to be tested in isolation, without API routing, middleware,
-  or serialisation noise.
+  score normalisation to be tested in isolation, without API routing,
+  middleware, or serialisation noise.
 
-- **License clarity.** AFINN-165 is released under the Apache 2.0 licence. It
-  is compatible with commercial use and imposes no per-request or per-seat cost.
+- **License clarity.** AFINN-165 is released under the Apache 2.0 licence. It is
+  compatible with commercial use and imposes no per-request or per-seat cost.
 
 - **Consistent with the bobadilla-tech OSS pattern.** A standalone
   `pkg/sentiment` package with embedded data and a focused public API follows
@@ -162,7 +162,8 @@ complexity-vs-quality curve for the platform's current needs:
 
 ## Score Normalisation
 
-AFINN raw scores span `[−5, +5]`. The service response shape requires `Score
+AFINN raw scores span `[−5, +5]`. The service response shape requires
+`Score
 float64` in `[0.0, 1.0]`. Normalisation is applied **per token**, before
 accumulation, so that multi-word input never pushes the accumulated sum outside
 a bounded range:
@@ -189,7 +190,7 @@ Per-token normalisation examples:
 | --------- | -------------------- | ---------------- |
 | +5        | 1.0                  | posSum           |
 | +3        | 0.8                  | posSum           |
-|  0        | 0.5                  | (skipped)        |
+| 0         | 0.5                  | (skipped)        |
 | −3        | 0.2                  | negSum           |
 | −5        | 0.0                  | negSum           |
 
@@ -272,8 +273,8 @@ The existing `service.go` is reduced to an HTTP handler. All logic moves to
 ## Future Upgrade Path
 
 If sentiment quality becomes a business priority, the recommended next step is
-replacing `lexicon.json` with **VADER's exported lexicon** (4,000+ words,
-better informal text coverage). This is a file swap inside `pkg/sentiment` — the
+replacing `lexicon.json` with **VADER's exported lexicon** (4,000+ words, better
+informal text coverage). This is a file swap inside `pkg/sentiment` — the
 algorithm, normalisation, and API surface are unchanged.
 
 If contextual or transformer-based sentiment is required in the future, the

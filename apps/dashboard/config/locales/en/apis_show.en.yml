@@ -26,4 +26,4 @@ en:
       rate_limit_title: Testing too fast!
       signup_benefit_html: Sign up for free and get <strong>%{requests}</strong> —
         you can keep testing right away.
-      status: 'Status:'
+      status: "Status:"

@@ -41,12 +41,12 @@ func TestMXLookup_InvalidDomain(t *testing.T) {
 			w := httptest.NewRecorder()
 			r.ServeHTTP(w, req)
 
-			assert.Equal(t, http.StatusBadRequest, w.Code, "expected 400 for %q, got %d", tc.domain, w.Code)
+			assert.Equal(t, http.StatusUnprocessableEntity, w.Code, "expected 422 for %q, got %d", tc.domain, w.Code)
 
 			var resp httpx.ErrorResponse
 			err := json.NewDecoder(w.Body).Decode(&resp)
 			require.NoError(t, err)
-			assert.Equal(t, "bad_request", resp.Error)
+			assert.Equal(t, "validation_failed", resp.Error)
 		})
 	}
 }

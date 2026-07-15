@@ -35,10 +35,10 @@ fr:
           abonnement.
         are_you_sure_you_want_to_resolve_this: Êtes-vous sûr de vouloir résoudre ce
           problème ?
-        ban: 'Interdire:'
+        ban: "Interdire:"
         by_email: par %{email}
         created_at_ago: "(%{created_at} il y a)"
-        investigate: 'Enquêter:'
+        investigate: "Enquêter:"
         key_prefix: Préfixe clé
         last_request: Dernière requête
         last_request_at_ago: "%{last_request_at} il y a"
@@ -49,8 +49,8 @@ fr:
         reported: Signalé
         reported_at: Signalé à
         reported_user: Utilisateur signalé
-        resolve: 'Résoudre:'
-        suspend: 'Suspendre:'
+        resolve: "Résoudre:"
+        suspend: "Suspendre:"
         suspended: Suspendu
         take_action_on_this_abuse_report: Prenez des mesures concernant ce signalement
           d'abus
@@ -67,13 +67,13 @@ fr:
         customer_distribution: Distribution client
         declining_revenue_description: Analyser les causes et mettre en œuvre des
           stratégies de croissance.
-        declining_revenue_label: 'Baisse des revenus :'
+        declining_revenue_label: "Baisse des revenus :"
         high_churn_description: Mettez l'accent sur la fidélisation et la satisfaction
           client.
-        high_churn_label: 'Taux de désabonnement élevé :'
+        high_churn_label: "Taux de désabonnement élevé :"
         key_takeaways: Points clés à retenir
         low_churn_description: Les clients sont satisfaits du service.
-        low_churn_label: 'Faible taux de désabonnement :'
+        low_churn_label: "Faible taux de désabonnement :"
         monthly_recurring_revenue: Revenus mensuels récurrents
         monthly_recurring_revenue_over_time: Revenus mensuels récurrents au fil du
           temps
@@ -91,9 +91,9 @@ fr:
         revenue_trend_last_12_months: Évolution du chiffre d'affaires (12 derniers
           mois)
         steady_growth_description: Les revenus augmentent de façon constante.
-        steady_growth_label: 'Croissance soutenue :'
+        steady_growth_label: "Croissance soutenue :"
         strong_growth_description: Les revenus augmentent rapidement.
-        strong_growth_label: 'Forte croissance :'
+        strong_growth_label: "Forte croissance :"
         subscription_growth_and_churn_over_time: Croissance et désabonnement des abonnements
           au fil du temps
         subscription_revenue_and_financial: Revenus des abonnements et indicateurs
@@ -134,7 +134,7 @@ fr:
         response_slow_description: Une optimisation des performances est nécessaire.
         response_slow_label: Temps de réponse lents.
         response_times: Temps de réponse
-        response_times_detail: 'P95 : %{p95}ms, P99 : %{p99}ms'
+        response_times_detail: "P95 : %{p95}ms, P99 : %{p99}ms"
         security_high_description: Surveillez les menaces de sécurité potentielles.
         security_high_label: Nombre élevé de tentatives d'authentification infructueuses.
         security_label: Sécurité
@@ -308,7 +308,7 @@ fr:
         no_users_found: Aucun utilisateur trouvé
         oldest_first: Du plus ancien au plus récent
         search_by_email_name_or_company: Recherche par courriel, nom ou entreprise
-        sort: 'Trier:'
+        sort: "Trier:"
         suspended: Suspendu
         try_adjusting_your_search_or_filters: Essayez de modifier votre recherche
           ou vos filtres.
