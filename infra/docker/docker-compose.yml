@@ -22,8 +22,6 @@ services:
     environment:
       - PORT=8080
       - ENVIRONMENT=production
-    ports:
-      - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
@@ -47,8 +45,6 @@ services:
       - MCP_TRANSPORT=http
       - MCP_HTTP_PORT=3000
       - REQUIEMS_BASE_URL=https://api.requiems.xyz
-    ports:
-      - "3100:3000"
     healthcheck:
       test:
         [
@@ -93,8 +89,6 @@ services:
     environment:
       - RAILS_ENV=production
       - RAILS_LOG_LEVEL=warn
-    ports:
-      - "3000:80"
     depends_on:
       db:
         condition: service_healthy
