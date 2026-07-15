@@ -1,0 +1,31 @@
+<turbo-frame id="useragent-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
+      <span class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate"><%= t("tools.useragent.demo.result_heading") %></span>
+      <span class="ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= data["is_bot"] ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" %>">
+        <%= data["is_bot"] ? t("tools.useragent.demo.badge_bot") : t("tools.useragent.demo.badge_human") %>
+      </span>
+    </div>
+
+    <div class="px-4 py-1">
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.useragent.demo.label_browser") %></span>
+        <span class="text-sm font-medium text-gray-900 dark:text-white"><%= [data["browser"], data["browser_version"]].compact.join(" ") %></span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.useragent.demo.label_os") %></span>
+        <span class="text-sm font-medium text-gray-900 dark:text-white"><%= [data["os"], data["os_version"]].compact.join(" ") %></span>
+      </div>
+      <div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.useragent.demo.label_device") %></span>
+        <span class="text-sm font-medium text-gray-900 dark:text-white"><%= data["device"] %></span>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400"><%= t("tools.useragent.demo.label_is_bot") %></span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= data["is_bot"] ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300" %>">
+          <%= data["is_bot"] ? t("tools.useragent.demo.badge_yes") : t("tools.useragent.demo.badge_no") %>
+        </span>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

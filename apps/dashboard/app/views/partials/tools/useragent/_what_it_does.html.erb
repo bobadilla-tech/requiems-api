@@ -1,0 +1,56 @@
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid md:grid-cols-2 gap-12">
+
+      <!-- Parsing -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4">
+            <%= t("tools.useragent.what_it_does.parsing_badge") %>
+          </span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <%= t("tools.useragent.what_it_does.parsing_heading") %>
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.useragent.what_it_does.parsing_body") %>
+          </p>
+        </div>
+
+        <!-- Mock response card -->
+        <p class="text-gray-500 text-xs font-mono mb-2">GET /v1/technology/useragent?ua=... → 200 OK</p>
+        <div data-controller="highlight">
+          <pre><code class="language-json">{
+  "browser": "Chrome 120",
+  "os": "Windows 10",
+  "device_type": "desktop",
+  "is_bot": false
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Bot detection -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4">
+            <%= t("tools.useragent.what_it_does.bot_badge") %>
+          </span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            <%= t("tools.useragent.what_it_does.bot_heading") %>
+          </h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.useragent.what_it_does.bot_body") %>
+          </p>
+        </div>
+
+        <!-- Mock request card -->
+        <div data-controller="highlight">
+          <pre><code class="language-http">GET /v1/technology/useragent?ua=Mozilla%2F5.0+%28compatible%3B+Googlebot%2F2.1%29
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.useragent.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.useragent.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.useragent.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.useragent.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("useragent"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="useragent-demo"
+         data-useragent-demo-error-empty-value="<%= t('tools.useragent.demo.error_empty') %>">
+
+      <form data-action="turbo:submit-start->useragent-demo#onSubmitStart turbo:submit-end->useragent-demo#onSubmitEnd"
+            action="<%= tool_demo_useragent_path %>"
+            method="post"
+            data-turbo-frame="useragent-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <label for="useragent-demo-input" class="sr-only"><%= t("tools.useragent.hero.label_input") %></label>
+        <textarea
+          id="useragent-demo-input"
+          name="ua"
+          rows="3"
+          data-useragent-demo-target="input"
+          placeholder="<%= t('tools.useragent.hero.placeholder') %>"
+          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm resize-none"
+        ></textarea>
+        <div class="mt-2 flex items-center gap-2">
+          <%= render "partials/shared/submit_button", text: t("tools.useragent.hero.submit"), controller: "useragent-demo" %>
+        </div>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.useragent.hero.no_account") %></p>
+
+        <p data-useragent-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="useragent-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>
