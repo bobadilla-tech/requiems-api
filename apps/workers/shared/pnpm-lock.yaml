@@ -19,8 +19,8 @@ importers:
         specifier: ^5.20260708.1
         version: 5.20260708.1
       hono:
-        specifier: ^4.12.28
-        version: 4.12.28
+        specifier: ^4.12.30
+        version: 4.12.30
       nanoid:
         specifier: ^5.1.16
         version: 5.1.16
@@ -206,8 +206,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  hono@4.12.28:
-    resolution: {integrity: sha512-YwUvVpSF7m1yOblFPrU3Hbo8XhPheBoiyfGuII6z19LnOr6JpDnyyp7LFNrfV56wS8tpvtBFGRISHN02pDdLOA==}
+  hono@4.12.30:
+    resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
     engines: {node: '>=16.9.0'}
 
   nanoid@5.1.16:
@@ -322,7 +322,7 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  hono@4.12.28: {}
+  hono@4.12.30: {}
 
   nanoid@5.1.16: {}
 
