@@ -1079,4 +1079,46 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.sudoku.demo.error_no_data"), response.body
   end
+
+  # ── number_base_conversion ───────────────────────────────────────────────────
+
+  test "number_base_conversion renders result on success" do
+    payload = { "input" => "255", "from" => 10, "to" => 16, "result" => "ff" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/number-base-conversion", params: { from: "10", to: "16", value: "255" }
+    end
+    assert_response :success
+    assert_match "255", response.body
+    assert_match "ff", response.body
+  end
+
+  test "number_base_conversion renders error when any field is blank" do
+    post "/tools/demos/number-base-conversion", params: { from: "10", to: "", value: "255" }
+    assert_response :success
+    assert_match I18n.t("tools.number_base_conversion.demo.error_fill_all_fields"), response.body
+  end
+
+  test "number_base_conversion renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/number-base-conversion", params: { from: "10", to: "16", value: "255" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.number_base_conversion.demo.error_rate_limit"), response.body
+  end
+
+  test "number_base_conversion renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/number-base-conversion", params: { from: "10", to: "16", value: "255" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.number_base_conversion.demo.error_generic"), response.body
+  end
+
+  test "number_base_conversion renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/number-base-conversion", params: { from: "10", to: "16", value: "255" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.number_base_conversion.demo.error_no_data"), response.body
+  end
 end

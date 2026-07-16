@@ -1,0 +1,101 @@
+<%#
+  Base option values MUST match what the Number Base Conversion API accepts:
+  2 (binary), 8 (octal), 10 (decimal), 16 (hexadecimal).
+  See apps/api/services/technology/base_conversion (from/to params).
+%>
+<% base_options = [
+  [2,  t("tools.number_base_conversion.hero.binary")],
+  [8,  t("tools.number_base_conversion.hero.octal")],
+  [10, t("tools.number_base_conversion.hero.decimal")],
+  [16, t("tools.number_base_conversion.hero.hexadecimal")],
+] %>
+
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.number_base_conversion.hero.title_html").html_safe %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.number_base_conversion.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.number_base_conversion.hero.get_api_key"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.number_base_conversion.hero.read_the_docs"),
+            variant: "outline",
+            href: api_path("number-base-conversion"),
+            size: "lg" %>
+    </div>
+
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="number-base-conversion-demo"
+         data-number-base-conversion-demo-error-fill-all-fields-value="<%= t('tools.number_base_conversion.demo.error_fill_all_fields') %>">
+
+      <form data-action="turbo:submit-start->number-base-conversion-demo#onSubmitStart turbo:submit-end->number-base-conversion-demo#onSubmitEnd"
+            action="<%= tool_demo_number_base_conversion_path %>"
+            method="post"
+            data-turbo-frame="number_base_conversion-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="flex flex-col gap-2">
+
+          <label for="number-base-conversion-from-demo-input" class="sr-only"><%= t("tools.number_base_conversion.hero.source_base") %></label>
+          <select
+            id="number-base-conversion-from-demo-input"
+            name="from"
+            data-number-base-conversion-demo-target="from"
+            class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+          >
+            <option value=""><%= t("tools.number_base_conversion.hero.source_base") %></option>
+            <% base_options.each do |value, label| %>
+              <option value="<%= value %>" <%= "selected" if value == 10 %>><%= label %></option>
+            <% end %>
+          </select>
+
+          <label for="number-base-conversion-to-demo-input" class="sr-only"><%= t("tools.number_base_conversion.hero.target_base") %></label>
+          <select
+            id="number-base-conversion-to-demo-input"
+            name="to"
+            data-number-base-conversion-demo-target="to"
+            class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+          >
+            <option value=""><%= t("tools.number_base_conversion.hero.target_base") %></option>
+            <% base_options.each do |value, label| %>
+              <option value="<%= value %>" <%= "selected" if value == 16 %>><%= label %></option>
+            <% end %>
+          </select>
+
+          <label for="number-base-conversion-value-demo-input" class="sr-only"><%= t("tools.number_base_conversion.demo.value_label") %></label>
+          <input
+            id="number-base-conversion-value-demo-input"
+            type="text"
+            name="value"
+            data-number-base-conversion-demo-target="value"
+            placeholder="<%= t('tools.number_base_conversion.demo.input_placeholder') %>"
+            autocomplete="off"
+            class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+          />
+
+          <div class="flex justify-between">
+            <p class="mt-2 flex text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("shared.info.no_account_demo") %></p>
+            <%= render "partials/shared/submit_button", text: t("tools.number_base_conversion.hero.convert"), controller: "number-base-conversion-demo" %>
+          </div>
+        </div>
+
+        <p data-number-base-conversion-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="number_base_conversion-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

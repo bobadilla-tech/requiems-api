@@ -1,0 +1,59 @@
+<% use_cases = [
+  {
+    title: t("tools.number_base_conversion.use_cases.debugging_title"),
+    desc:  t("tools.number_base_conversion.use_cases.debugging_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_debugging"), t("tools.number_base_conversion.use_cases.tag_engineering")]
+  },
+  {
+    title: t("tools.number_base_conversion.use_cases.teaching_title"),
+    desc:  t("tools.number_base_conversion.use_cases.teaching_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_education"), t("tools.number_base_conversion.use_cases.tag_learning")]
+  },
+  {
+    title: t("tools.number_base_conversion.use_cases.protocol_title"),
+    desc:  t("tools.number_base_conversion.use_cases.protocol_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_networking"), t("tools.number_base_conversion.use_cases.tag_security")]
+  },
+  {
+    title: t("tools.number_base_conversion.use_cases.calculators_title"),
+    desc:  t("tools.number_base_conversion.use_cases.calculators_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_development"), t("tools.number_base_conversion.use_cases.tag_tooling")]
+  },
+  {
+    title: t("tools.number_base_conversion.use_cases.bitmask_title"),
+    desc:  t("tools.number_base_conversion.use_cases.bitmask_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_utilities"), t("tools.number_base_conversion.use_cases.tag_design")]
+  },
+  {
+    title: t("tools.number_base_conversion.use_cases.validation_title"),
+    desc:  t("tools.number_base_conversion.use_cases.validation_desc"),
+    tags:  [t("tools.number_base_conversion.use_cases.tag_data_quality"), t("tools.number_base_conversion.use_cases.tag_backend")]
+  }
+] %>
+
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t("tools.number_base_conversion.use_cases.heading") %></h2>
+      <p class="mt-3 text-gray-500 dark:text-gray-400 max-w-xl mx-auto"><%= t("tools.number_base_conversion.use_cases.subheading") %></p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% use_cases.each do |uc| %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow">
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-2"><%= uc[:title] %></h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4"><%= uc[:desc] %></p>
+          <div class="flex flex-wrap gap-2">
+            <% uc[:tags].each do |tag| %>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                <%= tag %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>

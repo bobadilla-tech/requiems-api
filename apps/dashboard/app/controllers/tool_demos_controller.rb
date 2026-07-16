@@ -446,6 +446,35 @@ class ToolDemosController < ApplicationController
     render "tool_demos/sudoku", locals: { data: data }
   end
 
+  def number_base_conversion
+    from  = params[:from].to_s.strip
+    to    = params[:to].to_s.strip
+    value = params[:value].to_s.strip
+
+    if from.blank? || to.blank? || value.blank?
+      return render_demo_error("number_base_conversion", t("tools.number_base_conversion.demo.error_fill_all_fields"))
+    end
+
+    result = api_call(endpoint: "/v1/technology/base", method: "GET",
+                      params: { from: from, to: to, value: value })
+
+    if result.status_code == 429
+      return render_demo_error("number_base_conversion", t("tools.number_base_conversion.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      msg = result.data&.dig("data", "message") ||
+            result.data&.dig("message") ||
+            t("tools.number_base_conversion.demo.error_generic")
+      return render_demo_error("number_base_conversion", msg)
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("number_base_conversion", t("tools.number_base_conversion.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/number_base_conversion", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)

@@ -99,4 +99,10 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='sudoku-demo']"
   end
+
+  test "number base conversion tool page renders successfully" do
+    get "/en/tools/number-base-conversion"
+    assert_response :success
+    assert_select "[data-controller='number-base-conversion-demo']"
+  end
 end
