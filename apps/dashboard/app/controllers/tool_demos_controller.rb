@@ -261,6 +261,21 @@ class ToolDemosController < ApplicationController
     render "tool_demos/profanity_filter", locals: { data: data, text: text }
   end
 
+  def useragent
+    ua = params[:ua].to_s.strip
+    return render_demo_error("useragent", t("tools.useragent.demo.error_empty")) if ua.blank?
+
+    result = api_call(endpoint: "/v1/technology/useragent", method: "GET", params: { ua: ua })
+
+    return render_demo_error("useragent", t("tools.useragent.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("useragent", t("tools.useragent.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("useragent", t("tools.useragent.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/useragent", locals: { data: data }
+  end
+
   def timezone
     city = params[:city].to_s.strip
     lat  = params[:lat].to_s.strip

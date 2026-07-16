@@ -1168,6 +1168,116 @@ en:
         badge_yes: "Yes"
         badge_no: "No"
         badge_none: None detected
+    useragent:
+      seo:
+        title: Free User Agent Parser API — Detect Browser, OS & Device Type | Requiems API
+        description: Parse any user agent string to extract browser name, version, operating
+          system, device type, and bot detection. Try the free live demo — no account required.
+      logo_marquee:
+        trusted_by: Trusted by teams building smarter products
+      hero:
+        title: Parse Any User Agent String Instantly
+        subtitle: Extract browser, OS, device type, and bot status from any user agent
+          string in a single API call. No regex to maintain.
+        cta_primary: Get your free API key
+        cta_docs: View docs
+        label_input: User agent string
+        placeholder: "e.g. Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        submit: Parse
+        no_account: No account required for the demo
+      what_it_does:
+        parsing_badge: Parsing
+        parsing_heading: Structured Data from Any UA String
+        parsing_body: Converts raw user agent strings into structured fields — browser
+          name, version, operating system, OS version, and device type. No regex, no
+          maintenance, no edge cases to handle yourself.
+        bot_badge: Bot Detection
+        bot_heading: Identify Bots and Crawlers
+        bot_body: Returns a boolean is_bot flag for every request. Detect known crawlers,
+          scrapers, and monitoring bots before they skew your analytics or consume your
+          rate limits.
+      use_cases:
+        heading: Built for Traffic Intelligence Workflows
+        subheading: From analytics to security — if you see HTTP requests, you need
+          to know who's sending them.
+        analytics_title: Enrich analytics dashboards
+        analytics_desc: Break down traffic by real browser and OS without relying on
+          JavaScript. Works on server logs, API request headers, and CDN access logs.
+        analytics_tags: "Analytics, Dashboards, Logs"
+        adaptive_title: Serve device-optimized content
+        adaptive_desc: Detect mobile, tablet, or desktop before rendering. Send lightweight
+          pages to mobile clients without a client-side library.
+        adaptive_tags: "Responsive, Mobile, UX"
+        bot_title: Filter bot traffic
+        bot_desc: Identify crawlers, scrapers, and monitoring bots in your request
+          stream. Exclude them from analytics or apply rate limiting per device class.
+        bot_tags: "Bots, Crawlers, Traffic"
+        security_title: Detect suspicious sessions
+        security_desc: Flag requests where the user agent doesn't match the declared
+          device or browser. Useful for fraud detection and account protection workflows.
+        security_tags: "Security, Fraud, Sessions"
+        testing_title: QA browser compatibility
+        testing_desc: Parse user agents from your test suite or CI runs to confirm
+          which browser environments your tests are actually covering.
+        testing_tags: "QA, Testing, CI"
+        personalization_title: Personalize by platform
+        personalization_desc: Tailor onboarding flows, feature flags, and download
+          links based on the user's detected OS and browser without frontend JavaScript.
+        personalization_tags: "Personalization, Feature Flags, Onboarding"
+      api_combinations:
+        heading: Pair It With Other APIs
+        subheading: User Agent Parser fits naturally into security and analytics pipelines.
+          Combine it with other Requiems APIs for richer context per request.
+        vpn_pair: User Agent Parser + VPN Detection
+        vpn_benefit: Know both the client software and whether the IP is behind a proxy
+          or VPN. A powerful combination for fraud scoring and geo-compliance.
+        domain_pair: User Agent Parser + Domain Checker
+        domain_benefit: Validate the referring domain and parse the browser environment
+          in one pass. Useful for affiliate traffic verification.
+        email_pair: User Agent Parser + Email Validator
+        email_benefit: Combine device detection with email verification at signup. Flag
+          suspicious registrations that mix bot-like UAs with disposable addresses.
+      faq:
+        heading: Frequently Asked Questions
+        support_prompt: Still have questions?
+        support_link: Contact support
+        q1: What fields does the API return?
+        a1: Each response includes browser name, browser version, OS name, OS version,
+          device type (desktop, mobile, tablet, bot, or unknown), and is_bot (boolean).
+        q2: How accurate is the bot detection?
+        a2: The API matches against an up-to-date list of known crawlers, scrapers,
+          and monitoring agents. It returns is_bot true for known patterns; unknown
+          or custom bots may not be detected.
+        q3: Does it work with old or non-standard user agents?
+        a3: Yes. Unrecognized fields are returned as null or "Other" rather than
+          causing an error. The API never rejects a UA string based on its content.
+        q4: Is there a batch endpoint?
+        a4: Yes — POST /v1/technology/useragent/batch accepts up to 50 user agent
+          strings in a single request. See the API docs for the request format and
+          response schema.
+        q5: Can I use it server-side without a browser?
+        a5: Yes. The API accepts the UA string as a query parameter, so you can call
+          it from any server-side language or log processor — no browser required.
+      cta:
+        heading: Know your traffic with Requiems.
+        body: One API key. User agent parsing, VPN detection, email validation, and
+          50+ other APIs for building smarter, safer products.
+        cta_primary: Get your free API key
+        cta_docs: Read the docs →
+      demo:
+        error_empty: Please paste a user agent string to parse.
+        error_generic: Something went wrong. Try again.
+        error_rate_limit: Too many requests. Wait a moment and try again.
+        error_no_data: No data returned.
+        result_heading: Parsed result
+        label_browser: Browser
+        label_os: Operating system
+        label_device: Device type
+        label_is_bot: Bot detected
+        badge_bot: Bot
+        badge_human: Human
+        badge_yes: "Yes"
+        badge_no: "No"
 
     timezone:
       seo:

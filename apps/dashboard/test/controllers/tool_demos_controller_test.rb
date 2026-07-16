@@ -523,6 +523,50 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_match I18n.t("tools.profanity_filter.demo.error_no_data"), response.body
   end
 
+  # ── useragent ─────────────────────────────────────────────────────────────────
+
+  test "useragent renders result on success" do
+    payload = { "browser" => "Chrome", "browser_version" => "120.0",
+                "os" => "Windows", "os_version" => "10/11",
+                "device" => "desktop", "is_bot" => false }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/useragent", params: { ua: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0" }
+    end
+    assert_response :success
+    assert_match "Chrome", response.body
+    assert_match "Windows", response.body
+  end
+
+  test "useragent renders error when ua is blank" do
+    post "/tools/demos/useragent", params: { ua: "" }
+    assert_response :success
+    assert_match I18n.t("tools.useragent.demo.error_empty"), response.body
+  end
+
+  test "useragent renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/useragent", params: { ua: "Mozilla/5.0" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.useragent.demo.error_rate_limit"), response.body
+  end
+
+  test "useragent renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/useragent", params: { ua: "Mozilla/5.0" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.useragent.demo.error_generic"), response.body
+  end
+
+  test "useragent renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/useragent", params: { ua: "Mozilla/5.0" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.useragent.demo.error_no_data"), response.body
+  end
+
   # ── timezone ─────────────────────────────────────────────────────────────────
 
   test "timezone renders result on success by city" do

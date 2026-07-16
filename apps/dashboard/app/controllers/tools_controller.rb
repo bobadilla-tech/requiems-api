@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -58,6 +58,11 @@ class ToolsController < ApplicationController
       name: "Profanity Filter",
       description: "Detect and censor offensive language in any text. Returns flagged words and a clean censored version.",
       icon_classes: "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
+    },
+    "useragent" => {
+      name: "User Agent Parser",
+      description: "Parse user agent strings to extract browser, OS, device type, and bot detection.",
+      icon_classes: "bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400"
     },
     "timezone" => {
       name: "Timezone",

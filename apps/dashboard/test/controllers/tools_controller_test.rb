@@ -55,6 +55,11 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "useragent tool page renders successfully" do
+    get "/en/tools/useragent"
+    assert_response :success
+  end
+
   test "timezone tool page renders successfully" do
     get "/en/tools/timezone"
     assert_response :success

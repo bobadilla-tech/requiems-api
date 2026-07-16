@@ -1,0 +1,19 @@
+<% content_for :title, t("tools.useragent.seo.title") %>
+<% content_for :description, t("tools.useragent.seo.description") %>
+
+<%= render "partials/tools/useragent/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.useragent.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/useragent/what_it_does" %>
+<%= render "partials/tools/useragent/use_cases" %>
+<%= render "partials/tools/useragent/api_combinations" %>
+<%= render "partials/tools/useragent/faq" %>
+<%= render "partials/tools/useragent/cta" %>
