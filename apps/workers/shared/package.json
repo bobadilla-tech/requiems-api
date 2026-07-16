@@ -18,13 +18,13 @@
   },
   "peerDependencies": {
     "hono": "^4.12.28",
-    "nanoid": "^5.1.16"
+    "nanoid": "^6.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260708.1",
     "@biomejs/biome": "^2.5.3",
     "hono": "^4.12.28",
-    "nanoid": "^5.1.16",
+    "nanoid": "^6.0.0",
     "typescript": "^7.0.2"
   }
 }
