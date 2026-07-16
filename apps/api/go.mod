@@ -27,7 +27,7 @@ require (
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/paulmach/orb v0.13.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/ringsaturn/tzf-dist v0.0.2026-b-fix1 // indirect
+	github.com/ringsaturn/tzf-dist v0.0.2026-c-fix1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tidwall/geoindex v1.7.0 // indirect
@@ -56,7 +56,7 @@ require (
 	github.com/medama-io/go-useragent v1.2.3
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/pemistahl/lingua-go v1.4.0
-	github.com/ringsaturn/tzf v1.2.1
+	github.com/ringsaturn/tzf v1.2.3
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.10.2
 	github.com/yuin/goldmark v1.8.2
