@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user sudoku].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -93,6 +93,11 @@ class ToolsController < ApplicationController
       name: "Sudoku",
       description: "Generate Sudoku puzzles with solutions across multiple difficulty levels.",
       icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "number-base-conversion" => {
+      name: "Number Base Conversion",
+      description: "Convert integers between binary, octal, decimal, and hexadecimal, with optional 0x/0b/0o prefixes.",
+      icon_classes: "bg-slate-50 dark:bg-slate-900/20 text-slate-600 dark:text-slate-400"
     }
   }.freeze
 

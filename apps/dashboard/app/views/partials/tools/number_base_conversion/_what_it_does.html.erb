@@ -1,0 +1,44 @@
+<section class="bg-gray-50 dark:bg-gray-800 py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="grid md:grid-cols-2 gap-12">
+
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-brand-primary text-white mb-4"><%= t("shared.headings.accuracy") %></span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white"><%= t("tools.number_base_conversion.what_it_does.heading_predictable") %></h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.number_base_conversion.what_it_does.paragraph_predictable") %>
+          </p>
+        </div>
+
+        <%= render "partials/tools/shared/code_sample", language: "json" do %>
+{
+  "input": "255",
+  "from": 10,
+  "to": 16,
+  "result": "ff"
+}
+        <% end %>
+      </div>
+
+      <div class="flex flex-col gap-6">
+        <div>
+          <span class="inline-block text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 mb-4"><%= t("shared.headings.simplicity") %></span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white"><%= t("tools.number_base_conversion.what_it_does.heading_simple") %></h2>
+          <p class="mt-3 text-gray-500 dark:text-gray-400 leading-relaxed">
+            <%= t("tools.number_base_conversion.what_it_does.paragraph_simple") %>
+          </p>
+        </div>
+
+        <%= render "partials/tools/shared/code_sample", language: "http" do %>
+GET /v1/technology/base?from=10&to=16&value=255
+Host: api.requiems.xyz
+requiems-api-key: YOUR_API_KEY
+        <% end %>
+      </div>
+
+    </div>
+
+  </div>
+</section>
