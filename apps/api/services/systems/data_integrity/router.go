@@ -1,6 +1,8 @@
 package dataintegrity
 
 import (
+	"log"
+
 	"github.com/go-chi/chi/v5"
 
 	"requiems-api/services/networking/domain"
@@ -22,7 +24,10 @@ func RegisterRoutes(r chi.Router) {
 
 	detectlanguageSvc := detectlanguage.NewService()
 	profanitySvc := profanity.NewService()
-	sentimentSvc := sentiment.NewService()
+	sentimentSvc, err := sentiment.NewService()
+	if err != nil {
+		log.Fatalf("failed to init service: %v", err)
+	}
 	contentmoderateSvc := contentmoderate.NewService(detectlanguageSvc, profanitySvc, sentimentSvc)
 	contentmoderate.RegisterRoutes(r, contentmoderateSvc)
 
