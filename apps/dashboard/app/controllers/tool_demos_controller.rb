@@ -475,6 +475,37 @@ class ToolDemosController < ApplicationController
     render "tool_demos/number_base_conversion", locals: { data: data }
   end
 
+  def mx_lookup
+    domain = params[:domain].to_s.strip.downcase
+
+    if domain.blank?
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_empty"))
+    end
+
+    unless valid_domain?(domain)
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/networking/mx/#{domain}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_not_found"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/mx_lookup", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)
@@ -484,6 +515,10 @@ class ToolDemosController < ApplicationController
     true
   rescue IPAddr::Error
     false
+  end
+
+  def valid_domain?(domain)
+    domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/i)
   end
 
   def api_call(endpoint:, method:, params:)

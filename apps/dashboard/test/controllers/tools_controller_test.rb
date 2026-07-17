@@ -105,4 +105,10 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='number-base-conversion-demo']"
   end
+
+  test "mx lookup tool page renders successfully" do
+    get "/en/tools/mx-lookup"
+    assert_response :success
+    assert_select "[data-controller='mx-lookup-demo']"
+  end
 end

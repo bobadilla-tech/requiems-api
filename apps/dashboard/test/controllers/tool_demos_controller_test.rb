@@ -1121,4 +1121,69 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.number_base_conversion.demo.error_no_data"), response.body
   end
+
+  # ── mx_lookup ────────────────────────────────────────────────────────────────
+
+  test "mx_lookup renders result on success" do
+    payload = { "domain" => "gmail.com", "records" => [
+      { "host" => "gmail-smtp-in.l.google.com.", "priority" => 5 },
+      { "host" => "alt1.gmail-smtp-in.l.google.com.", "priority" => 10 }
+    ] }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/mx-lookup", params: { domain: "gmail.com" }
+    end
+    assert_response :success
+    assert_match "gmail.com", response.body
+    assert_match "gmail-smtp-in.l.google.com.", response.body
+  end
+
+  test "mx_lookup renders error when domain is blank" do
+    post "/tools/demos/mx-lookup", params: { domain: "" }
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_empty"), response.body
+  end
+
+  test "mx_lookup renders error when domain is whitespace" do
+    post "/tools/demos/mx-lookup", params: { domain: "   " }
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_empty"), response.body
+  end
+
+  test "mx_lookup renders error when domain has invalid format" do
+    post "/tools/demos/mx-lookup", params: { domain: "not a domain" }
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_invalid"), response.body
+  end
+
+  test "mx_lookup renders error on 404 no mx records" do
+    stub_api(404, nil) do
+      post "/tools/demos/mx-lookup", params: { domain: "no-mx.example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_not_found"), response.body
+  end
+
+  test "mx_lookup renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/mx-lookup", params: { domain: "gmail.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_rate_limit"), response.body
+  end
+
+  test "mx_lookup renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/mx-lookup", params: { domain: "gmail.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_generic"), response.body
+  end
+
+  test "mx_lookup renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/mx-lookup", params: { domain: "gmail.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mx_lookup.demo.error_no_data"), response.body
+  end
 end
