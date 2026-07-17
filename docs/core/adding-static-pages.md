@@ -29,7 +29,7 @@ Google despite being live, linked, indexable pages.
       `apps/dashboard/`
 - [ ] Verify the new URL shows up:
       `grep -o '<loc>[^<]*/{page}/</loc>'
-      apps/dashboard/public/sitemap_static.xml`
+    apps/dashboard/public/sitemap_static.xml`
 
 If the page is a redirect to another page (e.g. an old URL kept for
 compatibility), do **not** add it to the sitemap — see §4.
@@ -100,7 +100,7 @@ bundle exec rake sitemap:refresh
 This rewrites all six `public/sitemap_*.xml` files (locales × every page in
 every group), so expect a large diff even for a one-line `sitemap.rb` change —
 that's expected, not a bug. See
-[Sitemap & Crawler Fetchability Hardening](../design-plans/2026-04-15-sitemap-crawler-fetchability-hardening.md)
+[Sitemap & Crawler Fetchability Hardening](../plans/2026-04-15-sitemap-crawler-fetchability-hardening.md)
 for why the output is a static pre-generated file rather than a dynamic
 controller.
 
