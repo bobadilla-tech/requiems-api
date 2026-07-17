@@ -5,8 +5,8 @@ of design decisions, why a change was made, not just what.
 
 A plan starts as research: understand the current state related to the
 problem/improvement/bug before deciding anything. Only after that does it become
-an approach, what we're going to build/fix/test/benchmark, and how, described
-in prose rather than code where possible (code only where the approach can't be
+an approach, what we're going to build/fix/test/benchmark, and how, described in
+prose rather than code where possible (code only where the approach can't be
 stated clearly without it). The write-up is finished with a notes section that's
 explicitly meant to be filled in at the end of the work, not at planning time.
 
