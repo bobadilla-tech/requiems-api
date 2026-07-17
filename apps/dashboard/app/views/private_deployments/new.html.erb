@@ -1,4 +1,11 @@
 <% content_for :title, t('private_deployments.new.private_deployment_requiems_api') %>
+<% content_for :description, t('home.pricing.plans.private_deployment.description') %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= contact_page_json_ld(
+    name: t('private_deployments.new.private_deployment_requiems_api'),
+    description: t('home.pricing.plans.private_deployment.description')
+  ).html_safe %></script>
+<% end %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,12 @@
 <% i18n_scope = "divisions.#{@slug}" %>
 <% content_for :title, t("#{i18n_scope}.meta_title") %>
 <% content_for :description, t("#{i18n_scope}.hero.subheadline") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: api_category_display_name(@category),
+    items: apis_by_category(@slug).map { |api| { name: api["name"], url: api_path(api["id"]) } }
+  ).html_safe %></script>
+<% end %>
 <% testimonials = division_locale_array(i18n_scope, "testimonials") %>
 <div data-controller="division-hub">
   <%= render "partials/divisions/hero", i18n_scope: i18n_scope, hero_bg_classes: division_hero_gradient(@slug) %>

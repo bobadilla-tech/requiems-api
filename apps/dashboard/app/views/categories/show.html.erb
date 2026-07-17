@@ -1,4 +1,10 @@
 <% content_for :title, "#{@category["name"]} - API Directory" %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: @category["name"],
+    items: @apis.map { |api| { name: api["name"], url: api_path(api["id"]) } }
+  ).html_safe %></script>
+<% end %>
 
 <div class="min-h-screen flex bg-gray-50 dark:bg-gray-900">
     <!-- Sidebar -->

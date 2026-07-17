@@ -1,5 +1,11 @@
 <% content_for :title, "Blog - Requiems API" %>
 <% content_for :description, "Engineering notes from the team building Requiems API — how we ship features, APIs, and infrastructure." %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: "Blog",
+    items: BlogPost.all.map { |post| { name: post.title, url: blog_post_path(post.slug) } }
+  ).html_safe %></script>
+<% end %>
 
 <section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

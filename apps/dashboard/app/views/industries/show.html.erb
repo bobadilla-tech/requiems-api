@@ -2,6 +2,13 @@
 <% i18n_scope = "industries.#{i18n_key}" %>
 <% content_for :title, t("#{i18n_scope}.meta_title") %>
 <% content_for :description, t("#{i18n_scope}.hero.subheadline") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= service_json_ld(
+    name: t("#{i18n_scope}.meta_title"),
+    description: t("#{i18n_scope}.hero.subheadline"),
+    url: industry_path(@slug)
+  ).html_safe %></script>
+<% end %>
 
 <%= render "partials/industries/hero", i18n_scope: i18n_scope %>
 <%= render "partials/industries/api_mapping", i18n_scope: i18n_scope %>

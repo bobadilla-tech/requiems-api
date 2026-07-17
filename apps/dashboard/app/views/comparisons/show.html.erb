@@ -6,6 +6,13 @@
 %>
 <% content_for :title, t("comparisons.competitors.#{key}.meta_title") %>
 <% content_for :description, t("comparisons.competitors.#{key}.meta_description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= article_json_ld(
+    headline: t("comparisons.competitors.#{key}.meta_title"),
+    description: t("comparisons.competitors.#{key}.meta_description"),
+    url: comparison_path(@slug)
+  ).html_safe %></script>
+<% end %>
 
 <%# Hero %>
 <section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">

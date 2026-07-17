@@ -1,5 +1,12 @@
 <% content_for :title, t('tools.email_validator.show.free_email_validator_syntax_mx_record') %>
 <% content_for :description, t('tools.email_validator.show.description') %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
 
 <%= render "partials/tools/email_validator/hero" %>
 <%= render "partials/shared/logo_marquee",

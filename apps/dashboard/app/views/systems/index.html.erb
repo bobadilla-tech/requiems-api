@@ -1,4 +1,10 @@
 <% content_for :title, t("systems.index.meta_title") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: "Systems",
+    items: @systems.map { |sys| { name: t("systems.index.cards.#{sys[:slug].tr('-', '_')}.title"), url: system_path(system_slug: sys[:slug]) } }
+  ).html_safe %></script>
+<% end %>
 
 <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-white py-20">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">

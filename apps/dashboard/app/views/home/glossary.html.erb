@@ -1,5 +1,8 @@
 <% content_for :title, t("home.glossary.title") %>
 <% content_for :description, t("home.glossary.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= glossary_json_ld.html_safe %></script>
+<% end %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

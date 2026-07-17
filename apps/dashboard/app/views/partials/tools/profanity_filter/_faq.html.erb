@@ -39,7 +39,7 @@
 
     <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
       <%= t("tools.profanity_filter.faq.support_prompt") %>
-      <a href="/contact" class="text-brand-primary hover:underline"><%= t("tools.profanity_filter.faq.support_link") %></a>
+      <%= link_to t("tools.profanity_filter.faq.support_link"), contact_path, class: "text-brand-primary hover:underline" %>
     </p>
 
   </div>

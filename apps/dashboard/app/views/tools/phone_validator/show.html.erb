@@ -1,5 +1,12 @@
 <% content_for :title, t('tools.phone_validator.show.phone_validator_carrier_lookup_line') %>
 <% content_for :description, "Validate phone numbers instantly with carrier lookup, line type detection, and format normalization — free, no account required." %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
 
 <%= render "partials/phone_validator/hero" %>
 <%= render "partials/shared/logo_marquee",
