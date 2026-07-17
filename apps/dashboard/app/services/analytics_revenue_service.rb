@@ -9,11 +9,9 @@
 #   data.churn_rate    # => 2.5
 #
 class AnalyticsRevenueService
-  PLAN_PRICES = {
-    "developer"    => { monthly: 30,  yearly: 25 },
-    "business"     => { monthly: 75,  yearly: 62.5 },
-    "professional" => { monthly: 150, yearly: 125 }
-  }.freeze
+  PLAN_PRICES = PlanConfig::PAID_PLAN_NAMES.index_with do |plan|
+    { monthly: PlanConfig::PLANS[plan][:price_monthly], yearly: PlanConfig.price_yearly_monthly(plan) }
+  end.freeze
 
   Result = Data.define(
     :mrr,

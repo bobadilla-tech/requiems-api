@@ -83,4 +83,26 @@ class PlanConfig
   def self.paid?(plan_name)
     PAID_PLAN_NAMES.include?(plan_name.to_s)
   end
+
+  # Monthly-equivalent price when billed yearly, e.g. 750 / 12 => 62.5
+  def self.price_yearly_monthly(plan_name)
+    value = PLANS.fetch(plan_name.to_s, PLANS["free"])[:price_yearly] / 12.0
+    value % 1 == 0 ? value.to_i : value
+  end
+
+  def self.formatted_requests(plan_name)
+    humanize_count(requests_per_month(plan_name))
+  end
+
+  def self.formatted_rate_limit(plan_name)
+    "#{humanize_count(PLANS.fetch(plan_name.to_s, PLANS["free"])[:rate_limit_per_minute])}/min"
+  end
+
+  def self.humanize_count(n)
+    return n.to_s if n < 1_000
+    return "#{n / 1_000}k" if n < 1_000_000
+
+    "#{n / 1_000_000}M"
+  end
+  private_class_method :humanize_count
 end

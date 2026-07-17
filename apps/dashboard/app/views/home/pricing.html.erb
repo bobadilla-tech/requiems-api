@@ -1,5 +1,8 @@
 <% content_for :title, t("home.pricing.title") %>
 <% content_for :description, t("home.pricing.header.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= pricing_json_ld.html_safe %></script>
+<% end %>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <!-- Header -->
   <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -42,11 +45,11 @@
       <!-- Free Plan -->
       <%= render "partials/pricing/pricing_card",
         name: t("home.pricing.plans.free.name"),
-        monthly_price: 0,
-        yearly_price: 0,
+        monthly_price: PlanConfig::PLANS["free"][:price_monthly],
+        yearly_price: PlanConfig.price_yearly_monthly("free"),
         description: t("home.pricing.plans.free.description"),
-        requests: "500",
-        rate_limit: "30/min",
+        requests: PlanConfig.formatted_requests("free"),
+        rate_limit: PlanConfig.formatted_rate_limit("free"),
         features: t("home.pricing.plans.free.features"),
         cta_text: t("home.pricing.plans.free.cta"),
         cta_url: new_user_registration_path,
@@ -55,11 +58,11 @@
       <!-- Developer Plan -->
       <%= render "partials/pricing/pricing_card",
         name: t("home.pricing.plans.developer.name"),
-        monthly_price: 30,
-        yearly_price: 25,
+        monthly_price: PlanConfig::PLANS["developer"][:price_monthly],
+        yearly_price: PlanConfig.price_yearly_monthly("developer"),
         description: t("home.pricing.plans.developer.description"),
-        requests: "100k",
-        rate_limit: "5,000/min",
+        requests: PlanConfig.formatted_requests("developer"),
+        rate_limit: PlanConfig.formatted_rate_limit("developer"),
         features: t("home.pricing.plans.developer.features"),
         cta_text: t("home.pricing.plans.developer.cta"),
         cta_url: user_signed_in? ? { method: :post, url: dashboard_checkout_billing_path, params: { plan: "developer", billing_cycle: "monthly" } } : new_user_registration_path(plan: "developer"),
@@ -68,11 +71,11 @@
       <!-- Business Plan (Most Popular) -->
       <%= render "partials/pricing/pricing_card",
         name: t("home.pricing.plans.business.name"),
-        monthly_price: 75,
-        yearly_price: 62.5,
+        monthly_price: PlanConfig::PLANS["business"][:price_monthly],
+        yearly_price: PlanConfig.price_yearly_monthly("business"),
         description: t("home.pricing.plans.business.description"),
-        requests: "1M",
-        rate_limit: "10k/min",
+        requests: PlanConfig.formatted_requests("business"),
+        rate_limit: PlanConfig.formatted_rate_limit("business"),
         features: t("home.pricing.plans.business.features"),
         cta_text: t("home.pricing.plans.business.cta"),
         cta_url: user_signed_in? ? { method: :post, url: dashboard_checkout_billing_path, params: { plan: "business", billing_cycle: "monthly" } } : new_user_registration_path(plan: "business"),
@@ -81,11 +84,11 @@
       <!-- Professional Plan -->
       <%= render "partials/pricing/pricing_card",
         name: t("home.pricing.plans.professional.name"),
-        monthly_price: 150,
-        yearly_price: 125,
+        monthly_price: PlanConfig::PLANS["professional"][:price_monthly],
+        yearly_price: PlanConfig.price_yearly_monthly("professional"),
         description: t("home.pricing.plans.professional.description"),
-        requests: "10M",
-        rate_limit: "50k/min",
+        requests: PlanConfig.formatted_requests("professional"),
+        rate_limit: PlanConfig.formatted_rate_limit("professional"),
         features: t("home.pricing.plans.professional.features"),
         cta_text: t("home.pricing.plans.professional.cta"),
         cta_url: user_signed_in? ? { method: :post, url: dashboard_checkout_billing_path, params: { plan: "professional", billing_cycle: "monthly" } } : new_user_registration_path(plan: "professional"),
@@ -154,8 +157,8 @@
             </tr>
           </thead>
           <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.monthly_requests"), values: ["500", "100k", "1M", "10M"] %>
-            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.rate_limit"), values: ["30/min", "5k/min", "10k/min", "50k/min"] %>
+            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.monthly_requests"), values: PlanConfig::PLAN_NAMES.map { |plan| PlanConfig.formatted_requests(plan) } %>
+            <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.rate_limit"), values: PlanConfig::PLAN_NAMES.map { |plan| PlanConfig.formatted_rate_limit(plan) } %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.api_endpoints"), values: Array.new(4) { t("shared.common.all") } %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.data_centers"), values: Array.new(4) { t("home.pricing.table.values.eu") } %>
             <%= render "partials/pricing/pricing_table_row", feature: t("home.pricing.table.rows.support_response"), values: [t("home.pricing.table.values.community"), "24h", "4h", "1h"] %>

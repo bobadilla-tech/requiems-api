@@ -61,11 +61,7 @@ class Admin::DashboardController < Admin::BaseController
 
   def calculate_mrr
     # Calculate Monthly Recurring Revenue
-    plan_prices = {
-      "developer" => 30,
-      "business" => 75,
-      "professional" => 150
-    }
+    plan_prices = PlanConfig::PAID_PLAN_NAMES.index_with { |plan| PlanConfig::PLANS[plan][:price_monthly] }
 
     Subscription.paying
       .where(promoted_by_id: nil)

@@ -162,7 +162,7 @@ module ApplicationHelper
         "@type" => "SearchAction",
         "target" => {
           "@type" => "EntryPoint",
-          "urlTemplate" => "https://requiems.xyz/en/apis?search={search_term_string}"
+          "urlTemplate" => "https://requiems.xyz/#{I18n.locale}/apis?search={search_term_string}"
         },
         "query-input" => "required name=search_term_string"
       }
@@ -194,13 +194,33 @@ module ApplicationHelper
       "@type" => "WebAPI",
       "name" => api["name"],
       "description" => api["description"],
-      "documentation" => api["documentation_url"].presence || "https://requiems.xyz/en/apis/#{api["id"]}",
+      "documentation" => api["documentation_url"].presence || "https://requiems.xyz/#{I18n.locale}/apis/#{api["id"]}",
       "provider" => {
         "@type" => "Organization",
         "name" => "Requiems API",
         "url" => "https://requiems.xyz"
       }
     }.compact_blank.to_json
+  end
+
+  def pricing_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Product",
+      "name" => "Requiems API",
+      "description" => t("home.pricing.header.description"),
+      "brand" => { "@type" => "Brand", "name" => "Requiems API" },
+      "offers" => PlanConfig::PLAN_NAMES.map do |key|
+        {
+          "@type" => "Offer",
+          "name" => t("home.pricing.plans.#{key}.name"),
+          "price" => PlanConfig::PLANS[key][:price_monthly].to_s,
+          "priceCurrency" => "USD",
+          "availability" => "https://schema.org/InStock",
+          "url" => "#{request.base_url}#{pricing_path}"
+        }
+      end
+    }.to_json
   end
 
   private
