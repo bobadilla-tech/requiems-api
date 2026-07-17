@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "minitest/mock"
 
 class RefreshSitemapJobTest < ActiveJob::TestCase
   test "executes sitemap:refresh and logs success when the task is already defined" do
