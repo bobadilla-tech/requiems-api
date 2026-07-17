@@ -20,4 +20,5 @@ refresh_sitemap:
   cron: "0 3 * * *"
   class: RefreshSitemapJob
   queue: default
+  tz: UTC
   description: "Regenerate sitemap.xml and section files nightly at 03:00 UTC"

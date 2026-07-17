@@ -162,7 +162,7 @@ module ApplicationHelper
         "@type" => "SearchAction",
         "target" => {
           "@type" => "EntryPoint",
-          "urlTemplate" => "https://requiems.xyz/#{I18n.locale}/apis?search={search_term_string}"
+          "urlTemplate" => "#{request.base_url}/#{I18n.locale}/apis?search={search_term_string}"
         },
         "query-input" => "required name=search_term_string"
       }
@@ -194,7 +194,7 @@ module ApplicationHelper
       "@type" => "WebAPI",
       "name" => api["name"],
       "description" => api["description"],
-      "documentation" => api["documentation_url"].presence || "https://requiems.xyz/#{I18n.locale}/apis/#{api["id"]}",
+      "documentation" => api["documentation_url"].presence || "#{request.base_url}/#{I18n.locale}/apis/#{api["id"]}",
       "provider" => {
         "@type" => "Organization",
         "name" => "Requiems API",

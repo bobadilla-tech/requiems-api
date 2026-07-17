@@ -45,8 +45,7 @@ class AnalyticsRevenueService
     Subscription
       .paying
       .sum do |sub|
-        price = PLAN_PRICES[sub.plan_name]&.fetch(sub.plan&.to_sym || :monthly, 0) || 0
-        sub.plan == "yearly" ? (price * 12 / 12.0) : price
+        PLAN_PRICES[sub.plan_name]&.fetch(sub.plan&.to_sym || :monthly, 0) || 0
       end
   end
 

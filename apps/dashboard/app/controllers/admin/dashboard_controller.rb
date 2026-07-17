@@ -60,14 +60,15 @@ class Admin::DashboardController < Admin::BaseController
   private
 
   def calculate_mrr
-    # Calculate Monthly Recurring Revenue
-    plan_prices = PlanConfig::PAID_PLAN_NAMES.index_with { |plan| PlanConfig::PLANS[plan][:price_monthly] }
-
+    # Calculate Monthly Recurring Revenue (yearly subs counted at their monthly-equivalent price)
     Subscription.paying
       .where(promoted_by_id: nil)
-      .group(:plan_name)
+      .group(:plan_name, :plan)
       .count
-      .sum { |plan, count| (plan_prices[plan] || 0) * count }
+      .sum do |(plan_name, cycle), count|
+        price = cycle == "yearly" ? PlanConfig.price_yearly_monthly(plan_name) : PlanConfig::PLANS[plan_name]&.fetch(:price_monthly, 0)
+        (price || 0) * count
+      end
   end
 
   def calculate_avg_response_time

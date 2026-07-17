@@ -100,9 +100,13 @@ class PlanConfig
 
   def self.humanize_count(n)
     return n.to_s if n < 1_000
-    return "#{n / 1_000}k" if n < 1_000_000
+    return "#{trim_zero(n / 1_000.0)}k" if n < 1_000_000
 
-    "#{n / 1_000_000}M"
+    "#{trim_zero(n / 1_000_000.0)}M"
   end
-  private_class_method :humanize_count
+
+  def self.trim_zero(value)
+    value % 1 == 0 ? value.to_i : value
+  end
+  private_class_method :humanize_count, :trim_zero
 end
