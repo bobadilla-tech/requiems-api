@@ -2,8 +2,10 @@ package sentiment
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -14,9 +16,21 @@ import (
 	"requiems-api/platform/httpx"
 )
 
+var testSvc *Service
+
+func TestMain(m *testing.M) {
+	svc, err := NewService()
+	if err != nil {
+		log.Fatalf("failed to init service for tests: %v", err)
+	}
+	testSvc = svc
+
+	os.Exit(m.Run())
+}
+
 func setupRouter() chi.Router {
 	r := chi.NewRouter()
-	RegisterRoutes(r, NewService())
+	RegisterRoutes(r, testSvc)
 	return r
 }
 
