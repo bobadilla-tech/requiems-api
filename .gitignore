@@ -31,3 +31,4 @@ temp/
 .mcp.json
 tickets/
 apps/dashboard/public/documents/*.pdf
+.claude
