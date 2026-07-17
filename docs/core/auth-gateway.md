@@ -70,16 +70,22 @@ Add Usage Headers & Return Response
 
 ### Core Logic
 
-- [src/index.ts](../apps/workers/auth-gateway/src/index.ts) - Main worker entry
-  point
+- [src/index.ts](../apps/workers/auth-gateway/src/index.ts) - Hono app wiring
+  (thin entry point)
+- [src/middleware/api-key-auth.ts](../apps/workers/auth-gateway/src/middleware/api-key-auth.ts) -
+  API key validation, rate limiting, and quota check middleware
+- [src/routes/proxy.ts](../apps/workers/auth-gateway/src/routes/proxy.ts) -
+  Proxies to the Go backend and records usage
 - [src/env.ts](../apps/workers/auth-gateway/src/env.ts) - Worker environment
   bindings
 - [src/requests.ts](../apps/workers/auth-gateway/src/requests.ts) - Usage
-  tracking (D1 queries and recording)
+  tracking (KV cache-first, falls back to D1 aggregate query on miss)
 - [src/rate-limit.ts](../apps/workers/auth-gateway/src/rate-limit.ts) - Rate
   limiting logic
 - [src/http.ts](../apps/workers/auth-gateway/src/http.ts) - HTTP helpers and
   header filtering
+- [src/generated/openapi.ts](../apps/workers/auth-gateway/src/generated/openapi.ts) -
+  Generated OpenAPI spec, served at `/openapi.json`
 
 Plan limits and endpoint costs live in the shared package:
 [apps/workers/shared/src/config.ts](../apps/workers/shared/src/config.ts)
@@ -172,14 +178,14 @@ X-RateLimit-Remaining: 4999
 | Plan         | Request Limit | Period  | Rate Limit | Price      |
 | ------------ | ------------- | ------- | ---------- | ---------- |
 | Free         | 500           | Monthly | 30/min     | $0/month   |
-| Developer    | 100,000       | Monthly | 5,000/min  | $29/month  |
-| Business     | 1,000,000     | Monthly | 10,000/min | $74/month  |
-| Professional | 10,000,000    | Monthly | 50,000/min | $149/month |
+| Developer    | 100,000       | Monthly | 5,000/min  | $30/month  |
+| Business     | 1,000,000     | Monthly | 10,000/min | $75/month  |
+| Professional | 10,000,000    | Monthly | 50,000/min | $150/month |
 | Enterprise   | Unlimited     | Monthly | Unlimited  | Custom     |
 
 ## Endpoint Costs
 
-Some endpoints requestes costs as multiple request.
+Some endpoints cost more than one request.
 
 See [apps/workers/shared/src/config.ts](../apps/workers/shared/src/config.ts)
 for the full list.

@@ -50,6 +50,7 @@ Existing top-level domains and their `/v1` prefixes:
 | `services/health/`        | `/v1/health`        |
 | `services/networking/`    | `/v1/networking`    |
 | `services/places/`        | `/v1/places`        |
+| `services/systems/`       | `/v1/systems`       |
 | `services/technology/`    | `/v1/technology`    |
 | `services/text/`          | `/v1/text`          |
 | `services/validation/`    | `/v1/validation`    |
@@ -419,16 +420,19 @@ func RegisterRoutes(r chi.Router, pool *pgxpool.Pool) {
 **Adding to an existing domain** (most common): just add the lines above to the
 existing `router.go` for that domain. No other files need changing.
 
-**Creating a brand-new top-level domain**: add two lines to
-`apps/api/app/routes_v1.go`:
+**Creating a brand-new top-level domain**: add to `apps/api/app/routes_v1.go`,
+following the existing `serviceEnabled(cfg, ...)` gating pattern each mount uses
+(for private-deployment service toggles):
 
 ```go
-func registerV1Routes(ctx context.Context, r chi.Router, pool *pgxpool.Pool, rdb *redis.Client) {
+func registerV1Routes(ctx context.Context, r chi.Router, pool *pgxpool.Pool, rdb *redis.Client, cfg config.Config) {
     // ... existing mounts
 
-    puzzlesRouter := chi.NewRouter()
-    puzzles.RegisterRoutes(puzzlesRouter, pool)
-    r.Mount("/puzzles", puzzlesRouter)
+    if serviceEnabled(cfg, "puzzles") {
+        puzzlesRouter := chi.NewRouter()
+        puzzles.RegisterRoutes(puzzlesRouter, pool)
+        r.Mount("/puzzles", puzzlesRouter)
+    }
 }
 ```
 
@@ -899,14 +903,15 @@ entry if your endpoint explicitly counts as more than 1 request (rare — docume
 this clearly in the endpoint's API doc):
 
 ```ts
-// In ENDPOINT_MULTIPLIERS map:
-["/v1/text/riddle/generate", 1],   // default — omit this line unless non-1
-["/v1/text/summarize", 5],         // expensive AI call
-["/v1/translate/text", 3],         // ML translation
+// In ENDPOINT_MULTIPLIERS map — keys are "METHOD /path":
+["POST /v1/text/riddle/generate", 1],   // default — omit this line unless non-1
+["POST /v1/text/summarize", 5],         // expensive AI call
+["POST /v1/translate/text", 3],         // ML translation
 ```
 
 The gateway uses `getRequestMultiplier(method, pathname)` to look up the
-multiplier before tracking requests. If no entry exists, it defaults to `1`.
+multiplier via a `"${method} ${pathname}"` key before tracking requests. If no
+entry exists, it defaults to `1`.
 
 ---
 

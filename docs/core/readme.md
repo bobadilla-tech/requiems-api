@@ -14,7 +14,7 @@ This folder contains developer-focused documentation for Requiem API.
 8. [The Ruby on Rails App](./rails-app.md)
    - [Background Jobs](./background-jobs.md)
    - [Lemon Squeezy webhook setup](./lemonsqueezy-webhook-setup.md)
-9. [APIs](./apis/readme.md)
+9. [APIs](../apis/readme.md)
 10. [Adding a Tool Page](./adding-tools.md)
 11. [Adding a Static Page](./adding-static-pages.md)
 12. [Infrastructure](./infrastructure.md)

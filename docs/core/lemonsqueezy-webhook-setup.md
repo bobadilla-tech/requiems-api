@@ -33,11 +33,13 @@ Handles these webhook events:
 - `subscription_resumed` - Cancelled subscription reactivated
 - `subscription_payment_success` - Successful payment processed
 
-### 4. Cloudflare KV Sync Service ✅
+### 4. Cloudflare API Management Sync ✅
 
-Location: `apps/dashboard/app/services/cloudflare_kv_sync_service.rb`
+Location: `apps/dashboard/app/services/cloudflare/api_management_service.rb`
+(`Cloudflare::ApiManagementService#sync_user_plan`)
 
-Automatically syncs subscription changes to Cloudflare KV so the Worker can
+Automatically syncs subscription changes to Cloudflare KV (via the API
+Management worker — Rails never writes to KV directly) so the Auth Gateway can
 enforce:
 
 - Plan limits
@@ -108,7 +110,7 @@ After a successful webhook, check that the API key was synced to Cloudflare KV:
 ```bash
 # Using Wrangler CLI
 cd apps/workers/auth-gateway
-npx wrangler kv:key get "key:YOUR_API_KEY" --namespace-id=7cc847da3f3143b2ba8f7c531f416b35
+npx wrangler kv key get "key:YOUR_API_KEY" --namespace-id=7cc847da3f3143b2ba8f7c531f416b35
 ```
 
 Should return:
@@ -138,28 +140,31 @@ User Checkout → LemonSqueezy → Webhook Event
                           Worker Enforces New Plan Limits
 ```
 
-## Subscription Status Mapping
+## Plan Assignment Logic
 
-| LemonSqueezy Status | Plan Name | Cloudflare KV Plan |
-| ------------------- | --------- | ------------------ |
-| active              | developer | developer          |
-| trialing            | developer | developer          |
-| cancelled           | free      | free               |
-| expired             | free      | free               |
-| on_trial            | developer | developer          |
+Plan name is **not** derived from LemonSqueezy `status` — it's derived from the
+purchased `variant_id` via `determine_plan_name` /
+`AppConfig.plan_name_for_variant_id` in the webhook controller. The raw
+LemonSqueezy `status` string (`active`, `trialing`, `cancelled`, etc.) is stored
+as-is in the `subscriptions.status` column, unchanged.
+
+The only status-driven override is cancellation: `subscription_cancelled` /
+`subscription_expired` explicitly force `plan_name: "free"` regardless of
+variant.
 
 ## Variant ID to Plan Mapping
 
-Configured in `.env`:
+Configured via `infra/docker/.env` (see `.env.example` for the full list,
+including `_TEST` variants used when `LEMONSQUEEZY_TEST_MODE=true`):
 
 | Variant ID | Plan         | Billing |
 | ---------- | ------------ | ------- |
-| 822585     | Developer    | Monthly |
-| 822595     | Developer    | Yearly  |
-| 822596     | Business     | Monthly |
-| 822601     | Business     | Yearly  |
-| 822603     | Professional | Monthly |
-| 822604     | Professional | Yearly  |
+| 1296434    | Developer    | Monthly |
+| 1296449    | Developer    | Yearly  |
+| 1296450    | Business     | Monthly |
+| 1296455    | Business     | Yearly  |
+| 1296459    | Professional | Monthly |
+| 1296460    | Professional | Yearly  |
 
 ## Security
 
@@ -187,11 +192,10 @@ Configured in `.env`:
 
 **Fix:**
 
-1. Verify these environment variables are set:
-   - `CLOUDFLARE_ACCOUNT_ID`
-   - `CLOUDFLARE_KV_NAMESPACE_ID`
-   - `CLOUDFLARE_API_TOKEN`
-2. Test API token permissions: needs "Workers KV Storage:Edit"
+1. Verify `API_MANAGEMENT_API_KEY` is set and matches the api-management
+   worker's secret
+2. Check `apps/dashboard/app/services/cloudflare/api_management_service.rb` logs
+   for connection errors to the API Management worker
 
 ### Subscription Created but User Not Found
 

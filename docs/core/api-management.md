@@ -3,7 +3,7 @@
 Internal Cloudflare Worker service for managing API keys, exporting usage data,
 and providing analytics.
 
-**URL:** https://api-management.requiems.xyz **Local:** http://localhost:6001
+**URL:** https://api-management.requiems.xyz **Local:** http://localhost:5544
 **Framework:** Hono (TypeScript) **Runtime:** Cloudflare Workers (Bun for local
 dev)
 
@@ -45,7 +45,7 @@ curl https://api-management.requiems.xyz/healthz \
 Check if the service is running. No authentication required.
 
 ```bash
-curl http://localhost:6001/healthz
+curl http://localhost:5544/healthz
 ```
 
 Response:
@@ -86,7 +86,7 @@ Generate a new API key. The key is generated on the server and returned once.
 **Example:**
 
 ```bash
-curl -X POST http://localhost:6001/api-keys \
+curl -X POST http://localhost:5544/api-keys \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -134,7 +134,7 @@ Revoke an API key by its prefix. Deletes from KV and marks as revoked in D1.
 **Example:**
 
 ```bash
-curl -X DELETE http://localhost:6001/api-keys/rq_live_abc1 \
+curl -X DELETE http://localhost:5544/api-keys/rq_live_abc1 \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -182,7 +182,7 @@ Update an API key's plan or billing cycle.
 **Example:**
 
 ```bash
-curl -X PATCH http://localhost:6001/api-keys/rq_live_abc1 \
+curl -X PATCH http://localhost:5544/api-keys/rq_live_abc1 \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -211,6 +211,50 @@ curl -X PATCH http://localhost:6001/api-keys/rq_live_abc1 \
 
 ---
 
+#### List API Keys
+
+**GET /api-keys**
+
+List API keys. Never returns full key values — only safe metadata.
+
+**Headers:**
+
+- `X-API-Management-Key` (required)
+
+**Query Parameters:**
+
+- `userId` (optional) - Filter to a single user's keys
+- `active` (optional) - `"false"` to include revoked keys (default: active only)
+
+**Example:**
+
+```bash
+curl "http://localhost:5544/api-keys?userId=user-123" \
+  -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
+```
+
+**Response:**
+
+```json
+{
+  "keys": [
+    {
+      "keyPrefix": "rq_live_abc1",
+      "userId": "user-123",
+      "plan": "developer",
+      "active": true,
+      "createdAt": "2025-02-17T18:30:00Z",
+      "updatedAt": null,
+      "revokedAt": null,
+      "billingCycleStart": "2025-02-01T00:00:00Z"
+    }
+  ],
+  "total": 1
+}
+```
+
+---
+
 ### Usage Export
 
 **GET /usage/export**
@@ -230,7 +274,7 @@ Export usage data from D1 for syncing to Rails PostgreSQL. Supports pagination.
 **Example:**
 
 ```bash
-curl "http://localhost:6001/usage/export?since=2025-02-01T00:00:00Z&limit=1000" \
+curl "http://localhost:5544/usage/export?since=2025-02-01T00:00:00Z&limit=1000" \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -255,7 +299,7 @@ curl "http://localhost:6001/usage/export?since=2025-02-01T00:00:00Z&limit=1000" 
 **Pagination:** To get the next page, use the `nextCursor` value:
 
 ```bash
-curl "http://localhost:6001/usage/export?since=2025-02-01T00:00:00Z&limit=1000&cursor=1000" \
+curl "http://localhost:5544/usage/export?since=2025-02-01T00:00:00Z&limit=1000&cursor=1000" \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -281,7 +325,7 @@ Get usage breakdown by endpoint for a user.
 **Example:**
 
 ```bash
-curl "http://localhost:6001/analytics/by-endpoint?userId=user-123&limit=5" \
+curl "http://localhost:5544/analytics/by-endpoint?userId=user-123&limit=5" \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -330,7 +374,7 @@ Get usage trends over time for a user.
 **Example:**
 
 ```bash
-curl "http://localhost:6001/analytics/by-date?userId=user-123&groupBy=day" \
+curl "http://localhost:5544/analytics/by-date?userId=user-123&groupBy=day" \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -379,7 +423,7 @@ Get overall usage summary for a user with top endpoints.
 **Example:**
 
 ```bash
-curl "http://localhost:6001/analytics/summary?userId=user-123" \
+curl "http://localhost:5544/analytics/summary?userId=user-123" \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -427,7 +471,7 @@ Interactive API documentation using Swagger UI.
 
 ```bash
 # Local development
-open http://localhost:6001/docs
+open http://localhost:5544/docs
 
 # Production (basic auth prompt will appear)
 open https://api-management.requiems.xyz/docs
@@ -436,7 +480,7 @@ open https://api-management.requiems.xyz/docs
 **OpenAPI Spec:**
 
 ```bash
-curl http://localhost:6001/openapi.json
+curl http://localhost:5544/openapi.json
 ```
 
 ---
@@ -448,7 +492,7 @@ curl http://localhost:6001/openapi.json
 1. Install dependencies:
 
 ```bash
-cd apps/api-management
+cd apps/workers/api-management
 pnpm install
 ```
 
@@ -466,7 +510,7 @@ echo "ENVIRONMENT=development" >> .env
 pnpm dev
 ```
 
-Server runs at http://localhost:6001
+Server runs at http://localhost:5544
 
 ### Testing
 
@@ -514,7 +558,7 @@ pnpm run lint:fix  # Auto-fix
 ### Set Secrets
 
 ```bash
-cd apps/api-management
+cd apps/workers/api-management
 
 # Required: API Management key (64+ character random string)
 wrangler secret put API_MANAGEMENT_API_KEY

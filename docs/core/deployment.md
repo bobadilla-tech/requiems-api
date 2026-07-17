@@ -154,11 +154,24 @@ RAILS_MASTER_KEY=your_rails_master_key_here
 # Must match Cloudflare Worker BACKEND_SECRET
 BACKEND_SECRET=your_32_char_minimum_secret_here
 
-# Cloudflare Integration
-CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
-CLOUDFLARE_KV_NAMESPACE_ID=your_kv_namespace_id
-CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
+# API Management Worker (Rails -> api-management, never writes to KV directly)
+API_MANAGEMENT_URL=https://api-management.requiems.xyz
+API_MANAGEMENT_API_KEY=must_match_api_management_worker_secret
+
+# LemonSqueezy billing (store ID and variant IDs are public - see .env.example
+# for the full list of per-plan VARIANT_ID / CHECKOUT_UUID vars)
+LEMONSQUEEZY_STORE_ID=your_store_id
+LEMONSQUEEZY_SIGNING_SECRET=your_webhook_signing_secret
+LEMONSQUEEZY_API_KEY=your_lemonsqueezy_api_key
+
+# SMTP (Devise + ApplicationMailer)
+SMTP_FROM_EMAIL=noreply@mail.requiems.xyz
 ```
+
+**Note:** `AppConfig#load_config` hard-requires the LemonSqueezy store ID,
+signing secret, and all six variant ID / checkout UUID pairs at boot — Rails
+will not start without them. See `infra/docker/.env.example` for the complete
+list.
 
 **Generate secrets:**
 
@@ -338,7 +351,7 @@ wrangler login
 cd apps/workers/auth-gateway
 
 # Create KV namespace for API keys and rate limiting
-wrangler kv:namespace create KV --env production
+wrangler kv namespace create KV --env production
 # Output: { binding = "KV", id = "abc123..." }
 # → Update id in both wrangler.toml files
 
@@ -603,9 +616,11 @@ crontab -e
 - `DATABASE_URL` - PostgreSQL connection
 - `REDIS_URL` - Redis connection
 - `BACKEND_SECRET` - Worker authentication (32+ chars)
-- `CLOUDFLARE_ACCOUNT_ID` - Cloudflare account
-- `CLOUDFLARE_KV_NAMESPACE_ID` - KV namespace
-- `CLOUDFLARE_API_TOKEN` - Cloudflare API token
+- `LEMONSQUEEZY_STORE_ID`, `LEMONSQUEEZY_SIGNING_SECRET`,
+  `LEMONSQUEEZY_API_KEY` - LemonSqueezy billing
+- `LEMONSQUEEZY_{DEVELOPER,BUSINESS,PROFESSIONAL}_{MONTHLY,YEARLY}_VARIANT_ID` /
+  `_CHECKOUT_UUID` - per-plan billing config (required at boot, see
+  `.env.example`)
 - `API_MANAGEMENT_URL` - `https://api-management.requiems.xyz`
 - `API_MANAGEMENT_API_KEY` - Must match the api-management worker secret
 - `SMTP_FROM_EMAIL` - Sender address for all outgoing mail (must use the

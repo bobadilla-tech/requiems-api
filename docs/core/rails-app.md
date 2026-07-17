@@ -58,14 +58,15 @@ Rails 8.1, Tailwind CSS, Hotwire (Turbo + Stimulus) **Database:** PostgreSQL
 │                                     │
 │  ┌──────────────────────────────┐   │
 │  │     Services                 │   │
-│  │  - CloudflareKvSyncService   │   │
-│  │  - UsageSyncService          │   │
+│  │  - D1SyncService              │   │
+│  │  - Cloudflare::ApiManagementService │
 │  └──────────────────────────────┘   │
 │                                     │
 │  ┌──────────────────────────────┐   │
 │  │     Background Jobs          │   │
-│  │  - SyncUsageJob              │   │
-│  │  - CleanupLogsJob            │   │
+│  │  - SyncD1UsageJob             │   │
+│  │  - AggregateDailyUsageJob     │   │
+│  │  - ExpirePromotionalSubscriptionsJob │
 │  └──────────────────────────────┘   │
 └─────────────────────────────────────┘
          ↓                    ↓
@@ -115,17 +116,24 @@ Management worker via
 - Top endpoints by usage
 - Monthly/daily aggregations
 
-### Background Jobs (Solid Queue)
+### Background Jobs (Sidekiq-Cron)
 
 **[SyncD1UsageJob](../apps/dashboard/app/jobs/sync_d1_usage_job.rb)**
 
 - Pulls usage data from Cloudflare D1 into PostgreSQL
-- Runs every 5 minutes via Solid Queue recurring tasks
+- Runs every 3 minutes via Sidekiq-Cron (`config/sidekiq_schedule.yml`)
 
 **[AggregateDailyUsageJob](../apps/dashboard/app/jobs/aggregate_daily_usage_job.rb)**
 
 - Builds daily usage summaries for analytics/reporting
-- Runs once per day at 00:05 UTC via Solid Queue recurring tasks
+- Runs once per day at 00:05 UTC via Sidekiq-Cron
+
+**[ExpirePromotionalSubscriptionsJob](../apps/dashboard/app/jobs/expire_promotional_subscriptions_job.rb)**
+
+- Reverts expired admin-granted promotional plan upgrades back to free
+- Runs hourly via Sidekiq-Cron
+
+See [Background Jobs](./background-jobs.md) for full details.
 
 ## Development
 
@@ -185,9 +193,14 @@ Required in production:
 - `REDIS_URL` - Redis connection string
 - `SECRET_KEY_BASE` - Rails secret (generate with `rails secret`)
 - `RAILS_MASTER_KEY` - Encrypted credentials key
-- `CLOUDFLARE_ACCOUNT_ID` - Cloudflare account ID
-- `CLOUDFLARE_KV_NAMESPACE_ID` - KV namespace for API keys
-- `CLOUDFLARE_API_TOKEN` - Cloudflare API token with KV write permissions
+- `API_MANAGEMENT_API_KEY` - Authenticates Rails to the API Management worker
+- `LEMONSQUEEZY_STORE_ID`, `LEMONSQUEEZY_SIGNING_SECRET` (+ `_TEST` variant) -
+  LemonSqueezy billing integration
+- `LEMONSQUEEZY_{DEVELOPER,BUSINESS,PROFESSIONAL}_{MONTHLY,YEARLY}_VARIANT_ID` /
+  `_CHECKOUT_UUID` (+ `_TEST` variants) - per-plan billing config
+
+See [AppConfig](../apps/dashboard/app/lib/app_config.rb) for the full list this
+app requires at boot.
 
 ## Database Migrations
 
@@ -202,7 +215,6 @@ histories.
 ## Styling
 
 - **Tailwind CSS** - Utility-first CSS framework
-- **ViewComponent** - Reusable view components
 - **Hotwire** - Modern SPA-like experience without JavaScript frameworks
   - **Turbo Drive** - Fast navigation
   - **Turbo Frames** - Partial page updates
@@ -309,7 +321,7 @@ User makes API request
     ↓
 Worker records usage in D1
     ↓
-Sidekiq job pulls from D1 (hourly)
+Sidekiq job pulls from D1 (every 3 minutes)
     ↓
 Usage stored in PostgreSQL
     ↓

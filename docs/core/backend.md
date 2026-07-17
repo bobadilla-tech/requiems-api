@@ -29,7 +29,8 @@ apps/api/
     └── ...
 ```
 
-Domains: `email`, `text`, `tech`, `places`, `entertainment`, `misc`, etc...
+Domains: `entertainment`, `finance`, `health`, `networking`, `places`,
+`systems`, `technology`, `text`, `validation`.
 
 ### Adding a new feature
 

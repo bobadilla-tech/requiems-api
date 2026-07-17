@@ -7,9 +7,9 @@ All plans are **monthly** with API call limits per month.
 | Plan             | Price      | API Calls/Month  | Best For                          |
 | ---------------- | ---------- | ---------------- | --------------------------------- |
 | **Free**         | $0/month   | 500              | Testing and evaluation            |
-| **Developer**    | $29/month  | 100,000          | Individual developers and testing |
-| **Business**     | $74/month  | 1,000,000        | Startups and small businesses     |
-| **Professional** | $149/month | 10,000,000       | Growing teams and organizations   |
+| **Developer**    | $30/month  | 100,000          | Individual developers and testing |
+| **Business**     | $75/month  | 1,000,000        | Startups and small businesses     |
+| **Professional** | $150/month | 10,000,000       | Growing teams and organizations   |
 | **Enterprise**   | Custom     | Custom/Unlimited | Large corporations                |
 
 ## Features by Plan
@@ -23,31 +23,31 @@ All plans are **monthly** with API call limits per month.
 - Attribution required
 - Perfect for testing and evaluation
 
-### Developer - $29/month
+### Developer - $30/month
 
 - 100,000 API calls per month
 - 5,000 requests/minute rate limit
-- Standard support
+- Email support
 - Commercial use allowed
 - Attribution required
 
-### Business - $74/month (Most Popular)
+### Business - $75/month (Most Popular)
 
 - 1,000,000 API calls per month
 - 10,000 requests/minute rate limit
-- Priority support
+- Priority email support
 - Commercial use allowed
 - No attribution required
-- 99.95% uptime SLA
+- 99.9% uptime SLA
 
-### Professional - $149/month
+### Professional - $150/month
 
 - 10,000,000 API calls per month
 - 50,000 requests/minute rate limit
-- Priority support
+- 24/7 priority support, dedicated support engineer
 - Commercial use allowed
 - No attribution required
-- 99.95% uptime SLA
+- 99.99% uptime SLA
 - Analytics API access
 - Custom feature requests
 
