@@ -15,9 +15,9 @@
 # Requiems API
 
 Authentication, validation, fraud detection, payments intelligence, and global
-data delivered through one unified API.
+data behind one API key.
 
-Build production-ready systems without rebuilding backend infrastructure.
+Stop rebuilding the same backend plumbing for every SaaS product.
 
 [![CI](https://github.com/bobadilla-tech/requiems-api/actions/workflows/ci.yml/badge.svg)](https://github.com/bobadilla-tech/requiems-api/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bobadilla-tech/requiems-api/graph/badge.svg?token=N3O0R9J0SN)](https://codecov.io/gh/bobadilla-tech/requiems-api)
@@ -26,20 +26,20 @@ Build production-ready systems without rebuilding backend infrastructure.
 
 ## Systems
 
-One product, four systems, each focused on a real SaaS problem.
+Four systems, each built around a problem SaaS teams actually hit.
 
-- **Identity & Risk System** - Protect your product from fake users, fraud, and
-  bad data before it reaches your database.
-- **Payments Intelligence System** - Validate and enrich financial data to
-  reduce failed payments and detect risky transactions.
-- **Global Data System** - Power international products with accurate, real-time
-  location and compliance-ready data.
-- **Data Integrity System** - Clean, validate, and standardize user input across
-  your entire platform.
+- **Identity & Risk** - keep fake users, fraud, and bad data out before they
+  reach your database.
+- **Payments Intelligence** - validate and enrich financial data to cut failed
+  payments and catch risky transactions.
+- **Global Data** - accurate, real-time location and compliance data for
+  international products.
+- **Data Integrity** - clean, validate, and standardize user input across your
+  platform.
 
 ## Engines
 
-Need a decision, not just raw data? Use a composed engine.
+Need a decision, not just raw data? Compose an engine.
 
 ```
 POST /v1/signup/protect
@@ -66,36 +66,36 @@ POST /v1/signup/protect
 ```
 
 Each engine fans out across validation, networking, and intelligence APIs in
-parallel, then returns one structured result you can use immediately.
+parallel, then hands back one structured result.
 
-## Why Teams Use It
+## Where It Fits
 
-- **Signup protection** - Block fake accounts, bots, and abusive signups.
-- **Fintech onboarding** - Validate financial data and reduce onboarding
-  friction.
-- **Marketplace fraud prevention** - Detect risky users and transactions in real
-  time.
-- **Global product support** - Handle international users with accurate data
-  everywhere.
+- **Signup protection** - block fake accounts, bots, and abusive signups.
+- **Fintech onboarding** - validate financial data and cut onboarding friction.
+- **Marketplace fraud prevention** - catch risky users and transactions as they
+  happen.
+- **Global products** - handle international users with data that's actually
+  accurate.
 
 ## Developer Experience
 
-- **Live API playground** - Test every endpoint directly in the docs.
-- **Copy-paste examples** - cURL, Python, JavaScript, Go, and Markdown-ready
-  snippets.
-- **Precise documentation** - Every parameter, response field, and error code
-  documented.
+- **Live API playground** - test every endpoint straight from the docs.
+- **Copy-paste examples** - cURL, Python, JavaScript, Go, and Markdown ready to
+  drop in.
+- **Precise documentation** - every parameter, response field, and error code
+  written down.
 - **Built for AI agents** - llms.txt, Markdown docs, and one-click examples for
   Claude, ChatGPT, and coding agents.
-- **Official client libraries** - Installable clients for JavaScript,
-  TypeScript, Python, Go, Ruby, C#, and more:
+- **Official client libraries** - JavaScript, TypeScript, Python, Go, Ruby, C#,
+  and more:
   [requiems-api-clients](https://github.com/bobadilla-tech/requiems-api-clients)
-- **Agent Skills** - Installable skills for AI agents and copilots:
-  [requiems-api-skills](https://github.com/bobadilla-tech/requiems-api-skills)
+- **MCP server & Agent Skills** - connect via MCP or install skills straight
+  into Claude and other coding agents:
+  [requiems.xyz/ai](https://requiems.xyz/en/ai)
 
 ## Quick Start
 
-Get your API key at [requiems.xyz](https://requiems.xyz), then try it out:
+Grab an API key at [requiems.xyz](https://requiems.xyz), then try it:
 
 ```bash
 # Example: Protect a signup with one call
@@ -105,6 +105,6 @@ curl -X POST https://api.requiems.xyz/v1/signup/protect \
   -d '{"email": "user@tempmail.io", "ip_address": "45.33.32.156"}'
 ```
 
-Explore the full catalog in the [documentation](https://requiems.xyz/apis), or
-start with the [systems overview](https://requiems.xyz/en/systems) to pick the
-problem you want to solve.
+Explore the full catalog in the [documentation](https://requiems.xyz/en/apis),
+or start with the [systems overview](https://requiems.xyz/en/systems) to pick
+the problem you want to solve.
