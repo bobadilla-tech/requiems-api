@@ -1,6 +1,13 @@
 <% content_for :title, t('tools.quotes.show.random_quote_generator_free_quotes_api') %>
 <% content_for :description,
    "Generate random inspirational quotes from famous thinkers, leaders, and innovators. Try the live demo and integrate the Quotes API into your app in minutes." %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
 
 <main class="min-h-screen bg-white dark:bg-gray-950">
   <%= render "partials/tools/quotes/hero" %>

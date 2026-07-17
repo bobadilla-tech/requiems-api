@@ -1,5 +1,11 @@
 <% content_for :title, t("examples.index.title") %>
 <% content_for :description, t("examples.index.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: "Examples",
+    items: @examples.map { |ex| { name: example_localized(ex, "title"), url: example_path(ex["id"]) } }
+  ).html_safe %></script>
+<% end %>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <!-- Header -->
   <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">

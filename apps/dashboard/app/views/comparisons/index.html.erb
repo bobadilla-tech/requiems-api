@@ -1,5 +1,11 @@
 <% content_for :title, t("comparisons.hub.meta_title") %>
 <% content_for :description, t("comparisons.hub.meta_description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: "Comparisons",
+    items: ComparisonsController::COMPETITORS.map { |c| { name: t("comparisons.competitors.#{c[:slug].tr('-', '_')}.display_name"), url: comparison_path(c[:slug]) } }
+  ).html_safe %></script>
+<% end %>
 
 <%# Hero %>
 <section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">

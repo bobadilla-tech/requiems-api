@@ -223,6 +223,130 @@ module ApplicationHelper
     }.to_json
   end
 
+  def collection_json_ld(name:, items:, description: nil)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "CollectionPage",
+      "name" => name,
+      "description" => description,
+      "mainEntity" => {
+        "@type" => "ItemList",
+        "itemListElement" => items.each_with_index.map do |item, i|
+          { "@type" => "ListItem", "position" => i + 1, "name" => item[:name], "url" => item[:url] }
+        end
+      }
+    }.compact_blank.to_json
+  end
+
+  def service_json_ld(name:, description:, url:)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Service",
+      "name" => name,
+      "description" => description,
+      "url" => url,
+      "provider" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      }
+    }.compact_blank.to_json
+  end
+
+  def software_application_json_ld(name:, description:, url:, category: "DeveloperApplication")
+    {
+      "@context" => "https://schema.org",
+      "@type" => "SoftwareApplication",
+      "name" => name,
+      "description" => description,
+      "url" => url,
+      "applicationCategory" => category
+    }.compact_blank.to_json
+  end
+
+  def article_json_ld(headline:, description:, url:)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Article",
+      "headline" => headline,
+      "description" => description,
+      "url" => url,
+      "publisher" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      }
+    }.compact_blank.to_json
+  end
+
+  def contact_page_json_ld(name:, description:)
+    {
+      "@context" => "https://schema.org",
+      "@type" => "ContactPage",
+      "name" => name,
+      "description" => description,
+      "url" => request.original_url
+    }.compact_blank.to_json
+  end
+
+  def about_page_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "AboutPage",
+      "name" => t("home.about.title"),
+      "description" => t("home.about.intro"),
+      "url" => request.original_url,
+      "mainEntity" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "url" => "https://requiems.xyz"
+      }
+    }.compact_blank.to_json
+  end
+
+  TEAM_MEMBERS = [
+    { key: "eliaz", name_key: "eliaz_bobadilla" },
+    { key: "leonardo", name_key: "leonardo" },
+    { key: "alexandra", name_key: "alexandra_flores" }
+  ].freeze
+
+  def team_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "AboutPage",
+      "name" => t("home.team.title"),
+      "description" => t("home.team.subheading"),
+      "url" => request.original_url,
+      "mainEntity" => {
+        "@type" => "Organization",
+        "name" => "Requiems API",
+        "employee" => TEAM_MEMBERS.map do |member|
+          {
+            "@type" => "Person",
+            "name" => t("home.team.#{member[:name_key]}"),
+            "jobTitle" => t("home.team.members.#{member[:key]}.role")
+          }
+        end
+      }
+    }.compact_blank.to_json
+  end
+
+  def glossary_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "DefinedTermSet",
+      "name" => t("home.glossary.title"),
+      "url" => request.original_url,
+      "hasDefinedTerm" => t("home.glossary.terms").map do |term|
+        {
+          "@type" => "DefinedTerm",
+          "name" => term[:name],
+          "description" => term[:definition]
+        }
+      end
+    }.compact_blank.to_json
+  end
+
   private
 
   def searchable_apis

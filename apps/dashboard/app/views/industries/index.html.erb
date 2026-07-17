@@ -1,5 +1,11 @@
 <% content_for :title, t("industries.index.meta_title") %>
 <% content_for :description, t("industries.index.hero.subheadline") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= collection_json_ld(
+    name: "Industries",
+    items: IndustrySlugs::ALL.map { |slug| { name: t("industries.#{slug.tr('-', '_')}.meta_title"), url: industry_path(slug) } }
+  ).html_safe %></script>
+<% end %>
 
 <section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-24">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
