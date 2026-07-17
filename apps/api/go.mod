@@ -1,6 +1,6 @@
 module requiems-api
 
-go 1.26.1
+go 1.26.2
 
 require (
 	github.com/go-chi/chi/v5 v5.3.1
@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/bobadilla-tech/sentiment-go v1.0.0 // indirect
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect

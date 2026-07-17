@@ -1,6 +1,8 @@
 package text
 
 import (
+	"log"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -31,7 +33,11 @@ func RegisterRoutes(r chi.Router, pool *pgxpool.Pool, cfg config.Config) {
 	detectlanguageSvc := detectlanguage.NewService()
 	detectlanguage.RegisterRoutes(r, detectlanguageSvc)
 
-	sentimentSvc := sentiment.NewService()
+	sentimentSvc, err := sentiment.NewService()
+	if err != nil {
+		log.Fatalf("failed to init sentiment service: %v", err)
+	}
+
 	sentiment.RegisterRoutes(r, sentimentSvc)
 
 	similaritySvc := similarity.NewService()
