@@ -105,4 +105,9 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='number-base-conversion-demo']"
   end
+  test "markdown tool page renders successfully" do
+    get "/en/tools/markdown"
+    assert_response :success
+    assert_select "[data-controller='markdown-demo']"
+  end
 end

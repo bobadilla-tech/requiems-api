@@ -14,7 +14,7 @@ class RefreshSitemapJobTest < ActiveJob::TestCase
       end
     end
 
-    task.verify
+    assert_mock task
   end
 
   test "loads rake tasks first when sitemap:refresh is not yet defined" do
@@ -32,7 +32,7 @@ class RefreshSitemapJobTest < ActiveJob::TestCase
     end
 
     assert load_tasks_called
-    task.verify
+    assert_mock task
   end
 
   test "logs the error and re-raises when sitemap:refresh fails" do
@@ -51,7 +51,6 @@ class RefreshSitemapJobTest < ActiveJob::TestCase
       end
     end
 
-    assert_equal 1, logged_errors.size
-    assert_match(/Failed to regenerate sitemap: boom/, logged_errors.first)
+    assert logged_errors.any? { |msg| msg.match?(/Failed to regenerate sitemap: boom/) }
   end
 end

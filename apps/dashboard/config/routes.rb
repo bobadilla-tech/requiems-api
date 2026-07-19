@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   post "tools/demos/random-user",      to: "tool_demos#random_user",      as: :tool_demo_random_user
   post "tools/demos/sudoku",            to: "tool_demos#sudoku",            as: :tool_demo_sudoku
   post "tools/demos/number-base-conversion", to: "tool_demos#number_base_conversion", as: :tool_demo_number_base_conversion
+  post "tools/demos/markdown",               to: "tool_demos#markdown",               as: :tool_demo_markdown
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

@@ -1,0 +1,48 @@
+<% faqs = [
+  {
+    q: t('tools.markdown.faq.q1'),
+    a: t('tools.markdown.faq.a1')
+  },
+  {
+    q: t('tools.markdown.faq.q2'),
+    a: t('tools.markdown.faq.a2')
+  },
+  {
+    q: t('tools.markdown.faq.q3'),
+    a: t('tools.markdown.faq.a3')
+  }
+] %>
+<section class="bg-white dark:bg-gray-900 py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white"><%= t('tools.markdown.faq.heading') %></h2>
+    </div>
+    <div class="space-y-3" data-controller="faq-accordion">
+      <% faqs.each_with_index do |faq, i| %>
+        <% panel_id = "faq-markdown-#{i}" %>
+        <% button_id = "#{panel_id}-button" %>
+        <div class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <button type="button"
+                  id="<%= button_id %>"
+                  class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  data-action="click->faq-accordion#toggle"
+                  data-faq-accordion-target="button"
+                  aria-expanded="false"
+                  aria-controls="<%= panel_id %>">
+            <span class="font-medium text-gray-900 dark:text-gray-100"><%= faq[:q] %></span>
+            <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="<%= panel_id %>"
+               role="region"
+               aria-labelledby="<%= button_id %>"
+               class="hidden px-6 pb-5 text-gray-500 dark:text-gray-400 text-sm leading-relaxed"
+               data-faq-accordion-target="content">
+            <%= faq[:a] %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
