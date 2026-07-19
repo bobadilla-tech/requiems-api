@@ -1,0 +1,25 @@
+<% content_for :title, t("tools.mortgage.seo.title") %>
+<% content_for :description, t("tools.mortgage.seo.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
+<%= render "partials/tools/mortgage/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.mortgage.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/mortgage/what_it_does" %>
+<%= render "partials/tools/mortgage/use_cases" %>
+<%= render "partials/tools/mortgage/api_combinations" %>
+<%= render "partials/tools/mortgage/faq" %>
+<%= render "partials/tools/mortgage/cta" %>

@@ -1,0 +1,88 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.mortgage.hero.title") %>
+    </h1>
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.mortgage.hero.subtitle") %>
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.mortgage.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.mortgage.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("mortgage"),
+            size: "lg" %>
+    </div>
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="mortgage-demo"
+         data-mortgage-demo-error-empty-value="<%= t('tools.mortgage.demo.error_empty') %>"
+         data-mortgage-demo-error-invalid-value="<%= t('tools.mortgage.demo.error_invalid') %>">
+      <form data-action="turbo:submit-start->mortgage-demo#onSubmitStart turbo:submit-end->mortgage-demo#onSubmitEnd"
+            action="<%= tool_demo_mortgage_path %>"
+            method="post"
+            data-turbo-frame="mortgage-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <div>
+            <label for="mortgage-demo-principal" class="sr-only"><%= t("tools.mortgage.hero.label_principal") %></label>
+            <input
+              id="mortgage-demo-principal"
+              type="number"
+              name="principal"
+              min="1"
+              step="any"
+              data-mortgage-demo-target="inputPrincipal"
+              placeholder="<%= t('tools.mortgage.hero.placeholder_principal') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+          <div>
+            <label for="mortgage-demo-rate" class="sr-only"><%= t("tools.mortgage.hero.label_rate") %></label>
+            <input
+              id="mortgage-demo-rate"
+              type="number"
+              name="rate"
+              min="0.01"
+              step="any"
+              data-mortgage-demo-target="inputRate"
+              placeholder="<%= t('tools.mortgage.hero.placeholder_rate') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+          <div>
+            <label for="mortgage-demo-years" class="sr-only"><%= t("tools.mortgage.hero.label_years") %></label>
+            <input
+              id="mortgage-demo-years"
+              type="number"
+              name="years"
+              min="1"
+              max="50"
+              step="1"
+              data-mortgage-demo-target="inputYears"
+              placeholder="<%= t('tools.mortgage.hero.placeholder_years') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <%= render "partials/shared/submit_button", text: t("tools.mortgage.hero.submit"), controller: "mortgage-demo" %>
+        </div>
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.mortgage.hero.no_account") %></p>
+        <p data-mortgage-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+      <turbo-frame id="mortgage-demo-result"></turbo-frame>
+    </div>
+  </div>
+</section>

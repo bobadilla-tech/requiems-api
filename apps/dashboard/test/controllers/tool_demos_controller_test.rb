@@ -1121,4 +1121,77 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.number_base_conversion.demo.error_no_data"), response.body
   end
+
+  # ── mortgage ─────────────────────────────────────────────────────────────────
+
+  test "mortgage renders result on success" do
+    payload = {
+      "principal" => 300_000, "rate" => 6.5, "years" => 30,
+      "monthly_payment" => 1896.20, "total_payment" => 682_632.00,
+      "total_interest" => 382_632.00,
+      "schedule" => [
+        { "month" => 1, "payment" => 1896.20,
+          "principal" => 271.20, "interest" => 1625.00, "balance" => 299_728.80 }
+      ]
+    }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/mortgage",
+           params: { principal: "300000", rate: "6.5", years: "30" }
+    end
+    assert_response :success
+    assert_match "1,896.20", response.body
+    assert_match "682,632.00", response.body
+  end
+
+  test "mortgage renders error when principal is blank" do
+    post "/tools/demos/mortgage", params: { principal: "", rate: "6.5", years: "30" }
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_empty"), response.body
+  end
+
+  test "mortgage renders error when rate is blank" do
+    post "/tools/demos/mortgage", params: { principal: "300000", rate: "", years: "30" }
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_empty"), response.body
+  end
+
+  test "mortgage renders error when years is blank" do
+    post "/tools/demos/mortgage", params: { principal: "300000", rate: "6.5", years: "" }
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_empty"), response.body
+  end
+
+  test "mortgage renders error when params are invalid" do
+    post "/tools/demos/mortgage", params: { principal: "-1", rate: "0", years: "100" }
+    assert_response :success
+    # Match a substring without HTML-sensitive characters (> becomes &gt; in the response body)
+    assert_match "years between 1 and 50", response.body
+  end
+
+  test "mortgage renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/mortgage",
+           params: { principal: "300000", rate: "6.5", years: "30" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_rate_limit"), response.body
+  end
+
+  test "mortgage renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/mortgage",
+           params: { principal: "300000", rate: "6.5", years: "30" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_generic"), response.body
+  end
+
+  test "mortgage renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/mortgage",
+           params: { principal: "300000", rate: "6.5", years: "30" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.mortgage.demo.error_no_data"), response.body
+  end
 end

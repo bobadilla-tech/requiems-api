@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mortgage].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -103,6 +103,11 @@ class ToolsController < ApplicationController
       name: "Number Base Conversion",
       description: "Convert integers between binary, octal, decimal, and hexadecimal, with optional 0x/0b/0o prefixes.",
       icon_classes: "bg-slate-50 dark:bg-slate-900/20 text-slate-600 dark:text-slate-400"
+    },
+    "mortgage" => {
+      name: "Mortgage Calculator",
+      description: "Calculate monthly payments, total interest, and full amortization schedules for any fixed-rate mortgage.",
+      icon_classes: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400"
     }
   }.freeze
 
