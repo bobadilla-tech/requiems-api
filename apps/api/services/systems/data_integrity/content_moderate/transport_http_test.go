@@ -2,8 +2,10 @@ package contentmoderate
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
@@ -17,12 +19,24 @@ import (
 	"requiems-api/services/validation/profanity"
 )
 
+var sentimentSvc *sentiment.Service
+
+func TestMain(m *testing.M) {
+	svc, err := sentiment.NewService()
+	if err != nil {
+		log.Fatalf("failed to init service for tests: %v", err)
+	}
+	sentimentSvc = svc
+
+	os.Exit(m.Run())
+}
+
 func setupRouter() chi.Router {
 	r := chi.NewRouter()
 	svc := NewService(
 		detectlanguage.NewService(),
 		profanity.NewService(),
-		sentiment.NewService(),
+		sentimentSvc,
 	)
 	RegisterRoutes(r, svc)
 	return r
