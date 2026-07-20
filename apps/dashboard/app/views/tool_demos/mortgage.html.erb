@@ -1,0 +1,73 @@
+<turbo-frame id="mortgage-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <!-- Header: monthly payment + badge -->
+    <div class="px-4 py-4 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-mono">
+          <%= t("tools.mortgage.demo.label_monthly_payment") %>
+        </p>
+        <p class="mt-0.5 text-2xl font-bold text-gray-900 dark:text-white">
+          <%= number_with_precision(data["monthly_payment"], precision: 2, delimiter: ",") %>
+        </p>
+      </div>
+      <span class="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+        <%= t("tools.mortgage.demo.badge_fixed_rate") %>
+      </span>
+    </div>
+    <!-- Summary row -->
+    <div class="grid grid-cols-2 divide-x divide-gray-100 dark:divide-gray-700 border-t border-gray-100 dark:border-gray-700">
+      <div class="px-4 py-3">
+        <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+          <%= t("tools.mortgage.demo.label_total_payment") %>
+        </p>
+        <p class="mt-0.5 text-base font-semibold text-gray-800 dark:text-gray-200">
+          <%= number_with_precision(data["total_payment"], precision: 2, delimiter: ",") %>
+        </p>
+      </div>
+      <div class="px-4 py-3">
+        <p class="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+          <%= t("tools.mortgage.demo.label_total_interest") %>
+        </p>
+        <p class="mt-0.5 text-base font-semibold text-gray-800 dark:text-gray-200">
+          <%= number_with_precision(data["total_interest"], precision: 2, delimiter: ",") %>
+        </p>
+      </div>
+    </div>
+    <!-- Amortization schedule (first 12 months) -->
+    <% if data["schedule"].present? %>
+      <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-700">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+          <%= t("tools.mortgage.demo.label_schedule") %>
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="text-gray-400 dark:text-gray-500 border-b border-gray-100 dark:border-gray-700">
+                <th class="text-left py-1 pr-3 font-medium"><%= t("tools.mortgage.demo.label_month") %></th>
+                <th class="text-right py-1 pr-3 font-medium"><%= t("tools.mortgage.demo.label_principal") %></th>
+                <th class="text-right py-1 pr-3 font-medium"><%= t("tools.mortgage.demo.label_interest") %></th>
+                <th class="text-right py-1 font-medium"><%= t("tools.mortgage.demo.label_balance") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
+              <% data["schedule"].first(12).each do |entry| %>
+                <tr>
+                  <td class="py-1 pr-3 text-gray-500 dark:text-gray-400"><%= entry["month"] %></td>
+                  <td class="py-1 pr-3 text-right text-gray-700 dark:text-gray-300">
+                    <%= number_with_precision(entry["principal"], precision: 2, delimiter: ",") %>
+                  </td>
+                  <td class="py-1 pr-3 text-right text-gray-700 dark:text-gray-300">
+                    <%= number_with_precision(entry["interest"], precision: 2, delimiter: ",") %>
+                  </td>
+                  <td class="py-1 text-right font-medium text-gray-800 dark:text-gray-200">
+                    <%= number_with_precision(entry["balance"], precision: 2, delimiter: ",") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</turbo-frame>

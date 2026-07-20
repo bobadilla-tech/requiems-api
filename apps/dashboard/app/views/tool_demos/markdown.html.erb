@@ -1,0 +1,23 @@
+<%
+  html_output = data["html"].to_s
+%>
+<turbo-frame id="markdown-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-5 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+        <%= t("tools.markdown.demo.label_preview") %>
+      </p>
+    </div>
+    <div class="px-5 py-4 prose prose-sm dark:prose-invert max-w-none text-left">
+      <%= sanitize(html_output) %>
+    </div>
+    <div class="px-5 py-3 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+      <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
+        <%= t("tools.markdown.demo.label_html") %>
+      </p>
+      <%= render "partials/tools/shared/code_sample", language: "html" do %>
+<%= html_output %>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

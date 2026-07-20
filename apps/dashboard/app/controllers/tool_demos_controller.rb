@@ -84,13 +84,7 @@ class ToolDemosController < ApplicationController
   end
 
   def domain_checker
-    domain = params[:domain].to_s.strip.downcase
-    domain = domain.sub(/\Ahttps?:\/\//, "")  # strip protocol
-    domain = domain.split("/", 2).first.to_s   # strip path
-    domain = domain.split("?", 2).first.to_s   # strip query
-    domain = domain.split("#", 2).first.to_s   # strip fragment
-    domain = domain.split(":", 2).first.to_s   # strip port
-    domain = domain.strip
+    domain = normalize_domain(params[:domain])
     return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_empty")) if domain.blank?
 
     unless domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/)
@@ -475,6 +469,92 @@ class ToolDemosController < ApplicationController
     render "tool_demos/number_base_conversion", locals: { data: data }
   end
 
+  def mx_lookup
+    domain = normalize_domain(params[:domain])
+
+    if domain.blank?
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_empty"))
+    end
+
+    unless valid_domain?(domain)
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/networking/mx/#{domain}", method: "GET", params: {})
+
+    if result.status_code == 429
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_rate_limit"))
+    end
+
+    if result.status_code == 404
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_not_found"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/mx_lookup", locals: { data: data }
+  end
+
+  def mortgage
+    principal = params[:principal].to_s.strip
+    rate      = params[:rate].to_s.strip
+    years     = params[:years].to_s.strip
+
+    if principal.blank? || rate.blank? || years.blank?
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_empty"))
+    end
+
+    principal_f = Float(principal, exception: false)
+    rate_f      = Float(rate, exception: false)
+    years_i     = Integer(years, exception: false)
+
+    if principal_f.nil? || principal_f <= 0 ||
+       rate_f.nil? || rate_f <= 0 ||
+       years_i.nil? || years_i < 1 || years_i > 50
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_invalid"))
+    end
+
+    result = api_call(
+      endpoint: "/v1/finance/mortgage",
+      method: "GET",
+      params: { principal: principal_f, rate: rate_f, years: years_i }
+    )
+
+    if result.status_code == 429
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_rate_limit"))
+    end
+    unless result.status_code == 200
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("mortgage", t("tools.mortgage.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/mortgage", locals: { data: data }
+  end
+
+  def markdown
+    markdown_text = params[:markdown].to_s.strip
+    return render_demo_error("markdown", t("tools.markdown.demo.error_empty")) if markdown_text.blank?
+
+    result = api_call(endpoint: "/v1/technology/markdown", method: "POST",
+                      params: { markdown: markdown_text, sanitize: true })
+    return render_demo_error("markdown", t("tools.markdown.demo.error_rate_limit")) if result.status_code == 429
+    unless result.status_code == 200
+      return render_demo_error("markdown", t("tools.markdown.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("markdown", t("tools.markdown.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/markdown", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)
@@ -484,6 +564,20 @@ class ToolDemosController < ApplicationController
     true
   rescue IPAddr::Error
     false
+  end
+
+  def valid_domain?(domain)
+    domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/i)
+  end
+
+  def normalize_domain(domain)
+    domain = domain.to_s.strip.downcase
+    domain = domain.sub(/\Ahttps?:\/\//, "")  # strip protocol
+    domain = domain.split("/", 2).first.to_s   # strip path
+    domain = domain.split("?", 2).first.to_s   # strip query
+    domain = domain.split("#", 2).first.to_s   # strip fragment
+    domain = domain.split(":", 2).first.to_s   # strip port
+    domain.strip
   end
 
   def api_call(endpoint:, method:, params:)

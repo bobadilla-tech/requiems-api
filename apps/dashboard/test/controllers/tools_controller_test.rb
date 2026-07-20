@@ -105,4 +105,22 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='number-base-conversion-demo']"
   end
+
+  test "mx lookup tool page renders successfully" do
+    get "/en/tools/mx-lookup"
+    assert_response :success
+    assert_select "[data-controller='mx-lookup-demo']"
+  end
+
+  test "mortgage tool page renders successfully" do
+    get "/en/tools/mortgage"
+    assert_response :success
+    assert_select "[data-controller='mortgage-demo']"
+  end
+
+  test "markdown tool page renders successfully" do
+    get "/en/tools/markdown"
+    assert_response :success
+    assert_select "[data-controller='markdown-demo']"
+  end
 end

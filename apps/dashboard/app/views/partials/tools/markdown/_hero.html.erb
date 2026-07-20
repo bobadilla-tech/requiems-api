@@ -1,0 +1,49 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight"><%= t('tools.markdown.hero.title') %></h1>
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t('tools.markdown.hero.subtitle') %>
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t('tools.markdown.hero.get_api_key'),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t('tools.markdown.hero.read_the_docs'),
+            variant: "outline",
+            href: api_path("markdown"),
+            size: "lg" %>
+    </div>
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="markdown-demo"
+         data-markdown-demo-error-empty-value="<%= t('tools.markdown.demo.error_empty') %>">
+      <form data-action="turbo:submit-start->markdown-demo#onSubmitStart turbo:submit-end->markdown-demo#onSubmitEnd"
+            action="<%= tool_demo_markdown_path %>"
+            method="post"
+            data-turbo-frame="markdown-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <label for="markdown-demo-input" class="sr-only"><%= t('tools.markdown.hero.label_input') %></label>
+        <textarea
+          id="markdown-demo-input"
+          name="markdown"
+          data-markdown-demo-target="input"
+          placeholder="<%= t('tools.markdown.demo.input_placeholder') %>"
+          rows="5"
+          class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm font-mono resize-none"
+        ></textarea>
+        <div class="mt-2 flex items-center justify-between">
+          <p class="text-xs text-gray-400 dark:text-gray-500"><%= t('shared.info.no_account_demo') %></p>
+          <%= render "partials/shared/submit_button", text: t('tools.markdown.hero.convert'), controller: "markdown-demo" %>
+        </div>
+        <p data-markdown-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+      <turbo-frame id="markdown-demo-result"></turbo-frame>
+    </div>
+  </div>
+</section>
