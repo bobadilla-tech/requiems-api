@@ -544,6 +544,23 @@ class ToolDemosController < ApplicationController
     render "tool_demos/mortgage", locals: { data: data }
   end
 
+  def markdown
+    markdown_text = params[:markdown].to_s.strip
+    return render_demo_error("markdown", t("tools.markdown.demo.error_empty")) if markdown_text.blank?
+
+    result = api_call(endpoint: "/v1/technology/markdown", method: "POST",
+                      params: { markdown: markdown_text, sanitize: true })
+    return render_demo_error("markdown", t("tools.markdown.demo.error_rate_limit")) if result.status_code == 429
+    unless result.status_code == 200
+      return render_demo_error("markdown", t("tools.markdown.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("markdown", t("tools.markdown.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/markdown", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   post "tools/demos/number-base-conversion", to: "tool_demos#number_base_conversion", as: :tool_demo_number_base_conversion
   post "tools/demos/mx-lookup",              to: "tool_demos#mx_lookup",              as: :tool_demo_mx_lookup
   post "tools/demos/mortgage",              to: "tool_demos#mortgage",              as: :tool_demo_mortgage
+  post "tools/demos/markdown",               to: "tool_demos#markdown",               as: :tool_demo_markdown
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

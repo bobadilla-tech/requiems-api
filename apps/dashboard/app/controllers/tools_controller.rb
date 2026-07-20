@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage markdown].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -113,6 +113,11 @@ class ToolsController < ApplicationController
       name: "Mortgage Calculator",
       description: "Calculate monthly payments, total interest, and full amortization schedules for any fixed-rate mortgage.",
       icon_classes: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400"
+    },
+    "markdown" => {
+      name: "Markdown to HTML",
+      description: "Convert Markdown to HTML in a single API call. Optionally sanitize the output to strip unsafe tags and prevent XSS.",
+      icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
     }
   }.freeze
 

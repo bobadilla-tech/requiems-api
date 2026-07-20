@@ -1259,4 +1259,40 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.mortgage.demo.error_no_data"), response.body
   end
+
+  # ── markdown ─────────────────────────────────────────────────────────────────
+  test "markdown renders result on success" do
+    payload = { "html" => "<h1>Hello</h1>\n<p>This is <strong>bold</strong> text.</p>" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/markdown", params: { markdown: "# Hello\n\nThis is **bold** text." }
+    end
+    assert_response :success
+    assert_match(/<h1>Hello<\/h1>/i, response.body)
+  end
+  test "markdown renders error when markdown is blank" do
+    post "/tools/demos/markdown", params: { markdown: "" }
+    assert_response :success
+    assert_match I18n.t("tools.markdown.demo.error_empty"), response.body
+  end
+  test "markdown renders error on 429" do
+    stub_api(429, nil) do
+      post "/tools/demos/markdown", params: { markdown: "# Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.markdown.demo.error_rate_limit"), response.body
+  end
+  test "markdown renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/markdown", params: { markdown: "# Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.markdown.demo.error_generic"), response.body
+  end
+  test "markdown renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/markdown", params: { markdown: "# Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.markdown.demo.error_no_data"), response.body
+  end
 end
