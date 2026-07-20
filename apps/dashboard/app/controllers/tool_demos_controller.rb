@@ -506,6 +506,44 @@ class ToolDemosController < ApplicationController
     render "tool_demos/mx_lookup", locals: { data: data }
   end
 
+  def mortgage
+    principal = params[:principal].to_s.strip
+    rate      = params[:rate].to_s.strip
+    years     = params[:years].to_s.strip
+
+    if principal.blank? || rate.blank? || years.blank?
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_empty"))
+    end
+
+    principal_f = Float(principal, exception: false)
+    rate_f      = Float(rate, exception: false)
+    years_i     = Integer(years, exception: false)
+
+    if principal_f.nil? || principal_f <= 0 ||
+       rate_f.nil? || rate_f <= 0 ||
+       years_i.nil? || years_i < 1 || years_i > 50
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_invalid"))
+    end
+
+    result = api_call(
+      endpoint: "/v1/finance/mortgage",
+      method: "GET",
+      params: { principal: principal_f, rate: rate_f, years: years_i }
+    )
+
+    if result.status_code == 429
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_rate_limit"))
+    end
+    unless result.status_code == 200
+      return render_demo_error("mortgage", t("tools.mortgage.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("mortgage", t("tools.mortgage.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/mortgage", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)
