@@ -84,13 +84,7 @@ class ToolDemosController < ApplicationController
   end
 
   def domain_checker
-    domain = params[:domain].to_s.strip.downcase
-    domain = domain.sub(/\Ahttps?:\/\//, "")  # strip protocol
-    domain = domain.split("/", 2).first.to_s   # strip path
-    domain = domain.split("?", 2).first.to_s   # strip query
-    domain = domain.split("#", 2).first.to_s   # strip fragment
-    domain = domain.split(":", 2).first.to_s   # strip port
-    domain = domain.strip
+    domain = normalize_domain(params[:domain])
     return render_demo_error("domain_checker", t("tools.domain_checker.demo.error_empty")) if domain.blank?
 
     unless domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/)
@@ -476,7 +470,7 @@ class ToolDemosController < ApplicationController
   end
 
   def mx_lookup
-    domain = params[:domain].to_s.strip.downcase
+    domain = normalize_domain(params[:domain])
 
     if domain.blank?
       return render_demo_error("mx_lookup", t("tools.mx_lookup.demo.error_empty"))
@@ -574,6 +568,16 @@ class ToolDemosController < ApplicationController
 
   def valid_domain?(domain)
     domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/i)
+  end
+
+  def normalize_domain(domain)
+    domain = domain.to_s.strip.downcase
+    domain = domain.sub(/\Ahttps?:\/\//, "")  # strip protocol
+    domain = domain.split("/", 2).first.to_s   # strip path
+    domain = domain.split("?", 2).first.to_s   # strip query
+    domain = domain.split("#", 2).first.to_s   # strip fragment
+    domain = domain.split(":", 2).first.to_s   # strip port
+    domain.strip
   end
 
   def api_call(endpoint:, method:, params:)

@@ -12,13 +12,13 @@
       <% [
         { pair:    t("tools.mx_lookup.api_combinations.email_pair"),
           benefit: t("tools.mx_lookup.api_combinations.email_benefit"),
-          href:    "/apis/email-validator" },
+          href:    api_path("email-validate") },
         { pair:    t("tools.mx_lookup.api_combinations.domain_pair"),
           benefit: t("tools.mx_lookup.api_combinations.domain_benefit"),
-          href:    "/apis/domain-info" },
+          href:    api_path("domain-info") },
         { pair:    t("tools.mx_lookup.api_combinations.disposable_pair"),
           benefit: t("tools.mx_lookup.api_combinations.disposable_benefit"),
-          href:    "/apis/disposable-email" },
+          href:    api_path("disposable-email") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
