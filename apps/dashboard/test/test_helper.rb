@@ -27,6 +27,15 @@ module ActiveSupport
 
     fixtures :all
 
+    # ApplicationController#set_locale mutates the global I18n.locale per
+    # request without resetting it. Real Puma requests are safe (i18n's
+    # config is thread-local), but parallel test workers run many test
+    # methods sequentially on the same thread, so a locale change from one
+    # test otherwise leaks into whichever test runs next on that worker.
+    teardown do
+      I18n.locale = I18n.default_locale
+    end
+
     TEST_USER_PASSWORD = "password123!"
 
     def create_user(email: "test@example.com", **attributes)
