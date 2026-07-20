@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -103,6 +103,11 @@ class ToolsController < ApplicationController
       name: "Number Base Conversion",
       description: "Convert integers between binary, octal, decimal, and hexadecimal, with optional 0x/0b/0o prefixes.",
       icon_classes: "bg-slate-50 dark:bg-slate-900/20 text-slate-600 dark:text-slate-400"
+    },
+    "mx-lookup" => {
+      name: "MX Lookup",
+      description: "Look up MX records for any domain — mail server hostnames and priorities, sorted by delivery preference.",
+      icon_classes: "bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400"
     }
   }.freeze
 

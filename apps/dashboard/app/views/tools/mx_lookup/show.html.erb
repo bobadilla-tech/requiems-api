@@ -1,0 +1,19 @@
+<% content_for :title, t("tools.mx_lookup.seo.title") %>
+<% content_for :description, t("tools.mx_lookup.seo.description") %>
+
+<%= render "partials/tools/mx_lookup/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.mx_lookup.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/mx_lookup/what_it_does" %>
+<%= render "partials/tools/mx_lookup/use_cases" %>
+<%= render "partials/tools/mx_lookup/api_combinations" %>
+<%= render "partials/tools/mx_lookup/faq" %>
+<%= render "partials/tools/mx_lookup/cta" %>

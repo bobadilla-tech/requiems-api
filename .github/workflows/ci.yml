@@ -213,9 +213,8 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
           REDIS_URL: redis://localhost:6379
-        run: |
-          bin/rails db:create
-          bin/rails db:schema:load
+          BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
+        run: bin/rails db:prepare
 
       - name: Run tests
         working-directory: apps/dashboard
