@@ -32,3 +32,4 @@ temp/
 tickets/
 apps/dashboard/public/documents/*.pdf
 .claude
+apps/api/dbs/
