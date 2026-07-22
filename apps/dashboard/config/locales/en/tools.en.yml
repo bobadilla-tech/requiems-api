@@ -332,6 +332,26 @@ en:
         One API key unlocks all tools — plus
         50+ more APIs across validation, finance, networking, and more.
       tools_requiems_api: Tools — Requiems API
+      badge: "NEW"
+      banner: "New tools added"
+      eyebrow: "requiems.api/tools"
+      categories_label: "Categories"
+      categories_nav_label: "Tool categories"
+      title: "Interactive API Tools"
+      subtitle: "Try every API live — no account required. See real output from real endpoints."
+      try_live: "Try it live"
+      cta:
+        heading: "One key. Every API."
+        body: "One API key unlocks all tools plus 50+ APIs."
+        get_key: "Get your free API key"
+        browse_apis: "Browse all APIs"
+      categories:
+        validation: "Validation"
+        text: "Text & Language"
+        network: "Networking & Internet"
+        finance: "Finance"
+        entertainment: "Entertainment"
+        dev: "Developer Tools"
     phone_validator:
       api_combinations:
         domain_checker_benefit:

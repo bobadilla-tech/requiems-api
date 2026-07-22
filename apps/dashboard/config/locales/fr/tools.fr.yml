@@ -223,6 +223,26 @@ fr:
       interactive_api_tools: Outils API interactifs
       one_api_key_unlocks_all_tools_plus_50: Une seule clé API débloque tous les outils, ainsi que plus de 50 API supplémentaires dans les domaines de la validation, de la finance, des réseaux et bien plus encore.
       tools_requiems_api: Outils — Requiems API
+      badge: "NOUVEAU"
+      banner: "Nouveaux outils disponibles"
+      eyebrow: "requiems.api/tools"
+      categories_label: "Catégories"
+      categories_nav_label: "Catégories d'outils"
+      title: "Outils API Interactifs"
+      subtitle: "Testez chaque API en direct — sans compte requis. Résultats réels depuis des endpoints réels."
+      try_live: "Essayer en direct"
+      cta:
+        heading: "Une clé. Toutes les APIs."
+        body: "Une clé API déverrouille tous les outils et plus de 50 APIs."
+        get_key: "Obtenir votre clé API gratuite"
+        browse_apis: "Parcourir toutes les APIs"
+      categories:
+        validation: "Validation"
+        text: "Texte et Langues"
+        network: "Réseaux et Internet"
+        finance: "Finance"
+        entertainment: "Divertissement"
+        dev: "Outils de Développement"
     phone_validator:
       api_combinations:
         domain_checker_benefit: Vérifiez simultanément le numéro de téléphone et la réputation du domaine.

@@ -121,8 +121,48 @@ class ToolsController < ApplicationController
     }
   }.freeze
 
+  CATEGORIES = [
+    {
+      key: "validation",
+      color: "--c-validation",
+      tools: %w[email-validator email-normalizer phone-validator domain-checker]
+    },
+    {
+      key: "text",
+      color: "--c-text",
+      tools: %w[sentiment-analysis profanity-filter thesaurus spell-check]
+    },
+    {
+      key: "network",
+      color: "--c-network",
+      tools: %w[useragent vpn-detection timezone mx-lookup]
+    },
+    {
+      key: "finance",
+      color: "--c-finance",
+      tools: %w[bin-lookup inflation mortgage]
+    },
+    {
+      key: "entertainment",
+      color: "--c-entertainment",
+      tools: %w[quotes trivia sudoku]
+    },
+    {
+      key: "dev",
+      color: "--c-dev",
+      tools: %w[unit-conversion qr-code random-user number-base-conversion markdown]
+    }
+  ].freeze
+
   def index
     @tools = SUPPORTED_TOOLS.map { |id| { id: id }.merge(TOOLS_METADATA[id]) }
+    @categories = CATEGORIES.map do |cat|
+      {
+        key: cat[:key],
+        color: cat[:color],
+        tools: cat[:tools].filter_map { |id| TOOLS_METADATA[id]&.merge(id: id) }
+      }
+    end
   end
 
   def show
