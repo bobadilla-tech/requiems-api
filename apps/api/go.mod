@@ -54,7 +54,7 @@ require (
 	github.com/jaswdr/faker/v2 v2.9.1
 	github.com/likexian/whois v1.15.7
 	github.com/likexian/whois-parser v1.24.21
-	github.com/medama-io/go-useragent v1.2.3
+	github.com/medama-io/go-useragent v1.2.4
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/pemistahl/lingua-go v1.4.0
 	github.com/ringsaturn/tzf v1.2.3
