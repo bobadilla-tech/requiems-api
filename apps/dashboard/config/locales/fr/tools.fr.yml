@@ -228,11 +228,6 @@ fr:
       title: "Outils API Interactifs"
       subtitle: "Testez chaque API en direct — sans compte requis. Résultats réels depuis des endpoints réels."
       try_live: "Essayer en direct"
-      cta:
-        heading: "Une clé. Toutes les APIs."
-        body: "Une clé API déverrouille tous les outils et plus de 50 APIs."
-        get_key: "Obtenir votre clé API gratuite"
-        browse_apis: "Parcourir toutes les APIs"
       categories:
         validation: "Validation"
         text: "Texte et Langues"
