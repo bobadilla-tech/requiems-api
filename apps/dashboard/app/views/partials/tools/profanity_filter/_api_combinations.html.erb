@@ -12,13 +12,13 @@
       <% [
         { pair:    t("tools.profanity_filter.api_combinations.sentiment_pair"),
           benefit: t("tools.profanity_filter.api_combinations.sentiment_benefit"),
-          href:    "/apis/sentiment" },
+          href:    api_path("sentiment") },
         { pair:    t("tools.profanity_filter.api_combinations.email_pair"),
           benefit: t("tools.profanity_filter.api_combinations.email_benefit"),
-          href:    "/apis/email-validate" },
+          href:    api_path("email-validate") },
         { pair:    t("tools.profanity_filter.api_combinations.domain_pair"),
           benefit: t("tools.profanity_filter.api_combinations.domain_benefit"),
-          href:    "/apis/domain-checker" },
+          href:    api_path("domain-info") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">

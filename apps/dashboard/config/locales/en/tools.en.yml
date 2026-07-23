@@ -1796,9 +1796,9 @@ en:
         bin_pair: VPN Detection + BIN Lookup
         bin_benefit: Cross-reference IP threat signals with the card's issuing country
           to catch mismatched, high-risk payment attempts.
-        identity_pair: VPN Detection + Identity Risk
-        identity_benefit: Layer IP-based threat scoring with broader identity risk
-          signals for stronger account-takeover defense.
+        identity_pair: VPN Detection + ASN Lookup
+        identity_benefit: Layer IP-based threat scoring with ASN, ISP, and hosting-provider
+          data to flag datacenter and proxy traffic with more confidence.
         email_pair: VPN Detection + Email Validator
         email_benefit: Combine anonymized-IP detection with disposable email checks
           to catch fake account creation at signup.

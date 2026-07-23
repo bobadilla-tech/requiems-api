@@ -13,15 +13,15 @@
         { pair:    t("tools.inflation.api_combinations.bin_pair"),
           benefit: t("tools.inflation.api_combinations.bin_benefit"),
           outcome: t("tools.inflation.api_combinations.bin_outcome"),
-          href:    "/apis/bin-lookup" },
+          href:    api_path("bin-lookup") },
         { pair:    t("tools.inflation.api_combinations.currency_pair"),
           benefit: t("tools.inflation.api_combinations.currency_benefit"),
           outcome: t("tools.inflation.api_combinations.currency_outcome"),
-          href:    "/apis/currency" },
+          href:    api_path("exchange-rate") },
         { pair:    t("tools.inflation.api_combinations.ip_pair"),
           benefit: t("tools.inflation.api_combinations.ip_benefit"),
           outcome: t("tools.inflation.api_combinations.ip_outcome"),
-          href:    "/apis/identity-risk" },
+          href:    api_path("ip-info") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-2 leading-snug"><%= c[:pair] %></div>

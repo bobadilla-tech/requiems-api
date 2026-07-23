@@ -1440,8 +1440,8 @@ fr:
         subheading: "VPN & Proxy Detection fonctionne encore mieux associée à d'autres API Requiems."
         bin_pair: "Détection VPN + Recherche de BIN"
         bin_benefit: "Croisez les signaux de menace de l'IP avec le pays émetteur de la carte pour détecter les tentatives de paiement incohérentes et à haut risque."
-        identity_pair: "Détection VPN + Identity Risk"
-        identity_benefit: "Combinez le score de menace basé sur l'IP avec des signaux de risque d'identité plus larges pour une défense renforcée contre le piratage de compte."
+        identity_pair: "Détection VPN + Recherche ASN"
+        identity_benefit: "Combinez le score de menace basé sur l'IP avec des données ASN, FAI et fournisseur d'hébergement pour repérer le trafic datacenter et proxy avec plus de confiance."
         email_pair: "Détection VPN + Validateur d'e-mail"
         email_benefit: "Combinez la détection d'IP anonymisées avec la vérification des e-mails jetables pour repérer la création de faux comptes à l'inscription."
       faq:

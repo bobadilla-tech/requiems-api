@@ -12,13 +12,13 @@
       <% [
         { pair:    t("tools.thesaurus.api_combinations.spellcheck_pair"),
           benefit: t("tools.thesaurus.api_combinations.spellcheck_benefit"),
-          href:    "/apis/spell-check" },
+          href:    api_path("spell-check") },
         { pair:    t("tools.thesaurus.api_combinations.sentiment_pair"),
           benefit: t("tools.thesaurus.api_combinations.sentiment_benefit"),
-          href:    "/apis/sentiment" },
+          href:    api_path("sentiment") },
         { pair:    t("tools.thesaurus.api_combinations.profanity_pair"),
           benefit: t("tools.thesaurus.api_combinations.profanity_benefit"),
-          href:    "/apis/profanity" },
+          href:    api_path("profanity") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">

@@ -12,13 +12,13 @@
       <% [
         { pair:    t("tools.vpn_detection.api_combinations.bin_pair"),
           benefit: t("tools.vpn_detection.api_combinations.bin_benefit"),
-          href:    "/apis/bin-lookup" },
+          href:    api_path("bin-lookup") },
         { pair:    t("tools.vpn_detection.api_combinations.identity_pair"),
           benefit: t("tools.vpn_detection.api_combinations.identity_benefit"),
-          href:    "/apis/identity-risk" },
+          href:    api_path("ip-asn") },
         { pair:    t("tools.vpn_detection.api_combinations.email_pair"),
           benefit: t("tools.vpn_detection.api_combinations.email_benefit"),
-          href:    "/apis/email-validate" },
+          href:    api_path("email-validate") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">

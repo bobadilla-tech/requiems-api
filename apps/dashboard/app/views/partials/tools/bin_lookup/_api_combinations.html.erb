@@ -12,13 +12,13 @@
       <% [
         { pair:    t("tools.bin_lookup.api_combinations.ip_pair"),
           benefit: t("tools.bin_lookup.api_combinations.ip_benefit"),
-          href:    "/apis/identity-risk" },
+          href:    api_path("ip-info") },
         { pair:    t("tools.bin_lookup.api_combinations.iban_pair"),
           benefit: t("tools.bin_lookup.api_combinations.iban_benefit"),
-          href:    "/apis/iban" },
+          href:    api_path("iban") },
         { pair:    t("tools.bin_lookup.api_combinations.email_pair"),
           benefit: t("tools.bin_lookup.api_combinations.email_benefit"),
-          href:    "/apis/email-validate" },
+          href:    api_path("email-validate") },
       ].each do |c| %>
         <a href="<%= c[:href] %>" class="block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-md transition-shadow no-underline">
           <div class="font-semibold text-gray-900 dark:text-white mb-3 leading-snug">
