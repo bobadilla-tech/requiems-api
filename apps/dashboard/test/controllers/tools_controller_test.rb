@@ -7,7 +7,7 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     get "/en/tools"
     assert_response :success
     assert_select "h1"
-    assert_select ".tools-grid"
+    assert_select "section[id^='tools-']"
   end
 
   test "email validator tool page renders successfully" do
