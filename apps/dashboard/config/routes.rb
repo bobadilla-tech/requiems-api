@@ -40,6 +40,12 @@ Rails.application.routes.draw do
   post "tools/demos/mx-lookup",              to: "tool_demos#mx_lookup",              as: :tool_demo_mx_lookup
   post "tools/demos/mortgage",              to: "tool_demos#mortgage",              as: :tool_demo_mortgage
   post "tools/demos/markdown",               to: "tool_demos#markdown",               as: :tool_demo_markdown
+  post "tools/demos/barcode",                to: "tool_demos#barcode",                as: :tool_demo_barcode
+  post "tools/demos/advice",                 to: "tool_demos#advice",                 as: :tool_demo_advice
+  post "tools/demos/base64",                 to: "tool_demos#base64",                 as: :tool_demo_base64
+  post "tools/demos/whois",                  to: "tool_demos#whois",                  as: :tool_demo_whois
+  post "tools/demos/lorem-ipsum",            to: "tool_demos#lorem_ipsum",            as: :tool_demo_lorem_ipsum
+  post "tools/demos/working-days",           to: "tool_demos#working_days",           as: :tool_demo_working_days
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

@@ -1,0 +1,25 @@
+<% content_for :title, t("tools.base64.seo.title") %>
+<% content_for :description, t("tools.base64.seo.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
+<%= render "partials/tools/base64/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.base64.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/base64/what_it_does" %>
+<%= render "partials/tools/base64/use_cases" %>
+<%= render "partials/tools/base64/api_combinations" %>
+<%= render "partials/tools/base64/faq" %>
+<%= render "partials/tools/base64/cta" %>

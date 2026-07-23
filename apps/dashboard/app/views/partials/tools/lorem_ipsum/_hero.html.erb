@@ -1,0 +1,84 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.lorem_ipsum.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.lorem_ipsum.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.lorem_ipsum.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.lorem_ipsum.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("lorem-ipsum"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="lorem-ipsum-demo"
+         data-lorem-ipsum-demo-error-invalid-value="<%= t('tools.lorem_ipsum.demo.error_invalid') %>">
+
+      <form data-action="turbo:submit-start->lorem-ipsum-demo#onSubmitStart turbo:submit-end->lorem-ipsum-demo#onSubmitEnd"
+            action="<%= tool_demo_lorem_ipsum_path %>"
+            method="post"
+            data-turbo-frame="lorem_ipsum-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+          <div>
+            <label for="lorem-ipsum-demo-paragraphs" class="sr-only"><%= t("tools.lorem_ipsum.hero.label_paragraphs") %></label>
+            <input
+              id="lorem-ipsum-demo-paragraphs"
+              type="number"
+              name="paragraphs"
+              min="1"
+              max="20"
+              step="1"
+              value="1"
+              data-lorem-ipsum-demo-target="inputParagraphs"
+              placeholder="<%= t('tools.lorem_ipsum.hero.placeholder_paragraphs') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+          <div>
+            <label for="lorem-ipsum-demo-sentences" class="sr-only"><%= t("tools.lorem_ipsum.hero.label_sentences") %></label>
+            <input
+              id="lorem-ipsum-demo-sentences"
+              type="number"
+              name="sentences"
+              min="1"
+              max="20"
+              step="1"
+              value="5"
+              data-lorem-ipsum-demo-target="inputSentences"
+              placeholder="<%= t('tools.lorem_ipsum.hero.placeholder_sentences') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.lorem_ipsum.hero.no_account") %></p>
+          <%= render "partials/shared/submit_button", text: t("tools.lorem_ipsum.hero.submit"), controller: "lorem-ipsum-demo" %>
+        </div>
+
+        <p data-lorem-ipsum-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="lorem_ipsum-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

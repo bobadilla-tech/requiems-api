@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage markdown].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage markdown barcode advice base64 whois lorem-ipsum working-days].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -118,6 +118,36 @@ class ToolsController < ApplicationController
       name: "Markdown to HTML",
       description: "Convert Markdown to HTML in a single API call. Optionally sanitize the output to strip unsafe tags and prevent XSS.",
       icon_classes: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+    },
+    "barcode" => {
+      name: "Barcode Generator",
+      description: "Generate Code 128, Code 93, Code 39, EAN-8, and EAN-13 barcodes as a raw PNG or base64 JSON in a single API call.",
+      icon_classes: "bg-fuchsia-50 dark:bg-fuchsia-900/20 text-fuchsia-600 dark:text-fuchsia-400"
+    },
+    "advice" => {
+      name: "Random Advice",
+      description: "Fetch a random piece of advice for daily motivation apps, chatbots, or content placeholders.",
+      icon_classes: "bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400"
+    },
+    "base64" => {
+      name: "Base64 Encode / Decode",
+      description: "Encode and decode Base64 strings, with standard and URL-safe (base64url) variants, in a single API call.",
+      icon_classes: "bg-lime-50 dark:bg-lime-900/20 text-lime-600 dark:text-lime-400"
+    },
+    "whois" => {
+      name: "WHOIS Lookup",
+      description: "Look up domain registrar, name servers, status flags, and registration dates with a single WHOIS query.",
+      icon_classes: "bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400"
+    },
+    "lorem-ipsum" => {
+      name: "Lorem Ipsum Generator",
+      description: "Generate Lorem Ipsum placeholder text with configurable paragraphs and sentences per paragraph.",
+      icon_classes: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
+    },
+    "working-days" => {
+      name: "Working Days Calculator",
+      description: "Calculate business days between two dates, with optional country and subdivision holiday adjustments.",
+      icon_classes: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
     }
   }.freeze
 
@@ -137,7 +167,7 @@ class ToolsController < ApplicationController
     {
       key: "network",
       icon_category: "networking",
-      tools: %w[useragent vpn-detection timezone mx-lookup]
+      tools: %w[useragent vpn-detection timezone mx-lookup whois]
     },
     {
       key: "finance",
@@ -147,12 +177,12 @@ class ToolsController < ApplicationController
     {
       key: "entertainment",
       icon_category: "entertainment",
-      tools: %w[quotes trivia sudoku]
+      tools: %w[quotes trivia sudoku advice]
     },
     {
       key: "dev",
       icon_category: "technology",
-      tools: %w[unit-conversion qr-code random-user number-base-conversion markdown]
+      tools: %w[unit-conversion qr-code random-user number-base-conversion markdown barcode base64 lorem-ipsum working-days]
     }
   ].freeze
 

@@ -1,0 +1,52 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.advice.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.advice.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.advice.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.advice.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("advice"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="advice-demo"
+         data-advice-demo-error-network-value="<%= t('tools.advice.demo.error_generic') %>">
+
+      <form data-action="turbo:submit-start->advice-demo#onSubmitStart turbo:submit-end->advice-demo#onSubmitEnd"
+            action="<%= tool_demo_advice_path %>"
+            method="post"
+            data-turbo-frame="advice-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+        <%= render "partials/shared/submit_button",
+              text: t("tools.advice.hero.submit"),
+              controller: "advice-demo" %>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500"><%= t("tools.advice.hero.no_account") %></p>
+
+        <p data-advice-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="advice-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

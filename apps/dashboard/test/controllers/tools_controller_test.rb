@@ -130,4 +130,40 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='markdown-demo']"
   end
+
+  test "barcode tool page renders successfully" do
+    get "/en/tools/barcode"
+    assert_response :success
+    assert_select "[data-controller='barcode-demo']"
+  end
+
+  test "advice tool page renders successfully" do
+    get "/en/tools/advice"
+    assert_response :success
+    assert_select "[data-controller='advice-demo']"
+  end
+
+  test "base64 tool page renders successfully" do
+    get "/en/tools/base64"
+    assert_response :success
+    assert_select "[data-controller='base64-demo']"
+  end
+
+  test "whois tool page renders successfully" do
+    get "/en/tools/whois"
+    assert_response :success
+    assert_select "[data-controller='whois-demo']"
+  end
+
+  test "lorem ipsum tool page renders successfully" do
+    get "/en/tools/lorem-ipsum"
+    assert_response :success
+    assert_select "[data-controller='lorem-ipsum-demo']"
+  end
+
+  test "working days tool page renders successfully" do
+    get "/en/tools/working-days"
+    assert_response :success
+    assert_select "[data-controller='working-days-demo']"
+  end
 end

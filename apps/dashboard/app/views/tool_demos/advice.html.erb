@@ -1,0 +1,15 @@
+<turbo-frame id="advice-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">
+        <%= t("tools.advice.demo.result_heading") %>
+      </span>
+      <span class="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+        #<%= data["id"] %>
+      </span>
+    </div>
+    <div class="px-4 py-4">
+      <p class="text-base text-gray-800 dark:text-gray-200 leading-relaxed italic">&ldquo;<%= data["advice"] %>&rdquo;</p>
+    </div>
+  </div>
+</turbo-frame>

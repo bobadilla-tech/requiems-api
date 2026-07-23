@@ -1,0 +1,88 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.working_days.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.working_days.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.working_days.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.working_days.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("working-days"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="working-days-demo"
+         data-working-days-demo-error-empty-value="<%= t('tools.working_days.demo.error_empty') %>"
+         data-working-days-demo-error-invalid-value="<%= t('tools.working_days.demo.error_invalid') %>">
+
+      <form data-action="turbo:submit-start->working-days-demo#onSubmitStart turbo:submit-end->working-days-demo#onSubmitEnd"
+            action="<%= tool_demo_working_days_path %>"
+            method="post"
+            data-turbo-frame="working_days-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+          <div>
+            <label for="working-days-demo-from" class="sr-only"><%= t("tools.working_days.hero.label_from") %></label>
+            <input
+              id="working-days-demo-from"
+              type="date"
+              name="from"
+              data-working-days-demo-target="inputFrom"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+          <div>
+            <label for="working-days-demo-to" class="sr-only"><%= t("tools.working_days.hero.label_to") %></label>
+            <input
+              id="working-days-demo-to"
+              type="date"
+              name="to"
+              data-working-days-demo-target="inputTo"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+            >
+          </div>
+          <div>
+            <label for="working-days-demo-country" class="sr-only"><%= t("tools.working_days.hero.label_country") %></label>
+            <input
+              id="working-days-demo-country"
+              type="text"
+              name="country"
+              maxlength="2"
+              data-working-days-demo-target="inputCountry"
+              placeholder="<%= t('tools.working_days.hero.placeholder_country') %>"
+              autocomplete="off"
+              class="block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm uppercase"
+            >
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <p class="text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.working_days.hero.no_account") %></p>
+          <%= render "partials/shared/submit_button", text: t("tools.working_days.hero.submit"), controller: "working-days-demo" %>
+        </div>
+
+        <p data-working-days-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="working_days-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>

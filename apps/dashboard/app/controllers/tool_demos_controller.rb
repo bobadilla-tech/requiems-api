@@ -555,6 +555,158 @@ class ToolDemosController < ApplicationController
     render "tool_demos/markdown", locals: { data: data }
   end
 
+  def barcode
+    data = params[:data].to_s.strip
+    type = params[:type].to_s.strip
+
+    if data.blank? || type.blank?
+      return render_demo_error("barcode", t("tools.barcode.demo.error_empty"))
+    end
+
+    unless %w[code128 code93 code39 ean8 ean13].include?(type)
+      return render_demo_error("barcode", t("tools.barcode.demo.error_invalid_type"))
+    end
+
+    result = api_call(endpoint: "/v1/technology/barcode/base64", method: "GET",
+                      params: { data: data, type: type })
+
+    if result.status_code == 429
+      return render_demo_error("barcode", t("tools.barcode.demo.error_rate_limit"))
+    end
+
+    unless result.status_code == 200
+      msg = result.data&.dig("data", "message") ||
+            result.data&.dig("message") ||
+            t("tools.barcode.demo.error_generic")
+      return render_demo_error("barcode", msg)
+    end
+
+    data_out = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("barcode", t("tools.barcode.demo.error_no_data")) if data_out.nil?
+
+    render "tool_demos/barcode", locals: { data: data_out }
+  end
+
+  def advice
+    result = api_call(endpoint: "/v1/entertainment/advice", method: "GET", params: {})
+
+    return render_demo_error("advice", t("tools.advice.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("advice", t("tools.advice.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("advice", t("tools.advice.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/advice", locals: { data: data }
+  end
+
+  def base64
+    mode    = params[:mode].to_s.strip
+    value   = params[:value].to_s.strip
+    variant = params[:variant].to_s.strip
+    variant = "standard" unless %w[standard url].include?(variant)
+
+    return render_demo_error("base64", t("tools.base64.demo.error_empty")) if value.blank?
+
+    unless %w[encode decode].include?(mode)
+      return render_demo_error("base64", t("tools.base64.demo.error_invalid_mode"))
+    end
+
+    endpoint = mode == "encode" ? "/v1/technology/base64/encode" : "/v1/technology/base64/decode"
+    result = api_call(endpoint: endpoint, method: "POST", params: { value: value, variant: variant })
+
+    return render_demo_error("base64", t("tools.base64.demo.error_rate_limit")) if result.status_code == 429
+
+    if result.status_code == 422
+      return render_demo_error("base64", t("tools.base64.demo.error_invalid_base64"))
+    end
+
+    unless result.status_code == 200
+      return render_demo_error("base64", t("tools.base64.demo.error_generic"))
+    end
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("base64", t("tools.base64.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/base64", locals: { data: data, mode: mode }
+  end
+
+  def whois
+    domain = normalize_domain(params[:domain])
+    return render_demo_error("whois", t("tools.whois.demo.error_empty")) if domain.blank?
+
+    unless valid_domain?(domain)
+      return render_demo_error("whois", t("tools.whois.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/networking/whois/#{domain}", method: "GET", params: {})
+
+    return render_demo_error("whois", t("tools.whois.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("whois", t("tools.whois.demo.error_not_found")) if result.status_code == 404
+    return render_demo_error("whois", t("tools.whois.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("whois", t("tools.whois.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/whois", locals: { data: data }
+  end
+
+  def lorem_ipsum
+    paragraphs = params[:paragraphs].to_s.strip
+    sentences  = params[:sentences].to_s.strip
+
+    paragraphs_i = paragraphs.blank? ? 1 : Integer(paragraphs, exception: false)
+    sentences_i  = sentences.blank? ? 5 : Integer(sentences, exception: false)
+
+    if paragraphs_i.nil? || !paragraphs_i.between?(1, 20) ||
+       sentences_i.nil? || !sentences_i.between?(1, 20)
+      return render_demo_error("lorem_ipsum", t("tools.lorem_ipsum.demo.error_invalid"))
+    end
+
+    result = api_call(endpoint: "/v1/text/lorem", method: "GET",
+                      params: { paragraphs: paragraphs_i, sentences: sentences_i })
+
+    return render_demo_error("lorem_ipsum", t("tools.lorem_ipsum.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("lorem_ipsum", t("tools.lorem_ipsum.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("lorem_ipsum", t("tools.lorem_ipsum.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/lorem_ipsum", locals: { data: data }
+  end
+
+  def working_days
+    from = params[:from].to_s.strip
+    to   = params[:to].to_s.strip
+    country = params[:country].to_s.strip.upcase
+    subdivision = params[:subdivision].to_s.strip.upcase
+
+    if from.blank? || to.blank?
+      return render_demo_error("working_days", t("tools.working_days.demo.error_empty"))
+    end
+
+    from_date = parse_iso_date(from)
+    to_date   = parse_iso_date(to)
+
+    if from_date.nil? || to_date.nil? || to_date < from_date
+      return render_demo_error("working_days", t("tools.working_days.demo.error_invalid"))
+    end
+
+    query = { from: from, to: to }
+    query[:country] = country if country.present?
+    query[:subdivision] = subdivision if subdivision.present?
+
+    result = api_call(endpoint: "/v1/places/working-days", method: "GET", params: query)
+
+    return render_demo_error("working_days", t("tools.working_days.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("working_days", t("tools.working_days.demo.error_invalid")) if result.status_code == 400
+    return render_demo_error("working_days", t("tools.working_days.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("working_days", t("tools.working_days.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/working_days", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)
@@ -568,6 +720,12 @@ class ToolDemosController < ApplicationController
 
   def valid_domain?(domain)
     domain.match?(/\A[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?)+\z/i)
+  end
+
+  def parse_iso_date(str)
+    Date.iso8601(str)
+  rescue ArgumentError, TypeError
+    nil
   end
 
   def normalize_domain(domain)

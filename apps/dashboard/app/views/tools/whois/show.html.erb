@@ -1,0 +1,25 @@
+<% content_for :title, t("tools.whois.seo.title") %>
+<% content_for :description, t("tools.whois.seo.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
+<%= render "partials/tools/whois/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.whois.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/whois/what_it_does" %>
+<%= render "partials/tools/whois/use_cases" %>
+<%= render "partials/tools/whois/api_combinations" %>
+<%= render "partials/tools/whois/faq" %>
+<%= render "partials/tools/whois/cta" %>

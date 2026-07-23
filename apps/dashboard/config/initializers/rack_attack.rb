@@ -20,6 +20,23 @@ class Rack::Attack
     end
   end
 
+  # Throttle tool demo requests for anonymous users: 5 req/min
+  throttle("tool_demos/ip", limit: 5, period: 1.minute) do |req|
+    if req.path.start_with?("/tools/demos/") && req.post?
+      # Only throttle anonymous users — authenticated users have a separate throttle
+      req.ip unless req.env["warden"]&.user
+    end
+  end
+
+  # Throttle tool demo requests for free authenticated users: 15 req/min
+  # Paying users (any plan other than free) are not rate limited on tool demos
+  throttle("tool_demos/user", limit: 15, period: 1.minute) do |req|
+    if req.path.start_with?("/tools/demos/") && req.post?
+      user = req.env["warden"]&.user
+      "user:#{user.id}" if user && user.current_plan == "free"
+    end
+  end
+
   # Throttle login attempts by IP address
   throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
     if req.path == "/users/sign_in" && req.post?
@@ -51,7 +68,7 @@ class Rack::Attack
       "Content-Type" => "application/json"
     }
 
-    message = if match_name == "api_proxy/ip"
+    message = if match_name == "api_proxy/ip" || match_name == "tool_demos/ip"
       "You're testing too fast. Create a free account to get a higher limit."
     else
       "Too many requests. Please slow down and try again shortly."

@@ -1,0 +1,25 @@
+<% content_for :title, t("tools.barcode.seo.title") %>
+<% content_for :description, t("tools.barcode.seo.description") %>
+<% content_for :head do %>
+  <script type="application/ld+json"><%= software_application_json_ld(
+    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
+    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    url: tool_path(@tool_id)
+  ).html_safe %></script>
+<% end %>
+<%= render "partials/tools/barcode/hero" %>
+<%= render "partials/shared/logo_marquee",
+      logos: [
+        { file: "companies/bobadilla-tech.png",   alt: "Bobadilla Tech"   },
+        { file: "companies/compile-strength.png", alt: "Compile Strength" },
+        { file: "companies/flyver.jpeg",           alt: "Flyver"           },
+        { file: "companies/korealexa.png",         alt: "Korealexa"        },
+        { file: "companies/shareweave.jpeg",       alt: "Shareweave"       },
+      ],
+      label: t("tools.barcode.logo_marquee.trusted_by"),
+      speed: "34s" %>
+<%= render "partials/tools/barcode/what_it_does" %>
+<%= render "partials/tools/barcode/use_cases" %>
+<%= render "partials/tools/barcode/api_combinations" %>
+<%= render "partials/tools/barcode/faq" %>
+<%= render "partials/tools/barcode/cta" %>

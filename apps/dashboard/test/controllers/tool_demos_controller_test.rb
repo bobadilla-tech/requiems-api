@@ -1295,4 +1295,318 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match I18n.t("tools.markdown.demo.error_no_data"), response.body
   end
+
+  # ── barcode ──────────────────────────────────────────────────────────────────
+
+  test "barcode renders result on success" do
+    payload = { "image" => "iVBORw0KGgoAAAANSUhEUgAA", "type" => "code128", "width" => 300, "height" => 100 }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/barcode", params: { data: "123456789", type: "code128" }
+    end
+    assert_response :success
+    assert_match "iVBORw0KGgoAAAANSUhEUgAA", response.body
+  end
+
+  test "barcode renders error when data is blank" do
+    post "/tools/demos/barcode", params: { data: "", type: "code128" }
+    assert_response :success
+    assert_match I18n.t("tools.barcode.demo.error_empty"), response.body
+  end
+
+  test "barcode renders error when type is invalid" do
+    post "/tools/demos/barcode", params: { data: "123456789", type: "not-a-format" }
+    assert_response :success
+    assert_match I18n.t("tools.barcode.demo.error_invalid_type"), response.body
+  end
+
+  test "barcode renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/barcode", params: { data: "123456789", type: "code128" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.barcode.demo.error_rate_limit"), response.body
+  end
+
+  test "barcode renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/barcode", params: { data: "123456789", type: "code128" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.barcode.demo.error_generic"), response.body
+  end
+
+  test "barcode renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/barcode", params: { data: "123456789", type: "code128" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.barcode.demo.error_no_data"), response.body
+  end
+
+  # ── advice ───────────────────────────────────────────────────────────────────
+
+  test "advice renders result on success" do
+    payload = { "id" => 42, "advice" => "Don't compare yourself to others." }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/advice"
+    end
+    assert_response :success
+    assert_match "Don't compare yourself to others.", response.body
+  end
+
+  test "advice renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/advice"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.advice.demo.error_rate_limit"), response.body
+  end
+
+  test "advice renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/advice"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.advice.demo.error_generic"), response.body
+  end
+
+  test "advice renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/advice"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.advice.demo.error_no_data"), response.body
+  end
+
+  # ── base64 ───────────────────────────────────────────────────────────────────
+
+  test "base64 renders result on success for encode" do
+    payload = { "result" => "SGVsbG8sIHdvcmxkIQ==" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/base64", params: { mode: "encode", value: "Hello, world!" }
+    end
+    assert_response :success
+    assert_match "SGVsbG8sIHdvcmxkIQ==", response.body
+  end
+
+  test "base64 renders result on success for decode" do
+    payload = { "result" => "Hello, world!" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/base64", params: { mode: "decode", value: "SGVsbG8sIHdvcmxkIQ==" }
+    end
+    assert_response :success
+    assert_match "Hello, world!", response.body
+  end
+
+  test "base64 renders error when value is blank" do
+    post "/tools/demos/base64", params: { mode: "encode", value: "" }
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_empty"), response.body
+  end
+
+  test "base64 renders error when mode is invalid" do
+    post "/tools/demos/base64", params: { mode: "reverse", value: "Hello" }
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_invalid_mode"), response.body
+  end
+
+  test "base64 renders error on 422 invalid base64" do
+    stub_api(422, nil) do
+      post "/tools/demos/base64", params: { mode: "decode", value: "not-valid-base64!!" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_invalid_base64"), response.body
+  end
+
+  test "base64 renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/base64", params: { mode: "encode", value: "Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_rate_limit"), response.body
+  end
+
+  test "base64 renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/base64", params: { mode: "encode", value: "Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_generic"), response.body
+  end
+
+  test "base64 renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/base64", params: { mode: "encode", value: "Hello" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.base64.demo.error_no_data"), response.body
+  end
+
+  # ── whois ────────────────────────────────────────────────────────────────────
+
+  test "whois renders result on success" do
+    payload = { "domain" => "example.com", "registrar" => "RESERVED-Internet Assigned Numbers Authority",
+                "name_servers" => [ "A.IANA-SERVERS.NET" ], "status" => [ "clientTransferProhibited" ],
+                "created_date" => "1995-08-14T04:00:00Z", "updated_date" => "2023-08-14T07:01:38Z",
+                "expiry_date" => "2024-08-13T04:00:00Z", "dnssec" => true }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/whois", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match "RESERVED-Internet Assigned Numbers Authority", response.body
+  end
+
+  test "whois renders error when domain is blank" do
+    post "/tools/demos/whois", params: { domain: "" }
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_empty"), response.body
+  end
+
+  test "whois renders error when domain has invalid format" do
+    post "/tools/demos/whois", params: { domain: "not a domain" }
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_invalid"), response.body
+  end
+
+  test "whois renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/whois", params: { domain: "doesnotexist.example" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_not_found"), response.body
+  end
+
+  test "whois renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/whois", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_rate_limit"), response.body
+  end
+
+  test "whois renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/whois", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_generic"), response.body
+  end
+
+  test "whois renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/whois", params: { domain: "example.com" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.whois.demo.error_no_data"), response.body
+  end
+
+  # ── lorem_ipsum ──────────────────────────────────────────────────────────────
+
+  test "lorem_ipsum renders result on success" do
+    payload = { "text" => "Lorem ipsum dolor sit amet.", "paragraphs" => 1, "word_count" => 5 }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/lorem-ipsum", params: { paragraphs: "1", sentences: "5" }
+    end
+    assert_response :success
+    assert_match "Lorem ipsum dolor sit amet.", response.body
+  end
+
+  test "lorem_ipsum uses defaults when params are blank" do
+    payload = { "text" => "Lorem ipsum dolor sit amet.", "paragraphs" => 1, "word_count" => 5 }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/lorem-ipsum", params: {}
+    end
+    assert_response :success
+    assert_match "Lorem ipsum dolor sit amet.", response.body
+  end
+
+  test "lorem_ipsum renders error when paragraphs is out of range" do
+    post "/tools/demos/lorem-ipsum", params: { paragraphs: "21", sentences: "5" }
+    assert_response :success
+    assert_match I18n.t("tools.lorem_ipsum.demo.error_invalid"), response.body
+  end
+
+  test "lorem_ipsum renders error when sentences is out of range" do
+    post "/tools/demos/lorem-ipsum", params: { paragraphs: "1", sentences: "0" }
+    assert_response :success
+    assert_match I18n.t("tools.lorem_ipsum.demo.error_invalid"), response.body
+  end
+
+  test "lorem_ipsum renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/lorem-ipsum", params: { paragraphs: "1", sentences: "5" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.lorem_ipsum.demo.error_rate_limit"), response.body
+  end
+
+  test "lorem_ipsum renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/lorem-ipsum", params: { paragraphs: "1", sentences: "5" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.lorem_ipsum.demo.error_generic"), response.body
+  end
+
+  test "lorem_ipsum renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/lorem-ipsum", params: { paragraphs: "1", sentences: "5" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.lorem_ipsum.demo.error_no_data"), response.body
+  end
+
+  # ── working_days ─────────────────────────────────────────────────────────────
+
+  test "working_days renders result on success" do
+    payload = { "working_days" => 4, "from" => "2024-02-23", "to" => "2024-02-28",
+                "country" => "US", "subdivision" => "" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/working-days", params: { from: "2024-02-23", to: "2024-02-28", country: "US" }
+    end
+    assert_response :success
+    assert_match "2024-02-23", response.body
+  end
+
+  test "working_days renders error when from or to is blank" do
+    post "/tools/demos/working-days", params: { from: "", to: "2024-02-28" }
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_empty"), response.body
+  end
+
+  test "working_days renders error when to is before from" do
+    post "/tools/demos/working-days", params: { from: "2024-02-28", to: "2024-02-23" }
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_invalid"), response.body
+  end
+
+  test "working_days renders error when dates are malformed" do
+    post "/tools/demos/working-days", params: { from: "not-a-date", to: "2024-02-28" }
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_invalid"), response.body
+  end
+
+  test "working_days renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/working-days", params: { from: "2024-02-23", to: "2024-02-28" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_rate_limit"), response.body
+  end
+
+  test "working_days renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/working-days", params: { from: "2024-02-23", to: "2024-02-28" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_generic"), response.body
+  end
+
+  test "working_days renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/working-days", params: { from: "2024-02-23", to: "2024-02-28" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.working_days.demo.error_no_data"), response.body
+  end
 end
