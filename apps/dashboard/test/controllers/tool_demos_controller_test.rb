@@ -1351,7 +1351,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
       post "/tools/demos/advice"
     end
     assert_response :success
-    assert_match "Don't compare yourself to others.", response.body
+    assert_match "compare yourself to others", response.body
   end
 
   test "advice renders error on 429 rate limit" do
@@ -1415,7 +1415,8 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
       post "/tools/demos/base64", params: { mode: "decode", value: "not-valid-base64!!" }
     end
     assert_response :success
-    assert_match I18n.t("tools.base64.demo.error_invalid_base64"), response.body
+    # Match a substring without HTML-sensitive characters (' becomes &#39; in the response body)
+    assert_match "Check the padding and characters", response.body
   end
 
   test "base64 renders error on 429 rate limit" do
