@@ -21,7 +21,7 @@
     "nanoid": "^6.0.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260716.1",
+    "@cloudflare/workers-types": "^5.20260723.1",
     "@biomejs/biome": "^2.5.5",
     "hono": "^4.12.31",
     "nanoid": "^6.0.0",
