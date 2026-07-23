@@ -223,19 +223,11 @@ es:
       interactive_api_tools: Herramientas API interactivas
       one_api_key_unlocks_all_tools_plus_50: Una sola clave API desbloquea todas las herramientas, además de más de 50 API adicionales en áreas como validación, finanzas, redes y mucho más.
       tools_requiems_api: Herramientas — API de Requiems
-      badge: "NUEVO"
-      banner: "Nuevas herramientas disponibles"
-      eyebrow: "requiems.api/tools"
       categories_label: "Categorías"
       categories_nav_label: "Categorías de herramientas"
       title: "Herramientas API Interactivas"
       subtitle: "Prueba cada API en vivo — sin necesidad de cuenta. Resultados reales de endpoints reales."
       try_live: "Probar en vivo"
-      cta:
-        heading: "Una clave. Todas las APIs."
-        body: "Una clave API desbloquea todas las herramientas y más de 50 APIs."
-        get_key: "Obtén tu clave API gratis"
-        browse_apis: "Ver todas las APIs"
       categories:
         validation: "Validación"
         text: "Texto e Idiomas"

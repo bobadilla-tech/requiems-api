@@ -121,35 +121,37 @@ class ToolsController < ApplicationController
     }
   }.freeze
 
+  # icon_category maps to the category ids in ApisHelper::CATEGORY_ICON_SVGS / CATEGORY_COLORS,
+  # reused here so tool categories carry the same iconography as the API directory.
   CATEGORIES = [
     {
       key: "validation",
-      color: "--c-validation",
+      icon_category: "validation",
       tools: %w[email-validator email-normalizer phone-validator domain-checker]
     },
     {
       key: "text",
-      color: "--c-text",
+      icon_category: "text",
       tools: %w[sentiment-analysis profanity-filter thesaurus spell-check]
     },
     {
       key: "network",
-      color: "--c-network",
+      icon_category: "networking",
       tools: %w[useragent vpn-detection timezone mx-lookup]
     },
     {
       key: "finance",
-      color: "--c-finance",
+      icon_category: "finance",
       tools: %w[bin-lookup inflation mortgage]
     },
     {
       key: "entertainment",
-      color: "--c-entertainment",
+      icon_category: "entertainment",
       tools: %w[quotes trivia sudoku]
     },
     {
       key: "dev",
-      color: "--c-dev",
+      icon_category: "technology",
       tools: %w[unit-conversion qr-code random-user number-base-conversion markdown]
     }
   ].freeze
@@ -159,7 +161,7 @@ class ToolsController < ApplicationController
     @categories = CATEGORIES.map do |cat|
       {
         key: cat[:key],
-        color: cat[:color],
+        icon_category: cat[:icon_category],
         tools: cat[:tools].filter_map { |id| TOOLS_METADATA[id]&.merge(id: id) }
       }
     end

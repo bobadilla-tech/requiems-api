@@ -1,455 +1,10 @@
 <% content_for :title, t('tools.index.tools_requiems_api') %>
 <% content_for :description, "Interactive demos for Requiems API tools. Try email validation, sentiment analysis, and more — no account required." %>
 <% content_for :head do %>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script type="application/ld+json"><%= collection_json_ld(
     name: "Tools",
     items: @tools.map { |tool| { name: tool[:name], url: tool_path(tool[:id]) } }
   ).html_safe %></script>
-  <style>
-    /* Light mode (default) */
-    .tools-page {
-      --bg: #F5F7FA;
-      --surface: #FFFFFF;
-      --surface-hover: #F9FAFB;
-      --border: #E5E7EB;
-      --text: #111827;
-      --text-dim: #4B5563;
-      --text-faint: #9CA3AF;
-      --accent: #D97706;
-      --c-validation: #0D9488;
-      --c-text: #7C3AED;
-      --c-network: #E11D48;
-      --c-entertainment: #0284C7;
-      --c-finance: #D97706;
-      --c-dev: #65A30D;
-      --c-validation-bg: rgba(13, 148, 136, 0.16);
-      --c-text-bg: rgba(124, 58, 237, 0.16);
-      --c-network-bg: rgba(225, 29, 72, 0.16);
-      --c-entertainment-bg: rgba(2, 132, 199, 0.16);
-      --c-finance-bg: rgba(217, 119, 6, 0.16);
-      --c-dev-bg: rgba(101, 163, 13, 0.16);
-    }
-
-    /* Dark mode — se activa cuando <html> tiene la clase "dark" */
-    .dark .tools-page {
-      --bg: #12151B;
-      --surface: #1A1F28;
-      --surface-hover: #1F2530;
-      --border: #262C36;
-      --text: #ECEDEF;
-      --text-dim: #9AA2B1;
-      --text-faint: #626A78;
-      --accent: #F2B33D;
-      --c-validation: #4FD1C5;
-      --c-text: #A78BFA;
-      --c-network: #FB7185;
-      --c-entertainment: #38BDF8;
-      --c-finance: #F2B33D;
-      --c-dev: #A3E635;
-      --c-validation-bg: rgba(79, 209, 197, 0.16);
-      --c-text-bg: rgba(167, 139, 250, 0.16);
-      --c-network-bg: rgba(251, 113, 133, 0.16);
-      --c-entertainment-bg: rgba(56, 189, 248, 0.16);
-      --c-finance-bg: rgba(242, 179, 61, 0.16);
-      --c-dev-bg: rgba(163, 230, 53, 0.16);
-    }
-
-    .tools-page {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      min-height: 100vh;
-    }
-
-    /* Badge text adapts to contrast */
-    .tools-topbar-badge { color: #FFF; }
-    .dark .tools-topbar-badge { color: #12151B; }
-
-    /* Top bar */
-    .tools-topbar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 0;
-      text-align: center;
-    }
-    .tools-topbar-inner {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-    .tools-topbar-badge {
-      background: var(--accent);
-      font-weight: 700;
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-    }
-
-    /* Hero */
-    .tools-hero {
-      padding: 64px 24px 56px;
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-    .tools-hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-faint);
-      margin-bottom: 20px;
-      letter-spacing: 0.06em;
-    }
-    .tools-hero-eyebrow::before {
-      content: '$';
-      color: var(--accent);
-    }
-    .tools-hero h1 {
-      font-family: 'Inter', sans-serif;
-      font-size: 44px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin: 0 0 16px;
-      line-height: 1.1;
-    }
-    .tools-hero p {
-      font-size: 16px;
-      color: var(--text-dim);
-      max-width: 540px;
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    /* Mobile nav */
-    .mobile-nav {
-      display: none;
-      overflow-x: auto;
-      gap: 8px;
-      padding: 12px 16px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      scrollbar-width: none;
-    }
-    .mobile-nav::-webkit-scrollbar { display: none; }
-    .mobile-nav a {
-      flex-shrink: 0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      white-space: nowrap;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .mobile-nav a:hover,
-    .mobile-nav a:focus-visible {
-      color: var(--text);
-      border-color: var(--text-dim);
-      outline: none;
-    }
-    .mobile-nav a:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    /* Main layout */
-    .tools-main {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 24px 80px;
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 48px;
-      align-items: start;
-    }
-
-    /* Sidebar */
-    .tools-sidebar {
-      position: sticky;
-      top: 24px;
-    }
-    .tools-sidebar-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .tools-sidebar nav {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .tools-sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-dim);
-      text-decoration: none;
-      padding: 7px 10px;
-      border-radius: 6px;
-      transition: color 0.15s, background 0.15s;
-    }
-    .tools-sidebar-link:hover,
-    .tools-sidebar-link:focus-visible {
-      color: var(--text);
-      background: var(--surface);
-      outline: none;
-    }
-    .tools-sidebar-link:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-    .tools-sidebar-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* Category sections */
-    .tools-content {
-      display: flex;
-      flex-direction: column;
-      gap: 56px;
-    }
-    .tools-category-heading {
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .tools-category-heading::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Cards grid */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    /* Tool card */
-    .tool-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.15s, background 0.15s, transform 0.15s;
-      cursor: pointer;
-    }
-    .tool-card:hover,
-    .tool-card:focus-visible {
-      background: var(--surface-hover);
-      border-color: var(--card-color);
-      transform: translateY(-2px);
-      outline: none;
-    }
-    .tool-card:focus-visible {
-      outline: 2px solid var(--card-color);
-      outline-offset: 2px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .tool-card {
-        transition: border-color 0.15s, background 0.15s;
-      }
-      .tool-card:hover,
-      .tool-card:focus-visible {
-        transform: none;
-      }
-    }
-
-    .tool-card-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-      flex-shrink: 0;
-    }
-    .tool-card-icon svg {
-      width: 16px;
-      height: 16px;
-    }
-    .tool-card-name {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14.5px;
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 6px;
-    }
-    .tool-card-desc {
-      font-size: 13px;
-      color: var(--text-dim);
-      line-height: 1.55;
-      margin: 0;
-      flex: 1;
-    }
-
-    /* Hover snippet */
-    .tool-card-snippet {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-      background: var(--bg);
-      border-radius: 6px;
-      padding: 0 10px;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transition: max-height 0.2s ease, opacity 0.2s ease, padding 0.2s ease;
-      margin-top: 0;
-      line-height: 1.6;
-    }
-    .tool-card:hover .tool-card-snippet,
-    .tool-card:focus-within .tool-card-snippet {
-      max-height: 40px;
-      opacity: 1;
-      padding: 6px 10px;
-      margin-top: 10px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .tool-card-snippet {
-        transition: none;
-      }
-    }
-
-    .tool-card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      text-decoration: none;
-      margin-top: 14px;
-    }
-    .tool-card-link svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    /* CTA */
-    .tools-cta {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 64px 24px;
-      text-align: center;
-    }
-    .tools-cta-inner {
-      max-width: 560px;
-      margin: 0 auto;
-    }
-    .tools-cta h2 {
-      font-family: 'Inter', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      margin: 0 0 12px;
-    }
-    .tools-cta p {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin: 0 0 28px;
-      line-height: 1.6;
-    }
-    .tools-cta-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .tools-cta-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: #12151B;
-      background: var(--accent);
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .tools-cta-primary:hover { opacity: 0.9; }
-    .tools-cta-primary:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
-    .tools-cta-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .tools-cta-secondary:hover {
-      color: var(--text);
-      border-color: var(--text-dim);
-    }
-    .tools-cta-secondary:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
-
-    /* Responsive */
-    @media (max-width: 860px) {
-      .tools-hero h1 { font-size: 30px; }
-      .tools-sidebar { display: none; }
-      .mobile-nav { display: flex; }
-      .tools-main {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        padding-top: 32px;
-      }
-      .tools-grid { grid-template-columns: 1fr; }
-    }
-  </style>
 <% end %>
 
 <%
@@ -483,108 +38,96 @@
   end
 %>
 
-<div class="tools-page">
+<div class="min-h-screen flex bg-gray-50 dark:bg-gray-900">
 
-  <%# Top bar %>
-  <div class="tools-topbar">
-    <div class="tools-topbar-inner">
-      <span class="tools-topbar-badge"><%= t('tools.index.badge') %></span>
-      <%= t('tools.index.banner') %>
-    </div>
-  </div>
-
-  <%# Mobile nav (hidden on desktop) %>
-  <div class="mobile-nav" role="navigation" aria-label="<%= t('tools.index.categories_nav_label') %>">
-    <% @categories.each do |cat| %>
-      <a href="#tools-<%= cat[:key] %>"><%= t("tools.index.categories.#{cat[:key]}") %></a>
-    <% end %>
-  </div>
-
-  <%# Hero %>
-  <div class="tools-hero">
-    <div class="tools-hero-eyebrow"><%= t('tools.index.eyebrow') %></div>
-    <h1><%= t('tools.index.title') %></h1>
-    <p><%= t('tools.index.subtitle') %></p>
-  </div>
-
-  <%# Main: sidebar + content %>
-  <div class="tools-main">
-
-    <%# Sidebar %>
-    <aside class="tools-sidebar" aria-label="<%= t('tools.index.categories_nav_label') %>">
-      <div class="tools-sidebar-label"><%= t('tools.index.categories_label') %></div>
-      <nav>
+  <%# Sidebar %>
+  <aside class="hidden lg:block w-52 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shrink-0" aria-label="<%= t('tools.index.categories_nav_label') %>">
+    <div class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto p-4">
+      <h3 class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-3 px-2">
+        <%= t('tools.index.categories_label') %>
+      </h3>
+      <nav class="space-y-0.5">
         <% @categories.each do |cat| %>
-          <a href="#tools-<%= cat[:key] %>" class="tools-sidebar-link">
-            <span class="tools-sidebar-dot" style="background: var(<%= cat[:color] %>);"></span>
-            <%= t("tools.index.categories.#{cat[:key]}") %>
+          <a href="#tools-<%= cat[:key] %>" class="flex items-center px-2 py-2 text-sm font-medium rounded transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+            <span class="mr-2 inline-flex items-center justify-center w-6 h-6 rounded-full shrink-0 <%= category_color_classes(cat[:icon_category]) %>">
+              <%= category_icon_svg(cat[:icon_category], size: "w-3.5 h-3.5") %>
+            </span>
+            <span class="flex-1"><%= t("tools.index.categories.#{cat[:key]}") %></span>
           </a>
         <% end %>
       </nav>
-    </aside>
+    </div>
+  </aside>
 
-    <%# Category sections %>
-    <div class="tools-content">
+  <div class="flex-1 min-w-0">
+
+    <%# Mobile nav %>
+    <div class="lg:hidden sticky top-16 z-20 flex gap-2 overflow-x-auto px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700" role="navigation" aria-label="<%= t('tools.index.categories_nav_label') %>">
       <% @categories.each do |cat| %>
-        <section id="tools-<%= cat[:key] %>" aria-labelledby="cat-heading-<%= cat[:key] %>">
-          <h2 class="tools-category-heading" id="cat-heading-<%= cat[:key] %>">
-            <%= t("tools.index.categories.#{cat[:key]}") %>
-          </h2>
-          <div class="tools-grid">
-            <% cat[:tools].each do |tool| %>
-              <%
-                color_var = cat[:color]
-                color_val = "var(#{color_var})"
-              %>
-              <%= link_to tool_path(tool[:id]),
-                    class: "tool-card",
-                    style: "--card-color: #{color_val}; --card-color-bg: var(#{color_var}-bg);" do %>
-                <%# Icon %>
-                <div class="tool-card-icon" style="background: var(--card-color-bg);">
-                  <svg fill="none" stroke="<%= color_val %>" viewBox="0 0 24 24" aria-hidden="true">
-                    <%= icon_svg.call(tool[:id]).html_safe %>
-                  </svg>
-                </div>
-
-                <%# Name %>
-                <p class="tool-card-name"><%= tool[:name] %></p>
-
-                <%# Description %>
-                <p class="tool-card-desc"><%= tool[:description] %></p>
-
-                <%# Try Live %>
-                <span class="tool-card-link" style="color: <%= color_val %>;">
-                  <%= t('tools.index.try_live') %>
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                  </svg>
-                </span>
-              <% end %>
-            <% end %>
-          </div>
-        </section>
+        <a href="#tools-<%= cat[:key] %>" class="shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <span class="inline-flex items-center justify-center w-4 h-4 rounded-full shrink-0 <%= category_color_classes(cat[:icon_category]) %>">
+            <%= category_icon_svg(cat[:icon_category], size: "w-2.5 h-2.5") %>
+          </span>
+          <%= t("tools.index.categories.#{cat[:key]}") %>
+        </a>
       <% end %>
     </div>
 
-  </div>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-  <%# CTA %>
-  <div class="tools-cta">
-    <div class="tools-cta-inner">
-      <h2><%= t('tools.index.cta.heading') %></h2>
-      <p><%= t('tools.index.cta.body') %></p>
-      <div class="tools-cta-buttons">
-        <%= link_to new_user_registration_path, class: "tools-cta-primary" do %>
-          <%= t('tools.index.cta.get_key') %>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
-        <% end %>
-        <%= link_to apis_path, class: "tools-cta-secondary" do %>
-          <%= t('tools.index.cta.browse_apis') %>
+      <%# Hero %>
+      <div class="text-center mb-10 max-w-2xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+          <%= t('tools.index.title') %>
+        </h1>
+        <p class="text-base text-gray-600 dark:text-gray-400">
+          <%= t('tools.index.subtitle') %>
+        </p>
+      </div>
+
+      <%# Category sections %>
+      <div class="space-y-12">
+        <% @categories.each do |cat| %>
+          <section id="tools-<%= cat[:key] %>" class="scroll-mt-20" aria-labelledby="cat-heading-<%= cat[:key] %>">
+            <h2 class="flex items-center text-xl font-bold text-gray-900 dark:text-gray-100 pb-2 mb-4 border-b border-gray-200 dark:border-gray-700" id="cat-heading-<%= cat[:key] %>">
+              <span class="mr-2 inline-flex items-center justify-center w-8 h-8 rounded-full shrink-0 <%= category_color_classes(cat[:icon_category]) %>">
+                <%= category_icon_svg(cat[:icon_category], size: "w-4 h-4") %>
+              </span>
+              <%= t("tools.index.categories.#{cat[:key]}") %>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <% cat[:tools].each do |tool| %>
+                <%= link_to tool_path(tool[:id]),
+                      class: "block bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700 p-4 group" do %>
+                  <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-3 <%= tool[:icon_classes] %>">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <%= icon_svg.call(tool[:id]).html_safe %>
+                    </svg>
+                  </div>
+
+                  <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <%= tool[:name] %>
+                  </h3>
+
+                  <p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed mb-3">
+                    <%= tool[:description] %>
+                  </p>
+
+                  <span class="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400">
+                    <%= t('tools.index.try_live') %>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          </section>
         <% end %>
       </div>
+
     </div>
+
   </div>
 
 </div>
