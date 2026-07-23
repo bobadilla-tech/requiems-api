@@ -24,7 +24,7 @@
     "@hono/standard-validator": "^0.3.0",
     "@hono/swagger-ui": "^0.6.1",
     "@sentry/cloudflare": "^10.66.0",
-    "hono": "4.12.29",
+    "hono": "4.12.31",
     "nanoid": "^6.0.0",
     "zod": "^4.4.3"
   },
