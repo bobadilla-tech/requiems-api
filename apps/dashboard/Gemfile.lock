@@ -160,7 +160,7 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.20.0)
+    json (2.21.1)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
@@ -190,7 +190,10 @@ GEM
       net-smtp
     marcel (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.27.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
+    minitest-mock (5.27.0)
     msgpack (1.8.3)
     nanoid (2.0.0)
     net-http (0.9.1)
@@ -220,7 +223,7 @@ GEM
     nokogiri (1.19.4-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (43.6.0)
+    pagy (43.6.1)
       json
       uri
       yaml
@@ -368,7 +371,7 @@ GEM
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
       sidekiq (>= 6.5.0)
-    simplecov (1.0.1)
+    simplecov (1.0.2)
     simplecov-lcov (0.9.0)
     sitemap_generator (7.1.0)
       builder (~> 3.0)
@@ -387,10 +390,10 @@ GEM
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.5.0)
-    thruster (0.1.22)
-    thruster (0.1.22-aarch64-linux)
-    thruster (0.1.22-arm64-darwin)
-    thruster (0.1.22-x86_64-linux)
+    thruster (0.1.23)
+    thruster (0.1.23-aarch64-linux)
+    thruster (0.1.23-arm64-darwin)
+    thruster (0.1.23-x86_64-linux)
     timeout (0.6.1)
     tsort (0.2.0)
     turbo-rails (2.0.23)
@@ -450,7 +453,8 @@ DEPENDENCIES
   kramdown
   kramdown-parser-gfm
   letter_opener_web (~> 3.0)
-  minitest (~> 5.25)
+  minitest (~> 6.0)
+  minitest-mock (~> 5.0)
   nanoid (~> 2.0)
   pagy (~> 43.6)
   pg (~> 1.1)

@@ -46,15 +46,15 @@ require (
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/bobadilla-tech/business-days-calculator v1.1.0
 	github.com/bobadilla-tech/go-email-normalizer v1.2.0
-	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1
+	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.2.0
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
-	github.com/bobadilla-tech/sentiment-go v1.0.0
+	github.com/bobadilla-tech/sentiment-go v1.1.0
 	github.com/boombuler/barcode v1.1.0
 	github.com/getsentry/sentry-go v0.48.0
 	github.com/jaswdr/faker/v2 v2.9.1
 	github.com/likexian/whois v1.15.7
 	github.com/likexian/whois-parser v1.24.21
-	github.com/medama-io/go-useragent v1.2.3
+	github.com/medama-io/go-useragent v1.2.4
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/pemistahl/lingua-go v1.4.0
 	github.com/ringsaturn/tzf v1.2.3
