@@ -48,7 +48,7 @@ require (
 	github.com/bobadilla-tech/go-email-normalizer v1.2.0
 	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.1.1
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
-	github.com/bobadilla-tech/sentiment-go v1.0.0
+	github.com/bobadilla-tech/sentiment-go v1.1.0
 	github.com/boombuler/barcode v1.1.0
 	github.com/getsentry/sentry-go v0.48.0
 	github.com/jaswdr/faker/v2 v2.9.1
