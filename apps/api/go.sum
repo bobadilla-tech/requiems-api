@@ -113,8 +113,8 @@ github.com/likexian/whois v1.15.7 h1:sajjDhi2bVD71AHJhjV7jLYxN92H4AWhTwxM8hmj7c0
 github.com/likexian/whois v1.15.7/go.mod h1:kdPQtYb+7SQVftBEbCblDadUkycN7Mg1k1/Li/rwvmc=
 github.com/likexian/whois-parser v1.24.21 h1:MxsrGRxDOiZIVp7q7N/yAIbKuN4QAkGjCpOtTDA5OsM=
 github.com/likexian/whois-parser v1.24.21/go.mod h1:o3DUruO65Pb8WXCJCTlSVkTbwuYVrBCeoMTw2q0mxY4=
-github.com/medama-io/go-useragent v1.2.3 h1:jTv5NI+dn2hAe6zlagfXe/Y4934/YPzqxvP/gP0DjCQ=
-github.com/medama-io/go-useragent v1.2.3/go.mod h1:H9GYWth4IN8vAFZh5LeARza7VwM4jK9uk7Tb9huVzLw=
+github.com/medama-io/go-useragent v1.2.4 h1:kDux3lCjZvBpccKus/goaZl6YMnrl9D8Tx/wb4HqRMI=
+github.com/medama-io/go-useragent v1.2.4/go.mod h1:H9GYWth4IN8vAFZh5LeARza7VwM4jK9uk7Tb9huVzLw=
 github.com/moby/docker-image-spec v1.3.1 h1:jMKff3w6PgbfSa69GfNg+zN/XLhfXJGnEx3Nl2EsFP0=
 github.com/moby/docker-image-spec v1.3.1/go.mod h1:eKmb5VW8vQEh/BAr2yvVNvuiJuY6UIocYsFu/DxxRpo=
 github.com/moby/term v0.5.0 h1:xt8Q1nalod/v7BqbG21f8mQPqH+xAaC9C3N3wfWbVP0=
