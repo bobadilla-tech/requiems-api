@@ -1,71 +1,590 @@
 <% content_for :title, t('tools.index.tools_requiems_api') %>
 <% content_for :description, "Interactive demos for Requiems API tools. Try email validation, sentiment analysis, and more — no account required." %>
 <% content_for :head do %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script type="application/ld+json"><%= collection_json_ld(
     name: "Tools",
     items: @tools.map { |tool| { name: tool[:name], url: tool_path(tool[:id]) } }
   ).html_safe %></script>
+  <style>
+    /* Light mode (default) */
+    .tools-page {
+      --bg: #F5F7FA;
+      --surface: #FFFFFF;
+      --surface-hover: #F9FAFB;
+      --border: #E5E7EB;
+      --text: #111827;
+      --text-dim: #4B5563;
+      --text-faint: #9CA3AF;
+      --accent: #D97706;
+      --c-validation: #0D9488;
+      --c-text: #7C3AED;
+      --c-network: #E11D48;
+      --c-entertainment: #0284C7;
+      --c-finance: #D97706;
+      --c-dev: #65A30D;
+      --c-validation-bg: rgba(13, 148, 136, 0.16);
+      --c-text-bg: rgba(124, 58, 237, 0.16);
+      --c-network-bg: rgba(225, 29, 72, 0.16);
+      --c-entertainment-bg: rgba(2, 132, 199, 0.16);
+      --c-finance-bg: rgba(217, 119, 6, 0.16);
+      --c-dev-bg: rgba(101, 163, 13, 0.16);
+    }
+
+    /* Dark mode — se activa cuando <html> tiene la clase "dark" */
+    .dark .tools-page {
+      --bg: #12151B;
+      --surface: #1A1F28;
+      --surface-hover: #1F2530;
+      --border: #262C36;
+      --text: #ECEDEF;
+      --text-dim: #9AA2B1;
+      --text-faint: #626A78;
+      --accent: #F2B33D;
+      --c-validation: #4FD1C5;
+      --c-text: #A78BFA;
+      --c-network: #FB7185;
+      --c-entertainment: #38BDF8;
+      --c-finance: #F2B33D;
+      --c-dev: #A3E635;
+      --c-validation-bg: rgba(79, 209, 197, 0.16);
+      --c-text-bg: rgba(167, 139, 250, 0.16);
+      --c-network-bg: rgba(251, 113, 133, 0.16);
+      --c-entertainment-bg: rgba(56, 189, 248, 0.16);
+      --c-finance-bg: rgba(242, 179, 61, 0.16);
+      --c-dev-bg: rgba(163, 230, 53, 0.16);
+    }
+
+    .tools-page {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Badge text adapts to contrast */
+    .tools-topbar-badge { color: #FFF; }
+    .dark .tools-topbar-badge { color: #12151B; }
+
+    /* Top bar */
+    .tools-topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      text-align: center;
+    }
+    .tools-topbar-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .tools-topbar-badge {
+      background: var(--accent);
+      font-weight: 700;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Hero */
+    .tools-hero {
+      padding: 64px 24px 56px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .tools-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-bottom: 20px;
+      letter-spacing: 0.06em;
+    }
+    .tools-hero-eyebrow::before {
+      content: '$';
+      color: var(--accent);
+    }
+    .tools-hero h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 0 0 16px;
+      line-height: 1.1;
+    }
+    .tools-hero p {
+      font-size: 16px;
+      color: var(--text-dim);
+      max-width: 540px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      scrollbar-width: none;
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav a {
+      flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .mobile-nav a:hover,
+    .mobile-nav a:focus-visible {
+      color: var(--text);
+      border-color: var(--text-dim);
+      outline: none;
+    }
+    .mobile-nav a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Main layout */
+    .tools-main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .tools-sidebar {
+      position: sticky;
+      top: 24px;
+    }
+    .tools-sidebar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .tools-sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .tools-sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: 7px 10px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .tools-sidebar-link:hover,
+    .tools-sidebar-link:focus-visible {
+      color: var(--text);
+      background: var(--surface);
+      outline: none;
+    }
+    .tools-sidebar-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .tools-sidebar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Category sections */
+    .tools-content {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+    .tools-category-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .tools-category-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Cards grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* Tool card */
+    .tool-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+      cursor: pointer;
+    }
+    .tool-card:hover,
+    .tool-card:focus-visible {
+      background: var(--surface-hover);
+      border-color: var(--card-color);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .tool-card:focus-visible {
+      outline: 2px solid var(--card-color);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tool-card {
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .tool-card:hover,
+      .tool-card:focus-visible {
+        transform: none;
+      }
+    }
+
+    .tool-card-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+    .tool-card-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    .tool-card-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 6px;
+    }
+    .tool-card-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.55;
+      margin: 0;
+      flex: 1;
+    }
+
+    /* Hover snippet */
+    .tool-card-snippet {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 0 10px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease, opacity 0.2s ease, padding 0.2s ease;
+      margin-top: 0;
+      line-height: 1.6;
+    }
+    .tool-card:hover .tool-card-snippet,
+    .tool-card:focus-within .tool-card-snippet {
+      max-height: 40px;
+      opacity: 1;
+      padding: 6px 10px;
+      margin-top: 10px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tool-card-snippet {
+        transition: none;
+      }
+    }
+
+    .tool-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 14px;
+    }
+    .tool-card-link svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* CTA */
+    .tools-cta {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .tools-cta-inner {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .tools-cta h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 12px;
+    }
+    .tools-cta p {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin: 0 0 28px;
+      line-height: 1.6;
+    }
+    .tools-cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tools-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #12151B;
+      background: var(--accent);
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .tools-cta-primary:hover { opacity: 0.9; }
+    .tools-cta-primary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .tools-cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tools-cta-secondary:hover {
+      color: var(--text);
+      border-color: var(--text-dim);
+    }
+    .tools-cta-secondary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .tools-hero h1 { font-size: 30px; }
+      .tools-sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .tools-main {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-top: 32px;
+      }
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 <% end %>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-  <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4"><%= t('tools.index.interactive_api_tools') %></h1>
-        <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Try every API live — no account required. See real output from real endpoints.
-        </p>
-      </div>
+<%
+  icon_svg = ->(tool_id) do
+    icons = {
+      "email-validator"       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>',
+      "email-normalizer"      => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4"/>',
+      "phone-validator"       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>',
+      "domain-checker"        => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>',
+      "sentiment-analysis"    => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+      "profanity-filter"      => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>',
+      "thesaurus"             => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>',
+      "spell-check"           => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>',
+      "useragent"             => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>',
+      "vpn-detection"         => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>',
+      "timezone"              => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+      "bin-lookup"            => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>',
+      "inflation"             => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>',
+      "quotes"                => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>',
+      "trivia"                => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+      "sudoku"                => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>',
+      "unit-conversion"       => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>',
+      "qr-code"               => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>',
+      "random-user"           => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>',
+      "number-base-conversion"=> '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>',
+      "mx-lookup"             => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>',
+      "mortgage"              => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
+      "markdown"              => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>'
+    }
+    icons[tool_id] || '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 10V3L4 14h7v7l9-11h-7z"/>'
+  end
+%>
+
+<div class="tools-page">
+
+  <%# Top bar %>
+  <div class="tools-topbar">
+    <div class="tools-topbar-inner">
+      <span class="tools-topbar-badge"><%= t('tools.index.badge') %></span>
+      <%= t('tools.index.banner') %>
     </div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-      <% @tools.each do |tool| %>
-        <%= link_to tool_path(tool[:id]), class: "group flex flex-col bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg transition-all" do %>
-          <div class="flex items-center gap-3 mb-3">
-            <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg <%= tool[:icon_classes] %>">
-              <% if tool[:id] == "email-validator" %>
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-              <% else %>
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-              <% end %>
-            </span>
-            <h2 class="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-              <%= tool[:name] %>
-            </h2>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 flex-1"><%= tool[:description] %></p>
-          <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-            Try it live
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </span>
+  <%# Mobile nav (hidden on desktop) %>
+  <div class="mobile-nav" role="navigation" aria-label="<%= t('tools.index.categories_nav_label') %>">
+    <% @categories.each do |cat| %>
+      <a href="#tools-<%= cat[:key] %>"><%= t("tools.index.categories.#{cat[:key]}") %></a>
+    <% end %>
+  </div>
+
+  <%# Hero %>
+  <div class="tools-hero">
+    <div class="tools-hero-eyebrow"><%= t('tools.index.eyebrow') %></div>
+    <h1><%= t('tools.index.title') %></h1>
+    <p><%= t('tools.index.subtitle') %></p>
+  </div>
+
+  <%# Main: sidebar + content %>
+  <div class="tools-main">
+
+    <%# Sidebar %>
+    <aside class="tools-sidebar" aria-label="<%= t('tools.index.categories_nav_label') %>">
+      <div class="tools-sidebar-label"><%= t('tools.index.categories_label') %></div>
+      <nav>
+        <% @categories.each do |cat| %>
+          <a href="#tools-<%= cat[:key] %>" class="tools-sidebar-link">
+            <span class="tools-sidebar-dot" style="background: var(<%= cat[:color] %>);"></span>
+            <%= t("tools.index.categories.#{cat[:key]}") %>
+          </a>
         <% end %>
+      </nav>
+    </aside>
+
+    <%# Category sections %>
+    <div class="tools-content">
+      <% @categories.each do |cat| %>
+        <section id="tools-<%= cat[:key] %>" aria-labelledby="cat-heading-<%= cat[:key] %>">
+          <h2 class="tools-category-heading" id="cat-heading-<%= cat[:key] %>">
+            <%= t("tools.index.categories.#{cat[:key]}") %>
+          </h2>
+          <div class="tools-grid">
+            <% cat[:tools].each do |tool| %>
+              <%
+                color_var = cat[:color]
+                color_val = "var(#{color_var})"
+              %>
+              <%= link_to tool_path(tool[:id]),
+                    class: "tool-card",
+                    style: "--card-color: #{color_val}; --card-color-bg: var(#{color_var}-bg);" do %>
+                <%# Icon %>
+                <div class="tool-card-icon" style="background: var(--card-color-bg);">
+                  <svg fill="none" stroke="<%= color_val %>" viewBox="0 0 24 24" aria-hidden="true">
+                    <%= icon_svg.call(tool[:id]).html_safe %>
+                  </svg>
+                </div>
+
+                <%# Name %>
+                <p class="tool-card-name"><%= tool[:name] %></p>
+
+                <%# Description %>
+                <p class="tool-card-desc"><%= tool[:description] %></p>
+
+                <%# Try Live %>
+                <span class="tool-card-link" style="color: <%= color_val %>;">
+                  <%= t('tools.index.try_live') %>
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                  </svg>
+                </span>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
       <% end %>
     </div>
 
-    <div class="mt-16 rounded-2xl p-8 text-center text-white max-w-4xl mx-auto" style="background: linear-gradient(to right, #1D9E75, #0e7a5a);">
-      <h2 class="text-2xl font-bold mb-4"><%= t('home.for_llms.cta.heading') %></h2>
-      <p class="text-lg mb-6 text-emerald-100"><%= t('tools.index.one_api_key_unlocks_all_tools_plus_50') %></p>
+  </div>
 
-
-      <div class="flex flex-wrap justify-center gap-4">
-        <%= link_to new_user_registration_path, class: "inline-flex items-center px-6 py-3 bg-white text-emerald-700 font-semibold rounded-lg hover:bg-emerald-50 transition-colors" do %>
-          Get your free API key
-          <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+  <%# CTA %>
+  <div class="tools-cta">
+    <div class="tools-cta-inner">
+      <h2><%= t('tools.index.cta.heading') %></h2>
+      <p><%= t('tools.index.cta.body') %></p>
+      <div class="tools-cta-buttons">
+        <%= link_to new_user_registration_path, class: "tools-cta-primary" do %>
+          <%= t('tools.index.cta.get_key') %>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
           </svg>
         <% end %>
-        <%= link_to apis_path, class: "inline-flex items-center px-6 py-3 border-2 border-white/70 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors" do %>
-          Browse all APIs
+        <%= link_to apis_path, class: "tools-cta-secondary" do %>
+          <%= t('tools.index.cta.browse_apis') %>
         <% end %>
       </div>
     </div>
   </div>
+
 </div>

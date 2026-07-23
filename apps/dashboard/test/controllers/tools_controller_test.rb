@@ -3,6 +3,13 @@
 require "test_helper"
 
 class ToolsControllerTest < ActionDispatch::IntegrationTest
+  test "tools index renders successfully" do
+    get "/en/tools"
+    assert_response :success
+    assert_select "h1"
+    assert_select ".tools-grid"
+  end
+
   test "email validator tool page renders successfully" do
     get "/en/tools/email-validator"
     assert_response :success
