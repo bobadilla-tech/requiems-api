@@ -24,6 +24,8 @@ github.com/bobadilla-tech/lorelai v1.3.3 h1:59SqSzL+ICSW6MCA2OTzj6r+EJ7Nv7FXtbXd
 github.com/bobadilla-tech/lorelai v1.3.3/go.mod h1:ql8Jou+8OBienKt7ByAC9J7zuya3D5YVL6ZUFbMiKr0=
 github.com/bobadilla-tech/sentiment-go v1.1.0 h1:lrPpVJgSL/DfCOiOdgDpf0iigJlujYkc7GEZ9if8vVY=
 github.com/bobadilla-tech/sentiment-go v1.1.0/go.mod h1:TFCY/Gcee/+BNLrI7/s8uL80/Gy9Y8OH1KFaSQGafXw=
+github.com/bobadilla-tech/sudoku-go v0.1.0 h1:bLCI5oGAmK6QFll49ffy7dhTpHNq41Oap/wlunHsKWk=
+github.com/bobadilla-tech/sudoku-go v0.1.0/go.mod h1:Q3d0G6CdoNuF9eSd+dc/W6yIDSv2jTDKWFhIUniELxA=
 github.com/boombuler/barcode v1.1.0 h1:ChaYjBR63fr4LFyGn8E8nt7dBSt3MiU3zMOZqFvVkHo=
 github.com/boombuler/barcode v1.1.0/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
 github.com/boyter/go-string v1.0.5 h1:/xcOlWdgelLYLVkUU0xBLfioGjZ9KIMUMI/RXG138YY=

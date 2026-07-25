@@ -91,8 +91,8 @@ func TestSudoku_PuzzleHasEmptyCells(t *testing.T) {
 				}
 			}
 
-			expected := cellsToRemove[d]
-			assert.Equal(t, expected, empty, "difficulty %q: expected %d empty cells, got %d", d, expected, empty)
+			expectedEmpty := map[string]int{"easy": 36, "medium": 46, "hard": 52}
+			assert.Equal(t, expectedEmpty[d], empty, "difficulty %q: expected %d empty cells, got %d", d, expectedEmpty[d], empty)
 		})
 	}
 }
