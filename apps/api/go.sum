@@ -26,6 +26,10 @@ github.com/bobadilla-tech/sentiment-go v1.1.0 h1:lrPpVJgSL/DfCOiOdgDpf0iigJlujYk
 github.com/bobadilla-tech/sentiment-go v1.1.0/go.mod h1:TFCY/Gcee/+BNLrI7/s8uL80/Gy9Y8OH1KFaSQGafXw=
 github.com/bobadilla-tech/sudoku-go v0.1.0 h1:bLCI5oGAmK6QFll49ffy7dhTpHNq41Oap/wlunHsKWk=
 github.com/bobadilla-tech/sudoku-go v0.1.0/go.mod h1:Q3d0G6CdoNuF9eSd+dc/W6yIDSv2jTDKWFhIUniELxA=
+github.com/bobadilla-tech/thesaurus-go v0.0.0-20260727190354-29a20004b02d h1:ylP1NgR2rGD64YApO+jJ+3uE8KpOwWH4avfd/xws1B8=
+github.com/bobadilla-tech/thesaurus-go v0.0.0-20260727190354-29a20004b02d/go.mod h1:xgueJhpRBbsd0rrIMAVf0LWVfOv4FkzthLJy0tL2s4g=
+github.com/bobadilla-tech/thesaurus-go v1.0.0 h1:yXkQXIrZj/rWz4/N/qDbOz5SqWpkK+sWO8acB40dhFs=
+github.com/bobadilla-tech/thesaurus-go v1.0.0/go.mod h1:xgueJhpRBbsd0rrIMAVf0LWVfOv4FkzthLJy0tL2s4g=
 github.com/boombuler/barcode v1.1.0 h1:ChaYjBR63fr4LFyGn8E8nt7dBSt3MiU3zMOZqFvVkHo=
 github.com/boombuler/barcode v1.1.0/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
 github.com/boyter/go-string v1.0.5 h1:/xcOlWdgelLYLVkUU0xBLfioGjZ9KIMUMI/RXG138YY=

@@ -3,6 +3,8 @@ package thesaurus
 import (
 	"fmt"
 	"strings"
+
+	"github.com/bobadilla-tech/thesaurus-go/pkg/thesaurus"
 )
 
 // Result is the response payload for the thesaurus endpoint.
@@ -23,17 +25,17 @@ func NewService() *Service { return &Service{} }
 func (s *Service) Lookup(word string) (Result, error) {
 	normalized := strings.ToLower(strings.TrimSpace(word))
 
-	e, ok := thesaurusData[normalized]
+	e, ok := thesaurus.Lookup(word)
 	if !ok {
 		return Result{}, fmt.Errorf("word not found: %s", normalized)
 	}
 
-	synonyms := e.synonyms
+	synonyms := e.Synonyms
 	if synonyms == nil {
 		synonyms = []string{}
 	}
 
-	antonyms := e.antonyms
+	antonyms := e.Antonyms
 	if antonyms == nil {
 		antonyms = []string{}
 	}
