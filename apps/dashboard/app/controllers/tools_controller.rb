@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ToolsController < ApplicationController
-  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage markdown barcode advice base64 whois lorem-ipsum working-days].freeze
+  SUPPORTED_TOOLS = %w[email-validator sentiment-analysis email-normalizer domain-checker quotes unit-conversion phone-validator bin-lookup inflation qr-code profanity-filter useragent timezone trivia vpn-detection thesaurus spell-check random-user sudoku number-base-conversion mx-lookup mortgage markdown barcode advice base64 whois lorem-ipsum working-days world-time words].freeze
 
   TOOLS_METADATA = {
     "email-validator" => {
@@ -148,6 +148,16 @@ class ToolsController < ApplicationController
       name: "Working Days Calculator",
       description: "Calculate business days between two dates, with optional country and subdivision holiday adjustments.",
       icon_classes: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
+    },
+    "world-time" => {
+      name: "World Time",
+      description: "Get the current time, UTC offset, and DST status for any IANA timezone name in a single API call.",
+      icon_classes: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+    },
+    "words" => {
+      name: "Random Words",
+      description: "Fetch a random word with its definition and part of speech for testing, games, and creative projects.",
+      icon_classes: "bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400"
     }
   }.freeze
 
@@ -162,12 +172,12 @@ class ToolsController < ApplicationController
     {
       key: "text",
       icon_category: "text",
-      tools: %w[sentiment-analysis profanity-filter thesaurus spell-check]
+      tools: %w[sentiment-analysis profanity-filter thesaurus spell-check words]
     },
     {
       key: "network",
       icon_category: "networking",
-      tools: %w[useragent vpn-detection timezone mx-lookup whois]
+      tools: %w[useragent vpn-detection timezone mx-lookup whois world-time]
     },
     {
       key: "finance",

@@ -707,6 +707,34 @@ class ToolDemosController < ApplicationController
     render "tool_demos/working_days", locals: { data: data }
   end
 
+  def world_time
+    timezone_name = params[:timezone].to_s.strip
+    return render_demo_error("world_time", t("tools.world_time.demo.error_empty")) if timezone_name.blank?
+
+    result = api_call(endpoint: "/v1/places/time/#{timezone_name}", method: "GET", params: {})
+
+    return render_demo_error("world_time", t("tools.world_time.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("world_time", t("tools.world_time.demo.error_not_found")) if result.status_code == 404
+    return render_demo_error("world_time", t("tools.world_time.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("world_time", t("tools.world_time.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/world_time", locals: { data: data, timezone: timezone_name }
+  end
+
+  def words
+    result = api_call(endpoint: "/v1/text/words/random", method: "GET", params: {})
+
+    return render_demo_error("words", t("tools.words.demo.error_rate_limit")) if result.status_code == 429
+    return render_demo_error("words", t("tools.words.demo.error_generic")) unless result.status_code == 200
+
+    data = result.data&.dig("data", "data") || result.data&.dig("data")
+    return render_demo_error("words", t("tools.words.demo.error_no_data")) if data.nil?
+
+    render "tool_demos/words", locals: { data: data }
+  end
+
   private
 
   def valid_ip?(ip)

@@ -1,0 +1,27 @@
+<turbo-frame id="world-time-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <span class="text-sm font-semibold text-gray-900 dark:text-white truncate"><%= data["timezone"] || timezone %></span>
+      <% if data["is_dst"] %>
+        <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+          <%= t("tools.world_time.demo.badge_dst") %>
+        </span>
+      <% end %>
+    </div>
+
+    <div class="px-4 py-1">
+      <% fields = [
+        { label: t("tools.world_time.demo.label_current_time"), value: data["current_time"] },
+        { label: t("tools.world_time.demo.label_offset"),       value: data["offset"] },
+      ] %>
+      <% fields.each_with_index do |field, i| %>
+        <div class="flex items-start justify-between gap-4 py-2 <%= i < fields.length - 1 ? 'border-b border-gray-100 dark:border-gray-700' : '' %>">
+          <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0"><%= field[:label] %></span>
+          <span class="text-sm font-mono text-gray-800 dark:text-gray-200 text-right break-words">
+            <%= field[:value].presence || "—" %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</turbo-frame>

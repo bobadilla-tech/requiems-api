@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   post "tools/demos/whois",                  to: "tool_demos#whois",                  as: :tool_demo_whois
   post "tools/demos/lorem-ipsum",            to: "tool_demos#lorem_ipsum",            as: :tool_demo_lorem_ipsum
   post "tools/demos/working-days",           to: "tool_demos#working_days",           as: :tool_demo_working_days
+  post "tools/demos/world-time",              to: "tool_demos#world_time",              as: :tool_demo_world_time
+  post "tools/demos/words",                   to: "tool_demos#words",                   as: :tool_demo_words
 
   namespace :webhooks do
     post "lemonsqueezy", to: "lemonsqueezy#create"

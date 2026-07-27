@@ -1,0 +1,18 @@
+<turbo-frame id="words-demo-result">
+  <div class="mt-4 text-left rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 flex items-center justify-between gap-3">
+      <span class="text-sm font-semibold text-gray-900 dark:text-white">
+        <%= t("tools.words.demo.result_heading") %>
+      </span>
+      <% if data["part_of_speech"].present? %>
+        <span class="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+          <%= data["part_of_speech"] %>
+        </span>
+      <% end %>
+    </div>
+    <div class="px-4 py-4">
+      <p class="text-lg font-semibold text-gray-900 dark:text-white"><%= data["word"] %></p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 leading-relaxed"><%= data["definition"] %></p>
+    </div>
+  </div>
+</turbo-frame>

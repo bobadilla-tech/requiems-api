@@ -1,0 +1,61 @@
+<section class="bg-white dark:bg-gray-900 pt-20 pb-16">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
+      <%= t("tools.world_time.hero.title") %>
+    </h1>
+
+    <p class="mt-5 text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      <%= t("tools.world_time.hero.subtitle") %>
+    </p>
+
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= render "partials/shared/button",
+            text: t("tools.world_time.hero.cta_primary"),
+            variant: "brand",
+            href: new_user_registration_path,
+            size: "lg" %>
+      <%= render "partials/shared/button",
+            text: t("tools.world_time.hero.cta_docs"),
+            variant: "outline",
+            href: api_path("world-time"),
+            size: "lg" %>
+    </div>
+
+    <!-- Live demo -->
+    <div class="mt-12 max-w-xl mx-auto"
+         data-controller="world-time-demo"
+         data-world-time-demo-error-empty-value="<%= t('tools.world_time.demo.error_empty') %>">
+
+      <form data-action="turbo:submit-start->world-time-demo#onSubmitStart turbo:submit-end->world-time-demo#onSubmitEnd"
+            action="<%= tool_demo_world_time_path %>"
+            method="post"
+            data-turbo-frame="world-time-demo-result"
+            novalidate>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <div class="flex gap-2">
+          <label for="world-time-demo-input" class="sr-only"><%= t("tools.world_time.hero.label_input") %></label>
+          <input
+            id="world-time-demo-input"
+            type="text"
+            name="timezone"
+            data-world-time-demo-target="input"
+            placeholder="<%= t('tools.world_time.hero.placeholder') %>"
+            autocomplete="off"
+            class="flex-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
+          >
+          <%= render "partials/shared/submit_button", text: t("tools.world_time.hero.submit"), controller: "world-time-demo" %>
+        </div>
+
+        <p class="mt-2 text-xs text-gray-400 dark:text-gray-500 text-left"><%= t("tools.world_time.hero.no_account") %></p>
+
+        <p data-world-time-demo-target="errorMessage"
+           class="hidden mt-2 text-sm text-red-500 text-left"
+           role="alert"></p>
+      </form>
+
+      <turbo-frame id="world-time-demo-result"></turbo-frame>
+    </div>
+
+  </div>
+</section>
