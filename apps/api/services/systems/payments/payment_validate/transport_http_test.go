@@ -63,7 +63,7 @@ func post(t *testing.T, r chi.Router, body string) *httptest.ResponseRecorder {
 func usBIN() bin.LookupResponse {
 	return bin.LookupResponse{
 		BIN: "424242", Scheme: "visa", CardType: "credit", CardLevel: "classic",
-		IssuerName: "Chase", CountryCode: "US", Prepaid: false, Luhn: true,
+		IssuerName: "Chase", CountryCode: "US", Prepaid: false, LuhnPrefixValid: true,
 	}
 }
 
@@ -99,7 +99,7 @@ func TestPaymentValidate_ValidBINOnly(t *testing.T) {
 func TestPaymentValidate_BINandIBANSameCountry(t *testing.T) {
 	t.Parallel()
 	gbBIN := bin.LookupResponse{
-		BIN: "400000", Scheme: "visa", CountryCode: "GB", Luhn: true,
+		BIN: "400000", Scheme: "visa", CountryCode: "GB", LuhnPrefixValid: true,
 	}
 	r := setupRouter(&stubBIN{r: gbBIN}, &stubIBAN{r: gbIBAN()}, &stubSWIFT{})
 	w := post(t, r, `{"bin":"400000","iban":"GB29NWBK60161331926819"}`)
@@ -123,7 +123,7 @@ func TestPaymentValidate_BINUSandIBANGB_Mismatch(t *testing.T) {
 
 func TestPaymentValidate_AllThreeConsistent(t *testing.T) {
 	t.Parallel()
-	r := setupRouter(&stubBIN{r: bin.LookupResponse{BIN: "400000", CountryCode: "GB", Luhn: true}},
+	r := setupRouter(&stubBIN{r: bin.LookupResponse{BIN: "400000", CountryCode: "GB", LuhnPrefixValid: true}},
 		&stubIBAN{r: gbIBAN()}, &stubSWIFT{r: gbSWIFT()})
 	w := post(t, r, `{"bin":"400000","iban":"GB29NWBK60161331926819","swift":"NWBKGB2L"}`)
 	require.Equal(t, http.StatusOK, w.Code)

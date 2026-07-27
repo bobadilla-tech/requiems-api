@@ -66,15 +66,15 @@ func decodeResponse(t *testing.T, body *httptest.ResponseRecorder) httpx.Respons
 func TestBINLookup_KnownBIN_Returns200(t *testing.T) {
 	t.Parallel()
 	svc := &stubService{result: LookupResponse{
-		Scheme:      "visa",
-		CardType:    "credit",
-		CardLevel:   "classic",
-		IssuerName:  "Chase",
-		CountryCode: "US",
-		CountryName: "United States",
-		Prepaid:     false,
-		Luhn:        true,
-		Confidence:  0.92,
+		Scheme:          "visa",
+		CardType:        "credit",
+		CardLevel:       "classic",
+		IssuerName:      "Chase",
+		CountryCode:     "US",
+		CountryName:     "United States",
+		Prepaid:         false,
+		LuhnPrefixValid: true,
+		Confidence:      0.92,
 	}}
 
 	r := setupRouter(svc)
@@ -158,7 +158,7 @@ func TestBINLookup_NonDigits_Returns400(t *testing.T) {
 
 func TestBINLookup_LuhnTrue(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{result: LookupResponse{Luhn: true}}
+	svc := &stubService{result: LookupResponse{LuhnPrefixValid: true}}
 	r := setupRouter(svc)
 
 	req := httptest.NewRequest(http.MethodGet, "/bin/424242", http.NoBody)
@@ -166,12 +166,12 @@ func TestBINLookup_LuhnTrue(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	assert.True(t, resp.Data.Luhn, "expected luhn = true")
+	assert.True(t, resp.Data.LuhnPrefixValid, "expected luhn_prefix_valid = true")
 }
 
 func TestBINLookup_LuhnFalse(t *testing.T) {
 	t.Parallel()
-	svc := &stubService{result: LookupResponse{Luhn: false}}
+	svc := &stubService{result: LookupResponse{LuhnPrefixValid: false}}
 	r := setupRouter(svc)
 
 	req := httptest.NewRequest(http.MethodGet, "/bin/123456", http.NoBody)
@@ -179,7 +179,7 @@ func TestBINLookup_LuhnFalse(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	resp := decodeResponse(t, w)
-	assert.False(t, resp.Data.Luhn, "expected luhn = false")
+	assert.False(t, resp.Data.LuhnPrefixValid, "expected luhn_prefix_valid = false")
 }
 
 func TestBINLookup_PrepaidTrue(t *testing.T) {
@@ -225,7 +225,7 @@ func TestBINLookup_8DigitBIN(t *testing.T) {
 
 func TestBINBatch_Found(t *testing.T) {
 	t.Parallel()
-	hit := LookupResponse{Scheme: "visa", CardType: "credit", CountryCode: "US", Luhn: true, Confidence: 0.95}
+	hit := LookupResponse{Scheme: "visa", CardType: "credit", CountryCode: "US", LuhnPrefixValid: true, Confidence: 0.95}
 	svc := &stubService{
 		batchFn: func(bins []string) []BatchBINItem {
 			results := make([]BatchBINItem, len(bins))
@@ -293,17 +293,17 @@ func TestBINBatch_EmptyBINs422(t *testing.T) {
 func TestBINLookup_AllResponseFieldsPresent(t *testing.T) {
 	t.Parallel()
 	svc := &stubService{result: LookupResponse{
-		Scheme:      "mastercard",
-		CardType:    "debit",
-		CardLevel:   "gold",
-		IssuerName:  "Bank of America",
-		IssuerURL:   "www.bankofamerica.com",
-		IssuerPhone: "+18004321000",
-		CountryCode: "US",
-		CountryName: "United States",
-		Prepaid:     false,
-		Luhn:        true,
-		Confidence:  0.95,
+		Scheme:          "mastercard",
+		CardType:        "debit",
+		CardLevel:       "gold",
+		IssuerName:      "Bank of America",
+		IssuerURL:       "www.bankofamerica.com",
+		IssuerPhone:     "+18004321000",
+		CountryCode:     "US",
+		CountryName:     "United States",
+		Prepaid:         false,
+		LuhnPrefixValid: true,
+		Confidence:      0.95,
 	}}
 
 	r := setupRouter(svc)

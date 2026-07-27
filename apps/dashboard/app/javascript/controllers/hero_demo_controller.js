@@ -98,7 +98,7 @@ export default class extends Controller {
           `  ${k('"country_code"')}${p(":")} ${s('"US"')}${p(",")}`,
           `  ${k('"country_name"')}${p(":")} ${s('"United States"')}${p(",")}`,
           `  ${k('"prepaid"')}${p(":")} ${b("false")}${p(",")}`,
-          `  ${k('"luhn"')}${p(":")} ${b("true")}${p(",")}`,
+          `  ${k('"luhn_prefix_valid"')}${p(":")} ${b("true")}${p(",")}`,
           `  ${k('"confidence"')}${p(":")} ${b("0.97")}`,
           p("}"),
         ],

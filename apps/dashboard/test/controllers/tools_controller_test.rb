@@ -166,4 +166,16 @@ class ToolsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='working-days-demo']"
   end
+
+  test "world time tool page renders successfully" do
+    get "/en/tools/world-time"
+    assert_response :success
+    assert_select "[data-controller='world-time-demo']"
+  end
+
+  test "words tool page renders successfully" do
+    get "/en/tools/words"
+    assert_response :success
+    assert_select "[data-controller='words-demo']"
+  end
 end

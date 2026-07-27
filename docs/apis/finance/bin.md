@@ -28,7 +28,7 @@ digits of a payment card number.
     "country_code": "US",
     "country_name": "United States",
     "prepaid": false,
-    "luhn": true,
+    "luhn_prefix_valid": true,
     "confidence": 0.92
   },
   "metadata": {
@@ -51,7 +51,7 @@ digits of a payment card number.
 | `country_code` | string  | ISO 3166-1 alpha-2 country code of the issuing bank                                                                             |
 | `country_name` | string  | Full country name                                                                                                               |
 | `prepaid`      | boolean | Whether the card is a prepaid card                                                                                              |
-| `luhn`         | boolean | Whether the BIN prefix passes the Luhn algorithm check                                                                          |
+| `luhn_prefix_valid` | boolean | Whether the BIN prefix (not a full card number) passes the Luhn algorithm check                                            |
 | `confidence`   | number  | Data quality score (0.00–1.00). Multi-source confirmed records score higher                                                     |
 
 ## BIN vs 8-digit IIN
@@ -83,10 +83,10 @@ the API falls back to ISO/IEC 7812 prefix-range detection:
 
 ## Luhn Check
 
-The `luhn` field runs the Luhn algorithm on the BIN prefix itself (not a full
-card number). For a 6–8 digit prefix this is a partial check — it reflects
-whether the prefix has a valid Luhn structure, not whether a specific full card
-number is valid.
+The `luhn_prefix_valid` field runs the Luhn algorithm on the BIN prefix itself
+(not a full card number). For a 6–8 digit prefix this is a partial check — it
+reflects whether the prefix has a valid Luhn structure, not whether a specific
+full card number is valid.
 
 ## Error Codes
 

@@ -57,7 +57,7 @@ endpoints:
             "country_code": "US",
             "issuer": "JPMorgan Chase",
             "prepaid": false,
-            "luhn": true
+            "luhn_prefix_valid": true
           },
           "iban": {
             "valid": true,
@@ -83,7 +83,7 @@ endpoints:
     response_fields:
       - name: bin
         type: object or null
-        description: BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn.
+        description: BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn_prefix_valid.
       - name: iban
         type: object or null
         description: IBAN result. Null when iban was not provided. Contains valid, country_code, bank_code, account_number.

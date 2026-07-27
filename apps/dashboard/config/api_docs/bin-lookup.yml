@@ -48,7 +48,7 @@ endpoints:
           "country_code": "US",
           "country_name": "United States",
           "prepaid": false,
-          "luhn": true,
+          "luhn_prefix_valid": true,
           "confidence": 0.92
         },
         "metadata": {
@@ -87,9 +87,9 @@ endpoints:
       - name: prepaid
         type: boolean
         description: Whether the card is a prepaid card
-      - name: luhn
+      - name: luhn_prefix_valid
         type: boolean
-        description: Whether the BIN prefix passes the Luhn algorithm check
+        description: Whether the BIN prefix (not a full card number) passes the Luhn algorithm check
       - name: confidence
         type: number
         description: "Data quality score (0.00–1.00). Multi-source confirmed records score higher."
@@ -159,8 +159,8 @@ faq:
   - question: What does the confidence score mean?
     answer: "The confidence field (0.00–1.00) reflects data quality. Records confirmed across multiple independent data sources receive a higher score. A score above 0.85 indicates high-confidence data with bank and country information verified from more than one source."
 
-  - question: What does the luhn field mean?
-    answer: "The Luhn algorithm is a checksum formula used to validate card numbers. The luhn field runs this check on the BIN prefix (6–8 digits), not a full card number. It tells you whether the prefix has a structurally valid Luhn checksum — not whether a specific card number is real."
+  - question: What does the luhn_prefix_valid field mean?
+    answer: "The Luhn algorithm is a checksum formula used to validate card numbers. The luhn_prefix_valid field runs this check on the BIN prefix (6–8 digits), not a full card number. It tells you whether the prefix has a structurally valid Luhn checksum — not whether a specific card number is real."
 
   - question: Why is issuer_name sometimes empty?
     answer: "Not all BINs in the public dataset have associated bank name data. The confidence score will be lower for these records. Empty string fields indicate the data is not available for that BIN."

@@ -776,9 +776,9 @@ export const openApiSpec = {
                           type: "boolean",
                           description: "Whether the card is a prepaid card",
                         },
-                        luhn: {
+                        luhn_prefix_valid: {
                           type: "boolean",
-                          description: "Whether the BIN prefix passes the Luhn algorithm check",
+                          description: "Whether the BIN prefix (not a full card number) passes the Luhn algorithm check",
                         },
                         confidence: {
                           type: "number",
@@ -810,7 +810,7 @@ export const openApiSpec = {
                     country_code: "US",
                     country_name: "United States",
                     prepaid: false,
-                    luhn: true,
+                    luhn_prefix_valid: true,
                     confidence: 0.92,
                   },
                   metadata: {
@@ -8757,7 +8757,7 @@ export const openApiSpec = {
                         bin: {
                           type: "string",
                           description:
-                            "BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn.",
+                            "BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn_prefix_valid.",
                         },
                         iban: {
                           type: "string",
@@ -8802,7 +8802,7 @@ export const openApiSpec = {
                       country_code: "US",
                       issuer: "JPMorgan Chase",
                       prepaid: false,
-                      luhn: true,
+                      luhn_prefix_valid: true,
                     },
                     iban: {
                       valid: true,

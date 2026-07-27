@@ -379,7 +379,7 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
       "card_level" => "classic", "issuer_name" => "Chase",
       "issuer_url" => "www.chase.com", "issuer_phone" => "+18002324000",
       "country_code" => "US", "country_name" => "United States",
-      "prepaid" => false, "luhn" => true, "confidence" => 0.92
+      "prepaid" => false, "luhn_prefix_valid" => true, "confidence" => 0.92
     }
     stub_api(200, success_data(data)) do
       post "/tools/demos/bin-lookup", params: { bin: "424242" }
@@ -1609,5 +1609,91 @@ class ToolDemoControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_match I18n.t("tools.working_days.demo.error_no_data"), response.body
+  end
+
+  # ── world_time ───────────────────────────────────────────────────────────────
+
+  test "world_time renders result on success" do
+    payload = { "timezone" => "America/New_York", "offset" => "-04:00",
+                "current_time" => "2026-07-27T14:32:10-04:00", "is_dst" => true }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/world-time", params: { timezone: "America/New_York" }
+    end
+    assert_response :success
+    assert_match "America/New_York", response.body
+  end
+
+  test "world_time renders error when timezone is blank" do
+    post "/tools/demos/world-time", params: { timezone: "" }
+    assert_response :success
+    assert_match I18n.t("tools.world_time.demo.error_empty"), response.body
+  end
+
+  test "world_time renders error on 404 not found" do
+    stub_api(404, nil) do
+      post "/tools/demos/world-time", params: { timezone: "Not/AZone" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.world_time.demo.error_not_found"), response.body
+  end
+
+  test "world_time renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/world-time", params: { timezone: "America/New_York" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.world_time.demo.error_rate_limit"), response.body
+  end
+
+  test "world_time renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/world-time", params: { timezone: "America/New_York" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.world_time.demo.error_generic"), response.body
+  end
+
+  test "world_time renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/world-time", params: { timezone: "America/New_York" }
+    end
+    assert_response :success
+    assert_match I18n.t("tools.world_time.demo.error_no_data"), response.body
+  end
+
+  # ── words ────────────────────────────────────────────────────────────────────
+
+  test "words renders result on success" do
+    payload = { "id" => 512, "word" => "ephemeral", "definition" => "Lasting for a very short time.",
+                "part_of_speech" => "adjective" }
+    stub_api(200, success_data(payload)) do
+      post "/tools/demos/words"
+    end
+    assert_response :success
+    assert_match "ephemeral", response.body
+  end
+
+  test "words renders error on 429 rate limit" do
+    stub_api(429, nil) do
+      post "/tools/demos/words"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.words.demo.error_rate_limit"), response.body
+  end
+
+  test "words renders error on non-200 response" do
+    stub_api(500, nil) do
+      post "/tools/demos/words"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.words.demo.error_generic"), response.body
+  end
+
+  test "words renders error when data is nil" do
+    stub_api(200, nil) do
+      post "/tools/demos/words"
+    end
+    assert_response :success
+    assert_match I18n.t("tools.words.demo.error_no_data"), response.body
   end
 end

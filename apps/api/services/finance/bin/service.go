@@ -13,18 +13,20 @@ import (
 
 // LookupResponse is the response payload for GET /v1/finance/bin/:bin.
 type LookupResponse struct {
-	BIN         string  `json:"bin"`
-	Scheme      string  `json:"scheme"`
-	CardType    string  `json:"card_type"`
-	CardLevel   string  `json:"card_level"`
-	IssuerName  string  `json:"issuer_name"`
-	IssuerURL   string  `json:"issuer_url"`
-	IssuerPhone string  `json:"issuer_phone"`
-	CountryCode string  `json:"country_code"`
-	CountryName string  `json:"country_name"`
-	Prepaid     bool    `json:"prepaid"`
-	Luhn        bool    `json:"luhn"`
-	Confidence  float64 `json:"confidence"`
+	BIN         string `json:"bin"`
+	Scheme      string `json:"scheme"`
+	CardType    string `json:"card_type"`
+	CardLevel   string `json:"card_level"`
+	IssuerName  string `json:"issuer_name"`
+	IssuerURL   string `json:"issuer_url"`
+	IssuerPhone string `json:"issuer_phone"`
+	CountryCode string `json:"country_code"`
+	CountryName string `json:"country_name"`
+	Prepaid     bool   `json:"prepaid"`
+	// LuhnPrefixValid reports whether the BIN prefix (6-8 digits) itself
+	// passes the Luhn checksum — it does not validate a full card PAN.
+	LuhnPrefixValid bool    `json:"luhn_prefix_valid"`
+	Confidence      float64 `json:"confidence"`
 }
 
 // Service provides BIN lookup against the bin_data PostgreSQL table.
@@ -68,7 +70,7 @@ func (s *Service) Lookup(ctx context.Context, raw string) (LookupResponse, error
 	}
 
 	result.BIN = bin
-	result.Luhn = luhn
+	result.LuhnPrefixValid = luhn
 	return result, nil
 }
 
@@ -208,7 +210,7 @@ func (s *Service) batchBINItem(v batchBINValid, r LookupResponse) BatchBINItem {
 		r.Scheme = detectScheme(v.bin)
 	}
 	r.BIN = v.bin
-	r.Luhn = v.luhn
+	r.LuhnPrefixValid = v.luhn
 	return BatchBINItem{BIN: v.bin, Found: true, Result: &r}
 }
 

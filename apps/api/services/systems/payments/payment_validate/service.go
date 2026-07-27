@@ -40,7 +40,9 @@ type BINResult struct {
 	CountryCode string `json:"country_code"`
 	Issuer      string `json:"issuer"`
 	Prepaid     bool   `json:"prepaid"`
-	Luhn        bool   `json:"luhn"`
+	// LuhnPrefixValid reports whether the BIN prefix itself passes the Luhn
+	// checksum — it does not validate a full card PAN.
+	LuhnPrefixValid bool `json:"luhn_prefix_valid"`
 }
 
 type IBANResult struct {
@@ -130,14 +132,14 @@ func (s *Service) Validate(ctx context.Context, req Request) (Result, error) {
 	if req.BIN != "" {
 		if binResult.err == nil {
 			out.BIN = &BINResult{
-				Valid:       true,
-				Scheme:      binResult.r.Scheme,
-				CardType:    binResult.r.CardType,
-				CardLevel:   binResult.r.CardLevel,
-				CountryCode: binResult.r.CountryCode,
-				Issuer:      binResult.r.IssuerName,
-				Prepaid:     binResult.r.Prepaid,
-				Luhn:        binResult.r.Luhn,
+				Valid:           true,
+				Scheme:          binResult.r.Scheme,
+				CardType:        binResult.r.CardType,
+				CardLevel:       binResult.r.CardLevel,
+				CountryCode:     binResult.r.CountryCode,
+				Issuer:          binResult.r.IssuerName,
+				Prepaid:         binResult.r.Prepaid,
+				LuhnPrefixValid: binResult.r.LuhnPrefixValid,
 			}
 			binCountry = strings.ToUpper(binResult.r.CountryCode)
 		} else {
