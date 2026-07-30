@@ -12,8 +12,6 @@ require (
 )
 
 require (
-	github.com/bobadilla-tech/sudoku-go v0.1.0 // indirect
-	github.com/bobadilla-tech/thesaurus-go v1.0.0 // indirect
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
@@ -27,8 +25,8 @@ require (
 	github.com/likexian/gokit v0.25.16 // indirect
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
-	github.com/paulmach/orb v0.13.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/ringsaturn/orb v0.15.0 // indirect
 	github.com/ringsaturn/tzf-dist v0.0.2026-c-fix1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
@@ -51,6 +49,8 @@ require (
 	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.2.0
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
 	github.com/bobadilla-tech/sentiment-go v1.1.0
+	github.com/bobadilla-tech/sudoku-go v0.1.0
+	github.com/bobadilla-tech/thesaurus-go v1.0.0
 	github.com/boombuler/barcode v1.1.0
 	github.com/getsentry/sentry-go v0.48.0
 	github.com/jaswdr/faker/v2 v2.9.1
@@ -59,7 +59,7 @@ require (
 	github.com/medama-io/go-useragent v1.2.4
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/pemistahl/lingua-go v1.4.0
-	github.com/ringsaturn/tzf v1.2.3
+	github.com/ringsaturn/tzf v1.2.5
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/cobra v1.10.2
 	github.com/yuin/goldmark v1.8.4
