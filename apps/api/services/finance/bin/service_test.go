@@ -1,6 +1,7 @@
 package bin
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -237,4 +238,72 @@ func TestDetectScheme_Unknown(t *testing.T) {
 func TestDetectScheme_TooShort(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, "", detectScheme("42"), "detectScheme(42)")
+}
+
+// ---- resolveFallbackError ----
+
+func TestResolveFallbackError_ExactHitIsResolvedNormally(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+	results := make([]BatchBINItem, 1)
+	hit := LookupResponse{Scheme: "visa", BIN: "424242"}
+	exactHits := map[string]LookupResponse{"424242": hit}
+	v := batchBINValid{idx: 0, bin: "424242", luhn: true}
+
+	svc.resolveFallbackError(results, []batchBINValid{v}, exactHits)
+
+	assert.True(t, results[0].Found)
+	assert.Equal(t, "424242", results[0].BIN)
+	assert.Empty(t, results[0].Error)
+}
+
+func TestResolveFallbackError_8DigitMissGetsError(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+	results := make([]BatchBINItem, 1)
+	v := batchBINValid{idx: 0, bin: "42424242", luhn: false}
+
+	svc.resolveFallbackError(results, []batchBINValid{v}, map[string]LookupResponse{})
+
+	assert.False(t, results[0].Found)
+	assert.Equal(t, "lookup failed", results[0].Error)
+}
+
+func TestResolveFallbackError_6DigitMissIsNotFound(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+	results := make([]BatchBINItem, 1)
+	v := batchBINValid{idx: 0, bin: "424242", luhn: false}
+
+	svc.resolveFallbackError(results, []batchBINValid{v}, map[string]LookupResponse{})
+
+	assert.False(t, results[0].Found)
+	assert.Empty(t, results[0].Error)
+}
+
+// ---- LookupBatch (DB-free paths) ----
+
+func TestLookupBatch_AllInvalidBINs(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+	results := svc.LookupBatch(context.Background(), []string{"abc", "!!!", "1"})
+
+	require.Len(t, results, 3)
+	for _, r := range results {
+		assert.NotEmpty(t, r.Error, "expected in-band error for invalid BIN")
+		assert.False(t, r.Found)
+	}
+}
+
+func TestLookupBatch_EmptyInput(t *testing.T) {
+	t.Parallel()
+
+	svc := &Service{}
+	results := svc.LookupBatch(context.Background(), []string{})
+
+	assert.Empty(t, results)
 }
