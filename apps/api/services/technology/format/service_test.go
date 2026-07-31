@@ -331,3 +331,111 @@ func TestNormalizeNumbers_NonNumber(t *testing.T) {
 func jsonNumber(s string) any {
 	return json.Number(s)
 }
+
+// --- CSV duplicate headers ---
+
+func TestParseCSV_DuplicateHeaders(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	req := Request{From: "csv", To: "json", Content: "name,age,name\nAlice,30,Duplicate\n"}
+	_, err := svc.Convert(req)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "duplicate")
+}
+
+// --- XML attributes ---
+
+func TestXMLToJSON_WithAttributes(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	req := Request{
+		From:    "xml",
+		To:      "json",
+		Content: `<root><person id="42">Alice</person></root>`,
+	}
+	resp, err := svc.Convert(req)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Result, "@id")
+	assert.Contains(t, resp.Result, "42")
+	assert.Contains(t, resp.Result, "Alice")
+}
+
+// --- CSV heterogeneous keys across rows ---
+
+func TestJSONToCSV_HeterogeneousKeys(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	// "age" is absent from the first row but present in the second.
+	req := Request{
+		From:    "json",
+		To:      "csv",
+		Content: `[{"name":"Alice"},{"name":"Bob","age":"25"}]`,
+	}
+	resp, err := svc.Convert(req)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Result, "age")
+	assert.Contains(t, resp.Result, "25")
+}
+
+// --- XML #text key round-trip ---
+
+func TestJSONToXML_TextKey(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	// "#text" must be emitted as character data, not a child element named "_text".
+	req := Request{
+		From:    "json",
+		To:      "xml",
+		Content: `{"name":{"#text":"Alice"}}`,
+	}
+	resp, err := svc.Convert(req)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Result, "Alice")
+	assert.NotContains(t, resp.Result, "_text")
+}
+
+// --- encodeXMLValue branches ---
+
+func TestJSONToXML_ArrayItems(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	req := Request{
+		From:    "json",
+		To:      "xml",
+		Content: `{"tags":["go","api"]}`,
+	}
+	resp, err := svc.Convert(req)
+	require.NoError(t, err)
+	assert.Contains(t, resp.Result, "go")
+	assert.Contains(t, resp.Result, "api")
+}
+
+func TestJSONToXML_NullField(t *testing.T) {
+	t.Parallel()
+	svc := NewService()
+	req := Request{
+		From:    "json",
+		To:      "xml",
+		Content: `{"name":null}`,
+	}
+	resp, err := svc.Convert(req)
+	require.NoError(t, err)
+	// null emits an empty element with no text content inside.
+	assert.Contains(t, resp.Result, "<name></name>")
+}
+
+// --- normalizeNumbers string fallback ---
+
+func TestNormalizeNumbers_StringFallback(t *testing.T) {
+	t.Parallel()
+	// A json.Number that cannot be parsed as int64 or float64 falls back to its string representation.
+	result := normalizeNumbers(json.Number("not-a-number"))
+	assert.Equal(t, "not-a-number", result)
+}
+
+// --- sanitizeXMLName dot and dash ---
+
+func TestSanitizeXMLName_DotAndDash(t *testing.T) {
+	t.Parallel()
+	assert.Equal(t, "a.b-c", sanitizeXMLName("a.b-c"))
+}
