@@ -26,8 +26,6 @@ github.com/bobadilla-tech/sentiment-go v1.1.0 h1:lrPpVJgSL/DfCOiOdgDpf0iigJlujYk
 github.com/bobadilla-tech/sentiment-go v1.1.0/go.mod h1:TFCY/Gcee/+BNLrI7/s8uL80/Gy9Y8OH1KFaSQGafXw=
 github.com/bobadilla-tech/sudoku-go v0.1.0 h1:bLCI5oGAmK6QFll49ffy7dhTpHNq41Oap/wlunHsKWk=
 github.com/bobadilla-tech/sudoku-go v0.1.0/go.mod h1:Q3d0G6CdoNuF9eSd+dc/W6yIDSv2jTDKWFhIUniELxA=
-github.com/bobadilla-tech/thesaurus-go v0.0.0-20260727190354-29a20004b02d h1:ylP1NgR2rGD64YApO+jJ+3uE8KpOwWH4avfd/xws1B8=
-github.com/bobadilla-tech/thesaurus-go v0.0.0-20260727190354-29a20004b02d/go.mod h1:xgueJhpRBbsd0rrIMAVf0LWVfOv4FkzthLJy0tL2s4g=
 github.com/bobadilla-tech/thesaurus-go v1.0.0 h1:yXkQXIrZj/rWz4/N/qDbOz5SqWpkK+sWO8acB40dhFs=
 github.com/bobadilla-tech/thesaurus-go v1.0.0/go.mod h1:xgueJhpRBbsd0rrIMAVf0LWVfOv4FkzthLJy0tL2s4g=
 github.com/boombuler/barcode v1.1.0 h1:ChaYjBR63fr4LFyGn8E8nt7dBSt3MiU3zMOZqFvVkHo=
@@ -137,8 +135,6 @@ github.com/oschwald/geoip2-golang v1.13.0 h1:Q44/Ldc703pasJeP5V9+aFSZFmBN7DKHbNs
 github.com/oschwald/geoip2-golang v1.13.0/go.mod h1:P9zG+54KPEFOliZ29i7SeYZ/GM6tfEL+rgSn03hYuUo=
 github.com/oschwald/maxminddb-golang v1.13.0 h1:R8xBorY71s84yO06NgTmQvqvTvlS/bnYZrrWX1MElnU=
 github.com/oschwald/maxminddb-golang v1.13.0/go.mod h1:BU0z8BfFVhi1LQaonTwwGQlsHUEu9pWNdMfmq4ztm0o=
-github.com/paulmach/orb v0.13.0 h1:r7n7mQGGF+cj/CbcivEj9J3HGK+XR+yXnvzRdq9saIw=
-github.com/paulmach/orb v0.13.0/go.mod h1:6scRWINywA2Jf05dcjOfLfxrUIMECvTSG2MVbRLxu/k=
 github.com/pemistahl/lingua-go v1.4.0 h1:ifYhthrlW7iO4icdubwlduYnmwU37V1sbNrwhKBR4rM=
 github.com/pemistahl/lingua-go v1.4.0/go.mod h1:ECuM1Hp/3hvyh7k8aWSqNCPlTxLemFZsRjocUf3KgME=
 github.com/pingcap/errors v0.11.4 h1:lFuQV/oaUMGcD2tqt+01ROSmJs75VG1ToEOkZIZ4nE4=
@@ -152,8 +148,10 @@ github.com/redis/go-redis/v9 v9.21.0 h1:FPBE4hhbAke+TLmcY3WkpbDffJEomdqPn3HYiqAt
 github.com/redis/go-redis/v9 v9.21.0/go.mod h1:v/M13XI1PVCDcm01VtPFOADfZtHf8YW3baQf57KlIkA=
 github.com/ringsaturn/go-cities.json v0.6.13 h1:p5afPcJ/tEE6uzFCOzLSHJYXgWnGdPmwZB9KBrEASxc=
 github.com/ringsaturn/go-cities.json v0.6.13/go.mod h1:VtklT4Sod9i6kvXXNZV63sfjeCX9l11OQfaAvPu+p4M=
-github.com/ringsaturn/tzf v1.2.3 h1:iuEMZIgzo5pg5Q2vUIM274cjmvp8wI4/q7Ic7hReJxY=
-github.com/ringsaturn/tzf v1.2.3/go.mod h1:beR4RQuMSnTxLZBDwIb2zCNtOKrfj3fdqr5vAd5/yzg=
+github.com/ringsaturn/orb v0.15.0 h1:+jLFo3JzHX2yg5kILpfcLHokKXywqNHBtgEDo6SJOuk=
+github.com/ringsaturn/orb v0.15.0/go.mod h1:kF8F7MSKFRPm0HxTzlLz8k/jkexsV3MVcultHKVFmzg=
+github.com/ringsaturn/tzf v1.2.5 h1:bkZqp++IkuiHXArgY0H7kpxkW57sTgC1Pi8IjNCRl1A=
+github.com/ringsaturn/tzf v1.2.5/go.mod h1:EyV2g/W08JginFQWHE8sr47BKZxyOkhAEyiO53CaK9Y=
 github.com/ringsaturn/tzf-dist v0.0.2026-c-fix1 h1:GPSbb2L+LSfEvrMXAC25VT0n+MMk80W+qnUpnIA48TI=
 github.com/ringsaturn/tzf-dist v0.0.2026-c-fix1/go.mod h1:MLn3mRLioai5ceZLV8k+uAr4cLxdVEHoTQIGKpuVS/c=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
