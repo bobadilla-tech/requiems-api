@@ -39,20 +39,20 @@ digits of a payment card number.
 
 ## Response Fields
 
-| Field          | Type    | Description                                                                                                                     |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `bin`          | string  | The normalised BIN prefix used for the lookup                                                                                   |
-| `scheme`       | string  | Card network: `visa`, `mastercard`, `amex`, `discover`, `jcb`, `diners`, `unionpay`, `maestro`, `mir`, `rupay`, `private_label` |
-| `card_type`    | string  | `credit`, `debit`, `prepaid`, or `charge`                                                                                       |
-| `card_level`   | string  | `classic`, `gold`, `platinum`, `infinite`, `business`, `signature`, `standard`                                                  |
-| `issuer_name`  | string  | Name of the card-issuing bank                                                                                                   |
-| `issuer_url`   | string  | Bank website URL                                                                                                                |
-| `issuer_phone` | string  | Bank customer service phone number                                                                                              |
-| `country_code` | string  | ISO 3166-1 alpha-2 country code of the issuing bank                                                                             |
-| `country_name` | string  | Full country name                                                                                                               |
-| `prepaid`      | boolean | Whether the card is a prepaid card                                                                                              |
-| `luhn_prefix_valid` | boolean | Whether the BIN prefix (not a full card number) passes the Luhn algorithm check                                            |
-| `confidence`   | number  | Data quality score (0.00–1.00). Multi-source confirmed records score higher                                                     |
+| Field               | Type    | Description                                                                                                                     |
+| ------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `bin`               | string  | The normalised BIN prefix used for the lookup                                                                                   |
+| `scheme`            | string  | Card network: `visa`, `mastercard`, `amex`, `discover`, `jcb`, `diners`, `unionpay`, `maestro`, `mir`, `rupay`, `private_label` |
+| `card_type`         | string  | `credit`, `debit`, `prepaid`, or `charge`                                                                                       |
+| `card_level`        | string  | `classic`, `gold`, `platinum`, `infinite`, `business`, `signature`, `standard`                                                  |
+| `issuer_name`       | string  | Name of the card-issuing bank                                                                                                   |
+| `issuer_url`        | string  | Bank website URL                                                                                                                |
+| `issuer_phone`      | string  | Bank customer service phone number                                                                                              |
+| `country_code`      | string  | ISO 3166-1 alpha-2 country code of the issuing bank                                                                             |
+| `country_name`      | string  | Full country name                                                                                                               |
+| `prepaid`           | boolean | Whether the card is a prepaid card                                                                                              |
+| `luhn_prefix_valid` | boolean | Whether the BIN prefix (not a full card number) passes the Luhn algorithm check                                                 |
+| `confidence`        | number  | Data quality score (0.00–1.00). Multi-source confirmed records score higher                                                     |
 
 ## BIN vs 8-digit IIN
 
