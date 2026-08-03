@@ -36,7 +36,7 @@
     "@biomejs/biome": "^2.5.6",
     "@edge-runtime/vm": "^5.0.0",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.1.2",
     "@vitest/coverage-v8": "^4.1.8",
     "js-yaml": "^5.2.2",
     "tsx": "^4.23.1",
