@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@sentry/cloudflare": "^10.67.0",
-    "hono": "^4.12.32",
+    "hono": "^4.12.34",
     "zod": "^4.4.3"
   },
   "devDependencies": {
