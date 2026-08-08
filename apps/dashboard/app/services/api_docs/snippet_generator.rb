@@ -60,20 +60,28 @@ module ApiDocs
     def body_params  = params.select { |p| p["location"] == "body" }
     def get?         = http_method == "GET"
 
-    # Full URL with {name} path segments substituted by example values.
+    # Full URL with {name} path segments substituted by URL-encoded example values.
     def full_url
       url = "#{@base_url}#{path}"
-      path_params.each { |p| url = url.gsub("{#{p["name"]}}", example_str(p)) }
+      path_params.each { |p| url = url.gsub("{#{p["name"]}}", URI.encode_www_form_component(example_str(p))) }
       url
     end
 
     # Native Ruby value for a parameter's example or a type-appropriate placeholder.
     # YAML example values for array/object params are stored as JSON strings —
     # e.g. example: '["a", "b"]' — so we parse those back to native types.
+    # Malformed JSON examples fall back to the raw string rather than raising.
     def native_example(param)
       raw = param["example"]
       return type_placeholder(param["type"].to_s) if raw.nil?
-      return JSON.parse(raw) if raw.is_a?(String) && (raw.start_with?("[") || raw.start_with?("{"))
+
+      if raw.is_a?(String) && (raw.start_with?("[") || raw.start_with?("{"))
+        begin
+          return JSON.parse(raw)
+        rescue JSON::ParserError
+          # Malformed JSON example — treat as plain string
+        end
+      end
 
       raw
     end
@@ -138,7 +146,9 @@ module ApiDocs
     end
 
     def build_post
-      body_json = JSON.generate(body_hash)
+      # Shell-safe: escape any single quotes inside the JSON body so the
+      # -d '...' argument stays valid in sh/bash.
+      body_json = JSON.generate(body_hash).gsub("'", "'\\''")
       [
         "curl -X #{http_method} \"#{full_url}\" \\",
         "  -H \"requiems-api-key: #{API_KEY_PLACEHOLDER}\" \\",
@@ -207,10 +217,11 @@ module ApiDocs
     def to_python(value)
       case value
       when Hash
+        # Always use string keys ("key": val) to handle any key format.
         pairs = value.map { |k, v| "\"#{k}\": #{to_python(v)}" }
         "{ #{pairs.join(", ")} }"
       when Array then "[#{value.map { |v| to_python(v) }.join(", ")}]"
-      when String then "\"#{value}\""
+      when String then value.to_json  # handles internal quotes and backslashes
       when true   then "True"
       when false  then "False"
       when nil    then "None"
@@ -266,10 +277,11 @@ module ApiDocs
     def to_js(value)
       case value
       when Hash
-        pairs = value.map { |k, v| "#{k}: #{to_js(v)}" }
+        # Quote all keys to handle hyphens and reserved words safely.
+        pairs = value.map { |k, v| "'#{k}': #{to_js(v)}" }
         "{ #{pairs.join(", ")} }"
       when Array then "[#{value.map { |v| to_js(v) }.join(", ")}]"
-      when String then "'#{value}'"
+      when String then value.to_json  # handles internal quotes and backslashes
       when true   then "true"
       when false  then "false"
       when nil    then "null"
@@ -315,10 +327,11 @@ module ApiDocs
     def to_ruby(value)
       case value
       when Hash
-        pairs = value.map { |k, v| "#{k}: #{to_ruby(v)}" }
+        # Use rocket-style hash ("key" => val) to handle any key format safely.
+        pairs = value.map { |k, v| "\"#{k}\" => #{to_ruby(v)}" }
         "{ #{pairs.join(", ")} }"
       when Array then "[#{value.map { |v| to_ruby(v) }.join(", ")}]"
-      when String then "'#{value}'"
+      when String then value.inspect  # handles internal quotes and backslashes
       when true   then "true"
       when false  then "false"
       when nil    then "nil"

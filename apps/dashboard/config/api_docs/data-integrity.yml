@@ -630,7 +630,7 @@ endpoints:
         description: The text to normalize. Required.
         example: "  Hello,   World!  "
       - name: operations
-        type: array<object>
+        type: array<string>
         required: true
         location: body
         description: "Ordered list of normalization operations to apply. At least one required. Valid values: trim, lowercase, uppercase, normalize_unicode, collapse_whitespace, strip_html, remove_punctuation"
@@ -659,7 +659,7 @@ endpoints:
         type: string
         description: The text after all operations have been applied in order
       - name: operations
-        type: array<object>
+        type: array<string>
         description: The operations list echoed from the request
     errors:
       - code: 422

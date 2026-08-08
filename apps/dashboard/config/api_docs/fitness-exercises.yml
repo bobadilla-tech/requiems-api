@@ -93,7 +93,7 @@ endpoints:
 
     response_fields:
       - name: items
-        type: array<string>
+        type: array<object>
         description: Array of exercise objects for the current page
       - name: items[].id
         type: integer
