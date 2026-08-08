@@ -69,7 +69,7 @@ endpoints:
         type: integer
         description: Year for which holidays are returned
       - name: holidays
-        type: array
+        type: array<object>
         description: Array of holiday objects
       - name: holidays[].date
         type: string
@@ -137,7 +137,7 @@ endpoints:
 
     parameters:
       - name: queries
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Array of (country, year) pairs. Min: 1, Max: 50."
@@ -181,7 +181,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: One result per query, in the same order as the request
       - name: results[].country
         type: string
@@ -193,7 +193,7 @@ endpoints:
         type: boolean
         description: false when no holidays exist for that country/year combination
       - name: results[].holidays
-        type: array
+        type: array<object>
         description: List of holidays. Omitted when found is false.
       - name: results[].total
         type: integer

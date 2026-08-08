@@ -111,7 +111,7 @@ endpoints:
     description: Validate multiple email addresses in a single request (max 100 emails)
     parameters:
       - name: emails
-        type: array
+        type: array<string>
         required: true
         location: body
         description: Array of email addresses to check (max 100)
@@ -154,7 +154,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Array of check results for each email
       - name: total
         type: integer
@@ -321,7 +321,7 @@ endpoints:
       }
     response_fields:
       - name: domains
-        type: array
+        type: array<string>
         description: Array of domain names
       - name: total
         type: integer

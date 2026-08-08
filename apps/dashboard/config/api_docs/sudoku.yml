@@ -24,7 +24,7 @@ endpoints:
       Each puzzle in the batch counts as one unit of API usage.
     parameters:
       - name: puzzles
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of difficulty levels to generate (min: 1, max: 20). Each must be one of: easy, medium, hard."
@@ -71,16 +71,16 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Generated puzzles in the same order as the input array. Each item has the same fields as the single-puzzle endpoint.
       - name: results[].difficulty
         type: string
         description: The difficulty level of the puzzle (easy, medium, or hard)
       - name: results[].puzzle
-        type: array[array[integer]]
+        type: array<object>
         description: "9×9 grid representing the puzzle — 0 means an empty cell to be filled in"
       - name: results[].solution
-        type: array[array[integer]]
+        type: array<object>
         description: 9×9 grid containing the complete, valid solution
       - name: total
         type: integer
@@ -196,10 +196,10 @@ endpoints:
         type: string
         description: The difficulty level of the returned puzzle (easy, medium, or hard)
       - name: puzzle
-        type: array[array[integer]]
+        type: array<object>
         description: 9×9 grid representing the puzzle — 0 means an empty cell to be filled in
       - name: solution
-        type: array[array[integer]]
+        type: array<object>
         description: 9×9 grid containing the complete, valid solution
     errors:
       - status: 400

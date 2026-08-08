@@ -208,7 +208,7 @@ endpoints:
     description: Encode multiple strings to Base64 in a single request
     parameters:
       - name: values
-        type: array[string]
+        type: array<string>
         required: true
         location: body
         description: List of values to encode
@@ -239,7 +239,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Encoded results
       - name: total
         type: integer
@@ -255,7 +255,7 @@ endpoints:
     description: Decode multiple Base64 strings in a single request
     parameters:
       - name: values
-        type: array[string]
+        type: array<string>
         required: true
         location: body
         description: List of Base64 strings to decode
@@ -283,7 +283,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Decoded results
       - name: total
         type: integer

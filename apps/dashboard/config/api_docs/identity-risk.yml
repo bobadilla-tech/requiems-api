@@ -82,16 +82,16 @@ endpoints:
       }
     response_fields:
       - name: risk_score
-        type: float
+        type: number
         description: Composite risk score from 0.0 (clean) to 1.0 (high risk)
       - name: is_safe
         type: boolean
         description: True when risk_score is below the safety threshold with no critical flags
       - name: confidence
-        type: float
+        type: number
         description: Confidence in the decision from 0.0 to 1.0, based on which signals resolved successfully
       - name: flags
-        type: array
+        type: array<string>
         description: "Array of triggered risk flags. Possible values: disposable_email, vpn_detected, proxy_detected, tor_detected, is_hosting"
       - name: signals.email
         type: object
@@ -218,16 +218,16 @@ endpoints:
       }
     response_fields:
       - name: risk_score
-        type: float
+        type: number
         description: Composite risk score from 0.0 to 1.0
       - name: is_safe
         type: boolean
         description: True when the risk score is below the safety threshold
       - name: confidence
-        type: float
+        type: number
         description: Confidence in the score based on resolved signals
       - name: flags
-        type: array
+        type: array<string>
         description: Array of triggered risk flags
     errors:
       - code: 422
@@ -318,13 +318,13 @@ endpoints:
         type: boolean
         description: True when risk score is below 0.3, confidence is above 0.5, email is valid, domain has MX, and domain is registered
       - name: confidence
-        type: float
+        type: number
         description: Confidence in the verification result, based on how many signals resolved
       - name: risk_score
-        type: float
+        type: number
         description: Composite risk score from 0.0 to 1.0
       - name: flags
-        type: array
+        type: array<string>
         description: "Triggered risk flags. Possible values: email_invalid, disposable_email, no_mx, domain_not_registered, young_domain, whois_unavailable, ip_risk"
       - name: signals.email
         type: object
@@ -333,7 +333,8 @@ endpoints:
         type: object
         description: Domain intelligence including WHOIS age, MX and A record presence, and registration status
       - name: signals.ip
-        type: object or null
+        type: object
+        nullable: true
         description: IP risk signals. Null when ip_address was not provided
     errors:
       - code: 422

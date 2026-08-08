@@ -71,7 +71,7 @@ endpoints:
         type: string
         description: The domain part (after @) of the normalized address
       - name: changes
-        type: array
+        type: array<string>
         description: "Ordered list of transformations applied. Possible values: lowercased, trimmed_whitespace, removed_dots, removed_plus_tag, canonicalised_domain. Empty array when no changes were needed."
 
     errors:
@@ -143,7 +143,7 @@ endpoints:
     description: Normalizes up to 100 email addresses in one request. Results are in the same order as the input. Each item includes valid (boolean); when false, only original and message are set. Usage is billed per email processed (see gateway usage headers).
     parameters:
       - name: emails
-        type: array
+        type: array<string>
         required: true
         location: body
         description: Array of addresses to normalize (min 1, max 100; each entry non-empty)
@@ -193,7 +193,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: One normalization result per input email, in order
       - name: total
         type: integer

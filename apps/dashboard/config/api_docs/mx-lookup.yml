@@ -52,7 +52,7 @@ endpoints:
         type: string
         description: The domain that was queried
       - name: records
-        type: array
+        type: array<object>
         description: List of MX records, sorted by priority ascending (lowest number = highest priority)
       - name: records[].host
         type: string
@@ -113,7 +113,7 @@ endpoints:
       ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
     parameters:
       - name: domains
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of domains to lookup (min: 1, max: 50)."
@@ -170,7 +170,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: MX lookup results for each input domain, in the same order as the input.
       - name: results[].domain
         type: string
@@ -188,7 +188,7 @@ endpoints:
         type: string
         description: The domain name associated with the MX records.
       - name: results[].data.records
-        type: array
+        type: array<object>
         description: List of MX records sorted by priority ascending (lower value means higher priority).
       - name: results[].data.records[].host
         type: string

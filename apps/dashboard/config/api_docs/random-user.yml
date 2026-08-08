@@ -167,7 +167,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Ordered list of generated user profiles. Same fields as the single-user endpoint.
       - name: total
         type: integer

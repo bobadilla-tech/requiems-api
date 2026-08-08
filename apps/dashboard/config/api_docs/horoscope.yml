@@ -94,7 +94,7 @@ endpoints:
     description: Returns up to 12 daily horoscopes in a single request.
     parameters:
       - name: signs
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of signs to get (min: 1, max: 12). Allowed values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces."
@@ -138,7 +138,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of daily horoscopes returned in the same order as the input signs.
       - name: results[].sign
         type: string

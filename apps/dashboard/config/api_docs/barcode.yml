@@ -216,7 +216,7 @@ endpoints:
 
     parameters:
       - name: items
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Array of barcode generation requests. Min: 1, Max: 20."
@@ -265,7 +265,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of barcode generation results preserving input order
 
       - name: results[].image

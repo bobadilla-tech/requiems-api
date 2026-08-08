@@ -54,7 +54,8 @@ endpoints:
       }
     response_fields:
       - name: email
-        type: string|null
+        type: string
+        nullable: true
         description: The email address exactly as supplied in the request body; null when syntax is invalid
       - name: valid
         type: boolean
@@ -71,12 +72,14 @@ endpoints:
         type: boolean
         description: Whether the address uses a known disposable or temporary email domain
       - name: normalized
-        type: string|null
+        type: string
+        nullable: true
         description: >-
           The canonical form of the address after normalization (lowercase, plus-tag removal, alias-domain resolution).
           Null when syntax is invalid
       - name: domain
-        type: string|null
+        type: string
+        nullable: true
         description: The domain part of the address (after @). Null when syntax is invalid
       - name: suggestion
         type: string
@@ -156,7 +159,7 @@ endpoints:
 
     parameters:
       - name: emails
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of email addresses to validate. Min: 1, Max: 50."
@@ -201,11 +204,12 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of validation results for each email, preserving input order
 
       - name: results[].email
-        type: string|null
+        type: string
+        nullable: true
         description: Original email input (null if invalid syntax)
 
       - name: results[].valid
@@ -225,15 +229,18 @@ endpoints:
         description: Whether the email comes from a disposable domain
 
       - name: results[].normalized
-        type: string|null
+        type: string
+        nullable: true
         description: Canonical normalized email (lowercase, alias handling, etc.)
 
       - name: results[].domain
-        type: string|null
+        type: string
+        nullable: true
         description: Extracted domain from email address
 
       - name: results[].suggestion
-        type: string|null
+        type: string
+        nullable: true
         description: Suggested correction for common domain typos
 
       - name: total

@@ -121,7 +121,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Array of random quotes, one per requested count.
       - name: results[].id
         type: integer

@@ -75,7 +75,7 @@ endpoints:
         type: number
         description: Year-over-year percentage change from the prior year's annual average (positive = price increased)
       - name: historical
-        type: array
+        type: array<object>
         description: Up to 10 prior years of annual average prices, ordered newest to oldest
       - name: historical[].period
         type: string

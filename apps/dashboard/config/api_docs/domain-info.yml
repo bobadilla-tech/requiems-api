@@ -59,19 +59,19 @@ endpoints:
         type: boolean
         description: "True when the domain appears to be unregistered (NS lookup returns NXDOMAIN). False when name servers are delegated."
       - name: dns.a
-        type: array of strings
+        type: array<string>
         description: IPv4 addresses (A records)
       - name: dns.aaaa
-        type: array of strings
+        type: array<string>
         description: IPv6 addresses (AAAA records)
       - name: dns.mx
-        type: array of objects
+        type: array<object>
         description: Mail exchange records, each with host and priority fields
       - name: dns.ns
-        type: array of strings
+        type: array<string>
         description: Authoritative name server hostnames
       - name: dns.txt
-        type: array of strings
+        type: array<string>
         description: TXT record values (SPF, DKIM, verification tokens, etc.)
       - name: dns.cname
         type: string

@@ -55,7 +55,7 @@ endpoints:
         type: string
         description: "ISO 639-1 two-letter language code (e.g. fr, en, es). Empty string when detection is unreliable."
       - name: confidence
-        type: float
+        type: number
         description: "Confidence score between 0.0 and 1.0. 0.0 is returned when the language cannot be reliably detected."
 
     errors:

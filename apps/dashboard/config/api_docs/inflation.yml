@@ -64,7 +64,7 @@ endpoints:
         type: string
         description: Year of the latest data point (e.g. 2024)
       - name: historical
-        type: array
+        type: array<object>
         description: Up to 10 previous years of inflation data, ordered newest to oldest
       - name: historical[].period
         type: string
@@ -134,7 +134,7 @@ endpoints:
       Billing: 1 credit per country (not per HTTP request).
     parameters:
       - name: countries
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of ISO 3166-1 alpha-2 country codes. Min: 1, Max: 50."
@@ -172,7 +172,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: One entry per country, in the same order as the input array
       - name: results[].country
         type: string
@@ -187,7 +187,7 @@ endpoints:
         type: string
         description: "Year of the latest data point. Omitted when found: false"
       - name: results[].historical
-        type: array
+        type: array<object>
         description: "Up to 10 previous years. Omitted when found: false"
       - name: total
         type: integer

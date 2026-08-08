@@ -93,7 +93,7 @@ endpoints:
 
     response_fields:
       - name: items
-        type: array
+        type: array<string>
         description: Array of exercise objects for the current page
       - name: items[].id
         type: integer
@@ -102,19 +102,19 @@ endpoints:
         type: string
         description: Exercise name
       - name: items[].body_parts
-        type: array
+        type: array<string>
         description: Body part categories involved
       - name: items[].equipment
-        type: array
+        type: array<string>
         description: Equipment required
       - name: items[].target_muscles
-        type: array
+        type: array<string>
         description: Primary muscles targeted
       - name: items[].secondary_muscles
-        type: array
+        type: array<string>
         description: Secondary muscles engaged
       - name: items[].instructions
-        type: array
+        type: array<string>
         description: Ordered step-by-step instructions
       - name: total
         type: integer
@@ -214,19 +214,19 @@ endpoints:
         type: string
         description: Exercise name
       - name: body_parts
-        type: array
+        type: array<string>
         description: Body part categories involved
       - name: equipment
-        type: array
+        type: array<string>
         description: Equipment required
       - name: target_muscles
-        type: array
+        type: array<string>
         description: Primary muscles targeted
       - name: secondary_muscles
-        type: array
+        type: array<string>
         description: Secondary muscles engaged
       - name: instructions
-        type: array
+        type: array<string>
         description: Ordered step-by-step instructions
 
     errors:
@@ -383,7 +383,7 @@ endpoints:
 
     response_fields:
       - name: items
-        type: array
+        type: array<string>
         description: Sorted list of all distinct body part names
       - name: total
         type: integer
@@ -443,7 +443,7 @@ endpoints:
 
     response_fields:
       - name: items
-        type: array
+        type: array<string>
         description: Sorted list of all distinct equipment names
       - name: total
         type: integer
@@ -503,7 +503,7 @@ endpoints:
 
     response_fields:
       - name: items
-        type: array
+        type: array<string>
         description: Sorted list of all distinct muscle names
       - name: total
         type: integer
@@ -552,7 +552,7 @@ endpoints:
 
     parameters:
       - name: ids
-        type: array
+        type: array<number>
         required: true
         location: body
         description: "Array of numeric exercise IDs to fetch. Must contain between 1 and 50 items. Each ID must be a positive integer."
@@ -605,7 +605,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Exercises found for the given IDs, in input order. IDs not found are omitted.
       - name: results[].id
         type: integer
@@ -614,19 +614,19 @@ endpoints:
         type: string
         description: Exercise name
       - name: results[].body_parts
-        type: array
+        type: array<string>
         description: Body part categories involved
       - name: results[].equipment
-        type: array
+        type: array<string>
         description: Equipment required
       - name: results[].target_muscles
-        type: array
+        type: array<string>
         description: Primary muscles targeted
       - name: results[].secondary_muscles
-        type: array
+        type: array<string>
         description: Secondary muscles engaged
       - name: results[].instructions
-        type: array
+        type: array<string>
         description: Ordered step-by-step instructions
       - name: total
         type: integer

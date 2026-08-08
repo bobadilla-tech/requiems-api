@@ -110,7 +110,7 @@ endpoints:
     description: Parses up to 50 user agents in a single request.
     parameters:
       - name: user_agents
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of user agents to parse (min: 1, max: 50)."
@@ -161,7 +161,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of parsed user agents results returned in the same order as the input user agents.
       - name: results[].user_agent
         type: string

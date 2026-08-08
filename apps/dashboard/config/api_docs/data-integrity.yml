@@ -23,7 +23,7 @@ endpoints:
     description: Validates and scores a batch of up to 50 contact records in a single request. Each record is processed independently — one item failing does not affect others. Returns per-item email, phone, and text validation results with quality scores, normalized values, plus batch-level aggregates including total, valid_count, invalid_count, and average_quality_score.
     parameters:
       - name: items
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Array of contact records to validate. Each item must include email and phone. Text is optional. Min: 1, Max: 50."
@@ -78,19 +78,21 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of validation results, one per input item. Preserves the original submission order via the index field.
       - name: results[].index
         type: integer
         description: Zero-based position of the item in the original request array.
       - name: results[].email
-        type: object or null
+        type: object
+        nullable: true
         description: Email validation result. Null when email was not provided for this item.
       - name: results[].email.valid
         type: boolean
         description: True when the email passes syntax and MX validation.
       - name: results[].email.normalized
-        type: string or null
+        type: string
+        nullable: true
         description: Normalized form of the email address. Null when syntax is invalid.
       - name: results[].email.quality_score
         type: number
@@ -99,19 +101,22 @@ endpoints:
         type: boolean
         description: True when the email domain is a known disposable or temporary provider.
       - name: results[].phone
-        type: object or null
+        type: object
+        nullable: true
         description: Phone validation result. Null when phone was not provided for this item.
       - name: results[].phone.valid
         type: boolean
         description: True when the phone number is valid and dialable.
       - name: results[].phone.normalized
-        type: string or null
+        type: string
+        nullable: true
         description: Normalized phone number in international format. Null when the number is invalid.
       - name: results[].phone.quality_score
         type: number
         description: Phone quality score from 0.0 to 1.0. Penalized by invalidity, VoIP, virtual, landline, and unknown type.
       - name: results[].text
-        type: object or null
+        type: object
+        nullable: true
         description: Text analysis result. Null when text was not provided for this item.
       - name: results[].overall_quality_score
         type: number
@@ -122,7 +127,8 @@ endpoints:
           toxicity_score is available from the sentiment service.
           Returns 0.0 when only text is provided.
       - name: results[].error
-        type: string or null
+        type: string
+        nullable: true
         description: >-
           Error message when this item could not be processed due to an unexpected failure,
           such as a service timeout or malformed input. Null when the item was processed
@@ -318,13 +324,15 @@ endpoints:
       }
     response_fields:
       - name: email
-        type: object or null
+        type: object
+        nullable: true
         description: Email validation result. Null when email was not provided.
       - name: email.valid
         type: boolean
         description: True when the email passes syntax and MX validation.
       - name: email.normalized
-        type: string or null
+        type: string
+        nullable: true
         description: Normalized form of the email address. Null when syntax is invalid.
       - name: email.original
         type: string
@@ -339,37 +347,45 @@ endpoints:
         type: boolean
         description: True when the email domain is a known disposable or temporary provider.
       - name: email.suggestion
-        type: string or null
+        type: string
+        nullable: true
         description: Suggested correction when a typo is detected in the domain (e.g. gmial.com → gmail.com). Null otherwise.
       - name: email.flags
-        type: array or null
+        type: array<string>
+        nullable: true
         description: "Triggered flags. Possible values: email_syntax_invalid, email_mx_invalid, email_disposable, email_has_suggestion."
       - name: email.quality_score
         type: number
         description: Email quality score from 0.0 to 1.0. Penalized by invalidity, disposable domain, and suggestions.
       - name: phone
-        type: object or null
+        type: object
+        nullable: true
         description: Phone validation result. Null when phone was not provided.
       - name: phone.valid
         type: boolean
         description: True when the phone number is valid and dialable.
       - name: phone.normalized
-        type: string or null
+        type: string
+        nullable: true
         description: Normalized phone number in international format. Null when the number is invalid.
       - name: phone.country
-        type: string or null
+        type: string
+        nullable: true
         description: ISO 3166-1 alpha-2 country code detected from the number (e.g. US, CO). Null when the number is invalid.
       - name: phone.type
-        type: string or null
+        type: string
+        nullable: true
         description: "Line type. Null when the number is invalid. Possible values: mobile, landline, voip, toll_free, unknown."
       - name: phone.carrier
-        type: object or null
+        type: object
+        nullable: true
         description: Carrier information. Null when not available.
       - name: phone.carrier.name
         type: string
         description: Name of the carrier or operator associated with the number.
       - name: phone.risk
-        type: object or null
+        type: object
+        nullable: true
         description: Risk signals associated with the phone number. Null when the validator could not determine risk information.
       - name: phone.risk.is_voip
         type: boolean
@@ -378,25 +394,29 @@ endpoints:
         type: boolean
         description: True when the number is confirmed as a virtual number. False when explicitly confirmed as non-virtual.
       - name: phone.flags
-        type: array or null
+        type: array<string>
+        nullable: true
         description: "Triggered flags. Possible values: phone_invalid, phone_voip, phone_virtual, phone_unknown_type, phone_landline."
       - name: phone.quality_score
         type: number
         description: Phone quality score from 0.0 to 1.0. Penalized by invalidity, VoIP, virtual, landline, and unknown type.
       - name: text
-        type: object or null
+        type: object
+        nullable: true
         description: Text analysis result. Null when text was not provided.
       - name: text.is_safe
         type: boolean
         description: False when any moderation flag is triggered. True otherwise.
       - name: text.toxicity_score
-        type: number or null
+        type: number
+        nullable: true
         description: Reserved for future use. Currently always null.
       - name: text.sentiment
         type: string
         description: "Detected sentiment: positive, negative, or neutral."
       - name: text.flags
-        type: array or null
+        type: array<string>
+        nullable: true
         description: "Triggered moderation flags. Possible values: text_profanity."
       - name: overall_quality_score
         type: number
@@ -524,19 +544,22 @@ endpoints:
         type: boolean
         description: False when any moderation category is triggered. True otherwise.
       - name: toxicity_score
-        type: number or null
+        type: number
+        nullable: true
         description: Reserved for future use. Currently always null.
       - name: sentiment
         type: string
         description: "Detected sentiment: positive, negative, or neutral"
       - name: language
-        type: string or null
+        type: string
+        nullable: true
         description: "Detected or provided ISO 639-1 language code. Null when detection confidence is 0."
       - name: language_confidence
-        type: number or null
+        type: number
+        nullable: true
         description: "Confidence in the detected language from 0.0 to 1.0. 1.0 when language was explicitly provided."
       - name: flags
-        type: array
+        type: array<string>
         description: "Triggered moderation flags. Currently possible: text_profanity"
       - name: categories
         type: object
@@ -607,7 +630,7 @@ endpoints:
         description: The text to normalize. Required.
         example: "  Hello,   World!  "
       - name: operations
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Ordered list of normalization operations to apply. At least one required. Valid values: trim, lowercase, uppercase, normalize_unicode, collapse_whitespace, strip_html, remove_punctuation"
@@ -636,7 +659,7 @@ endpoints:
         type: string
         description: The text after all operations have been applied in order
       - name: operations
-        type: array
+        type: array<object>
         description: The operations list echoed from the request
     errors:
       - code: 422
@@ -746,7 +769,7 @@ endpoints:
         type: string
         description: The domain name that was evaluated.
       - name: trust_score
-        type: float
+        type: number
         description: Computed trust score between 0.0 and 1.0. Starts at 1.0 with penalties applied based on domain signals.
       - name: trust_level
         type: string
@@ -767,7 +790,7 @@ endpoints:
         type: integer
         description: Number of days since the domain was registered.
       - name: who_is.status
-        type: array
+        type: array<string>
         description: WHOIS status codes indicating the domain transfer and update permissions.
       - name: dns
         type: object
@@ -785,7 +808,7 @@ endpoints:
         type: boolean
         description: True if the domain is unregistered and available for purchase. When true, trust_score is 0.0 and evaluation stops immediately.
       - name: mx_records
-        type: array
+        type: array<object>
         description: List of MX records found for the domain. Empty array if none exist or if the domain is not registered.
       - name: mx_records[].host_name
         type: string
@@ -794,7 +817,7 @@ endpoints:
         type: integer
         description: Mail server priority. Lower value means higher priority.
       - name: flags
-        type: array
+        type: array<string>
         description: List of signal flags raised during evaluation. Possible values are "new_domain", "young_domain", "no_mx", "no_a_records", "no_ns_records", "expiring_soon", "whois_unavailable", "domain_not_registered". Only "domain_not_registered" is returned when the domain is not registered.
     errors:
       - code: bad_request

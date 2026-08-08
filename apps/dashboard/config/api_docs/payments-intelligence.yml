@@ -82,19 +82,22 @@ endpoints:
       }
     response_fields:
       - name: bin
-        type: object or null
+        type: object
+        nullable: true
         description: BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn_prefix_valid.
       - name: iban
-        type: object or null
+        type: object
+        nullable: true
         description: IBAN result. Null when iban was not provided. Contains valid, country_code, bank_code, account_number.
       - name: swift
-        type: object or null
+        type: object
+        nullable: true
         description: SWIFT result. Null when swift was not provided. Contains valid, institution, country, branch.
       - name: consistency.ok
         type: boolean
         description: True when no cross-field mismatches were detected
       - name: consistency.flags
-        type: array
+        type: array<string>
         description: "Mismatch flags. Possible values: country_mismatch_bin_iban, country_mismatch_bin_swift, country_mismatch_iban_swift, bank_mismatch_iban_swift"
     errors:
       - code: 422
@@ -209,19 +212,20 @@ endpoints:
       }
     response_fields:
       - name: risk_score
-        type: float
+        type: number
         description: Transaction risk score from 0.0 to 1.0
       - name: is_safe
         type: boolean
         description: True when score is below 0.5 and no TOR or proxy detected
       - name: flags
-        type: array
+        type: array<string>
         description: "Triggered flags. Possible values: ip_country_mismatch, bin_country_mismatch, country_mismatch, vpn_detected, proxy_detected, tor_detected, high_value_vpn"
       - name: signals.ip_country
         type: string
         description: Country code resolved from the IP address
       - name: signals.billing_country
-        type: string or null
+        type: string
+        nullable: true
         description: Billing country provided in the request, or null if omitted
       - name: signals.bin_country
         type: string

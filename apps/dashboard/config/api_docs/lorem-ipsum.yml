@@ -118,7 +118,7 @@ endpoints:
     description: Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
     parameters:
       - name: items
-        type: array
+        type: array<object>
         required: true
         location: body
         description: Array of text generation requests. Minimum 1 item, maximum 50 items.

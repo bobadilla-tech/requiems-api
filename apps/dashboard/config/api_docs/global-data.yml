@@ -89,13 +89,16 @@ endpoints:
         type: object
         description: Resolved lat/lng coordinates
       - name: timezone
-        type: string or null
+        type: string
+        nullable: true
         description: IANA timezone identifier (e.g. Europe/Berlin). Null when timezone resolution fails.
       - name: utc_offset
-        type: string or null
+        type: string
+        nullable: true
         description: UTC offset string (e.g. +02:00). Null when timezone resolution fails.
       - name: current_time
-        type: string or null
+        type: string
+        nullable: true
         description: Current local time in RFC3339 format. Null when timezone resolution fails.
       - name: is_holiday_today
         type: boolean
@@ -104,10 +107,11 @@ endpoints:
         type: integer
         description: Number of working days (excluding weekends and public holidays) in the current calendar month
       - name: next_holiday
-        type: object or null
+        type: object
+        nullable: true
         description: "Next public holiday within 90 days. Shape: {date: YYYY-MM-DD, name: string, type: national}"
       - name: flags
-        type: array
+        type: array<string>
         description: "Non-fatal warnings. Possible values: timezone_unavailable, calendar_unavailable"
     errors:
       - code: 422
@@ -198,16 +202,20 @@ endpoints:
         type: string
         description: ISO 3166-1 alpha-2 country code
       - name: timezone
-        type: string or null
+        type: string
+        nullable: true
         description: IANA timezone identifier. Null when timezone resolution fails.
       - name: utc_offset
-        type: string or null
+        type: string
+        nullable: true
         description: UTC offset string. Null when timezone resolution fails.
       - name: dst_active
-        type: boolean or null
+        type: boolean
+        nullable: true
         description: True when daylight saving time is currently active. Null when timezone resolution fails.
       - name: current_time
-        type: string or null
+        type: string
+        nullable: true
         description: Current local time in RFC3339 format
     errors:
       - code: 422
@@ -293,25 +301,29 @@ endpoints:
         type: integer
         description: Year the calendar covers
       - name: month
-        type: integer or null
+        type: integer
+        nullable: true
         description: Month scope. Present only when the month query parameter was provided.
       - name: working_days
         type: integer
         description: Number of working days (excluding weekends and public holidays) in the scope
       - name: total_days
-        type: integer or null
+        type: integer
+        nullable: true
         description: Total calendar days in the month. Present only when month is provided.
       - name: weekend_days
-        type: integer or null
+        type: integer
+        nullable: true
         description: Number of weekend days in the month. Present only when month is provided.
       - name: holidays
-        type: array
+        type: array<object>
         description: "List of public holidays in the scope. Each item: {date: YYYY-MM-DD, name: string, type: national}"
       - name: holiday_count
         type: integer
         description: Count of holidays in the holidays array
       - name: next_holiday
-        type: object or null
+        type: object
+        nullable: true
         description: "Next public holiday within 90 days from today. Shape: {date, name, type}"
     errors:
       - code: 422

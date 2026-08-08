@@ -221,7 +221,7 @@ endpoints:
     description: Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
     parameters:
       - name: addresses
-        type: array of strings
+        type: array<string>
         required: true
         location: body
         description: List of addresses to geocode (1–20 items, each non-empty). Max 20 due to Nominatim usage policy.
@@ -251,7 +251,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Per-item results in input order.
       - name: results[].address
         type: string
@@ -335,7 +335,7 @@ endpoints:
     description: Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
     parameters:
       - name: items
-        type: array of objects
+        type: array<object>
         required: true
         location: body
         description: List of coordinate pairs to reverse-geocode (1–20 items). Max 20 due to Nominatim usage policy.
@@ -375,7 +375,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Per-item results in input order.
       - name: results[].lat
         type: number

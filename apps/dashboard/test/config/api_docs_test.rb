@@ -10,10 +10,25 @@ require "yaml"
 #   endpoints[]: name, method (GET/POST/PUT/PATCH/DELETE), path (/v1/…), description
 #   parameters[]: name, type, required (bool), location (path|query|body), description
 #     - "location" is the required key. Using "in" (OpenAPI) is not allowed.
+#     - "type" must be one of VALID_TYPES (closed vocabulary).
+#     - Nullable fields use a separate "nullable: true" flag instead of "string or null".
+#   response_fields[]: name, type, description
+#     - "type" must be one of VALID_TYPES.
+#     - "bytes" is allowed only for binary-response endpoints (response_kind: binary).
 class ApiDocsSchemaTest < ActiveSupport::TestCase
   DOCS_DIR = Rails.root.join("config/api_docs")
   VALID_METHODS = %w[GET POST PUT PATCH DELETE].freeze
   VALID_LOCATIONS = %w[path query body].freeze
+
+  # Closed type vocabulary for parameters[] and response_fields[].
+  # Compound types like "string or null" or "array of strings" are not allowed —
+  # use the base type + nullable: true for nullables, and array<string>/<object>/<number>
+  # for typed arrays.
+  VALID_TYPES = %w[
+    string integer number boolean object
+    array<string> array<object> array<number>
+    bytes
+  ].freeze
 
   Dir[DOCS_DIR.join("*.yml")].sort.each do |file|
     basename = File.basename(file)
@@ -64,6 +79,19 @@ class ApiDocsSchemaTest < ActiveSupport::TestCase
             "#{plabel}: 'required' must be a boolean"
         end
 
+        test "#{plabel}: type is from the closed vocabulary" do
+          assert_includes VALID_TYPES, param["type"].to_s,
+            "#{plabel}: type '#{param["type"]}' is not in the closed vocabulary #{VALID_TYPES.join(", ")}. " \
+            "Use a base type + nullable: true instead of compound types like 'string or null'."
+        end
+
+        test "#{plabel}: nullable is a boolean when present" do
+          if param.key?("nullable")
+            assert_includes [ true, false ], param["nullable"],
+              "#{plabel}: 'nullable' must be a boolean"
+          end
+        end
+
         test "#{plabel}: uses 'location' not 'in'" do
           assert param.key?("location"),
             "#{plabel}: must use 'location:' (not 'in:'). " \
@@ -75,6 +103,29 @@ class ApiDocsSchemaTest < ActiveSupport::TestCase
         test "#{plabel}: location is valid" do
           assert_includes VALID_LOCATIONS, param["location"],
             "#{plabel}: location '#{param["location"]}' must be one of #{VALID_LOCATIONS.join(", ")}"
+        end
+      end
+
+      (ep["response_fields"] || []).each_with_index do |field, fi|
+        flabel = "#{label} response_field[#{fi}] (#{field["name"] || "unnamed"})"
+
+        test "#{flabel}: has required fields" do
+          %w[name type description].each do |f|
+            assert field.key?(f), "#{flabel}: missing field '#{f}'"
+            assert field[f].present?, "#{flabel}: '#{f}' must not be blank"
+          end
+        end
+
+        test "#{flabel}: type is from the closed vocabulary" do
+          assert_includes VALID_TYPES, field["type"].to_s,
+            "#{flabel}: type '#{field["type"]}' is not in the closed vocabulary #{VALID_TYPES.join(", ")}."
+        end
+
+        test "#{flabel}: nullable is a boolean when present" do
+          if field.key?("nullable")
+            assert_includes [ true, false ], field["nullable"],
+              "#{flabel}: 'nullable' must be a boolean"
+          end
         end
       end
     end
