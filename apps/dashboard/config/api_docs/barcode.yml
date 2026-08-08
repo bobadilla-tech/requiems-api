@@ -24,6 +24,7 @@ endpoints:
     method: GET
     path: /v1/technology/barcode
     description: Returns a raw PNG image of the barcode. Ideal for direct embedding or file download.
+    response_kind: binary
 
     parameters:
       - name: data

@@ -61,6 +61,13 @@ class ApiDocsSchemaTest < ActiveSupport::TestCase
           "#{label}: method '#{ep["method"]}' must be one of #{VALID_METHODS.join(", ")}"
       end
 
+      test "#{label}: response_kind is valid when present" do
+        if ep.key?("response_kind")
+          assert_includes %w[json binary], ep["response_kind"],
+            "#{label}: response_kind '#{ep["response_kind"]}' must be 'json' or 'binary'"
+        end
+      end
+
       test "#{label}: path starts with /v1/" do
         assert ep["path"].to_s.start_with?("/v1/"),
           "#{label}: path '#{ep["path"]}' must start with /v1/"
