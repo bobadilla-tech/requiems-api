@@ -60,10 +60,14 @@ module ApiDocs
     def body_params  = params.select { |p| p["location"] == "body" }
     def get?         = http_method == "GET"
 
-    # Full URL with {name} path segments substituted by URL-encoded example values.
+    # Full URL with {name} path segments substituted by example values.
+    # Path param values are NOT percent-encoded because they may contain slashes that
+    # are part of the value itself (e.g. timezone "America/New_York") and because
+    # documentation examples are meant to be human-readable. Query params use
+    # URI.encode_www_form_component in query_string to handle spaces and special chars.
     def full_url
       url = "#{@base_url}#{path}"
-      path_params.each { |p| url = url.gsub("{#{p["name"]}}", URI.encode_www_form_component(example_str(p))) }
+      path_params.each { |p| url = url.gsub("{#{p["name"]}}", example_str(p)) }
       url
     end
 
@@ -118,9 +122,10 @@ module ApiDocs
       when "number"        then 1.0
       when "boolean"       then true
       when "object"        then {}
-      when "array<string>" then ["example"]
-      when "array<object>" then [{}]
-      when "array<number>" then [1.0]
+      when "array<string>"  then ["example"]
+      when "array<object>"  then [{}]
+      when "array<number>"  then [1.0]
+      when "array<integer>" then [1]
       else "example"
       end
     end

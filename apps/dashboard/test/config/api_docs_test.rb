@@ -26,7 +26,7 @@ class ApiDocsSchemaTest < ActiveSupport::TestCase
   # for typed arrays.
   VALID_TYPES = %w[
     string integer number boolean object
-    array<string> array<object> array<number>
+    array<string> array<object> array<number> array<integer>
     bytes
   ].freeze
 

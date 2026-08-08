@@ -77,10 +77,10 @@ endpoints:
         type: string
         description: The difficulty level of the puzzle (easy, medium, or hard)
       - name: results[].puzzle
-        type: array<object>
+        type: array<integer>
         description: "9×9 grid as an array of 9 rows, each row an array of 9 integers — 0 means an empty cell to be filled in"
       - name: results[].solution
-        type: array<object>
+        type: array<integer>
         description: "9×9 grid as an array of 9 rows, each row an array of 9 integers — complete, valid solution"
       - name: total
         type: integer
@@ -196,10 +196,10 @@ endpoints:
         type: string
         description: The difficulty level of the returned puzzle (easy, medium, or hard)
       - name: puzzle
-        type: array<object>
-        description: 9×9 grid representing the puzzle — 0 means an empty cell to be filled in
+        type: array<integer>
+        description: "9×9 grid as an array of 9 rows, each row an array of 9 integers — 0 means an empty cell to be filled in"
       - name: solution
-        type: array<object>
+        type: array<integer>
         description: "9×9 grid as an array of 9 rows, each row an array of 9 integers — complete, valid solution"
     errors:
       - status: 400

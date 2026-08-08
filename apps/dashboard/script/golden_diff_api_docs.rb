@@ -54,15 +54,38 @@ def curl_invocation_count(curl_snippet)
   curl_snippet.to_s.scan(/^\s*curl\s/).size
 end
 
-# Returns true if the generated curl URL appears anywhere in the hand-written curl snippet.
+# Returns true if the generated endpoint URL path is present in the hand-written
+# curl snippet AND the HTTP methods match.
+#
+# URL extraction: strips `curl`, optional `-X METHOD`, surrounding quotes, and
+# trailing ` \`. Falls back to false if the extraction produces an empty string,
+# which would otherwise give a false-positive substring match.
 def url_present_in_handwritten?(generated_curl, handwritten_curl)
-  # Extract the URL from the generated curl (second token after optional -X METHOD)
-  generated_url = generated_curl.to_s.lines.first&.strip
-  # Strip the leading `curl `, `-X METHOD `, and trailing ` \`
-  generated_url = generated_url.sub(/^curl\s+/, "").sub(/^-X\s+\S+\s+/, "").sub(/\s*\\$/, "").gsub('"', "")
-  # Strip query string for path comparison (query param order can differ)
-  base_url = generated_url.split("?").first.to_s.strip
-  handwritten_curl.to_s.include?(base_url)
+  first_line = generated_curl.to_s.lines.first.to_s.strip
+
+  # Extract HTTP method from generated curl (-X POST / -X GET / implicit GET)
+  generated_method = first_line.match(/-X\s+(\w+)/i)&.captures&.first || "GET"
+
+  # Strip curl command prefix, optional -X METHOD, quotes, and trailing backslash
+  extracted = first_line
+    .sub(/^curl\s+/, "")
+    .sub(/^-X\s+\S+\s+/, "")
+    .sub(/\s*\\$/, "")
+    .gsub('"', "")
+    .strip
+
+  # Guard: empty extraction would match any string
+  return false if extracted.empty?
+
+  # Strip query string — parameter order may differ between generated and hand-written
+  base_path = extracted.split("?").first.to_s.strip
+  return false if base_path.empty?
+
+  # Both the path AND method must appear in the hand-written snippet
+  method_present = handwritten_curl.to_s.match?(/curl\s+(-X\s+#{generated_method}\s+|"#{generated_method}"|'#{generated_method}')/i) ||
+                   (generated_method == "GET" && !handwritten_curl.to_s.match?(/-X\s+(POST|PUT|PATCH|DELETE)/i))
+
+  handwritten_curl.to_s.include?(base_path) && method_present
 end
 
 # --------------------------------------------------------------------------- #
