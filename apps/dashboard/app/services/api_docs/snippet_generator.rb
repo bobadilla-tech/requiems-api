@@ -68,11 +68,12 @@ module ApiDocs
     end
 
     # Native Ruby value for a parameter's example or a type-appropriate placeholder.
+    # Resolution order: example: → default: → type placeholder.
     # YAML example values for array/object params are stored as JSON strings —
     # e.g. example: '["a", "b"]' — so we parse those back to native types.
     # Malformed JSON examples fall back to the raw string rather than raising.
     def native_example(param)
-      raw = param["example"]
+      raw = param["example"].nil? ? param["default"] : param["example"]
       return type_placeholder(param["type"].to_s) if raw.nil?
 
       if raw.is_a?(String) && (raw.start_with?("[") || raw.start_with?("{"))
@@ -93,8 +94,12 @@ module ApiDocs
     end
 
     # Body hash: { field_name => native_value } from location: body params.
+    # Skips params whose name contains "[]. " — those document nested object fields
+    # for schema purposes, not top-level request keys (e.g. items[].from).
     def body_hash
-      body_params.each_with_object({}) { |p, h| h[p["name"]] = native_example(p) }
+      body_params
+        .reject { |p| p["name"].to_s.include?("[].") }
+        .each_with_object({}) { |p, h| h[p["name"]] = native_example(p) }
     end
 
     # Query string built from location: query params.
@@ -248,7 +253,9 @@ module ApiDocs
 
       if binary?
         lines << "const blob = await response.blob();"
-        lines << "const imgUrl = URL.createObjectURL(blob);"
+        lines << "const url = URL.createObjectURL(blob);"
+        lines << "const a = document.createElement('a');"
+        lines << "a.href = url; a.download = 'response.png'; a.click();"
       else
         lines << "const { data } = await response.json();"
         lines << "console.log(data);"

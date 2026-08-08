@@ -237,11 +237,12 @@ class ApiDocs::SnippetGeneratorTest < ActiveSupport::TestCase
     assert_not_includes py, "response.json"
   end
 
-  test "javascript binary GET creates blob URL" do
+  test "javascript binary GET creates download link" do
     ep = endpoint("response_kind" => "binary")
     js = snippets_for(ep)["javascript"]
     assert_includes js, "response.blob()"
     assert_includes js, "URL.createObjectURL"
+    assert_includes js, "a.download"
     assert_not_includes js, "response.json"
   end
 
@@ -294,5 +295,35 @@ class ApiDocs::SnippetGeneratorTest < ActiveSupport::TestCase
     )
     curl = snippets_for(ep)["curl"]
     assert_includes curl, '"count":1'
+  end
+
+  test "native_example falls back to default when no example given" do
+    ep = endpoint(
+      "method"     => "POST",
+      "parameters" => [
+        { "name" => "variant", "type" => "string", "location" => "body",
+          "required" => false, "description" => "Variant", "default" => "standard" }
+      ]
+    )
+    curl = snippets_for(ep)["curl"]
+    assert_includes curl, '"variant":"standard"'
+  end
+
+  test "body_hash skips nested items[]. params" do
+    ep = endpoint(
+      "method" => "POST",
+      "parameters" => [
+        { "name" => "items",      "type" => "array<object>", "location" => "body",
+          "required" => true, "description" => "items" },
+        { "name" => "items[].from", "type" => "integer", "location" => "body",
+          "required" => true, "description" => "from base" },
+        { "name" => "items[].to",   "type" => "integer", "location" => "body",
+          "required" => true, "description" => "to base" }
+      ]
+    )
+    curl = snippets_for(ep)["curl"]
+    assert_not_includes curl, "items[].from"
+    assert_not_includes curl, "items[].to"
+    assert_includes curl, '"items"'
   end
 end

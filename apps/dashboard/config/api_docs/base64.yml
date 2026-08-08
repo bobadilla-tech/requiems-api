@@ -223,6 +223,7 @@ endpoints:
         location: body
         description: Encoding variant (standard or url)
         default: standard
+        example: standard
     response_example: |
       {
         "data": {
@@ -261,12 +262,14 @@ endpoints:
         description: List of Base64 strings to decode
         min_items: 1
         max_items: 50
+        example: '["SGVsbG8=", "V29ybGQ="]'
       - name: variant
         type: string
         required: false
         location: body
         description: Encoding variant (standard or url)
         default: standard
+        example: standard
     response_example: |
       {
         "data": {
