@@ -26,6 +26,7 @@ endpoints:
         description: >-
           Zodiac sign (case-insensitive). Supported values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio,
           sagittarius, capricorn, aquarius, pisces
+        example: aries
     response_example: |
       {
         "data": {
