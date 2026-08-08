@@ -128,6 +128,13 @@ class ApiDocsSchemaTest < ActiveSupport::TestCase
             "#{flabel}: type '#{field["type"]}' is not in the closed vocabulary #{VALID_TYPES.join(", ")}."
         end
 
+        test "#{flabel}: bytes type only allowed on binary response endpoints" do
+          if field["type"].to_s == "bytes"
+            assert_equal "binary", ep["response_kind"],
+              "#{flabel}: type 'bytes' is only valid when the endpoint has response_kind: binary"
+          end
+        end
+
         test "#{flabel}: nullable is a boolean when present" do
           if field.key?("nullable")
             assert_includes [ true, false ], field["nullable"],

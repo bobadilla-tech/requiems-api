@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "api_docs/snippet_generator"
 
 class ApiDocs::SnippetGeneratorTest < ActiveSupport::TestCase
   BASE_URL = "https://api.requiems.xyz"
