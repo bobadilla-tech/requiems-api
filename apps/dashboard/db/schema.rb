@@ -173,8 +173,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.index ["api_key_id", "used_at"], name: "index_usage_logs_on_api_key_and_time"
     t.index ["api_key_id"], name: "index_usage_logs_on_api_key_id"
     t.index ["endpoint", "used_at"], name: "index_usage_logs_on_endpoint_and_time"
+    t.index ["request_method"], name: "index_usage_logs_on_request_method"
     t.index ["status_code"], name: "index_usage_logs_on_status_code"
     t.index ["usage_date"], name: "index_usage_logs_on_usage_date"
+    t.index ["user_id", "request_method"], name: "index_usage_logs_on_user_id_and_request_method"
     t.index ["user_id", "used_at"], name: "index_usage_logs_on_user_and_time"
     t.index ["user_id"], name: "index_usage_logs_on_user_id"
   end
@@ -219,7 +221,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["status"], name: "index_users_on_status"
-    t.check_constraint "locale IS NULL OR (locale::text = ANY (ARRAY['en'::character varying, 'es'::character varying, 'fr'::character varying]::text[]))", name: "locale_valid_values"
+    t.check_constraint "locale IS NULL OR (locale::text = ANY (ARRAY['en'::character varying::text, 'es'::character varying::text, 'fr'::character varying::text]))", name: "locale_valid_values"
   end
 
   add_foreign_key "abuse_reports", "api_keys"
