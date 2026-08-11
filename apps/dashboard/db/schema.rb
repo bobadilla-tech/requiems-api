@@ -167,8 +167,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_000001) do
     t.index ["api_key_id", "used_at"], name: "index_usage_logs_on_api_key_and_time"
     t.index ["api_key_id"], name: "index_usage_logs_on_api_key_id"
     t.index ["endpoint", "used_at"], name: "index_usage_logs_on_endpoint_and_time"
+    t.index ["request_method"], name: "index_usage_logs_on_request_method"
     t.index ["status_code"], name: "index_usage_logs_on_status_code"
     t.index ["usage_date"], name: "index_usage_logs_on_usage_date"
+    t.index ["user_id", "request_method"], name: "index_usage_logs_on_user_id_and_request_method"
     t.index ["user_id", "used_at"], name: "index_usage_logs_on_user_and_time"
     t.index ["user_id"], name: "index_usage_logs_on_user_id"
   end
