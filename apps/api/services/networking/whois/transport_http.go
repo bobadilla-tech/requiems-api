@@ -22,29 +22,61 @@ var domainPattern = regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0
 
 func RegisterRoutes(r chi.Router, svc *Service) {
 	r.With(middleware.ValidateURLParam("domain", domainPattern, "invalid domain name")).
-		Get("/whois/{domain}", func(w http.ResponseWriter, r *http.Request) {
-			domain := chi.URLParam(r, "domain")
+		Get("/whois/{domain}", handleWhoisLookup(svc))
 
-			result, err := svc.Lookup(r.Context(), domain)
+	r.Post("/whois/batch", handleWhoisBatch(svc))
+}
 
-			if err != nil {
-				if errors.Is(err, ErrDomainNotFound) {
-					httpx.Error(w, http.StatusNotFound, "not_found", "domain not found")
-					return
-				}
+// handleWhoisLookup godoc
+//
+//	@Summary		WHOIS Lookup
+//	@Description	Returns WHOIS registration information for a domain.
+//	@Tags			whois
+//	@Produce		json
+//	@Param			domain	path		string	true	"Domain to look up (e.g. example.com)"
+//	@Success		200		{object}	httpx.Response[LookupResponse]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		404		{object}	httpx.ErrorResponse
+//	@Failure		500		{object}	httpx.ErrorResponse
+//	@Router			/v1/networking/whois/{domain} [get]
+func handleWhoisLookup(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		domain := chi.URLParam(r, "domain")
 
-				httpx.Error(w, http.StatusInternalServerError, "internal_error", "whois lookup failed")
+		result, err := svc.Lookup(r.Context(), domain)
+
+		if err != nil {
+			if errors.Is(err, ErrDomainNotFound) {
+				httpx.Error(w, http.StatusNotFound, "not_found", "domain not found")
 				return
 			}
 
-			httpx.JSON(w, http.StatusOK, result)
-		})
+			httpx.Error(w, http.StatusInternalServerError, "internal_error", "whois lookup failed")
+			return
+		}
 
-	r.Post("/whois/batch", httpx.HandleBatch(
+		httpx.JSON(w, http.StatusOK, result)
+	}
+}
+
+// handleWhoisBatch godoc
+//
+//	@Summary		Batch WHOIS Lookup
+//	@Description	WHOIS for up to 50 domains; domains without data return `found: false`.
+//	@Tags			whois
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchLookupRequest	true	"List of domains to look up"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchLookupItem]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Failure		500		{object}	httpx.ErrorResponse
+//	@Router			/v1/networking/whois/batch [post]
+func handleWhoisBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchLookupRequest) (httpx.BatchResponse[BatchLookupItem], error) {
 			items, err := svc.LookupBatch(ctx, req.Domains)
 			return httpx.BatchResponse[BatchLookupItem]{Results: items}, err
 		},
-	))
-
+	)
 }

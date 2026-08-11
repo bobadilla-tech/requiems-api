@@ -24,7 +24,24 @@ type BatchTimezoneRequest struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/time/*", httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/time/*", httpx.Guard(svc, handleWorldTime(svc)))
+	r.Get("/timezone", httpx.Guard(svc, handleTimezoneLookup(svc)))
+	r.Post("/timezone/batch", httpx.Guard(svc, handleTimezoneBatch(svc)))
+}
+
+// handleWorldTime godoc
+//
+//	@Summary		Get Current Time by Timezone
+//	@Description	Returns the current time for the given IANA timezone identifier.
+//	@Tags			world-time
+//	@Produce		json
+//	@Param			timezone	path		string	true	"IANA timezone identifier (e.g. America/New_York, Europe/London, UTC)"
+//	@Success		200			{object}	httpx.Response[Info]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		404			{object}	httpx.ErrorResponse
+//	@Router			/v1/places/time/{timezone} [get]
+func handleWorldTime(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		tzName := chi.URLParam(r, "*")
 		if tzName == "" {
 			httpx.Error(w, http.StatusBadRequest, "bad_request", "timezone is required")
@@ -38,18 +55,23 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		}
 
 		httpx.JSON(w, http.StatusOK, *info)
-	}))
-
-	r.Get("/timezone", httpx.Guard(svc, handleGetTimezone(svc)))
-
-	r.Post("/timezone/batch", httpx.Guard(svc, httpx.HandleBatch(
-		func(_ context.Context, req BatchTimezoneRequest) (httpx.BatchResponse[BatchResult], error) {
-			return httpx.BatchResponse[BatchResult]{Results: svc.BatchLookup(req.Items)}, nil
-		},
-	)))
+	}
 }
 
-func handleGetTimezone(svc *Service) http.HandlerFunc {
+// handleTimezoneLookup godoc
+//
+//	@Summary		Get Timezone
+//	@Description	Returns timezone info for given coordinates or city name. Provide either `city` or both `lat` and `lon`.
+//	@Tags			timezone
+//	@Produce		json
+//	@Param			lat		query		number	false	"Latitude (-90..90)"
+//	@Param			lon		query		number	false	"Longitude (-180..180)"
+//	@Param			city	query		string	false	"City name (e.g. Tokyo, London)"
+//	@Success		200		{object}	httpx.Response[Info]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		404		{object}	httpx.ErrorResponse
+//	@Router			/v1/places/timezone [get]
+func handleTimezoneLookup(svc *Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		req, hasCity, hasCoords, err := parseTimezoneQuery(r)
 		if err != nil {
@@ -71,6 +93,26 @@ func handleGetTimezone(svc *Service) http.HandlerFunc {
 
 		httpx.JSON(w, http.StatusOK, *info)
 	}
+}
+
+// handleTimezoneBatch godoc
+//
+//	@Summary		Batch Timezone Lookup
+//	@Description	Looks up timezone for up to 50 locations. Priority: timezone name > city > coordinates.
+//	@Tags			timezone
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchTimezoneRequest	true	"List of location lookups"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchResult]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/places/timezone/batch [post]
+func handleTimezoneBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
+		func(_ context.Context, req BatchTimezoneRequest) (httpx.BatchResponse[BatchResult], error) {
+			return httpx.BatchResponse[BatchResult]{Results: svc.BatchLookup(req.Items)}, nil
+		},
+	)
 }
 
 func parseTimezoneQuery(r *http.Request) (req Request, hasCity, hasCoords bool, err error) {

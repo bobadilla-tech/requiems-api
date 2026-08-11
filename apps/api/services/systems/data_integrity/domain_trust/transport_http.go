@@ -24,9 +24,23 @@ func RegisterRoutes(r chi.Router, svc EvaluateService) {
 	r.Group(func(validated chi.Router) {
 		validated.Use(middleware.ValidateURLParam("domain", domainRe, "invalid domain: must be a valid hostname such as example.com"))
 
-		validated.Get("/domain/trust/{domain}", func(w http.ResponseWriter, r *http.Request) {
-			d := chi.URLParam(r, "domain")
-			httpx.JSON(w, http.StatusOK, svc.Evaluate(r.Context(), d))
-		})
+		validated.Get("/domain/trust/{domain}", handleDomainTrust(svc))
 	})
+}
+
+// handleDomainTrust godoc
+//
+//	@Summary		Domain Trust
+//	@Description	Evaluates the trustworthiness of a domain by analyzing DNS records, WHOIS registration data, and MX configuration.
+//	@Tags			data-integrity
+//	@Produce		json
+//	@Param			domain	path		string	true	"Domain to evaluate (e.g. example.com)"
+//	@Success		200		{object}	httpx.Response[Response]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Router			/v1/systems/domain/trust/{domain} [get]
+func handleDomainTrust(svc EvaluateService) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		d := chi.URLParam(r, "domain")
+		httpx.JSON(w, http.StatusOK, svc.Evaluate(r.Context(), d))
+	}
 }

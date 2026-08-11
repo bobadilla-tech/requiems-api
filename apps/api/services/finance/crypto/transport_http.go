@@ -27,19 +27,29 @@ type BatchSymbolsRequest struct {
 func RegisterRoutes(r chi.Router, svc *Service) {
 	registerCryptoRoutes(r, svc)
 
-	r.Post("/crypto/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchSymbolsRequest) (httpx.BatchResponse[BatchPriceItem], error) {
-			return httpx.BatchResponse[BatchPriceItem]{Results: svc.GetPriceBatch(ctx, req.Symbols)}, nil
-		},
-	))
+	r.Post("/crypto/batch", handleCryptoBatch(svc))
 }
 
 // registerCryptoRoutes wires the Getter interface to the router. Kept
 // unexported so tests can inject a stub without going through the concrete
 // *Service type.
 func registerCryptoRoutes(r chi.Router, g Getter) {
-	// GET /crypto/{symbol}
-	r.Get("/crypto/{symbol}", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/crypto/{symbol}", handleCryptoPrice(g))
+}
+
+// handleCryptoPrice godoc
+//
+//	@Summary		Get Crypto Price
+//	@Description	Returns current price data for the given cryptocurrency symbol.
+//	@Tags			crypto
+//	@Produce		json
+//	@Param			symbol	path		string	true	"Uppercase ticker (e.g. BTC, ETH, SOL)"
+//	@Success		200		{object}	httpx.Response[Price]
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Failure		503		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/crypto/{symbol} [get]
+func handleCryptoPrice(g Getter) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		symbol := strings.ToUpper(chi.URLParam(r, "symbol"))
 
 		price, err := g.GetPrice(r.Context(), symbol)
@@ -53,5 +63,25 @@ func registerCryptoRoutes(r chi.Router, g Getter) {
 		}
 
 		httpx.JSON(w, http.StatusOK, price)
-	})
+	}
+}
+
+// handleCryptoBatch godoc
+//
+//	@Summary		Get Crypto Prices (Batch)
+//	@Description	Returns current prices for up to 20 cryptocurrency symbols.
+//	@Tags			crypto
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchSymbolsRequest	true	"List of cryptocurrency symbols"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchPriceItem]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/crypto/batch [post]
+func handleCryptoBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
+		func(ctx context.Context, req BatchSymbolsRequest) (httpx.BatchResponse[BatchPriceItem], error) {
+			return httpx.BatchResponse[BatchPriceItem]{Results: svc.GetPriceBatch(ctx, req.Symbols)}, nil
+		},
+	)
 }

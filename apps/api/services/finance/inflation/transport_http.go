@@ -38,8 +38,24 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // unexported so tests can inject a stub without going through the concrete
 // *Service type.
 func registerInflationRoutes(r chi.Router, g Getter) {
-	// GET /inflation?country=US — return latest and historical CPI inflation rate
-	r.Get("/inflation", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/inflation", handleInflationRate(g))
+	r.Post("/inflation/batch", handleInflationBatch(g))
+}
+
+// handleInflationRate godoc
+//
+//	@Summary		Get Inflation Rate
+//	@Description	Returns latest annual CPI inflation rate for a country plus previous 10 years.
+//	@Tags			inflation
+//	@Produce		json
+//	@Param			country	query		string	true	"ISO 3166-1 alpha-2 country code (case-insensitive)"
+//	@Success		200		{object}	httpx.Response[Response]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		404		{object}	httpx.ErrorResponse
+//	@Failure		500		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/inflation [get]
+func handleInflationRate(g Getter) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		// Uppercase the country param before binding — iso3166_1_alpha2 is case-sensitive.
 		if country := r.URL.Query().Get("country"); country != "" {
 			q := r.URL.Query()
@@ -64,13 +80,25 @@ func registerInflationRoutes(r chi.Router, g Getter) {
 		}
 
 		httpx.JSON(w, http.StatusOK, resp)
-	})
+	}
+}
 
-	// POST /inflation/batch — return inflation data for up to 50 countries at once.
-	// Uses HandleBatch so the gateway charges one credit per country (X-Usage-Count).
-	r.Post("/inflation/batch", httpx.HandleBatch(
+// handleInflationBatch godoc
+//
+//	@Summary		Batch Inflation Rates
+//	@Description	Returns inflation data for up to 50 countries; countries with no data return `found: false`. Billing: 1 credit per country.
+//	@Tags			inflation
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchRequest	true	"List of ISO country codes"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchItem]]
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Failure		500		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/inflation/batch [post]
+func handleInflationBatch(g Getter) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchItem], error) {
 			return httpx.BatchResponse[BatchItem]{Results: g.GetInflationBatch(ctx, req.Countries)}, nil
 		},
-	))
+	)
 }

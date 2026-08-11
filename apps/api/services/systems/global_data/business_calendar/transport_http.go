@@ -19,7 +19,24 @@ type Request struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/business-calendar/{country}", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/business-calendar/{country}", handleBusinessCalendar(svc))
+}
+
+// handleBusinessCalendar godoc
+//
+//	@Summary		Business Calendar
+//	@Description	Retrieves working days, public holidays, and next upcoming holiday for any country and optional year/month.
+//	@Tags			global-data
+//	@Produce		json
+//	@Param			country	path		string	true	"ISO 3166-1 alpha-2 country code"
+//	@Param			year	query		integer	false	"Year (defaults to current year)"
+//	@Param			month	query		integer	false	"Month 1–12; when provided, returns month-scoped counts"
+//	@Success		200		{object}	httpx.Response[Result]
+//	@Failure		401		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/systems/business-calendar/{country} [get]
+func handleBusinessCalendar(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		country := strings.ToUpper(chi.URLParam(r, "country"))
 		if len(country) != 2 {
 			httpx.Error(w, http.StatusUnprocessableEntity, "validation_failed", "country must be a 2-letter ISO 3166-1 alpha-2 code")
@@ -56,5 +73,5 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return
 		}
 		httpx.JSON(w, http.StatusOK, res)
-	})
+	}
 }

@@ -23,11 +23,39 @@ type BatchRequest struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/convert/units", func(w http.ResponseWriter, r *http.Request) {
-		httpx.JSON(w, http.StatusOK, svc.Units())
-	})
+	r.Get("/convert/units", handleListUnits(svc))
+	r.Get("/convert", handleUnitConvert(svc))
+	r.Post("/convert/batch", handleUnitsBatch(svc))
+}
 
-	r.Get("/convert", func(w http.ResponseWriter, r *http.Request) {
+// handleListUnits godoc
+//
+//	@Summary		List Available Units
+//	@Description	Returns all available unit conversion types grouped by measurement category.
+//	@Tags			unit-conversion
+//	@Produce		json
+//	@Success		200	{object}	httpx.Response[Results]
+//	@Router			/v1/technology/convert/units [get]
+func handleListUnits(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		httpx.JSON(w, http.StatusOK, svc.Units())
+	}
+}
+
+// handleUnitConvert godoc
+//
+//	@Summary		Convert Units
+//	@Description	Converts a value from one unit to another.
+//	@Tags			unit-conversion
+//	@Produce		json
+//	@Param			from	query		string	true	"Source unit key (e.g. miles)"
+//	@Param			to		query		string	true	"Target unit key (e.g. km)"
+//	@Param			value	query		number	true	"Numeric value to convert"
+//	@Success		200		{object}	httpx.Response[Result]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/convert [get]
+func handleUnitConvert(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		from := r.URL.Query().Get("from")
 		to := r.URL.Query().Get("to")
 		valueStr := r.URL.Query().Get("value")
@@ -50,11 +78,25 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		}
 
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
+}
 
-	r.Post("/convert/batch", httpx.HandleBatch(
+// handleUnitsBatch godoc
+//
+//	@Summary		Convert Units (Batch)
+//	@Description	Converts up to 50 unit conversion operations.
+//	@Tags			unit-conversion
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchRequest	true	"List of unit conversion operations"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchResponse]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/convert/batch [post]
+func handleUnitsBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchRequest) (httpx.BatchResponse[BatchResponse], error) {
 			return httpx.BatchResponse[BatchResponse]{Results: svc.ConvertBatch(ctx, req.Operations)}, nil
-		}),
+		},
 	)
 }

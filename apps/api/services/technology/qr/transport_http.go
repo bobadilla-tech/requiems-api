@@ -25,8 +25,26 @@ type BatchQRRequest struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	// GET /qr — returns a raw PNG image (not JSON, must stay inline).
-	r.Get("/qr", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/qr", handleQRCodePNG(svc))
+	r.Get("/qr/base64", handleQRCodeBase64(svc))
+	r.Post("/qr/base64/batch", handleQRCodeBatch(svc))
+}
+
+// handleQRCodePNG godoc
+//
+//	@Summary		Generate QR Code (PNG)
+//	@Description	Returns a raw PNG image of the QR code (Content-Type image/png).
+//	@Tags			qr-code
+//	@Produce		image/png
+//	@Param			data		query		string	true	"Text or URL to encode"
+//	@Param			size		query		integer	false	"Image size in pixels (50–1000, default 256)"
+//	@Param			recovery	query		string	false	"Error correction level: low, medium, high, highest (default medium)"
+//	@Success		200			{file}		binary	"QR code PNG image"
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/qr [get]
+func handleQRCodePNG(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		req := Request{Size: defaultSize}
 
 		if err := httpx.BindQuery(r, &req); err != nil {
@@ -43,10 +61,24 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		w.Header().Set("Content-Type", "image/png")
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(png)
-	})
+	}
+}
 
-	// GET /qr/base64 — returns a JSON envelope with a base64-encoded PNG.
-	r.Get("/qr/base64", httpx.HandleGet(func(ctx context.Context, req Request) (Base64Response, error) {
+// handleQRCodeBase64 godoc
+//
+//	@Summary		Generate QR Code (Base64 JSON)
+//	@Description	Returns JSON with base64-encoded PNG and dimensions.
+//	@Tags			qr-code
+//	@Produce		json
+//	@Param			data		query		string	true	"Text or URL to encode"
+//	@Param			size		query		integer	false	"Image size in pixels (50–1000, default 256)"
+//	@Param			recovery	query		string	false	"Error correction level: low, medium, high, highest (default medium)"
+//	@Success		200			{object}	httpx.Response[Base64Response]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/qr/base64 [get]
+func handleQRCodeBase64(svc *Service) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req Request) (Base64Response, error) {
 		png, err := svc.Generate(req.Data, req.Size, req.Recovery)
 		if err != nil {
 			return Base64Response{}, err
@@ -56,13 +88,25 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			Width:  req.Size,
 			Height: req.Size,
 		}, nil
-	}, Request{Size: defaultSize}))
+	}, Request{Size: defaultSize})
+}
 
-	// POST /qr/base64/batch — returns multiple base64-encoded QR codes.
-	// The raw PNG endpoint (GET /qr) has no batch variant: it returns binary image/png.
-	r.Post("/qr/base64/batch", httpx.HandleBatch(
+// handleQRCodeBatch godoc
+//
+//	@Summary		Batch Generate QR Codes (Base64)
+//	@Description	Generates up to 50 base64 QR codes. The PNG endpoint has no batch variant.
+//	@Tags			qr-code
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchQRRequest	true	"List of QR generation options"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchBase64Item]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/qr/base64/batch [post]
+func handleQRCodeBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(_ context.Context, req BatchQRRequest) (httpx.BatchResponse[BatchBase64Item], error) {
 			return httpx.BatchResponse[BatchBase64Item]{Results: svc.GenerateBatch(req.Items)}, nil
 		},
-	))
+	)
 }

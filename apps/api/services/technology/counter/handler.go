@@ -24,18 +24,25 @@ func RegisterRoutes(r chi.Router, svc Service) {
 	r.Group(func(validated chi.Router) {
 		validated.Use(middleware.ValidateURLParam("namespace", namespaceRe, namespaceValidationErrorMessage))
 
-		validated.Post("/counter/{namespace}", incrementHandler(svc))
-		validated.Get("/counter/{namespace}", getHandler(svc))
+		validated.Post("/counter/{namespace}", handleCounterIncrement(svc))
+		validated.Get("/counter/{namespace}", handleCounterGet(svc))
 	})
 
-	r.Post("/counter/batch", httpx.HandleBatch(
-		func(ctx context.Context, req BatchCounterRequest) (httpx.BatchResponse[BatchCounterItem], error) {
-			return httpx.BatchResponse[BatchCounterItem]{Results: svc.IncrementBatch(ctx, req.Namespaces)}, nil
-		},
-	))
+	r.Post("/counter/batch", handleCounterBatch(svc))
 }
 
-func incrementHandler(svc Service) http.HandlerFunc {
+// handleCounterIncrement godoc
+//
+//	@Summary		Increment Counter
+//	@Description	Atomically increments a counter and returns the new value.
+//	@Tags			counter
+//	@Produce		json
+//	@Param			namespace	path		string	true	"Counter namespace (1–64 chars, alphanumeric, hyphen or underscore)"
+//	@Success		200			{object}	httpx.Response[Counter]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/counter/{namespace} [post]
+func handleCounterIncrement(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ns := chi.URLParam(r, "namespace")
 
@@ -49,7 +56,18 @@ func incrementHandler(svc Service) http.HandlerFunc {
 	}
 }
 
-func getHandler(svc Service) http.HandlerFunc {
+// handleCounterGet godoc
+//
+//	@Summary		Get Counter Value
+//	@Description	Gets the current value of a counter without incrementing (returns 0 if it does not exist).
+//	@Tags			counter
+//	@Produce		json
+//	@Param			namespace	path		string	true	"Counter namespace (1–64 chars, alphanumeric, hyphen or underscore)"
+//	@Success		200			{object}	httpx.Response[Counter]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/counter/{namespace} [get]
+func handleCounterGet(svc Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ns := chi.URLParam(r, "namespace")
 
@@ -61,4 +79,24 @@ func getHandler(svc Service) http.HandlerFunc {
 
 		httpx.JSON(w, http.StatusOK, Counter{Namespace: ns, Value: val})
 	}
+}
+
+// handleCounterBatch godoc
+//
+//	@Summary		Batch Counter Operations
+//	@Description	Increments up to 50 counters in a single request.
+//	@Tags			counter
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchCounterRequest	true	"List of counter namespaces"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchCounterItem]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/counter/batch [post]
+func handleCounterBatch(svc Service) http.HandlerFunc {
+	return httpx.HandleBatch(
+		func(ctx context.Context, req BatchCounterRequest) (httpx.BatchResponse[BatchCounterItem], error) {
+			return httpx.BatchResponse[BatchCounterItem]{Results: svc.IncrementBatch(ctx, req.Namespaces)}, nil
+		},
+	)
 }

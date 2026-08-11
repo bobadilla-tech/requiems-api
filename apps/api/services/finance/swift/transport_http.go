@@ -35,13 +35,45 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // registerSWIFTRoutes wires the Looker interface to the router. Kept unexported
 // so tests can inject a stub without going through the concrete *Service type.
 func registerSWIFTRoutes(r chi.Router, l Looker) {
-	r.Get("/swift", httpx.HandleGet(func(ctx context.Context, req ListFilter) (ListResponse, error) {
-		return l.List(ctx, req)
-	}, ListFilter{Limit: 50}))
+	r.Get("/swift", handleSwiftList(l))
+	r.Get("/swift/{code}", handleSwiftLookup(l))
+}
 
-	// GET /swift/{code} — look up bank metadata for a SWIFT/BIC code.
-	// Path param only, no query binding.
-	r.Get("/swift/{code}", func(w http.ResponseWriter, r *http.Request) {
+// handleSwiftList godoc
+//
+//	@Summary		List SWIFT Codes
+//	@Description	Lists SWIFT records with optional filters and pagination.
+//	@Tags			swift-code
+//	@Produce		json
+//	@Param			country_code	query		string	false	"2-letter country filter (e.g. DE)"
+//	@Param			bank_code		query		string	false	"4-letter bank code filter (e.g. DEUT)"
+//	@Param			q				query		string	false	"Text search across swift_code, bank_name, city"
+//	@Param			limit			query		integer	false	"Maximum results (default 50, max 200)"
+//	@Param			offset			query		integer	false	"Result offset (default 0)"
+//	@Success		200				{object}	httpx.Response[ListResponse]
+//	@Failure		400				{object}	httpx.ErrorResponse
+//	@Failure		500				{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/swift [get]
+func handleSwiftList(l Looker) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req ListFilter) (ListResponse, error) {
+		return l.List(ctx, req)
+	}, ListFilter{Limit: 50})
+}
+
+// handleSwiftLookup godoc
+//
+//	@Summary		Get SWIFT Code
+//	@Description	Looks up bank metadata for a SWIFT/BIC code.
+//	@Tags			swift-code
+//	@Produce		json
+//	@Param			code	path		string	true	"8 or 11 alphanumeric characters"
+//	@Success		200		{object}	httpx.Response[LookupResponse]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		404		{object}	httpx.ErrorResponse
+//	@Failure		500		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/swift/{code} [get]
+func handleSwiftLookup(l Looker) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		rawCode := chi.URLParam(r, "code")
 
 		result, err := l.Lookup(r.Context(), rawCode)
@@ -55,5 +87,5 @@ func registerSWIFTRoutes(r chi.Router, l Looker) {
 		}
 
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
 }
