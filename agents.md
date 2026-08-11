@@ -35,3 +35,15 @@ Preserve unrelated worktree changes. Use `apply_patch` for edits. Keep
 historical audit and plan records unchanged except the implementation notes in
 the active completion plan.
 
+Regenerate the OpenAPI spec (`docs/swagger.json`), from `apps/api`:
+
+```bash
+swag init -g main.go --outputTypes json --parseDependency   # regenerate docs/swagger.json
+swag fmt -g main.go                                          # normalize annotation formatting
+```
+
+The spec is generated from swagger annotations on the handler functions in
+`services/**/transport_http.go` (see the `// handleX godoc` blocks). `swag` is a
+global binary; run these commands locally, not in the container. After changing
+annotations, regenerate and commit the new `docs/swagger.json`. The drift-guard
+test `app/spec_coverage_test.go` fails if a registered route is undocumented.
