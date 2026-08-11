@@ -52,15 +52,71 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // Note: /exercises/random must be registered before /exercises/{id} so chi
 // matches the literal segment first.
 func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
-	r.Get("/exercises", httpx.HandleGet(func(ctx context.Context, params ListParams) (ExerciseList, error) {
+	r.Get("/exercises", handleListExercises(q))
+	r.Get("/exercises/random", handleRandomExercise(q))
+	r.Get("/exercises/{id}", handleExerciseByID(q))
+	r.Get("/body-parts", handleBodyParts(q))
+	r.Get("/equipment", handleEquipment(q))
+	r.Get("/muscles", handleMuscles(q))
+	r.Post("/exercises/batch", handleExercisesBatch(q))
+}
+
+// handleListExercises godoc
+//
+//	@Summary		List Exercises
+//	@Description	Returns a paginated list of exercises. All filter parameters are optional and combinable.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Param			body_part	query		string	false	"Body part filter (e.g. chest). Valid values via /v1/health/body-parts"
+//	@Param			equipment	query		string	false	"Equipment filter (e.g. barbell). Valid values via /v1/health/equipment"
+//	@Param			muscle		query		string	false	"Muscle filter (e.g. biceps). Valid values via /v1/health/muscles"
+//	@Param			search		query		string	false	"Full-text search on exercise name"
+//	@Param			page		query		integer	false	"Page number (default 1)"
+//	@Param			per_page	query		integer	false	"Results per page, 1–100 (default 20)"
+//	@Success		200			{object}	httpx.Response[ExerciseList]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/health/exercises [get]
+func handleListExercises(q exerciseQuerier) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, params ListParams) (ExerciseList, error) {
 		return q.List(ctx, params)
-	}, ListParams{Page: 1, PerPage: 20}))
+	}, ListParams{Page: 1, PerPage: 20})
+}
 
-	r.Get("/exercises/random", httpx.HandleGet(func(ctx context.Context, params ListParams) (Exercise, error) {
+// handleRandomExercise godoc
+//
+//	@Summary		Random Exercise
+//	@Description	Returns a single randomly selected exercise, accepting the same filters as the list endpoint.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Param			body_part	query		string	false	"Body part filter (e.g. chest)"
+//	@Param			equipment	query		string	false	"Equipment filter (e.g. barbell)"
+//	@Param			muscle		query		string	false	"Muscle filter (e.g. biceps)"
+//	@Param			search		query		string	false	"Full-text search on exercise name"
+//	@Success		200			{object}	httpx.Response[Exercise]
+//	@Failure		404			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/health/exercises/random [get]
+func handleRandomExercise(q exerciseQuerier) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, params ListParams) (Exercise, error) {
 		return q.Random(ctx, params)
-	}, ListParams{Page: 1, PerPage: 20}))
+	}, ListParams{Page: 1, PerPage: 20})
+}
 
-	r.Get("/exercises/{id}", func(w http.ResponseWriter, r *http.Request) {
+// handleExerciseByID godoc
+//
+//	@Summary		Exercise by ID
+//	@Description	Returns a single exercise by its numeric ID.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Param			id	path		integer	true	"Numeric exercise ID"
+//	@Success		200	{object}	httpx.Response[Exercise]
+//	@Failure		400	{object}	httpx.ErrorResponse
+//	@Failure		404	{object}	httpx.ErrorResponse
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/health/exercises/{id} [get]
+func handleExerciseByID(q exerciseQuerier) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		raw := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(raw)
 		if err != nil || id <= 0 {
@@ -79,36 +135,83 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 		}
 
 		httpx.JSON(w, http.StatusOK, exercise)
-	})
+	}
+}
 
-	r.Get("/body-parts", func(w http.ResponseWriter, r *http.Request) {
+// handleBodyParts godoc
+//
+//	@Summary		List Body Parts
+//	@Description	Returns a sorted list of all distinct body part values.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Success		200	{object}	httpx.Response[StringList]
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/health/body-parts [get]
+func handleBodyParts(q exerciseQuerier) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		result, err := q.BodyParts(r.Context())
 		if err != nil {
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch body parts")
 			return
 		}
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
+}
 
-	r.Get("/equipment", func(w http.ResponseWriter, r *http.Request) {
+// handleEquipment godoc
+//
+//	@Summary		List Equipment
+//	@Description	Returns a sorted list of all distinct equipment types.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Success		200	{object}	httpx.Response[StringList]
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/health/equipment [get]
+func handleEquipment(q exerciseQuerier) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		result, err := q.Equipment(r.Context())
 		if err != nil {
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch equipment")
 			return
 		}
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
+}
 
-	r.Get("/muscles", func(w http.ResponseWriter, r *http.Request) {
+// handleMuscles godoc
+//
+//	@Summary		List Muscles
+//	@Description	Returns a sorted list of all distinct muscle names.
+//	@Tags			fitness-exercises
+//	@Produce		json
+//	@Success		200	{object}	httpx.Response[StringList]
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/health/muscles [get]
+func handleMuscles(q exerciseQuerier) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		result, err := q.Muscles(r.Context())
 		if err != nil {
 			httpx.Error(w, http.StatusInternalServerError, "internal_error", "failed to fetch muscles")
 			return
 		}
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
+}
 
-	r.Post("/exercises/batch", httpx.HandleBatch(
+// handleExercisesBatch godoc
+//
+//	@Summary		Batch Get Exercises
+//	@Description	Fetches up to 50 exercises by numeric IDs. Non-existent IDs are silently skipped.
+//	@Tags			fitness-exercises
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchGetRequest	true	"List of exercise IDs"
+//	@Success		200		{object}	httpx.Response[BatchExerciseResponse]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/health/exercises/batch [post]
+func handleExercisesBatch(q exerciseQuerier) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchGetRequest) (BatchExerciseResponse, error) {
 			results, err := q.GetBatch(ctx, req.IDs)
 			if err != nil {
@@ -116,5 +219,5 @@ func registerExerciseRoutes(r chi.Router, q exerciseQuerier) {
 			}
 			return BatchExerciseResponse{Results: results}, nil
 		},
-	))
+	)
 }

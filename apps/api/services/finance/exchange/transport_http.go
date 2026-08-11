@@ -3,6 +3,7 @@ package exchange
 import (
 	"context"
 	"errors"
+	"net/http"
 	"strings"
 	"time"
 
@@ -40,7 +41,25 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // unexported so tests can inject a stub without going through the concrete
 // *Service type.
 func registerExchangeRoutes(r chi.Router, f Fetcher) {
-	r.Get("/exchange-rate", httpx.HandleGet(func(ctx context.Context, req RateRequest) (RateResponse, error) {
+	r.Get("/exchange-rate", handleExchangeRate(f))
+	r.Get("/convert", handleExchangeConvert(f))
+}
+
+// handleExchangeRate godoc
+//
+//	@Summary		Get Exchange Rate
+//	@Description	Returns the current exchange rate between two currencies.
+//	@Tags			exchange-rate
+//	@Produce		json
+//	@Param			from	query		string	true	"ISO 4217 source currency code (e.g. USD)"
+//	@Param			to		query		string	true	"ISO 4217 target currency code (e.g. EUR)"
+//	@Success		200		{object}	httpx.Response[RateResponse]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Failure		503		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/exchange-rate [get]
+func handleExchangeRate(f Fetcher) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req RateRequest) (RateResponse, error) {
 		from := strings.ToUpper(req.From)
 		to := strings.ToUpper(req.To)
 		rate, ts, err := f.GetRate(ctx, from, to)
@@ -56,9 +75,25 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 			Rate:      rate,
 			Timestamp: ts.UTC().Format("2006-01-02T15:04:05Z"),
 		}, nil
-	}))
+	})
+}
 
-	r.Get("/convert", httpx.HandleGet(func(ctx context.Context, req ConvertRequest) (ConvertResponse, error) {
+// handleExchangeConvert godoc
+//
+//	@Summary		Convert Currency
+//	@Description	Converts an amount from one currency to another and returns the rate alongside the converted value.
+//	@Tags			exchange-rate
+//	@Produce		json
+//	@Param			from	query		string	true	"ISO 4217 source currency code (e.g. USD)"
+//	@Param			to		query		string	true	"ISO 4217 target currency code (e.g. EUR)"
+//	@Param			amount	query		number	true	"Amount to convert; must be greater than 0"
+//	@Success		200		{object}	httpx.Response[ConvertResponse]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Failure		503		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/convert [get]
+func handleExchangeConvert(f Fetcher) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req ConvertRequest) (ConvertResponse, error) {
 		from := strings.ToUpper(req.From)
 		to := strings.ToUpper(req.To)
 		rate, ts, err := f.GetRate(ctx, from, to)
@@ -76,5 +111,5 @@ func registerExchangeRoutes(r chi.Router, f Fetcher) {
 			Converted: round2(rate * req.Amount),
 			Timestamp: ts.UTC().Format("2006-01-02T15:04:05Z"),
 		}, nil
-	}))
+	})
 }

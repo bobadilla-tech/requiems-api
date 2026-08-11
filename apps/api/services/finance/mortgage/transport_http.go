@@ -2,6 +2,7 @@ package mortgage
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
@@ -36,10 +37,42 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 // unexported so tests can inject a stub without going through the concrete
 // *Service type.
 func registerMortgageRoutes(r chi.Router, c Calculator) {
-	r.Get("/mortgage", httpx.HandleGet(func(ctx context.Context, req Request) (Response, error) {
+	r.Get("/mortgage", handleMortgageCalculate(c))
+	r.Post("/mortgage/batch", handleMortgageBatch(c))
+}
+
+// handleMortgageCalculate godoc
+//
+//	@Summary		Calculate Mortgage
+//	@Description	Returns monthly payment, total cost, and full amortization schedule.
+//	@Tags			mortgage
+//	@Produce		json
+//	@Param			principal	query		number	true	"Loan amount"
+//	@Param			rate		query		number	true	"Annual interest rate in percent, greater than 0"
+//	@Param			years		query		integer	true	"Loan term in years (1–50)"
+//	@Success		200			{object}	httpx.Response[Response]
+//	@Failure		400			{object}	httpx.ErrorResponse
+//	@Failure		500			{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/mortgage [get]
+func handleMortgageCalculate(c Calculator) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req Request) (Response, error) {
 		return c.Calculate(req.Principal, req.Rate, req.Years), nil
-	}))
-	r.Post("/mortgage/batch", httpx.HandleBatch(func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
+	})
+}
+
+// handleMortgageBatch godoc
+//
+//	@Summary		Batch Calculate Mortgages
+//	@Description	Calculates up to 50 mortgages in a single request.
+//	@Tags			mortgage
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchRequest	true	"List of mortgage parameters"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[Response]]
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/finance/mortgage/batch [post]
+func handleMortgageBatch(c Calculator) http.HandlerFunc {
+	return httpx.HandleBatch(func(_ context.Context, req BatchRequest) (httpx.BatchResponse[Response], error) {
 		return httpx.BatchResponse[Response]{Results: c.CalculateBatch(req.Mortgages)}, nil
-	}))
+	})
 }

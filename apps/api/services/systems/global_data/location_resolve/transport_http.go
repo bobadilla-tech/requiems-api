@@ -2,6 +2,7 @@ package locationresolve
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
@@ -16,7 +17,23 @@ type Request struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Post("/location/resolve", httpx.Handle(
+	r.Post("/location/resolve", handleLocationResolve(svc))
+}
+
+// handleLocationResolve godoc
+//
+//	@Summary		Resolve Location
+//	@Description	Resolves an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, next holiday.
+//	@Tags			global-data
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		Request	true	"Address or coordinates to resolve"
+//	@Success		200		{object}	httpx.Response[Result]
+//	@Failure		401		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/systems/location/resolve [post]
+func handleLocationResolve(svc *Service) http.HandlerFunc {
+	return httpx.Handle(
 		func(ctx context.Context, req Request) (Result, error) {
 			if req.Address == "" && req.Coordinates == nil {
 				return Result{}, svcerr.Unknown("validation_failed", "address or coordinates is required")
@@ -35,5 +52,5 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 
 			return res, nil
 		},
-	))
+	)
 }

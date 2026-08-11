@@ -17,7 +17,16 @@ type BatchInfoRequest struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/ip/{ip}", httpx.Guard(svc, handleIPInfo(svc)))
+	r.Get("/ip", httpx.Guard(svc, handleOwnIPInfo(svc)))
+
+	r.Post("/ip/info/batch", httpx.Guard(svc, handleIPInfoBatch(svc)))
+}
+
+// ipInfoHandler returns the shared geolocation handler used by both the
+// explicit-IP and caller-IP routes.
+func ipInfoHandler(svc *Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		ipStr := chi.URLParam(r, "ip")
 		if ipStr == "" {
 			ipStr = callerIP(r)
@@ -35,16 +44,55 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 		}
 
 		httpx.JSON(w, http.StatusOK, result)
-	})
+	}
+}
 
-	r.Get("/ip/{ip}", handler)
-	r.Get("/ip", handler)
+// handleIPInfo godoc
+//
+//	@Summary		Get IP Info for IP
+//	@Description	Geolocation for a specific IP (IPv4 and IPv6).
+//	@Tags			ip-info
+//	@Produce		json
+//	@Param			ip	path		string	true	"IP address (IPv4 or IPv6)"
+//	@Success		200	{object}	httpx.Response[LookupResponse]
+//	@Failure		400	{object}	httpx.ErrorResponse
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/networking/ip/{ip} [get]
+func handleIPInfo(svc *Service) http.HandlerFunc {
+	return ipInfoHandler(svc)
+}
 
-	r.Post("/ip/info/batch", httpx.Guard(svc, httpx.HandleBatch(
+// handleOwnIPInfo godoc
+//
+//	@Summary		Get IP Info (Caller IP)
+//	@Description	Geolocation for the requesting client's IP.
+//	@Tags			ip-info
+//	@Produce		json
+//	@Success		200	{object}	httpx.Response[LookupResponse]
+//	@Failure		500	{object}	httpx.ErrorResponse
+//	@Router			/v1/networking/ip [get]
+func handleOwnIPInfo(svc *Service) http.HandlerFunc {
+	return ipInfoHandler(svc)
+}
+
+// handleIPInfoBatch godoc
+//
+//	@Summary		Batch IP Geolocation
+//	@Description	Looks up geolocation for up to 50 IPs; per-item errors inline.
+//	@Tags			ip-info
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchInfoRequest	true	"List of IP addresses"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchIPInfoItem]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/networking/ip/info/batch [post]
+func handleIPInfoBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchInfoRequest) (httpx.BatchResponse[BatchIPInfoItem], error) {
 			return httpx.BatchResponse[BatchIPInfoItem]{Results: svc.CheckInfoBatch(ctx, req.IPs)}, nil
 		},
-	)))
+	)
 }
 
 // callerIP extracts the real client IP from the request, checking

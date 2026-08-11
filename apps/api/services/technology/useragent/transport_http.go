@@ -2,6 +2,7 @@ package useragent
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
@@ -25,12 +26,42 @@ type BatchParseItem struct {
 }
 
 func RegisterRoutes(r chi.Router, svc *Service) {
-	r.Get("/useragent", httpx.HandleGet(func(ctx context.Context, req ParseRequest) (Result, error) {
+	r.Get("/useragent", handleParseUserAgent(svc))
+	r.Post("/useragent/batch", handleUserAgentBatch(svc))
+}
+
+// handleParseUserAgent godoc
+//
+//	@Summary		Parse User Agent
+//	@Description	Parses a user agent string and returns browser, OS, device, and bot status.
+//	@Tags			useragent
+//	@Produce		json
+//	@Param			ua	query		string	true	"Full user agent string"
+//	@Success		200	{object}	httpx.Response[Result]
+//	@Failure		400	{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/useragent [get]
+func handleParseUserAgent(svc *Service) http.HandlerFunc {
+	return httpx.HandleGet(func(ctx context.Context, req ParseRequest) (Result, error) {
 		return svc.Parse(req.UA), nil
-	}))
-	r.Post("/useragent/batch", httpx.HandleBatch(
+	})
+}
+
+// handleUserAgentBatch godoc
+//
+//	@Summary		Batch Parse User Agents
+//	@Description	Parses up to 50 user agents.
+//	@Tags			useragent
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		BatchParseRequest	true	"List of user agent strings"
+//	@Success		200		{object}	httpx.Response[httpx.BatchResponse[BatchParseItem]]
+//	@Failure		400		{object}	httpx.ErrorResponse
+//	@Failure		422		{object}	httpx.ErrorResponse
+//	@Router			/v1/technology/useragent/batch [post]
+func handleUserAgentBatch(svc *Service) http.HandlerFunc {
+	return httpx.HandleBatch(
 		func(ctx context.Context, req BatchParseRequest) (httpx.BatchResponse[BatchParseItem], error) {
 			return httpx.BatchResponse[BatchParseItem]{Results: svc.ParseBatch(ctx, req.UserAgents)}, nil
 		},
-	))
+	)
 }
