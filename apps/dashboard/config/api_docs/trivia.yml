@@ -55,7 +55,7 @@ endpoints:
         type: string
         description: The trivia question text
       - name: options
-        type: array[string]
+        type: array<string>
         description: Four multiple-choice answer options
       - name: answer
         type: string
@@ -131,7 +131,7 @@ endpoints:
     description: Returns up to 50 trivia questions in a single request.
     parameters:
       - name: filters
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Array of filters to get (min: 1, max: 50)."
@@ -186,7 +186,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of trivia questions returned in the same order as the input filters.
       - name: results[].category
         type: string
@@ -204,7 +204,7 @@ endpoints:
         type: string
         description: The trivia question text.
       - name: results[].data.options
-        type: array
+        type: array<string>
         description: List of possible answers for the question.
       - name: results[].data.answer
         type: string

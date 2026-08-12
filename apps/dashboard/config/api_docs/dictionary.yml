@@ -56,7 +56,7 @@ endpoints:
         type: string
         description: IPA phonetic transcription of the word (may be omitted if unavailable)
       - name: definitions
-        type: array of objects
+        type: array<object>
         description: One or more definitions for the word, each with part_of_speech, definition, and an optional example
       - name: definitions[].part_of_speech
         type: string
@@ -68,7 +68,7 @@ endpoints:
         type: string
         description: Example sentence using the word (may be omitted)
       - name: synonyms
-        type: array of strings
+        type: array<string>
         description: List of words with similar meaning
     errors:
       - code: not_found

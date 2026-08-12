@@ -128,7 +128,7 @@ endpoints:
 
     parameters:
       - name: markdowns
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of Markdown strings. Min: 1, Max: 50."
@@ -166,7 +166,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: One HTML result per Markdown input, preserving input order
       - name: results[].html
         type: string

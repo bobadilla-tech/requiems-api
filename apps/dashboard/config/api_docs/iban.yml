@@ -141,7 +141,7 @@ endpoints:
     description: Validates up to 50 iban numbers in a single request. Results are returned in the same order as the input.
     parameters:
       - name: numbers
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of iban numbers to validate (min: 1, max: 50)."
@@ -184,7 +184,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: >-
           Validation result for each number in the same order as the input. Each item has the same fields as the single
           validate endpoint.

@@ -63,10 +63,10 @@ endpoints:
         type: string
         description: The name of the registrar holding the domain registration
       - name: name_servers
-        type: array of strings
+        type: array<string>
         description: List of authoritative name servers for the domain
       - name: status
-        type: array of strings
+        type: array<string>
         description: "EPP status codes for the domain (e.g. clientTransferProhibited)"
       - name: created_date
         type: string
@@ -140,7 +140,7 @@ endpoints:
 
     parameters:
       - name: domains
-        type: array
+        type: array<string>
         required: true
         location: body
         description: "Array of domain names. Min: 1, Max: 50."
@@ -184,7 +184,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: One entry per domain, in the same order as the input
 
       - name: results[].domain

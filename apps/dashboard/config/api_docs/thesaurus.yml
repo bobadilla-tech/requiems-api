@@ -44,10 +44,10 @@ endpoints:
         type: string
         description: The normalized (lowercased) word that was looked up
       - name: synonyms
-        type: array of strings
+        type: array<string>
         description: List of words with similar meaning
       - name: antonyms
-        type: array of strings
+        type: array<string>
         description: List of words with opposite meaning
     errors:
       - code: not_found

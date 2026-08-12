@@ -66,7 +66,7 @@ endpoints:
         type: string
         description: The full input text with all misspelled words replaced by the top-ranked suggestion
       - name: corrections
-        type: array of objects
+        type: array<object>
         description: >-
           List of individual corrections. Each item contains: original (the misspelled word), suggested (the
           top-ranked replacement applied to corrected), suggestions (up to 3 ranked alternatives returned by
@@ -135,7 +135,7 @@ endpoints:
     description: Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
     parameters:
       - name: texts
-        type: array
+        type: array<string>
         required: true
         location: body
         description: The list of texts to spell-check. Between 1 and 50 items.
@@ -185,7 +185,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array of objects
+        type: array<object>
         description: >-
           One entry per input text, in the same order as the input array. Each item contains corrected (the fixed
           text) and corrections (list of individual corrections with original, suggested, suggestions, and position).

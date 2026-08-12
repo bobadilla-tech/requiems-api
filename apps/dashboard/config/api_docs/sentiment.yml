@@ -132,7 +132,7 @@ endpoints:
 
     parameters:
       - name: texts
-        type: array
+        type: array<string>
         required: true
         location: body
         description: The list of texts to analyze. Between 1 and 50 items.
@@ -176,7 +176,7 @@ endpoints:
 
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Sentiment results for each input text, in the same order as the input.
       - name: results[].sentiment
         type: string

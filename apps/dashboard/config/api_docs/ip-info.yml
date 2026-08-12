@@ -179,7 +179,7 @@ endpoints:
     description: Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
     parameters:
       - name: ips
-        type: array of strings
+        type: array<string>
         required: true
         location: body
         description: List of IP addresses to look up (1–50 items, each must be a valid IPv4 or IPv6 address).
@@ -206,7 +206,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Per-item results in input order.
       - name: results[].ip
         type: string

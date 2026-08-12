@@ -111,7 +111,7 @@ endpoints:
       }
     response_fields:
       - name: items
-        type: array
+        type: array<object>
         description: List of matching emoji objects
       - name: total
         type: integer

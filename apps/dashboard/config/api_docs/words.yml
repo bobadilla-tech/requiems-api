@@ -95,7 +95,7 @@ endpoints:
       or error information when a word is not in the dataset.
     parameters:
       - name: items
-        type: array
+        type: array<string>
         required: true
         location: body
         description: List of words to look up in batch (max 50 items)
@@ -138,7 +138,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: List of batch lookup results
       - name: total
         type: integer

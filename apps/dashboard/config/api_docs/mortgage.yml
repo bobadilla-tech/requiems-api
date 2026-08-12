@@ -91,7 +91,7 @@ endpoints:
         type: number
         description: Total interest paid (total_payment minus principal)
       - name: schedule
-        type: array
+        type: array<object>
         description: Full amortization schedule — one entry per month (years × 12 entries)
       - name: schedule[].month
         type: integer
@@ -165,7 +165,7 @@ endpoints:
     description: Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
     parameters:
       - name: mortgages
-        type: array
+        type: array<object>
         required: true
         location: body
         description: "Array of mortgages to calculate (min: 1, max: 50)."
@@ -246,7 +246,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: >-
           Mortgage calculation result for each mortgage request in the same order
           as the input. Each item has the same fields as the single mortgage

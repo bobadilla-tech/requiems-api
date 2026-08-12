@@ -24,6 +24,7 @@ endpoints:
     method: GET
     path: /v1/technology/qr
     description: Returns a raw PNG image of the QR code. Ideal for direct embedding or file download.
+    response_kind: binary
 
     parameters:
       - name: data
@@ -229,7 +230,7 @@ endpoints:
     description: Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
     parameters:
       - name: items
-        type: array of objects
+        type: array<object>
         required: true
         location: body
         description: List of QR generation requests (1–50 items).
@@ -268,7 +269,7 @@ endpoints:
       }
     response_fields:
       - name: results
-        type: array
+        type: array<object>
         description: Per-item results in input order.
       - name: results[].data
         type: string
