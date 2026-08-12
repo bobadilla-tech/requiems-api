@@ -63,7 +63,7 @@ gem "pagy", "~> 43.6"
 gem "groupdate", "~> 6.8"
 
 # Redis — cache store + shared with Go backend counter service
-gem "redis", "~> 5.0"
+gem "redis", "~> 6.0"
 
 # Rate limiting
 gem "rack-attack", "~> 6.7"
