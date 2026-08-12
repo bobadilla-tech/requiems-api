@@ -174,7 +174,7 @@ export function buildOperation(endpoint: YamlEndpoint, apiId: string): Record<st
   return operation;
 }
 
-export async function loadCatalog() {
+export async function loadCatalog(): Promise<{ apis: CatalogEntry[] }> {
   try {
     const catalogContent = await readFile(catalogPath, "utf8");
 
@@ -187,7 +187,7 @@ export async function loadCatalog() {
   }
 }
 
-export async function loadAPIDocs() {
+export async function loadAPIDocs(): Promise<string[]> {
   try {
     const files = await readdir(apiDocsDir);
 
