@@ -6,21 +6,28 @@
 # Runs ApiDocs::SnippetGenerator against every endpoint that has a hand-written
 # code_examples block and buckets each one as:
 #
-#   SAFE            — generator output is structurally equivalent; code_examples
-#                     can be deleted from the YAML in the rollout PRs.
+#   SAFE            — generator output is structurally equivalent to the
+#                     hand-written snippet. Proves the generator can stand in
+#                     for this endpoint's code_examples going forward.
 #   MANUAL_OVERRIDE — generator output differs meaningfully; the hand-written
-#                     block must stay.
+#                     block stays authoritative.
+#
+# This is a regeneration-confidence check, not a deletion trigger — SAFE means
+# "the generator reproduces this endpoint correctly," not "delete the YAML
+# block." Whether/when to stop hand-maintaining code_examples for SAFE
+# endpoints is a separate rollout decision.
 #
 # Structural equivalence rules (in order — first match wins):
-#   1. multi-example  → MANUAL_OVERRIDE  (≥2 curl invocations in hand-written snippet)
-#   2. binary         → MANUAL_OVERRIDE  (response_kind: binary — download template differs)
-#   3. url_mismatch   → MANUAL_OVERRIDE  (generated URL does not appear in hand-written curl)
-#   4. (default)      → SAFE
+#   1. multi-example       → MANUAL_OVERRIDE  (≥2 curl invocations in hand-written snippet)
+#   2. binary               → MANUAL_OVERRIDE  (response_kind: binary — download template differs)
+#   3. structural_mismatch  → MANUAL_OVERRIDE  (method, URL, query, headers, or body differ — or either snippet failed to parse)
+#   4. (default)            → SAFE
 #
 # The script deliberately does not do a full string diff. The generator makes
 # intentional trade-offs (prints data as a whole instead of cherry-picking a
 # field), so exact string match is the wrong threshold. Structural equivalence
-# (same URL, same params, same auth header) is what matters for the rollout.
+# (same method, same URL, same query params, same headers, same body) is what
+# matters for regeneration confidence.
 #
 # Usage:
 #   ruby apps/dashboard/script/golden_diff_api_docs.rb
@@ -33,7 +40,6 @@
 require "yaml"
 require "json"
 require "uri"
-require "set"
 
 $LOAD_PATH.unshift(File.expand_path("../app/services", __dir__))
 require "api_docs/snippet_generator"
@@ -54,38 +60,67 @@ def curl_invocation_count(curl_snippet)
   curl_snippet.to_s.scan(/^\s*curl\s/).size
 end
 
-# Returns true if the generated endpoint URL path is present in the hand-written
-# curl snippet AND the HTTP methods match.
-#
-# URL extraction: strips `curl`, optional `-X METHOD`, surrounding quotes, and
-# trailing ` \`. Falls back to false if the extraction produces an empty string,
-# which would otherwise give a false-positive substring match.
-def url_present_in_handwritten?(generated_curl, handwritten_curl)
-  first_line = generated_curl.to_s.lines.first.to_s.strip
+# Parses a (single-invocation) curl snippet into its structural parts: HTTP
+# method, canonical URL (scheme+host+path+query, order-independent on query),
+# header names present, and request body (parsed as JSON when possible).
+# Returns nil if the method/URL can't be extracted at all — callers must treat
+# that as "not comparable", never as a match.
+CurlParts = Struct.new(:method, :url, :query, :headers, :body, keyword_init: true)
 
-  # Extract HTTP method from generated curl (-X POST / -X GET / implicit GET)
-  generated_method = first_line.match(/-X\s+(\w+)/i)&.captures&.first || "GET"
+def parse_curl(curl_snippet)
+  text = curl_snippet.to_s
+  first_line = text.lines.first.to_s.strip
+  return nil if first_line.empty?
 
-  # Strip curl command prefix, optional -X METHOD, quotes, and trailing backslash
-  extracted = first_line
-    .sub(/^curl\s+/, "")
-    .sub(/^-X\s+\S+\s+/, "")
-    .sub(/\s*\\$/, "")
-    .gsub('"', "")
-    .strip
+  method = first_line.match(/-X\s+(\w+)/i)&.captures&.first&.upcase || "GET"
 
-  # Guard: empty extraction would match any string
-  return false if extracted.empty?
+  # URL may or may not be quoted in hand-written snippets (both are valid
+  # shell syntax since generated/example URLs never contain whitespace).
+  url_match = first_line.match(/curl\s+(?:-X\s+\S+\s+)?(?:"([^"]+)"|'([^']+)'|(\S+))/)
+  return nil unless url_match
 
-  # Strip query string — parameter order may differ between generated and hand-written
-  base_path = extracted.split("?").first.to_s.strip
-  return false if base_path.empty?
+  full_url = (url_match[1] || url_match[2] || url_match[3]).to_s.strip
+  return nil if full_url.empty?
 
-  # Both the path AND method must appear in the hand-written snippet
-  method_present = handwritten_curl.to_s.match?(/curl\s+(-X\s+#{generated_method}\s+|"#{generated_method}"|'#{generated_method}')/i) ||
-                   (generated_method == "GET" && !handwritten_curl.to_s.match?(/-X\s+(POST|PUT|PATCH|DELETE)/i))
+  path, _, query = full_url.partition("?")
+  return nil if path.empty?
 
-  handwritten_curl.to_s.include?(base_path) && method_present
+  query_pairs = query.empty? ? [] : URI.decode_www_form(query).sort
+
+  headers = text.scan(/-H\s+["']([^"':]+):/).flatten.map(&:downcase).sort
+
+  body = nil
+  body_match = text.match(/-d\s+'((?:[^'\\]|\\.)*)'/m)
+  if body_match
+    raw = body_match[1].gsub("'\\''", "'")
+    body = begin
+      JSON.parse(raw)
+    rescue JSON::ParserError
+      raw
+    end
+  end
+
+  CurlParts.new(method: method, url: path, query: query_pairs, headers: headers, body: body)
+rescue URI::InvalidComponentError, ArgumentError
+  nil
+end
+
+# Structural equivalence between the generated and hand-written curl snippets:
+# same HTTP method, same canonical URL (path, no query), same query params,
+# same header set (covers the requiems-api-key auth header), same body.
+# Returns false (never true) when either snippet fails to parse — an
+# unparseable snippet is a reason to keep the manual override, not a reason
+# to trust it as safe.
+def semantically_equivalent?(generated_curl, handwritten_curl)
+  gen = parse_curl(generated_curl)
+  hw  = parse_curl(handwritten_curl)
+  return false if gen.nil? || hw.nil?
+
+  gen.method == hw.method &&
+    gen.url == hw.url &&
+    gen.query == hw.query &&
+    gen.headers == hw.headers &&
+    gen.body == hw.body
 end
 
 # --------------------------------------------------------------------------- #
@@ -93,6 +128,7 @@ end
 # --------------------------------------------------------------------------- #
 
 results = []
+needs_review = []
 total_endpoints = 0
 total_with_examples = 0
 
@@ -103,7 +139,19 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
 
   doc["endpoints"]&.each do |ep|
     total_endpoints += 1
-    next unless ep.key?("code_examples")
+
+    unless ep.key?("code_examples")
+      # No hand-written block means this endpoint is already auto-generated
+      # today (ApisHelper's absence-of-key-means-generate rule). If its notes
+      # describe partial-success semantics, the generic whole-object-print
+      # template may not narrate that well — flag it for human review even
+      # though there's no hand-written snippet to diff against.
+      notes = Array(ep["notes"])
+      if notes.any? { |n| n.to_s.match?(/partial.success/i) }
+        needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"] }
+      end
+      next
+    end
 
     total_with_examples += 1
     handwritten = ep["code_examples"]
@@ -114,10 +162,10 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
         ["MANUAL_OVERRIDE", "multi-example (#{curl_invocation_count(handwritten["curl"])} curl calls in snippet)"]
       elsif (ep["response_kind"] || "json") == "binary"
         ["MANUAL_OVERRIDE", "binary response (response_kind: binary)"]
-      elsif !url_present_in_handwritten?(generated["curl"], handwritten["curl"])
-        ["MANUAL_OVERRIDE", "url_mismatch — generated URL not found in hand-written curl"]
+      elsif !semantically_equivalent?(generated["curl"], handwritten["curl"])
+        ["MANUAL_OVERRIDE", "structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl"]
       else
-        ["SAFE", "generated URL present, single example, JSON response"]
+        ["SAFE", "method, URL, query params, headers, and body all match; single example, JSON response"]
       end
 
     results << Result.new(
@@ -144,10 +192,12 @@ puts "=" * 70
 puts "GOLDEN-DIFF REPORT — ApiDocs SnippetGenerator (REQAPI-456)"
 puts "=" * 70
 puts ""
-puts "Total endpoints:           #{total_endpoints}"
-puts "With hand-written examples:#{total_with_examples}"
-puts "  SAFE (can delete YAML):  #{safe.size}"
-puts "  MANUAL_OVERRIDE (keep):  #{override.size}"
+puts "Total endpoints:              #{total_endpoints}"
+puts "With hand-written examples:   #{total_with_examples}"
+puts "  SAFE (generator matches):   #{safe.size}"
+puts "  MANUAL_OVERRIDE (keep):     #{override.size}"
+puts "Needs review (no examples,"
+puts "  partial-success notes):     #{needs_review.size}"
 puts ""
 
 puts "SAFE BUCKET (#{safe.size} endpoints):"
@@ -156,6 +206,10 @@ safe.each { |r| puts "  ✓ #{r.file} | #{r.method} #{r.path} (#{r.endpoint_name
 puts ""
 puts "MANUAL_OVERRIDE BUCKET (#{override.size} endpoints):"
 override.each { |r| puts "  ✗ #{r.file} | #{r.method} #{r.path} — #{r.reason}" }
+
+puts ""
+puts "NEEDS REVIEW (#{needs_review.size} endpoints, auto-generated, partial-success notes):"
+needs_review.each { |r| puts "  ? #{r[:file]} | #{r[:method]} #{r[:path]} (#{r[:endpoint_name]})" }
 
 if VERBOSE
   puts ""
@@ -185,13 +239,18 @@ md << "| Metric | Count |"
 md << "|--------|-------|"
 md << "| Total endpoints | #{total_endpoints} |"
 md << "| With hand-written `code_examples` | #{total_with_examples} |"
-md << "| **SAFE** — code_examples can be deleted | **#{safe.size}** |"
-md << "| **MANUAL_OVERRIDE** — keep hand-written | **#{override.size}** |"
+md << "| **SAFE** — generator output matches hand-written | **#{safe.size}** |"
+md << "| **MANUAL_OVERRIDE** — hand-written stays authoritative | **#{override.size}** |"
+md << "| **Needs review** — auto-generated, has partial-success notes | **#{needs_review.size}** |"
 md << ""
 md << "## Safe Bucket — #{safe.size} endpoints"
 md << ""
-md << "These endpoints have a single canonical example and a JSON response."
-md << "Their `code_examples` key can be deleted from the YAML in the rollout PRs."
+md << "The generator's method, URL, query params, headers, and body all match"
+md << "the hand-written snippet for these endpoints — the generator can stand in"
+md << "for `code_examples` here with no loss of correctness. This bucket is a"
+md << "regeneration-confidence signal, not a deletion instruction: whether and"
+md << "when to stop hand-maintaining `code_examples` for these endpoints is a"
+md << "separate rollout decision, made file-by-file with its own review."
 md << ""
 md << "| File | Method | Path | Endpoint name |"
 md << "|------|--------|------|---------------|"
@@ -211,6 +270,22 @@ override.each do |r|
 end
 
 md << ""
+md << "## Needs Review — #{needs_review.size} endpoints"
+md << ""
+md << "These endpoints have no hand-written `code_examples` at all, so they're"
+md << "already auto-generated today (absence of the key means \"generate\")."
+md << "Their `notes:` describe partial-success semantics that the generator's"
+md << "generic whole-object-print template doesn't narrate. Flagged for a human"
+md << "to judge whether the generated snippet reads clearly enough as-is, or"
+md << "whether this endpoint needs a hand-written `code_examples` override."
+md << ""
+md << "| File | Method | Path | Endpoint name |"
+md << "|------|--------|------|---------------|"
+needs_review.each do |r|
+  md << "| #{r[:file]}.yml | `#{r[:method]}` | `#{r[:path]}` | #{r[:endpoint_name]} |"
+end
+
+md << ""
 md << "## Generator vs Hand-written — Sample Diff (Safe Endpoints)"
 md << ""
 md << "Intentional differences between generated and hand-written snippets:"
@@ -221,9 +296,9 @@ md << "  This is a deliberate trade-off for robustness over readability."
 md << "- **No field-specific comments**: hand-written snippets often include"
 md << "  inline comments (`# SGVsbG8...`). Generator omits these."
 md << ""
-md << "These differences are acceptable for the rollout. Endpoints where the"
-md << "generator output would be confusing to a first-time user are already"
-md << "in the manual-override bucket."
+md << "These differences are acceptable for regeneration purposes. Endpoints"
+md << "where the generator output would be confusing to a first-time user are"
+md << "already in the manual-override bucket."
 
 File.write(REPORT_PATH, md.join("\n") + "\n")
 puts ""

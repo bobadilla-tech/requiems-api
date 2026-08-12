@@ -72,10 +72,12 @@ module ApisHelper
     @api_docs ||= {}
     @api_docs[api_id] ||= begin
       doc = YAML.load_file(doc_path)
-      # Manual override: if an endpoint already has a code_examples key in YAML,
-      # keep it verbatim. Absence of the key is the signal to auto-generate.
-      doc["endpoints"]&.each do |ep|
-        ep["code_examples"] ||= ApiDocs::SnippetGenerator.new(ep, doc["base_url"]).call
+      if doc.is_a?(Hash)
+        # Manual override: if an endpoint already has a code_examples key in YAML,
+        # keep it verbatim. Absence of the key is the signal to auto-generate.
+        doc["endpoints"]&.each do |ep|
+          ep["code_examples"] ||= ApiDocs::SnippetGenerator.new(ep, doc["base_url"]).call
+        end
       end
       doc
     end

@@ -717,6 +717,16 @@ field is rendered in the UI — do not leave any required section empty.
 10. **Hot Reload**: The development environment auto-reloads YAML changes - just
     refresh your browser
 
+11. **`code_examples`**: Omit this key by default. When absent, the dashboard
+    auto-generates curl/Python/JavaScript/Ruby snippets from `parameters` and
+    `response_fields` (`ApiDocs::SnippetGenerator`, see
+    `docs/plans/2026-08-03-api-docs-codegen-spec.md`). Only hand-write
+    `code_examples` when the generator's single-example/JSON-only model
+    genuinely doesn't fit — e.g. an endpoint that needs to illustrate more than
+    one call, or a binary (`response_kind: binary`) endpoint whose download
+    template needs bespoke framing. Presence of the key is a permanent manual
+    override: the dashboard renders it verbatim and never regenerates it.
+
 ```yaml
 api_id: riddles
 api_name: Riddles
@@ -789,55 +799,10 @@ endpoints:
         status: 500
         description: Unexpected server error.
 
-    code_examples:
-      curl: |
-        curl -X POST https://api.requiems.xyz/v1/text/riddle/generate \
-          -H "requiems-api-key: YOUR_API_KEY" \
-          -H "Content-Type: application/json" \
-          -d '{"category": "general"}'
-
-      python: |
-        import requests
-
-        url = "https://api.requiems.xyz/v1/text/riddle/generate"
-        headers = {
-            "requiems-api-key": "YOUR_API_KEY",
-            "Content-Type": "application/json"
-        }
-        payload = {"category": "general"}
-
-        response = requests.post(url, headers=headers, json=payload)
-        print(response.json())
-
-      javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/text/riddle/generate', {
-          method: 'POST',
-          headers: {
-            'requiems-api-key': 'YOUR_API_KEY',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ category: 'general' })
-        });
-
-        const data = await response.json();
-        console.log(data.data.question);
-
-      ruby: |
-        require 'net/http'
-        require 'json'
-
-        uri = URI('https://api.requiems.xyz/v1/text/riddle/generate')
-        request = Net::HTTP::Post.new(uri)
-        request['requiems-api-key'] = 'YOUR_API_KEY'
-        request['Content-Type'] = 'application/json'
-        request.body = { category: 'general' }.to_json
-
-        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          http.request(request)
-        end
-
-        data = JSON.parse(response.body)
-        puts data['data']['question']
+    # No code_examples key here — see rule 11 above. The dashboard generates
+    # curl/Python/JavaScript/Ruby snippets automatically from `parameters`
+    # and `response_fields`. Only add code_examples if this endpoint needs a
+    # multi-call illustration or a binary-response template.
 
 faq:
   - question: Can I request riddles from multiple categories at once?

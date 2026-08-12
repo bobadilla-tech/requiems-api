@@ -129,6 +129,40 @@ module ApiDocs
       else "example"
       end
     end
+
+    # Per-language literal syntax for #serialize below. Adding a language means
+    # adding one entry here rather than a whole new recursive method.
+    LITERAL_SYNTAX = {
+      python: {
+        pair_sep: ": ", key: ->(k) { "\"#{k}\"" }, string: ->(s) { s.to_json },
+        true_lit: "True", false_lit: "False", nil_lit: "None"
+      },
+      javascript: {
+        pair_sep: ": ", key: ->(k) { "'#{k}'" }, string: ->(s) { s.to_json },
+        true_lit: "true", false_lit: "false", nil_lit: "null"
+      },
+      ruby: {
+        pair_sep: " => ", key: ->(k) { "\"#{k}\"" }, string: ->(s) { s.inspect },
+        true_lit: "true", false_lit: "false", nil_lit: "nil"
+      }
+    }.freeze
+
+    # Recursively renders a native Ruby value as a source-code literal in the
+    # given target language (:python, :javascript, or :ruby).
+    def serialize(value, lang)
+      rules = LITERAL_SYNTAX.fetch(lang)
+      case value
+      when Hash
+        pairs = value.map { |k, v| "#{rules[:key].call(k)}#{rules[:pair_sep]}#{serialize(v, lang)}" }
+        "{ #{pairs.join(", ")} }"
+      when Array  then "[#{value.map { |v| serialize(v, lang) }.join(", ")}]"
+      when String then rules[:string].call(value)
+      when true   then rules[:true_lit]
+      when false  then rules[:false_lit]
+      when nil    then rules[:nil_lit]
+      else value.to_s
+      end
+    end
   end
 
   # curl snippet — one-liner for GET, multi-line with -d for POST/PUT/PATCH.
@@ -156,16 +190,37 @@ module ApiDocs
     end
 
     def build_post
-      # Shell-safe: escape any single quotes inside the JSON body so the
-      # -d '...' argument stays valid in sh/bash.
-      body_json = JSON.generate(body_hash).gsub("'", "'\\''")
-      [
-        "curl -X #{http_method} \"#{full_url}\" \\",
-        "  -H \"requiems-api-key: #{API_KEY_PLACEHOLDER}\" \\",
-        "  -H \"Content-Type: application/json\" \\",
-        "  -d '#{body_json}'"
-      ].join("\n")
+      url = "#{full_url}#{query_string}"
+
+      if binary?
+        lines = ["curl -X #{http_method} \"#{url}\" \\"]
+        lines << "  -H \"requiems-api-key: #{API_KEY_PLACEHOLDER}\" \\"
+        if body_hash.any?
+          body_json = shell_escape(JSON.generate(body_hash))
+          lines << "  -H \"Content-Type: application/json\" \\"
+          lines << "  -d '#{body_json}' \\"
+        end
+        lines << "  --output response.png"
+        lines.join("\n")
+      elsif body_hash.any?
+        # Shell-safe: escape any single quotes inside the JSON body so the
+        # -d '...' argument stays valid in sh/bash.
+        body_json = shell_escape(JSON.generate(body_hash))
+        [
+          "curl -X #{http_method} \"#{url}\" \\",
+          "  -H \"requiems-api-key: #{API_KEY_PLACEHOLDER}\" \\",
+          "  -H \"Content-Type: application/json\" \\",
+          "  -d '#{body_json}'"
+        ].join("\n")
+      else
+        [
+          "curl -X #{http_method} \"#{url}\" \\",
+          "  -H \"requiems-api-key: #{API_KEY_PLACEHOLDER}\""
+        ].join("\n")
+      end
     end
+
+    def shell_escape(str) = str.gsub("'", "'\\''")
   end
 
   # Python snippet using the requests library.
@@ -188,7 +243,7 @@ module ApiDocs
     def build_get(lines)
       if query_params.any?
         q_hash = query_params.each_with_object({}) { |p, h| h[p["name"]] = native_example(p) }
-        lines << "params = #{to_python(q_hash)}"
+        lines << "params = #{serialize(q_hash, :python)}"
         lines << "headers = {\"requiems-api-key\": \"#{API_KEY_PLACEHOLDER}\"}"
         lines << "response = requests.get(url, headers=headers, params=params)"
       else
@@ -200,17 +255,29 @@ module ApiDocs
     end
 
     def build_post(lines)
-      lines << "headers = {"
-      lines << "    \"requiems-api-key\": \"#{API_KEY_PLACEHOLDER}\","
-      lines << "    \"Content-Type\": \"application/json\""
-      lines << "}"
+      if body_hash.any?
+        lines << "headers = {"
+        lines << "    \"requiems-api-key\": \"#{API_KEY_PLACEHOLDER}\","
+        lines << "    \"Content-Type\": \"application/json\""
+        lines << "}"
+      else
+        lines << "headers = {\"requiems-api-key\": \"#{API_KEY_PLACEHOLDER}\"}"
+      end
+
+      kwargs = ["headers=headers"]
+
+      if query_params.any?
+        q_hash = query_params.each_with_object({}) { |p, h| h[p["name"]] = native_example(p) }
+        lines << "params = #{serialize(q_hash, :python)}"
+        kwargs << "params=params"
+      end
 
       if body_hash.any?
-        lines << "payload = #{to_python(body_hash)}"
-        lines << "response = requests.#{http_method.downcase}(url, headers=headers, json=payload)"
-      else
-        lines << "response = requests.#{http_method.downcase}(url, headers=headers)"
+        lines << "payload = #{serialize(body_hash, :python)}"
+        kwargs << "json=payload"
       end
+
+      lines << "response = requests.#{http_method.downcase}(url, #{kwargs.join(", ")})"
 
       append_response(lines)
     end
@@ -221,21 +288,6 @@ module ApiDocs
         lines << "    f.write(response.content)"
       else
         lines << "print(response.json()[\"data\"])"
-      end
-    end
-
-    def to_python(value)
-      case value
-      when Hash
-        # Always use string keys ("key": val) to handle any key format.
-        pairs = value.map { |k, v| "\"#{k}\": #{to_python(v)}" }
-        "{ #{pairs.join(", ")} }"
-      when Array then "[#{value.map { |v| to_python(v) }.join(", ")}]"
-      when String then value.to_json  # handles internal quotes and backslashes
-      when true   then "True"
-      when false  then "False"
-      when nil    then "None"
-      else value.to_s
       end
     end
   end
@@ -270,35 +322,33 @@ module ApiDocs
     end
 
     def build_post
-      body_js = to_js(body_hash)
-      lines = [
-        "const response = await fetch('#{full_url}', {",
-        "  method: '#{http_method}',",
-        "  headers: {",
-        "    'requiems-api-key': '#{API_KEY_PLACEHOLDER}',",
-        "    'Content-Type': 'application/json'",
-        "  },",
-        "  body: JSON.stringify(#{body_js})",
-        "});"
-      ]
-      lines << "const { data } = await response.json();"
-      lines << "console.log(data);"
-      lines.join("\n")
-    end
+      url = "#{full_url}#{query_string}"
+      lines = ["const response = await fetch('#{url}', {"]
+      lines << "  method: '#{http_method}',"
 
-    def to_js(value)
-      case value
-      when Hash
-        # Quote all keys to handle hyphens and reserved words safely.
-        pairs = value.map { |k, v| "'#{k}': #{to_js(v)}" }
-        "{ #{pairs.join(", ")} }"
-      when Array then "[#{value.map { |v| to_js(v) }.join(", ")}]"
-      when String then value.to_json  # handles internal quotes and backslashes
-      when true   then "true"
-      when false  then "false"
-      when nil    then "null"
-      else value.to_s
+      if body_hash.any?
+        lines << "  headers: {"
+        lines << "    'requiems-api-key': '#{API_KEY_PLACEHOLDER}',"
+        lines << "    'Content-Type': 'application/json'"
+        lines << "  },"
+        lines << "  body: JSON.stringify(#{serialize(body_hash, :javascript)})"
+      else
+        lines << "  headers: { 'requiems-api-key': '#{API_KEY_PLACEHOLDER}' }"
       end
+
+      lines << "});"
+
+      if binary?
+        lines << "const blob = await response.blob();"
+        lines << "const url = URL.createObjectURL(blob);"
+        lines << "const a = document.createElement('a');"
+        lines << "a.href = url; a.download = 'response.png'; a.click();"
+      else
+        lines << "const { data } = await response.json();"
+        lines << "console.log(data);"
+      end
+
+      lines.join("\n")
     end
   end
 
@@ -310,17 +360,19 @@ module ApiDocs
       lines << ""
       lines << "uri = URI('#{full_url}')"
 
-      if get? && query_params.any?
-        pairs = query_params.map { |p| "#{p["name"]}: '#{example_str(p)}'" }
+      if query_params.any?
+        # example_str(p).inspect renders a properly-escaped Ruby string literal
+        # (handles embedded quotes/backslashes), same as the body serializer below.
+        pairs = query_params.map { |p| "#{p["name"]}: #{example_str(p).inspect}" }
         lines << "uri.query = URI.encode_www_form(#{pairs.join(", ")})"
       end
 
       lines << "request = Net::HTTP::#{http_method.capitalize}.new(uri)"
       lines << "request['requiems-api-key'] = '#{API_KEY_PLACEHOLDER}'"
 
-      unless get?
+      if !get? && body_hash.any?
         lines << "request['Content-Type'] = 'application/json'"
-        lines << "request.body = #{to_ruby(body_hash)}.to_json" if body_hash.any?
+        lines << "request.body = #{serialize(body_hash, :ruby)}.to_json"
       end
 
       lines << "response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }"
@@ -332,23 +384,6 @@ module ApiDocs
       end
 
       lines.join("\n")
-    end
-
-    private
-
-    def to_ruby(value)
-      case value
-      when Hash
-        # Use rocket-style hash ("key" => val) to handle any key format safely.
-        pairs = value.map { |k, v| "\"#{k}\" => #{to_ruby(v)}" }
-        "{ #{pairs.join(", ")} }"
-      when Array then "[#{value.map { |v| to_ruby(v) }.join(", ")}]"
-      when String then value.inspect  # handles internal quotes and backslashes
-      when true   then "true"
-      when false  then "false"
-      when nil    then "nil"
-      else value.to_s
-      end
     end
   end
 end

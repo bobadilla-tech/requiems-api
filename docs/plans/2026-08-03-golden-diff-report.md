@@ -9,19 +9,23 @@
 |--------|-------|
 | Total endpoints | 129 |
 | With hand-written `code_examples` | 125 |
-| **SAFE** — code_examples can be deleted | **110** |
-| **MANUAL_OVERRIDE** — keep hand-written | **15** |
+| **SAFE** — generator output matches hand-written | **76** |
+| **MANUAL_OVERRIDE** — hand-written stays authoritative | **49** |
+| **Needs review** — auto-generated, has partial-success notes | **1** |
 
-## Safe Bucket — 110 endpoints
+## Safe Bucket — 76 endpoints
 
-These endpoints have a single canonical example and a JSON response.
-Their `code_examples` key can be deleted from the YAML in the rollout PRs.
+The generator's method, URL, query params, headers, and body all match
+the hand-written snippet for these endpoints — the generator can stand in
+for `code_examples` here with no loss of correctness. This bucket is a
+regeneration-confidence signal, not a deletion instruction: whether and
+when to stop hand-maintaining `code_examples` for these endpoints is a
+separate rollout decision, made file-by-file with its own review.
 
 | File | Method | Path | Endpoint name |
 |------|--------|------|---------------|
 | advice.yml | `GET` | `/v1/entertainment/advice` | Get Random Advice |
 | barcode.yml | `GET` | `/v1/technology/barcode/base64` | Generate Barcode (Base64 JSON) |
-| barcode.yml | `POST` | `/v1/technology/barcode/batch` | Generate Barcodes (Batch) |
 | bin-lookup.yml | `GET` | `/v1/finance/bin/{bin}` | BIN Lookup |
 | chuck-norris.yml | `GET` | `/v1/entertainment/chuck-norris` | Get Random Chuck Norris Fact |
 | cities.yml | `GET` | `/v1/places/cities/{city}` | Get City Info |
@@ -30,25 +34,17 @@ Their `code_examples` key can be deleted from the YAML in the rollout PRs.
 | counter.yml | `GET` | `/v1/technology/counter/{namespace}` | Get Counter Value |
 | crypto.yml | `GET` | `/v1/finance/crypto/{symbol}` | Get Crypto Price |
 | dad-jokes.yml | `GET` | `/v1/entertainment/jokes/dad` | Get Random Dad Joke |
-| data-integrity.yml | `POST` | `/v1/systems/input/validate/batch` | Batch Input Validate |
-| data-integrity.yml | `POST` | `/v1/systems/input/validate` | Input Validate |
 | data-integrity.yml | `POST` | `/v1/systems/content/moderate` | Moderate Content |
 | data-integrity.yml | `POST` | `/v1/systems/text/normalize` | Normalize Text |
 | data-integrity.yml | `GET` | `/v1/systems/domain/trust/{domain}` | Domain Trust |
 | detect-language.yml | `POST` | `/v1/text/detect-language` | Detect Language |
-| developer-utilities.yml | `GET` | `/v1/technology/qr/base64` | Generate QR Code |
-| developer-utilities.yml | `POST` | `/v1/technology/base64/encode` | Base64 Encode |
-| developer-utilities.yml | `POST` | `/v1/technology/base64/decode` | Base64 Decode |
 | developer-utilities.yml | `POST` | `/v1/technology/markdown` | Render Markdown |
 | dictionary.yml | `GET` | `/v1/text/dictionary/{word}` | Dictionary Lookup |
-| disposable-email.yml | `POST` | `/v1/networking/disposable/check` | Check Single Email |
-| disposable-email.yml | `POST` | `/v1/networking/disposable/batch` | Check Batch Emails |
 | disposable-email.yml | `GET` | `/v1/networking/disposable/domain/{domain}` | Check Domain |
 | disposable-email.yml | `GET` | `/v1/networking/disposable/stats` | Get Statistics |
 | disposable-email.yml | `GET` | `/v1/networking/disposable/domains` | List Domains (Paginated) |
 | domain-info.yml | `GET` | `/v1/networking/domain/{domain}` | Get Domain Info |
 | email-normalize.yml | `POST` | `/v1/text/normalize` | Normalize Email |
-| email-normalize.yml | `POST` | `/v1/text/normalize/batch` | Normalize Email Batch |
 | email-validate.yml | `POST` | `/v1/validation/email` | Validate Email |
 | email-validate.yml | `POST` | `/v1/validation/email/batch` | Validate Emails (Batch) |
 | emoji.yml | `GET` | `/v1/entertainment/emoji/random` | Get Random Emoji |
@@ -56,18 +52,12 @@ Their `code_examples` key can be deleted from the YAML in the rollout PRs.
 | emoji.yml | `GET` | `/v1/entertainment/emoji/{name}` | Get Emoji by Name |
 | exchange-rate.yml | `GET` | `/v1/finance/exchange-rate` | Get Exchange Rate |
 | exchange-rate.yml | `GET` | `/v1/finance/convert` | Convert Currency |
-| fitness-exercises.yml | `GET` | `/v1/health/exercises` | List Exercises |
 | fitness-exercises.yml | `GET` | `/v1/health/exercises/{id}` | Exercise by ID |
-| fitness-exercises.yml | `GET` | `/v1/health/exercises/random` | Random Exercise |
 | fitness-exercises.yml | `GET` | `/v1/health/body-parts` | List Body Parts |
 | fitness-exercises.yml | `GET` | `/v1/health/equipment` | List Equipment |
 | fitness-exercises.yml | `GET` | `/v1/health/muscles` | List Muscles |
 | fitness-exercises.yml | `POST` | `/v1/health/exercises/batch` | Batch Get Exercises |
-| geocode.yml | `GET` | `/v1/places/geocode` | Geocode Address |
 | geocode.yml | `GET` | `/v1/places/reverse-geocode` | Reverse Geocode |
-| geocode.yml | `POST` | `/v1/places/geocode/batch` | Batch Geocode Addresses |
-| geocode.yml | `POST` | `/v1/places/reverse-geocode/batch` | Batch Reverse Geocode |
-| global-data.yml | `POST` | `/v1/systems/location/resolve` | Resolve Location |
 | global-data.yml | `GET` | `/v1/systems/timezone/from-ip/{ip}` | Timezone from IP |
 | global-data.yml | `GET` | `/v1/systems/business-calendar/{country}` | Business Calendar |
 | holidays.yml | `GET` | `/v1/places/holidays` | Get Holidays |
@@ -76,53 +66,34 @@ Their `code_examples` key can be deleted from the YAML in the rollout PRs.
 | horoscope.yml | `POST` | `/v1/entertainment/horoscope/batch` | Batch Daily Horoscopes |
 | iban.yml | `POST` | `/v1/finance/iban/batch` | Batch Validate IBANs |
 | identity-risk.yml | `POST` | `/v1/systems/signup/protect` | Protect Signup |
-| identity-risk.yml | `POST` | `/v1/systems/risk/score` | Score Risk |
 | identity-risk.yml | `POST` | `/v1/systems/user/verify` | Verify User |
 | inflation.yml | `GET` | `/v1/finance/inflation` | Get Inflation Rate |
 | inflation.yml | `POST` | `/v1/finance/inflation/batch` | Batch Inflation Rates |
 | ip-asn.yml | `GET` | `/v1/networking/ip/asn` | Lookup ASN (Caller IP) |
 | ip-asn.yml | `GET` | `/v1/networking/ip/asn/{ip}` | Lookup ASN for IP |
-| ip-asn.yml | `POST` | `/v1/networking/ip/asn/batch` | Batch ASN Lookup |
 | ip-info.yml | `GET` | `/v1/networking/ip` | Get IP Info (Caller IP) |
 | ip-info.yml | `GET` | `/v1/networking/ip/{ip}` | Get IP Info for IP |
-| ip-info.yml | `POST` | `/v1/networking/ip/info/batch` | Batch IP Geolocation |
-| lorem-ipsum.yml | `POST` | `/v1/text/lorem/batch` | Generate Lorem Ipsum (Batch) |
-| markdown.yml | `POST` | `/v1/technology/markdown` | Convert Markdown to HTML |
-| markdown.yml | `POST` | `/v1/technology/markdown/batch` | Convert Markdown Batch |
 | mortgage.yml | `GET` | `/v1/finance/mortgage` | Calculate Mortgage |
 | mortgage.yml | `POST` | `/v1/finance/mortgage/batch` | Batch Calculate Mortgages |
 | mx-lookup.yml | `GET` | `/v1/networking/mx/{domain}` | MX Lookup |
 | mx-lookup.yml | `POST` | `/v1/networking/mx/batch` | Batch MX Lookup |
-| number-base-conversion.yml | `POST` | `/v1/technology/base/batch` | Batch Convert Base |
-| password-generator.yml | `POST` | `/v1/technology/password/batch` | Batch Generate Passwords |
 | payments-intelligence.yml | `POST` | `/v1/systems/payment/validate` | Validate Payment |
 | payments-intelligence.yml | `POST` | `/v1/systems/transaction/risk` | Score Transaction Risk |
 | phone-validation.yml | `GET` | `/v1/validation/phone` | Validate Phone Number |
 | phone-validation.yml | `POST` | `/v1/validation/phone/batch` | Batch Validate Phone Numbers |
-| postal-code.yml | `POST` | `/v1/places/postal/batch` | Batch Lookup Postal Codes |
-| profanity.yml | `POST` | `/v1/validation/profanity` | Check Profanity |
-| profanity.yml | `POST` | `/v1/validation/profanity/batch` | Batch Check Profanity |
 | qr-code.yml | `GET` | `/v1/technology/qr/base64` | Generate QR Code (Base64 JSON) |
-| qr-code.yml | `POST` | `/v1/technology/qr/base64/batch` | Batch Generate QR Codes (Base64) |
 | quotes.yml | `GET` | `/v1/entertainment/quotes/random` | Get Random Quote |
-| quotes.yml | `POST` | `/v1/entertainment/quotes/random/batch` | Get Random Quotes (Batch) |
 | random-user.yml | `GET` | `/v1/technology/random-user` | Get Random User |
-| random-user.yml | `POST` | `/v1/technology/random-user/batch` | Batch Generate Users |
-| sentiment.yml | `POST` | `/v1/text/sentiment` | Analyze Sentiment |
 | sentiment.yml | `POST` | `/v1/text/sentiment/batch` | Analyze Sentiment (Batch) |
 | spell-check.yml | `POST` | `/v1/text/spellcheck` | Check Spelling |
 | spell-check.yml | `POST` | `/v1/text/spellcheck/batch` | Check Spelling (Batch) |
 | sudoku.yml | `POST` | `/v1/entertainment/sudoku/batch` | Batch Generate Sudoku Puzzles |
-| sudoku.yml | `GET` | `/v1/entertainment/sudoku` | Get Sudoku Puzzle |
-| swift-code.yml | `GET` | `/v1/finance/swift` | List SWIFT Codes |
 | text-similarity.yml | `POST` | `/v1/text/similarity` | Compare Text Similarity |
 | thesaurus.yml | `GET` | `/v1/text/thesaurus/{word}` | Thesaurus Lookup |
-| timezone.yml | `POST` | `/v1/places/timezone/batch` | Batch Timezone Lookup |
 | trivia.yml | `POST` | `/v1/entertainment/trivia/batch` | Get Batch Trivia Questions |
 | unit-conversion.yml | `GET` | `/v1/technology/convert` | Convert Units |
 | unit-conversion.yml | `GET` | `/v1/technology/convert/units` | List Available Units |
 | unit-conversion.yml | `POST` | `/v1/technology/convert/batch` | Batch Convert Units |
-| useragent.yml | `GET` | `/v1/technology/useragent` | Parse User Agent |
 | useragent.yml | `POST` | `/v1/technology/useragent/batch` | Batch Parse User Agents |
 | vpn-detection.yml | `GET` | `/v1/networking/ip/vpn/{ip}` | Check IP Address |
 | whois.yml | `GET` | `/v1/networking/whois/{domain}` | WHOIS Lookup |
@@ -130,27 +101,74 @@ Their `code_examples` key can be deleted from the YAML in the rollout PRs.
 | words.yml | `GET` | `/v1/text/words/random` | Get Random Word |
 | world-time.yml | `GET` | `/v1/places/time/{timezone}` | Get Current Time by Timezone |
 
-## Manual Override Bucket — 15 endpoints
+## Manual Override Bucket — 49 endpoints
 
 These endpoints keep their hand-written `code_examples` block permanently.
 
 | File | Method | Path | Endpoint name | Reason |
 |------|--------|------|---------------|--------|
 | barcode.yml | `GET` | `/v1/technology/barcode` | Generate Barcode (PNG) | multi-example (2 curl calls in snippet) |
+| barcode.yml | `POST` | `/v1/technology/barcode/batch` | Generate Barcodes (Batch) | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | base64.yml | `POST` | `/v1/technology/base64/encode` | Encode | multi-example (2 curl calls in snippet) |
 | base64.yml | `POST` | `/v1/technology/base64/decode` | Decode | multi-example (2 curl calls in snippet) |
 | color-conversion.yml | `GET` | `/v1/technology/color` | Convert Color | multi-example (3 curl calls in snippet) |
 | data-format-conversion.yml | `POST` | `/v1/technology/format` | Convert Format | multi-example (2 curl calls in snippet) |
+| data-integrity.yml | `POST` | `/v1/systems/input/validate/batch` | Batch Input Validate | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| data-integrity.yml | `POST` | `/v1/systems/input/validate` | Input Validate | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| developer-utilities.yml | `GET` | `/v1/technology/qr/base64` | Generate QR Code | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| developer-utilities.yml | `POST` | `/v1/technology/base64/encode` | Base64 Encode | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| developer-utilities.yml | `POST` | `/v1/technology/base64/decode` | Base64 Decode | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| disposable-email.yml | `POST` | `/v1/networking/disposable/check` | Check Single Email | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| disposable-email.yml | `POST` | `/v1/networking/disposable/batch` | Check Batch Emails | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| email-normalize.yml | `POST` | `/v1/text/normalize/batch` | Normalize Email Batch | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | facts.yml | `GET` | `/v1/entertainment/facts` | Get Random Fact | multi-example (2 curl calls in snippet) |
+| fitness-exercises.yml | `GET` | `/v1/health/exercises` | List Exercises | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| fitness-exercises.yml | `GET` | `/v1/health/exercises/random` | Random Exercise | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| geocode.yml | `GET` | `/v1/places/geocode` | Geocode Address | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| geocode.yml | `POST` | `/v1/places/geocode/batch` | Batch Geocode Addresses | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| geocode.yml | `POST` | `/v1/places/reverse-geocode/batch` | Batch Reverse Geocode | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| global-data.yml | `POST` | `/v1/systems/location/resolve` | Resolve Location | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | iban.yml | `GET` | `/v1/finance/iban/{iban}` | Validate IBAN | multi-example (2 curl calls in snippet) |
+| identity-risk.yml | `POST` | `/v1/systems/risk/score` | Score Risk | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| ip-asn.yml | `POST` | `/v1/networking/ip/asn/batch` | Batch ASN Lookup | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| ip-info.yml | `POST` | `/v1/networking/ip/info/batch` | Batch IP Geolocation | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | lorem-ipsum.yml | `GET` | `/v1/text/lorem` | Generate Lorem Ipsum | multi-example (2 curl calls in snippet) |
+| lorem-ipsum.yml | `POST` | `/v1/text/lorem/batch` | Generate Lorem Ipsum (Batch) | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| markdown.yml | `POST` | `/v1/technology/markdown` | Convert Markdown to HTML | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| markdown.yml | `POST` | `/v1/technology/markdown/batch` | Convert Markdown Batch | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | number-base-conversion.yml | `GET` | `/v1/technology/base` | Convert Base | multi-example (2 curl calls in snippet) |
+| number-base-conversion.yml | `POST` | `/v1/technology/base/batch` | Batch Convert Base | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | password-generator.yml | `GET` | `/v1/technology/password` | Generate Password | multi-example (3 curl calls in snippet) |
+| password-generator.yml | `POST` | `/v1/technology/password/batch` | Batch Generate Passwords | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | postal-code.yml | `GET` | `/v1/places/postal/{code}` | Lookup Postal Code | multi-example (2 curl calls in snippet) |
+| postal-code.yml | `POST` | `/v1/places/postal/batch` | Batch Lookup Postal Codes | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| profanity.yml | `POST` | `/v1/validation/profanity` | Check Profanity | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| profanity.yml | `POST` | `/v1/validation/profanity/batch` | Batch Check Profanity | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | qr-code.yml | `GET` | `/v1/technology/qr` | Generate QR Code (PNG) | multi-example (2 curl calls in snippet) |
+| qr-code.yml | `POST` | `/v1/technology/qr/base64/batch` | Batch Generate QR Codes (Base64) | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| quotes.yml | `POST` | `/v1/entertainment/quotes/random/batch` | Get Random Quotes (Batch) | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| random-user.yml | `POST` | `/v1/technology/random-user/batch` | Batch Generate Users | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| sentiment.yml | `POST` | `/v1/text/sentiment` | Analyze Sentiment | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| sudoku.yml | `GET` | `/v1/entertainment/sudoku` | Get Sudoku Puzzle | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
+| swift-code.yml | `GET` | `/v1/finance/swift` | List SWIFT Codes | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | timezone.yml | `GET` | `/v1/places/timezone` | Get Timezone | multi-example (2 curl calls in snippet) |
+| timezone.yml | `POST` | `/v1/places/timezone/batch` | Batch Timezone Lookup | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | trivia.yml | `GET` | `/v1/entertainment/trivia` | Get Trivia Question | multi-example (2 curl calls in snippet) |
+| useragent.yml | `GET` | `/v1/technology/useragent` | Parse User Agent | structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl |
 | working-days.yml | `GET` | `/v1/places/working-days` | Calculate Working Days | multi-example (3 curl calls in snippet) |
+
+## Needs Review — 1 endpoints
+
+These endpoints have no hand-written `code_examples` at all, so they're
+already auto-generated today (absence of the key means "generate").
+Their `notes:` describe partial-success semantics that the generator's
+generic whole-object-print template doesn't narrate. Flagged for a human
+to judge whether the generated snippet reads clearly enough as-is, or
+whether this endpoint needs a hand-written `code_examples` override.
+
+| File | Method | Path | Endpoint name |
+|------|--------|------|---------------|
+| base64.yml | `POST` | `/v1/technology/base64/decode/batch` | Decode Batch |
 
 ## Generator vs Hand-written — Sample Diff (Safe Endpoints)
 
@@ -162,6 +180,6 @@ Intentional differences between generated and hand-written snippets:
 - **No field-specific comments**: hand-written snippets often include
   inline comments (`# SGVsbG8...`). Generator omits these.
 
-These differences are acceptable for the rollout. Endpoints where the
-generator output would be confusing to a first-time user are already
-in the manual-override bucket.
+These differences are acceptable for regeneration purposes. Endpoints
+where the generator output would be confusing to a first-time user are
+already in the manual-override bucket.
