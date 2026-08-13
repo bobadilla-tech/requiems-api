@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@hono/standard-validator':
-        specifier: ^0.3.0
-        version: 0.3.0(@standard-schema/spec@1.1.0)(hono@4.12.34)
+        specifier: ^0.4.0
+        version: 0.4.0(@standard-schema/spec@1.1.0)(hono@4.12.34)
       '@hono/swagger-ui':
         specifier: ^0.6.1
         version: 0.6.1(hono@4.12.34)
@@ -371,8 +371,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@hono/standard-validator@0.3.0':
-    resolution: {integrity: sha512-tHLKEjKXDcHImj0XTFWW4Hr0ev+1G5GxnBZrGdpg/7NLy9s9meFPTSCOkw++ZzZKom3FjrMw2e0nFQpPPvwUVQ==}
+  '@hono/standard-validator@0.4.0':
+    resolution: {integrity: sha512-MxOm1asDh9j7c1D0KiWwppSbFgAQxTRO4YEhjMrJn3lF1BIcXenPdgjSGKDRfQmZdaTaMA8slQLETgVOKyJxFw==}
     peerDependencies:
       '@standard-schema/spec': ^1.0.0
       hono: '>=4.11.2'
@@ -1518,7 +1518,7 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@hono/standard-validator@0.3.0(@standard-schema/spec@1.1.0)(hono@4.12.34)':
+  '@hono/standard-validator@0.4.0(@standard-schema/spec@1.1.0)(hono@4.12.34)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       hono: 4.12.34
