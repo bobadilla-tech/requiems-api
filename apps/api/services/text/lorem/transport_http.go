@@ -39,7 +39,7 @@ func RegisterRoutes(r chi.Router, svc Generator) {
 // handleLoremIpsum godoc
 //
 //	@Summary		Generate Lorem Ipsum
-//	@Description	Generate Lorem Ipsum placeholder text with customizable length and format.
+//	@Description	Generates Lorem Ipsum placeholder text with customizable paragraph and sentence counts.
 //	@Tags			lorem-ipsum
 //	@Produce		json
 //	@Param			paragraphs	query		integer	false	"Number of paragraphs (1–20, default 1)"
