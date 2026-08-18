@@ -338,15 +338,40 @@ separate from the license of the data it extracts).
   | entries with multiple senses | 9.0% (133,772 / 1,481,704) |
 
   Restricted to a 50,000-word frequency list (`hermitdave/FrequencyWords`,
-  `en_50k.txt`), combined coverage across the fields measured rose to
-  **60.6%** — well above OEWN's equivalents (27.6% phonetics, 27.9%
-  example). The low global numbers are a long-tail artifact: Wiktionary
-  documents roughly 1.48M English entries versus OEWN's 157,513 lemmas, and
-  that ~9x larger vocabulary is overwhelmingly rare, technical, or archaic
-  terms that Wiktionary's editors have defined but rarely transcribed
-  phonetically or illustrated with a usage example. The service being
-  built here will only ever be queried for common vocabulary, so the global
-  figure measures the wrong population.
+  `en_50k.txt`, 37,357 words matched — this is the actual denominator, not
+  the raw dump's millions of entries), coverage was re-measured using the
+  **same classifier the real generator uses** for dialect (`US`/
+  `General-American` → US; `UK`/`Received-Pronunciation`/`British` → UK),
+  and each field kept **separate** rather than averaged into one figure:
+
+  | Field | Coverage (50k wordlist, 37,357 words) | OEWN equivalent |
+  | --- | --- | --- |
+  | `definition` | 100.0% (37,357 / 37,357) | 100% |
+  | `example` | 67.6% (25,263 / 37,357) | 27.9% |
+  | any `ipa` present (any tag or untagged) | 66.2% (24,727 / 37,357) | — |
+  | `ipa` tagged with a dialect the real classifier recognizes (UK or US) | 37.6% (14,054 / 37,357) | 27.6% |
+
+  Wiktionary outperforms OEWN on every field measured, though by a smaller
+  margin on phonetics than an earlier, methodologically flawed pass of
+  this analysis reported. That earlier pass combined `definition`,
+  `example`, and phonetic coverage into a single "60.6%" figure and
+  compared it directly against OEWN's phonetic-only rate — comparing a
+  blended metric to a single-field one. It also counted only the bare
+  literal `"US"`/`"UK"` tags (13.8% of matched words) rather than the
+  classifier the generator actually uses, undercounting real phonetic
+  coverage before the blending error compounded it further upward. The
+  conclusion (Wiktionary beats OEWN on every measured field, for the
+  vocabulary this service actually serves) is unchanged; the number
+  supporting the phonetics claim specifically is not 60.6% — it is 37.6%,
+  still comfortably above OEWN's 27.6%.
+
+  The low global numbers seen in the first pass above are a long-tail
+  artifact: Wiktionary documents roughly 1.48M English entries versus
+  OEWN's 157,513 lemmas, and that ~9x larger vocabulary is overwhelmingly
+  rare, technical, or archaic terms that Wiktionary's editors have defined
+  but rarely transcribed phonetically or illustrated with a usage example.
+  The service being built here will only ever be queried for common
+  vocabulary, so the global figure measures the wrong population.
 
   One caveat surfaced by the field-level breakdown: `US`-tagged coverage
   plus `UK`-tagged coverage does not sum to the "any `ipa`" figure — there
@@ -392,11 +417,26 @@ opposite of what would justify moving off OEWN. Taken at face value, this
 would have called the whole decision into question.
 
 **Second pass (restricted to a 50,000-word common-English list): the
-numbers inverted.** Combined field coverage rose to 60.6% — well above
-OEWN's equivalents. The explanation is straightforward: Wiktionary's ~9x
+numbers inverted.** Measured separately per field with the classifier the
+generator actually uses, `example` coverage rose to 67.6% and phonetic
+(UK/US) coverage to 37.6% — both above OEWN's equivalents (27.9% and
+27.6% respectively). The explanation is straightforward: Wiktionary's ~9x
 larger vocabulary is overwhelmingly long-tail, and the service being built
 here will only ever be queried for common vocabulary, so the global figure
 was measuring the wrong population entirely.
+
+**A correction to this finding's own first draft:** an earlier version of
+this section reported a single "60.6%" figure, produced by averaging
+`definition`, `example`, and phonetic coverage together and comparing that
+blend against OEWN's phonetic-only rate — not a valid comparison, and it
+also undercounted phonetics by classifying only the literal `US`/`UK`
+tags rather than the full set the generator recognizes
+(`General-American`, `Received-Pronunciation`, `British`). Re-measured
+correctly, the underlying conclusion holds — Wiktionary still beats OEWN
+on every field, for the vocabulary this service serves — but the
+phonetics margin is real and moderate (37.6% vs. 27.6%), not the
+inflated one the blended figure implied. See the Field-coverage
+completeness bullet under Alternative 5 for the full corrected table.
 
 **Practical consequence for the generator:** this is not just a
 documentation footnote, it is an architectural input. Filtering the source
@@ -415,9 +455,9 @@ size. See Future Upgrade Path for how this affects dataset generation scope.
 | License clarity                         | —                 | ⚠️ undocumented      | ⚠️ paid for prod | ✅ documented | ✅ documented (CC-BY-SA + GFDL), no "merged from other sources" caveat | ✅ documented, permissive | — |
 | Role in the shipped package              | ✅ kept, unmerged, via `GetCurated` | rejected | rejected | scoped to `pkg/thesaurus` only | ✅ selected, via `Get` | rejected | rejected |
 | Covers etymology + all phonetic/definition/example fields from one source | —            | ✅ (but live API)    | ✅ (but paid)    | ❌ (no phonetic UK/US, no etymology) | ✅ selected | ❌ (no definitions, no etymology) | — |
-| `phonetic` UK/US/Other coverage          | —                 | ⚠️ inconsistent      | ✅               | ❌ single unlabeled form, 27.6% coverage | ✅ 60.6% combined on 50k common-vocab list (verified; 9.3% unrestricted) | ❌ US only | — |
+| `phonetic` UK/US/Other coverage          | —                 | ⚠️ inconsistent      | ✅               | ❌ single unlabeled form, 27.6% coverage | ✅ 37.6% on 50k common-vocab list, real dialect classifier (verified; 9.3% unrestricted, any-tag) | ❌ US only | — |
 | `definition` coverage                    | —                 | ⚠️ inconsistent      | ✅               | ✅ 100% (verified) | ✅ 99.9% (verified) | ❌ none | — |
-| `example` coverage                       | —                 | ⚠️ inconsistent      | ✅               | ⚠️ 27.9% (verified) | ✅ well above OEWN on common vocab (verified; 19.4% unrestricted) | ❌ none | — |
+| `example` coverage                       | —                 | ⚠️ inconsistent      | ✅               | ⚠️ 27.9% (verified) | ✅ 67.6% on 50k common-vocab list (verified; 19.4% unrestricted) | ❌ none | — |
 | Reuses existing pipeline/`Provider`      | —                 | ❌                    | ❌               | ✅ (but insufficient alone) | ❌ new provider needed | ❌ | — |
 | No *runtime* infrastructure overhead     | ✅               | ✅                    | ✅               | ✅   | ✅ (runtime); ⚠️ build-time: ~23GB disk, generator run required | ✅  | ❌ (DB ops)       |
 | Independent update cycle                 | ❌               | ✅                    | ✅               | ✅   | ✅ (weekly dumps, documented) | ✅  | ✅                |
