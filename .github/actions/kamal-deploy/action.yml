@@ -41,6 +41,6 @@ runs:
           fi
         done
 
-    - name: Deploy
+    - name: Bootstrap and deploy
       shell: bash
-      run: BUNDLE_GEMFILE="$GITHUB_WORKSPACE/infra/kamal/Gemfile" bundle exec kamal deploy -c ${{ inputs.config }}
+      run: BUNDLE_GEMFILE="$GITHUB_WORKSPACE/infra/kamal/Gemfile" bundle exec kamal setup -c ${{ inputs.config }}

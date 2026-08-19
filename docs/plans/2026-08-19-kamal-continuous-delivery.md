@@ -101,6 +101,13 @@ got a pointer to it.
   `POSTGRES_DB`, `DATABASE_URL`, `REDIS_URL`, `BACKEND_SECRET`,
   `SECRET_KEY_BASE`, `API_MANAGEMENT_API_KEY`, `LEMONSQUEEZY_SIGNING_SECRET`,
   `SMTP_PASSWORD`), then verify the first run.
+- One-time VPS bootstrap: the CD action's deploy step runs `kamal setup` (not
+  `kamal deploy`), which bootstraps the server — installing Docker if missing —
+  and boots the configured accessories before deploying. That covers `db`
+  (Postgres), `redis`, and `languagetool` from `deploy.api.yml`, and `db`/`redis`
+  from `deploy.dashboard.yml`. It is idempotent: already-booted accessories are
+  skipped, so a fresh VPS is provisioned on its first run and later deploys are
+  unaffected.
 - Known limitation: `GITHUB_TOKEN` is ephemeral, so out-of-band `kamal rollback`
   on the VPS after a run can't pull images. Rollbacks should be triggered via
   `workflow_dispatch`, or a `KAMAL_REGISTRY_PASSWORD` PAT added for server-side
