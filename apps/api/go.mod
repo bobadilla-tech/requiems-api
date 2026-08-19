@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/jackc/pgx/v5 v5.10.0
-	github.com/redis/go-redis/v9 v9.21.0
+	github.com/redis/go-redis/v9 v9.22.0
 	github.com/stretchr/testify v1.11.1
 )
 
