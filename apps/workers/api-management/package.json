@@ -33,7 +33,7 @@
     "@cloudflare/workers-types": "^5.20260809.1",
     "@edge-runtime/vm": "^5.0.0",
     "@standard-schema/spec": "^1.1.0",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^4.1.8",
     "vite": "^8.1.5",
     "typescript": "^7.0.2",
