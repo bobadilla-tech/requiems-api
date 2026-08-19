@@ -1,0 +1,46 @@
+name: Kamal Deploy
+description: Build, push, and deploy an app to the VPS with Kamal.
+
+inputs:
+  config:
+    description: "Path to the Kamal deploy config (e.g. infra/kamal/deploy.api.yml)"
+    required: true
+  required-secrets:
+    description: "Space-separated env var names that must be non-empty before deploying"
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "3.4"
+
+    - name: Install Kamal
+      shell: bash
+      run: BUNDLE_GEMFILE="$GITHUB_WORKSPACE/infra/kamal/Gemfile" bundle install
+
+    - name: Configure SSH
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H "$HETZNER_VPS_IP" >> ~/.ssh/known_hosts
+        chmod 644 ~/.ssh/known_hosts
+
+    - name: Verify required secrets
+      shell: bash
+      run: |
+        for var in ${{ inputs.required-secrets }}; do
+          if [ -z "${!var}" ]; then
+            echo "::error::Missing required secret: $var"
+            exit 1
+          fi
+        done
+
+    - name: Deploy
+      shell: bash
+      run: BUNDLE_GEMFILE="$GITHUB_WORKSPACE/infra/kamal/Gemfile" bundle exec kamal deploy -c ${{ inputs.config }}

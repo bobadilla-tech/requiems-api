@@ -690,6 +690,48 @@ docker compose up -d
 
 ---
 
+## Continuous Delivery (GitHub Actions)
+
+Deploys are automated via `.github/workflows/cd.yml`. Pushing to `main` triggers
+a path-filtered deploy of only the apps that changed (`api`, `dashboard`, `mcp`).
+A manual redeploy/rollback is available from the Actions tab via the
+`workflow_dispatch` trigger ("Run workflow" → pick an app).
+
+How it works:
+
+- Deploy jobs run in the `production` GitHub environment.
+- GHCR authentication uses the workflow's `GITHUB_TOKEN` (the workflow requests
+  the `packages: write` permission). The registry username is overridden to the
+  triggering actor via the `KAMAL_REGISTRY_USERNAME` env var; the deploy config
+  falls back to `bobadilla-tech` when it's unset, so manual `kamal deploy` keeps
+  working.
+- Deploys are serialized because all three apps share one VPS and the `db`/`redis`
+  accessories.
+
+### Required environment secrets
+
+Add these to the `production` environment (Settings → Environments →
+production):
+
+| Secret                                                | Used by        |
+| ----------------------------------------------------- | -------------- |
+| `HETZNER_VPS_IP`                                      | all            |
+| `SSH_PRIVATE_KEY` (the `deploy` user's key)           | all            |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | api, dashboard |
+| `DATABASE_URL` / `REDIS_URL`                          | api, dashboard |
+| `BACKEND_SECRET`                                      | api, dashboard |
+| `SECRET_KEY_BASE`                                     | dashboard      |
+| `API_MANAGEMENT_API_KEY`                              | dashboard      |
+| `LEMONSQUEEZY_SIGNING_SECRET`                         | dashboard      |
+| `SMTP_PASSWORD`                                       | dashboard      |
+
+> `GITHUB_TOKEN` is ephemeral, so a `kamal rollback` run directly on the VPS
+> after the workflow has finished won't be able to pull the image. Trigger
+> rollbacks through the workflow (fresh token), or set a long-lived
+> `KAMAL_REGISTRY_PASSWORD` PAT for out-of-band server pulls.
+
+---
+
 ## Updating Production
 
 ### Standard Update (Normal Deployment)

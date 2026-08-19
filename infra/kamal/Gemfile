@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+
+# Patched Kamal fork.
+#
+# Point the branch/ref at the patched commit you want to deploy. To pin an exact
+# commit for reproducible deploys, commit the resulting Gemfile.lock (generate
+# with: BUNDLE_GEMFILE=infra/kamal/Gemfile bundle lock).
+gem "kamal", git: "https://github.com/bobadilla-tech/kamal.git", branch: "main"
