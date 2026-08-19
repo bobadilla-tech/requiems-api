@@ -427,10 +427,14 @@ requires a running service to maintain.
 ## Key Finding: Global Coverage Understated the Real Picture — Verification Against a Common-Vocabulary Filter Was Required
 
 **First pass (global, all 1,481,704 English entries): the numbers looked
-worse than OEWN, not better.** `ipa` coverage was 9.3%, roughly a third of
-OEWN's 27.6%, and `example` coverage was 19.4%, below OEWN's 27.9% — the
-opposite of what would justify moving off OEWN. Taken at face value, this
-would have called the whole decision into question.
+worse than OEWN, not better.** `ipa` coverage was 9.3%, and `example`
+coverage was 19.4%. At face value these looked worse than OEWN's
+27.6%/27.9% full-corpus rates — though, as with the wordlist-filtered
+comparison below, that reading conflates two different populations
+(Wiktionary's entire raw dump vs. OEWN's entire corpus) rather than
+comparing either source on the same target vocabulary. Taken at face
+value regardless, this would have called the whole decision into
+question.
 
 **Second pass (restricted to a 50,000-word common-English list): the
 picture changed.** Measured separately per field with the classifier the
@@ -468,7 +472,7 @@ size. See Future Upgrade Path for how this affects dataset generation scope.
 
 | Criterion                              | Curated word list | Free Dictionary API | Merriam-Webster | OEWN | Wiktionary (raw, selected) | CMU | Database-backed |
 | --------------------------------------- | ---------------- | -------------------- | ---------------- | ---- | --------------------------- | --- | ---------------- |
-| Vocabulary coverage                     | ❌ (~30 words)   | ✅ broad             | ✅ broad         | ✅ 157,513 lemmas (verified) | ✅ broad (millions of entries) | ⚠️ US-only | — (storage only) |
+| Vocabulary coverage                     | ❌ (~30 words)   | ✅ broad             | ✅ broad         | ✅ 157,513 lemmas (full corpus, verified) | ✅ 1.48M raw entries; 37,357 wordlist-matched (not directly comparable to OEWN's count — different units/scope) | ⚠️ US-only | — (storage only) |
 | Fits `//go:embed` (static artifact)     | ✅               | ❌ live API          | ❌ live API/paid | ✅   | ✅ (dump-based)              | ✅  | ❌ (DB dependency) |
 | License clarity                         | —                 | ⚠️ undocumented      | ⚠️ paid for prod | ✅ documented | ✅ documented (CC-BY-SA + GFDL), no "merged from other sources" caveat | ✅ documented, permissive | — |
 | Role in the shipped package              | ✅ kept, unmerged, via `GetCurated` | rejected | rejected | scoped to `pkg/thesaurus` only | ✅ selected, via `Get` | rejected | rejected |
@@ -648,35 +652,28 @@ package's.
   dump requires rebuilding `go-dictionary` and redeploying the API.
   Deliberate, for the same reasons already accepted for `pkg/thesaurus`.
 
-- **Dialect (UK/US/Other) is exposed as three fields, not resolved to
-  one.** `PhoneticUK`, `PhoneticUS`, and `PhoneticOther` are independent,
-  possibly-empty fields with no package-internal fallback rule between
-  them; any UK-preference or fallback behavior is the calling service's
+- **Dialect (UK/US/Other) is exposed as three word-scoped fields, not
+  resolved to one and not scoped per etymology.** `PhoneticUK`,
+  `PhoneticUS`, and `PhoneticOther` are independent, possibly-empty
+  fields on `Entry` with no package-internal fallback rule between them;
+  any UK-preference or fallback behavior is the calling service's
   decision. `PhoneticOther` does not distinguish "no dialect tag at all"
   from "a real third dialect (e.g. Australian) that wasn't specifically
-  requested" — both land in the same field.
-
-- **Phonetics are word-scoped, not etymology-scoped — a source limitation,
-  not a package one.** `PhoneticUK`/`PhoneticUS`/`PhoneticOther` live on
-  `Entry`, describing the word's pronunciation as a whole, not on `Variant`
-  per etymology. This was a deliberate correction, first prompted by
-  observing `"name"` (where the yam etymology showed a UK pronunciation
-  that actually belongs to the identifier etymology) and then confirmed
-  empirically: wiktextract duplicates the identical `sounds[]` array
-  across etymology sections in 85.2% of multi-etymology words (3,507 of
-  4,115) — the source itself does not reliably scope pronunciation per
-  meaning, so a genuinely different etymology with its own distinct
-  pronunciation (where the source does provide that distinction cleanly)
-  is not preserved separately. A caller cannot infer which etymology/sense
-  a given `PhoneticUK`/`US`/`Other` value "belongs to," because the source
-  data does not support that distinction in the large majority of cases.
-  Extraction now scans every raw entry for the word (across all
-  `etymology_number` groups, not just one), which widens the "first in
-  source order wins" rule from the Phonetics field note under Alternative
-  5 to the whole word: the determinism guarantee still holds — stable for
-  a given pinned dump (see `source.lock`) — but the pool of candidate
-  sounds a first match is drawn from is now the word's entire raw entry
-  set, not one etymology group's.
+  requested" — both land in the same field. Word scope (rather than
+  per-`Variant`) was a deliberate correction: wiktextract duplicates the
+  identical `sounds[]` array across etymology sections in 85.2% of
+  multi-etymology words (3,507 of 4,115), first noticed on `"name"`
+  (where the yam etymology showed a UK pronunciation belonging to the
+  identifier etymology), so attaching phonetics to `Variant` would
+  misattribute a dialect transcription to the wrong sense far more often
+  than it would correctly attribute it. Extraction scans every raw entry
+  for the word (across all `etymology_number` groups), and when multiple
+  sounds share a dialect the first one in source order wins — stable
+  across rebuilds of the same pinned dump (see `source.lock`). The
+  trade-off this accepts: a genuinely different etymology with its own
+  distinct pronunciation, on the rare occasions the source does provide
+  that distinction cleanly, is not preserved separately — a caller cannot
+  infer which etymology/sense a given phonetic value "belongs to."
 
 - **Sense selection is left to the caller.** The package returns the full
   `Definitions[]` list (deduplicated by `partOfSpeech` + gloss text, up to
