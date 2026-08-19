@@ -29,7 +29,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 # All apps deploy to the same VPS and share the db/redis accessories, so
 # serialize deployments across runs instead of cancelling the one in flight.
@@ -79,6 +78,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
     env:
       KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
@@ -105,6 +107,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
     env:
       KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
@@ -135,6 +140,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
     env:
       KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
