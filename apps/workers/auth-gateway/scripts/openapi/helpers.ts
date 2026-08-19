@@ -184,6 +184,7 @@ export async function loadCatalog(): Promise<{ apis: CatalogEntry[] }> {
   } catch (err) {
     console.error(`❌ Failed to read catalog at ${catalogPath}:`, err);
     process.exit(1);
+    throw err;
   }
 }
 
@@ -195,6 +196,7 @@ export async function loadAPIDocs(): Promise<string[]> {
   } catch (err) {
     console.error(`❌ Failed to read api_docs directory at ${apiDocsDir}:`, err);
     process.exit(1);
+    throw err;
   }
 }
 
