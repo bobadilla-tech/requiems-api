@@ -1,0 +1,34 @@
+service: requiems-mcp
+
+image: bobadilla-tech/requiems-mcp
+
+servers:
+  web:
+    - <%= ENV["HETZNER_VPS_IP"] %>
+
+proxy:
+  ssl: true
+  host: mcp.requiems.xyz
+  app_port: 3000
+  healthcheck:
+    path: /healthz
+
+registry:
+  server: ghcr.io
+  username: bobadilla-tech
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  context: apps/mcp
+  dockerfile: infra/docker/mcp.Dockerfile
+  arch: amd64
+
+secrets_path: infra/kamal/secrets
+
+ssh:
+  user: deploy
+
+env:
+  clear:
+    REQUIEMS_BASE_URL: https://api.requiems.xyz
