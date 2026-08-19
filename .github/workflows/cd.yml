@@ -47,11 +47,11 @@ jobs:
       dashboard: ${{ steps.filter.outputs.dashboard }}
       mcp: ${{ steps.filter.outputs.mcp }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
 
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d
         id: filter
         with:
           filters: |
@@ -91,7 +91,7 @@ jobs:
       REDIS_URL: ${{ secrets.REDIS_URL }}
       BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.api.yml
@@ -120,7 +120,7 @@ jobs:
       LEMONSQUEEZY_SIGNING_SECRET: ${{ secrets.LEMONSQUEEZY_SIGNING_SECRET }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.dashboard.yml
@@ -139,7 +139,7 @@ jobs:
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.mcp.yml
