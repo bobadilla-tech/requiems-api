@@ -19,7 +19,7 @@ proxy:
 
 registry:
   server: ghcr.io
-  username: bobadilla-tech
+  username: <%= ENV["KAMAL_REGISTRY_USERNAME"] || "bobadilla-tech" %>
   password:
     - KAMAL_REGISTRY_PASSWORD
 
