@@ -1,5 +1,4 @@
-# Requiems Go API — internal backend. Reachable only from the auth-gateway Worker
-# (which sends X-Backend-Secret, enforced by middleware) and the Rails dashboard.
+# Requiems API internal backend.
 service: requiems-api
 
 image: bobadilla-tech/requiems-api

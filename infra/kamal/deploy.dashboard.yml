@@ -1,4 +1,4 @@
-# Requiems Rails dashboard (public web UI, admin) + Sidekiq background worker.
+# Requiems dashboard and background worker.
 service: requiems-dashboard
 
 image: bobadilla-tech/requiems-dashboard
