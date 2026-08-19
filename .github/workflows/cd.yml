@@ -1,0 +1,157 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "apps/dashboard/**"
+      - "apps/mcp/**"
+      - "infra/kamal/**"
+      - "infra/docker/api.Dockerfile"
+      - "infra/docker/dashboard.Dockerfile"
+      - "infra/docker/mcp.Dockerfile"
+      - "scripts/**"
+      - ".github/workflows/cd.yml"
+      - ".github/actions/kamal-deploy/**"
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App to deploy"
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - api
+          - dashboard
+          - mcp
+
+permissions:
+  contents: read
+
+# All apps deploy to the same VPS and share the db/redis accessories, so
+# serialize deployments across runs instead of cancelling the one in flight.
+concurrency:
+  group: cd-deploy
+  cancel-in-progress: false
+
+jobs:
+  detect-changes:
+    name: Detect Changed Apps
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.filter.outputs.api }}
+      dashboard: ${{ steps.filter.outputs.dashboard }}
+      mcp: ${{ steps.filter.outputs.mcp }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d
+        id: filter
+        with:
+          filters: |
+            api:
+              - 'apps/api/**'
+              - 'infra/kamal/**'
+              - 'infra/docker/api.Dockerfile'
+              - '.github/workflows/cd.yml'
+            dashboard:
+              - 'apps/dashboard/**'
+              - 'infra/kamal/**'
+              - 'infra/docker/dashboard.Dockerfile'
+              - 'scripts/**'
+              - '.github/workflows/cd.yml'
+            mcp:
+              - 'apps/mcp/**'
+              - 'infra/kamal/**'
+              - 'infra/docker/mcp.Dockerfile'
+              - '.github/workflows/cd.yml'
+
+  deploy-api:
+    name: Deploy API
+    if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'api' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.api == 'true'
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    env:
+      KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+      KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
+      HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ./.github/actions/kamal-deploy
+        with:
+          config: infra/kamal/deploy.api.yml
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET
+
+  deploy-dashboard:
+    name: Deploy Dashboard
+    if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'dashboard' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.dashboard == 'true'
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    env:
+      KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+      KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
+      HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      API_MANAGEMENT_API_KEY: ${{ secrets.API_MANAGEMENT_API_KEY }}
+      LEMONSQUEEZY_SIGNING_SECRET: ${{ secrets.LEMONSQUEEZY_SIGNING_SECRET }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ./.github/actions/kamal-deploy
+        with:
+          config: infra/kamal/deploy.dashboard.yml
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET SECRET_KEY_BASE API_MANAGEMENT_API_KEY LEMONSQUEEZY_SIGNING_SECRET SMTP_PASSWORD
+
+  deploy-mcp:
+    name: Deploy MCP
+    if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'mcp' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.mcp == 'true'
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    env:
+      KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+      KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
+      HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ./.github/actions/kamal-deploy
+        with:
+          config: infra/kamal/deploy.mcp.yml
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP

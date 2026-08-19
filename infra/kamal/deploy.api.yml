@@ -1,0 +1,77 @@
+# Requiems API internal backend.
+service: requiems-api
+
+image: bobadilla-tech/requiems-api
+
+servers:
+  web:
+    - <%= ENV["HETZNER_VPS_IP"] %>
+
+proxy:
+  ssl: true
+  host: internal.requiems.xyz
+  app_port: 8080
+  healthcheck:
+    path: /healthz
+
+registry:
+  server: ghcr.io
+  username: <%= ENV["KAMAL_REGISTRY_USERNAME"] || "bobadilla-tech" %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  context: apps/api
+  dockerfile: infra/docker/api.Dockerfile
+  arch: amd64
+
+secrets_path: infra/kamal/secrets
+
+ssh:
+  user: deploy
+
+env:
+  clear:
+    ENVIRONMENT: production
+    PORT: "8080"
+    LANGUAGETOOL_URL: http://languagetool:8010
+    NOMINATIM_URL: https://nominatim.openstreetmap.org
+    VPN_DATABASE_PATH: dbs/IP2PROXY-LITE-PX2.BIN
+    VPN_ASN_DATABASE_PATH: dbs/GeoLite2-ASN.mmdb
+    IP_CITY_DATABASE_PATH: dbs/GeoLite2-City.mmdb
+    POSTAL_CODE_DB_PATH: dbs/postal_codes.txt
+    CITIES_DB_PATH: dbs/cities15000.txt
+  secret:
+    - DATABASE_URL
+    - REDIS_URL
+    - BACKEND_SECRET
+
+# Go migrations run on boot (MigrateWithRetry), so allow extra time to become ready.
+deploy_timeout: 120
+
+accessories:
+  db:
+    service: db
+    image: postgres:16-alpine
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    env:
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+    directories:
+      - data:/var/lib/postgresql/data
+
+  redis:
+    service: redis
+    image: redis:7-alpine
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    directories:
+      - data:/data
+
+  languagetool:
+    service: languagetool
+    image: erikvl87/languagetool
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    options:
+      restart: unless-stopped

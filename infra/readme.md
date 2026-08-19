@@ -66,6 +66,12 @@ Pass as `X-API-Management-Key` header to `http://localhost:5544`.
 Target: single VPS (Docker + Docker Compose) running API, Postgres, Redis, and
 Caddy. Cloudflare Worker sits in front and forwards authorized traffic.
 
+> **Continuous delivery:** production deploys are automated with Kamal via
+> `.github/workflows/cd.yml`. See
+> [docs/core/deployment.md](../docs/core/deployment.md#continuous-delivery-github-actions)
+> for the workflow, the `production` environment secrets it requires, and manual
+> redeploy/rollback instructions.
+
 ### 2.1 Prepare the VPS
 
 #### Recommended Hetzner Configuration

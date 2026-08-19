@@ -1,0 +1,94 @@
+# Requiems dashboard and background worker.
+service: requiems-dashboard
+
+image: bobadilla-tech/requiems-dashboard
+
+servers:
+  web:
+    - <%= ENV["HETZNER_VPS_IP"] %>
+  job:
+    hosts:
+      - <%= ENV["HETZNER_VPS_IP"] %>
+    cmd: bundle exec sidekiq
+    stop_timeout: 30
+
+proxy:
+  ssl: true
+  host: requiems.xyz
+  app_port: 80
+
+registry:
+  server: ghcr.io
+  username: <%= ENV["KAMAL_REGISTRY_USERNAME"] || "bobadilla-tech" %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  context: apps/dashboard
+  dockerfile: infra/docker/dashboard.Dockerfile
+  arch: amd64
+  additional_contexts:
+    scripts: scripts
+
+secrets_path: infra/kamal/secrets
+
+ssh:
+  user: deploy
+
+env:
+  clear:
+    RAILS_ENV: production
+    RAILS_LOG_LEVEL: warn
+    INTERNAL_API_URL: https://internal.requiems.xyz
+    API_BASE_URL: https://api.requiems.xyz
+    API_MANAGEMENT_URL: https://api-management.requiems.xyz
+    LEMONSQUEEZY_STORE_ID: "241998"
+    LEMONSQUEEZY_STORE_SLUG: ultirequiem
+    LEMONSQUEEZY_TEST_MODE: "false"
+    LEMONSQUEEZY_DEVELOPER_MONTHLY_VARIANT_ID: "1296434"
+    LEMONSQUEEZY_DEVELOPER_YEARLY_VARIANT_ID: "1296449"
+    LEMONSQUEEZY_BUSINESS_MONTHLY_VARIANT_ID: "1296450"
+    LEMONSQUEEZY_BUSINESS_YEARLY_VARIANT_ID: "1296455"
+    LEMONSQUEEZY_PROFESSIONAL_MONTHLY_VARIANT_ID: "1296459"
+    LEMONSQUEEZY_PROFESSIONAL_YEARLY_VARIANT_ID: "1296460"
+    LEMONSQUEEZY_DEVELOPER_MONTHLY_CHECKOUT_UUID: 5e11cee2-5f80-4486-aeca-8e25511bd4ac
+    LEMONSQUEEZY_DEVELOPER_YEARLY_CHECKOUT_UUID: 8562dd29-f28c-43fb-8aab-add364efe179
+    LEMONSQUEEZY_BUSINESS_MONTHLY_CHECKOUT_UUID: 631bd9b8-61fb-42a8-8b72-395e280ae1c4
+    LEMONSQUEEZY_BUSINESS_YEARLY_CHECKOUT_UUID: f4145891-6a7c-4a92-ac86-aae539f39853
+    LEMONSQUEEZY_PROFESSIONAL_MONTHLY_CHECKOUT_UUID: 75dbfba3-3cb0-4136-a677-61103798a663
+    LEMONSQUEEZY_PROFESSIONAL_YEARLY_CHECKOUT_UUID: 7c892cc3-bc79-4c44-ba03-9cf432c38783
+    SMTP_ADDRESS: smtp.resend.com
+    SMTP_PORT: "587"
+    SMTP_DOMAIN: mail.requiems.xyz
+    SMTP_USERNAME: resend
+    SMTP_FROM_EMAIL: noreply@mail.requiems.xyz
+    MAILER_HOST: requiems.xyz
+    GA4_MEASUREMENT_ID: G-LS6S9MEGTW
+  secret:
+    - DATABASE_URL
+    - REDIS_URL
+    - SECRET_KEY_BASE
+    - BACKEND_SECRET
+    - API_MANAGEMENT_API_KEY
+    - LEMONSQUEEZY_SIGNING_SECRET
+    - SMTP_PASSWORD
+
+accessories:
+  db:
+    service: db
+    image: postgres:16-alpine
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    env:
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+    directories:
+      - data:/var/lib/postgresql/data
+
+  redis:
+    service: redis
+    image: redis:7-alpine
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    directories:
+      - data:/data
