@@ -84,6 +84,7 @@ jobs:
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
@@ -95,7 +96,7 @@ jobs:
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.api.yml
-          required-secrets: SSH_PRIVATE_KEY HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET
 
   deploy-dashboard:
     name: Deploy Dashboard
@@ -109,6 +110,7 @@ jobs:
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
@@ -124,7 +126,7 @@ jobs:
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.dashboard.yml
-          required-secrets: SSH_PRIVATE_KEY HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET SECRET_KEY_BASE API_MANAGEMENT_API_KEY LEMONSQUEEZY_SIGNING_SECRET SMTP_PASSWORD
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET SECRET_KEY_BASE API_MANAGEMENT_API_KEY LEMONSQUEEZY_SIGNING_SECRET SMTP_PASSWORD
 
   deploy-mcp:
     name: Deploy MCP
@@ -138,9 +140,10 @@ jobs:
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.mcp.yml
-          required-secrets: SSH_PRIVATE_KEY HETZNER_VPS_IP
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP
