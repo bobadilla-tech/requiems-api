@@ -5,7 +5,10 @@ image: bobadilla-tech/requiems-api
 
 servers:
   web:
-    - <%= ENV["HETZNER_VPS_IP"] %>
+    hosts:
+      - <%= ENV["HETZNER_VPS_IP"] %>
+    volumes:
+      - /home/deploy/vendor:/app/dbs
 
 proxy:
   ssl: true

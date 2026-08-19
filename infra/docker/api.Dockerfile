@@ -30,7 +30,7 @@ ENV PORT=8080
 COPY --from=build /out/api /app/api
 COPY --from=build /out/seed-* /app/
 COPY migrations /app/migrations
-COPY dbs /app/dbs
+RUN mkdir -p /app/dbs
 
 USER appuser
 

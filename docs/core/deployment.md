@@ -481,6 +481,49 @@ done
 
 ## Part 7: Post-Deployment
 
+### 7.0 Static Databases (dbs/)
+
+Several endpoints read large third-party datasets at startup from `/app/dbs`.
+These files are **not committed** (they are gitignored and redistributed under
+their own licenses), so they are **not baked into the Docker image**. Instead
+they are mounted from a persistent directory on the VPS:
+
+```
+/home/deploy/vendor  →  /app/dbs
+```
+
+The mount is declared in both `infra/kamal/deploy.api.yml` and
+`infra/docker/docker-compose.yml`. If the directory or a file is missing, the
+affected services start in degraded mode and return `not_found` (the API does
+not crash).
+
+The five files and their sources:
+
+| File                          | Source                                                              |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `cities15000.txt`             | GeoNames `cities15000.zip` (free, no key)                            |
+| `postal_codes.txt`            | GeoNames `allCountries.zip` (free, no key; `allCountries.txt` renamed) |
+| `GeoLite2-ASN.mmdb`           | MaxMind GeoLite2 ASN (requires a free license key)                  |
+| `GeoLite2-City.mmdb`          | MaxMind GeoLite2 City (requires a free license key)                 |
+| `IP2PROXY-LITE-PX2.BIN`       | IP2Location IP2Proxy LITE PX2 (requires a download token)           |
+
+**One-time bootstrap** — create the directory on the VPS and copy the files
+(the developer machine already has them in the gitignored `apps/api/dbs/`):
+
+```bash
+ssh deploy@$HETZNER_VPS_IP 'mkdir -p /home/deploy/vendor'
+rsync -avz apps/api/dbs/ deploy@$HETZNER_VPS_IP:/home/deploy/vendor/
+```
+
+Then restart the API container so it reloads the files (no redeploy needed):
+
+```bash
+kamal app restart -c infra/kamal/deploy.api.yml
+```
+
+**Updating the data** — re-run the `rsync` above and restart the container. The
+databases live outside the image, so a plain `kamal deploy` never touches them.
+
 ### 7.1 Seed Static Data
 
 Some endpoints require data to be seeded after the first deploy. Migrations
