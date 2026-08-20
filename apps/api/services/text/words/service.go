@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	dictionary "github.com/bobadilla-tech/go-dictionary"
+	dictionarydata "github.com/bobadilla-tech/go-dictionary"
 	"github.com/bobadilla-tech/thesaurus-go/pkg/thesaurus"
 	"github.com/jackc/pgx/v5/pgxpool"
 
@@ -75,12 +75,12 @@ LIMIT 1;
 func (s *Service) Define(word string) (DictionaryEntry, error) {
 	normalized := strings.ToLower(strings.TrimSpace(word))
 
-	entry, ok := dictionary.GetCurated(normalized)
+	entry, ok := dictionarydata.GetCurated(normalized)
 	if ok {
 		return curatedToDictionaryEntry(normalized, entry), nil
 	}
 
-	if entry, ok := dictionary.Get(normalized); ok {
+	if entry, ok := dictionarydata.Get(normalized); ok {
 		return wiktionaryToDictionaryEntry(normalized, entry), nil
 	}
 
@@ -91,7 +91,7 @@ func (s *Service) Define(word string) (DictionaryEntry, error) {
 // dataset) directly to DictionaryEntry. A straightforward 1:1 mapping with
 // no decisions to make: copies Phonetic as-is, transforms each CuratedDefinition into
 // a Definition, and uses Synonyms from the curated entry as-is (or []string{} if nil).
-func curatedToDictionaryEntry(word string, e dictionary.CuratedEntry) DictionaryEntry {
+func curatedToDictionaryEntry(word string, e dictionarydata.CuratedEntry) DictionaryEntry {
 
 	defs := make([]Definition, 0, len(e.Definitions))
 	for _, d := range e.Definitions {
@@ -121,7 +121,7 @@ func curatedToDictionaryEntry(word string, e dictionary.CuratedEntry) Dictionary
 // the first Variant (first etymology) and only the first Example
 // from each of its definitions, and resolves Synonyms by calling thesaurus.Lookup(word)
 // since Wiktionary-derived entries carry no synonyms of their own.
-func wiktionaryToDictionaryEntry(word string, e dictionary.Entry) DictionaryEntry {
+func wiktionaryToDictionaryEntry(word string, e dictionarydata.Entry) DictionaryEntry {
 	phonetic := e.PhoneticUK
 
 	if phonetic == "" {
