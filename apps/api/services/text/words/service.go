@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	dictionary "github.com/bobadilla-tech/go-dictionary"
+	"github.com/bobadilla-tech/thesaurus-go/pkg/thesaurus"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"requiems-api/platform/db"
@@ -73,31 +75,95 @@ LIMIT 1;
 func (s *Service) Define(word string) (DictionaryEntry, error) {
 	normalized := strings.ToLower(strings.TrimSpace(word))
 
-	e, ok := dictionaryData[normalized]
-	if !ok {
-		return DictionaryEntry{}, svcerr.NotFound("not_found", "word not found in dictionary")
+	entry, ok := dictionary.GetCurated(normalized)
+	if ok {
+		return curatedToDictionaryEntry(normalized, entry), nil
 	}
 
-	defs := make([]Definition, 0, len(e.definitions))
-	for _, d := range e.definitions {
+	if entry, ok := dictionary.Get(normalized); ok {
+		return wiktionaryToDictionaryEntry(normalized, entry), nil
+	}
+
+	return DictionaryEntry{}, svcerr.NotFound("not_found", "word not found in dictionary")
+}
+
+// curatedToDictionaryEntry — Converts a CuratedEntry (the ~30-word curated
+// dataset) directly to DictionaryEntry. A straightforward 1:1 mapping with
+// no decisions to make: copies Phonetic as-is, transforms each CuratedDefinition into
+// a Definition, and uses Synonyms from the curated entry as-is (or []string{} if nil).
+func curatedToDictionaryEntry(word string, e dictionary.CuratedEntry) DictionaryEntry {
+
+	defs := make([]Definition, 0, len(e.Definitions))
+	for _, d := range e.Definitions {
 		defs = append(defs, Definition{
-			PartOfSpeech: d.partOfSpeech,
-			Definition:   d.definition,
-			Example:      d.example,
+			PartOfSpeech: d.PartOfSpeech,
+			Definition:   d.Definition,
+			Example:      d.Example,
 		})
 	}
 
-	synonyms := e.synonyms
+	synonyms := e.Synonyms
 	if synonyms == nil {
 		synonyms = []string{}
 	}
 
 	return DictionaryEntry{
-		Word:        normalized,
-		Phonetic:    e.phonetic,
+		Word:        word,
+		Phonetic:    e.Phonetic,
 		Definitions: defs,
 		Synonyms:    synonyms,
-	}, nil
+	}
+
+}
+
+// wiktionaryToDictionaryEntry — Converts a Wiktionary-derived Entry (richer, with multiple etymologies/dialects)
+// into DictionaryEntry, flattening it: picks Phonetic with UK→US→Other priority, takes only
+// the first Variant (first etymology) and only the first Example
+// from each of its definitions, and resolves Synonyms by calling thesaurus.Lookup(word)
+// since Wiktionary-derived entries carry no synonyms of their own.
+func wiktionaryToDictionaryEntry(word string, e dictionary.Entry) DictionaryEntry {
+	phonetic := e.PhoneticUK
+
+	if phonetic == "" {
+		phonetic = e.PhoneticUS
+	}
+
+	if phonetic == "" {
+		phonetic = e.PhoneticOther
+	}
+
+	var defs []Definition
+	if len(e.Variants) > 0 {
+		v := e.Variants[0]
+		defs = make([]Definition, 0, len(v.Definitions))
+		for _, d := range v.Definitions {
+			example := ""
+			if len(d.Examples) > 0 {
+				example = d.Examples[0]
+			}
+			defs = append(defs, Definition{
+				PartOfSpeech: d.PartOfSpeech,
+				Definition:   d.Definition,
+				Example:      example,
+			})
+		}
+	}
+
+	if defs == nil {
+		defs = []Definition{}
+	}
+
+	synonyms := []string{}
+	if syn, ok := thesaurus.Lookup(word); ok && syn.Synonyms != nil {
+		synonyms = syn.Synonyms
+	}
+
+	return DictionaryEntry{
+		Word:        word,
+		Phonetic:    phonetic,
+		Definitions: defs,
+		Synonyms:    synonyms,
+	}
 }
 
 func (s *Service) BatchDefine(ctx context.Context, req BatchRequest) ([]BatchItem, error) {

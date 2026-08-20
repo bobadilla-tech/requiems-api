@@ -163,13 +163,13 @@ func TestBatchDefine_AllInvalid(t *testing.T) {
 	svc := &Service{}
 
 	req := BatchRequest{
-		Items: []string{"xxx", "yyy", "zzz"},
+		Items: []string{"yyy", "zzz"},
 	}
 
 	resp, err := svc.BatchDefine(context.Background(), req)
 	require.NoError(t, err)
 
-	assert.Equal(t, 3, len(resp))
+	assert.Equal(t, 2, len(resp))
 
 	for _, r := range resp {
 		assert.False(t, r.Found)
