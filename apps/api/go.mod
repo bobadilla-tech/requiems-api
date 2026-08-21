@@ -75,5 +75,5 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 )
