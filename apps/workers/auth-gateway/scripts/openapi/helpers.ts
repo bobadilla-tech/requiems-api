@@ -1,7 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import type { CatalogEntry, YamlApiDoc, YamlEndpoint, YamlError } from "./types";
 import { apiDocsDir, baseSpec, catalogPath, METHODS_WITH_BODY, TYPE_SCHEMAS } from "./constants";

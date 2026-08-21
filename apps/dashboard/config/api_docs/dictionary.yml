@@ -128,6 +128,66 @@ endpoints:
           puts "  Example: #{d['example']}" if d['example']
         end
         puts "Synonyms: #{data['synonyms'].join(', ')}"
+  - name: Batch Define Words
+    method: POST
+    path: /v1/text/words/batch
+    description: >
+      Resolve multiple words in a single request. Returns dictionary entries when found,
+      or error information when a word is not in the dataset.
+    parameters:
+      - name: items
+        type: array<string>
+        required: true
+        location: body
+        description: List of words to look up in batch (max 50 items)
+        items:
+          type: string
+    request_example: |
+      {
+        "items": ["ephemeral", "serendipity", "melancholy"]
+      }
+    response_example: |
+      {
+        "data": {
+          "results": [
+            {
+              "word": "serendipity",
+              "found": true,
+              "entry": {
+                "word": "serendipity",
+                "phonetic": "/ˌserənˈdipədē/",
+                "definitions": [
+                  {
+                    "part_of_speech": "noun",
+                    "definition": "the occurrence of events by chance in a happy way"
+                  }
+                ],
+                "synonyms": ["fluke", "chance", "fortuity"]
+              }
+            },
+            {
+              "word": "fakeword",
+              "found": false,
+              "error": "word not found: fakeword"
+            }
+          ],
+          "total": 3
+        },
+        "metadata": {
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      }
+    response_fields:
+      - name: results
+        type: array<object>
+        description: List of batch lookup results
+      - name: total
+        type: integer
+        description: Total number of items processed
+    errors:
+      - code: 422
+        message: unprocessable_entity
+        description: Invalid or empty items array
 faq:
   - question: Is the lookup case-sensitive?
     answer: >-
