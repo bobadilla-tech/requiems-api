@@ -499,16 +499,16 @@ not crash).
 
 The five files and their sources:
 
-| File                          | Source                                                              |
-| ----------------------------- | ------------------------------------------------------------------- |
-| `cities15000.txt`             | GeoNames `cities15000.zip` (free, no key)                            |
-| `postal_codes.txt`            | GeoNames `allCountries.zip` (free, no key; `allCountries.txt` renamed) |
-| `GeoLite2-ASN.mmdb`           | MaxMind GeoLite2 ASN (requires a free license key)                  |
-| `GeoLite2-City.mmdb`          | MaxMind GeoLite2 City (requires a free license key)                 |
-| `IP2PROXY-LITE-PX2.BIN`       | IP2Location IP2Proxy LITE PX2 (requires a download token)           |
+| File                    | Source                                                                 |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `cities15000.txt`       | GeoNames `cities15000.zip` (free, no key)                              |
+| `postal_codes.txt`      | GeoNames `allCountries.zip` (free, no key; `allCountries.txt` renamed) |
+| `GeoLite2-ASN.mmdb`     | MaxMind GeoLite2 ASN (requires a free license key)                     |
+| `GeoLite2-City.mmdb`    | MaxMind GeoLite2 City (requires a free license key)                    |
+| `IP2PROXY-LITE-PX2.BIN` | IP2Location IP2Proxy LITE PX2 (requires a download token)              |
 
-**One-time bootstrap** — create the directory on the VPS and copy the files
-(the developer machine already has them in the gitignored `apps/api/dbs/`):
+**One-time bootstrap** — create the directory on the VPS and copy the files (the
+developer machine already has them in the gitignored `apps/api/dbs/`):
 
 ```bash
 ssh deploy@$HETZNER_VPS_IP 'mkdir -p /home/deploy/vendor'
@@ -736,8 +736,8 @@ docker compose up -d
 ## Continuous Delivery (GitHub Actions)
 
 Deploys are automated via `.github/workflows/cd.yml`. Pushing to `main` triggers
-a path-filtered deploy of only the apps that changed (`api`, `dashboard`, `mcp`).
-A manual redeploy/rollback is available from the Actions tab via the
+a path-filtered deploy of only the apps that changed (`api`, `dashboard`,
+`mcp`). A manual redeploy/rollback is available from the Actions tab via the
 `workflow_dispatch` trigger ("Run workflow" → pick an app).
 
 How it works:
@@ -748,8 +748,8 @@ How it works:
   triggering actor via the `KAMAL_REGISTRY_USERNAME` env var; the deploy config
   falls back to `bobadilla-tech` when it's unset, so manual `kamal deploy` keeps
   working.
-- Deploys are serialized because all three apps share one VPS and the `db`/`redis`
-  accessories.
+- Deploys are serialized because all three apps share one VPS and the
+  `db`/`redis` accessories.
 
 ### Required environment secrets
 

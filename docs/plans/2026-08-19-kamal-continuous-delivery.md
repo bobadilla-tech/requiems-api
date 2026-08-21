@@ -1,16 +1,16 @@
 # Kamal Continuous Delivery — GitHub Actions
 
 Automate the manual `kamal deploy -c infra/kamal/deploy.<app>.yml` flow with a
-GitHub Actions CD workflow that builds, pushes to GHCR, and deploys to the VPS on
-every push to `main`, path-filtered so only the changed apps redeploy.
+GitHub Actions CD workflow that builds, pushes to GHCR, and deploys to the VPS
+on every push to `main`, path-filtered so only the changed apps redeploy.
 
 ## Context
 
-Kamal deployment support was added recently (the three `infra/kamal/deploy.*.yml`
-configs plus a shared secrets file), but deploys were still run by hand from a
-developer machine: source the gitignored root `.env` into the shell, then run
-`kamal deploy -c infra/kamal/deploy.<app>.yml`. Nothing in CI built or pushed
-images, and nothing deployed.
+Kamal deployment support was added recently (the three
+`infra/kamal/deploy.*.yml` configs plus a shared secrets file), but deploys were
+still run by hand from a developer machine: source the gitignored root `.env`
+into the shell, then run `kamal deploy -c infra/kamal/deploy.<app>.yml`. Nothing
+in CI built or pushed images, and nothing deployed.
 
 The Kamal configs are YAML rendered as ERB, so host and registry values already
 come from the environment — `servers.web` uses `ENV["HETZNER_VPS_IP"]`, and
@@ -42,8 +42,8 @@ Two things needed deciding before writing it:
 **Registry override (three one-line edits).** Each `infra/kamal/deploy.*.yml`
 changed `username: bobadilla-tech` to
 `username: <%= ENV["KAMAL_REGISTRY_USERNAME"] || "bobadilla-tech" %>`. This is
-the only config change — the password already flows through the secrets file, and
-CI just sets `KAMAL_REGISTRY_USERNAME=${{ github.actor }}` and
+the only config change — the password already flows through the secrets file,
+and CI just sets `KAMAL_REGISTRY_USERNAME=${{ github.actor }}` and
 `KAMAL_REGISTRY_PASSWORD=${{ github.token }}`.
 
 **New `.github/workflows/cd.yml`.** A single workflow with:
@@ -55,22 +55,24 @@ CI just sets `KAMAL_REGISTRY_USERNAME=${{ github.actor }}` and
 - **Concurrency:** a single `cd-deploy` group with `cancel-in-progress: false`,
   so deployments serialize — all three apps share one VPS and the `db`/`redis`
   accessories.
-- **`detect-changes` job** (push only) using `dorny/paths-filter` to decide which
-  apps changed. The dashboard filter also watches `scripts/**` and
+- **`detect-changes` job** (push only) using `dorny/paths-filter` to decide
+  which apps changed. The dashboard filter also watches `scripts/**` and
   `infra/docker/dashboard.Dockerfile` because its image consumes the `scripts`
   build context; all three watch `infra/kamal/**` and the workflow file itself.
 - **Three deploy jobs** (`deploy-api`, `deploy-dashboard`, `deploy-mcp`), each
   `environment: production`, gated on the filter output (or the dispatch input).
   Each job sets its own `env` (secrets mapped to env vars) and then delegates to
-  a shared composite action (`.github/actions/kamal-deploy`) that runs the common
-  steps: `ruby/setup-ruby` → configure bundler (`BUNDLE_GEMFILE` points at
-  `infra/kamal/Gemfile`, which installs the patched Kamal fork from
+  a shared composite action (`.github/actions/kamal-deploy`) that runs the
+  common steps: `ruby/setup-ruby` → configure bundler (`BUNDLE_GEMFILE` points
+  at `infra/kamal/Gemfile`, which installs the patched Kamal fork from
   `github.com/bobadilla-tech/kamal`) → `bundle install` → configure SSH (write
   the private key to `~/.ssh/id_ed25519`, add the host via `ssh-keyscan`) → a
-  guard that fails fast if any required secret is empty → `bundle exec kamal
-  deploy -c infra/kamal/deploy.<app>.yml`. The composite action avoids repeating
-  those steps across the three jobs and keeps the SSH/registry plumbing in one
-  place. The fork is pinned to a commit via the committed `Gemfile.lock`.
+  guard that fails fast if any required secret is empty →
+  `bundle exec kamal
+  deploy -c infra/kamal/deploy.<app>.yml`. The composite
+  action avoids repeating those steps across the three jobs and keeps the
+  SSH/registry plumbing in one place. The fork is pinned to a commit via the
+  committed `Gemfile.lock`.
 
 The per-app env mapping keeps the surface minimal: `api` and `dashboard` get the
 Postgres, `DATABASE_URL`/`REDIS_URL`, and `BACKEND_SECRET` values; `dashboard`
@@ -96,18 +98,18 @@ got a pointer to it.
   at the time of writing). To deploy a newer patch, update the branch/ref in the
   Gemfile and re-run `BUNDLE_GEMFILE=infra/kamal/Gemfile bundle lock`.
 - Manual setup still required (not something code can do): create the
-  `production` GitHub environment and add the secrets
-  (`HETZNER_VPS_IP`, `SSH_PRIVATE_KEY`, `POSTGRES_USER`, `POSTGRES_PASSWORD`,
-  `POSTGRES_DB`, `DATABASE_URL`, `REDIS_URL`, `BACKEND_SECRET`,
-  `SECRET_KEY_BASE`, `API_MANAGEMENT_API_KEY`, `LEMONSQUEEZY_SIGNING_SECRET`,
-  `SMTP_PASSWORD`), then verify the first run.
+  `production` GitHub environment and add the secrets (`HETZNER_VPS_IP`,
+  `SSH_PRIVATE_KEY`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`,
+  `DATABASE_URL`, `REDIS_URL`, `BACKEND_SECRET`, `SECRET_KEY_BASE`,
+  `API_MANAGEMENT_API_KEY`, `LEMONSQUEEZY_SIGNING_SECRET`, `SMTP_PASSWORD`),
+  then verify the first run.
 - One-time VPS bootstrap: the CD action's deploy step runs `kamal setup` (not
   `kamal deploy`), which bootstraps the server — installing Docker if missing —
   and boots the configured accessories before deploying. That covers `db`
-  (Postgres), `redis`, and `languagetool` from `deploy.api.yml`, and `db`/`redis`
-  from `deploy.dashboard.yml`. It is idempotent: already-booted accessories are
-  skipped, so a fresh VPS is provisioned on its first run and later deploys are
-  unaffected.
+  (Postgres), `redis`, and `languagetool` from `deploy.api.yml`, and
+  `db`/`redis` from `deploy.dashboard.yml`. It is idempotent: already-booted
+  accessories are skipped, so a fresh VPS is provisioned on its first run and
+  later deploys are unaffected.
 - Known limitation: `GITHUB_TOKEN` is ephemeral, so out-of-band `kamal rollback`
   on the VPS after a run can't pull images. Rollbacks should be triggered via
   `workflow_dispatch`, or a `KAMAL_REGISTRY_PASSWORD` PAT added for server-side
