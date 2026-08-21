@@ -92,7 +92,7 @@ cutover of already-finished code.
 
 ## Current Architecture
 
-```
+```text
                               INTERNET
                                  │
                  ┌───────────────┴───────────────┐
@@ -158,7 +158,7 @@ there is no reconciliation job that would catch a Postgres/KV divergence.
 
 ## Proposed Architecture
 
-```
+```text
          INTERNET
             │
 ┌───────────┴───────────┐
@@ -197,11 +197,16 @@ there is no reconciliation job that would catch a Postgres/KV divergence.
 ```
 
 Key differences from today: one hot-path store (Redis) instead of two (KV + D1),
-zero edge-to-origin HTTP hops for auth (currently: client → Worker → KV → KV →
-D1 → Go → Postgres; proposed: client → Go → Redis), and Rails talks to Postgres
-directly for key CRUD instead of round-tripping to a Worker. Cloudflare is
-retained purely as network infrastructure — its removal is explicitly **not**
-recommended (see the DDoS/abuse-posture discussion under Risks below).
+zero edge-to-origin HTTP hops for auth. Today's synchronous path is client →
+Worker → KV (key lookup) → KV (rate limit) → KV (quota cache, with a D1 read
+only on a quota-cache miss) → Go → Postgres/Redis, followed by an asynchronous
+D1 usage write dispatched via `waitUntil` _after_ the response has already gone
+back to the client (`routes/proxy.ts`) — D1 is not on the synchronous critical
+path the way an earlier draft of this diagram implied. Proposed: client → Go →
+Redis, one hop, no separate edge tier at all. Rails talks to Postgres directly
+for key CRUD instead of round-tripping to a Worker. Cloudflare is retained
+purely as network infrastructure — its removal is explicitly **not** recommended
+(see the DDoS/abuse-posture discussion under Risks below).
 
 ---
 
@@ -471,14 +476,15 @@ gaps versus the production Cloudflare-backed path
    practice"). `generate_key_locally` relies solely on ActiveRecord's
    `validates :key_prefix, uniqueness: true`, which is a race-prone
    check-then-insert with no database-level backing — `key_prefix`'s only index
-   is a trigram index for fuzzy search (`db/schema.rb`), not a unique
-   constraint, and `key_hash` has no index at all (also flagged separately above
-   as a P0 item). A validation failure on collision also just errors out to the
-   user today rather than retrying with a new key.
+   is a trigram index for fuzzy search (`db/schema.rb`), not an efficient
+   exact-match/uniqueness-enforcing one (also flagged separately above as a P0
+   item). A validation failure on collision also just errors out to the user
+   today rather than retrying with a new key.
 
 Promoting the local path to production is a good direction, but requires (a)
-fixing the key-prefix format, (b) adding a real unique index on `key_hash`
-(already a P0 item for other reasons) and/or `key_prefix`, and (c) adding
+fixing the key-prefix format, (b) adding a proper btree index on `key_prefix`
+(already a P0 item for other reasons — see Authentication Architecture above for
+why `key_prefix`, not `key_hash`, is the column that needs it), and (c) adding
 retry-on-collision logic — not just flipping the `Rails.env.test?` gate. See
 Migration Phase 4 below.
 
@@ -509,16 +515,17 @@ schema/namespace — but the practical collision is handled. No code change need
 here; only a documentation correction.
 
 **Real, minor schema issues found regardless of the Workers question:**
-`api_keys.key_hash` — the actual authentication lookup column — has no unique
-index (only the non-secret `key_prefix` is indexed, and that index is a trigram
-index for fuzzy search, not a uniqueness constraint either); the FK gaps noted
-above in the Rails section. (An earlier version of this audit also flagged
-`words` as missing an index on its `word` column — on closer check, no code path
-anywhere in `apps/api` currently queries `words` by word value at all
-[`Random()` does `ORDER BY random()`, and `Define()`/`BatchDefine()` resolve
-from an in-memory dataset, not this table], so there's currently no query
-pattern that index would even serve. Dropped as a non-issue; verify again if a
-word-lookup query is ever added.)
+`api_keys.key_prefix` — the column any Postgres-backed auth lookup would
+actually query by, since bcrypt's `key_hash` can't be looked up by equality (see
+Authentication Architecture above) — has only a trigram index built for fuzzy
+admin search, not an efficient exact-match btree index; the FK gaps noted above
+in the Rails section. (An earlier version of this audit also flagged `words` as
+missing an index on its `word` column — on closer check, no code path anywhere
+in `apps/api` currently queries `words` by word value at all [`Random()` does
+`ORDER BY random()`, and `Define()`/`BatchDefine()` resolve from an in-memory
+dataset, not this table], so there's currently no query pattern that index would
+even serve. Dropped as a non-issue; verify again if a word-lookup query is ever
+added.)
 
 ### Redis
 
@@ -550,23 +557,25 @@ proposed design:** synchronous atomic rate-limit checks in the request hot path
 (a Lua-scripted `INCR`+`EXPIRE`, O(1) — a _plain_ two-command `INCR` then
 `EXPIRE` is not atomic as a pair, see Rate Limiting Architecture below — but
 either way this fixes the current KV get-then-put race by construction) and a
-cache of `api_keys.key_hash → {user_id, plan}` invalidated on revoke (mirrors
-the existing `geocode`/`crypto`/`exchange` TTL-cache pattern already in
-`apps/api/services`).
+cache of `key_prefix → {user_id, plan}` invalidated on revoke (keyed by
+`key_prefix`, not a hash of the raw key — see the corrected Authentication
+Architecture section above for why; mirrors the existing
+`geocode`/`crypto`/`exchange` TTL-cache pattern already in `apps/api/services`).
 
 ---
 
 ## Data Ownership
 
-| Data                                                      | Source of truth today                                                                                | Proposed source of truth                                                                                                                                               |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| API key existence/plan/revocation                         | Cloudflare KV (fast path) + D1 `api_keys` (audit) + Postgres `api_keys` (Rails' view) — three copies | PostgreSQL `api_keys` (Rails-owned), Redis as a read-through cache only                                                                                                |
-| Rate-limit counters                                       | Cloudflare KV, non-atomic, no persistent record                                                      | Redis, Lua-scripted atomic `INCR`+`EXPIRE` (see Rate Limiting Architecture), ephemeral by design (no Postgres mirror needed — these are enforcement-only, not billing) |
-| Usage/billing ledger                                      | Cloudflare D1 `credit_usage` → (3 min lag) → Postgres `usage_logs`                                   | Redis counters (per-user/per-key) → (batched, same pattern as `counters` today) → Postgres `usage_logs` directly, no edge SQLite hop                                   |
-| Subscriptions/plans                                       | Postgres `subscriptions` (Rails), mirrored into KV                                                   | Postgres `subscriptions` only; Go reads it (directly or via a Redis-cached view) instead of a separate KV copy                                                         |
-| Business/reference data (advice, quotes, BIN data, etc.)  | Postgres, Go-owned                                                                                   | unchanged                                                                                                                                                              |
-| Response caches (geocode, crypto, FX)                     | Redis, Go-owned                                                                                      | unchanged                                                                                                                                                              |
-| Rails throttle counters (`Rack::Attack`) / Sidekiq queues | Redis, Rails-owned                                                                                   | unchanged — unaffected by this migration                                                                                                                               |
+| Data                                                      | Source of truth today                                                                                | Proposed source of truth                                                                                                                                                                                        |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API key existence/plan/revocation                         | Cloudflare KV (fast path) + D1 `api_keys` (audit) + Postgres `api_keys` (Rails' view) — three copies | PostgreSQL `api_keys` (Rails-owned), Redis as a read-through cache only                                                                                                                                         |
+| Rate-limit counters                                       | Cloudflare KV, non-atomic, no persistent record                                                      | Redis, Lua-scripted atomic `INCR`+`EXPIRE` (see Rate Limiting Architecture), ephemeral by design (no Postgres mirror needed — these are enforcement-only, not billing)                                          |
+| Usage quota enforcement (aggregate)                       | Cloudflare D1 `credit_usage`, summed on read for the quota check                                     | Redis counters (per-user/per-key, aggregate only) → batched flush to a new aggregate table (same pattern as `counters`, not `usage_logs` itself — see the row-level caveat in Usage/Billing Architecture above) |
+| Usage row-level ledger (billing/analytics detail)         | Cloudflare D1 `credit_usage` → (3 min lag) → Postgres `usage_logs`                                   | Written directly from Go to Postgres `usage_logs` per request (not via the Redis aggregate counters, which cannot reconstruct individual-request rows) — see Open Question 7                                    |
+| Subscriptions/plans                                       | Postgres `subscriptions` (Rails), mirrored into KV                                                   | Postgres `subscriptions` only; Go reads it (directly or via a Redis-cached view) instead of a separate KV copy                                                                                                  |
+| Business/reference data (advice, quotes, BIN data, etc.)  | Postgres, Go-owned                                                                                   | unchanged                                                                                                                                                                                                       |
+| Response caches (geocode, crypto, FX)                     | Redis, Go-owned                                                                                      | unchanged                                                                                                                                                                                                       |
+| Rails throttle counters (`Rack::Attack`) / Sidekiq queues | Redis, Rails-owned                                                                                   | unchanged — unaffected by this migration                                                                                                                                                                        |
 
 ---
 
@@ -580,12 +589,17 @@ auth of its own, trusts `X-Backend-Secret`) → Postgres/Redis for business logi
 operations in the steady-state case (9 during a quota-cache-miss), 2 network
 hops between edge and origin**, before business logic even runs.
 
-**Proposed:** Client → Cloudflare (proxy only, no Worker) → Go: Redis `GET` (key
-cache) → Redis Lua-scripted `INCR`+`EXPIRE` (rate limit, atomic as a unit — see
-Rate Limiting Architecture below) → business logic → Redis `INCR` (usage,
-extending the Lua pattern already used by `counters`) → response. **~3 atomic
-Redis ops, one process, one network hop.** Usage flush to Postgres happens
-out-of-band on a batched-sync cadence, not per-request.
+**Proposed:** Client → Cloudflare (proxy only, no Worker) → Go: Redis `GET`
+(key-prefix cache) → Redis Lua-scripted `INCR`+`EXPIRE` (per-minute rate limit,
+atomic as a unit — see Rate Limiting Architecture below) → Redis `GET` (monthly
+usage counter, compared against `plan.requestLimit`; reject with 429 if
+`usage >= limit`, honoring `billingCycleStart` — this quota-enforcement step
+exists in the current system's `checkRequestUsage` and must not be dropped in
+the redesign, it was omitted from an earlier draft of this lifecycle) → business
+logic → Redis `INCR` (usage, extending the Lua pattern already used by
+`counters`) → response. **~4 atomic Redis ops, one process, one network hop.**
+Usage flush to Postgres happens out-of-band on a batched-sync cadence, not
+per-request.
 
 ---
 
@@ -601,15 +615,39 @@ never touches Postgres or bcrypt at request time — it's a flat KV JSON blob
 lookup with no hash comparison at all (the KV value is looked up by the full key
 as the literal cache key, `key:{apiKey}`, not by a hash).
 
-**Proposed:** Go validates the customer's key directly — hash it, look up
-`api_keys.key_hash` (needs the missing unique index added first), cache the
-`{user_id, plan}` result in Redis with a short TTL (mirrors the existing
-`geocode`/`crypto` cache pattern) so steady-state traffic doesn't hit Postgres
-per request. Revocation invalidates the Redis cache entry explicitly (an active
-`DEL` on revoke, not just a TTL wait) — this is _faster_ to propagate than
-today's system, where a revoked key still works against a stale 60s KV cache in
-some paths and depends on a successful `sync_revocation_to_cloudflare` HTTP call
-that can silently fail.
+**Proposed — corrected from an earlier draft, which described a lookup mechanism
+that doesn't actually work with bcrypt:** you cannot look up a row by computing
+`bcrypt(presented_key)` and matching it against a stored `key_hash` column —
+bcrypt embeds a random salt per hash, so the same input produces a different
+output every time it's hashed, unlike a deterministic digest (SHA-256/HMAC).
+Equality-lookup-by-hash simply isn't possible with bcrypt; the real flow has to
+be candidate-then-verify: extract `key_prefix` from the presented key
+(deterministic, cheap), `SELECT ... WHERE key_prefix =
+?` (needs a proper btree
+index — see the corrected item below, not a unique index on `key_hash`, which
+was this audit's original, incorrect target), then
+`bcrypt.compare(presented_key, candidate.key_hash)` against each candidate row
+(in practice almost always exactly one, given the prefix's entropy, but the code
+should not assume DB-enforced uniqueness).
+
+To avoid paying Postgres-round-trip **and** bcrypt's deliberately-slow compare
+on every request, cache the verified `{user_id, plan}` result in Redis keyed by
+`key_prefix` (not by a hash of the raw key — Rails discards the raw key after
+creation, so it would have no way to compute an invalidation key for a
+raw-key-keyed cache entry later), mirroring the existing `geocode`/`crypto`
+TTL-cache pattern. **Revocation must invalidate this cache durably, not just
+optimistically:** an active `DEL key_prefix` on revoke is the fast path (and,
+unlike a raw-key-derived cache key, is actually computable at revoke time since
+Postgres has `key_prefix`), but if that `DEL` fails (Redis unreachable,
+timeout), a stale cache entry would otherwise keep serving a revoked key as
+valid until its TTL expires. Recommend either retrying the `DEL` via a small
+durable queue, or keeping the TTL short enough that this window is an accepted,
+explicitly-documented risk — either way, this is faster to propagate than
+today's system, where a revoked key can persist against a stale 60s KV cache and
+depends on `sync_revocation_to_cloudflare`, which already silently fails with no
+retry today (see Reliability Findings). The
+Postgres-revocation-succeeds/Redis-invalidation-fails path needs explicit test
+coverage before cutover, not just before/after happy-path testing.
 
 ---
 
@@ -636,7 +674,12 @@ approach already proven (for a different purpose) in
 `if
 redis.call("INCR", KEYS[1]) == 1 then redis.call("EXPIRE", KEYS[1], 60) end`
 in one script call. This is a small, well-precedented addition on top of the
-existing pattern, not new technique.
+existing pattern, not new technique. Needs test coverage beyond the happy path
+before shipping: concurrent increments against the same key (confirm no
+undercounting under load, unlike today's KV race), and window-rollover behavior
+at the minute boundary (confirm a key from the previous window expires and a
+fresh window starts cleanly rather than any off-by-one letting a burst span two
+windows).
 
 The plan-tiered limit _values_ themselves (30–50,000 req/min, currently
 hardcoded in `apps/workers/shared/src/config.ts` and hand-copied into Rails per
@@ -721,10 +764,16 @@ plan rather than assumed. See Open Questions.
    shared secrets** spanning three independently-deployed services (Worker, VPS,
    Worker) — not a vulnerability per se, but a real operational fragility; a
    single leaked value grants broad trust with no scoping or expiry.
-4. **`api_keys.key_hash` has no unique index** in Postgres — not currently
-   exploitable (nothing queries by it in production yet, since validation
-   happens in KV), but must be added before any migration that makes this column
-   the live authentication lookup.
+4. **`api_keys.key_prefix` has no efficient exact-match index** in Postgres —
+   only a trigram/GIN index exists (built for fuzzy admin search), not a plain
+   btree. Not currently exploitable (nothing queries by it in production yet,
+   since validation happens in KV), but this is what actually needs an index
+   before any migration makes Postgres the live authentication lookup — **not**
+   `key_hash`, as an earlier draft of this finding claimed: bcrypt hashes are
+   salted and non-deterministic, so a hash-equality lookup against `key_hash`
+   isn't possible in the first place; the real lookup path is
+   candidate-selection by `key_prefix` followed by a bcrypt verify (see
+   Authentication Architecture above).
 5. **Customer API keys are looked up in Cloudflare KV by their literal plaintext
    value**, not a hash — `key:{apiKey}` is the actual KV cache key
    (`middleware/api-key-auth.ts:50`) — unlike the bcrypt-hashed copy Postgres
@@ -755,7 +804,8 @@ plan rather than assumed. See Open Questions.
   the "critical problem" already observed with KV write pressure described in
   the audit brief — the KV figure alone is large but Cloudflare KV is built for
   high read/write fan-out; the D1 figure is the harder limit.
-- **Proposed design cuts this to ~3 atomic Redis ops/request, zero synchronous
+- **Proposed design cuts this to ~4 atomic Redis ops/request (key-cache lookup,
+  rate-limit increment, quota check, usage increment), zero synchronous
   Postgres/D1 ops** — usage flush is batched at a fixed 60s cadence regardless
   of request volume (the existing `counters` sync worker already demonstrates
   this scales independent of RPS, since it batches via `MGET`+one upsert per
@@ -779,11 +829,23 @@ plan rather than assumed. See Open Questions.
   after.
 - **auth-gateway hard-fails (bare 500) on any KV/D1 error in the hot path** — no
   fail-open, no fallback, no timeout on D1 reads. The proposed Redis-based
-  design should explicitly decide fail-open-vs-fail-closed for a Redis outage
-  (recommendation: fail-open on the rate-limit/usage-counter check, fail-closed
-  on the api-key-existence check — a Redis outage should not let unauthenticated
-  traffic through, but it also shouldn't hard-block all authenticated traffic
-  over a soft rate-limit check).
+  design should explicitly decide fail-open-vs-fail-closed for a Redis outage,
+  and **rate limiting and usage/quota accounting need different answers here,
+  not one shared policy**: fail-closed on api-key existence (a Redis outage
+  should not let unauthenticated traffic through); fail-open on the per-minute
+  rate-limit check is fine (it's a soft abuse-prevention feature — the cost of
+  under-enforcing it briefly during an outage is low); but **usage/quota
+  accounting must not silently fail-open**, since that would mean requests get
+  served and billed-for-nothing during the outage window, permanently losing
+  those usage records with no reconciliation path (this is a real
+  billing-accuracy risk, not just an availability trade-off — see the Risks
+  section below). Recommend either: (a) a durable fallback for usage writes
+  during a Redis outage — e.g., write the row directly to Postgres synchronously
+  as a degraded-but-not-lossy path — or (b) documenting and accepting a bounded
+  reconciliation gap (Go still serves the request, quota enforcement is
+  temporarily best-effort, but a follow-up job cross-checks Postgres
+  `usage_logs` against expected volume once Redis recovers). Do not ship this
+  decision unmade.
 - **Single, unclustered Redis instance with no `maxmemory` configured** —
   currently low-risk (only response caches + one counter + Rails
   cache/throttles), becomes a single point of failure for the entire
@@ -796,10 +858,15 @@ plan rather than assumed. See Open Questions.
   above); an eviction policy like `allkeys-lru` under memory pressure could
   evict a not-yet-flushed rate-limit or usage-counter key at any time, well
   before its 60s flush — an unbounded-in-frequency risk the crash scenario
-  doesn't capture. Recommend isolating billing-critical keys (rate-limit
-  counters, usage counters, api-key cache) into a separate Redis logical DB or a
-  dedicated instance with `noeviction`, keeping `allkeys-lru` (or similar) only
-  for the disposable response caches (`geocode:*`, `crypto:*`, `exchange:*`).
+  doesn't capture. The same risk applies to **Sidekiq's own queue/job state**,
+  which already shares this Redis instance today — an eviction policy that
+  reclaims a Sidekiq job payload under memory pressure would silently drop a
+  background job, not just degrade a cache, and this instance currently has no
+  such protection either. Recommend isolating all non-cache state (rate-limit
+  counters, usage counters, api-key cache, and Sidekiq's queues) into a separate
+  Redis logical DB or a dedicated instance with `noeviction`, keeping
+  `allkeys-lru` (or similar) only for the genuinely disposable response caches
+  (`geocode:*`, `crypto:*`, `exchange:*`).
 - **Silent divergence between Postgres and Cloudflare KV on sync failure** —
   `ApiKey#sync_revocation_to_cloudflare` and `Subscription#sync_to_cloudflare`
   both swallow errors with only a log line, no retry, no reconciliation job.
@@ -964,30 +1031,32 @@ implied.**
 
 **Phase 0 — Fix the blocking Go gaps (prerequisite, not migration-specific).**
 Add graceful shutdown (`signal.NotifyContext` + `server.Shutdown`), structured
-logging, explicit `pgxpool`/`go-redis` pool sizing to `apps/api`, and a unique
-index on `api_keys.key_hash` in Rails. Concrete acceptance criteria (these are
-underspecified if left as prose): structured logging = `log/slog`, wired into
-Go's HTTP middleware so every request logs request-id, method, route, status,
-and latency as JSON to stdout (picked up by Docker/Kamal's log collection), with
-`Sentry` continuing to own uncaught-exception capture; pool sizing = explicit
-`pgxpool.Config.MaxConns`/`MinConns` and `go-redis`'s `PoolSize`, set relative
-to Postgres's own `max_connections` and the number of Go replicas (get the real
-current-traffic numbers per Open Question 5 before picking a value, don't
-guess). Also fix the dev-seed key-format bug in this phase (cheap, independent,
-and needed before Phase 3's shadow-comparison work can be manually exercised):
-`scripts/seed-dev.ts` and `docs/core/auth-gateway.md`'s example both use
-`rq_free_000001`-shaped keys that the live `requiem_[0-9a-zA-Z]{24}` validator
-rejects.
+logging, explicit `pgxpool`/`go-redis` pool sizing to `apps/api`, and a btree
+index on `api_keys.key_prefix` in Rails (not `key_hash` — see the corrected
+Authentication Architecture section above for why). Concrete acceptance criteria
+(these are underspecified if left as prose): structured logging = `log/slog`,
+wired into Go's HTTP middleware so every request logs request-id, method, route,
+status, and latency as JSON to stdout (picked up by Docker/Kamal's log
+collection), with `Sentry` continuing to own uncaught-exception capture; pool
+sizing = explicit `pgxpool.Config.MaxConns`/`MinConns` and `go-redis`'s
+`PoolSize`, set relative to Postgres's own `max_connections` and the number of
+Go replicas (get the real current-traffic numbers per Open Question 5 before
+picking a value, don't guess). Also fix the dev-seed key-format bug in this
+phase (cheap, independent, and needed before Phase 3's shadow-comparison work
+can be manually exercised): `scripts/seed-dev.ts` and
+`docs/core/auth-gateway.md`'s example both use `rq_free_000001`-shaped keys that
+the live `requiem_[0-9a-zA-Z]{24}` validator rejects.
 
 **Phase 1 — Introduce Go-side API-key authentication, dual-running alongside the
 Worker, shadow-only.** Add a new Go middleware that validates `requiems-api-key`
-against Postgres `api_keys.key_hash` (Redis-cached). Pick one gating mechanism
-(a feature-flagged route subset, not both a flag and a Worker-set header) and
-commit to it for this phase. **Explicit exit criterion:** the middleware logs
-its auth decision for every request without affecting the response, for a
-defined minimum period (recommend two weeks) with zero unexplained
-false-positive/false-negative divergence from the Worker's live decision on a
-sampled comparison.
+by candidate-selecting on `key_prefix` and bcrypt-verifying against
+`api_keys.key_hash` (Redis-cached by `key_prefix` — see Authentication
+Architecture above). Pick one gating mechanism (a feature-flagged route subset,
+not both a flag and a Worker-set header) and commit to it for this phase.
+**Explicit exit criterion:** the middleware logs its auth decision for every
+request without affecting the response, for a defined minimum period (recommend
+two weeks) with zero unexplained false-positive/false-negative divergence from
+the Worker's live decision on a sampled comparison.
 
 **Phase 2 — Introduce Redis-based rate limiting and usage counting,
 shadow-only.** Implement atomic rate limiting via a Lua-scripted `INCR`+`EXPIRE`
@@ -1023,28 +1092,28 @@ gate is what Phase 5 depends on.
 **Phase 4 — Move key-generation ownership to Rails, with the Cloudflare mirror
 kept in sync.** First, fix `ApiKey#generate_key_locally`'s output format
 (`requiem_` prefix, not `rq_live_`/`rq_test_`) and add real collision handling
-(the `key_hash` unique index from Phase 0, plus a retry-on-collision loop
-mirroring api-management's `create.ts` behavior) — see the Rails component audit
-above for why this isn't optional polish. **Do not simply stop calling
-api-management for new keys at this point** — an earlier version of this plan
-did, which would 401 every new signup between this phase and full cutover, since
-the Worker (still the production auth gate through Phase 5) only knows about
-keys present in Cloudflare KV. Instead, Rails should generate the key locally
-and push it into KV for the transition period — **but note this requires new
-work, not just a dual call to the existing endpoint**: api-management's
-`POST /api-keys` (`create.ts`) always generates its own key server-side and has
-no request field to accept an externally-supplied key, so naively "pushing"
-Rails' locally-generated key to the current endpoint would make api-management
-mint and store a _different_ key than the one Rails shows the user, silently
-reintroducing the same 401-on-signup failure via a different path. Either (a)
-extend api-management's create endpoint (or add a new one) to accept and persist
-an externally-supplied key, or (b) have Rails write directly to the KV namespace
-via the Cloudflare API for this transitional dual-write, bypassing
-api-management's key-generation logic entirely for this one call while still
-going through it for revoke/update. Also decide and document the failure mode if
-this dual-write's Cloudflare-side call fails mid-signup (block signup and
-surface an error, or proceed and rely on a retry/reconciliation job) — don't let
-it silently degrade to the same swallow-and-log pattern already flagged as a
+(the `key_prefix` index from Phase 0 makes a pre-write collision check feasible,
+plus a retry-on-collision loop mirroring api-management's `create.ts` behavior)
+— see the Rails component audit above for why this isn't optional polish. **Do
+not simply stop calling api-management for new keys at this point** — an earlier
+version of this plan did, which would 401 every new signup between this phase
+and full cutover, since the Worker (still the production auth gate through
+Phase 5) only knows about keys present in Cloudflare KV. Instead, Rails should
+generate the key locally and push it into KV for the transition period — **but
+note this requires new work, not just a dual call to the existing endpoint**:
+api-management's `POST /api-keys` (`create.ts`) always generates its own key
+server-side and has no request field to accept an externally-supplied key, so
+naively "pushing" Rails' locally-generated key to the current endpoint would
+make api-management mint and store a _different_ key than the one Rails shows
+the user, silently reintroducing the same 401-on-signup failure via a different
+path. Either (a) extend api-management's create endpoint (or add a new one) to
+accept and persist an externally-supplied key, or (b) have Rails write directly
+to the KV namespace via the Cloudflare API for this transitional dual-write,
+bypassing api-management's key-generation logic entirely for this one call while
+still going through it for revoke/update. Also decide and document the failure
+mode if this dual-write's Cloudflare-side call fails mid-signup (block signup
+and surface an error, or proceed and rely on a retry/reconciliation job) — don't
+let it silently degrade to the same swallow-and-log pattern already flagged as a
 problem elsewhere in this document. The Cloudflare round trip for new-key
 creation is only fully removed once Phase 6 completes and the Worker is no
 longer the auth gate for any traffic. Revocation/update continue round-tripping
@@ -1077,9 +1146,13 @@ inbound to Cloudflare's published IP ranges) must be in place _before_ this
 phase completes — without it, Go becomes directly internet-reachable with zero
 origin authentication the moment the old secret-header gate is removed, which
 directly contradicts the Proposed Architecture's premise that "Cloudflare stays
-as DNS/WAF/DDoS/TLS." Configure `trusted_proxies`/equivalent client-IP handling
-in Go at this point too, since `CF-Connecting-IP` semantics now apply directly
-to Go instead of being pre-filtered by the Worker.
+as DNS/WAF/DDoS/TLS." **Verification step, not just configuration:** before
+declaring this phase done, confirm a direct request to the origin's IP/hostname
+(bypassing Cloudflare's proxy) is actually rejected — configuring Authenticated
+Origin Pulls or a firewall rule is not sufficient on its own; test it. Configure
+`trusted_proxies`/equivalent client-IP handling in Go at this point too, since
+`CF-Connecting-IP` semantics now apply directly to Go instead of being
+pre-filtered by the Worker.
 
 **Phase 7 — Remove D1/KV synchronization.** Delete `SyncD1UsageJob`,
 `D1SyncService`, `Cloudflare::ApiManagementService`,
@@ -1118,8 +1191,12 @@ gateway URL, not Worker internals directly, so most of
   `apps/api/platform/{db,reqredis}`, sized against Postgres's `max_connections`
   and the real number of Go replicas/current traffic (see Open Question 5 —
   don't size blind). _small, needs load-test validation._
-- Add unique index on `apps/dashboard` `api_keys.key_hash`. _one migration,
-  needs a live-DB check that no duplicate hashes already exist first._
+- Add a plain btree index on `apps/dashboard` `api_keys.key_prefix` for
+  efficient exact-match candidate lookup during auth (the existing index there
+  is a trigram index for fuzzy admin search, not this) — **not** a unique index
+  on `key_hash`, which was this item's original target in an earlier draft:
+  bcrypt hashes can't be looked up by equality in the first place, see
+  Authentication Architecture above. _One migration, small._
 - Fix the dev-seed API-key format bug (`scripts/seed-dev.ts` /
   `docs/core/auth-gateway.md` use `rq_free_*`-shaped keys the live
   `requiem_[0-9a-zA-Z]{24}` validator rejects). _Independently doable, trivial,
@@ -1220,9 +1297,15 @@ gateway URL, not Worker internals directly, so most of
   reviewed/tightened as part of Phase 6, not assumed to be equivalent.
 - **Redis becomes a single point of failure for the entire request-serving
   path**, not just for a handful of internal caches. The "what happens if Redis
-  is down" question needs an explicit, tested answer (recommended: fail-open on
-  rate-limit/usage checks, fail-closed on key-existence checks) before Phase 6,
-  not discovered live during an incident.
+  is down" question needs an explicit, tested answer before Phase 6, not
+  discovered live during an incident — and rate-limit and usage/quota checks
+  need different answers, not one shared "fail open" policy: fail-open on the
+  rate-limit check is acceptable (soft abuse prevention), fail-closed on
+  key-existence is required (no unauthenticated traffic), and usage/quota
+  accounting needs a durable fallback or an explicitly-accepted reconciliation
+  gap rather than silently fail-open — see Reliability Findings above for the
+  full reasoning; failing open there means billed usage is permanently lost,
+  which is a different class of risk than briefly under-enforcing a rate limit.
 - **The 3-minute D1→Postgres lag is currently a soft, mostly cosmetic delay**
   (dashboard usage numbers a few minutes stale); a bug in the new Redis-based
   flush could turn "slightly stale" into "silently wrong," which is a worse

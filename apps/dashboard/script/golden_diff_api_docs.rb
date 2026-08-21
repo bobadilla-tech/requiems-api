@@ -20,8 +20,10 @@
 # Structural equivalence rules (in order — first match wins):
 #   1. multi-example       → MANUAL_OVERRIDE  (≥2 curl invocations in hand-written snippet)
 #   2. binary               → MANUAL_OVERRIDE  (response_kind: binary — download template differs)
-#   3. structural_mismatch  → MANUAL_OVERRIDE  (method, URL, query, headers, or body differ — or either snippet failed to parse)
-#   4. (default)            → SAFE
+#   3. parse_failure        → NEEDS_REVIEW     (generated or hand-written curl couldn't be parsed —
+#                                                not a confirmed structural difference, needs a human look)
+#   4. structural_mismatch  → MANUAL_OVERRIDE  (method, URL, query, headers, or body differ)
+#   5. (default)            → SAFE
 #
 # The script deliberately does not do a full string diff. The generator makes
 # intentional trade-offs (prints data as a whole instead of cherry-picking a
@@ -40,6 +42,7 @@
 require "yaml"
 require "json"
 require "uri"
+require "shellwords"
 
 $LOAD_PATH.unshift(File.expand_path("../app/services", __dir__))
 require "api_docs/snippet_generator"
@@ -105,22 +108,31 @@ rescue URI::InvalidComponentError, ArgumentError
   nil
 end
 
-# Structural equivalence between the generated and hand-written curl snippets:
-# same HTTP method, same canonical URL (path, no query), same query params,
-# same header set (covers the requiems-api-key auth header), same body.
-# Returns false (never true) when either snippet fails to parse — an
-# unparseable snippet is a reason to keep the manual override, not a reason
-# to trust it as safe.
-def semantically_equivalent?(generated_curl, handwritten_curl)
+# Compares the generated and hand-written curl snippets and returns one of:
+#   :parse_failure — generated or hand-written curl couldn't be parsed at all.
+#                    Not a confirmed structural difference — routed to Needs
+#                    Review rather than asserted as MANUAL_OVERRIDE, since a
+#                    parser bug (not a real snippet difference) is just as
+#                    likely a cause and deserves a human look either way.
+#   :mismatch      — both parsed, but method/URL/query/headers/body differ.
+#   :match         — both parsed and are structurally equivalent (same
+#                    method, same canonical URL, same query params, same
+#                    header set — covers the requiems-api-key auth header —
+#                    same body).
+def compare_curls(generated_curl, handwritten_curl)
   gen = parse_curl(generated_curl)
   hw  = parse_curl(handwritten_curl)
-  return false if gen.nil? || hw.nil?
+  return :parse_failure if gen.nil? || hw.nil?
 
-  gen.method == hw.method &&
-    gen.url == hw.url &&
-    gen.query == hw.query &&
-    gen.headers == hw.headers &&
-    gen.body == hw.body
+  if gen.method == hw.method &&
+     gen.url == hw.url &&
+     gen.query == hw.query &&
+     gen.headers == hw.headers &&
+     gen.body == hw.body
+    :match
+  else
+    :mismatch
+  end
 end
 
 # --------------------------------------------------------------------------- #
@@ -148,7 +160,8 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
       # though there's no hand-written snippet to diff against.
       notes = Array(ep["notes"])
       if notes.any? { |n| n.to_s.match?(/partial.success/i) }
-        needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"] }
+        needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"],
+                           reason: "partial-success notes — generic template may not narrate this well" }
       end
       next
     end
@@ -157,16 +170,25 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
     handwritten = ep["code_examples"]
     generated   = ApiDocs::SnippetGenerator.new(ep, base_url).call
 
+    curl_comparison = curl_invocation_count(handwritten["curl"]) >= 2 ? nil : compare_curls(generated["curl"], handwritten["curl"])
+
     bucket, reason =
       if curl_invocation_count(handwritten["curl"]) >= 2
         ["MANUAL_OVERRIDE", "multi-example (#{curl_invocation_count(handwritten["curl"])} curl calls in snippet)"]
       elsif (ep["response_kind"] || "json") == "binary"
         ["MANUAL_OVERRIDE", "binary response (response_kind: binary)"]
-      elsif !semantically_equivalent?(generated["curl"], handwritten["curl"])
-        ["MANUAL_OVERRIDE", "structural_mismatch — method/url/query/headers/body differ (or failed to parse) between generated and hand-written curl"]
+      elsif curl_comparison == :parse_failure
+        ["NEEDS_REVIEW", "parse_failure — generated or hand-written curl could not be parsed; not a confirmed structural difference, needs a human look"]
+      elsif curl_comparison == :mismatch
+        ["MANUAL_OVERRIDE", "structural_mismatch — method/url/query/headers/body differ between generated and hand-written curl"]
       else
         ["SAFE", "method, URL, query params, headers, and body all match; single example, JSON response"]
       end
+
+    if bucket == "NEEDS_REVIEW"
+      needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"], reason: reason }
+      next
+    end
 
     results << Result.new(
       file:          basename,
@@ -196,8 +218,8 @@ puts "Total endpoints:              #{total_endpoints}"
 puts "With hand-written examples:   #{total_with_examples}"
 puts "  SAFE (generator matches):   #{safe.size}"
 puts "  MANUAL_OVERRIDE (keep):     #{override.size}"
-puts "Needs review (no examples,"
-puts "  partial-success notes):     #{needs_review.size}"
+puts "Needs review (partial-success"
+puts "  notes or parse failures):   #{needs_review.size}"
 puts ""
 
 puts "SAFE BUCKET (#{safe.size} endpoints):"
@@ -208,8 +230,8 @@ puts "MANUAL_OVERRIDE BUCKET (#{override.size} endpoints):"
 override.each { |r| puts "  ✗ #{r.file} | #{r.method} #{r.path} — #{r.reason}" }
 
 puts ""
-puts "NEEDS REVIEW (#{needs_review.size} endpoints, auto-generated, partial-success notes):"
-needs_review.each { |r| puts "  ? #{r[:file]} | #{r[:method]} #{r[:path]} (#{r[:endpoint_name]})" }
+puts "NEEDS REVIEW (#{needs_review.size} endpoints):"
+needs_review.each { |r| puts "  ? #{r[:file]} | #{r[:method]} #{r[:path]} (#{r[:endpoint_name]}) — #{r[:reason]}" }
 
 if VERBOSE
   puts ""
@@ -227,11 +249,18 @@ end
 # Markdown report
 # --------------------------------------------------------------------------- #
 
+source_revision    = `git rev-parse HEAD 2>/dev/null`.strip
+source_revision    = "unknown (not a git checkout, or git unavailable)" if source_revision.empty?
+generator_revision = `git log -1 --format=%H -- #{Shellwords.escape(__FILE__)} 2>/dev/null`.strip
+generator_revision = "unknown" if generator_revision.empty?
+generated_at       = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+
 md = []
 md << "# Golden-Diff Report — ApiDocs SnippetGenerator"
 md << ""
 md << "> Generated by `apps/dashboard/script/golden_diff_api_docs.rb`  "
-md << "> Part of REQAPI-456 — Auto-generate API doc code examples from YAML endpoint metadata."
+md << "> Part of REQAPI-456 — Auto-generate API doc code examples from YAML endpoint metadata.  "
+md << "> Source revision: `#{source_revision}` · Generator script revision: `#{generator_revision}` · Generated: #{generated_at}"
 md << ""
 md << "## Summary"
 md << ""
@@ -241,7 +270,16 @@ md << "| Total endpoints | #{total_endpoints} |"
 md << "| With hand-written `code_examples` | #{total_with_examples} |"
 md << "| **SAFE** — generator output matches hand-written | **#{safe.size}** |"
 md << "| **MANUAL_OVERRIDE** — hand-written stays authoritative | **#{override.size}** |"
-md << "| **Needs review** — auto-generated, has partial-success notes | **#{needs_review.size}** |"
+md << "| **Needs review** — partial-success notes or curl parse failures | **#{needs_review.size}** |"
+md << ""
+md << "Note: SAFE + MANUAL_OVERRIDE always sum to \"With hand-written `code_examples`\""
+md << "(every endpoint that has a hand-written snippet lands in exactly one of those"
+md << "two buckets). \"Needs review\" is a separate subset of the endpoints *without*"
+md << "a hand-written snippet — most no-hand-written-example endpoints have nothing"
+md << "noteworthy to report and are simply not listed anywhere in this report, by"
+md << "design; only the ones with partial-success notes or a curl parse failure are."
+md << "So the three bucket counts above will not, and are not meant to, sum to"
+md << "\"Total endpoints.\""
 md << ""
 md << "## Safe Bucket — #{safe.size} endpoints"
 md << ""
@@ -272,17 +310,27 @@ end
 md << ""
 md << "## Needs Review — #{needs_review.size} endpoints"
 md << ""
-md << "These endpoints have no hand-written `code_examples` at all, so they're"
-md << "already auto-generated today (absence of the key means \"generate\")."
-md << "Their `notes:` describe partial-success semantics that the generator's"
-md << "generic whole-object-print template doesn't narrate. Flagged for a human"
-md << "to judge whether the generated snippet reads clearly enough as-is, or"
-md << "whether this endpoint needs a hand-written `code_examples` override."
+md << "Two distinct reasons an endpoint lands here, distinguished in the Reason"
+md << "column below:"
 md << ""
-md << "| File | Method | Path | Endpoint name |"
-md << "|------|--------|------|---------------|"
+md << "- **partial-success notes** — no hand-written `code_examples` at all (so"
+md << "  it's already auto-generated today, per ApisHelper's absence-of-the-key-"
+md << "  means-\"generate\" rule), but its `notes:` describe partial-success"
+md << "  semantics that the generator's generic whole-object-print template may"
+md << "  not narrate well. Flagged for a human to judge whether the generated"
+md << "  snippet reads clearly enough as-is, or needs a hand-written override."
+md << "- **parse_failure** — this endpoint *does* have a hand-written"
+md << "  `code_examples` block, but either the generated or the hand-written curl"
+md << "  snippet couldn't be parsed by this script's comparator. This is *not* a"
+md << "  confirmed structural difference (unlike MANUAL_OVERRIDE's"
+md << "  `structural_mismatch`) — it may just be a parser limitation — so it's"
+md << "  routed here for a human to verify by hand rather than asserted as a"
+md << "  real mismatch."
+md << ""
+md << "| File | Method | Path | Endpoint name | Reason |"
+md << "|------|--------|------|---------------|--------|"
 needs_review.each do |r|
-  md << "| #{r[:file]}.yml | `#{r[:method]}` | `#{r[:path]}` | #{r[:endpoint_name]} |"
+  md << "| #{r[:file]}.yml | `#{r[:method]}` | `#{r[:path]}` | #{r[:endpoint_name]} | #{r[:reason]} |"
 end
 
 md << ""
