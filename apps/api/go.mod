@@ -8,13 +8,12 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/redis/go-redis/v9 v9.22.0
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.1
 )
 
 require (
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -25,7 +24,6 @@ require (
 	github.com/likexian/gokit v0.25.16 // indirect
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ringsaturn/orb v0.15.0 // indirect
 	github.com/ringsaturn/tzf-dist v0.0.2026-c-fix1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
@@ -33,6 +31,7 @@ require (
 	github.com/tidwall/geoindex v1.7.0 // indirect
 	github.com/tidwall/rtree v1.10.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
@@ -46,7 +45,7 @@ require (
 	github.com/agnivade/levenshtein v1.2.1
 	github.com/bobadilla-tech/business-days-calculator v1.1.0
 	github.com/bobadilla-tech/go-dictionary v1.0.0
-	github.com/bobadilla-tech/go-email-normalizer v1.2.0
+	github.com/bobadilla-tech/go-email-normalizer v1.2.1
 	github.com/bobadilla-tech/go-ip-intelligence/v2 v2.2.0
 	github.com/bobadilla-tech/holidays-per-country v1.0.1
 	github.com/bobadilla-tech/sentiment-go v1.1.0
@@ -76,5 +75,5 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 )
