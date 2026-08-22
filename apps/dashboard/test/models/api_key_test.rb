@@ -131,6 +131,30 @@ class ApiKeyTest < ActiveSupport::TestCase
     assert new_key.key_prefix.start_with?("rq_test_")
   end
 
+  test "revoke! invalidates the Go auth cache for this key_prefix" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.revoke!(reason: "test")
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
+  test "destroying an api key invalidates the Go auth cache for this key_prefix" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.destroy!
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
   test "adds error when server returns no key in non-test env" do
     fake_service = Object.new
     fake_service.define_singleton_method(:create_key) { |**_| nil }
@@ -146,5 +170,15 @@ class ApiKeyTest < ActiveSupport::TestCase
       Rails.env.singleton_class.remove_method(:test?)
       Cloudflare::ApiManagementService.singleton_class.remove_method(:new)
     end
+  end
+
+  private
+
+  def go_auth_test_redis
+    redis = Redis.new(url: ENV.fetch("REDIS_URL", "redis://localhost:6379"))
+    redis.ping
+    redis
+  rescue StandardError => e
+    skip "Redis unavailable: #{e.message}"
   end
 end

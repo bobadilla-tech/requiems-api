@@ -23,4 +23,34 @@ if Rails.env.development?
     user2.save!
     puts "✓ Created additional test user: #{user2.email}"
   end
+
+  # Postgres-side dev API key for exercising the Go auth path directly
+  # (apps/api/platform/middleware/apikeyauth.go), independent of the
+  # Cloudflare-Worker/KV-seeded keys from
+  # apps/workers/auth-gateway/scripts/seed-dev.ts.
+  #
+  # NOTE: ApiKey.create! is deliberately NOT used with a bare `name:`/`user:`
+  # here — ApiKey#request_key_from_server only takes the local-generation
+  # branch under Rails.env.test?; in development it would call out to
+  # Cloudflare::ApiManagementService over HTTP. Calling ApiKeyGenerator
+  # directly and passing the resulting key_prefix/key_hash in makes
+  # request_key_from_server's before_validation early-return (it only
+  # generates when key_prefix is blank), so no network call happens.
+  if test_user.api_keys.active_keys.none?
+    full_key = ApiKeyGenerator.generate(environment: :live)
+
+    ApiKey.create!(
+      user: test_user,
+      name: "Local Dev Key",
+      key_prefix: ApiKeyGenerator.extract_prefix(full_key),
+      key_hash: ApiKeyGenerator.hash_key(full_key),
+      active: true
+    )
+
+    puts "✓ Created Postgres-seeded API key for #{test_user.email}: #{full_key}"
+    puts "  (queryable by key_prefix; use this with the Go auth path, not the Worker)"
+  else
+    puts "✓ Postgres-seeded API key already exists for #{test_user.email} " \
+         "(key_prefix: #{test_user.api_keys.active_keys.first.key_prefix}, raw key not recoverable)"
+  end
 end

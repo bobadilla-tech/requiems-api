@@ -17,14 +17,17 @@ interface DevKey {
 const WRANGLER = "pnpm exec wrangler";
 const WRANGLER_PERSIST_TO = process.env.WRANGLER_PERSIST_TO?.trim();
 
-// Keys use unique 12-char prefixes so D1 UNIQUE(key_prefix) constraint is satisfied.
-// Format: rq_{plan-abbr}_{6-digit-id}  →  prefix = first 12 chars
+// Keys must match the live validator's ^requiem_[0-9a-zA-Z]{24}$ format
+// (apps/workers/shared/src/api-key-generator.ts) or the Worker 401s them
+// before ever reaching KV. Each key embeds its plan abbreviation right after
+// the "requiem_" prefix so the first 12 chars (the key_prefix D1 keys on)
+// stay unique per key.
 const DEV_KEYS: DevKey[] = [
-  { apiKey: "rq_free_000001", userId: "dev_user_free", plan: "free" },
-  { apiKey: "rq_devl_000001", userId: "dev_user_developer", plan: "developer" },
-  { apiKey: "rq_bizz_000001", userId: "dev_user_business", plan: "business" },
+  { apiKey: "requiem_free00000000000000000001", userId: "dev_user_free", plan: "free" },
+  { apiKey: "requiem_devl00000000000000000001", userId: "dev_user_developer", plan: "developer" },
+  { apiKey: "requiem_bizz00000000000000000001", userId: "dev_user_business", plan: "business" },
   {
-    apiKey: "rq_prof_000001",
+    apiKey: "requiem_prof00000000000000000001",
     userId: "dev_user_professional",
     plan: "professional",
   },

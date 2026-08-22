@@ -157,7 +157,7 @@ wrangler d1 execute requiem-usage --file=schema.sql
 Dev API keys are seeded automatically when the stack starts. Use them directly:
 
 ```bash
-curl -H "requiems-api-key: rq_free_000001" http://localhost:4455/v1/text/advice
+curl -H "requiems-api-key: requiem_free00000000000000000001" http://localhost:4455/v1/text/advice
 ```
 
 ## Response Headers

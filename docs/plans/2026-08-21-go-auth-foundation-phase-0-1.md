@@ -255,5 +255,107 @@ container mid-session doesn't silently let unauthenticated traffic through.
 
 ## Final notes
 
-_(fill in after the work lands: what actually shipped, deviations from this
-approach, follow-ups.)_
+**Shipped, Phase 0:**
+
+- Graceful shutdown in `apps/api/main.go`: `signal.NotifyContext` +
+  `server.Shutdown` with a 15s drain timeout, pool/Redis client closed after.
+  Manually verified with a running binary + `SIGTERM` mid-request — in-flight
+  requests completed, new connections were refused once shutdown began, clean
+  exit logged.
+- Structured logging via `log/slog`: `platform/middleware/logging.go`
+  (`RequestLogger`) emits one JSON line per request (request ID, method,
+  route pattern, status, latency), mounted in `app.go` alongside `RequestID`.
+  `main.go`'s own startup/shutdown logs were also moved to `slog` since it was
+  a small, directly-related change. **Scope call:** the ~23 files with
+  scattered `log.Printf`/`log.Println` elsewhere in `apps/api/services` were
+  *not* touched — the plan's acceptance criterion was "wired into Go's HTTP
+  middleware," not a repo-wide logging migration, and rewriting 23 unrelated
+  files would have been scope creep beyond what this plan asked for.
+- Pool sizing: `pgxpool.Config.MaxConns=20/MinConns=5` in `platform/db/db.go`,
+  `go-redis`'s `PoolSize=20` in `platform/reqredis/redis.go`, both with a code
+  comment flagging them as placeholders to revisit under real traffic.
+- Btree index: `db/migrate/20260821000000_add_btree_index_to_api_keys_key_prefix.rb`
+  (`index_api_keys_on_key_prefix_btree`), migrated and `schema.rb` regenerated.
+- Dev-seed fix: `apps/workers/auth-gateway/scripts/seed-dev.ts` and
+  `docs/core/auth-gateway.md`'s curl example now use
+  `requiem_[plan]00000000000000000001`-shaped keys (valid against
+  `^requiem_[0-9a-zA-Z]{24}$`, unique 12-char prefixes for D1). Postgres-side
+  seeding was added to `db/seeds.rb`: calls `ApiKeyGenerator` directly (option
+  (i) from the plan) and passes `key_prefix`/`key_hash` straight into
+  `ApiKey.create!`, so `request_key_from_server`'s before_validation
+  early-returns and no Cloudflare HTTP call happens in development. Verified
+  idempotent (`bin/rails db:seed` twice — second run detects the existing
+  key and skips). The KV-seeded and Postgres-seeded keys are intentionally
+  different keys, per the plan.
+
+**Shipped, Phase 1:**
+
+- `apps/api/platform/middleware/apikeyauth.go`: `APIKeyAuth`, candidate-then-verify
+  by `key_prefix` (btree-indexed lookup + `bcrypt.CompareHashAndPassword`
+  against each candidate), Redis-cached by `key_prefix` under the
+  `apikey:{prefix}` key (documented in-code as the exact contract Rails'
+  revocation `DEL` must match). Fails closed whenever Postgres can't
+  affirmatively resolve the key (including when Redis is *also* down); falls
+  through to a direct Postgres lookup when only Redis is unavailable. Full
+  test suite in `apikeyauth_test.go` covers every case item 5 lists,
+  including the namespace-mismatch regression test (warm cache + revoke +
+  raw `DEL` + re-request before TTL) — all run against real Postgres/Redis,
+  not mocks, per this repo's convention.
+- Rails side: `app/services/go_auth_cache.rb` (`GoAuthCache.invalidate`) uses
+  a raw `Redis.new` connection, never `Rails.cache`, wired into `ApiKey` via
+  new `after_update`/`after_destroy` callbacks alongside the existing
+  Cloudflare-sync ones. Tested against real Redis (`test/services/go_auth_cache_test.rb`,
+  plus two new `ApiKey` model tests) — including a regression test asserting
+  invalidation does *not* touch a `rails_cache:`-namespaced key.
+- Mounted in `app.go`: `apiKeyAuth.Middleware()` is chained in the *same*
+  `/v1` protected group as `BackendSecretAuth`, both required (AND-composed),
+  with a 30s cache TTL constant.
+- Manually verified end-to-end against a real Postgres+Redis with the
+  Rails-generated schema: seeded key → 200 through Go directly; wrong
+  key/no key → 401; Redis killed mid-session + correct key → still 200
+  (falls through to Postgres); Redis killed + wrong key → still 401 (no
+  fail-open). All four match the Phase 1 exit criteria.
+
+**Deviation worth flagging explicitly:** mounting `APIKeyAuth` in the *same*
+`/v1` group as `BackendSecretAuth` means real Worker-proxied traffic — which
+only ever sends `X-Backend-Secret`, never `requiems-api-key` (the Worker
+strips it) — now gets **401'd by this new gate too**, not just "not enforced
+by it." The plan's item 6 flagged that this middleware "cannot be the
+enforcing check" for Worker traffic but didn't fully spell out that mounting
+it this way actively rejects that traffic rather than passing it through
+unaffected. This is consistent with the plan's own premise (no production
+traffic exists yet to break) and was a deliberate choice over inventing an
+unrequested second route group, but it means: **the Worker's own
+`auth-gateway` → Go proxy path is no longer functional as of this merge**,
+by design, until either the (explicitly out-of-scope) Worker header
+passthrough change happens, or Phase 5/6 cuts traffic direct to Go. Flagging
+this loudly since it's a behavior change beyond what item 6's prose alone
+made obvious.
+
+**Security note worth flagging (design as specified, not changed):** the
+Redis cache is keyed purely by `key_prefix` and stores no verification of
+the remaining ~20 secret characters. A cache *hit* trusts the prefix alone —
+it does not re-run `bcrypt.compare` against the presented key. This is
+exactly what the plan and the audit's Authentication Architecture section
+specify, and it's implemented as specified, but it means: once a real
+request has warmed the cache for a given prefix, *any* request presenting
+that same 12-character prefix (with an arbitrary or even absent suffix)
+authenticates as that user for the rest of the TTL window. The prefix has
+only ~4 random characters of entropy beyond the fixed `requiem_` literal
+(62^4 ≈ 14.7M combinations) — brute-forceable, and this plan explicitly
+defers rate limiting to a later plan, so nothing currently throttles that
+guessing. Worth a closer look before real users exist; not changed here
+since it was already through 3 rounds of review and the task was to execute
+the vetted plan, not redesign it.
+
+**Follow-ups:**
+
+- Pool sizes (`MaxConns`/`PoolSize`) and the 30s API-key cache TTL are all
+  placeholders picked without real traffic to measure against — revisit once
+  there's load to look at.
+- The Worker → Go proxy path being non-functional (see deviation above) needs
+  either the Worker header-passthrough change or Phase 5/6 of the audit's
+  migration plan before it matters for real traffic.
+- The prefix-only cache-hit trust boundary (see security note above) should
+  be revisited alongside rate limiting, since rate limiting is the thing that
+  would bound the brute-force risk.

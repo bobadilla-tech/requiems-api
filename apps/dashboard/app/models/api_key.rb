@@ -22,7 +22,9 @@ class ApiKey < ApplicationRecord
   # Callbacks
   before_validation :request_key_from_server, on: :create
   after_destroy :remove_from_cloudflare
+  after_destroy :invalidate_go_auth_cache
   after_update :sync_revocation_to_cloudflare, if: :saved_change_to_active?
+  after_update :invalidate_go_auth_cache, if: :saved_change_to_active?
 
   # Request a new API key from the api-management worker.
   # The worker generates the key, stores it in KV + D1, and returns it once.
@@ -100,5 +102,13 @@ class ApiKey < ApplicationRecord
     return unless !active && revoked_at
 
     remove_from_cloudflare
+  end
+
+  # Invalidates the Go auth path's Redis verification cache. Called both on
+  # destroy and on revocation (active flipping to false) — either way, the
+  # Go-side cached {user_id, plan, revoked} result for this key_prefix must
+  # not keep serving a key that no longer exists or is no longer active.
+  def invalidate_go_auth_cache
+    GoAuthCache.invalidate(key_prefix)
   end
 end

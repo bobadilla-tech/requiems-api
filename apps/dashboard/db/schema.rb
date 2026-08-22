@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_21_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.string "revoked_reason"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["key_prefix"], name: "index_api_keys_on_key_prefix_btree"
     t.index ["key_prefix"], name: "index_api_keys_on_key_prefix_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
