@@ -2,9 +2,12 @@ package app
 
 import (
 	"context"
+	"crypto/rand"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -29,6 +32,19 @@ import (
 // rate-limit/quota specifics, which have their own dedicated tests in
 // platform/middleware.
 func seedAPIKeyFixture(t *testing.T, dsn string) string {
+	t.Helper()
+	return seedAPIKeyFixtureWithKey(t, dsn, "requiem_apphandlertestfixturekey0001")
+}
+
+// seedAPIKeyFixtureWithKey is seedAPIKeyFixture parameterized on the raw key.
+// Each test that authenticates needs its own distinct key/prefix: the
+// APIKeyAuth candidate cache is keyed by prefix and, once warm, verifies
+// bcrypt against whatever hash it has cached rather than re-querying
+// Postgres — reusing the same literal key across tests whose fixtures
+// delete-and-reinsert the row (getting a new api_keys.id each time) lets a
+// later test authenticate against an earlier test's stale, already-deleted
+// api_key_id, silently orphaning that later test's usage_logs writes.
+func seedAPIKeyFixtureWithKey(t *testing.T, dsn, fullKey string) string {
 	t.Helper()
 
 	ctx := context.Background()
@@ -104,7 +120,6 @@ func seedAPIKeyFixture(t *testing.T, dsn string) string {
 	`)
 	require.NoError(t, err)
 
-	fullKey := "requiem_apphandlertestfixturekey0001"
 	prefix := fullKey[:12]
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(fullKey), bcrypt.MinCost)
@@ -215,5 +230,124 @@ func TestApp_Handler(t *testing.T) {
 		// The endpoint itself may return any 2xx; 401/403 would indicate auth failure.
 		assert.NotEqual(t, http.StatusUnauthorized, w.Code)
 		assert.NotEqual(t, http.StatusForbidden, w.Code)
+	})
+}
+
+// creditsUsedFor queries the credits_used column usage/quota middleware just
+// wrote for the given endpoint path, ordered to the most recent row (each
+// subtest below uses a distinct word so paths don't collide, but ORDER BY id
+// DESC keeps this robust even if that ever changes).
+func creditsUsedFor(t *testing.T, pool *pgxpool.Pool, apiKeyPrefix, endpoint string) int {
+	t.Helper()
+
+	var credits int
+
+	err := pool.QueryRow(context.Background(), `
+		SELECT ul.credits_used FROM usage_logs ul
+		JOIN api_keys ak ON ak.id = ul.api_key_id
+		WHERE ak.key_prefix = $1 AND ul.endpoint = $2
+		ORDER BY ul.id DESC LIMIT 1
+	`, apiKeyPrefix, endpoint).Scan(&credits)
+	require.NoError(t, err)
+
+	return credits
+}
+
+// TestApp_UsageMultiplier_DictionaryAndThesaurus is an integration test for
+// docs/plans/2026-08-22-go-auth-foundation-phase-6-usage-multiplier-and-loose-ends.md
+// Phase 6a: GET /v1/text/dictionary/{word} and GET /v1/text/thesaurus/{word}
+// must bill 2 credits (X-Usage-Count response header and the usage_logs
+// credits_used column), through the full APIKeyAuth -> rate limit -> usage
+// quota -> handler chain. The batch routes must be left unaffected, still
+// billing per item via httpx.HandleBatch.
+func TestApp_UsageMultiplier_DictionaryAndThesaurus(t *testing.T) {
+	dsn := os.Getenv("TEST_DATABASE_URL")
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_URL")
+	}
+
+	if dsn == "" {
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping usage-multiplier integration test")
+	}
+
+	redisURL := os.Getenv("REDIS_URL")
+	if redisURL == "" {
+		redisURL = "redis://localhost:6379/0"
+	}
+
+	t.Chdir("..")
+
+	cfg := config.Config{DatabaseURL: dsn, RedisURL: redisURL}
+
+	app, err := New(context.Background(), cfg)
+	if err != nil {
+		t.Skipf("infrastructure unavailable; skipping usage-multiplier integration test: %v", err)
+	}
+
+	h := app.Handler()
+
+	pool, err := pgxpool.New(context.Background(), dsn)
+	require.NoError(t, err)
+	t.Cleanup(pool.Close)
+
+	// A unique key per run, not a hardcoded literal: the APIKeyAuth Redis
+	// cache is keyed by the 12-char prefix and survives across separate
+	// `go test` process invocations (it's a real shared Redis, TTL-bound,
+	// not per-process). A fixed literal risks a cache hit against a stale
+	// api_key_id left over from an earlier run's now-deleted row, silently
+	// orphaning every usage_logs write this test then tries to read back.
+	randSuffix := make([]byte, 4)
+	_, err = rand.Read(randSuffix)
+	require.NoError(t, err)
+
+	apiKey := seedAPIKeyFixtureWithKey(t, dsn, fmt.Sprintf("requiem_%x00000000000000000000", randSuffix))
+	prefix := apiKey[:12]
+
+	t.Run("GET dictionary lookup bills 2 credits", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/v1/text/dictionary/ephemeral", http.NoBody)
+		req.Header.Set("requiems-api-key", apiKey)
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
+		assert.Equal(t, 2, creditsUsedFor(t, pool, prefix, "/v1/text/dictionary/ephemeral"))
+	})
+
+	t.Run("GET thesaurus lookup bills 2 credits", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/v1/text/thesaurus/happy", http.NoBody)
+		req.Header.Set("requiems-api-key", apiKey)
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
+		assert.Equal(t, 2, creditsUsedFor(t, pool, prefix, "/v1/text/thesaurus/happy"))
+	})
+
+	t.Run("POST words batch still bills per item, not flattened by the GET-route fix", func(t *testing.T) {
+		body := `{"items": ["ephemeral", "serendipity", "melancholy"]}`
+		req := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", strings.NewReader(body))
+		req.Header.Set("requiems-api-key", apiKey)
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "3", w.Header().Get("X-Usage-Count"))
+		assert.Equal(t, 3, creditsUsedFor(t, pool, prefix, "/v1/text/words/batch"))
+	})
+
+	t.Run("POST thesaurus batch still bills per item, not flattened by the GET-route fix", func(t *testing.T) {
+		body := `{"words": ["happy", "sad"]}`
+		req := httptest.NewRequest(http.MethodPost, "/v1/text/thesaurus/batch", strings.NewReader(body))
+		req.Header.Set("requiems-api-key", apiKey)
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, req)
+
+		require.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
+		assert.Equal(t, 2, creditsUsedFor(t, pool, prefix, "/v1/text/thesaurus/batch"))
 	})
 }
