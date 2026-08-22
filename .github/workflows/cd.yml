@@ -43,9 +43,9 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
-      api: ${{ steps.filter.outputs.api }}
-      dashboard: ${{ steps.filter.outputs.dashboard }}
-      mcp: ${{ steps.filter.outputs.mcp }}
+      api: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.api }}
+      dashboard: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.dashboard }}
+      mcp: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.mcp }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -83,6 +83,7 @@ jobs:
       KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
+      REDIS_MAXMEMORY: 256mb
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
