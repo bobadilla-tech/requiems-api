@@ -73,8 +73,8 @@ export const PLAN_NAMES = Object.keys(PLANS) as PlanName[];
  */
 export const ENDPOINT_MULTIPLIERS = new Map<string, number>([
   // Dictionary operations count as 2 requests
-  ["GET /v1/text/words/define", 2],
-  ["GET /v1/text/words/synonyms", 2],
+  ["GET /v1/text/dictionary", 2],
+  ["GET /v1/text/thesaurus", 2],
   // Future expensive endpoints:
   // ["GET /v1/ai/image-recognition", 5],
   // ["POST /v1/text/translate", 3],

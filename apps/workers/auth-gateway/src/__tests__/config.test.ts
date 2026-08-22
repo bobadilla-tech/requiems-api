@@ -64,8 +64,16 @@ describe("Configuration", () => {
     });
 
     it("has dictionary endpoints with 2x multiplier", () => {
-      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/words/define")).toBe(2);
-      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/words/synonyms")).toBe(2);
+      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/dictionary")).toBe(2);
+      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/thesaurus")).toBe(2);
+    });
+
+    it("does not still list the pre-reorg /words/define and /words/synonyms paths", () => {
+      // Regression test: these routes were renamed by the services
+      // reorganization (see docs/plans/2026-04-15-services-reorganization.md).
+      // If a future rename reintroduces stale keys here, this catches it.
+      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/words/define")).toBeUndefined();
+      expect(ENDPOINT_MULTIPLIERS.get("GET /v1/text/words/synonyms")).toBeUndefined();
     });
 
     it("all multipliers are positive integers", () => {
@@ -94,14 +102,29 @@ describe("Configuration", () => {
   });
 
   describe("getRequestMultiplier", () => {
-    it("returns exact match for dictionary define endpoint", () => {
-      const multiplier = getRequestMultiplier("GET", "/v1/text/words/define");
+    it("returns exact match for the bare dictionary prefix", () => {
+      const multiplier = getRequestMultiplier("GET", "/v1/text/dictionary");
       expect(multiplier).toBe(2);
     });
 
-    it("returns exact match for dictionary synonyms endpoint", () => {
-      const multiplier = getRequestMultiplier("GET", "/v1/text/words/synonyms");
+    it("returns exact match for the bare thesaurus prefix", () => {
+      const multiplier = getRequestMultiplier("GET", "/v1/text/thesaurus");
       expect(multiplier).toBe(2);
+    });
+
+    it("matches the current dictionary/thesaurus word-lookup routes via prefix", () => {
+      expect(getRequestMultiplier("GET", "/v1/text/dictionary/hello")).toBe(2);
+      expect(getRequestMultiplier("GET", "/v1/text/thesaurus/hello")).toBe(2);
+    });
+
+    it("no longer matches the old pre-reorg word routes", () => {
+      expect(getRequestMultiplier("GET", "/v1/text/words/define")).toBe(1);
+      expect(getRequestMultiplier("GET", "/v1/text/words/synonyms")).toBe(1);
+    });
+
+    it("does not match the batch routes (POST, not GET)", () => {
+      expect(getRequestMultiplier("POST", "/v1/text/words/batch")).toBe(1);
+      expect(getRequestMultiplier("POST", "/v1/text/thesaurus/batch")).toBe(1);
     });
 
     it("returns default multiplier for unlisted endpoints", () => {
@@ -120,24 +143,24 @@ describe("Configuration", () => {
 
     it("is case-sensitive for HTTP methods", () => {
       // Correct method
-      expect(getRequestMultiplier("GET", "/v1/text/words/define")).toBe(2);
+      expect(getRequestMultiplier("GET", "/v1/text/dictionary/hello")).toBe(2);
 
       // Wrong case - should not match
-      expect(getRequestMultiplier("get", "/v1/text/words/define")).toBe(1);
-      expect(getRequestMultiplier("Get", "/v1/text/words/define")).toBe(1);
+      expect(getRequestMultiplier("get", "/v1/text/dictionary/hello")).toBe(1);
+      expect(getRequestMultiplier("Get", "/v1/text/dictionary/hello")).toBe(1);
     });
 
     it("handles prefix matching for dynamic routes", () => {
-      // If /v1/text/words/define is configured with multiplier 2,
-      // and we call /v1/text/words/define/something, it should match via prefix
-      const multiplier = getRequestMultiplier("GET", "/v1/text/words/define/something");
+      // /v1/text/dictionary is configured with multiplier 2, so a word
+      // segment appended to it should match via prefix
+      const multiplier = getRequestMultiplier("GET", "/v1/text/dictionary/something");
       expect(multiplier).toBe(2);
     });
 
     it("returns different multipliers for different methods on same path", () => {
       // Only GET is configured, POST should return default
-      expect(getRequestMultiplier("GET", "/v1/text/words/define")).toBe(2);
-      expect(getRequestMultiplier("POST", "/v1/text/words/define")).toBe(1);
+      expect(getRequestMultiplier("GET", "/v1/text/dictionary/hello")).toBe(2);
+      expect(getRequestMultiplier("POST", "/v1/text/dictionary/hello")).toBe(1);
     });
 
     it("handles root paths correctly", () => {
@@ -152,7 +175,7 @@ describe("Configuration", () => {
 
     it("handles query parameters in path (should not affect matching)", () => {
       // The function receives pathname only (no query string)
-      const multiplier = getRequestMultiplier("GET", "/v1/text/words/define");
+      const multiplier = getRequestMultiplier("GET", "/v1/text/dictionary/hello");
       expect(multiplier).toBe(2);
     });
   });
