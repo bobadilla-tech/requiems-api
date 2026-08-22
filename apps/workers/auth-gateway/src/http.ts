@@ -17,7 +17,10 @@ export function filterHeaders(headers: Headers, backendSecret: string): Headers 
     const lowerKey = key.toLowerCase();
 
     if (lowerKey.startsWith("cf-")) continue;
-    if (lowerKey === "requiems-api-key") continue;
+    // Go's trusted backend now re-verifies the complete key against Postgres.
+    // Preserve this header across the Worker-to-Go hop; the Worker has already
+    // performed its edge validation, and stripping it would make the backend
+    // reject every proxied request.
     if (lowerKey === "connection") continue;
     if (lowerKey === "keep-alive") continue;
 

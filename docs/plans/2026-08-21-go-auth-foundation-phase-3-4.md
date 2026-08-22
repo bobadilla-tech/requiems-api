@@ -104,8 +104,11 @@ method) should check for an existing `key_prefix` before returning — Phase 0's
 btree index (`index_api_keys_on_key_prefix_btree`) makes this an efficient
 `EXISTS` query, not a table scan — and retry with a freshly generated key on
 collision, capped at a small fixed number of attempts (e.g. 5) before raising.
-Mirrors the "extremely unlikely with nanoid, but good practice" comment the
-audit found in the Worker's own `create.ts:53-64`.
+The persistence boundary must also catch only the `api_keys` key-prefix unique
+violation, because two creators can both pass the pre-insert check, regenerate,
+and retry rather than surfacing a spurious failure. Mirrors the "extremely
+unlikely with nanoid, but good practice" comment the audit found in the Worker's
+own `create.ts:53-64`.
 
 **3. Make `generate_key_locally` (or equivalent) the only code path, in every
 environment.** `ApiKey#request_key_from_server`

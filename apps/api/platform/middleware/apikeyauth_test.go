@@ -71,11 +71,14 @@ func setupAPIKeyAuthTestDB(t *testing.T) *pgxpool.Pool {
 			id BIGSERIAL PRIMARY KEY,
 			user_id BIGINT NOT NULL,
 			plan_name TEXT,
+			status TEXT,
 			current_period_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		)
 	`)
+	require.NoError(t, err)
+	_, err = pool.Exec(ctx, `ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS status TEXT`)
 	require.NoError(t, err)
 
 	return pool
@@ -178,7 +181,7 @@ func insertSubscription(t *testing.T, pool *pgxpool.Pool, userID int64, planName
 	t.Helper()
 
 	_, err := pool.Exec(context.Background(), `
-		INSERT INTO subscriptions (user_id, plan_name) VALUES ($1, $2)
+		INSERT INTO subscriptions (user_id, plan_name, status) VALUES ($1, $2, 'active')
 	`, userID, planName)
 	require.NoError(t, err)
 
@@ -275,6 +278,35 @@ func TestAPIKeyAuth_DefaultsToFreePlanWithoutSubscription(t *testing.T) {
 	// No subscriptions row exists for this user, so CurrentPeriodStart must
 	// fall back to the key's own created_at (defaults to NOW() at insert).
 	require.WithinDuration(t, time.Now(), gotPrincipal.CurrentPeriodStart, 10*time.Second)
+}
+
+func TestAPIKeyAuth_SelectsEligibleSubscriptionDeterministically(t *testing.T) {
+	pool := setupAPIKeyAuthTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	prefix, fullKey := testKey(t)
+	userID := time.Now().UnixNano()
+	insertAPIKey(t, pool, prefix, fullKey, userID, true, false)
+
+	_, err := pool.Exec(context.Background(), `
+		INSERT INTO subscriptions (user_id, plan_name, status, updated_at)
+		VALUES ($1, 'developer', 'active', NOW() - INTERVAL '1 day'),
+		       ($1, 'business', 'cancelled', NOW())
+	`, userID)
+	require.NoError(t, err)
+	t.Cleanup(func() { _, _ = pool.Exec(context.Background(), `DELETE FROM subscriptions WHERE user_id = $1`, userID) })
+
+	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
+	var gotPlan string
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		principal, _ := APIKeyPrincipalFromContext(r.Context())
+		gotPlan = principal.Plan
+		w.WriteHeader(http.StatusOK)
+	})
+
+	w := doRequest(t, auth.Middleware()(next), fullKey)
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, "developer", gotPlan)
 }
 
 func TestAPIKeyAuth_RevokedKeyRejected(t *testing.T) {

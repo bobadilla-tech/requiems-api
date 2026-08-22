@@ -220,33 +220,30 @@ batched/async write (a bounded, buffered writer flushing periodically, distinct
 from the Redis quota counter) before that becomes the bottleneck the audit
 warned about.
 
-**Fail-closed on quota-check failure only when both stores are actually down;
-treat "slow" the same as "down," don't let it hang:** if Redis errors _or times
-out_ on the quota Lua script, fall through to a direct Postgres `SUM` (mirrors
-`APIKeyAuth`'s existing Redis-down-Postgres-up fallback pattern) — reuse the
-same fallback shape Phase 1 already established, don't invent a third pattern.
-Both the rate-limiter's `INCR` and this quota script must be called with a
-short, explicit timeout (e.g. a bounded `context.Context`, on the order of tens
-of milliseconds) — **a Redis instance that's alive but slow under memory
-pressure is a distinct failure mode from a clean connection error**, and without
-an explicit timeout it isn't caught by the same error-handling path at all; it
-just makes every request hang on a slow/degraded Redis instead of falling
-through. Any Redis error — connection refused, timeout, or an
-`OOM command not allowed` write rejection once `maxmemory` is actually hit under
-the `noeviction` policy from section 5 below — must be handled identically by
-this fallback logic; don't special-case on error string/type. If Postgres is
-_also_ unreachable at that point, the row-level write in step (b) can't happen
-either, so fail-closed (reject the request) — this is the one case the audit is
-explicit must never fail open ("usage/quota accounting must not silently
-fail-open... permanently losing those usage records"). Log at `error`, not
-`warn`, since this path means a real reconciliation gap if it happens
-repeatedly. **Known, accepted risk left unaddressed by this design:** if Redis
-degrades (not fails) under sustained load, every concurrent request's quota
-check falls through to a synchronous Postgres `SUM` simultaneously — a
-thundering-herd load spike onto Postgres at exactly the moment Redis is
-struggling. No mitigation for this is in scope here (e.g. a circuit breaker that
-trips to a cheaper degraded mode instead of retrying Postgres per-request);
-flagged as a follow-up, not solved by this phase.
+**Fail-closed on quota-check failure:** Redis quota reservation is the atomic
+counter. If Redis errors _or times out_ on the quota Lua script, reject the
+request with `503`; do not fall through to a bare Postgres `SUM`, because a
+sum-then-write sequence is not an atomic reservation and concurrent requests
+could all pass against the same total. A transactional reservation table or a
+locked Postgres counter can replace this policy later, but until one exists
+Redis-unavailable quota requests must fail closed. Both the rate-limiter's
+`INCR` and this quota script must be called with a short, explicit timeout (e.g.
+a bounded `context.Context`, on the order of tens of milliseconds) — **a Redis
+instance that's alive but slow under memory pressure is a distinct failure mode
+from a clean connection error**, and without an explicit timeout it isn't caught
+by the same error-handling path at all; it just makes every request hang on a
+slow/degraded Redis instead of falling through. Any Redis error — connection
+refused, timeout, or an `OOM command not allowed` write rejection once
+`maxmemory` is actually hit under the `noeviction` policy from section 5 below —
+must be handled identically and must reject the request; don't special-case on
+error string/type. A bare Postgres `SUM` fallback is intentionally not used
+because it cannot reserve quota atomically under concurrency. If Postgres is
+also unreachable, the request is likewise rejected. Log at `error`, not `warn`,
+since this path means a real reconciliation gap if it happens repeatedly.
+**Known, accepted risk left unaddressed by this design:** if Redis degrades (not
+fails) under sustained load, requests receive `503` until Redis recovers. A
+transactional Postgres reservation can replace this policy later; it is not
+silently assumed to be safe here.
 
 ### 5. Redis key-space isolation
 
@@ -372,14 +369,10 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
 - `apps/api/platform/middleware/plancache.go`: `PlanCache`, a shared in-process,
   60s-TTL cache over the `plans` table, constructed once in `app.go` and passed
   to both `RateLimiter` and `UsageQuota` — one cache, one Postgres read path,
-  not two independent implementations. A Postgres error or an unknown plan name
-  both degrade to "unlimited" (fail open) rather than rejecting the request;
-  this is a deliberate call the plan doc doesn't address directly (its
-  fail-closed language is specifically about the usage-ledger fallback in
-  section 4, not this config-table read) — treating a rarely-changing config
-  table's read failure the same as "no limit configured" seemed clearly
-  preferable to hard-failing every request over a blip on a table that barely
-  ever changes.
+  not two independent implementations. Unknown plan names remain unlimited, but
+  a Postgres error is returned separately: the rate limiter fails open as soft
+  abuse prevention, while quota uses stale limits when available and returns
+  `503` when no stale limits exist.
 - `apps/api/platform/middleware/ratelimit.go`: `RateLimiter`, the exact Lua
   script from the plan doc (`INCR` + first-hit `EXPIRE 60`), keyed
   `ratelimit:{api_key_id}:{unix_minute}`. Fails open on any Redis error

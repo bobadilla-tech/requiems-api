@@ -110,9 +110,7 @@ class User < ApplicationRecord
   end
 
   def ban!(reason:, admin_user:)
-    key_prefixes_to_invalidate = api_keys.active_keys.pluck(:key_prefix)
-
-    transaction do
+    key_prefixes_to_invalidate = transaction do
       update!(
         status: "banned",
         banned_at: Time.current,
@@ -121,9 +119,11 @@ class User < ApplicationRecord
       )
 
       # update_all bypasses ActiveRecord callbacks entirely, so ApiKey's
-      # after_update_commit :invalidate_go_auth_cache never fires for these
-      # rows — invalidate explicitly below instead.
-      api_keys.update_all(active: false, revoked_at: Time.current)
+      # after_update_commit callback never fires for these rows. Collect the
+      # rows affected by this update inside the transaction instead of relying
+      # on an active_keys snapshot taken before it.
+      revoked_at = Time.current
+      api_keys.update_all(active: false, revoked_at: revoked_at)
 
       AuditLog.create!(
         user: self,
@@ -131,6 +131,7 @@ class User < ApplicationRecord
         action: "ban_user",
         details: { reason: reason }.to_json
       )
+      api_keys.where(revoked_at: revoked_at).pluck(:key_prefix)
     end
 
     # Runs after the transaction above has committed (not inside a Rails

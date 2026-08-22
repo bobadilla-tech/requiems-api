@@ -155,12 +155,44 @@ class ApiKeyTest < ActiveSupport::TestCase
     end
   end
 
+  test "retries when the key_prefix index loses a concurrent insert race" do
+    colliding_key = "requiem_raceprefix00000000000001"
+    existing = @user.api_keys.create!(
+      name: "Existing race key",
+      key_prefix: ApiKeyGenerator.extract_prefix(colliding_key),
+      key_hash: ApiKeyGenerator.hash_key(colliding_key)
+    )
+
+    raced = ApiKey.new(
+      user: @user,
+      name: "Raced key",
+      key_prefix: existing.key_prefix,
+      key_hash: existing.key_hash,
+      active: true
+    )
+
+    assert raced.save!(validate: false)
+    assert_not_equal existing.key_prefix, raced.key_prefix
+  end
+
   test "revoke! invalidates the Go auth cache for this key_prefix" do
     redis = go_auth_test_redis
     cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
     redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
 
     @api_key.revoke!(reason: "test")
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
+  test "direct revoked_at updates invalidate the Go auth cache" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.update!(revoked_at: Time.current)
 
     assert_nil redis.get(cache_key)
   ensure

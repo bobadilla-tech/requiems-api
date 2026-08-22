@@ -109,7 +109,7 @@ describe("HTTP Utilities", () => {
       expect(filtered.get("cf-ipcountry")).toBeNull();
     });
 
-    it("removes API key header", () => {
+    it("preserves the API key header for Go backend verification", () => {
       const headers = new Headers({
         "requiems-api-key": "secret-key",
         "Content-Type": "application/json",
@@ -117,7 +117,7 @@ describe("HTTP Utilities", () => {
 
       const filtered = filterHeaders(headers, "test-secret");
 
-      expect(filtered.get("requiems-api-key")).toBeNull();
+      expect(filtered.get("requiems-api-key")).toBe("secret-key");
       expect(filtered.get("Content-Type")).toBe("application/json");
     });
 

@@ -47,40 +47,32 @@ func NewPlanCache(pool *pgxpool.Pool) *PlanCache {
 	return &PlanCache{pool: pool, entries: make(map[string]planCacheEntry)}
 }
 
-// get returns the limits for planName, querying Postgres on a cache miss or
-// expired entry. An unknown plan name (shouldn't happen in practice, since
-// APIKeyPrincipal.Plan always comes from subscriptions.plan_name or the
-// "free" default) is treated as fully unlimited rather than erroring the
-// request over a data-consistency issue in a different table.
-func (c *PlanCache) get(ctx context.Context, planName string) planLimits {
+// get returns the limits for planName and any Postgres lookup error. An
+// unknown plan name is a successful lookup with unlimited limits; a database
+// failure is returned separately so callers can preserve stale limits or
+// choose their own failure policy.
+func (c *PlanCache) get(ctx context.Context, planName string) (planLimits, bool, error) {
 	c.mu.Lock()
 	entry, ok := c.entries[planName]
 	c.mu.Unlock()
 
 	if ok && time.Now().Before(entry.expiresAt) {
-		return entry.limits
+		return entry.limits, true, nil
 	}
 
 	limits, err := c.fetch(ctx, planName)
 	if err != nil {
-		// A Postgres error here degrades to "unlimited" rather than failing
-		// the request: this cache backs soft abuse-prevention (rate
-		// limiting) and quota accounting, and a transient plans-table read
-		// failure shouldn't itself become the reason a request is rejected.
-		// A stale cached entry, if one exists, is preferred over this
-		// fallback, but a bootstrap-time failure has no stale entry to fall
-		// back to.
 		if ok {
-			return entry.limits
+			return entry.limits, true, err
 		}
-		return planLimits{}
+		return planLimits{}, false, err
 	}
 
 	c.mu.Lock()
 	c.entries[planName] = planCacheEntry{limits: limits, expiresAt: time.Now().Add(planCacheTTL)}
 	c.mu.Unlock()
 
-	return limits
+	return limits, false, nil
 }
 
 func (c *PlanCache) fetch(ctx context.Context, planName string) (planLimits, error) {

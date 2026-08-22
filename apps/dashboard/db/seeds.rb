@@ -26,12 +26,21 @@ if Rails.env.development?
 
   # Dev API key for exercising the Go auth path directly
   # (apps/api/platform/middleware/apikeyauth.go). Key generation is local-only
-  # in every environment (ApiKey#generate_key), so a plain create! is enough.
+  # in every environment (ApiKey#generate_key). The raw key is accepted only
+  # from an operator-provided environment variable; it is never generated or
+  # printed by the seed process.
   if test_user.api_keys.active_keys.none?
-    dev_key = test_user.api_keys.create!(name: "Local Dev Key")
+    raw_key = ENV["LOCAL_DEV_API_KEY"]
+    raise "LOCAL_DEV_API_KEY must be set when creating the local development API key" if raw_key.blank?
 
-    puts "✓ Created API key for #{test_user.email}: #{dev_key.full_key}"
-    puts "  (queryable by key_prefix: #{dev_key.key_prefix})"
+    dev_key = test_user.api_keys.create!(
+      name: "Local Dev Key",
+      key_prefix: ApiKeyGenerator.extract_prefix(raw_key),
+      key_hash: ApiKeyGenerator.hash_key(raw_key),
+      full_key: raw_key
+    )
+
+    puts "✓ Created API key for #{test_user.email} (key_prefix: #{dev_key.key_prefix})"
   else
     puts "✓ Postgres-seeded API key already exists for #{test_user.email} " \
          "(key_prefix: #{test_user.api_keys.active_keys.first.key_prefix}, raw key not recoverable)"

@@ -29,7 +29,7 @@ var quotaIncrementIfPresentScript = redis.NewScript(`
 if redis.call("EXISTS", KEYS[1]) == 0 then
   return -1
 end
-return redis.call("INCR", KEYS[1])
+return redis.call("INCRBY", KEYS[1], ARGV[1])
 `)
 
 var quotaBootstrapScript = redis.NewScript(`
@@ -37,7 +37,14 @@ if redis.call("EXISTS", KEYS[1]) == 0 then
   redis.call("SET", KEYS[1], ARGV[1])
   redis.call("EXPIRE", KEYS[1], ARGV[2])
 end
-return redis.call("INCR", KEYS[1])
+return redis.call("INCRBY", KEYS[1], ARGV[3])
+`)
+
+var quotaAdjustScript = redis.NewScript(`
+if redis.call("EXISTS", KEYS[1]) == 0 then
+  return -1
+end
+return redis.call("INCRBY", KEYS[1], ARGV[1])
 `)
 
 // UsageQuota enforces a per-user monthly request quota and writes a
@@ -86,9 +93,19 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			cycle := cycleStart(principal.CurrentPeriodStart, time.Now())
 			key := fmt.Sprintf("usage:%d:%d", principal.UserID, cycle.Unix())
 
-			limits := u.plans.get(r.Context(), principal.Plan)
+			limits, hasStaleLimits, planErr := u.plans.get(r.Context(), principal.Plan)
+			if planErr != nil {
+				u.logger.Error("usage quota: plan lookup failed", "error", planErr, "user_id", principal.UserID)
+				// A stale plan entry is safe to use; without one, quota
+				// enforcement cannot be established safely.
+				if !hasStaleLimits {
+					httpx.Error(w, http.StatusServiceUnavailable, "service_unavailable", "Usage limits temporarily unavailable")
+					return
+				}
+			}
 
-			count, err := u.increment(r.Context(), key, principal.UserID, cycle)
+			requestedCredits := requestCredits(r.Header)
+			count, err := u.increment(r.Context(), key, principal.UserID, cycle, requestedCredits)
 			if err != nil {
 				// Both Redis and Postgres failed to affirmatively check
 				// quota. Unlike rate limiting, usage/quota accounting must
@@ -112,7 +129,14 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 
 			next.ServeHTTP(ww, r)
 
-			u.recordUsage(r.Context(), principal, r, ww, start)
+			creditsUsed := responseCredits(ww.Header())
+			if creditsUsed != requestedCredits {
+				if err := u.adjust(r.Context(), key, creditsUsed-requestedCredits); err != nil {
+					u.logger.Error("usage quota: failed to reconcile Redis credits", "error", err, "user_id", principal.UserID)
+				}
+			}
+
+			u.recordUsage(r.Context(), principal, r, ww, start, creditsUsed)
 		})
 	}
 }
@@ -124,9 +148,9 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 // or rejects the write (e.g. "OOM command not allowed" under noeviction at
 // capacity: handled identically to a connection error, not special-cased).
 // An error is returned only when that Postgres fallback itself also fails.
-func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cycle time.Time) (int64, error) {
+func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cycle time.Time, credits int64) (int64, error) {
 	rctx, cancel := context.WithTimeout(ctx, redisCallTimeout)
-	val, err := quotaIncrementIfPresentScript.Run(rctx, u.rdb, []string{key}).Int64()
+	val, err := quotaIncrementIfPresentScript.Run(rctx, u.rdb, []string{key}, credits).Int64()
 	cancel()
 
 	if err == nil && val != -1 {
@@ -141,7 +165,7 @@ func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cy
 		// Worker's own quota-cache-miss D1 read.
 		baseline, sumErr := u.sumUsage(ctx, userID, cycle)
 		if sumErr != nil {
-			return 0, sumErr
+				return 0, sumErr
 		}
 
 		ttl := time.Until(cycle.AddDate(0, 1, 0))
@@ -154,26 +178,35 @@ func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cy
 		}
 
 		rctx2, cancel2 := context.WithTimeout(ctx, redisCallTimeout)
-		val, err = quotaBootstrapScript.Run(rctx2, u.rdb, []string{key}, baseline, int64(ttl.Seconds())).Int64()
+		val, err = quotaBootstrapScript.Run(rctx2, u.rdb, []string{key}, baseline, int64(ttl.Seconds()), credits).Int64()
 		cancel2()
 
 		if err == nil {
 			return val, nil
 		}
 
-		u.logger.Warn("usage quota: redis bootstrap-increment failed after a successful baseline read, enforcing on the baseline alone for this request",
-			"error", err, "user_id", userID)
-		return baseline + 1, nil
+		return 0, fmt.Errorf("redis quota reservation failed after baseline read: %w", err)
 	}
 
-	u.logger.Warn("usage quota: redis error, falling back to postgres", "error", err, "user_id", userID)
+	return 0, fmt.Errorf("redis quota reservation failed: %w", err)
+}
 
-	sum, sumErr := u.sumUsage(ctx, userID, cycle)
-	if sumErr != nil {
-		return 0, sumErr
+func (u *UsageQuota) adjust(ctx context.Context, key string, delta int64) error {
+	if delta == 0 {
+		return nil
 	}
 
-	return sum + 1, nil
+	rctx, cancel := context.WithTimeout(ctx, redisCallTimeout)
+	defer cancel()
+
+	value, err := quotaAdjustScript.Run(rctx, u.rdb, []string{key}, delta).Int64()
+	if err != nil {
+		return err
+	}
+	if value == -1 {
+		return fmt.Errorf("quota key %q disappeared during reconciliation", key)
+	}
+	return nil
 }
 
 func (u *UsageQuota) sumUsage(ctx context.Context, userID int64, cycle time.Time) (int64, error) {
@@ -197,22 +230,34 @@ func (u *UsageQuota) sumUsage(ctx context.Context, userID int64, cycle time.Time
 // write itself fails (a real error, not a conflict), it's logged and
 // dropped: the response has already been sent, so there's nothing left to
 // reject.
-func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, ww chimw.WrapResponseWriter, start time.Time) {
-	creditsUsed := 1
+func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, ww chimw.WrapResponseWriter, start time.Time, creditsUsed int64) {
+	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
+	defer cancel()
 
-	if raw := ww.Header().Get("X-Usage-Count"); raw != "" {
-		if n, err := strconv.Atoi(raw); err == nil && n > 0 {
-			creditsUsed = n
-		}
-	}
-
-	err := u.insertUsageRow(ctx, principal, r.URL.Path, r.Method, creditsUsed,
+	err := u.insertUsageRow(writeCtx, principal, r.URL.Path, r.Method, int(creditsUsed),
 		ww.Status(), time.Since(start).Milliseconds(), time.Now().UTC())
 
 	if err != nil {
 		u.logger.Error("usage quota: failed to write usage_logs row, dropping",
-			"error", err, "user_id", principal.UserID, "api_key_id", principal.APIKeyID)
+			"error", err, "user_id", principal.UserID, "api_key_id", principal.APIKeyID) // codeql[go/cleartext-logging] APIKeyID is only the numeric api_keys.id, never a credential
 	}
+}
+
+func requestCredits(headers http.Header) int64 {
+	return headerCredits(headers)
+}
+
+func responseCredits(headers http.Header) int64 {
+	return headerCredits(headers)
+}
+
+func headerCredits(headers http.Header) int64 {
+	if raw := headers.Get("X-Usage-Count"); raw != "" {
+		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n > 0 {
+			return n
+		}
+	}
+	return 1
 }
 
 // insertUsageRow is split out from recordUsage so tests can force a
@@ -247,7 +292,13 @@ func cycleStart(anchor, now time.Time) time.Time {
 	anchor = anchor.UTC()
 	now = now.UTC()
 
-	candidate := time.Date(now.Year(), now.Month(), anchor.Day(), 0, 0, 0, 0, time.UTC)
+	anchorDay := anchor.Day()
+	monthEnd := time.Date(now.Year(), now.Month()+1, 0, 0, 0, 0, 0, time.UTC).Day()
+	if anchorDay > monthEnd {
+		anchorDay = monthEnd
+	}
+
+	candidate := time.Date(now.Year(), now.Month(), anchorDay, 0, 0, 0, 0, time.UTC)
 	if candidate.After(now) {
 		candidate = candidate.AddDate(0, -1, 0)
 	}

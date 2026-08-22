@@ -32,6 +32,15 @@ class CreatePlans < ActiveRecord::Migration[8.1]
         ('enterprise', NULL, NULL, NOW(), NOW())
       ON CONFLICT (id) DO NOTHING
     SQL
+
+    execute <<~SQL.squish
+      UPDATE subscriptions
+      SET plan_name = 'free'
+      WHERE plan_name IS NULL
+         OR plan_name NOT IN ('free', 'developer', 'business', 'professional')
+    SQL
+
+    add_foreign_key :subscriptions, :plans, column: :plan_name, primary_key: :id
   end
 
   def down

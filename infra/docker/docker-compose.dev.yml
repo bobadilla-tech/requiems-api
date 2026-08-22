@@ -38,10 +38,9 @@ services:
     # command not allowed" while reads keep succeeding; the rate
     # limiter/quota middleware (apps/api/platform/middleware) treat that
     # identically to a connection error/timeout, not as a separate case.
-    # 256mb is a placeholder picked without real traffic to measure against,
-    # same caveat as Phase 0/1's pool-size constants — revisit once there's
-    # load to look at.
-    command: redis-server --maxmemory 256mb --maxmemory-policy noeviction
+    # Development uses the bounded value in .env.example; production must set
+    # REDIS_MAXMEMORY only after validating its shared workload capacity.
+    command: redis-server --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy noeviction
     volumes:
       - redis_data:/data
     ports:

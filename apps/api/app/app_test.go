@@ -55,11 +55,14 @@ func seedAPIKeyFixture(t *testing.T, dsn string) string {
 			id BIGSERIAL PRIMARY KEY,
 			user_id BIGINT NOT NULL,
 			plan_name TEXT,
+			status TEXT,
 			current_period_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		)
 	`)
+	require.NoError(t, err)
+	_, err = pool.Exec(ctx, `ALTER TABLE subscriptions ADD COLUMN IF NOT EXISTS status TEXT`)
 	require.NoError(t, err)
 
 	_, err = pool.Exec(ctx, `

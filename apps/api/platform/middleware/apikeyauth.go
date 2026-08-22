@@ -211,10 +211,23 @@ func (a *APIKeyAuth) storeCache(ctx context.Context, prefix string, result cache
 func (a *APIKeyAuth) lookupDB(ctx context.Context, prefix, presented string) (cachedAPIKey, bool, error) {
 	rows, err := a.pool.Query(ctx, `
 		SELECT api_keys.id, api_keys.key_hash, api_keys.user_id, api_keys.active, api_keys.revoked_at,
-		       COALESCE(subscriptions.plan_name, 'free') AS plan,
-		       COALESCE(subscriptions.current_period_start, api_keys.created_at) AS current_period_start
+		       COALESCE(subscription.plan_name, 'free') AS plan,
+		       COALESCE(subscription.current_period_start, api_keys.created_at) AS current_period_start
 		FROM api_keys
-		LEFT JOIN subscriptions ON subscriptions.user_id = api_keys.user_id
+		LEFT JOIN LATERAL (
+			SELECT plan_name, current_period_start
+			FROM subscriptions
+			WHERE subscriptions.user_id = api_keys.user_id
+			  AND subscriptions.status IN ('active', 'trialing')
+			ORDER BY CASE subscriptions.status
+				WHEN 'active' THEN 0
+				WHEN 'trialing' THEN 1
+				ELSE 2
+			END,
+				COALESCE(subscriptions.updated_at, subscriptions.created_at) DESC,
+				subscriptions.id DESC
+			LIMIT 1
+		) AS subscription ON TRUE
 		WHERE api_keys.key_prefix = $1
 	`, prefix)
 	if err != nil {

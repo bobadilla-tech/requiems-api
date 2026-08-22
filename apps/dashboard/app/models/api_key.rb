@@ -37,7 +37,8 @@ class ApiKey < ApplicationRecord
   # Verified this actually happens (empirically, via `bin/rails runner`, not
   # just in theory) before landing this as two separate methods.
   after_destroy_commit :invalidate_go_auth_cache_on_destroy
-  after_update_commit :invalidate_go_auth_cache_on_revoke, if: :saved_change_to_active?
+  after_update_commit :invalidate_go_auth_cache_on_revoke,
+                      if: -> { saved_change_to_active? || saved_change_to_revoked_at? }
 
   # Generate and hash a new API key locally — the sole key-generation path in
   # every environment. No Cloudflare/Worker round trip.
@@ -56,6 +57,26 @@ class ApiKey < ApplicationRecord
     ApiKeyGenerator.verify_key(key_to_verify, key_hash)
   end
 
+  # The application-level prefix check in ApiKeyGenerator cannot close the
+  # race between two creators. Retry only the database's key-prefix unique
+  # violation; unrelated uniqueness errors must still surface unchanged.
+  def save!(**options)
+    attempts = 0
+
+    begin
+      super
+    rescue ActiveRecord::RecordNotUnique => error
+      raise unless new_record? && key_prefix_unique_violation?(error) && attempts < ApiKeyGenerator::MAX_GENERATION_ATTEMPTS - 1
+
+      attempts += 1
+      self.key_prefix = nil
+      self.key_hash = nil
+      self.full_key = nil
+      generate_key
+      retry
+    end
+  end
+
   # Revoke the API key
   def revoke!(reason: nil)
     update!(
@@ -72,8 +93,15 @@ class ApiKey < ApplicationRecord
 
   private
 
+  def key_prefix_unique_violation?(error)
+    cause = error.cause
+    return false unless cause.is_a?(PG::UniqueViolation)
+
+    cause.result.error_field(PG::Result::PG_DIAG_CONSTRAINT_NAME) == "index_api_keys_on_key_prefix_btree"
+  end
+
   # Invalidates the Go auth path's Redis verification cache. Called both on
-  # destroy and on revocation (active flipping to false) — either way, the
+  # destroy and on revocation (active/revoked_at changing) — either way, the
   # Go-side cached {user_id, plan, revoked} result for this key_prefix must
   # not keep serving a key that no longer exists or is no longer active.
   def invalidate_go_auth_cache_on_destroy

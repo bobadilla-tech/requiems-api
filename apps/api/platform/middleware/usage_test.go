@@ -79,7 +79,7 @@ func TestUsageQuota_BootstrapSumsAcrossAllUserAPIKeys(t *testing.T) {
 	cycle := cycleStart(now, now)
 	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
 
-	count, err := uq.increment(context.Background(), key, userID, cycle)
+	count, err := uq.increment(context.Background(), key, userID, cycle, 1)
 	require.NoError(t, err)
 	// 3 (keyA) + 4 (keyB) = 7 baseline, summed at the user level per the plan
 	// doc's Context section, plus 1 for this request's own increment.
@@ -102,7 +102,7 @@ func TestUsageQuota_NewBillingCycleExcludesPriorCycleUsage(t *testing.T) {
 	cycle := cycleStart(now, now) // anchor == now: today is the cycle's own start
 	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
 
-	count, err := uq.increment(context.Background(), key, userID, cycle)
+	count, err := uq.increment(context.Background(), key, userID, cycle, 1)
 	require.NoError(t, err)
 	require.EqualValues(t, 1, count, "the 40-day-old row must not be counted in the new cycle's baseline")
 }
@@ -136,7 +136,7 @@ func TestUsageQuota_CrossingLimitRejectsAndSkipsRowWrite(t *testing.T) {
 	require.EqualValues(t, 2, rowCount, "only the 2 requests that cleared quota should have written a row; the 3rd (rejected) must not")
 }
 
-func TestUsageQuota_RedisDownFallsThroughAndStillEnforces(t *testing.T) {
+func TestUsageQuota_RedisDownFailsClosed(t *testing.T) {
 	pool := setupUsageTestDB(t)
 
 	userID := time.Now().UnixNano()
@@ -148,9 +148,8 @@ func TestUsageQuota_RedisDownFallsThroughAndStillEnforces(t *testing.T) {
 	cycle := cycleStart(now, now)
 	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
 
-	count, err := uq.increment(context.Background(), key, userID, cycle)
-	require.NoError(t, err)
-	require.EqualValues(t, 6, count) // 5 baseline + 1, enforced via direct Postgres SUM since Redis is down
+	_, err := uq.increment(context.Background(), key, userID, cycle, 1)
+	require.Error(t, err)
 }
 
 func TestUsageQuota_BothRedisAndPostgresDownFailsClosed(t *testing.T) {
@@ -166,7 +165,7 @@ func TestUsageQuota_BothRedisAndPostgresDownFailsClosed(t *testing.T) {
 	cycle := cycleStart(now, now)
 	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
 
-	_, err = uq.increment(ctx, key, userID, cycle)
+	_, err = uq.increment(ctx, key, userID, cycle, 1)
 	require.Error(t, err)
 }
 
@@ -217,12 +216,50 @@ func TestUsageQuota_RedisOOMRejectionHandledLikeConnectionError(t *testing.T) {
 	cycle := cycleStart(now, now)
 	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
 
-	count, err := uq.increment(context.Background(), key, userID, cycle)
-	// An OOM write rejection must be handled exactly like a connection
-	// error or timeout — falling back to Postgres, not surfacing as an
-	// unhandled error or 500.
+	_, err = uq.increment(context.Background(), key, userID, cycle, 1)
+	// An OOM write rejection is a Redis outage for quota reservation and must
+	// fail closed rather than race a non-atomic Postgres SUM fallback.
+	require.Error(t, err)
+}
+
+func TestUsageQuota_IncrementUsesCredits(t *testing.T) {
+	pool := setupUsageTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	userID := time.Now().UnixNano()
+	uq := NewUsageQuota(pool, rdb, NewPlanCache(pool), nil)
+	now := time.Now()
+	cycle := cycleStart(now, now)
+	key := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
+
+	count, err := uq.increment(context.Background(), key, userID, cycle, 3)
 	require.NoError(t, err)
 	require.EqualValues(t, 3, count)
+
+	count, err = uq.increment(context.Background(), key, userID, cycle, 2)
+	require.NoError(t, err)
+	require.EqualValues(t, 5, count)
+}
+
+func TestCycleStartClampsAnchorDayToMonthEnd(t *testing.T) {
+	tests := []struct {
+		name      string
+		anchorDay int
+		now       time.Time
+		want      time.Time
+	}{
+		{"february anchor 29", 29, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 29, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 30", 30, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 30, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 31", 31, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC)},
+		{"30-day month anchor 31", 31, time.Date(2026, time.April, 30, 12, 0, 0, 0, time.UTC), time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC)},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			anchor := time.Date(2025, time.January, tt.anchorDay, 12, 0, 0, 0, time.UTC)
+			require.Equal(t, tt.want, cycleStart(anchor, tt.now))
+		})
+	}
 }
 
 func TestUsageQuota_RowLevelWriteDedupsOnConflict(t *testing.T) {

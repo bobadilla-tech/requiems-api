@@ -333,29 +333,16 @@ out-of-scope) Worker header passthrough change happens, or Phase 5/6 cuts
 traffic direct to Go. Flagging this loudly since it's a behavior change beyond
 what item 6's prose alone made obvious.
 
-**Security note worth flagging (design as specified, not changed):** the Redis
-cache is keyed purely by `key_prefix` and stores no verification of the
-remaining ~20 secret characters. A cache _hit_ trusts the prefix alone — it does
-not re-run `bcrypt.compare` against the presented key. This is exactly what the
-plan and the audit's Authentication Architecture section specify, and it's
-implemented as specified, but it means: once a real request has warmed the cache
-for a given prefix, _any_ request presenting that same 12-character prefix (with
-an arbitrary or even absent suffix) authenticates as that user for the rest of
-the TTL window. The prefix has only ~4 random characters of entropy beyond the
-fixed `requiem_` literal (62^4 ≈ 14.7M combinations) — brute-forceable, and this
-plan explicitly defers rate limiting to a later plan, so nothing currently
-throttles that guessing. Worth a closer look before real users exist; not
-changed here since it was already through 3 rounds of review and the task was to
-execute the vetted plan, not redesign it.
+**Security status of the former cache-hit concern:** Redis entries under
+`apikey:{key_prefix}` are candidates only. Every cache hit re-runs bcrypt
+against the complete presented key; a mismatch falls through to the full
+Postgres candidate query, which also handles shared-prefix keys. Prefix-only and
+altered- suffix presentations therefore fail closed. The shipped per-key rate
+limiter and monthly quota run after authentication; Redis failures fail open for
+the soft rate limiter and fail closed with `503` for quota reservation.
 
 **Follow-ups:**
 
 - Pool sizes (`MaxConns`/`PoolSize`) and the 30s API-key cache TTL are all
   placeholders picked without real traffic to measure against — revisit once
   there's load to look at.
-- The Worker → Go proxy path being non-functional (see deviation above) needs
-  either the Worker header-passthrough change or Phase 5/6 of the audit's
-  migration plan before it matters for real traffic.
-- The prefix-only cache-hit trust boundary (see security note above) should be
-  revisited alongside rate limiting, since rate limiting is the thing that would
-  bound the brute-force risk.
