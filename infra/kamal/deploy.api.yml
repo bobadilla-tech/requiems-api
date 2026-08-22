@@ -70,6 +70,16 @@ accessories:
     service: redis
     image: redis:7-alpine
     host: <%= ENV["HETZNER_VPS_IP"] %>
+    # noeviction + an explicit maxmemory: auth-cache/rate-limit/quota state
+    # (apikey:*, ratelimit:*, usage:*) must never be evicted under memory
+    # pressure now that it shares this instance with disposable, TTL'd
+    # response caches (geocode:*/crypto:*/exchange:*) — see
+    # infra/docker/docker-compose.dev.yml for the full rationale, including
+    # what noeviction actually does at capacity (rejects writes with "OOM
+    # command not allowed," doesn't evict). 256mb is a placeholder picked
+    # without real production traffic to measure against — revisit once
+    # there's load to look at.
+    cmd: redis-server --maxmemory 256mb --maxmemory-policy noeviction
     directories:
       - data:/data
 

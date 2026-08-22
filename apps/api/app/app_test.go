@@ -19,7 +19,15 @@ import (
 // seedAPIKeyFixture creates a self-contained api_keys row (mirroring the
 // convention in platform/middleware/apikeyauth_test.go: Go's own test
 // Postgres never has Rails' schema loaded, only Go's own migrations run) and
-// returns the raw key to present in the requiems-api-key header.
+// returns the raw key to present in the requiems-api-key header. It also
+// creates subscriptions/plans/usage_logs — empty otherwise, but the protected
+// route group now runs APIKeyAuth's LEFT JOIN subscriptions query plus the
+// rate limiter and usage/quota middleware from
+// docs/plans/2026-08-21-go-auth-foundation-phase-2.md, both of which read
+// plans and (on a served request) write usage_logs. A "free" plans row with
+// null limits keeps this test focused on auth header wiring rather than
+// rate-limit/quota specifics, which have their own dedicated tests in
+// platform/middleware.
 func seedAPIKeyFixture(t *testing.T, dsn string) string {
 	t.Helper()
 
@@ -39,6 +47,57 @@ func seedAPIKeyFixture(t *testing.T, dsn string) string {
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		)
+	`)
+	require.NoError(t, err)
+
+	_, err = pool.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS subscriptions (
+			id BIGSERIAL PRIMARY KEY,
+			user_id BIGINT NOT NULL,
+			plan_name TEXT,
+			current_period_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		)
+	`)
+	require.NoError(t, err)
+
+	_, err = pool.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS plans (
+			id TEXT PRIMARY KEY,
+			request_limit BIGINT,
+			rate_limit_per_minute BIGINT
+		)
+	`)
+	require.NoError(t, err)
+
+	_, err = pool.Exec(ctx, `
+		INSERT INTO plans (id, request_limit, rate_limit_per_minute) VALUES ('free', NULL, NULL)
+		ON CONFLICT (id) DO UPDATE SET request_limit = NULL, rate_limit_per_minute = NULL
+	`)
+	require.NoError(t, err)
+
+	_, err = pool.Exec(ctx, `
+		CREATE TABLE IF NOT EXISTS usage_logs (
+			id BIGSERIAL PRIMARY KEY,
+			user_id BIGINT NOT NULL,
+			api_key_id BIGINT NOT NULL,
+			endpoint TEXT NOT NULL,
+			credits_used INTEGER,
+			request_method TEXT,
+			status_code INTEGER,
+			response_time_ms INTEGER,
+			used_at TIMESTAMPTZ NOT NULL,
+			usage_date DATE,
+			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		)
+	`)
+	require.NoError(t, err)
+
+	_, err = pool.Exec(ctx, `
+		CREATE UNIQUE INDEX IF NOT EXISTS idx_usage_logs_apphandler_dedup
+		ON usage_logs (api_key_id, used_at, endpoint)
 	`)
 	require.NoError(t, err)
 

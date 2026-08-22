@@ -71,6 +71,7 @@ func setupAPIKeyAuthTestDB(t *testing.T) *pgxpool.Pool {
 			id BIGSERIAL PRIMARY KEY,
 			user_id BIGINT NOT NULL,
 			plan_name TEXT,
+			current_period_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		)
@@ -90,6 +91,12 @@ func setupAPIKeyAuthTestRedis(t *testing.T) *redis.Client {
 
 	opts, err := redis.ParseURL(url)
 	require.NoError(t, err)
+
+	// Matches platform/reqredis.Connect's production client: required for
+	// the rate limiter/usage-quota tests' context.WithTimeout calls to
+	// actually bound a slow Redis instead of blocking on go-redis's own
+	// (much longer) default ReadTimeout.
+	opts.ContextTimeoutEnabled = true
 
 	rdb := redis.NewClient(opts)
 	t.Cleanup(func() { _ = rdb.Close() })
@@ -223,11 +230,13 @@ func TestAPIKeyAuth_ValidKeyResolvesUserAndPlan(t *testing.T) {
 	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
 
 	var gotPlan string
+	var gotPrincipal APIKeyPrincipal
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p, ok := APIKeyPrincipalFromContext(r.Context())
 		require.True(t, ok)
 		require.Equal(t, userID, p.UserID)
 		gotPlan = p.Plan
+		gotPrincipal = p
 		w.WriteHeader(http.StatusOK)
 	})
 
@@ -235,6 +244,11 @@ func TestAPIKeyAuth_ValidKeyResolvesUserAndPlan(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, w.Code)
 	require.Equal(t, "developer", gotPlan)
+	require.NotZero(t, gotPrincipal.APIKeyID)
+	// The subscriptions test table defaults current_period_start to NOW() at
+	// insert time (see setupAPIKeyAuthTestDB), so it should round-trip close
+	// to "now", not the zero value.
+	require.WithinDuration(t, time.Now(), gotPrincipal.CurrentPeriodStart, 10*time.Second)
 }
 
 func TestAPIKeyAuth_DefaultsToFreePlanWithoutSubscription(t *testing.T) {
@@ -247,17 +261,20 @@ func TestAPIKeyAuth_DefaultsToFreePlanWithoutSubscription(t *testing.T) {
 
 	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
 
-	var gotPlan string
+	var gotPrincipal APIKeyPrincipal
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p, _ := APIKeyPrincipalFromContext(r.Context())
-		gotPlan = p.Plan
+		gotPrincipal = p
 		w.WriteHeader(http.StatusOK)
 	})
 
 	w := doRequest(t, auth.Middleware()(next), fullKey)
 
 	require.Equal(t, http.StatusOK, w.Code)
-	require.Equal(t, "free", gotPlan)
+	require.Equal(t, "free", gotPrincipal.Plan)
+	// No subscriptions row exists for this user, so CurrentPeriodStart must
+	// fall back to the key's own created_at (defaults to NOW() at insert).
+	require.WithinDuration(t, time.Now(), gotPrincipal.CurrentPeriodStart, 10*time.Second)
 }
 
 func TestAPIKeyAuth_RevokedKeyRejected(t *testing.T) {

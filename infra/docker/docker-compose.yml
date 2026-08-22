@@ -73,6 +73,11 @@ services:
 
   redis:
     image: redis:7-alpine
+    # See infra/docker/docker-compose.dev.yml for the full rationale: fixed
+    # maxmemory + noeviction protects apikey:*/ratelimit:*/usage:* state
+    # sharing this instance with disposable, TTL'd response caches. 256mb is
+    # a placeholder, not a tuned production value — revisit under real load.
+    command: redis-server --maxmemory 256mb --maxmemory-policy noeviction
     volumes:
       - redis_data:/data
     healthcheck:

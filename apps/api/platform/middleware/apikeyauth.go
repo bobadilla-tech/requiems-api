@@ -39,6 +39,20 @@ type apiKeyContextKey struct{}
 type APIKeyPrincipal struct {
 	UserID int64
 	Plan   string
+
+	// APIKeyID identifies the specific key used for this request (api_keys.id).
+	// Rate limiting (ratelimit.go) is keyed per-key, not per-user.
+	APIKeyID int64
+
+	// CurrentPeriodStart anchors the user's monthly billing cycle for quota
+	// tracking (usage.go): subscriptions.current_period_start, falling back
+	// to the key's own created_at when the user has no subscription row
+	// (free-tier users, who may never have one). The quota middleware derives
+	// the *current* cycle boundary from this anchor's day-of-month, mirroring
+	// the legacy Worker's getResetTime (apps/workers/auth-gateway/src/requests.ts)
+	// — it is not itself the current cycle's start once more than one cycle
+	// has elapsed since it was read.
+	CurrentPeriodStart time.Time
 }
 
 // APIKeyPrincipalFromContext returns the principal APIKeyAuth stored on the
@@ -52,9 +66,11 @@ func APIKeyPrincipalFromContext(ctx context.Context) (APIKeyPrincipal, bool) {
 // (not by a hash of the raw key: Rails discards the raw key after creation,
 // so a raw-key-derived cache key could never be invalidated on revoke).
 type cachedAPIKey struct {
-	UserID  int64  `json:"user_id"`
-	Plan    string `json:"plan"`
-	Revoked bool   `json:"revoked"`
+	UserID             int64     `json:"user_id"`
+	Plan               string    `json:"plan"`
+	Revoked            bool      `json:"revoked"`
+	APIKeyID           int64     `json:"api_key_id"`
+	CurrentPeriodStart time.Time `json:"current_period_start"`
 }
 
 // APIKeyAuth validates the requiems-api-key header via candidate-then-verify
@@ -113,8 +129,10 @@ func (a *APIKeyAuth) Middleware() func(http.Handler) http.Handler {
 			}
 
 			ctx := context.WithValue(r.Context(), apiKeyContextKey{}, APIKeyPrincipal{
-				UserID: result.UserID,
-				Plan:   result.Plan,
+				UserID:             result.UserID,
+				Plan:               result.Plan,
+				APIKeyID:           result.APIKeyID,
+				CurrentPeriodStart: result.CurrentPeriodStart,
 			})
 
 			next.ServeHTTP(w, r.WithContext(ctx))
@@ -173,8 +191,9 @@ func (a *APIKeyAuth) storeCache(ctx context.Context, prefix string, result cache
 // error; "no candidate matched" is a normal not-found result, not an error.
 func (a *APIKeyAuth) lookupDB(ctx context.Context, prefix, presented string) (cachedAPIKey, bool, error) {
 	rows, err := a.pool.Query(ctx, `
-		SELECT api_keys.key_hash, api_keys.user_id, api_keys.active, api_keys.revoked_at,
-		       COALESCE(subscriptions.plan_name, 'free') AS plan
+		SELECT api_keys.id, api_keys.key_hash, api_keys.user_id, api_keys.active, api_keys.revoked_at,
+		       COALESCE(subscriptions.plan_name, 'free') AS plan,
+		       COALESCE(subscriptions.current_period_start, api_keys.created_at) AS current_period_start
 		FROM api_keys
 		LEFT JOIN subscriptions ON subscriptions.user_id = api_keys.user_id
 		WHERE api_keys.key_prefix = $1
@@ -186,14 +205,16 @@ func (a *APIKeyAuth) lookupDB(ctx context.Context, prefix, presented string) (ca
 
 	for rows.Next() {
 		var (
-			keyHash   string
-			userID    int64
-			active    bool
-			revokedAt *time.Time
-			plan      string
+			apiKeyID           int64
+			keyHash            string
+			userID             int64
+			active             bool
+			revokedAt          *time.Time
+			plan               string
+			currentPeriodStart time.Time
 		)
 
-		if err := rows.Scan(&keyHash, &userID, &active, &revokedAt, &plan); err != nil {
+		if err := rows.Scan(&apiKeyID, &keyHash, &userID, &active, &revokedAt, &plan, &currentPeriodStart); err != nil {
 			return cachedAPIKey{}, false, err
 		}
 
@@ -202,9 +223,11 @@ func (a *APIKeyAuth) lookupDB(ctx context.Context, prefix, presented string) (ca
 		}
 
 		return cachedAPIKey{
-			UserID:  userID,
-			Plan:    plan,
-			Revoked: !active || revokedAt != nil,
+			UserID:             userID,
+			Plan:               plan,
+			Revoked:            !active || revokedAt != nil,
+			APIKeyID:           apiKeyID,
+			CurrentPeriodStart: currentPeriodStart,
 		}, true, rows.Err()
 	}
 

@@ -27,6 +27,21 @@ services:
     image: redis:7-alpine
     networks:
       - stack
+    # noeviction + an explicit maxmemory: auth-cache/rate-limit/quota state
+    # (apikey:*, ratelimit:*, usage:*) must never be evicted under memory
+    # pressure, and they now share this instance with disposable response
+    # caches (geocode:*/crypto:*/exchange:*, TTL'd but otherwise unprotected
+    # under noeviction — acceptable since they're small and TTL'd, but this
+    # config does mean they lose any allkeys-lru-style protection a future
+    # contributor might otherwise assume they have). At capacity, noeviction
+    # doesn't drop data — Redis starts rejecting WRITE commands with "OOM
+    # command not allowed" while reads keep succeeding; the rate
+    # limiter/quota middleware (apps/api/platform/middleware) treat that
+    # identically to a connection error/timeout, not as a separate case.
+    # 256mb is a placeholder picked without real traffic to measure against,
+    # same caveat as Phase 0/1's pool-size constants — revisit once there's
+    # load to look at.
+    command: redis-server --maxmemory 256mb --maxmemory-policy noeviction
     volumes:
       - redis_data:/data
     ports:

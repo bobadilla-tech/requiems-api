@@ -45,6 +45,9 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 	}
 
 	apiKeyAuth := middleware.NewAPIKeyAuth(pool, rdb, apiKeyCacheTTL)
+	plans := middleware.NewPlanCache(pool)
+	rateLimiter := middleware.NewRateLimiter(rdb, plans, slog.Default())
+	usageQuota := middleware.NewUsageQuota(pool, rdb, plans, slog.Default())
 
 	router := chi.NewRouter()
 	router.Use(middleware.RequestID)
@@ -63,6 +66,12 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		// direct-to-Go paths) — see docs/plans/2026-08-21-go-auth-foundation-phase-0-1.md
 		// Phase 1 item 6 for why that's an accepted gap, not a bug.
 		protected.Use(apiKeyAuth.Middleware())
+		// Rate limiting and usage/quota tracking both read the principal
+		// APIKeyAuth just attached, so they're mounted right after it, in
+		// this order: cheap per-minute rate check before the (Postgres
+		// fallback-capable, potentially synchronous-write) quota check.
+		protected.Use(rateLimiter.Middleware())
+		protected.Use(usageQuota.Middleware())
 
 		protected.Route("/v1", func(v1 chi.Router) {
 			registerV1Routes(ctx, v1, pool, rdb, cfg)

@@ -346,3 +346,165 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
 - The Phase 1 deviation already shipped (Worker→Go proxy path currently 401s
   since `APIKeyAuth` is mounted in the same group as `BackendSecretAuth`) is
   unchanged by this plan and not revisited here.
+
+## Final notes
+
+**Shipped:**
+
+- `plans` table: `apps/dashboard/db/migrate/20260821010000_create_plans.rb`,
+  seeded inside the migration's `up` (not `db/seeds.rb`) — production's boot
+  command runs `db:prepare`, which runs pending migrations but never
+  `db:seed`, so seeding in `db/seeds.rb` would have left the table empty in
+  every environment that matters most. `id` is a string PK; `request_limit`
+  and `rate_limit_per_minute` are nullable integers, seeded with the five
+  rows the plan doc specifies (four from `PlanConfig::PLANS`, `enterprise`
+  with both columns null). `schema.rb` regenerated.
+- `apps/api/platform/middleware/apikeyauth.go`: `APIKeyPrincipal` and
+  `cachedAPIKey` both extended with `APIKeyID int64` and
+  `CurrentPeriodStart time.Time`; `lookupDB`'s query now also selects
+  `api_keys.id` and `COALESCE(subscriptions.current_period_start,
+  api_keys.created_at)`. Existing Phase 1 tests updated in place (new
+  `subscriptions.current_period_start` column with a `DEFAULT NOW()` in the
+  test table, plus new assertions on the two added fields) rather than left
+  to bit-rot, per the plan's own instruction.
+- `apps/api/platform/middleware/plancache.go`: `PlanCache`, a shared
+  in-process, 60s-TTL cache over the `plans` table, constructed once in
+  `app.go` and passed to both `RateLimiter` and `UsageQuota` — one cache, one
+  Postgres read path, not two independent implementations. A Postgres error
+  or an unknown plan name both degrade to "unlimited" (fail open) rather than
+  rejecting the request; this is a deliberate call the plan doc doesn't
+  address directly (its fail-closed language is specifically about the
+  usage-ledger fallback in section 4, not this config-table read) — treating
+  a rarely-changing config table's read failure the same as "no limit
+  configured" seemed clearly preferable to hard-failing every request over a
+  blip on a table that barely ever changes.
+- `apps/api/platform/middleware/ratelimit.go`: `RateLimiter`, the exact Lua
+  script from the plan doc (`INCR` + first-hit `EXPIRE 60`), keyed
+  `ratelimit:{api_key_id}:{unix_minute}`. Fails open on any Redis error
+  (including a timeout), logged at `warn`; `429` with `Retry-After` set to
+  seconds-remaining-in-the-current-minute on exceeding the limit.
+- `apps/api/platform/middleware/usage.go`: `UsageQuota`. Quota check reuses
+  `counter/redis_mutations.go`'s EXISTS-then-INCR / SET-then-INCR shape,
+  reimplemented (not imported) per the plan's own reasoning, with an added
+  `EXPIRE` on bootstrap so a key just misses at the next cycle boundary — no
+  reset job. Baseline sums across all of a user's API keys. Cycle boundary is
+  computed by `cycleStart()`, mirroring the legacy Worker's `getResetTime`
+  (`apps/workers/auth-gateway/src/requests.ts`): the most recent occurrence
+  of the billing anchor's day-of-month, at midnight UTC, at or before now —
+  this is what lets a static anchor (a free-tier key's `created_at`, which
+  never changes) still roll into a new monthly cycle automatically, which a
+  naive "use `CurrentPeriodStart` as the literal cycle key" approach would
+  not have done. Redis error/timeout falls through to a direct Postgres
+  `SUM`, enforced as `sum+1`; if that also fails, fails closed with `503`,
+  logged at `error`. Row-level write is a synchronous `INSERT ... ON
+  CONFLICT (api_key_id, used_at, endpoint) DO NOTHING`, column-list form as
+  specified; `credits_used` reads `X-Usage-Count` (defaulting to 1) — the
+  same header the Worker's `proxy.ts` already reads for the identical
+  purpose, confirming the doc's "one endpoint implements `UsageCounter`"
+  guess (`services/systems/data_integrity/input_validate_batch`) was
+  correct, not stale.
+- Mounted in `app.go`: `rateLimiter.Middleware()` then `usageQuota.Middleware()`,
+  both after `apiKeyAuth.Middleware()` in the same protected `/v1` group —
+  same "what traffic this actually gates" caveat from Phase 1 applies
+  unchanged.
+- Redis config: `docker-compose.dev.yml`, `docker-compose.yml`, and
+  `infra/kamal/deploy.api.yml`'s `redis` accessory all set
+  `maxmemory-policy noeviction` with an explicit `maxmemory 256mb`
+  (placeholder, flagged as such in each file's comment). Verified live
+  against the dev container: `CONFIG GET maxmemory` → `268435456`,
+  `CONFIG GET maxmemory-policy` → `noeviction`.
+- Tests: `ratelimit_test.go` and `usage_test.go` cover every case section 6
+  lists (concurrent-increment correctness, minute-window isolation, fail-open
+  on Redis-down and Redis-timeout, cross-key-sum bootstrap, cycle rollover
+  excluding prior-cycle usage, 429-skips-the-row-write, Redis-down-Postgres-up
+  fallback, both-down fail-closed, simulated `OOM command not allowed`
+  handled identically to a connection error via `CONFIG SET maxmemory 1`,
+  row-level dedup via `ON CONFLICT`, and enterprise/null-limit plans never
+  triggering either check) — all against real Postgres/Redis, following the
+  repo's existing convention. `usage.go`'s row-insert was split into a small
+  `insertUsageRow` helper specifically so the dedup test could force an exact
+  `used_at` collision instead of racing `time.Now()`'s microsecond
+  precision; this is the one production-code shape driven by testability
+  rather than the plan doc's own text.
+- `apps/api/app/app_test.go`'s `seedAPIKeyFixture` updated to also create
+  self-contained `subscriptions`/`plans`/`usage_logs` tables and seed a
+  `free` plan row with null limits. This wasn't optional cleanup: the
+  protected route group now runs `APIKeyAuth`'s `LEFT JOIN subscriptions`
+  query plus the new rate-limit/quota middleware on every request, so the
+  existing end-to-end fixture needed the same tables to keep passing — the
+  same "existing tests need updating alongside this" instruction the plan
+  doc gives for the `apikeyauth_test.go` cached-JSON-shape tests applies
+  here too, just for a file the doc didn't happen to name.
+
+**Bug found and fixed while implementing, not called out in the plan doc:**
+`go-redis` v9 ignores a per-call `context.WithTimeout` entirely unless the
+client's `ContextTimeoutEnabled` option is set — without it, a command
+blocks on the client's own (much longer) default `ReadTimeout` regardless of
+the context passed to `Script.Run`. This would have silently defeated the
+plan's explicit "tens of milliseconds" timeout requirement for exactly the
+"alive but slow" Redis failure mode section 4 calls out as the reason a
+timeout is needed at all — discovered via
+`TestRateLimiter_RedisTimeoutFailsOpenWithoutHanging` actually hanging for
+~300ms instead of failing open at 50ms. Fixed by setting
+`ContextTimeoutEnabled = true` in `platform/reqredis/redis.go`'s `Connect`
+(applies to every caller of the shared client, not just this phase's
+middleware — a strictly-more-correct default, not a behavior change for any
+caller that doesn't set a context deadline) and the equivalent test-client
+constructor in `apikeyauth_test.go`.
+
+**Manually verified end-to-end**, against the dev docker-compose stack
+(`db`+`redis`) with a Rails-migrated schema and a `db:seed`-generated dev
+key, hitting Go directly on its own port (bypassing the Worker, matching
+Phase 1's own verification method):
+
+- 29 requests within a minute → all `200`; the 30th → `429` with
+  `Retry-After: 24`.
+- Redis's `usage:{user_id}:{cycle}` counter set to 499 → next request → `200`
+  (the 500th, at the limit); the request after that → `429
+  quota_exceeded`.
+- `usage_logs` held exactly one row per served (non-429) request — 30 rows
+  for 30 served requests, confirmed via direct SQL (equivalent to the
+  `bin/rails console` check the exit criteria names); none of the
+  rate-limited or quota-rejected requests produced a row.
+
+**Deviations from the doc's literal text, both reasoned, neither silent:**
+
+1. The doc's rate-limiter section describes the in-process plan-limit cache's
+   60s TTL as "the same convention, and same concrete value, as the
+   geocode/crypto/exchange TTL-cache pattern" — in fact those three use
+   Redis-backed caches with TTLs of 24h, 1h, and 5min respectively, not 60s
+   and not in-process. The doc's own text for *this* cache is unambiguous
+   ("Go-side, in-process cache with an explicit 60s TTL"), so that's what was
+   built; the "same convention" framing just doesn't hold up against the
+   actual code in `apps/api/services`, worth noting so nobody goes looking
+   for a 60s Redis cache over there.
+2. `cycleStart()`'s day-of-month rollover logic isn't spelled out in the plan
+   doc at the level of "recompute the boundary each request from the anchor
+   plus now" vs. "use `CurrentPeriodStart` as a static cycle key" — the doc
+   only says the key is `usage:{user_id}:{cycle_start_unix}` and that a new
+   cycle "just misses and rebootstraps." A static reading of `CurrentPeriodStart`
+   as the literal cycle key would never roll over for free-tier users (whose
+   anchor is `api_keys.created_at`, which never changes, since they have no
+   subscription webhook updating it) — the SUM's `WHERE used_at >= cycle_start`
+   would keep including every month since signup forever. `cycleStart()`
+   closes that gap by mirroring the legacy Worker's own `getResetTime`
+   day-of-month logic, so this isn't new behavior for existing accounts, just
+   the same monthly-rollover semantics reimplemented in Go.
+
+**Known, accepted gaps carried forward as-is (already reasoned about in the
+plan doc's text, not revisited here):** the rate limiter's inability to bound
+the auth-cache prefix-guessing exposure; the usage-logs row-level dedup
+collision under rapid same-second traffic to one endpoint; the
+thundering-herd risk of every concurrent request falling through to Postgres
+`SUM` simultaneously if Redis degrades under load; the three
+manually-synced copies of plan-tier values.
+
+**Follow-ups (new, surfaced by this phase):**
+
+- The 256mb `maxmemory` value and the plan-cache's 60s TTL are placeholders
+  picked without real traffic to measure against, same caveat as every other
+  placeholder constant from Phase 0/1 — revisit once there's load to look at.
+- `PlanCache`'s fail-open-on-Postgres-error behavior (see above) was a
+  judgment call filling a gap the plan doc left implicit. Worth confirming
+  explicitly once there's a real incident to reason from, rather than
+  leaving it as an assumption baked into the code.
