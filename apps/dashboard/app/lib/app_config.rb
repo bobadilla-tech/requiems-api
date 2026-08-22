@@ -101,6 +101,24 @@ class AppConfig
     end
   end
 
+  # The webhook payload's variant_id already encodes monthly-vs-yearly: each
+  # paid plan has two distinct configured variant IDs (see the
+  # lemonsqueezy_*_monthly/yearly_variant_id attrs above), one per billing
+  # cycle. No separate LemonSqueezy API call or payload field is needed.
+  def billing_cycle_for_variant_id(variant_id)
+    variant_id = variant_id.to_s
+    case variant_id
+    when lemonsqueezy_developer_monthly_variant_id, lemonsqueezy_business_monthly_variant_id,
+         lemonsqueezy_professional_monthly_variant_id
+      "monthly"
+    when lemonsqueezy_developer_yearly_variant_id, lemonsqueezy_business_yearly_variant_id,
+         lemonsqueezy_professional_yearly_variant_id
+      "yearly"
+    else
+      nil
+    end
+  end
+
   def checkout_uuid_for(plan:, billing_cycle:)
     case plan.to_s.downcase
     when "developer"

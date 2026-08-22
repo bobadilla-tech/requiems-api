@@ -80,6 +80,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
 
     ActiveRecord::Base.transaction do
       subscription = user.subscription || user.build_subscription
@@ -87,6 +88,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
         lemonsqueezy_subscription_id: params[:data][:id],
         lemonsqueezy_customer_id: data[:customer_id],
         plan_name: plan_name,
+        plan: billing_cycle,
         status: data[:status],
         current_period_start: data[:renews_at] ? Time.zone.parse(data[:renews_at]) - 1.month : Time.current,
         current_period_end: data[:renews_at],
@@ -141,12 +143,14 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
     previous_plan = subscription.plan_name
 
     ActiveRecord::Base.transaction do
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
+        plan: billing_cycle,
         current_period_end: data[:renews_at],
         cancel_at_period_end: data[:ends_at].present?
       )
@@ -189,11 +193,13 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
 
     ActiveRecord::Base.transaction do
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
+        plan: billing_cycle,
         cancel_at_period_end: false
       )
     end
@@ -219,6 +225,16 @@ class Webhooks::LemonsqueezyController < ApplicationController
     AppConfig.plan_name_for_variant_id(variant_id) || begin
       Rails.logger.warn "[LemonSqueezy] Unknown variant_id: #{variant_id}"
       "free"
+    end
+  end
+
+  # Falls back to "monthly", matching AnalyticsRevenueService's existing
+  # `sub.plan&.to_sym || :monthly` default for rows with no billing-cycle
+  # signal (nil `plan`, or an unrecognized variant_id).
+  def determine_billing_cycle(variant_id)
+    AppConfig.billing_cycle_for_variant_id(variant_id) || begin
+      Rails.logger.warn "[LemonSqueezy] Unknown variant_id for billing cycle: #{variant_id}"
+      "monthly"
     end
   end
 end
