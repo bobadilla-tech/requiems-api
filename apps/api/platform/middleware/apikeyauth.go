@@ -13,11 +13,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
-// apiKeyHeader is the header the (eventually retired) Cloudflare Worker
+// clientAuthHeader is the header the (eventually retired) Cloudflare Worker
 // gateway validates against KV today; this middleware validates the same
 // header directly against Postgres for requests that reach Go without going
 // through the Worker.
-const apiKeyHeader = "requiems-api-key"
+const clientAuthHeader = "requiems-api-key"
 
 // keyPrefixLength mirrors the Worker's extractKeyPrefix
 // (apps/workers/shared/src/api-key-generator.ts) and Rails'
@@ -106,7 +106,7 @@ func NewAPIKeyAuth(pool *pgxpool.Pool, rdb *redis.Client, ttl time.Duration) *AP
 func (a *APIKeyAuth) Middleware() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			presented := r.Header.Get(apiKeyHeader)
+			presented := r.Header.Get(clientAuthHeader)
 
 			if len(presented) < keyPrefixLength {
 				unauthorized(w)

@@ -153,7 +153,7 @@ func randomHex(t *testing.T, n int) string {
 // testKey builds a (prefix, fullKey) pair. prefix is always exactly
 // keyPrefixLength characters ("requiem_" + 4 random hex chars), so each call
 // gets its own isolated Redis/Postgres key.
-func testKey(t *testing.T) (prefix string, fullKey string) {
+func testKey(t *testing.T) (prefix, fullKey string) {
 	t.Helper()
 
 	prefix = "requiem_" + randomHex(t, 2) // "requiem_" (8) + 4 hex chars = 12
@@ -171,7 +171,7 @@ func hashKey(t *testing.T, fullKey string) string {
 	return string(h)
 }
 
-func insertAPIKey(t *testing.T, pool *pgxpool.Pool, prefix, fullKey string, userID int64, active bool, revoked bool) {
+func insertAPIKey(t *testing.T, pool *pgxpool.Pool, prefix, fullKey string, userID int64, active, revoked bool) {
 	t.Helper()
 
 	var revokedAt any
@@ -203,7 +203,7 @@ func insertSubscription(t *testing.T, pool *pgxpool.Pool, userID int64, planName
 	})
 }
 
-func newTestHandler() (http.Handler, *int64) {
+func newTestHandler() (handler http.Handler, callCount *int64) {
 	var calls int64
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -225,7 +225,7 @@ func doRequest(t *testing.T, h http.Handler, key string) *httptest.ResponseRecor
 
 	req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
 	if key != "" {
-		req.Header.Set(apiKeyHeader, key)
+		req.Header.Set(clientAuthHeader, key)
 	}
 
 	w := httptest.NewRecorder()

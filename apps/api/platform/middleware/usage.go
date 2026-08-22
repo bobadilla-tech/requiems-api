@@ -231,12 +231,12 @@ func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal,
 	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
 	defer cancel()
 
-	err := u.insertUsageRow(writeCtx, principal, r.URL.Path, r.Method, int(creditsUsed),
+	err := u.insertUsageRow(writeCtx, principal, r.URL.Path, r.Method, creditsUsed,
 		ww.Status(), time.Since(start).Milliseconds(), time.Now().UTC())
 
 	if err != nil {
 		u.logger.Error("usage quota: failed to write usage_logs row, dropping",
-			"error", err, "user_id", principal.UserID, "api_key_id", principal.APIKeyID) // codeql[go/clear-text-logging] APIKeyID is only the numeric api_keys.id, never a credential
+			"error", err, "user_id", principal.UserID)
 	}
 }
 
@@ -249,9 +249,8 @@ func responseCredits(headers http.Header) int64 {
 }
 
 // headerCredits parses X-Usage-Count, bounded to [1, math.MaxInt32] so the
-// later int64->int narrowing in recordUsage (usage_logs.credits_used is an
-// int column) can never overflow on any platform, regardless of int's native
-// width there.
+// usage_logs.credits_used is an integer column, so values outside this range
+// are treated as the default unit charge rather than being persisted.
 func headerCredits(headers http.Header) int64 {
 	if raw := headers.Get("X-Usage-Count"); raw != "" {
 		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n > 0 && n <= math.MaxInt32 {
@@ -266,7 +265,7 @@ func headerCredits(headers http.Header) int64 {
 // than racing time.Now()'s microsecond precision.
 func (u *UsageQuota) insertUsageRow(
 	ctx context.Context, principal APIKeyPrincipal, endpoint, method string,
-	creditsUsed, statusCode int, responseTimeMs int64, usedAt time.Time,
+	creditsUsed int64, statusCode int, responseTimeMs int64, usedAt time.Time,
 ) error {
 	_, err := u.pool.Exec(ctx, `
 		INSERT INTO usage_logs (

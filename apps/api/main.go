@@ -22,6 +22,10 @@ import (
 const shutdownTimeout = 15 * time.Second
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
@@ -45,7 +49,7 @@ func main() {
 	if err != nil {
 		logger.Error("failed to initialise app", "error", err)
 		sentry.Flush(2 * time.Second)
-		os.Exit(1)
+		return 1
 	}
 
 	addr := fmt.Sprintf(":%s", cfg.Port)
@@ -78,7 +82,7 @@ func main() {
 			logger.Error("server error", "error", err)
 			sentry.Flush(2 * time.Second)
 			appInstance.Close()
-			os.Exit(1)
+			return 1
 		}
 	case <-ctx.Done():
 		logger.Info("shutdown signal received, draining in-flight requests")
@@ -94,4 +98,5 @@ func main() {
 	appInstance.Close()
 	sentry.Flush(2 * time.Second)
 	logger.Info("shutdown complete")
+	return 0
 }
