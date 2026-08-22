@@ -40,7 +40,7 @@ concurrency:
 jobs:
   detect-changes:
     name: Detect Changed Apps
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.filter.outputs.api }}
