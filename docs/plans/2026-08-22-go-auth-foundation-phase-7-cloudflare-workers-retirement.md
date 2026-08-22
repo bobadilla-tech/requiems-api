@@ -483,48 +483,79 @@ stated explicitly in Final Notes.
 
 ### Session status — 2026-08-22
 
-Phase 7a was not started beyond read-only preparation. The required live
-Cloudflare dashboard access was confirmed by the project owner. A direct VPS IP
-was subsequently supplied, but SSH authentication rejected the supplied
-credential twice; retries were stopped. The Rails internal URL, Caddy
-deployment, AOP toggle timing, direct-origin TLS-alert verification,
-Worker-route disable, WAF review, and post-cutover smoke test were therefore
-deferred rather than guessed or simulated.
+Phase 7a was partially executed with live Cloudflare dashboard access and VPS
+SSH access present. It is not yet closed: the bake period has not elapsed, a
+public valid-key/rate-limit smoke test remains outstanding, and the owner still
+needs to confirm the Worker-route state in the dashboard. Phase 7b and 7c were
+not started.
 
 Executed:
 
-- Read this plan in full and inspected the prepared AOP branch and relevant
-  Kamal/Caddy configuration.
-- Installed Cloudflare's published agent skills and registered the five
-  Cloudflare MCP servers for Codex; OAuth setup completed for the registered
-  servers. No repository commit or PR was created for this environment setup.
-- Per the project owner's explicit direction, skipped 7a step 1's optional KV/D1
-  backup export. No backup, reconciliation, backfill, or database-row cleanup
-  was performed.
+- Read this plan in full and fetched Cloudflare's agent setup instructions.
+  The published Cloudflare skills/MCP servers were installed and registered.
+- Per the owner's explicit direction, skipped the optional KV/D1 backup/export.
+  No backup, reconciliation, backfill, or database-row cleanup was performed.
+- Confirmed live production ingress was `kamal-proxy` on ports 80/443. Kept
+  Kamal as the deployment model and placed repository Caddy in front of it on
+  host ports 80/443; Kamal Proxy now listens on loopback ports 8080/8443.
+- Enabled the AOP-protected `api.requiems.xyz` and
+  `internal.requiems.xyz` Caddy vhosts, removed the Caddy
+  `X-Backend-Secret` gate, and registered the API/dashboard/MCP Kamal routes
+  without a second TLS termination behind Caddy.
+- Added the stable Docker network alias `requiems-api` and rolled the live
+  dashboard web/job containers to `INTERNAL_API_URL=http://requiems-api:8080`.
+  A real Rails `ApiProxyService` request returned 200 over that private path.
+- Cloudflare's API showed `api.requiems.xyz` as a proxied A record to the VPS,
+  no zone Worker routes, and no Worker custom-domain attachment. The API DNS
+  record was observed live; the Worker was not deleted. The owner must still
+  confirm in the dashboard that the intended route-disable action is complete.
+- Verified the live API through Cloudflare → Caddy → Kamal Proxy → Go with
+  `/healthz` returning 200, and an invalid API key returning 401.
+- Verified direct-origin AOP enforcement against the VPS: the TLS handshake
+  completed only far enough to present the certificate, then the server sent
+  TLS alert 116 (`certificate_required`) without a client certificate.
+- Reviewed the zone's live protection state: Cloudflare managed normalization,
+  managed free-zone firewall, and L7 DDoS rulesets are present; legacy custom
+  firewall rules and filters are empty. No custom rate-limit rule was found.
+- Committed the repository cutover configuration as
+  [`6ca862f4`](https://github.com/bobadilla-tech/requiems-api/commit/6ca862f4)
+  (`phase7: put Caddy AOP edge in front of Kamal`). No PR was opened.
 
 Deferred:
 
-- All of Phase 7a, pending working VPS/SSH authentication or equivalent live
-  origin-management access and a decision on the exact private Rails→Go address.
-  The intended public shape is `api.requiems.xyz` → Cloudflare → the Go origin
-  currently represented by `internal.requiems.xyz`, with Rails using a private
-  path that bypasses AOP.
-- Phases 7b and 7c. KV/D1 deletion remains explicitly human-gated and was not
-  attempted. No Worker, KV, D1, Rails sync, CI, compose, documentation, or test
-  files were deleted or rewritten.
+- 7a's owner-confirmed Worker-route state, public valid-key smoke test,
+  per-minute 429 test, and the bake period. The current production container
+  has no `PLAYGROUND_API_KEY` environment value, so no new key was created and
+  no `api_keys`/users/subscriptions/plans data was changed.
+- The next Kamal-managed application deploy should replace the one-off live
+  dashboard container names with the committed deploy configuration. Caddy is
+  managed as the `caddy` accessory from `deploy.api.yml`; future Caddyfile or
+  AOP-CA changes require the corresponding accessory update/reboot.
+- Phases 7b and 7c. No Worker, KV, D1, Rails sync job, CI, compose,
+  documentation, or test files were deleted or rewritten. KV/D1 deletion still
+  requires an explicit human confirmation and was not attempted.
 
 Open-question answers:
 
-- Live access: Cloudflare dashboard access was confirmed and the VPS IP was
-  supplied, but usable direct VPS SSH access was not available because the
-  supplied credential was rejected.
-- Sidekiq scheduler: not checked against production because 7a did not reach the
-  live VPS and 7b was not started.
-- Cloudflare WAF/rate-limit rules: not reviewed; still unanswered.
-- `api.requiems.xyz` routing mechanism: not finalized. The direct Caddy
-  `api.requiems.xyz` site-block approach remains the likely implementation, but
-  it must be confirmed against the live DNS/Cloudflare setup before the Worker
-  route is disabled.
-- Rails `INTERNAL_API_URL`: not changed; the exact private-network address
-  remains dependent on the live Kamal/Docker layout.
-- Real commits/PRs: none were created in this session.
+- Live access: confirmed and used. The owner supplied the dashboard access and
+  VPS SSH access required for this human-gated phase.
+- Sidekiq scheduler: not yet verified against the live process; this remains a
+  prerequisite for 7b's D1-job disable step.
+- Cloudflare WAF/rate-limit rules: reviewed. Managed normalization/free-zone/
+  L7-DDoS protection exists; legacy custom firewall rules and filters are empty;
+  no custom rate-limit rule was found. The Go Redis rate limiter remains the
+  application enforcement layer after cutover.
+- `api.requiems.xyz` routing mechanism: resolved as a direct proxied DNS A
+  record to the VPS, with a dedicated Caddy site block and AOP, then Caddy →
+  loopback Kamal Proxy → Go. No Cloudflare Origin Rule was added.
+- Rails `INTERNAL_API_URL`: resolved to `http://requiems-api:8080` on the
+  Kamal Docker network and verified by a real Rails API proxy call.
+- Production ingress/AOP compatibility: verified in the live path. Caddy
+  owns public TLS and requires Cloudflare's origin-pull client certificate;
+  Kamal Proxy remains the deployment-aware backend router.
+- Worker route: Cloudflare API currently reports no zone Worker route or
+  custom-domain attachment for this account/zone. Owner dashboard confirmation
+  is still required before treating the 7a exit criterion as closed.
+- Real commits/PRs: commit
+  [`6ca862f4`](https://github.com/bobadilla-tech/requiems-api/commit/6ca862f4)
+  was created; no PR was opened.
