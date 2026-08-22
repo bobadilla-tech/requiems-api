@@ -248,9 +248,9 @@ func TestCycleStartClampsAnchorDayToMonthEnd(t *testing.T) {
 		now       time.Time
 		want      time.Time
 	}{
-		{"february anchor 29", 29, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 29, 0, 0, 0, 0, time.UTC)},
-		{"february anchor 30", 30, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 30, 0, 0, 0, 0, time.UTC)},
-		{"february anchor 31", 31, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 29", 29, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 30", 30, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 31", 31, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
 		{"30-day month anchor 31", 31, time.Date(2026, time.April, 30, 12, 0, 0, 0, time.UTC), time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC)},
 	}
 

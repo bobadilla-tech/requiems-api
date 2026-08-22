@@ -33,18 +33,10 @@ without blocking anything.
 
 ## Context
 
-**The Worker→Go path is already non-functional, which changes the risk profile
-of this work.** Phase 1's own "Final notes" flagged this explicitly: mounting
-`APIKeyAuth` in the same `/v1` route group as `BackendSecretAuth`
-(`apps/api/app/app.go:58-68`, both `protected.Use(...)`, AND-composed) means
-real Worker-proxied traffic — which only ever carries `X-Backend-Secret`, never
-`requiems-api-key`, because the Worker strips that header before proxying
-(`apps/workers/auth-gateway/src/http.ts:20`) — 401s at `apiKeyAuth.Middleware()`
-today. So the "before" state for this plan is not "a working Worker-fronted
-system that needs a careful cutover"; it's "a Worker that cannot successfully
-proxy a single authenticated request to Go right now." Cutting traffic direct to
-Go is not a risky migration off a working path — it's the only way to get a
-working path back.
+**The Worker→Go path remains functional during this work.** The Worker preserves
+`requiems-api-key` on the trusted hop and Go's `APIKeyAuth` verifies the
+complete key against Postgres. The Worker still performs edge validation, so
+both layers remain active until the planned traffic cutover.
 
 **Verified against the current tree** (not re-derived from the audit, which is
 same-day but was read-only): `apps/dashboard/app/models/api_key.rb` still gates
@@ -335,10 +327,9 @@ wrong key:             401
 second hit (cache):    200 (Redis apikey: cache path also exercised)
 ```
 
-This is the literal test the plan's Context section says would have caught
-today's 401-everything state — confirms item 5 actually fixes the Worker→Go path
-Phase 1's Final Notes flagged as non-functional, not just that it changes why it
-fails.
+The Worker header-preservation test and the Go integration path together cover
+the request shape that previously caused the 401-everything state: edge
+validation forwards the complete key, and Go verifies it before serving.
 
 **Bugs/gaps found while implementing, not called out in the plan doc — not fixed
 this session, need a decision:**

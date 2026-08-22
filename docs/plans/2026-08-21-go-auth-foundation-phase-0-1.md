@@ -217,21 +217,10 @@ matching `_test.go`). Extend this package rather than inventing a new one.
 6. **Wire it up as real, request-blocking middleware — with an explicit note on
    what traffic it actually gates today.** Once the middleware's own test suite
    is green, mount it on `apps/api`'s router as enforcing (not shadow/log-only)
-   middleware. But be precise about what "enforcing" means right now: the Worker
-   (`apps/workers/auth-gateway/src/http.ts:20`) strips any incoming
-   `requiems-api-key` header before proxying to Go and replaces it with
-   `X-Backend-Secret`, and every existing Go route is currently gated by
-   `middleware.BackendSecretAuth` alone
-   (`apps/api/platform/middleware/auth.go`), which trusts the Worker completely.
-   So for as long as the Worker sits in front of Go unmodified — which this plan
-   keeps true, per its own out-of-scope list — real Worker-proxied traffic will
-   never carry a `requiems-api-key` header, and this middleware cannot be the
-   enforcing check for that traffic. What it _does_ enforce, today, is any
-   request that reaches Go directly (local dev, integration tests hitting Go's
-   port directly, or any future direct-to-Go path) — which is exactly this
-   plan's actual test surface, per item 5 and the exit criteria below. Making
-   this middleware the enforcing path for real customer traffic requires either
-   a (explicitly out-of-scope) Worker change to pass the header through, or
+   middleware. The Worker preserves `requiems-api-key` on its trusted hop to Go,
+   and Go verifies it against Postgres. Direct requests use the same header
+   contract, so this middleware enforces both Worker-proxied and local traffic.
+   Making this middleware the enforcing path for real customer traffic requires
    Phase 5/6 of the audit's migration plan (direct traffic cutover) — don't
    claim this phase alone flips production auth over, because it doesn't.
 
@@ -318,26 +307,16 @@ container mid-session doesn't silently let unauthenticated traffic through.
   Postgres); Redis killed + wrong key → still 401 (no fail-open). All four match
   the Phase 1 exit criteria.
 
-**Deviation worth flagging explicitly:** mounting `APIKeyAuth` in the _same_
-`/v1` group as `BackendSecretAuth` means real Worker-proxied traffic — which
-only ever sends `X-Backend-Secret`, never `requiems-api-key` (the Worker strips
-it) — now gets **401'd by this new gate too**, not just "not enforced by it."
-The plan's item 6 flagged that this middleware "cannot be the enforcing check"
-for Worker traffic but didn't fully spell out that mounting it this way actively
-rejects that traffic rather than passing it through unaffected. This is
-consistent with the plan's own premise (no production traffic exists yet to
-break) and was a deliberate choice over inventing an unrequested second route
-group, but it means: **the Worker's own `auth-gateway` → Go proxy path is no
-longer functional as of this merge**, by design, until either the (explicitly
-out-of-scope) Worker header passthrough change happens, or Phase 5/6 cuts
-traffic direct to Go. Flagging this loudly since it's a behavior change beyond
-what item 6's prose alone made obvious.
+**Worker-proxy status:** the Worker preserves `requiems-api-key` on its trusted
+hop to Go, and Go re-verifies the complete credential against Postgres. The
+Worker's edge validation and Go's backend validation therefore both remain in
+the request path; local direct-to-Go requests use the same header contract.
 
 **Security status of the former cache-hit concern:** Redis entries under
 `apikey:{key_prefix}` are candidates only. Every cache hit re-runs bcrypt
 against the complete presented key; a mismatch falls through to the full
 Postgres candidate query, which also handles shared-prefix keys. Prefix-only and
-altered- suffix presentations therefore fail closed. The shipped per-key rate
+altered-suffix presentations therefore fail closed. The shipped per-key rate
 limiter and monthly quota run after authentication; Redis failures fail open for
 the soft rate limiter and fail closed with `503` for quota reservation.
 

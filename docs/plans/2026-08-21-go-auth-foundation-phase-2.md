@@ -70,16 +70,11 @@ a shortcut: `daily_usage_summaries` keeps being populated exactly as it is today
 by Rails' existing `AggregateDailyUsageJob` reading `usage_logs`, completely
 unaffected by anything in this phase.
 
-**Accepted, intentional behavior worth stating explicitly:** because the Redis
-counter increments on every _checked_ request but the bootstrap baseline only
-sums _served_ requests (rejected requests never reach step (b)'s write), any
-cache rebuild mid-cycle — TTL churn, a Redis restart, or the
-Redis-down→Postgres-fallback path below — resets the counter to the served-only
-total, which is always ≤ the pre-rebuild checked-count. This "forgives"
-previously-rejected attempts rather than preserving them. That's the safe
-direction to be wrong in (it can only ever grant a little extra headroom after
-an outage, never wrongly reject already-served, already-paid- for usage), so
-it's accepted as-is rather than engineered around.
+**Accepted, intentional behavior worth stating explicitly:** a Redis quota
+reservation is required for each request. Redis loss or an atomic reservation
+failure returns `503`; the implementation does not rebuild a counter through a
+non-atomic Postgres `SUM` fallback and cannot silently forgive or double-count
+checked requests during an outage.
 
 Rate limiting has no equivalent row-level ledger and doesn't need one — the
 audit's Data Ownership table already says these counters are "ephemeral by
@@ -403,17 +398,15 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
   `usageQuota.Middleware()`, both after `apiKeyAuth.Middleware()` in the same
   protected `/v1` group — same "what traffic this actually gates" caveat from
   Phase 1 applies unchanged.
-- Redis config: `docker-compose.dev.yml`, `docker-compose.yml`, and
-  `infra/kamal/deploy.api.yml`'s `redis` accessory all set
-  `maxmemory-policy noeviction` with an explicit `maxmemory 256mb` (placeholder,
-  flagged as such in each file's comment). Verified live against the dev
-  container: `CONFIG GET maxmemory` → `268435456`, `CONFIG GET maxmemory-policy`
-  → `noeviction`.
+- Redis config: shared Redis uses `maxmemory-policy noeviction`, but production
+  now requires an operator-supplied `REDIS_MAXMEMORY` chosen after measuring
+  protected auth/quota state, Sidekiq, and bounded TTL caches with headroom;
+  development retains the bounded example value.
 - Tests: `ratelimit_test.go` and `usage_test.go` cover every case section 6
   lists (concurrent-increment correctness, minute-window isolation, fail-open on
   Redis-down and Redis-timeout, cross-key-sum bootstrap, cycle rollover
-  excluding prior-cycle usage, 429-skips-the-row-write, Redis-down-Postgres-up
-  fallback, both-down fail-closed, simulated `OOM command not allowed` handled
+  excluding prior-cycle usage, 429-skips-the-row-write, Redis-down fail-closed,
+  both-down fail-closed, simulated `OOM command not allowed` rejected
   identically to a connection error via `CONFIG SET maxmemory 1`, row-level
   dedup via `ON CONFLICT`, and enterprise/null-limit plans never triggering
   either check) — all against real Postgres/Redis, following the repo's existing

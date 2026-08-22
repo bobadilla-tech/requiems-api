@@ -51,8 +51,9 @@ return redis.call("INCRBY", KEYS[1], ARGV[1])
 // row-level usage_logs record for every request that clears it. The two
 // pieces run in this order, per request:
 //
-//  1. Quota check (Lua bootstrap-and-increment against Redis, falling back
-//     to a direct Postgres SUM if Redis is unavailable). The counter
+//  1. Quota check (Lua bootstrap-and-increment against Redis). Redis is the
+//     atomic reservation store; an unavailable reservation path fails closed.
+//     The counter
 //     increments unconditionally, before the handler runs — a rejected
 //     request still consumes one unit of quota, matching the legacy
 //     Worker's check-then-serve-or-reject semantics. It counts *checked*
@@ -107,13 +108,10 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			requestedCredits := requestCredits(r.Header)
 			count, err := u.increment(r.Context(), key, principal.UserID, cycle, requestedCredits)
 			if err != nil {
-				// Both Redis and Postgres failed to affirmatively check
-				// quota. Unlike rate limiting, usage/quota accounting must
-				// not silently fail-open here (the audit is explicit: doing
-				// so would mean permanently losing those usage records) —
-				// and step 2's row-level write couldn't happen either way,
-				// since it needs the same Postgres connection.
-				u.logger.Error("usage quota: redis and postgres both unavailable, failing closed",
+				// Quota reservation must not silently fail open. A bare
+				// Postgres SUM cannot reserve quota atomically under
+				// concurrency, so Redis reservation errors fail closed.
+				u.logger.Error("usage quota: atomic reservation unavailable, failing closed",
 					"error", err, "user_id", principal.UserID)
 				httpx.Error(w, http.StatusServiceUnavailable, "service_unavailable", "Usage tracking temporarily unavailable")
 				return
@@ -141,13 +139,11 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 	}
 }
 
-// increment returns the post-increment quota count for key. It tries the
-// Redis fast path first (bootstrapping from a Postgres baseline on a cold
-// key), and falls back to a direct Postgres SUM — enforced as sum+1 for this
-// request, since no Redis increment happened — if Redis errors, times out,
-// or rejects the write (e.g. "OOM command not allowed" under noeviction at
-// capacity: handled identically to a connection error, not special-cased).
-// An error is returned only when that Postgres fallback itself also fails.
+// increment returns the post-increment quota count for key. It uses Redis for
+// the atomic reservation, bootstrapping from a Postgres baseline on a cold key.
+// If Redis errors, times out, or rejects the write (e.g. "OOM command not
+// allowed" under noeviction at capacity), it returns an error rather than
+// attempting a non-atomic Postgres SUM fallback.
 func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cycle time.Time, credits int64) (int64, error) {
 	rctx, cancel := context.WithTimeout(ctx, redisCallTimeout)
 	val, err := quotaIncrementIfPresentScript.Run(rctx, u.rdb, []string{key}, credits).Int64()
