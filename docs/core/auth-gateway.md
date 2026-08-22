@@ -57,7 +57,8 @@ Add Usage Headers & Return Response
 ### 4. Request Forwarding
 
 - Adds `X-Backend-Secret` header for backend authentication
-- Strips sensitive headers (requiems-api-key, Cloudflare headers)
+- Strips Cloudflare transport headers while preserving `requiems-api-key` for
+  Go's trusted backend to verify the complete credential
 - Forwards to internal backend URL
 
 ### 5. Usage Recording

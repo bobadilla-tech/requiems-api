@@ -76,10 +76,10 @@ func (rl *RateLimiter) Middleware() func(http.Handler) http.Handler {
 				return
 			}
 
-				limits, _, planErr := rl.plans.get(r.Context(), principal.Plan)
-				if planErr != nil {
-					rl.logger.Warn("rate limiter: plan lookup failed, failing open", "error", planErr)
-				}
+			limits, _, planErr := rl.plans.get(r.Context(), principal.Plan)
+			if planErr != nil {
+				rl.logger.Warn("rate limiter: plan lookup failed, failing open", "error", planErr)
+			}
 			if limits.RateLimitPerMinute == nil {
 				// Unlimited plan (enterprise, or any plan with a null
 				// rate_limit_per_minute) skips the check entirely.
@@ -96,7 +96,7 @@ func (rl *RateLimiter) Middleware() func(http.Handler) http.Handler {
 			cancel()
 
 			if err != nil {
-					rl.logger.Warn("rate limiter: redis error, failing open", "error", err)
+				rl.logger.Warn("rate limiter: redis error, failing open", "error", err)
 				next.ServeHTTP(w, r)
 				return
 			}

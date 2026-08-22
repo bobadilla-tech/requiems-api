@@ -165,7 +165,7 @@ func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cy
 		// Worker's own quota-cache-miss D1 read.
 		baseline, sumErr := u.sumUsage(ctx, userID, cycle)
 		if sumErr != nil {
-				return 0, sumErr
+			return 0, sumErr
 		}
 
 		ttl := time.Until(cycle.AddDate(0, 1, 0))
