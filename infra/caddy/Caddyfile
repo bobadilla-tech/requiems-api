@@ -2,6 +2,9 @@
   email admin@requiems.xyz
 }
 
+# Caddy is the stable public edge. Kamal Proxy remains the deployment-aware
+# router behind it and listens on 127.0.0.1:8080/8443.
+
 # Main application (landing page, dashboard, admin, docs)
 requiems.xyz {
   # Exclude sitemaps from gzip — Googlebot HEAD requests fail when the gzip
@@ -12,38 +15,60 @@ requiems.xyz {
 
   encode @compressible zstd gzip
 
-  # Locale root paths without trailing slash: /en → /en/, /es → /es/, /fr → /fr/
   @locale_bare {
     path_regexp ^/(en|es|fr)$
   }
-  
+
   redir @locale_bare {uri}/ 301
 
-  reverse_proxy dashboard:80
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host {host}
+  }
 }
 
-# MCP server (public — auth is per-request via the requiems-api-key header,
-# validated downstream by the auth-gateway Worker, not gated here)
+# MCP server (public — request authentication is handled by the MCP service).
 mcp.requiems.xyz {
-  reverse_proxy mcp:3000
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host {host}
+  }
 }
 
-# Internal backend API (only accessible via Cloudflare Worker)
+# Public API. Cloudflare AOP is enforced at this edge before the request can
+# reach Kamal Proxy or Go.
+api.requiems.xyz {
+  encode gzip
+
+  tls {
+    client_auth {
+      mode require_and_verify
+      trust_pool file {
+        pem_file /etc/caddy/certs/cloudflare-origin-pull-ca.pem
+      }
+    }
+  }
+
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host {host}
+  }
+}
+
+# Kept as the transition/rollback hostname while the Worker route is being
+# disabled. It is protected by the same AOP gate and routes to the same Go
+# service through Kamal Proxy.
 internal.requiems.xyz {
   encode gzip
 
-  # Add X-Backend-Secret header verification
-  @authorized {
-    header X-Backend-Secret {env.BACKEND_SECRET}
+  tls {
+    client_auth {
+      mode require_and_verify
+      trust_pool file {
+        pem_file /etc/caddy/certs/cloudflare-origin-pull-ca.pem
+      }
+    }
   }
 
-  handle @authorized {
-    reverse_proxy api:8080
-  }
-
-  handle {
-    respond "Unauthorized" 403
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host api.requiems.xyz
   }
 }
-
 

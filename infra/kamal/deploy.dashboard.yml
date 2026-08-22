@@ -13,9 +13,16 @@ servers:
     stop_timeout: 30
 
 proxy:
-  ssl: true
+  ssl: false
   host: requiems.xyz
   app_port: 80
+  forward_headers: true
+  run:
+    http_port: 8080
+    https_port: 8443
+    publish: true
+    bind_ips:
+      - 127.0.0.1
 
 registry:
   server: ghcr.io
@@ -39,7 +46,7 @@ env:
   clear:
     RAILS_ENV: production
     RAILS_LOG_LEVEL: warn
-    INTERNAL_API_URL: https://internal.requiems.xyz
+    INTERNAL_API_URL: http://requiems-api:8080
     API_BASE_URL: https://api.requiems.xyz
     API_MANAGEMENT_URL: https://api-management.requiems.xyz
     LEMONSQUEEZY_STORE_ID: "241998"
