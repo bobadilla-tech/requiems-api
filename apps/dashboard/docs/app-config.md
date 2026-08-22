@@ -78,7 +78,9 @@ These are required in all environments:
 
 - `API_MANAGEMENT_URL` - Default: `https://api-management.requiems.xyz`
 - `API_BASE_URL` - Default: `https://api.requiems.xyz`
-- `PLAYGROUND_API_KEY` - Default: `rq_test_playground_demo_key`
+- `PLAYGROUND_API_KEY` - Default: `requiem_notprovisioned0000000000`
+  (format-valid but non-functional; must be set to a real provisioned key
+  for the public playground/demo forms to work)
 - `LEMONSQUEEZY_STORE_SLUG` - Default: `requiems`
 
 ### Production Only

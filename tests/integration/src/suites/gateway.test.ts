@@ -22,7 +22,7 @@ async function unauthenticated(path: string): Promise<Response> {
 async function withBadKey(path: string): Promise<Response> {
   const cfg = getConfig();
   return fetch(new URL(path, cfg.baseUrl).toString(), {
-    headers: { "requiems-api-key": "rq_live_obviously_invalid_key" },
+    headers: { "requiems-api-key": "requiem_obviously_invalid_key" },
     signal: AbortSignal.timeout(cfg.requestTimeoutMs),
   });
 }

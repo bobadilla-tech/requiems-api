@@ -524,7 +524,7 @@ en:
           definition: A unique identifier used to authenticate requests to an API. API
             keys act as both an identifier and a secret token for authentication.
           example_prefix: "Example:"
-          example_code: rq_live_1234567890abcdef
+          example_code: requiem_1234567890abcdef
         - name: Rate Limiting
           definition: A technique used to control the number of requests a user can
             make to an API within a given time period. This helps prevent abuse and

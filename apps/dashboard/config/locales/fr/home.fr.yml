@@ -529,7 +529,7 @@ fr:
           definition: Identifiant unique servant à authentifier les requêtes. Elle sert
             à la fois d'identifiant et de secret.
           example_prefix: "Exemple :"
-          example_code: rq_live_1234567890abcdef
+          example_code: requiem_1234567890abcdef
         - name: Limitation de débit
           definition: Technique pour limiter le nombre de requêtes dans une fenêtre
             de temps. Limite les abus et garantit un usage équitable.

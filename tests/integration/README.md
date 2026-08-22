@@ -18,7 +18,7 @@ genuine API key and are designed to:
 | --------------------- | ------------------------------------------------ |
 | Node.js ≥ 20          | Any LTS release                                  |
 | pnpm ≥ 10             | `npm i -g pnpm`                                  |
-| A `rq_live_*` API key | Obtain from [requiems.xyz](https://requiems.xyz) |
+| A `requiem_*` API key | Obtain from [requiems.xyz](https://requiems.xyz) |
 
 ## Setup
 
@@ -30,7 +30,7 @@ pnpm install
 
 # Copy the example env file and fill in your API key
 cp .env.example .env
-# Edit .env and set REQUIEMS_API_KEY=rq_live_...
+# Edit .env and set REQUIEMS_API_KEY=requiem_...
 ```
 
 ## Running the Tests
