@@ -37,7 +37,7 @@
 #
 # Output:
 #   Prints a summary to stdout and writes a full report to
-#   docs/plans/golden_diff_report.md
+#   docs/plans/2026-08-21-golden-diff-report.md
 
 require "yaml"
 require "json"
@@ -48,7 +48,7 @@ $LOAD_PATH.unshift(File.expand_path("../app/services", __dir__))
 require "api_docs/snippet_generator"
 
 DOCS_DIR    = File.expand_path("../config/api_docs", __dir__)
-REPORT_PATH = File.expand_path("../../../docs/plans/golden_diff_report.md", __dir__)
+REPORT_PATH = File.expand_path("../../../docs/plans/2026-08-21-golden-diff-report.md", __dir__)
 VERBOSE     = ARGV.include?("--verbose")
 
 Result = Struct.new(:file, :endpoint_name, :method, :path, :bucket, :reason, :generated, :handwritten, keyword_init: true)
@@ -135,10 +135,28 @@ def compare_curls(generated_curl, handwritten_curl)
   end
 end
 
+# Maps comparator outcomes to the same report buckets used by the audit loop.
+# Multi-example and binary precedence is intentionally kept here so focused
+# tests exercise the classification logic as well as compare_curls.
+def classify_curl_result(curl_comparison, invocation_count:, response_kind:)
+  if invocation_count >= 2
+    ["MANUAL_OVERRIDE", "multi-example (#{invocation_count} curl calls in snippet)"]
+  elsif response_kind == "binary"
+    ["MANUAL_OVERRIDE", "binary response (response_kind: binary)"]
+  elsif curl_comparison == :parse_failure
+    ["NEEDS_REVIEW", "parse_failure — generated or hand-written curl could not be parsed; not a confirmed structural difference, needs a human look"]
+  elsif curl_comparison == :mismatch
+    ["MANUAL_OVERRIDE", "structural_mismatch — method/url/query/headers/body differ between generated and hand-written curl"]
+  else
+    ["SAFE", "method, URL, query params, headers, and body all match; single example, JSON response"]
+  end
+end
+
 # --------------------------------------------------------------------------- #
 # Main loop
 # --------------------------------------------------------------------------- #
 
+def generate_report(verbose: VERBOSE)
 results = []
 needs_review = []
 total_endpoints = 0
@@ -161,6 +179,7 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
       notes = Array(ep["notes"])
       if notes.any? { |n| n.to_s.match?(/partial.success/i) }
         needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"],
+                           kind: :partial_success,
                            reason: "partial-success notes — generic template may not narrate this well" }
       end
       next
@@ -172,21 +191,15 @@ Dir[File.join(DOCS_DIR, "*.yml")].sort.each do |file|
 
     curl_comparison = curl_invocation_count(handwritten["curl"]) >= 2 ? nil : compare_curls(generated["curl"], handwritten["curl"])
 
-    bucket, reason =
-      if curl_invocation_count(handwritten["curl"]) >= 2
-        ["MANUAL_OVERRIDE", "multi-example (#{curl_invocation_count(handwritten["curl"])} curl calls in snippet)"]
-      elsif (ep["response_kind"] || "json") == "binary"
-        ["MANUAL_OVERRIDE", "binary response (response_kind: binary)"]
-      elsif curl_comparison == :parse_failure
-        ["NEEDS_REVIEW", "parse_failure — generated or hand-written curl could not be parsed; not a confirmed structural difference, needs a human look"]
-      elsif curl_comparison == :mismatch
-        ["MANUAL_OVERRIDE", "structural_mismatch — method/url/query/headers/body differ between generated and hand-written curl"]
-      else
-        ["SAFE", "method, URL, query params, headers, and body all match; single example, JSON response"]
-      end
+    bucket, reason = classify_curl_result(
+      curl_comparison,
+      invocation_count: curl_invocation_count(handwritten["curl"]),
+      response_kind: (ep["response_kind"] || "json")
+    )
 
     if bucket == "NEEDS_REVIEW"
-      needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"], reason: reason }
+      needs_review << { file: basename, endpoint_name: ep["name"], method: ep["method"], path: ep["path"],
+                        kind: :parse_failure, reason: reason }
       next
     end
 
@@ -205,6 +218,8 @@ end
 
 safe     = results.select { |r| r.bucket == "SAFE" }
 override = results.select { |r| r.bucket == "MANUAL_OVERRIDE" }
+partial_success_review = needs_review.count { |r| r[:kind] == :partial_success }
+parse_failure_review = needs_review.count { |r| r[:kind] == :parse_failure }
 
 # --------------------------------------------------------------------------- #
 # Stdout summary
@@ -214,12 +229,13 @@ puts "=" * 70
 puts "GOLDEN-DIFF REPORT — ApiDocs SnippetGenerator (REQAPI-456)"
 puts "=" * 70
 puts ""
-puts "Total endpoints:              #{total_endpoints}"
-puts "With hand-written examples:   #{total_with_examples}"
-puts "  SAFE (generator matches):   #{safe.size}"
-puts "  MANUAL_OVERRIDE (keep):     #{override.size}"
-puts "Needs review (partial-success"
-puts "  notes or parse failures):   #{needs_review.size}"
+puts "Total endpoints:                    #{total_endpoints}"
+puts "With hand-written examples:         #{total_with_examples}"
+puts "  SAFE (generator matches):         #{safe.size}"
+puts "  MANUAL_OVERRIDE (keep):           #{override.size}"
+puts "  Needs review — parse failures:    #{parse_failure_review}"
+puts "  Needs review — partial-success:   #{partial_success_review}"
+puts "Needs review total:                 #{needs_review.size}"
 puts ""
 
 puts "SAFE BUCKET (#{safe.size} endpoints):"
@@ -233,7 +249,7 @@ puts ""
 puts "NEEDS REVIEW (#{needs_review.size} endpoints):"
 needs_review.each { |r| puts "  ? #{r[:file]} | #{r[:method]} #{r[:path]} (#{r[:endpoint_name]}) — #{r[:reason]}" }
 
-if VERBOSE
+if verbose
   puts ""
   puts "=" * 70
   puts "VERBOSE DIFF — SAFE ENDPOINTS (generated vs hand-written curl)"
@@ -258,8 +274,8 @@ generated_at       = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 md = []
 md << "# Golden-Diff Report — ApiDocs SnippetGenerator"
 md << ""
-md << "> Generated by `apps/dashboard/script/golden_diff_api_docs.rb`  "
-md << "> Part of REQAPI-456 — Auto-generate API doc code examples from YAML endpoint metadata.  "
+md << "> Generated by `apps/dashboard/script/golden_diff_api_docs.rb`"
+md << "> Part of REQAPI-456 — Auto-generate API doc code examples from YAML endpoint metadata."
 md << "> Source revision: `#{source_revision}` · Generator script revision: `#{generator_revision}` · Generated: #{generated_at}"
 md << ""
 md << "## Summary"
@@ -271,15 +287,17 @@ md << "| With hand-written `code_examples` | #{total_with_examples} |"
 md << "| **SAFE** — generator output matches hand-written | **#{safe.size}** |"
 md << "| **MANUAL_OVERRIDE** — hand-written stays authoritative | **#{override.size}** |"
 md << "| **Needs review** — partial-success notes or curl parse failures | **#{needs_review.size}** |"
+md << "| Needs review — partial-success endpoints without snippets | #{partial_success_review} |"
+md << "| Needs review — parse failures with hand-written snippets | #{parse_failure_review} |"
 md << ""
-md << "Note: SAFE + MANUAL_OVERRIDE always sum to \"With hand-written `code_examples`\""
-md << "(every endpoint that has a hand-written snippet lands in exactly one of those"
-md << "two buckets). \"Needs review\" is a separate subset of the endpoints *without*"
-md << "a hand-written snippet — most no-hand-written-example endpoints have nothing"
-md << "noteworthy to report and are simply not listed anywhere in this report, by"
-md << "design; only the ones with partial-success notes or a curl parse failure are."
-md << "So the three bucket counts above will not, and are not meant to, sum to"
-md << "\"Total endpoints.\""
+md << "Bucket accounting: endpoints with hand-written `code_examples` are split"
+md << "among SAFE (#{safe.size}), MANUAL_OVERRIDE (#{override.size}), and parse-failure"
+md << "Needs Review (#{parse_failure_review}); these counts sum to"
+md << "#{safe.size + override.size + parse_failure_review}, the #{total_with_examples}"
+md << "endpoints with hand-written snippets. The remaining Needs Review entries"
+md << "(#{partial_success_review}) are endpoints without hand-written snippets whose"
+md << "partial-success notes warrant human review. Other endpoints without snippets"
+md << "are intentionally omitted from the report."
 md << ""
 md << "## Safe Bucket — #{safe.size} endpoints"
 md << ""
@@ -350,4 +368,7 @@ md << "already in the manual-override bucket."
 
 File.write(REPORT_PATH, md.join("\n") + "\n")
 puts ""
-puts "Full report written to: docs/plans/golden_diff_report.md"
+puts "Full report written to: docs/plans/2026-08-21-golden-diff-report.md"
+end
+
+generate_report if $PROGRAM_NAME == __FILE__

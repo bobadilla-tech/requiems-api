@@ -7,6 +7,12 @@ customers, or meaningful public positioning. Backwards compatibility, SEO
 preservation, old-domain redirects, and customer migration are therefore
 explicitly out of scope unless a later decision re-enables them.
 
+Authoritative migration policy: this owner-approved clean-break policy
+supersedes the initially described root redirect and any earlier draft language
+about dual-host support or an old-apex grace period. The route behavior matrix
+in Section 3 is the source of truth for implementation, tests, deployment, and
+rollback.
+
 Audit date: 2026-08-21
 
 Repository: `requiems-api`, branch `v2/requiems-api-v2`
@@ -28,11 +34,13 @@ hostnames and two documented VPS deployment paths:
 - `mcp.requiems.xyz` serves the MCP HTTP server, whose generated tools call the
   current API base URL.
 
-The target requires one apex host, `requiems.xyz`, to have path-dependent
-behavior: `/v1/*` must execute the API gateway while all other requests must
-redirect to `https://requiemsapi.com`. The repository currently has no such
-host/path split. The current apex is routed to Rails by Kamal/Caddy, while the
-API Worker owns all paths on the separate `api.requiems.xyz` custom domain.
+The initially requested target requires one apex host, `requiems.xyz`, to have
+path-dependent behavior. Under the owner-approved clean break, `/v1*` executes
+the API gateway, explicitly retained operational endpoints execute on the API
+gateway, and every other apex request is retired with 404/410 rather than
+redirected. The repository currently has no such host/path split. The current
+apex is routed to Rails by Kamal/Caddy, while the API Worker owns all paths on
+the separate `api.requiems.xyz` custom domain.
 
 Overall risk is MEDIUM for a clean break, rising to HIGH only if the active
 ingress, DNS/TLS ownership, payment-provider callback, or API security boundary
@@ -44,8 +52,8 @@ is changed without verification. The recommended clean-break posture is:
 3. retire `api.requiems.xyz` without redirecting it after internal references
    and provider settings are updated;
 4. do not configure generic old-page redirects or SEO migration machinery;
-5. return an explicit 404/410 for non-API paths on `requiems.xyz`, unless a
-   later product decision restores the root redirect for convenience.
+5. return an explicit 404/410 for every non-API path and method on
+   `requiems.xyz`; no root or old-page redirect is part of this migration.
 
 This is a recommendation, not a completed migration. The exact Cloudflare route
 and DNS records must be confirmed against the production account before any
@@ -275,33 +283,62 @@ https://requiems.xyz/v1/*
 
 https://requiems.xyz/healthz
 https://requiems.xyz/openapi.json
-    -> explicit API operational/documentation endpoints, if retained
+    -> Auth Gateway operational/documentation endpoints
 
 https://requiems.xyz/<non-API public path>
-    -> explicit 404/410 (recommended); no generic redirect
+    -> explicit 404/410; no generic redirect
 
 https://api.requiems.xyz/v1/*
     -> retired; no redirect
 ```
 
-The exact treatment of `/healthz` and `/openapi.json` must be part of the
-contract. The current Worker exposes both on the old API host, and MCP/spec
-automation depends on `/openapi.json`. For the clean break, publish them at the
-new API host if operationally needed, update internal generators, and retire the
-old endpoints. They must not fall through to a product redirect.
+### 3.0 Authoritative `requiems.xyz` method/path matrix
 
-### 3.1 Recommended ingress design
+The following matrix is normative for this migration. Every result is for
+`https://requiems.xyz`; no row redirects to `requiemsapi.com`.
+
+| Path class              | GET/HEAD                                                         | POST/PUT/PATCH/DELETE                | OPTIONS or other/unknown methods                                                                             |
+| ----------------------- | ---------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `/`                     | 404/410, no body for `HEAD`                                      | 404/410                              | 404/410                                                                                                      |
+| Any public non-API path | 404/410, no body for `HEAD`                                      | 404/410                              | 404/410                                                                                                      |
+| `/v1` and `/v1/*`       | Forward to Auth Gateway/API contract                             | Forward to Auth Gateway/API contract | `OPTIONS` is the API CORS preflight; unsupported methods return the API's 405/404 response, never a redirect |
+| `/healthz`              | Auth Gateway health response; `HEAD` follows the health contract | 405/404                              | 405/404                                                                                                      |
+| `/openapi.json`         | Auth Gateway OpenAPI response; `HEAD` follows the spec contract  | 405/404                              | 405/404                                                                                                      |
+| Unknown path            | 404/410                                                          | 404/410                              | 404/410                                                                                                      |
+
+The API implementation must preserve its existing method/body/query/header
+semantics for `/v1` and `/v1/*`; the edge must not turn unsupported API methods
+into redirects. The selected API owner is the Auth Gateway Worker, with the Go
+service remaining private behind `X-Backend-Secret`.
+
+### 3.1 Endpoint lifecycle
+
+| Host/path                     | Owner                                 | Current state                                           | Transition                                                                          | Retirement condition                                                                                                             |
+| ----------------------------- | ------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `requiemsapi.com/*`           | Rails/Kamal product service           | Not configured in repository                            | Add DNS/TLS and product ingress; validate auth, dashboard, webhooks, and mail links | Separate product shutdown decision                                                                                               |
+| `requiems.xyz/v1` and `/v1/*` | Auth Gateway Worker -> private Go API | Not routed on apex; Worker owns old custom domain       | Add explicit proxied apex routes and update active internal consumers               | Separate API shutdown decision                                                                                                   |
+| `requiems.xyz/healthz`        | Auth Gateway Worker                   | Not exposed on apex; exists on old Worker custom domain | Publish as the canonical API health endpoint with the new API route                 | Retire only when the API route and its probes are retired                                                                        |
+| `requiems.xyz/openapi.json`   | Auth Gateway Worker                   | Not exposed on apex; MCP/spec automation uses old host  | Publish as the canonical spec endpoint; update MCP fetch/generation                 | Retire only after MCP and all spec consumers are removed or repointed                                                            |
+| `requiems.xyz/<non-API>`      | Apex edge retirement handler          | Rails currently owns these paths                        | Replace Rails exposure with explicit 404/410; do not redirect                       | Remains the terminal response for this migration                                                                                 |
+| `api.requiems.xyz/*`          | Existing Auth Gateway Custom Domain   | Current public API, health, and spec host               | Update consumers to new host, verify no redirect, then remove Custom Domain/DNS     | DNS is absent and no active certificate/route remains; if the provider requires a temporary resolving state, return 404/410 only |
+
+This table is also the contract for MCP generation, health/spec probes,
+deployment acceptance, and rollback. Rollback restores the selected new-host
+route/version and its endpoint ownership; it does not restore customer-facing
+legacy compatibility.
+
+### 3.2 Recommended ingress design
 
 Use Cloudflare path Routes on the proxied apex origin for the new API paths:
 
 1. Route the exact `/v1` path and `/v1/*` to the selected API implementation.
    Preserve the original path, method, query, body, API-key header, and response
    behavior.
-2. Route `/healthz` and `/openapi.json` only if the new API contract needs them;
-   otherwise remove/update internal consumers and return 404 for them.
-3. Return explicit 404/410 for every non-API apex path. Do not add a generic
-   Redirect Rule. If HTTP is enabled, define HTTPS behavior separately and test
-   API POST handling rather than inheriting an undocumented redirect.
+2. Route `/healthz` and `/openapi.json` explicitly to the Auth Gateway Worker
+   and update internal consumers before retiring the old host.
+3. Return explicit 404/410 for every non-API apex path and method. Do not add a
+   generic Redirect Rule. If HTTP is enabled, define HTTPS behavior separately
+   and test API POST handling rather than inheriting an undocumented redirect.
 4. Retire the old API Custom Domain and old apex Rails surface only after the
    new product/API paths and any active Lemon Squeezy callback are verified.
 
@@ -309,7 +346,7 @@ Cloudflare routes are appropriate here because the Worker is being placed in
 front of an existing apex origin. The current Worker Custom Domain model is
 appropriate for `api.requiems.xyz`, where the Worker owns the hostname.
 
-### 3.2 Public product host
+### 3.3 Public product host
 
 Configure the Rails/Kamal public service for `requiemsapi.com`, including:
 
@@ -501,9 +538,9 @@ Go/API Worker:
 - Make the selected API implementation available only on the new apex API route.
   Verify the new route's methods, bodies, query strings, API-key headers, usage
   headers, error statuses, and binary responses.
-- Decide whether `/healthz` and `/openapi.json` are supported on `requiems.xyz`;
-  if yes, create explicit path routes and update all internal consumers; if no,
-  remove/update those consumers and return 404.
+- Publish `/healthz` and `/openapi.json` on `requiems.xyz` as explicit Auth
+  Gateway routes and update all internal consumers before retiring the old host.
+  These are retained operational contracts, not fall-through paths.
 - Do not make the Go backend serve public redirects or accept public traffic
   without `X-Backend-Secret`.
 - Decide whether the Worker may forward Rails `Cookie` headers to Go. Current
@@ -647,7 +684,9 @@ External DNS/Cloudflare:
 The project owner has explicitly accepted a clean break. Do not preserve
 `api.requiems.xyz`, old apex pages, old API paths, old cookies, or old examples
 for customer compatibility. After internal consumers and provider settings are
-updated, retire the old API Custom Domain and return 404/410 for old surfaces.
+updated, retire the old API Custom Domain. Any old surface that still resolves
+during propagation must return 404/410, never redirect; the final state is DNS
+absence.
 
 This is not permission to skip correctness on the new system: the new API still
 needs method/body/query/header parity within its own contract, and the new Lemon
@@ -719,9 +758,10 @@ development to production.
 
 No SEO migration is required under the confirmed project premise. Do not spend
 cutover effort on canonical tags, sitemap regeneration, robots changes, Search
-Console, hreflang, indexing, or old-page redirects. Update public metadata only
-if it is needed for the new product to render correctly; otherwise defer it to
-the later positioning/launch work.
+Console, hreflang, indexing, LLM-feed migration, or old-page redirects. Update
+public metadata or LLM feeds only if needed for the new product to render or for
+an active operational consumer; otherwise defer them to later positioning/launch
+work. None is a release gate.
 
 ### 5.8 Monitoring and operations — HIGH/MEDIUM
 
@@ -741,7 +781,7 @@ needed to confirm the new API route and clean retirement.
 
 Add synthetic probes for GET and POST API endpoints on the new API host, the
 product root, localized pages, `/dashboard`, login, password reset request, the
-new webhook endpoint in a safe test mode, and `/openapi.json` if retained.
+new webhook endpoint in a safe test mode, `/healthz`, and `/openapi.json`.
 
 Add alerts/probes for cache leakage (`Cache-Control`, `Age`, `CF-Cache-Status`),
 actual HSTS headers, redirect loops, internal exception disclosure, and forged
@@ -756,20 +796,26 @@ security acceptance checks, not assumed properties of the edge.
 
 Add or execute a host/path contract matrix before production:
 
-| Request                                                  | Expected result                                  |
-| -------------------------------------------------------- | ------------------------------------------------ |
-| `GET https://requiemsapi.com/`                           | Rails product 200/canonical product host         |
-| `GET https://requiemsapi.com/en/`                        | Rails localized product page                     |
-| `GET https://requiemsapi.com/dashboard`                  | Defined dashboard contract; no ambiguity         |
-| `GET https://requiems.xyz/`                              | Explicit 404/410; no generic redirect            |
-| `GET https://requiems.xyz/en/pricing`                    | Explicit 404/410; no product HTML                |
-| `GET/POST https://requiems.xyz/v1/...`                   | Auth Gateway API behavior, no redirect           |
-| `GET/POST https://api.requiems.xyz/v1/...`               | Retired response; no redirect                    |
-| `OPTIONS https://requiems.xyz/v1/...`                    | Correct CORS preflight                           |
-| `GET /healthz` and `/openapi.json` on each promised host | Contract-specific success                        |
-| `POST /webhooks/lemonsqueezy` on new host                | Signature/body accepted                          |
-| Rails login/logout/confirmation/reset/account deletion   | Correct new-host cookies and URLs                |
-| MCP HTTP tool call                                       | Calls new API base and propagates caller API key |
+| Request                                                   | Expected result                                                       |
+| --------------------------------------------------------- | --------------------------------------------------------------------- |
+| `GET https://requiemsapi.com/`                            | Rails product 200/canonical product host                              |
+| `GET https://requiemsapi.com/en/`                         | Rails localized product page                                          |
+| `GET https://requiemsapi.com/dashboard`                   | Defined dashboard contract; no ambiguity                              |
+| `GET https://requiems.xyz/`                               | Explicit 404/410; no generic redirect                                 |
+| `HEAD https://requiems.xyz/`                              | Same 404/410 status as `GET`, with no body                            |
+| `GET https://requiems.xyz/en/pricing`                     | Explicit 404/410; no product HTML                                     |
+| `HEAD https://requiems.xyz/en/pricing`                    | Same 404/410 status as `GET`, with no body                            |
+| `POST https://requiems.xyz/en/pricing`                    | Explicit 404/410; no redirect or Rails handler                        |
+| `OPTIONS https://requiems.xyz/unknown`                    | Explicit 404/410; no redirect                                         |
+| `GET/POST https://requiems.xyz/v1/...`                    | Auth Gateway API behavior, no redirect                                |
+| `GET/POST https://api.requiems.xyz/v1/...`                | Before DNS deletion: no redirect; after deletion: no active DNS/route |
+| `OPTIONS https://requiems.xyz/v1/...`                     | Correct CORS preflight                                                |
+| `GET/HEAD https://requiems.xyz/healthz`                   | Auth Gateway health contract                                          |
+| `GET/HEAD https://requiems.xyz/openapi.json`              | Auth Gateway OpenAPI contract; MCP fetch succeeds                     |
+| `GET https://api.requiems.xyz/healthz` or `/openapi.json` | Before DNS deletion: no redirect; after deletion: no active DNS/route |
+| `POST /webhooks/lemonsqueezy` on new host                 | Signature/body accepted                                               |
+| Rails login/logout/confirmation/reset/account deletion    | Correct new-host cookies and URLs                                     |
+| MCP HTTP tool call                                        | Calls new API base and propagates caller API key                      |
 
 Extend the matrix with:
 
@@ -801,7 +847,8 @@ and timeout behavior. No cross-host redirect-following tests are required.
 Do not preserve `api.requiems.xyz`, old apex pages, old API examples, old
 cookies, or old paths. Update all known internal consumers to the new canonical
 URLs, verify the new product/API surfaces, then remove the old DNS/custom-domain
-configuration. Return 404/410 rather than redirecting retired URLs.
+configuration. During DNS propagation, any still-resolving retired URL must
+return 404/410 rather than redirect; the final old-host state is DNS absence.
 
 The only exceptions are active operational dependencies: Lemon Squeezy must be
 configured to call the new product endpoint before its old callback is disabled,
@@ -836,9 +883,10 @@ removed. These are cutover prerequisites, not compatibility support.
    diff.
 8. Switch Rails to `requiemsapi.com`, switch Lemon Squeezy to the new callback,
    and validate new-host authentication, webhook signatures, and API requests.
-9. Verify retired `api.requiems.xyz` and non-API `requiems.xyz` paths return
-   404/410 with no redirects. Remove the old Worker Custom Domain, DNS records,
-   and old Rails host after this check.
+9. Before deletion, verify `api.requiems.xyz` and non-API `requiems.xyz` paths
+   never redirect. Remove the old Worker Custom Domain, DNS records, and old
+   Rails host; afterward verify the old API hostname has no active DNS,
+   certificate, or route.
 10. Monitor the new product/API, webhook, DNS/TLS, Worker, Rails, Go, MCP, and
     internal management paths through at least one controlled webhook/test cycle
     (or the first real billing cycle if billing becomes active).
@@ -889,39 +937,39 @@ Rollback limitations:
 Only verified repository findings are listed here. External state is listed as
 an assumption/dependency below, not presented as a repository fact.
 
-| Severity | Finding                                                                                                                                                                            | Evidence                                                                                                                                                                                       | Impact                                                                                                                                              | Recommended Action                                                                                                                                   |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HIGH     | The current public API is a host-wide Worker custom domain at `api.requiems.xyz`; the apex is Rails, not the API.                                                                  | `apps/workers/auth-gateway/wrangler.toml:38-42`; `infra/kamal/deploy.dashboard.yml:15-18`; `infra/caddy/Caddyfile:5-23`                                                                        | A hostname change alone cannot create the required apex API path.                                                                                   | Add and test the new `requiems.xyz/v1/*` route, then retire the old Custom Domain.                                                                   |
-| HIGH     | The current Lemon Squeezy webhook is bound to the old apex.                                                                                                                        | `apps/dashboard/config/routes.rb:52-54`; `docs/core/lemonsqueezy-webhook-setup.md:56`                                                                                                          | Retiring the old Rails host before changing the provider callback can stop payment processing.                                                      | Switch and verify the callback on `requiemsapi.com`, then disable the old route.                                                                     |
-| HIGH     | Production ingress has two competing repository descriptions; CD deploys Kamal while Caddy/Compose remain documented as production.                                                | `.github/workflows/cd.yml:75-149`; `infra/kamal/deploy.*.yml`; `infra/docker/docker-compose.yml`; `infra/caddy/Caddyfile`                                                                      | Editing the wrong ingress can cause outage or leave the active path unchanged.                                                                      | Verify live VPS and Cloudflare ingress before selecting files to change.                                                                             |
-| HIGH     | Go `/v1` routes are protected only by backend secret middleware and have no public host/path logic.                                                                                | `apps/api/app/app.go:35-51`; `apps/api/platform/middleware/auth.go`                                                                                                                            | Incorrect edge routing can bypass the gateway or route API requests to Rails.                                                                       | Keep Worker/secret boundary and test direct-origin rejection plus path precedence.                                                                   |
-| HIGH     | Rails has no repository-defined production host allowlist, while absolute URLs are partly derived from the request host.                                                           | No production `config.hosts`; `apps/dashboard/app/helpers/application_helper.rb:172-187,403-484`; `apps/dashboard/app/controllers/private_deployments_controller.rb:56-61`                     | Host-header/proxy mistakes can produce wrong links, redirect abuse, or cross-host security behavior during cutover.                                 | Define accepted hosts and trusted proxy policy; use fixed configured production URLs and test Host/X-Forwarded-Host rejection.                       |
-| HIGH     | The Go origin is exposed through a public hostname and relies on a static shared `X-Backend-Secret` guard; repository firewall policy does not prove Cloudflare-only reachability. | `infra/kamal/deploy.api.yml:14-18`; `infra/caddy/Caddyfile:31-46`; `apps/api/platform/middleware/auth.go:10-35`                                                                                | Direct-origin exposure or secret leakage can bypass the intended gateway boundary.                                                                  | Verify origin firewall/Cloudflare-only access, direct-origin rejection, secret rotation, and spoofed-header tests before changing routes.            |
-| HIGH     | Webhook HMAC verification has no event-ID ledger or replay window; only one subscription test is business-idempotent.                                                              | `apps/dashboard/app/controllers/webhooks/lemonsqueezy_controller.rb:38-64,115-133`; `apps/dashboard/test/controllers/webhooks/lemonsqueezy_controller_test.rb:70-82`                           | Concurrent old/new delivery or replay can repeat email/deployment side effects.                                                                     | Keep one active provider callback and add/verify event-level idempotency/replay controls before dual ingress.                                        |
-| HIGH     | The Auth Gateway forwards incoming `Cookie` headers to the Go origin even though API authentication is header-based.                                                               | `apps/workers/auth-gateway/src/http.ts:16-31`                                                                                                                                                  | Apex API requests made in a browser session can carry Rails cookies across the API boundary and expand the impact of a routing or origin mistake.   | Decide and test cookie filtering, and verify session-cookie attributes and same-origin API behavior.                                                 |
-| HIGH     | The existing CD workflow does not deploy the Auth Gateway Worker, and the repository does not identify an isolated product-host preview.                                           | `.github/workflows/cd.yml:75-149`; `apps/workers/auth-gateway/package.json:8-13`; `infra/kamal/deploy.dashboard.yml:15-18`                                                                     | A route/config change may never reach production, or a supposed preview may alter the only live ingress.                                            | Add an explicit Wrangler deploy/verification owner and define the actual parallel validation mechanism.                                              |
-| MEDIUM   | The repository’s separate architecture audit proposes retiring the Worker/KV/D1/API-Management layer, while this clean break can use the current Worker for speed.                 | `docs/audits/2026-08-21-architecture-audit.md:70-84,1357-1360`                                                                                                                                 | Combining both migrations can expand scope and complicate rollback even without customers.                                                          | Use the current Worker for this domain cutover unless Go auth is explicitly in scope; schedule the architecture rewrite separately.                  |
-| HIGH     | The documented Worker staging path uses production KV/D1 identifiers and has no staging environment selector.                                                                      | `apps/workers/auth-gateway/wrangler.toml:7-16,31-42`; `apps/workers/auth-gateway/package.json:8-13`; `apps/workers/auth-gateway/readme.md:173-178`                                             | A canary can mutate production keys, quotas, rate limits, or usage data and does not provide safe route validation.                                 | Provision isolated staging resources/hostname/secrets/observability before any canary; prohibit production apex attachment from the staging command. |
-| HIGH     | No repository source names the authoritative Cloudflare zone, apex Worker Route, or route owner.                                                                                   | `apps/workers/auth-gateway/wrangler.toml:40-42`; no apex route/zone declaration; `infra/kamal/deploy.dashboard.yml:15-18`; `infra/caddy/Caddyfile:5-23`                                        | An engineer could configure an inactive layer or leave the new API path unreachable.                                                                | Record exact zone, Worker, route patterns, DNS record, owners, and route-trace acceptance before implementation.                                     |
-| HIGH     | Existing deployment automation has no versioned rollback input or Cloudflare route rollback procedure.                                                                             | `.github/actions/kamal-deploy/action.yml:44-46`; `.github/workflows/cd.yml:17-28`; no Worker route rollback automation                                                                         | Re-running deployment cannot reliably restore the prior product/API topology; cached redirects and route state may persist.                         | Create a rollback runbook/workflow with image/Worker version, route bindings, credentials, disable/restore operations, and probes.                   |
-| MEDIUM   | Rails dashboard URLs are locale-scoped while target names `/dashboard` explicitly.                                                                                                 | `apps/dashboard/config/routes.rb:64-111`; `ApplicationController#set_locale`                                                                                                                   | A target URL can redirect unexpectedly or fail if not deliberately defined.                                                                         | Decide and test an unlocalized dashboard entry point/canonical URL.                                                                                  |
-| MEDIUM   | API CORS is wildcard and header-based; preflight behavior is implemented by Worker middleware.                                                                                     | `apps/workers/shared/src/http.ts:5-15`; `apps/workers/shared/src/middleware/cors.ts:9-15`                                                                                                      | New route must preserve preflight and API-key header behavior; browser failures may be host-specific.                                               | Test OPTIONS and actual requests from product and third-party origins.                                                                               |
-| MEDIUM   | OpenAPI and `/healthz` are current Worker routes on the old API host but are not yet assigned to the new contract.                                                                 | `apps/workers/auth-gateway/src/index.ts:20-30`; generated spec URL                                                                                                                             | Removing them without updating internal consumers breaks operations and MCP generation.                                                             | Define new-host endpoints or remove/update internal consumers before retiring the old host.                                                          |
-| MEDIUM   | `API_BASE_URL` is configured and validated but has no runtime consumer in the repository.                                                                                          | `apps/dashboard/app/lib/app_config.rb:164,177-179`; repository-wide `AppConfig.api_base_url` search                                                                                            | Changing the variable alone will not update UI, docs, or generated API examples and can create false confidence in the cutover.                     | Treat it as a configuration contract to either wire explicitly or update only after identifying its intended consumer.                               |
-| MEDIUM   | The target API examples do not match current Go route paths.                                                                                                                       | `apps/api/app/routes_v1.go:42-95`; validation, networking, and signup-protect transport routes                                                                                                 | Domain-only migration docs could accidentally promise nonexistent endpoint aliases.                                                                 | Freeze the migration as domain-only; require a separate decision for path aliases and test only actual routes.                                       |
-| MEDIUM   | First-party authentication documentation contradicts the gateway and its CORS preflight.                                                                                           | `apps/workers/auth-gateway/src/middleware/api-key-auth.ts:39-46`; `readme.md:98-105`; `apps/workers/shared/src/http.ts:9-15`                                                                   | Users may send an unsupported Bearer header and fail both authentication and browser preflight.                                                     | Correct all surfaces to `requiems-api-key` or separately implement/test Bearer support.                                                              |
-| MEDIUM   | Worker API responses have no explicit cache policy.                                                                                                                                | `apps/workers/shared/src/http.ts:21-33`; `apps/workers/auth-gateway/src/http.ts:50-65`                                                                                                         | Future or existing Cloudflare cache rules could cache authenticated or operational responses incorrectly.                                           | Export cache-rule state and require `no-store`/private behavior and `Age`/`CF-Cache-Status` probes.                                                  |
-| MEDIUM   | Generated security material claims HSTS, but repository ingress configuration does not prove the header is emitted.                                                                | `scripts/generate-docs.mjs:437-444`; no `Strict-Transport-Security` ingress match                                                                                                              | Clients may receive a security policy different from published claims, and an incorrect preload policy complicates rollback.                        | Verify actual headers and deliberately choose HSTS scope/preload policy.                                                                             |
-| MEDIUM   | Worker error handling returns internal exception messages in the global Hono handler.                                                                                              | `apps/workers/shared/src/middleware/error-handler.ts:10-23`                                                                                                                                    | New route failures could disclose internal details to public callers.                                                                               | Return generic production errors while logging details; add error-body assertions.                                                                   |
-| MEDIUM   | Rails public proxy/demo surfaces also return backend exception and timeout messages.                                                                                               | `apps/dashboard/app/controllers/api_proxy_controller.rb:33-40`; `apps/dashboard/app/services/api_proxy_service.rb:53-58`; `apps/dashboard/app/controllers/tool_demos_controller.rb:769-778`    | Retiring the old apex does not remove the disclosure risk if these surfaces are re-exposed on the product host.                                     | Include Rails proxy/demo error bodies in the security review and return only approved public messages.                                               |
-| MEDIUM   | Forwarded client-IP handling trusts an incoming header when Cloudflare does not provide `CF-Connecting-IP`.                                                                        | `apps/workers/auth-gateway/src/http.ts:13-31`; Go IP handlers read `X-Forwarded-For` first                                                                                                     | Direct or spoofed requests can alter IP-dependent API behavior and telemetry.                                                                       | Require Cloudflare-only ingress, overwrite forwarding headers, and test spoofed direct requests.                                                     |
-| MEDIUM   | MCP has separate fetch, snapshot, and runtime URL contracts, and its `--base-url` generation flag is unused.                                                                       | `apps/mcp/scripts/fetch-spec.ts:1-11`; `apps/mcp/openapi.json:1`; `apps/mcp/scripts/generate.ts:74-95,492-517`; `apps/mcp/generated/runtime.ts:36-44,73-96`                                    | Updating one layer can leave MCP fetching redirects/HTML or calling the wrong host.                                                                 | Configure fetch and runtime separately, regenerate snapshot/tools as appropriate, and test a live MCP call.                                          |
-| MEDIUM   | OpenAPI, MCP, and Go already disagree on at least one operation path.                                                                                                              | `apps/workers/auth-gateway/src/generated/openapi.ts:332`; `apps/mcp/generated/tools/text_advice.ts:2,24`; `apps/api/app/routes_v1.go:42-47`                                                    | Host migration regeneration can silently publish or preserve path drift and break generated clients.                                                | Diff `(method,path,operationId)` before/after generation and fail publication on unexplained loss or reassignment.                                   |
-| MEDIUM   | Mailer and checkout links contain independent old-host contracts outside `MAILER_HOST`.                                                                                            | `apps/dashboard/app/mailers/private_deployment_mailer.rb:7,30`; `apps/dashboard/app/controllers/private_deployments_controller.rb:56-61`; `apps/dashboard/app/mailers/application_mailer.rb:4` | New product/payment links can remain on the retired host.                                                                                           | Audit browser-link host, sender domain, checkout return URL, and mail transport separately; test new-host checkouts.                                 |
-| MEDIUM   | Private-deployment tenant URLs use the `*.requiems.xyz` wildcard namespace.                                                                                                        | `apps/dashboard/app/models/private_deployment_request.rb:83-85`; `apps/dashboard/app/views/private_deployment_mailer/deployment_ready.html.erb:20-35`                                          | Blindly changing the product domain could break separately hosted tenant deployments.                                                               | Preserve the tenant namespace unless it receives a separate migration plan and DNS/certificate design.                                               |
-| MEDIUM   | New-host health ownership is unresolved: the Worker owns `/healthz` only on its current Custom Domain while Rails exposes `/up`.                                                   | `apps/workers/auth-gateway/src/index.ts:20-28`; `apps/dashboard/config/routes.rb:9-16`                                                                                                         | A public probe can test a redirect/origin health endpoint while the API route is unavailable, or the new host can have no promised health endpoint. | Select Worker- or Go-owned `/healthz` and `/openapi.json` contracts per architecture branch; assign probes and test bare/trailing-slash variants.    |
-| MEDIUM   | Certificate ownership and renewal for `requiemsapi.com` are absent from repository configuration.                                                                                  | Existing host settings in `infra/kamal/deploy.dashboard.yml:15-18` and `infra/caddy/Caddyfile:5-23`; no new-domain DNS/certificate files                                                       | New product traffic can fail TLS or certificate renewal.                                                                                            | Name Cloudflare/registrar/origin certificate owners, issuance/renewal path, CAA/DNSSEC state, and deletion rollback.                                 |
-| LOW      | Many repository docs, fixtures, examples, and performance reports record the old host.                                                                                             | `readme.md`; `docs/apis`; `tests/reports`; `tests/integration`; `apps/dashboard` views                                                                                                         | Internal docs and test defaults can point at retired endpoints, but no customer compatibility impact exists.                                        | Update active docs/tests; leave clearly historical reports unchanged.                                                                                |
+| Severity | Finding                                                                                                                                                                                            | Evidence                                                                                                                                                                                       | Impact                                                                                                                                            | Recommended Action                                                                                                                                      |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HIGH     | The current public API is a host-wide Worker custom domain at `api.requiems.xyz`; the apex is Rails, not the API.                                                                                  | `apps/workers/auth-gateway/wrangler.toml:38-42`; `infra/kamal/deploy.dashboard.yml:15-18`; `infra/caddy/Caddyfile:5-23`                                                                        | A hostname change alone cannot create the required apex API path.                                                                                 | Add and test the new `requiems.xyz/v1/*` route, then retire the old Custom Domain.                                                                      |
+| HIGH     | The current Lemon Squeezy webhook is bound to the old apex.                                                                                                                                        | `apps/dashboard/config/routes.rb:52-54`; `docs/core/lemonsqueezy-webhook-setup.md:56`                                                                                                          | Retiring the old Rails host before changing the provider callback can stop payment processing.                                                    | Switch and verify the callback on `requiemsapi.com`, then disable the old route.                                                                        |
+| HIGH     | Production ingress has two competing repository descriptions; CD deploys Kamal while Caddy/Compose remain documented as production.                                                                | `.github/workflows/cd.yml:75-149`; `infra/kamal/deploy.*.yml`; `infra/docker/docker-compose.yml`; `infra/caddy/Caddyfile`                                                                      | Editing the wrong ingress can cause outage or leave the active path unchanged.                                                                    | Verify live VPS and Cloudflare ingress before selecting files to change.                                                                                |
+| HIGH     | Go `/v1` routes are protected only by backend secret middleware and have no public host/path logic.                                                                                                | `apps/api/app/app.go:35-51`; `apps/api/platform/middleware/auth.go`                                                                                                                            | Incorrect edge routing can bypass the gateway or route API requests to Rails.                                                                     | Keep Worker/secret boundary and test direct-origin rejection plus path precedence.                                                                      |
+| HIGH     | Rails has no repository-defined production host allowlist, while absolute URLs are partly derived from the request host.                                                                           | No production `config.hosts`; `apps/dashboard/app/helpers/application_helper.rb:172-187,403-484`; `apps/dashboard/app/controllers/private_deployments_controller.rb:56-61`                     | Host-header/proxy mistakes can produce wrong links, redirect abuse, or cross-host security behavior during cutover.                               | Define accepted hosts and trusted proxy policy; use fixed configured production URLs and test Host/X-Forwarded-Host rejection.                          |
+| HIGH     | The Go origin is exposed through a public hostname and relies on a static shared `X-Backend-Secret` guard; repository firewall policy does not prove Cloudflare-only reachability.                 | `infra/kamal/deploy.api.yml:14-18`; `infra/caddy/Caddyfile:31-46`; `apps/api/platform/middleware/auth.go:10-35`                                                                                | Direct-origin exposure or secret leakage can bypass the intended gateway boundary.                                                                | Verify origin firewall/Cloudflare-only access, direct-origin rejection, secret rotation, and spoofed-header tests before changing routes.               |
+| HIGH     | Webhook HMAC verification has no event-ID ledger or replay window; only one subscription test is business-idempotent.                                                                              | `apps/dashboard/app/controllers/webhooks/lemonsqueezy_controller.rb:38-64,115-133`; `apps/dashboard/test/controllers/webhooks/lemonsqueezy_controller_test.rb:70-82`                           | Concurrent old/new delivery or replay can repeat email/deployment side effects.                                                                   | Keep one active provider callback and add/verify event-level idempotency/replay controls before dual ingress.                                           |
+| HIGH     | The Auth Gateway forwards incoming `Cookie` headers to the Go origin even though API authentication is header-based.                                                                               | `apps/workers/auth-gateway/src/http.ts:16-31`                                                                                                                                                  | Apex API requests made in a browser session can carry Rails cookies across the API boundary and expand the impact of a routing or origin mistake. | Decide and test cookie filtering, and verify session-cookie attributes and same-origin API behavior.                                                    |
+| HIGH     | The existing CD workflow does not deploy the Auth Gateway Worker, and the repository does not identify an isolated product-host preview.                                                           | `.github/workflows/cd.yml:75-149`; `apps/workers/auth-gateway/package.json:8-13`; `infra/kamal/deploy.dashboard.yml:15-18`                                                                     | A route/config change may never reach production, or a supposed preview may alter the only live ingress.                                          | Add an explicit Wrangler deploy/verification owner and define the actual parallel validation mechanism.                                                 |
+| MEDIUM   | The repository’s separate architecture audit proposes retiring the Worker/KV/D1/API-Management layer, while this clean break can use the current Worker for speed.                                 | `docs/audits/2026-08-21-architecture-audit.md:70-84,1357-1360`                                                                                                                                 | Combining both migrations can expand scope and complicate rollback even without customers.                                                        | Use the current Worker for this domain cutover unless Go auth is explicitly in scope; schedule the architecture rewrite separately.                     |
+| HIGH     | The documented Worker staging path uses production KV/D1 identifiers and has no staging environment selector.                                                                                      | `apps/workers/auth-gateway/wrangler.toml:7-16,31-42`; `apps/workers/auth-gateway/package.json:8-13`; `apps/workers/auth-gateway/readme.md:173-178`                                             | A canary can mutate production keys, quotas, rate limits, or usage data and does not provide safe route validation.                               | Provision isolated staging resources/hostname/secrets/observability before any canary; prohibit production apex attachment from the staging command.    |
+| HIGH     | No repository source names the authoritative Cloudflare zone, apex Worker Route, or route owner.                                                                                                   | `apps/workers/auth-gateway/wrangler.toml:40-42`; no apex route/zone declaration; `infra/kamal/deploy.dashboard.yml:15-18`; `infra/caddy/Caddyfile:5-23`                                        | An engineer could configure an inactive layer or leave the new API path unreachable.                                                              | Record exact zone, Worker, route patterns, DNS record, owners, and route-trace acceptance before implementation.                                        |
+| HIGH     | Existing deployment automation has no versioned rollback input or Cloudflare route rollback procedure.                                                                                             | `.github/actions/kamal-deploy/action.yml:44-46`; `.github/workflows/cd.yml:17-28`; no Worker route rollback automation                                                                         | Re-running deployment cannot reliably restore the prior product/API topology; cached redirects and route state may persist.                       | Create a rollback runbook/workflow with image/Worker version, route bindings, credentials, disable/restore operations, and probes.                      |
+| MEDIUM   | Rails dashboard URLs are locale-scoped while target names `/dashboard` explicitly.                                                                                                                 | `apps/dashboard/config/routes.rb:64-111`; `ApplicationController#set_locale`                                                                                                                   | A target URL can redirect unexpectedly or fail if not deliberately defined.                                                                       | Decide and test an unlocalized dashboard entry point/canonical URL.                                                                                     |
+| MEDIUM   | API CORS is wildcard and header-based; preflight behavior is implemented by Worker middleware.                                                                                                     | `apps/workers/shared/src/http.ts:5-15`; `apps/workers/shared/src/middleware/cors.ts:9-15`                                                                                                      | New route must preserve preflight and API-key header behavior; browser failures may be host-specific.                                             | Test OPTIONS and actual requests from product and third-party origins.                                                                                  |
+| MEDIUM   | OpenAPI and `/healthz` are current Worker routes on the old API host but are not yet assigned to the new contract.                                                                                 | `apps/workers/auth-gateway/src/index.ts:20-30`; generated spec URL                                                                                                                             | Removing them without updating internal consumers breaks operations and MCP generation.                                                           | Define new-host endpoints or remove/update internal consumers before retiring the old host.                                                             |
+| MEDIUM   | `API_BASE_URL` is configured and validated but has no runtime consumer in the repository.                                                                                                          | `apps/dashboard/app/lib/app_config.rb:164,177-179`; repository-wide `AppConfig.api_base_url` search                                                                                            | Changing the variable alone will not update UI, docs, or generated API examples and can create false confidence in the cutover.                   | Treat it as a configuration contract to either wire explicitly or update only after identifying its intended consumer.                                  |
+| MEDIUM   | The target API examples do not match current Go route paths.                                                                                                                                       | `apps/api/app/routes_v1.go:42-95`; validation, networking, and signup-protect transport routes                                                                                                 | Domain-only migration docs could accidentally promise nonexistent endpoint aliases.                                                               | Freeze the migration as domain-only; require a separate decision for path aliases and test only actual routes.                                          |
+| MEDIUM   | First-party authentication documentation contradicts the gateway and its CORS preflight.                                                                                                           | `apps/workers/auth-gateway/src/middleware/api-key-auth.ts:39-46`; `readme.md:98-105`; `apps/workers/shared/src/http.ts:9-15`                                                                   | Users may send an unsupported Bearer header and fail both authentication and browser preflight.                                                   | Correct all surfaces to `requiems-api-key` or separately implement/test Bearer support.                                                                 |
+| MEDIUM   | Worker API responses have no explicit cache policy.                                                                                                                                                | `apps/workers/shared/src/http.ts:21-33`; `apps/workers/auth-gateway/src/http.ts:50-65`                                                                                                         | Future or existing Cloudflare cache rules could cache authenticated or operational responses incorrectly.                                         | Export cache-rule state and require `no-store`/private behavior and `Age`/`CF-Cache-Status` probes.                                                     |
+| MEDIUM   | Generated security material claims HSTS, but repository ingress configuration does not prove the header is emitted.                                                                                | `scripts/generate-docs.mjs:437-444`; no `Strict-Transport-Security` ingress match                                                                                                              | Clients may receive a security policy different from published claims, and an incorrect preload policy complicates rollback.                      | Verify actual headers and deliberately choose HSTS scope/preload policy.                                                                                |
+| MEDIUM   | Worker error handling returns internal exception messages in the global Hono handler.                                                                                                              | `apps/workers/shared/src/middleware/error-handler.ts:10-23`                                                                                                                                    | New route failures could disclose internal details to public callers.                                                                             | Return generic production errors while logging details; add error-body assertions.                                                                      |
+| MEDIUM   | Rails public proxy/demo surfaces also return backend exception and timeout messages.                                                                                                               | `apps/dashboard/app/controllers/api_proxy_controller.rb:33-40`; `apps/dashboard/app/services/api_proxy_service.rb:53-58`; `apps/dashboard/app/controllers/tool_demos_controller.rb:769-778`    | Retiring the old apex does not remove the disclosure risk if these surfaces are re-exposed on the product host.                                   | Include Rails proxy/demo error bodies in the security review and return only approved public messages.                                                  |
+| MEDIUM   | Forwarded client-IP handling trusts an incoming header when Cloudflare does not provide `CF-Connecting-IP`.                                                                                        | `apps/workers/auth-gateway/src/http.ts:13-31`; Go IP handlers read `X-Forwarded-For` first                                                                                                     | Direct or spoofed requests can alter IP-dependent API behavior and telemetry.                                                                     | Require Cloudflare-only ingress, overwrite forwarding headers, and test spoofed direct requests.                                                        |
+| MEDIUM   | MCP has separate fetch, snapshot, and runtime URL contracts, and its `--base-url` generation flag is unused.                                                                                       | `apps/mcp/scripts/fetch-spec.ts:1-11`; `apps/mcp/openapi.json:1`; `apps/mcp/scripts/generate.ts:74-95,492-517`; `apps/mcp/generated/runtime.ts:36-44,73-96`                                    | Updating one layer can leave MCP fetching redirects/HTML or calling the wrong host.                                                               | Configure fetch and runtime separately, regenerate snapshot/tools as appropriate, and test a live MCP call.                                             |
+| MEDIUM   | OpenAPI, MCP, and Go already disagree on at least one operation path.                                                                                                                              | `apps/workers/auth-gateway/src/generated/openapi.ts:332`; `apps/mcp/generated/tools/text_advice.ts:2,24`; `apps/api/app/routes_v1.go:42-47`                                                    | Host migration regeneration can silently publish or preserve path drift and break generated clients.                                              | Diff `(method,path,operationId)` before/after generation and fail publication on unexplained loss or reassignment.                                      |
+| MEDIUM   | Mailer and checkout links contain independent old-host contracts outside `MAILER_HOST`.                                                                                                            | `apps/dashboard/app/mailers/private_deployment_mailer.rb:7,30`; `apps/dashboard/app/controllers/private_deployments_controller.rb:56-61`; `apps/dashboard/app/mailers/application_mailer.rb:4` | New product/payment links can remain on the retired host.                                                                                         | Audit browser-link host, sender domain, checkout return URL, and mail transport separately; test new-host checkouts.                                    |
+| MEDIUM   | Private-deployment tenant URLs use the `*.requiems.xyz` wildcard namespace.                                                                                                                        | `apps/dashboard/app/models/private_deployment_request.rb:83-85`; `apps/dashboard/app/views/private_deployment_mailer/deployment_ready.html.erb:20-35`                                          | Blindly changing the product domain could break separately hosted tenant deployments.                                                             | Preserve the tenant namespace unless it receives a separate migration plan and DNS/certificate design.                                                  |
+| MEDIUM   | The canonical new-host health/spec routes are not configured; the Worker currently exposes `/healthz` and `/openapi.json` only through its old Custom Domain while Rails separately exposes `/up`. | `apps/workers/auth-gateway/src/index.ts:20-28`; `apps/dashboard/config/routes.rb:9-16`                                                                                                         | Monitoring and MCP generation can fail or probe the wrong service during cutover.                                                                 | Route both endpoints to the Auth Gateway on `requiems.xyz`, update consumers, and test exact/bare/trailing-slash behavior before retiring the old host. |
+| MEDIUM   | Certificate ownership and renewal for `requiemsapi.com` are absent from repository configuration.                                                                                                  | Existing host settings in `infra/kamal/deploy.dashboard.yml:15-18` and `infra/caddy/Caddyfile:5-23`; no new-domain DNS/certificate files                                                       | New product traffic can fail TLS or certificate renewal.                                                                                          | Name Cloudflare/registrar/origin certificate owners, issuance/renewal path, CAA/DNSSEC state, and deletion rollback.                                    |
+| LOW      | Many repository docs, fixtures, examples, and performance reports record the old host.                                                                                                             | `readme.md`; `docs/apis`; `tests/reports`; `tests/integration`; `apps/dashboard` views                                                                                                         | Internal docs and test defaults can point at retired endpoints, but no customer compatibility impact exists.                                      | Update active docs/tests; leave clearly historical reports unchanged.                                                                                   |
 
 ## 10. Multi-Agent Review History
 
@@ -934,6 +982,12 @@ Lead research passes before independent review:
 - Lead adversarial pass rechecked Rails routes, Devise/session behavior,
   mailers, webhook tests, API proxy, MCP/OpenAPI generation, Worker CORS, Go
   secret middleware, CI/CD, and SEO files before accepting reviewer reports.
+
+The first review rounds were conducted against the original brief, before the
+owner confirmed the clean-break scope. Any round-1 wording about preserving
+legacy hosts, old-page redirects, customer telemetry, or SEO is historical
+review context only; the scope amendment below supersedes it and is not a
+current implementation requirement.
 
 Review round 1 (independent subagents; no files edited by reviewers):
 
@@ -1060,9 +1114,10 @@ verification, and a final adversarial pass.
   after the final adversarial changes; the legacy API no-redirect strategy was
   replaced by the owner-approved clean-break strategy.
 - Unresolved decisions: Worker-retention versus Go-cutover architecture branch;
-  exact `/dashboard`, `/healthz`, and `/openapi.json` contracts; full old-apex
-  POST disposition; event-level webhook idempotency; cookie forwarding policy;
-  auth-header contract; SDK publication decision; and API path-alias scope.
+  exact `/dashboard` contract; full old-apex POST disposition; event-level
+  webhook idempotency; cookie forwarding policy; auth-header contract; SDK
+  publication decision; and API path-alias scope. The `/healthz` and
+  `/openapi.json` owner/transition contract is fixed by Section 3.
 - Human verification required: Cloudflare zone/routes/Rules/Cache/WAF state;
   DNS/registrar/DNSSEC/CAA; certificates and renewal; active VPS ingress; origin
   firewall; Worker/KV/D1 staging resources; Lemon Squeezy callback
@@ -1108,12 +1163,14 @@ verification, and a final adversarial pass.
 
 - [ ] Add exact Cloudflare route(s) for `requiems.xyz/v1` and
       `requiems.xyz/v1/*` to the selected API owner, with precedence verified.
-- [ ] Implement the selected non-redirecting `/healthz` and `/openapi.json`
-      surfaces on the selected API owner, or remove/update all internal
-      consumers and return 404.
+- [ ] Implement the canonical non-redirecting `/healthz` and `/openapi.json`
+      surfaces on the Auth Gateway at the new API host and update all internal
+      consumers before retiring the old host.
 - [ ] Prove method/body/query/header/path/response correctness on the new host.
-- [ ] Retire `api.requiems.xyz` Custom Domain/DNS and verify old API paths
-      return 404/410 without redirects.
+- [ ] Before deleting `api.requiems.xyz`, verify old API paths never redirect;
+      then remove its Custom Domain/DNS and verify no active DNS, certificate,
+      or route remains. Any still-resolving propagation path must return
+      404/410.
 - [ ] Preserve KV/D1, usage, quota, rate-limit, and backend-secret behavior.
 
 ### Webhooks and external systems
