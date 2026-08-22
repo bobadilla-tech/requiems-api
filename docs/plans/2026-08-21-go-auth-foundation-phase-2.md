@@ -284,9 +284,9 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
   billing cycle (via TTL expiry or an explicit `current_period_start` change)
   resets to zero, not carrying over the previous cycle's count; Redis down →
   fails closed with 503, as does both Redis and Postgres being down; a simulated
-  `OOM command not allowed` write rejection (e.g. a
-  test Redis instance with `maxmemory` set near-zero) is handled identically to
-  a connection error, not left as an unhandled 500.
+  `OOM command not allowed` write rejection (e.g. a test Redis instance with
+  `maxmemory` set near-zero) is handled identically to a connection error, not
+  left as an unhandled 500.
 - Row-level write: two requests that would produce the same
   `(api_key_id, used_at, endpoint)` — simulate via a fixed clock or explicit
   `used_at` — dedup correctly via `ON CONFLICT DO NOTHING`, no error surfaced to
@@ -381,8 +381,7 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
   changes) still roll into a new monthly cycle automatically, which a naive "use
   `CurrentPeriodStart` as the literal cycle key" approach would not have done.
   Redis error/timeout fails closed with `503`, logged at `error`; there is no
-  non-atomic Postgres `SUM` fallback.
-  Row-level write is a synchronous
+  non-atomic Postgres `SUM` fallback. Row-level write is a synchronous
   `INSERT ... ON
   CONFLICT (api_key_id, used_at, endpoint) DO NOTHING`,
   column-list form as specified; `credits_used` reads `X-Usage-Count`
@@ -401,17 +400,16 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
 - Tests: `ratelimit_test.go` and `usage_test.go` cover every case section 6
   lists (concurrent-increment correctness, minute-window isolation, fail-open on
   Redis-down and Redis-timeout, cross-key-sum bootstrap, cycle rollover
-  excluding prior-cycle usage, 429-rolls-back-and-skips-the-row-write,
-  repeated rejected batch reservations, Redis-down fail-closed,
-  both-down fail-closed, simulated `OOM command not allowed` rejected
-  identically to a connection error via `CONFIG SET maxmemory 1`, row-level
-  dedup via `ON CONFLICT`, and enterprise/null-limit plans never triggering
-  either check) — all against real Postgres/Redis, following the repo's existing
-  convention. `usage.go`'s row-insert was split into a small `insertUsageRow`
-  helper specifically so the dedup test could force an exact `used_at` collision
-  instead of racing `time.Now()`'s microsecond precision; this is the one
-  production-code shape driven by testability rather than the plan doc's own
-  text.
+  excluding prior-cycle usage, 429-rolls-back-and-skips-the-row-write, repeated
+  rejected batch reservations, Redis-down fail-closed, both-down fail-closed,
+  simulated `OOM command not allowed` rejected identically to a connection error
+  via `CONFIG SET maxmemory 1`, row-level dedup via `ON CONFLICT`, and
+  enterprise/null-limit plans never triggering either check) — all against real
+  Postgres/Redis, following the repo's existing convention. `usage.go`'s
+  row-insert was split into a small `insertUsageRow` helper specifically so the
+  dedup test could force an exact `used_at` collision instead of racing
+  `time.Now()`'s microsecond precision; this is the one production-code shape
+  driven by testability rather than the plan doc's own text.
 - `apps/api/app/app_test.go`'s `seedAPIKeyFixture` updated to also create
   self-contained `subscriptions`/`plans`/`usage_logs` tables and seed a `free`
   plan row with null limits. This wasn't optional cleanup: the protected route

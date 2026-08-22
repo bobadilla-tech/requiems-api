@@ -34,10 +34,10 @@ without blocking anything.
 ## Context
 
 **At the time this plan was written, the Worker→Go path remained functional.**
-The Worker preserved `requiems-api-key` on the trusted hop and Go's
-`APIKeyAuth` verified the complete key against Postgres. The Worker still
-performed edge validation, so both layers remained active until the planned
-traffic cutover. The later cutover status is recorded in the Phase 7 plan.
+The Worker preserved `requiems-api-key` on the trusted hop and Go's `APIKeyAuth`
+verified the complete key against Postgres. The Worker still performed edge
+validation, so both layers remained active until the planned traffic cutover.
+The later cutover status is recorded in the Phase 7 plan.
 
 **Verified against the current tree** (not re-derived from the audit, which is
 same-day but was read-only): `apps/dashboard/app/models/api_key.rb` still gates

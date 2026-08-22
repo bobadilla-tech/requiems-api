@@ -169,11 +169,11 @@ matching `_test.go`). Extend this package rather than inventing a new one.
    bcrypt's deliberately-slow compare on every request once a key's been seen
    once.
 
-3. **Revocation invalidation.** On revoke, Rails must issue `DEL apikey:{key_prefix}`
-   against the **same, unnamespaced Redis keyspace Go writes to** — this is not
-   as simple as "Rails already talks to Redis for Rack::Attack/Sidekiq, so reuse
-   that." `Rails.cache` (what `Rack::Attack` uses) is a `:redis_cache_store`
-   configured with `namespace: "rails_cache"`
+3. **Revocation invalidation.** On revoke, Rails must issue
+   `DEL apikey:{key_prefix}` against the **same, unnamespaced Redis keyspace Go
+   writes to** — this is not as simple as "Rails already talks to Redis for
+   Rack::Attack/Sidekiq, so reuse that." `Rails.cache` (what `Rack::Attack`
+   uses) is a `:redis_cache_store` configured with `namespace: "rails_cache"`
    (`apps/dashboard/config/environments/{development,production}.rb`), so
    `Rails.cache.delete(key_prefix)` would actually target
    `rails_cache:{key_prefix}` in Redis, silently missing the unnamespaced key
@@ -220,10 +220,10 @@ matching `_test.go`). Extend this package rather than inventing a new one.
    middleware. At the time Phase 1 shipped, the Worker preserved
    `requiems-api-key` on its trusted hop to Go, and Go verified it against
    Postgres. Direct requests used the same header contract, so this middleware
-   enforced both Worker-proxied and local traffic.
-   Making this middleware the enforcing path for real customer traffic requires
-   Phase 5/6 of the audit's migration plan (direct traffic cutover) — don't
-   claim this phase alone flips production auth over, because it doesn't.
+   enforced both Worker-proxied and local traffic. Making this middleware the
+   enforcing path for real customer traffic requires Phase 5/6 of the audit's
+   migration plan (direct traffic cutover) — don't claim this phase alone flips
+   production auth over, because it doesn't.
 
 **Phase 1 exit criteria:** middleware test suite green (all cases in item 5); a
 Postgres-seeded dev key (from Phase 0 item 5b) authenticates through the new Go
@@ -312,8 +312,8 @@ container mid-session doesn't silently let unauthenticated traffic through.
 `requiems-api-key` on its trusted hop to Go, and Go re-verified the complete
 credential against Postgres. The Worker's edge validation and Go's backend
 validation therefore both remained in the request path; local direct-to-Go
-requests used the same header contract. Later retirement/cutover work is
-tracked in the Phase 7 plan.
+requests used the same header contract. Later retirement/cutover work is tracked
+in the Phase 7 plan.
 
 **Security status of the former cache-hit concern:** Redis entries under
 `apikey:{key_prefix}` are candidates only. Every cache hit re-runs bcrypt

@@ -491,20 +491,19 @@ not started.
 
 Executed:
 
-- Read this plan in full and fetched Cloudflare's agent setup instructions.
-  The published Cloudflare skills/MCP servers were installed and registered.
+- Read this plan in full and fetched Cloudflare's agent setup instructions. The
+  published Cloudflare skills/MCP servers were installed and registered.
 - Per the owner's explicit direction, skipped the optional KV/D1 backup/export.
   No backup, reconciliation, backfill, or database-row cleanup was performed.
 - Confirmed live production ingress was `kamal-proxy` on ports 80/443. Kept
   Kamal as the deployment model and placed repository Caddy in front of it on
   host ports 80/443; Kamal Proxy now listens on loopback ports 8080/8443.
-- Enabled the AOP-protected `api.requiems.xyz` and
-  `internal.requiems.xyz` Caddy vhosts, removed the Caddy
-  `X-Backend-Secret` gate, and registered the API/dashboard/MCP Kamal routes
-  without a second TLS termination behind Caddy.
+- Enabled the AOP-protected `api.requiems.xyz` and `internal.requiems.xyz` Caddy
+  vhosts, removed the Caddy `X-Backend-Secret` gate, and registered the
+  API/dashboard/MCP Kamal routes without a second TLS termination behind Caddy.
 - Added the stable Docker network alias `requiems-api` and rolled the live
-  dashboard web/job containers to `INTERNAL_API_URL=http://requiems-api:8080`.
-  A real Rails `ApiProxyService` request returned 200 over that private path.
+  dashboard web/job containers to `INTERNAL_API_URL=http://requiems-api:8080`. A
+  real Rails `ApiProxyService` request returned 200 over that private path.
 - Cloudflare's API showed `api.requiems.xyz` as a proxied A record to the VPS,
   no zone Worker routes, and no Worker custom-domain attachment. The API DNS
   record was observed live; the Worker was not deleted. The owner must still
@@ -512,8 +511,8 @@ Executed:
 - Verified the live API through Cloudflare → Caddy → Kamal Proxy → Go with
   `/healthz` returning 200, and an invalid API key returning 401.
 - Verified direct-origin AOP enforcement against the VPS: the TLS handshake
-  completed only far enough to present the certificate, then the server sent
-  TLS alert 116 (`certificate_required`) without a client certificate.
+  completed only far enough to present the certificate, then the server sent TLS
+  alert 116 (`certificate_required`) without a client certificate.
 - Reviewed the zone's live protection state: Cloudflare managed normalization,
   managed free-zone firewall, and L7 DDoS rulesets are present; legacy custom
   firewall rules and filters are empty. No custom rate-limit rule was found.
@@ -524,9 +523,9 @@ Executed:
 Deferred:
 
 - 7a's owner-confirmed Worker-route state, public valid-key smoke test,
-  per-minute 429 test, and the bake period. The current production container
-  has no `PLAYGROUND_API_KEY` environment value, so no new key was created and
-  no `api_keys`/users/subscriptions/plans data was changed.
+  per-minute 429 test, and the bake period. The current production container has
+  no `PLAYGROUND_API_KEY` environment value, so no new key was created and no
+  `api_keys`/users/subscriptions/plans data was changed.
 - The next Kamal-managed application deploy should replace the one-off live
   dashboard container names with the committed deploy configuration. Caddy is
   managed as the `caddy` accessory from `deploy.api.yml`; future Caddyfile or
@@ -548,11 +547,11 @@ Open-question answers:
 - `api.requiems.xyz` routing mechanism: resolved as a direct proxied DNS A
   record to the VPS, with a dedicated Caddy site block and AOP, then Caddy →
   loopback Kamal Proxy → Go. No Cloudflare Origin Rule was added.
-- Rails `INTERNAL_API_URL`: resolved to `http://requiems-api:8080` on the
-  Kamal Docker network and verified by a real Rails API proxy call.
-- Production ingress/AOP compatibility: verified in the live path. Caddy
-  owns public TLS and requires Cloudflare's origin-pull client certificate;
-  Kamal Proxy remains the deployment-aware backend router.
+- Rails `INTERNAL_API_URL`: resolved to `http://requiems-api:8080` on the Kamal
+  Docker network and verified by a real Rails API proxy call.
+- Production ingress/AOP compatibility: verified in the live path. Caddy owns
+  public TLS and requires Cloudflare's origin-pull client certificate; Kamal
+  Proxy remains the deployment-aware backend router.
 - Worker route: Cloudflare API currently reports no zone Worker route or
   custom-domain attachment for this account/zone. Owner dashboard confirmation
   is still required before treating the 7a exit criterion as closed.
