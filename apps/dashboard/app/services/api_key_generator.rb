@@ -3,13 +3,27 @@
 require "bcrypt"
 
 class ApiKeyGenerator
-  # Generate a new API key in the format: rq_live_<24_random_chars>
-  # Returns the full key (which should be shown to the user once)
-  def self.generate(environment: :live)
-    prefix = environment == :test ? "rq_test" : "rq_live"
-    random_part = Nanoid.generate(size: 24, alphabet: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  # Matches apps/api/platform/middleware/apikeyauth.go's keyPrefixLength (12)
+  # and the validator both Go and the (retired) Worker enforce:
+  # ^requiem_[0-9a-zA-Z]{24}$
+  ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    "#{prefix}_#{random_part}"
+  MAX_GENERATION_ATTEMPTS = 5
+
+  class CollisionError < StandardError; end
+
+  # Generate a new, prefix-unique API key in the format: requiem_<24_random_chars>
+  # Returns the full key (which should be shown to the user once). Retries on
+  # a key_prefix collision (extremely unlikely with nanoid, but the same
+  # good-practice check the Cloudflare-backed path used to make) up to
+  # MAX_GENERATION_ATTEMPTS before raising.
+  def self.generate
+    MAX_GENERATION_ATTEMPTS.times do
+      candidate = generate_candidate
+      return candidate unless ApiKey.exists?(key_prefix: extract_prefix(candidate))
+    end
+
+    raise CollisionError, "Could not generate a unique API key after #{MAX_GENERATION_ATTEMPTS} attempts"
   end
 
   # Extract the prefix for display (first 12 characters)
@@ -28,4 +42,9 @@ class ApiKeyGenerator
   rescue BCrypt::Errors::InvalidHash
     false
   end
+
+  def self.generate_candidate
+    "requiem_#{Nanoid.generate(size: 24, alphabet: ALPHABET)}"
+  end
+  private_class_method :generate_candidate
 end

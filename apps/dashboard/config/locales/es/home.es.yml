@@ -385,8 +385,9 @@ es:
     faq:
       authentication:
         a1: "Incluye tu clave API en el encabezado Authorization como token Bearer:"
-        a2_html: Las claves de prueba (que comienzan con %{test_key}) son para desarrollo
-          y pruebas. Las claves de producción (%{live_key}) son para uso en producción.
+        a2_html: Todas las claves comparten el mismo prefijo %{key_prefix}. Las claves
+          de "prueba" son para desarrollo y pruebas; las de "producción" son para uso
+          en producción — es solo una etiqueta de la clave, no parte de su formato.
           Ambos tipos de clave cuentan para tu cuota mensual de solicitudes.
         a3: ¡Sí! Ve a tu panel, haz clic en la clave API que deseas regenerar y selecciona
           "Regenerar". Ten en cuenta que la clave antigua dejará de funcionar de inmediato,

@@ -56,15 +56,10 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 	router.Get("/healthz", Healthz(pool))
 
 	router.Group(func(protected chi.Router) {
-		protected.Use(middleware.BackendSecretAuth(cfg.BackendSecret))
-		// Enforcing, not shadow — but note what this actually gates today:
-		// the Worker (apps/workers/auth-gateway/src/http.ts) strips any
-		// incoming requiems-api-key header before proxying to Go, so real
-		// Worker-proxied traffic never carries one and will 401 here. This
-		// middleware is the live enforcing check only for requests that
-		// reach Go directly (local dev, integration tests, future
-		// direct-to-Go paths) — see docs/plans/2026-08-21-go-auth-foundation-phase-0-1.md
-		// Phase 1 item 6 for why that's an accepted gap, not a bug.
+		// APIKeyAuth is the sole enforcing auth check for all traffic to this
+		// group, direct or Cloudflare-proxied — the Worker/BackendSecretAuth
+		// gate this repo used to run alongside it is retired (see
+		// docs/plans/2026-08-21-go-auth-foundation-phase-3-4.md Phase 3 item 5).
 		protected.Use(apiKeyAuth.Middleware())
 		// Rate limiting and usage/quota tracking both read the principal
 		// APIKeyAuth just attached, so they're mounted right after it, in

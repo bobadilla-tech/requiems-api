@@ -102,11 +102,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
       user.referral_received&.mark_converted!(subscription) if plan_name != "free"
     end
 
-    # Cloudflare sync after transaction commits — keeps the transaction free of HTTP I/O.
-    # A Cloudflare failure here does not roll back the subscription record; the customer
-    # already paid and the DB is the source of truth.
-    Cloudflare::ApiManagementService.new.sync_user_plan(user, plan_name)
-
     SubscriptionMailer.upgrade_notification(user, plan_name).deliver_later if plan_name != "free"
 
     Rails.logger.info "[LemonSqueezy] Subscription created for user #{user.id}: #{plan_name}"
@@ -157,8 +152,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
       )
     end
 
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
-
     if plan_name != "free" && plan_name != previous_plan
       SubscriptionMailer.upgrade_notification(subscription.user, plan_name).deliver_later
     end
@@ -183,8 +176,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
       )
     end
 
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, "free")
-
     Rails.logger.info "[LemonSqueezy] Subscription cancelled: #{subscription.id}"
   end
 
@@ -206,8 +197,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
         cancel_at_period_end: false
       )
     end
-
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
 
     Rails.logger.info "[LemonSqueezy] Subscription resumed: #{subscription.id}"
   end

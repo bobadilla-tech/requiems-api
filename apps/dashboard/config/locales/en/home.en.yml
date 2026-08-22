@@ -370,8 +370,9 @@ en:
     faq:
       authentication:
         a1: "Include your API key in the Authorization header as a Bearer token:"
-        a2_html: Test keys (starting with %{test_key}) are for development and testing.
-          Live keys (%{live_key}) are for production use. Both key types count against
+        a2_html: All keys share the same %{key_prefix} prefix. "Test" keys are for
+          development and testing; "Live" keys are for production use — this is just
+          a label on the key, not part of its format. Both key types count against
           your monthly request quota.
         a3: Yes! Go to your dashboard, click on the API key you want to regenerate,
           and select "Regenerate". Note that the old key will stop working immediately,

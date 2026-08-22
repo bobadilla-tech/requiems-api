@@ -257,6 +257,154 @@ real-Postgres/real-Redis convention:
   or in Cloudflare.
 - Full test suite (item 8) green.
 
+**Phase 3 items 1–5 and 8 — Final notes (shipped this session; items 6/7 not
+started, see below):**
+
+**Shipped:**
+
+- `apps/dashboard/app/services/api_key_generator.rb`: `generate` now produces
+  `requiem_<24-char-alnum>`, checks `ApiKey.exists?(key_prefix:)` before
+  returning, retries up to `MAX_GENERATION_ATTEMPTS = 5`, raises
+  `ApiKeyGenerator::CollisionError` if exhausted. The `environment:` keyword arg
+  item 1 originally passed through is gone — it never affected the key literal
+  even before this change, only the `environment` column, so dropping it is a
+  straight simplification, not a behavior change to that column
+  (`ApiKey#environment` validation/scope are untouched).
+- `apps/dashboard/app/models/api_key.rb`: `request_key_from_server` and
+  `generate_key_locally` collapsed into one method, `generate_key`, run in every
+  environment via `before_validation`. `remove_from_cloudflare` and
+  `sync_revocation_to_cloudflare` deleted outright (straight deletion per the
+  plan's own instruction, not the audit's `after_commit`-conversion fix).
+  `invalidate_go_auth_cache_on_destroy`/`_on_revoke` (Phase 1's Redis
+  invalidation) untouched.
+- `apps/dashboard/app/models/subscription.rb`:
+  `after_create`/`after_update
+  :sync_to_cloudflare` and the method itself
+  deleted.
+- `apps/dashboard/app/controllers/webhooks/lemonsqueezy_controller.rb`: all 4
+  explicit `Cloudflare::ApiManagementService.new.sync_user_plan(...)` calls
+  deleted (`handle_subscription_created`, `_updated`, `_cancelled`, `_resumed`).
+- `apps/api/app/app.go`: `protected.Use(middleware.BackendSecretAuth(...))`
+  removed; `APIKeyAuth` is now the sole gate on `/v1`.
+  `apps/api/platform/
+  middleware/auth.go` and `auth_test.go` deleted.
+  `cfg.BackendSecret` removed from `platform/config/config.go`'s `Config` struct
+  and `Load()`.
+- `infra/caddy/Caddyfile`, `infra/docker/.env.example`,
+  `infra/docker/docker-compose.dev.yml`, `infra/kamal/*.yml` deliberately
+  **not** touched — item 5's own text says to sequence `BACKEND_SECRET` env-file
+  removal together with item 6 (Caddy still needs the literal env var until that
+  lands), not as part of this PR.
+- Tests: `api_key_test.rb` gained a format-match test
+  (`\Arequiem_[0-9a-zA-Z]{24}\z`), a collision-retry test (stubs
+  `ApiKeyGenerator.generate_candidate` via Minitest's `.stub` — a manual
+  `define_singleton_method`/`remove_method` pair was tried first and **actively
+  broke the suite**: it permanently deleted the `private_class_method`-declared
+  `generate_candidate`, since `define_singleton_method` replaces rather than
+  stacks a same-named singleton method, so `remove_method` in the `ensure` block
+  removed the _original_, not a temporary override — `.stub` handles
+  save/restore correctly and is now the pattern to reach for), and a "no
+  Cloudflare call in a non-test-like env" test replacing the old "adds error
+  when server returns no key" test (that code path no longer exists). Two stale
+  `rq_test_`/`rq_live_` prefix assertions fixed — one in `api_key_test.rb`
+  (missed on the first pass since it was found by
+  `generate_key_locally`/`request_key_from_server` grep, not a prefix-literal
+  grep), one in `test/controllers/dashboard/api_keys_controller_test.rb` (a
+  second, initially missed instance of the exact same stale-literal problem —
+  found only by a follow-up repo-wide grep for `rq_live_`/`rq_test_`
+  specifically, not the method-name grep that caught the first one).
+- Go `app_test.go`'s `TestApp_Handler` rewritten: `BackendSecret` dropped from
+  the skip-guard and `config.Config` literal; the sub-test that used to send a
+  valid backend secret without an api key (proving Worker traffic 401'd) is
+  gone, replaced by a sub-test proving the opposite direction — a valid api key
+  with **no** `X-Backend-Secret` header at all now succeeds. This is item 8's
+  required regression test.
+
+**Manually verified end-to-end**, against the real dev docker-compose stack
+(`db`+`redis`+`api`, Rails migrated and seeded), a real `bin/rails db:seed`
+-generated key, curled directly against Go on its own port with **zero**
+`X-Backend-Secret` header ever sent:
+
+```
+no header, no key:    401
+no header, valid key: 200  (advice endpoint returned real JSON)
+wrong key:             401
+second hit (cache):    200 (Redis apikey: cache path also exercised)
+```
+
+This is the literal test the plan's Context section says would have caught
+today's 401-everything state — confirms item 5 actually fixes the Worker→Go path
+Phase 1's Final Notes flagged as non-functional, not just that it changes why it
+fails.
+
+**Bugs/gaps found while implementing, not called out in the plan doc — not fixed
+this session, need a decision:**
+
+1. **`apps/dashboard/app/services/api_proxy_service.rb` (backs the public
+   playground and `ToolDemosController`'s server-side demo forms) sends only
+   `X-Backend-Secret` to Go, never `requiems-api-key`.** This has been silently
+   broken since Phase 1 shipped `APIKeyAuth` into the same `/v1` group as
+   `BackendSecretAuth` (AND-composed) — it 401'd there already, and removing
+   `BackendSecretAuth` in this phase doesn't fix or worsen it, it's still just
+   as broken. **Not in scope for any item in this plan's Phase 3 or Phase 4** —
+   nobody has assigned this a fix. Needs a product decision (does the playground
+   get its own system-owned API key Rails provisions and injects here, or
+   something else) before it can be scoped as work. **Follow-up: add as a new
+   Phase 4 (or Phase 5) item explicitly, or file it separately — it will not get
+   fixed by anything currently written down.**
+2. **`apps/dashboard/app/lib/app_config.rb`'s `PLAYGROUND_API_KEY` /
+   `@playground_api_key` is dead — defined, defaulted to a stale
+   `rq_test_playground_demo_key` literal, never read anywhere in the codebase**
+   (confirmed via grep: only the definition and its `attr_reader` registration
+   exist, zero call sites). Left as-is — genuinely dead code, in-scope for Phase
+   4 item 4's "dead-code sweep" if that item's grep is redone post-Phase-3 (it
+   wasn't in the audit's own dead-code list, so add it explicitly rather than
+   assuming the existing Phase 4 item 4 bullets already cover it).
+3. **Go's test suite writes its self-contained fixture tables
+   (`api_keys`/`subscriptions`/`plans`/`usage_logs`) into whatever
+   `DATABASE_URL` resolves to inside the `api` dev container — which is the
+   shared dev database (`requiem`), not an isolated test database.** Running
+   `docker exec requiem-dev-api-1 go test ./...` (the exact command `agents.md`
+   documents) against a dev stack that hasn't had Rails migrate yet leaves those
+   minimal `CREATE TABLE IF NOT EXISTS` tables sitting in `requiem`; running
+   `bin/rails db:migrate` afterward then fails with `PG::DuplicateTable` on
+   `api_keys` because Rails' real migration collides with Go's minimal
+   test-fixture version of the same table name. Hit this directly this session —
+   resolved by dropping and recreating the `requiem` database before migrating.
+   **This is a pre-existing repo/CI hygiene gap, not something Phase 0–3
+   introduced or something this plan's scope covers** — worth its own follow-up
+   (either Go's tests should use a dedicated test database/`DATABASE_URL`
+   override the way Rails' `test:` config does, or the dev-stack bring-up order
+   in `agents.md` should explicitly warn migrate-then- test). Not blocking
+   anything in this plan; flagging so it doesn't surprise the next person who
+   runs both suites back-to-back on a fresh stack.
+4. Also fixed, not a bug but worth noting since it wasn't in the plan's item
+   list: the FAQ page (`app/views/home/faq.html.erb` +
+   `config/locales/{en,es,fr}/home.*.yml`) told users test/live keys have
+   different literal prefixes (`rq_test_`/`rq_live_`) — no longer true (both
+   share `requiem_`; environment is now purely a label, not part of the key
+   format). Updated copy in all three locales plus a stale comment in
+   `expire_promotional_subscriptions_job.rb` referencing the now-deleted
+   `sync_to_cloudflare` callback. Small, directly downstream of item 1's format
+   change, not scope creep into Phase 4's doc sweep (which is `docs/core/*` +
+   `agents.md`, not dashboard-embedded user copy).
+
+**Follow-ups (add explicitly to Phase 4, or a new Phase 5 — none of Phase 4's
+existing items 1–4 as currently written cover these):**
+
+- Fix or explicitly descope `api_proxy_service.rb`'s missing `requiems-api-key`
+  header (bug #1 above) — the playground/demo forms are fully non-functional
+  against Go until this is decided.
+- Remove dead `PLAYGROUND_API_KEY`/`AppConfig#playground_api_key` (bug #2 above)
+  as part of Phase 4 item 4's dead-code sweep — call it out explicitly since it
+  wasn't in the audit's original list.
+- Decide whether to fix Go's test-suite database isolation (bug #3 above) before
+  or independent of Phase 4 — it's a test-hygiene issue, not tied to the Worker
+  retirement, so it can land anytime.
+- Phase 4's own item 3 (doc sweep) should also grep `docs/` and `agents.md` for
+  any remaining `rq_live_`/`rq_test_` literals beyond what this session already
+  fixed in the FAQ/locale files — the sweep hadn't run yet as of this note.
+
 ### Phase 4 — Correctness cleanup (independent bugs + doc/dead-code sweep)
 
 Everything here is either already-independent of the migration per the audit

@@ -20,9 +20,7 @@ class ApiKey < ApplicationRecord
   scope :for_environment, ->(env) { where(environment: env) }
 
   # Callbacks
-  before_validation :request_key_from_server, on: :create
-  after_destroy :remove_from_cloudflare
-  after_update :sync_revocation_to_cloudflare, if: :saved_change_to_active?
+  before_validation :generate_key, on: :create
   # _commit, not plain after_destroy/after_update: revoke! and destroy can run
   # inside a wrapping transaction (e.g. User#ban!). A plain after_update fires
   # before that outer transaction commits — if Go re-caches the key in that
@@ -41,43 +39,12 @@ class ApiKey < ApplicationRecord
   after_destroy_commit :invalidate_go_auth_cache_on_destroy
   after_update_commit :invalidate_go_auth_cache_on_revoke, if: :saved_change_to_active?
 
-  # Request a new API key from the api-management worker.
-  # The worker generates the key, stores it in KV + D1, and returns it once.
-  def request_key_from_server
+  # Generate and hash a new API key locally — the sole key-generation path in
+  # every environment. No Cloudflare/Worker round trip.
+  def generate_key
     return if key_prefix.present? # Skip if already generated
 
-    if Rails.env.test?
-      # In tests, generate locally to avoid external dependencies
-      generate_key_locally
-    else
-      # In all other environments, use the api-management worker so that
-      # the key is immediately available in Cloudflare KV (auth) and D1 (usage)
-      service = Cloudflare::ApiManagementService.new
-      billing_start = user.subscription&.created_at || Time.current
-
-      generated_key = service.create_key(
-        user_id: user_id,
-        plan: user.current_plan,
-        name: name,
-        billing_cycle_start: billing_start.iso8601
-      )
-
-      if generated_key
-        self.full_key = generated_key
-        self.key_prefix = ApiKeyGenerator.extract_prefix(generated_key)
-        self.key_hash = ApiKeyGenerator.hash_key(generated_key)
-        self.active = true if active.nil?
-      else
-        errors.add(:base, I18n.t("api_key.failed_to_generate_api_key_please_try"))
-        throw :abort
-      end
-    end
-  end
-
-  def generate_key_locally
-    # Generate a local API key for test/development
-    env = environment&.to_sym || :live
-    generated_key = ApiKeyGenerator.generate(environment: env)
+    generated_key = ApiKeyGenerator.generate
     self.full_key = generated_key
     self.key_prefix = ApiKeyGenerator.extract_prefix(generated_key)
     self.key_hash = ApiKeyGenerator.hash_key(generated_key)
@@ -104,20 +71,6 @@ class ApiKey < ApplicationRecord
   end
 
   private
-
-  def remove_from_cloudflare
-    return if Rails.env.test?
-
-    Cloudflare::ApiManagementService.new.revoke_key(key_prefix)
-  rescue StandardError => e
-    Rails.logger.error("[ApiManagement] Failed to revoke API key #{key_prefix}: #{e.message}")
-  end
-
-  def sync_revocation_to_cloudflare
-    return unless !active && revoked_at
-
-    remove_from_cloudflare
-  end
 
   # Invalidates the Go auth path's Redis verification cache. Called both on
   # destroy and on revocation (active flipping to false) — either way, the

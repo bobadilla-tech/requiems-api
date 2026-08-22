@@ -374,9 +374,10 @@ fr:
       authentication:
         a1: 'Incluez votre clé API dans l''en-tête Authorization en tant que jeton
           Bearer :'
-        a2_html: Les clés de test (préfixe %{test_key}) servent au développement et
-          aux tests. Les clés de production (%{live_key}) sont pour la production.
-          Les deux types comptent dans le quota mensuel.
+        a2_html: Toutes les clés partagent le même préfixe %{key_prefix}. Les clés
+          « test » servent au développement et aux tests ; les clés « production »
+          sont pour la production — c'est juste une étiquette, pas le format de la
+          clé. Les deux types comptent dans le quota mensuel.
         a3: 'Oui ! Dans le tableau de bord, ouvrez la clé concernée et choisissez
           « Régénérer ». L''ancienne cesse de fonctionner immédiatement : mettez à
           jour toutes vos applications.'

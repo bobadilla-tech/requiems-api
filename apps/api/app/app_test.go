@@ -139,21 +139,16 @@ func TestNew_ErrorOnBadDatabaseURL(t *testing.T) {
 // TestApp_Handler is an integration test that creates a real App and verifies
 // the HTTP handler has the expected routing structure:
 //   - GET /healthz is publicly accessible (no auth required)
-//   - GET /v1/* routes require both the X-Backend-Secret header AND a valid
-//     requiems-api-key header (both middlewares are enforcing, AND-composed)
+//   - GET /v1/* routes require a valid requiems-api-key header — APIKeyAuth
+//     is the sole enforcing gate now that BackendSecretAuth is retired (see
+//     docs/plans/2026-08-21-go-auth-foundation-phase-3-4.md Phase 3 item 5)
 //
-// The test is skipped when DATABASE_URL or BACKEND_SECRET is not set.
+// The test is skipped when DATABASE_URL is not set.
 func TestApp_Handler(t *testing.T) {
 	dsn := os.Getenv("DATABASE_URL")
 
 	if dsn == "" {
 		t.Skip("DATABASE_URL not set; skipping App integration test")
-	}
-
-	backendSecret := os.Getenv("BACKEND_SECRET")
-
-	if backendSecret == "" {
-		t.Skip("BACKEND_SECRET not set; skipping App integration test")
 	}
 
 	redisURL := os.Getenv("REDIS_URL")
@@ -165,9 +160,8 @@ func TestApp_Handler(t *testing.T) {
 	t.Chdir("..") // resolve "migrations" relative to api root, not package dir
 
 	cfg := config.Config{
-		DatabaseURL:   dsn,
-		BackendSecret: backendSecret,
-		RedisURL:      redisURL,
+		DatabaseURL: dsn,
+		RedisURL:    redisURL,
 	}
 
 	app, err := New(context.Background(), cfg)
@@ -187,7 +181,7 @@ func TestApp_Handler(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
-	t.Run("v1 routes require backend secret", func(t *testing.T) {
+	t.Run("v1 routes require an api key", func(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
@@ -195,24 +189,15 @@ func TestApp_Handler(t *testing.T) {
 		assert.Equal(t, http.StatusUnauthorized, w.Code)
 	})
 
-	t.Run("v1 routes reject a valid backend secret without an api key", func(t *testing.T) {
-		// The Cloudflare Worker gateway strips requiems-api-key before
-		// proxying to Go, so this is exactly the traffic shape it sends
-		// today — this documents that Worker-proxied traffic is not what
-		// this middleware enforces yet (see app.go's mounting comment).
-		req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
-		req.Header.Set("X-Backend-Secret", backendSecret)
-		w := httptest.NewRecorder()
-		h.ServeHTTP(w, req)
-
-		assert.Equal(t, http.StatusUnauthorized, w.Code)
-	})
-
-	t.Run("v1 routes are accessible with valid backend secret and api key", func(t *testing.T) {
+	t.Run("v1 routes are accessible with a valid api key and no X-Backend-Secret header at all", func(t *testing.T) {
+		// This is the traffic shape Cloudflare-proxied requests carry once
+		// the Worker is retired (and the shape any direct client already
+		// carries): no X-Backend-Secret, just the api key. Proves item 5
+		// actually fixed the 401-on-all-traffic state described in the
+		// plan's Context section, not just changed why it failed.
 		apiKey := seedAPIKeyFixture(t, dsn)
 
 		req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
-		req.Header.Set("X-Backend-Secret", backendSecret)
 		req.Header.Set("requiems-api-key", apiKey)
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
