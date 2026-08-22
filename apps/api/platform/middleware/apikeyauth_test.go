@@ -443,6 +443,96 @@ func TestAPIKeyAuth_MalformedKeyRejectedWithoutPanic(t *testing.T) {
 	require.EqualValues(t, 0, *calls)
 }
 
+func TestAPIKeyAuth_WarmCacheRejectsPrefixOnlyKey(t *testing.T) {
+	// Regression test: a cache entry is a candidate (it carries the matched
+	// row's key_hash), not an authorization. Before this was fixed, a cache
+	// HIT skipped bcrypt entirely and trusted the prefix alone — so once a
+	// legitimate request had warmed the cache for a prefix, presenting just
+	// that 12-character prefix (which isn't secret — it's what masked_key
+	// displays) was enough to authenticate as that key's owner.
+	pool := setupAPIKeyAuthTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	prefix, fullKey := testKey(t)
+	userID := time.Now().UnixNano()
+	insertAPIKey(t, pool, prefix, fullKey, userID, true, false)
+
+	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
+	next, calls := newTestHandler()
+	handler := auth.Middleware()(next)
+
+	// Warm the cache with the real key.
+	w := doRequest(t, handler, fullKey)
+	require.Equal(t, http.StatusOK, w.Code)
+
+	// Now present only the prefix (exactly keyPrefixLength characters) —
+	// must NOT authenticate from the warm cache entry.
+	w = doRequest(t, handler, prefix)
+	require.Equal(t, http.StatusUnauthorized, w.Code)
+	require.EqualValues(t, 1, *calls) // only the first, legitimate request reached next
+}
+
+func TestAPIKeyAuth_WarmCacheRejectsAlteredSuffix(t *testing.T) {
+	pool := setupAPIKeyAuthTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	prefix, fullKey := testKey(t)
+	userID := time.Now().UnixNano()
+	insertAPIKey(t, pool, prefix, fullKey, userID, true, false)
+
+	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
+	next, calls := newTestHandler()
+	handler := auth.Middleware()(next)
+
+	w := doRequest(t, handler, fullKey)
+	require.Equal(t, http.StatusOK, w.Code)
+
+	alteredSuffix := prefix + "zzzzzzzzzz"
+	w = doRequest(t, handler, alteredSuffix)
+	require.Equal(t, http.StatusUnauthorized, w.Code)
+	require.EqualValues(t, 1, *calls)
+}
+
+func TestAPIKeyAuth_WarmCacheFallsThroughToCorrectCollisionCandidate(t *testing.T) {
+	// A cache entry only remembers the last-verified candidate for a prefix.
+	// If a second, different key shares that prefix, presenting it must
+	// still resolve to *that* key's own principal — not 401, and not
+	// silently authenticated as the first (cached) key.
+	pool := setupAPIKeyAuthTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	prefix := "requiem_" + randomHex(t, 2)
+	fullKeyA := prefix + "aaaaaaaaaaaaaaaaaaaa"
+	fullKeyB := prefix + "bbbbbbbbbbbbbbbbbbbb"
+
+	userA := time.Now().UnixNano()
+	userB := userA + 1
+
+	insertAPIKey(t, pool, prefix, fullKeyA, userA, true, false)
+	insertAPIKey(t, pool, prefix, fullKeyB, userB, true, false)
+
+	auth := NewAPIKeyAuth(pool, rdb, time.Minute)
+
+	var gotUserID int64
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p, _ := APIKeyPrincipalFromContext(r.Context())
+		gotUserID = p.UserID
+		w.WriteHeader(http.StatusOK)
+	})
+	handler := auth.Middleware()(next)
+
+	// Warm the cache with key A.
+	w := doRequest(t, handler, fullKeyA)
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, userA, gotUserID)
+
+	// Presenting key B (same prefix, different secret) must resolve to B's
+	// own principal via a fresh Postgres lookup, not A's cached one.
+	w = doRequest(t, handler, fullKeyB)
+	require.Equal(t, http.StatusOK, w.Code)
+	require.Equal(t, userB, gotUserID)
+}
+
 func TestAPIKeyAuth_ResponseDoesNotLeakWhetherPrefixMatched(t *testing.T) {
 	pool := setupAPIKeyAuthTestDB(t)
 	rdb := setupAPIKeyAuthTestRedis(t)

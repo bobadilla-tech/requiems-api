@@ -57,6 +57,29 @@ class UserTest < ActiveSupport::TestCase
     assert @user.banned?
   end
 
+  test "ban! invalidates the Go auth cache for all active api keys, even though update_all skips ApiKey callbacks" do
+    redis = Redis.new(url: ENV.fetch("REDIS_URL", "redis://localhost:6379"))
+    redis.ping
+  rescue StandardError => e
+    skip "Redis unavailable: #{e.message}"
+  else
+    admin = create_user(email: "admin@example.com", password: "password123", password_confirmation: "password123")
+    key_one = @user.api_keys.create!(name: "One", environment: "test")
+    key_two = @user.api_keys.create!(name: "Two", environment: "test")
+
+    cache_key_one = "#{GoAuthCache::CACHE_KEY_PREFIX}#{key_one.key_prefix}"
+    cache_key_two = "#{GoAuthCache::CACHE_KEY_PREFIX}#{key_two.key_prefix}"
+    redis.set(cache_key_one, "warm")
+    redis.set(cache_key_two, "warm")
+
+    @user.ban!(reason: "test", admin_user: admin)
+
+    assert_nil redis.get(cache_key_one)
+    assert_nil redis.get(cache_key_two)
+  ensure
+    redis&.del(cache_key_one, cache_key_two) if cache_key_one
+  end
+
   test "has many api_keys" do
     assert_respond_to @user, :api_keys
 

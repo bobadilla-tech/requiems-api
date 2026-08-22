@@ -71,4 +71,29 @@ func TestRequestLogger(t *testing.T) {
 		require.Equal(t, "/does-not-exist", logLine["route"])
 		require.Equal(t, float64(http.StatusNotFound), logLine["status"])
 	})
+
+	t.Run("logs 200 when the handler writes neither headers nor body", func(t *testing.T) {
+		t.Parallel()
+
+		var buf bytes.Buffer
+		logger := slog.New(slog.NewJSONHandler(&buf, nil))
+
+		r := chi.NewRouter()
+		r.Use(RequestLogger(logger))
+		r.Get("/silent", func(_ http.ResponseWriter, _ *http.Request) {
+			// Deliberately does nothing: no WriteHeader, no Write. net/http
+			// still writes a 200 to the wire in this case — the wrapped
+			// ResponseWriter's Status() would otherwise report 0.
+		})
+
+		req := httptest.NewRequest(http.MethodGet, "/silent", http.NoBody)
+		w := httptest.NewRecorder()
+
+		r.ServeHTTP(w, req)
+
+		var logLine map[string]any
+		require.NoError(t, json.Unmarshal(buf.Bytes(), &logLine))
+
+		require.Equal(t, float64(http.StatusOK), logLine["status"])
+	})
 }

@@ -65,12 +65,21 @@ func APIKeyPrincipalFromContext(ctx context.Context) (APIKeyPrincipal, bool) {
 // cachedAPIKey is the Redis-cached verification result, keyed by key_prefix
 // (not by a hash of the raw key: Rails discards the raw key after creation,
 // so a raw-key-derived cache key could never be invalidated on revoke).
+//
+// The cache entry is a *candidate*, not an authorization: it still carries
+// the matched row's key_hash, and every request — cache hit or miss — must
+// bcrypt-compare the presented key against it before the principal it names
+// is used. Skipping that check on a hit would mean anyone who learns a
+// 12-character key_prefix (not meant to be secret — it's what masked_key
+// displays) could authenticate as that key's owner for the rest of the TTL
+// without ever presenting the real secret.
 type cachedAPIKey struct {
 	UserID             int64     `json:"user_id"`
 	Plan               string    `json:"plan"`
 	Revoked            bool      `json:"revoked"`
 	APIKeyID           int64     `json:"api_key_id"`
 	CurrentPeriodStart time.Time `json:"current_period_start"`
+	KeyHash            string    `json:"key_hash"`
 }
 
 // APIKeyAuth validates the requiems-api-key header via candidate-then-verify
@@ -107,6 +116,16 @@ func (a *APIKeyAuth) Middleware() func(http.Handler) http.Handler {
 			prefix := presented[:keyPrefixLength]
 
 			result, found := a.lookupCache(r.Context(), prefix)
+
+			// A cache hit only names a candidate key_hash; it is not itself
+			// proof the presented key is correct. Verify it here, and fall
+			// through to Postgres on a mismatch — this is what lets a
+			// second key sharing the same prefix (a real, if rare,
+			// collision) still resolve correctly instead of being rejected
+			// or, worse, silently authenticated as the wrong key.
+			if found && bcrypt.CompareHashAndPassword([]byte(result.KeyHash), []byte(presented)) != nil {
+				found = false
+			}
 
 			if !found {
 				var err error
@@ -228,6 +247,7 @@ func (a *APIKeyAuth) lookupDB(ctx context.Context, prefix, presented string) (ca
 			Revoked:            !active || revokedAt != nil,
 			APIKeyID:           apiKeyID,
 			CurrentPeriodStart: currentPeriodStart,
+			KeyHash:            keyHash,
 		}, true, rows.Err()
 	}
 

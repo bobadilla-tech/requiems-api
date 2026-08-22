@@ -28,11 +28,19 @@ func RequestLogger(logger *slog.Logger) func(http.Handler) http.Handler {
 				pattern = route.RoutePattern()
 			}
 
+			// A handler that never calls WriteHeader/Write leaves ww.Status()
+			// at its zero value, but net/http itself writes a 200 to the wire
+			// in that case — match that behavior instead of logging "status":0.
+			status := ww.Status()
+			if status == 0 {
+				status = http.StatusOK
+			}
+
 			logger.Info("request",
 				"request_id", GetRequestID(r.Context()),
 				"method", r.Method,
 				"route", pattern,
-				"status", ww.Status(),
+				"status", status,
 				"latency_ms", time.Since(start).Milliseconds(),
 			)
 		})

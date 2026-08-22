@@ -22,9 +22,24 @@ class ApiKey < ApplicationRecord
   # Callbacks
   before_validation :request_key_from_server, on: :create
   after_destroy :remove_from_cloudflare
-  after_destroy :invalidate_go_auth_cache
   after_update :sync_revocation_to_cloudflare, if: :saved_change_to_active?
-  after_update :invalidate_go_auth_cache, if: :saved_change_to_active?
+  # _commit, not plain after_destroy/after_update: revoke! and destroy can run
+  # inside a wrapping transaction (e.g. User#ban!). A plain after_update fires
+  # before that outer transaction commits — if Go re-caches the key in that
+  # window, it reads the still-committed-old row (Postgres isn't done
+  # committing yet) and caches it as valid for a full TTL, outliving the
+  # revocation it raced with. after_commit only fires once the row change is
+  # actually visible to other connections.
+  # Two distinctly-named methods, not the same symbol registered twice with
+  # different `if:` guards: Rails' callback chain deduplicates by filter name,
+  # so `after_destroy_commit :invalidate_go_auth_cache` followed by
+  # `after_update_commit :invalidate_go_auth_cache, if: ...` collapses into a
+  # single entry that keeps only the second's `if:` guard — silently
+  # no-opping on destroy, since `saved_change_to_active?` is never true there.
+  # Verified this actually happens (empirically, via `bin/rails runner`, not
+  # just in theory) before landing this as two separate methods.
+  after_destroy_commit :invalidate_go_auth_cache_on_destroy
+  after_update_commit :invalidate_go_auth_cache_on_revoke, if: :saved_change_to_active?
 
   # Request a new API key from the api-management worker.
   # The worker generates the key, stores it in KV + D1, and returns it once.
@@ -108,7 +123,11 @@ class ApiKey < ApplicationRecord
   # destroy and on revocation (active flipping to false) — either way, the
   # Go-side cached {user_id, plan, revoked} result for this key_prefix must
   # not keep serving a key that no longer exists or is no longer active.
-  def invalidate_go_auth_cache
+  def invalidate_go_auth_cache_on_destroy
+    GoAuthCache.invalidate(key_prefix)
+  end
+
+  def invalidate_go_auth_cache_on_revoke
     GoAuthCache.invalidate(key_prefix)
   end
 end

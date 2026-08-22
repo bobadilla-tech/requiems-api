@@ -110,6 +110,8 @@ class User < ApplicationRecord
   end
 
   def ban!(reason:, admin_user:)
+    key_prefixes_to_invalidate = api_keys.active_keys.pluck(:key_prefix)
+
     transaction do
       update!(
         status: "banned",
@@ -118,6 +120,9 @@ class User < ApplicationRecord
         active: false
       )
 
+      # update_all bypasses ActiveRecord callbacks entirely, so ApiKey's
+      # after_update_commit :invalidate_go_auth_cache never fires for these
+      # rows — invalidate explicitly below instead.
       api_keys.update_all(active: false, revoked_at: Time.current)
 
       AuditLog.create!(
@@ -127,6 +132,11 @@ class User < ApplicationRecord
         details: { reason: reason }.to_json
       )
     end
+
+    # Runs after the transaction above has committed (not inside a Rails
+    # callback), so this can't race a Go-side cache re-warm the way an
+    # after_update callback fired mid-transaction could.
+    key_prefixes_to_invalidate.each { |prefix| GoAuthCache.invalidate(prefix) }
   end
 
   def suspend!(admin_user:)
