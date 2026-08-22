@@ -88,7 +88,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
         lemonsqueezy_subscription_id: params[:data][:id],
         lemonsqueezy_customer_id: data[:customer_id],
         plan_name: plan_name,
-        plan: billing_cycle,
+        plan: billing_cycle, # codeql[rb/clear-text-storage-sensitive-data] billing_cycle is "monthly"/"yearly" (see determine_billing_cycle), not payment/customer data
         status: data[:status],
         current_period_start: data[:renews_at] ? Time.zone.parse(data[:renews_at]) - 1.month : Time.current,
         current_period_end: data[:renews_at],
@@ -150,7 +150,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
-        plan: billing_cycle,
+        plan: billing_cycle, # codeql[rb/clear-text-storage-sensitive-data] billing_cycle is "monthly"/"yearly" (see determine_billing_cycle), not payment/customer data
         current_period_end: data[:renews_at],
         cancel_at_period_end: data[:ends_at].present?
       )
@@ -199,7 +199,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
-        plan: billing_cycle,
+        plan: billing_cycle, # codeql[rb/clear-text-storage-sensitive-data] billing_cycle is "monthly"/"yearly" (see determine_billing_cycle), not payment/customer data
         cancel_at_period_end: false
       )
     end

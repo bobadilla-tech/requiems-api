@@ -262,6 +262,38 @@ func TestCycleStartClampsAnchorDayToMonthEnd(t *testing.T) {
 	}
 }
 
+// TestHeaderCredits_BoundsUnvalidatedParseInt guards the CodeQL
+// go/incorrect-integer-conversion fix: headerCredits must reject anything
+// that wouldn't survive the later int64->int narrowing in recordUsage
+// (usage_logs.credits_used is an int column), on top of its existing
+// missing/zero/negative handling.
+func TestHeaderCredits_BoundsUnvalidatedParseInt(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  string
+		want int64
+	}{
+		{"missing header defaults to 1", "", 1},
+		{"non-numeric defaults to 1", "not-a-number", 1},
+		{"zero defaults to 1", "0", 1},
+		{"negative defaults to 1", "-5", 1},
+		{"typical batch count passes through", "50", 50},
+		{"exactly MaxInt32 passes through", "2147483647", 2147483647},
+		{"above MaxInt32 defaults to 1", "2147483648", 1},
+		{"far above MaxInt32 (int64 max) defaults to 1", "9223372036854775807", 1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			headers := http.Header{}
+			if tt.raw != "" {
+				headers.Set("X-Usage-Count", tt.raw)
+			}
+			require.Equal(t, tt.want, headerCredits(headers))
+		})
+	}
+}
+
 func TestUsageQuota_RowLevelWriteDedupsOnConflict(t *testing.T) {
 	pool := setupUsageTestDB(t)
 	rdb := setupAPIKeyAuthTestRedis(t)

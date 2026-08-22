@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -235,7 +236,7 @@ func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal,
 
 	if err != nil {
 		u.logger.Error("usage quota: failed to write usage_logs row, dropping",
-			"error", err, "user_id", principal.UserID, "api_key_id", principal.APIKeyID) // codeql[go/cleartext-logging] APIKeyID is only the numeric api_keys.id, never a credential
+			"error", err, "user_id", principal.UserID, "api_key_id", principal.APIKeyID) // codeql[go/clear-text-logging] APIKeyID is only the numeric api_keys.id, never a credential
 	}
 }
 
@@ -247,9 +248,13 @@ func responseCredits(headers http.Header) int64 {
 	return headerCredits(headers)
 }
 
+// headerCredits parses X-Usage-Count, bounded to [1, math.MaxInt32] so the
+// later int64->int narrowing in recordUsage (usage_logs.credits_used is an
+// int column) can never overflow on any platform, regardless of int's native
+// width there.
 func headerCredits(headers http.Header) int64 {
 	if raw := headers.Get("X-Usage-Count"); raw != "" {
-		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n > 0 {
+		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n > 0 && n <= math.MaxInt32 {
 			return n
 		}
 	}
