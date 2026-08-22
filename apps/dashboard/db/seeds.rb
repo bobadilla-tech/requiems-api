@@ -32,6 +32,9 @@ if Rails.env.development?
   if test_user.api_keys.active_keys.none?
     raw_key = ENV["LOCAL_DEV_API_KEY"]
     raise "LOCAL_DEV_API_KEY must be set when creating the local development API key" if raw_key.blank?
+    unless raw_key.match?(/\Arequiem_[0-9A-Za-z]{24}\z/)
+      raise "LOCAL_DEV_API_KEY must match requiem_<24 alphanumeric characters>"
+    end
 
     dev_key = test_user.api_keys.create!(
       name: "Local Dev Key",

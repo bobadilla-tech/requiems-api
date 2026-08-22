@@ -37,13 +37,14 @@ class CreatePlans < ActiveRecord::Migration[8.1]
       UPDATE subscriptions
       SET plan_name = 'free'
       WHERE plan_name IS NULL
-         OR plan_name NOT IN ('free', 'developer', 'business', 'professional')
+         OR plan_name NOT IN ('free', 'developer', 'business', 'professional', 'enterprise')
     SQL
 
     add_foreign_key :subscriptions, :plans, column: :plan_name, primary_key: :id
   end
 
   def down
+    remove_foreign_key :subscriptions, column: :plan_name
     drop_table :plans
   end
 end

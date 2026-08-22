@@ -7,6 +7,7 @@ import (
 	"math"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	chimw "github.com/go-chi/chi/v5/middleware"
@@ -54,11 +55,9 @@ return redis.call("INCRBY", KEYS[1], ARGV[1])
 //
 //  1. Quota check (Lua bootstrap-and-increment against Redis). Redis is the
 //     atomic reservation store; an unavailable reservation path fails closed.
-//     The counter
-//     increments unconditionally, before the handler runs — a rejected
-//     request still consumes one unit of quota, matching the legacy
-//     Worker's check-then-serve-or-reject semantics. It counts *checked*
-//     requests, not *served* ones, by design.
+//     The counter reserves the authoritative route cost before the handler
+//     runs. If the reservation is over quota, it is rolled back because the
+//     request was not admitted.
 //  2. A synchronous INSERT into usage_logs after the handler runs, skipped
 //     entirely for a request the quota check rejected.
 type UsageQuota struct {
@@ -106,7 +105,7 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 				}
 			}
 
-			requestedCredits := requestCredits(r.Header)
+			requestedCredits := requestCredits(r)
 			count, err := u.increment(r.Context(), key, principal.UserID, cycle, requestedCredits)
 			if err != nil {
 				// Quota reservation must not silently fail open. A bare
@@ -119,6 +118,9 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			}
 
 			if limits.RequestLimit != nil && count > *limits.RequestLimit {
+				if err := u.adjust(r.Context(), key, -requestedCredits); err != nil {
+					u.logger.Error("usage quota: failed to roll back rejected reservation", "error", err, "user_id", principal.UserID)
+				}
 				httpx.Error(w, http.StatusTooManyRequests, "quota_exceeded", "Monthly request quota exceeded")
 				return
 			}
@@ -240,8 +242,21 @@ func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal,
 	}
 }
 
-func requestCredits(headers http.Header) int64 {
-	return headerCredits(headers)
+// requestCredits returns the static, authoritative cost for a route before
+// dispatch. Dynamic batch costs are reconciled from the response header after
+// the handler runs; the request's X-Usage-Count header is never trusted.
+func requestCredits(r *http.Request) int64 {
+	if r.Method != http.MethodGet {
+		return 1
+	}
+
+	for _, route := range []string{"/v1/text/dictionary", "/v1/text/thesaurus"} {
+		if r.URL.Path == route || strings.HasPrefix(r.URL.Path, route+"/") {
+			return 2
+		}
+	}
+
+	return 1
 }
 
 func responseCredits(headers http.Header) int64 {
@@ -293,15 +308,24 @@ func cycleStart(anchor, now time.Time) time.Time {
 	now = now.UTC()
 
 	anchorDay := anchor.Day()
-	monthEnd := time.Date(now.Year(), now.Month()+1, 0, 0, 0, 0, 0, time.UTC).Day()
+	monthStart := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.UTC)
+	currentMonthEnd := monthStart.AddDate(0, 1, -1).Day()
+	currentDay := anchorDay
+	if currentDay > currentMonthEnd {
+		currentDay = currentMonthEnd
+	}
+	candidate := time.Date(now.Year(), now.Month(), currentDay, 0, 0, 0, 0, time.UTC)
+	if candidate.After(now) {
+		monthStart = monthStart.AddDate(0, -1, 0)
+	}
+
+	// Derive the candidate month before clamping the original anchor day. This
+	// keeps a January 31 anchor on January 31 during February instead of first
+	// turning it into February 28 and then subtracting a month.
+	monthEnd := monthStart.AddDate(0, 1, -1).Day()
 	if anchorDay > monthEnd {
 		anchorDay = monthEnd
 	}
 
-	candidate := time.Date(now.Year(), now.Month(), anchorDay, 0, 0, 0, 0, time.UTC)
-	if candidate.After(now) {
-		candidate = candidate.AddDate(0, -1, 0)
-	}
-
-	return candidate
+	return time.Date(monthStart.Year(), monthStart.Month(), anchorDay, 0, 0, 0, 0, time.UTC)
 }

@@ -227,9 +227,10 @@ func TestApp_Handler(t *testing.T) {
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
 
-		// The endpoint itself may return any 2xx; 401/403 would indicate auth failure.
-		assert.NotEqual(t, http.StatusUnauthorized, w.Code)
-		assert.NotEqual(t, http.StatusForbidden, w.Code)
+		// The endpoint itself may return any 2xx, but a non-2xx response means
+		// this regression test did not prove the authenticated request served.
+		assert.GreaterOrEqual(t, w.Code, http.StatusOK)
+		assert.Less(t, w.Code, http.StatusMultipleChoices)
 	})
 }
 

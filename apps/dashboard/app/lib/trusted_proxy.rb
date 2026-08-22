@@ -24,8 +24,19 @@ class TrustedProxy
     2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32
   ].freeze
 
+  # These are the Docker/Kamal peer networks that can reach Rails through the
+  # Caddy/Kamal proxy path. Do not use Rails' broad private-network defaults:
+  # an unconfigured private peer must not gain the ability to override the
+  # caller IP with X-Forwarded-For.
+  CADDY_PEER_RANGES = %w[
+    127.0.0.1/32
+    172.18.0.0/16
+    172.20.0.0/16
+  ].freeze
+
   TRUSTED_RANGES = (
-    ActionDispatch::RemoteIp::TRUSTED_PROXIES + CLOUDFLARE_IP_RANGES.map { |cidr| IPAddr.new(cidr) }
+    CADDY_PEER_RANGES.map { |cidr| IPAddr.new(cidr) } +
+    CLOUDFLARE_IP_RANGES.map { |cidr| IPAddr.new(cidr) }
   ).freeze
 
   # Returns the caller's real IP: X-Forwarded-For's first hop when

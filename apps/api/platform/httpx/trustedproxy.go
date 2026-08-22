@@ -67,13 +67,27 @@ func ClientIP(r *http.Request) string {
 	}
 
 	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
-		if before, _, ok := strings.Cut(xff, ","); ok {
-			return strings.TrimSpace(before)
+		// X-Forwarded-For is ordered client-to-proxy. Walk from the
+		// connection inward, discarding proxy hops we explicitly trust; the
+		// first valid address left is the client (or the nearest untrusted
+		// hop). Never return an unparseable header value as an IP.
+		parts := strings.Split(xff, ",")
+		for i := len(parts) - 1; i >= 0; i-- {
+			candidate := strings.TrimSpace(parts[i])
+			ip := net.ParseIP(candidate)
+			if ip == nil {
+				continue
+			}
+			if !isTrustedProxy(ip) {
+				return candidate
+			}
 		}
-		return strings.TrimSpace(xff)
 	}
 	if xri := r.Header.Get("X-Real-IP"); xri != "" {
-		return strings.TrimSpace(xri)
+		candidate := strings.TrimSpace(xri)
+		if net.ParseIP(candidate) != nil {
+			return candidate
+		}
 	}
 	return remoteHost
 }

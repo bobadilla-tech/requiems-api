@@ -28,6 +28,10 @@ services:
     image: redis:7-alpine
     networks:
       - stack
+    env_file:
+      - .env.example
+      - path: .env.local
+        required: false
     # noeviction + an explicit maxmemory: auth-cache/rate-limit/quota state
     # (apikey:*, ratelimit:*, usage:*) must never be evicted under memory
     # pressure, and they now share this instance with disposable response
@@ -41,7 +45,10 @@ services:
     # identically to a connection error/timeout, not as a separate case.
     # Development uses the bounded value in .env.example; production must set
     # REDIS_MAXMEMORY only after validating its shared workload capacity.
-    command: redis-server --maxmemory ${REDIS_MAXMEMORY:-256mb} --maxmemory-policy noeviction
+    # Read REDIS_MAXMEMORY inside the container so .env.local, supplied via
+    # env_file, is available before Redis is started. Compose service env_file
+    # values are not available to Compose-time interpolation.
+    command: ["sh", "-c", "exec redis-server --maxmemory \"$${REDIS_MAXMEMORY:-256mb}\" --maxmemory-policy noeviction"]
     volumes:
       - redis_data:/data
     ports:

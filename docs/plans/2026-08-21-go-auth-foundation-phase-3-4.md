@@ -33,10 +33,11 @@ without blocking anything.
 
 ## Context
 
-**The Worker→Go path remains functional during this work.** The Worker preserves
-`requiems-api-key` on the trusted hop and Go's `APIKeyAuth` verifies the
-complete key against Postgres. The Worker still performs edge validation, so
-both layers remain active until the planned traffic cutover.
+**At the time this plan was written, the Worker→Go path remained functional.**
+The Worker preserved `requiems-api-key` on the trusted hop and Go's
+`APIKeyAuth` verified the complete key against Postgres. The Worker still
+performed edge validation, so both layers remained active until the planned
+traffic cutover. The later cutover status is recorded in the Phase 7 plan.
 
 **Verified against the current tree** (not re-derived from the audit, which is
 same-day but was read-only): `apps/dashboard/app/models/api_key.rb` still gates
@@ -320,16 +321,17 @@ started, see below):**
 -generated key, curled directly against Go on its own port with **zero**
 `X-Backend-Secret` header ever sent:
 
-```
+```text
 no header, no key:    401
 no header, valid key: 200  (advice endpoint returned real JSON)
 wrong key:             401
 second hit (cache):    200 (Redis apikey: cache path also exercised)
 ```
 
-The Worker header-preservation test and the Go integration path together cover
-the request shape that previously caused the 401-everything state: edge
-validation forwards the complete key, and Go verifies it before serving.
+The Phase 3-era Worker header-preservation test and the Go integration path
+together covered the request shape that previously caused the 401-everything
+state: edge validation forwarded the complete key, and Go verified it before
+serving.
 
 **Bugs/gaps found while implementing, not called out in the plan doc — not fixed
 this session, need a decision:**

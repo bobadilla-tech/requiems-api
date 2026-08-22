@@ -161,14 +161,10 @@ meant to be reused as-is). Key: `usage:{user_id}:{cycle_start_unix}`. On
 bootstrap, baseline query as described in Context. The Lua script increments
 unconditionally, then the post-increment value is compared against the plan's
 `request_limit` (null = unlimited, skip the check entirely). If over the limit,
-the request is rejected with `429` — the increment has already happened at that
-point, but this is not double counting: the row-level Postgres write in step (b)
-below is skipped for a rejected request, so a rejected request consumes one unit
-of quota and produces no `usage_logs` row. Document this in-code: the quota
-counter counts _checked_ requests, not _served_ requests, by design — this
-matches the legacy Worker's own `checkRequestUsage` semantics
-(check-then-serve-or-reject), not an "unlimited free retries at the boundary"
-design.
+the request is rejected with `429` and the reservation is rolled back — a
+rejected request consumes no quota and produces no `usage_logs` row. The
+reservation uses the authoritative static route cost before dispatch; dynamic
+batch cost is reconciled from the backend response after an admitted request.
 
 **b. Row-level write (after the handler runs, on response).** Synchronous
 `INSERT INTO usage_logs (user_id, api_key_id, endpoint, credits_used,
@@ -286,9 +282,9 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
   counter starts from their combined sum, not just one key's); crossing the
   limit rejects with 429 and no further Postgres write for that request; a new
   billing cycle (via TTL expiry or an explicit `current_period_start` change)
-  resets to zero, not carrying over the previous cycle's count; Redis down +
-  Postgres up → falls through to direct `SUM` and still enforces; both down →
-  fails closed; a simulated `OOM command not allowed` write rejection (e.g. a
+  resets to zero, not carrying over the previous cycle's count; Redis down →
+  fails closed with 503, as does both Redis and Postgres being down; a simulated
+  `OOM command not allowed` write rejection (e.g. a
   test Redis instance with `maxmemory` set near-zero) is handled identically to
   a connection error, not left as an unhandled 500.
 - Row-level write: two requests that would produce the same
@@ -384,8 +380,8 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
   what lets a static anchor (a free-tier key's `created_at`, which never
   changes) still roll into a new monthly cycle automatically, which a naive "use
   `CurrentPeriodStart` as the literal cycle key" approach would not have done.
-  Redis error/timeout falls through to a direct Postgres `SUM`, enforced as
-  `sum+1`; if that also fails, fails closed with `503`, logged at `error`.
+  Redis error/timeout fails closed with `503`, logged at `error`; there is no
+  non-atomic Postgres `SUM` fallback.
   Row-level write is a synchronous
   `INSERT ... ON
   CONFLICT (api_key_id, used_at, endpoint) DO NOTHING`,
@@ -405,7 +401,8 @@ Following the repo's real-Postgres/real-Redis convention (Phase 1's
 - Tests: `ratelimit_test.go` and `usage_test.go` cover every case section 6
   lists (concurrent-increment correctness, minute-window isolation, fail-open on
   Redis-down and Redis-timeout, cross-key-sum bootstrap, cycle rollover
-  excluding prior-cycle usage, 429-skips-the-row-write, Redis-down fail-closed,
+  excluding prior-cycle usage, 429-rolls-back-and-skips-the-row-write,
+  repeated rejected batch reservations, Redis-down fail-closed,
   both-down fail-closed, simulated `OOM command not allowed` rejected
   identically to a connection error via `CONFIG SET maxmemory 1`, row-level
   dedup via `ON CONFLICT`, and enterprise/null-limit plans never triggering
@@ -482,9 +479,8 @@ own verification method):
 **Known, accepted gaps carried forward as-is (already reasoned about in the plan
 doc's text, not revisited here):** the rate limiter's inability to bound the
 auth-cache prefix-guessing exposure; the usage-logs row-level dedup collision
-under rapid same-second traffic to one endpoint; the thundering-herd risk of
-every concurrent request falling through to Postgres `SUM` simultaneously if
-Redis degrades under load; the three manually-synced copies of plan-tier values.
+under rapid same-second traffic to one endpoint; the three manually-synced
+copies of plan-tier values.
 
 **Follow-ups (new, surfaced by this phase):**
 

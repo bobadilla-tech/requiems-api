@@ -17,6 +17,28 @@ func TestClientIP_TrustedProxyHonorsForwardedHeader(t *testing.T) {
 	}
 }
 
+func TestClientIP_TrustedProxyWalksForwardedChainRightToLeft(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
+	req.RemoteAddr = "172.20.0.5:54321"
+	req.Header.Set("X-Forwarded-For", "198.51.100.9, 172.20.0.6, 172.20.0.5")
+
+	got := ClientIP(req)
+	if got != "198.51.100.9" {
+		t.Fatalf("ClientIP() = %q, want the first untrusted address in the chain", got)
+	}
+}
+
+func TestClientIP_TrustedProxySkipsMalformedAndTrustedForwardedEntries(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
+	req.RemoteAddr = "172.20.0.5:54321"
+	req.Header.Set("X-Forwarded-For", "not-an-ip, 172.20.0.6, 172.20.0.5")
+
+	got := ClientIP(req)
+	if got != "172.20.0.5" {
+		t.Fatalf("ClientIP() = %q, want RemoteAddr after trusted/malformed entries are discarded", got)
+	}
+}
+
 func TestClientIP_TrustedProxyHonorsCloudflareRange(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
 	req.RemoteAddr = "104.16.1.1:443" // within Cloudflare's published range

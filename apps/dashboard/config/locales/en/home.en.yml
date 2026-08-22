@@ -370,7 +370,7 @@ en:
     faq:
       authentication:
         a1: "Include your API key in the Authorization header as a Bearer token:"
-        a2_html: All keys share the same %{key_prefix} prefix. "Test" keys are for
+        a2_html: All keys share the same requiem_ prefix. "Test" keys are for
           development and testing; "Live" keys are for production use — this is just
           a label on the key, not part of its format. Both key types count against
           your monthly request quota.

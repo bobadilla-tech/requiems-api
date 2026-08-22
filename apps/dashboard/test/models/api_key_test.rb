@@ -199,6 +199,24 @@ class ApiKeyTest < ActiveSupport::TestCase
     redis&.del(cache_key) if cache_key
   end
 
+  test "rotating key material invalidates both old and new Go auth cache prefixes" do
+    redis = go_auth_test_redis
+    old_prefix = @api_key.key_prefix
+    new_raw_key = "requiem_#{"A" * 24}"
+    new_prefix = ApiKeyGenerator.extract_prefix(new_raw_key)
+    old_cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{old_prefix}"
+    new_cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{new_prefix}"
+    redis.set(old_cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+    redis.set(new_cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.update!(key_prefix: new_prefix, key_hash: ApiKeyGenerator.hash_key(new_raw_key))
+
+    assert_nil redis.get(old_cache_key)
+    assert_nil redis.get(new_cache_key)
+  ensure
+    redis&.del(old_cache_key, new_cache_key) if old_cache_key && new_cache_key
+  end
+
   test "destroying an api key invalidates the Go auth cache for this key_prefix" do
     redis = go_auth_test_redis
     cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"

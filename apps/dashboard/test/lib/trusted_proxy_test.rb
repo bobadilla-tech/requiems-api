@@ -25,6 +25,11 @@ class TrustedProxyTest < ActiveSupport::TestCase
     assert_equal "203.0.113.55", TrustedProxy.client_ip(request)
   end
 
+  test "ignores a spoofed X-Forwarded-For from an unconfigured private peer" do
+    request = fake_request(remote_addr: "10.0.0.8", x_forwarded_for: "6.6.6.6")
+    assert_equal "10.0.0.8", TrustedProxy.client_ip(request)
+  end
+
   test "falls back to remote_addr when no forwarded header is present, even if trusted" do
     request = fake_request(remote_addr: "172.20.0.5")
     assert_equal "172.20.0.5", TrustedProxy.client_ip(request)

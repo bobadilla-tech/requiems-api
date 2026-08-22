@@ -38,7 +38,10 @@ class ApiKey < ApplicationRecord
   # just in theory) before landing this as two separate methods.
   after_destroy_commit :invalidate_go_auth_cache_on_destroy
   after_update_commit :invalidate_go_auth_cache_on_revoke,
-                      if: -> { saved_change_to_active? || saved_change_to_revoked_at? }
+                      if: -> {
+                        saved_change_to_active? || saved_change_to_revoked_at? ||
+                          saved_change_to_key_prefix? || saved_change_to_key_hash?
+                      }
 
   # Generate and hash a new API key locally — the sole key-generation path in
   # every environment. No Cloudflare/Worker round trip.
@@ -109,6 +112,12 @@ class ApiKey < ApplicationRecord
   end
 
   def invalidate_go_auth_cache_on_revoke
-    GoAuthCache.invalidate(key_prefix)
+    invalidate_go_auth_cache_for_prefixes
+  end
+
+  def invalidate_go_auth_cache_for_prefixes
+    [key_prefix_before_last_save, key_prefix].compact.uniq.each do |prefix|
+      GoAuthCache.invalidate(prefix)
+    end
   end
 end

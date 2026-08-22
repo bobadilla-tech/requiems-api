@@ -169,7 +169,7 @@ matching `_test.go`). Extend this package rather than inventing a new one.
    bcrypt's deliberately-slow compare on every request once a key's been seen
    once.
 
-3. **Revocation invalidation.** On revoke, Rails must issue `DEL key_prefix`
+3. **Revocation invalidation.** On revoke, Rails must issue `DEL apikey:{key_prefix}`
    against the **same, unnamespaced Redis keyspace Go writes to** — this is not
    as simple as "Rails already talks to Redis for Rack::Attack/Sidekiq, so reuse
    that." `Rails.cache` (what `Rack::Attack` uses) is a `:redis_cache_store`
@@ -217,9 +217,10 @@ matching `_test.go`). Extend this package rather than inventing a new one.
 6. **Wire it up as real, request-blocking middleware — with an explicit note on
    what traffic it actually gates today.** Once the middleware's own test suite
    is green, mount it on `apps/api`'s router as enforcing (not shadow/log-only)
-   middleware. The Worker preserves `requiems-api-key` on its trusted hop to Go,
-   and Go verifies it against Postgres. Direct requests use the same header
-   contract, so this middleware enforces both Worker-proxied and local traffic.
+   middleware. At the time Phase 1 shipped, the Worker preserved
+   `requiems-api-key` on its trusted hop to Go, and Go verified it against
+   Postgres. Direct requests used the same header contract, so this middleware
+   enforced both Worker-proxied and local traffic.
    Making this middleware the enforcing path for real customer traffic requires
    Phase 5/6 of the audit's migration plan (direct traffic cutover) — don't
    claim this phase alone flips production auth over, because it doesn't.
@@ -307,10 +308,12 @@ container mid-session doesn't silently let unauthenticated traffic through.
   Postgres); Redis killed + wrong key → still 401 (no fail-open). All four match
   the Phase 1 exit criteria.
 
-**Worker-proxy status:** the Worker preserves `requiems-api-key` on its trusted
-hop to Go, and Go re-verifies the complete credential against Postgres. The
-Worker's edge validation and Go's backend validation therefore both remain in
-the request path; local direct-to-Go requests use the same header contract.
+**Worker-proxy status at Phase 1 implementation time:** the Worker preserved
+`requiems-api-key` on its trusted hop to Go, and Go re-verified the complete
+credential against Postgres. The Worker's edge validation and Go's backend
+validation therefore both remained in the request path; local direct-to-Go
+requests used the same header contract. Later retirement/cutover work is
+tracked in the Phase 7 plan.
 
 **Security status of the former cache-hit concern:** Redis entries under
 `apikey:{key_prefix}` are candidates only. Every cache hit re-runs bcrypt

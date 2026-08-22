@@ -385,7 +385,7 @@ es:
     faq:
       authentication:
         a1: "Incluye tu clave API en el encabezado Authorization como token Bearer:"
-        a2_html: Todas las claves comparten el mismo prefijo %{key_prefix}. Las claves
+        a2_html: Todas las claves comparten el mismo prefijo requiem_. Las claves
           de "prueba" son para desarrollo y pruebas; las de "producción" son para uso
           en producción — es solo una etiqueta de la clave, no parte de su formato.
           Ambos tipos de clave cuentan para tu cuota mensual de solicitudes.

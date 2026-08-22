@@ -136,6 +136,44 @@ func TestUsageQuota_CrossingLimitRejectsAndSkipsRowWrite(t *testing.T) {
 	require.EqualValues(t, 2, rowCount, "only the 2 requests that cleared quota should have written a row; the 3rd (rejected) must not")
 }
 
+func TestUsageQuota_RejectedBatchReservationsAreRolledBack(t *testing.T) {
+	pool := setupUsageTestDB(t)
+	rdb := setupAPIKeyAuthTestRedis(t)
+
+	userID := time.Now().UnixNano()
+	planID := "usage-batch-plan-" + randomHex(t, 4)
+	insertPlan(t, pool, planID, ptr(3), nil)
+
+	uq := NewUsageQuota(pool, rdb, NewPlanCache(pool), nil)
+	batchHandler := http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Usage-Count", "3")
+		w.WriteHeader(http.StatusOK)
+	})
+	handler := uq.Middleware()(batchHandler)
+	principal := APIKeyPrincipal{UserID: userID, Plan: planID, APIKeyID: userID, CurrentPeriodStart: time.Now()}
+	t.Cleanup(func() { _, _ = pool.Exec(context.Background(), `DELETE FROM usage_logs WHERE user_id = $1`, userID) })
+
+	first := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", nil)
+	first = first.WithContext(context.WithValue(first.Context(), apiKeyContextKey{}, principal))
+	w := httptest.NewRecorder()
+	handler.ServeHTTP(w, first)
+	require.Equal(t, http.StatusOK, w.Code)
+
+	cycle := cycleStart(principal.CurrentPeriodStart, time.Now())
+	usageKey := fmt.Sprintf("usage:%d:%d", userID, cycle.Unix())
+	require.EqualValues(t, "3", rdb.Get(context.Background(), usageKey).Val())
+
+	for range 3 {
+		req := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", nil)
+		req.Header.Set("X-Usage-Count", "999") // request headers are untrusted
+		req = req.WithContext(context.WithValue(req.Context(), apiKeyContextKey{}, principal))
+		w = httptest.NewRecorder()
+		handler.ServeHTTP(w, req)
+		require.Equal(t, http.StatusTooManyRequests, w.Code)
+		require.EqualValues(t, "3", rdb.Get(context.Background(), usageKey).Val(), "a rejected batch must not consume another reservation")
+	}
+}
+
 func TestUsageQuota_RedisDownFailsClosed(t *testing.T) {
 	pool := setupUsageTestDB(t)
 
@@ -248,9 +286,10 @@ func TestCycleStartClampsAnchorDayToMonthEnd(t *testing.T) {
 		now       time.Time
 		want      time.Time
 	}{
-		{"february anchor 29", 29, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
-		{"february anchor 30", 30, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
-		{"february anchor 31", 31, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 28, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 29", 29, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 29, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 30", 30, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 30, 0, 0, 0, 0, time.UTC)},
+		{"february anchor 31", 31, time.Date(2026, time.February, 20, 12, 0, 0, 0, time.UTC), time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC)},
+		{"early april anchor 31", 31, time.Date(2026, time.April, 2, 12, 0, 0, 0, time.UTC), time.Date(2026, time.March, 31, 0, 0, 0, 0, time.UTC)},
 		{"30-day month anchor 31", 31, time.Date(2026, time.April, 30, 12, 0, 0, 0, time.UTC), time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC)},
 	}
 
@@ -258,6 +297,28 @@ func TestCycleStartClampsAnchorDayToMonthEnd(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			anchor := time.Date(2025, time.January, tt.anchorDay, 12, 0, 0, 0, time.UTC)
 			require.Equal(t, tt.want, cycleStart(anchor, tt.now))
+		})
+	}
+}
+
+func TestRequestCreditsUsesRouteCostNotRequestHeader(t *testing.T) {
+	tests := []struct {
+		name   string
+		method string
+		path   string
+		want   int64
+	}{
+		{"dictionary multiplier", http.MethodGet, "/v1/text/dictionary/word", 2},
+		{"thesaurus multiplier", http.MethodGet, "/v1/text/thesaurus/word", 2},
+		{"ordinary route", http.MethodGet, "/v1/text/advice", 1},
+		{"batch route reserves one before response", http.MethodPost, "/v1/text/words/batch", 1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req := httptest.NewRequest(tt.method, tt.path, nil)
+			req.Header.Set("X-Usage-Count", "999")
+			require.Equal(t, tt.want, requestCredits(req))
 		})
 	}
 }

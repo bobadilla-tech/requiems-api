@@ -374,7 +374,7 @@ fr:
       authentication:
         a1: 'Incluez votre clé API dans l''en-tête Authorization en tant que jeton
           Bearer :'
-        a2_html: Toutes les clés partagent le même préfixe %{key_prefix}. Les clés
+        a2_html: Toutes les clés partagent le même préfixe requiem_. Les clés
           « test » servent au développement et aux tests ; les clés « production »
           sont pour la production — c'est juste une étiquette, pas le format de la
           clé. Les deux types comptent dans le quota mensuel.
