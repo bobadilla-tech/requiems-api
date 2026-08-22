@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -21,9 +20,9 @@ import (
 func setupPlansTestDB(t *testing.T) *pgxpool.Pool {
 	t.Helper()
 
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := testDSN()
 	if dsn == "" {
-		t.Skip("DATABASE_URL not set; skipping rate limiter/usage integration tests")
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping rate limiter/usage integration tests")
 	}
 
 	ctx := context.Background()

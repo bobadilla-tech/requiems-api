@@ -15,6 +15,7 @@ services:
         required: false
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
     ports:
       - "127.0.0.1:5433:5432"
     healthcheck:

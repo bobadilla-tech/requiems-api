@@ -148,10 +148,17 @@ func TestNew_ErrorOnBadDatabaseURL(t *testing.T) {
 //
 // The test is skipped when DATABASE_URL is not set.
 func TestApp_Handler(t *testing.T) {
-	dsn := os.Getenv("DATABASE_URL")
+	// TEST_DATABASE_URL (a dedicated database, see docker-compose.dev.yml's
+	// db-init service) takes priority so seedAPIKeyFixture's self-contained
+	// tables never collide with Rails' real migrations of the same names
+	// when both suites run against the same Postgres server (agents.md).
+	dsn := os.Getenv("TEST_DATABASE_URL")
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_URL")
+	}
 
 	if dsn == "" {
-		t.Skip("DATABASE_URL not set; skipping App integration test")
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping App integration test")
 	}
 
 	redisURL := os.Getenv("REDIS_URL")

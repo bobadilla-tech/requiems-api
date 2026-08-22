@@ -59,6 +59,19 @@ Run tests:
 docker exec requiem-dev-api-1 go test ./...
 ```
 
+**Test database isolation:** several integration tests (`app/app_test.go`,
+`platform/middleware/apikeyauth_test.go`, `ratelimit_test.go`,
+`usage_test.go`) create self-contained `api_keys`/`subscriptions`/`plans`/
+`usage_logs` fixture tables directly against whatever `DATABASE_URL`
+resolves to. Set `TEST_DATABASE_URL` (see `.env.example`) to point these
+tests at the dedicated `requiem_test` database instead — it's preferred
+over `DATABASE_URL` when set, so `go test ./...` and `bin/rails db:migrate`
+can run back-to-back against the same Postgres server with no
+`PG::DuplicateTable` collision. `requiem_test` is created automatically by
+`infra/docker/postgres-init/01-create-test-db.sh` on a fresh `db_data`
+volume; on an existing dev volume, create it once manually:
+`docker exec requiem-dev-db-1 createdb -U requiem requiem_test`.
+
 Run tests with coverage:
 
 ```bash

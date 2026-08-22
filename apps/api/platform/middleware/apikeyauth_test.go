@@ -28,6 +28,19 @@ func init() {
 	redis.SetLogger(discardLogger{})
 }
 
+// testDSN prefers TEST_DATABASE_URL (a dedicated database, see
+// docker-compose.dev.yml's db-init service) so this package's
+// self-contained fixture tables (api_keys/subscriptions/plans/usage_logs)
+// never collide with Rails' real migrations of the same table names when
+// both suites run against the same Postgres server. Falls back to
+// DATABASE_URL when TEST_DATABASE_URL isn't set (documented in agents.md).
+func testDSN() string {
+	if dsn := os.Getenv("TEST_DATABASE_URL"); dsn != "" {
+		return dsn
+	}
+	return os.Getenv("DATABASE_URL")
+}
+
 // setupAPIKeyAuthTestDB returns a pgxpool.Pool backed by DATABASE_URL, with
 // self-contained api_keys/subscriptions tables (no FK to a users table,
 // matching the CI environment where only Go's own migrations have run —
@@ -36,9 +49,9 @@ func init() {
 func setupAPIKeyAuthTestDB(t *testing.T) *pgxpool.Pool {
 	t.Helper()
 
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := testDSN()
 	if dsn == "" {
-		t.Skip("DATABASE_URL not set; skipping API key auth integration tests")
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping API key auth integration tests")
 	}
 
 	ctx := context.Background()

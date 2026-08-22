@@ -207,7 +207,8 @@ app requires at boot.
 Rails uses separate migration tracking from the Go backend to avoid conflicts:
 
 **Go migrations table:** `schema_migrations` **Rails migrations table:**
-`schema_migrations` (separate schema)
+`rails_schema_migrations` (a renamed table, same `public` schema — not a
+separate Postgres schema/namespace)
 
 Both apps share the same PostgreSQL database but maintain independent migration
 histories.

@@ -180,7 +180,9 @@ class AppConfig
     @lemonsqueezy_private_enterprise_yearly_checkout_uuid  = optional_env("LEMONSQUEEZY_PRIVATE_ENTERPRISE_YEARLY_CHECKOUT_UUID#{suffix}")
 
     @api_base_url = optional_env("API_BASE_URL", default: "https://api.requiems.xyz")
-    @playground_api_key = optional_env("PLAYGROUND_API_KEY", default: "rq_test_playground_demo_key")
+    # Format-valid but non-functional until `rails playground:provision_key`
+    # is run with a real PLAYGROUND_API_KEY value (see that task).
+    @playground_api_key = optional_env("PLAYGROUND_API_KEY", default: "requiem_notprovisioned0000000000")
     @internal_api_url = optional_env("INTERNAL_API_URL", default: "http://localhost:8080")
     @backend_secret = optional_env("BACKEND_SECRET", default: "dev_backend_secret")
 
@@ -264,6 +266,7 @@ class AppConfig
       "LEMONSQUEEZY_PRIVATE_ENTERPRISE_MONTHLY_CHECKOUT_UUID_TEST" => "00000000-0000-0000-0000-000000000027",
       "LEMONSQUEEZY_PRIVATE_ENTERPRISE_YEARLY_CHECKOUT_UUID_TEST"  => "00000000-0000-0000-0000-000000000028",
       "BACKEND_SECRET" => "test_backend_secret",
+      "PLAYGROUND_API_KEY" => "requiem_pgtestkey000000000000000",
       "LEMONSQUEEZY_SIGNING_SECRET_TEST" => "test_signing_secret_test",
       "LEMONSQUEEZY_DEVELOPER_MONTHLY_VARIANT_ID_TEST" => "223456",
       "LEMONSQUEEZY_DEVELOPER_YEARLY_VARIANT_ID_TEST" => "223457",

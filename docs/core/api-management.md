@@ -129,12 +129,12 @@ Revoke an API key by its prefix. Deletes from KV and marks as revoked in D1.
 
 **URL Parameters:**
 
-- `keyPrefix` - First 12 characters of the API key (e.g., `rq_live_abc1`)
+- `keyPrefix` - First 12 characters of the API key (e.g., `requiem_abc1`)
 
 **Example:**
 
 ```bash
-curl -X DELETE http://localhost:5544/api-keys/rq_live_abc1 \
+curl -X DELETE http://localhost:5544/api-keys/requiem_abc1 \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY"
 ```
 
@@ -144,7 +144,7 @@ curl -X DELETE http://localhost:5544/api-keys/rq_live_abc1 \
 {
   "success": true,
   "message": "API key revoked successfully",
-  "keyPrefix": "rq_live_abc1"
+  "keyPrefix": "requiem_abc1"
 }
 ```
 
@@ -168,7 +168,7 @@ Update an API key's plan or billing cycle.
 
 **URL Parameters:**
 
-- `keyPrefix` - First 12 characters of the API key (e.g., `rq_live_abc1`)
+- `keyPrefix` - First 12 characters of the API key (e.g., `requiem_abc1`)
 
 **Request Body:**
 
@@ -182,7 +182,7 @@ Update an API key's plan or billing cycle.
 **Example:**
 
 ```bash
-curl -X PATCH http://localhost:5544/api-keys/rq_live_abc1 \
+curl -X PATCH http://localhost:5544/api-keys/requiem_abc1 \
   -H "X-API-Management-Key: $API_MANAGEMENT_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -197,7 +197,7 @@ curl -X PATCH http://localhost:5544/api-keys/rq_live_abc1 \
 {
   "success": true,
   "message": "API key updated successfully",
-  "keyPrefix": "rq_live_abc1",
+  "keyPrefix": "requiem_abc1",
   "plan": "business",
   "billingCycleStart": "2025-02-01T00:00:00Z"
 }
@@ -239,7 +239,7 @@ curl "http://localhost:5544/api-keys?userId=user-123" \
 {
   "keys": [
     {
-      "keyPrefix": "rq_live_abc1",
+      "keyPrefix": "requiem_abc1",
       "userId": "user-123",
       "plan": "developer",
       "active": true,
@@ -284,7 +284,7 @@ curl "http://localhost:5544/usage/export?since=2025-02-01T00:00:00Z&limit=1000" 
 {
   "usage": [
     {
-      "api_key": "rq_live_abc123xyz",
+      "api_key": "requiem_abc123xyz",
       "endpoint": "/v1/text/advice",
       "credits_used": 1,
       "used_at": "2025-02-17T10:30:00Z"

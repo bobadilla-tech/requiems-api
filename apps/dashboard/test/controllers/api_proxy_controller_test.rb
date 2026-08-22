@@ -47,4 +47,40 @@ class ApiProxyControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
   end
+
+  def capture_forwarded_for
+    captured = nil
+    result = ApiProxyService::Result.new(status_code: 200, data: { "ok" => true }, error: nil)
+    original = ApiProxyService.method(:call)
+    ApiProxyService.define_singleton_method(:call) do |**kwargs|
+      captured = kwargs[:forwarded_for]
+      result
+    end
+    yield
+    captured
+  ensure
+    ApiProxyService.define_singleton_method(:call, original)
+  end
+
+  test "forwarded_for resolves the real client IP when the immediate hop is a trusted Cloudflare-range proxy" do
+    captured = capture_forwarded_for do
+      post "/api/proxy",
+        params: { endpoint: "/v1/email/validate", method: "GET" },
+        headers: { "X-Forwarded-For" => "203.0.113.7" },
+        env: { "REMOTE_ADDR" => "172.64.0.1" }
+    end
+
+    assert_equal "203.0.113.7", captured
+  end
+
+  test "forwarded_for ignores a spoofed X-Forwarded-For from an untrusted remote and uses the real connection IP" do
+    captured = capture_forwarded_for do
+      post "/api/proxy",
+        params: { endpoint: "/v1/email/validate", method: "GET" },
+        headers: { "X-Forwarded-For" => "6.6.6.6" },
+        env: { "REMOTE_ADDR" => "203.0.113.55" }
+    end
+
+    assert_equal "203.0.113.55", captured
+  end
 end

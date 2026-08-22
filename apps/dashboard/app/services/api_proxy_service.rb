@@ -29,7 +29,11 @@ class ApiProxyService
     Rails.logger.debug { "ApiProxyService: #{@method} #{base.host}#{@endpoint} params=#{@params.inspect}" }
 
     headers = {
+      # Caddy still gates internal.requiems.xyz on X-Backend-Secret until
+      # Phase 3 item 6 (Cloudflare origin lockdown) lands — additive, not a
+      # replacement. requiems-api-key is what Go's APIKeyAuth actually checks.
       "X-Backend-Secret" => ::AppConfig.backend_secret,
+      "requiems-api-key" => ::AppConfig.playground_api_key,
       "Content-Type" => "application/json",
       "User-Agent" => "Requiems-Playground/1.0",
       "X-Forwarded-For" => @forwarded_for

@@ -97,7 +97,7 @@ class ApiKey < ApplicationRecord
     cause = error.cause
     return false unless cause.is_a?(PG::UniqueViolation)
 
-    cause.result.error_field(PG::Result::PG_DIAG_CONSTRAINT_NAME) == "index_api_keys_on_key_prefix_btree"
+    cause.result.error_field(PG::Result::PG_DIAG_CONSTRAINT_NAME) == "index_api_keys_on_key_prefix_unique"
   end
 
   # Invalidates the Go auth path's Redis verification cache. Called both on

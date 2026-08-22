@@ -144,7 +144,7 @@ We use **3 data stores**, each optimized for its specific use case:
 **Example data:**
 
 ```json
-// key:rq_live_abc123xyz
+// key:requiem_abc123xyz
 {
   "userId": "user_456",
   "plan": "starter",
@@ -237,13 +237,13 @@ CREATE TABLE words (id SERIAL, word TEXT, definition TEXT, ...);
 
 ```
 1. User calls: GET api.requiems.xyz/v1/text/advice
-   └─ Header: requiems-api-key: rq_live_abc123
+   └─ Header: requiems-api-key: requiem_abc123
 
 2. Worker receives request
-   └─ KV.get("key:rq_live_abc123") → { plan: "starter", ... }
+   └─ KV.get("key:requiem_abc123") → { plan: "starter", ... }
 
 3. Check rate limit
-   └─ KV.get("rl:m:rq_live_abc123:28377600") → "150"
+   └─ KV.get("rl:m:requiem_abc123:28377600") → "150"
    └─ Under limit? Continue. Over? Return 429.
 
 4. Check usage quota
