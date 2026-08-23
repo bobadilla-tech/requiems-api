@@ -67,29 +67,6 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
           REDIS_URL: redis://localhost:6379
-          BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
         run: |
           bin/rails db:create
           bin/rails db:schema:load
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: latest
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: "24"
-
-      - name: Install shared worker dependencies
-        working-directory: apps/workers/shared
-        run: pnpm install --frozen-lockfile
-
-      - name: Install auth-gateway dependencies
-        working-directory: apps/workers/auth-gateway
-        run: pnpm install --frozen-lockfile
-
-      - name: Install api-management dependencies
-        working-directory: apps/workers/api-management
-        run: pnpm install --frozen-lockfile

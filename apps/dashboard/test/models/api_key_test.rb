@@ -128,23 +128,126 @@ class ApiKeyTest < ActiveSupport::TestCase
     )
 
     assert_not_nil new_key.key_prefix
-    assert new_key.key_prefix.start_with?("rq_test_")
+    assert new_key.key_prefix.start_with?("requiem_")
   end
 
-  test "adds error when server returns no key in non-test env" do
-    fake_service = Object.new
-    fake_service.define_singleton_method(:create_key) { |**_| nil }
+  test "generated key matches the format Go's validator requires" do
+    new_key = @user.api_keys.create!(name: "Format Check", environment: "live")
 
-    Cloudflare::ApiManagementService.define_singleton_method(:new) { fake_service }
+    assert_match(/\Arequiem_[0-9a-zA-Z]{24}\z/, new_key.full_key)
+    assert_equal 12, new_key.key_prefix.length
+  end
+
+  test "retries on key_prefix collision and eventually raises if exhausted" do
+    colliding_key = "requiem_collidingkeyvalue00001"
+
+    # Simulate the exact prefix already existing so every attempt collides.
+    @user.api_keys.create!(
+      name: "Existing",
+      key_prefix: ApiKeyGenerator.extract_prefix(colliding_key),
+      key_hash: ApiKeyGenerator.hash_key(colliding_key)
+    )
+
+    ApiKeyGenerator.stub(:generate_candidate, colliding_key) do
+      assert_raises(ApiKeyGenerator::CollisionError) do
+        ApiKeyGenerator.generate
+      end
+    end
+  end
+
+  test "retries when the key_prefix index loses a concurrent insert race" do
+    colliding_key = "requiem_raceprefix00000000000001"
+    existing = @user.api_keys.create!(
+      name: "Existing race key",
+      key_prefix: ApiKeyGenerator.extract_prefix(colliding_key),
+      key_hash: ApiKeyGenerator.hash_key(colliding_key)
+    )
+
+    raced = ApiKey.new(
+      user: @user,
+      name: "Raced key",
+      key_prefix: existing.key_prefix,
+      key_hash: existing.key_hash,
+      active: true
+    )
+
+    assert raced.save!(validate: false)
+    assert_not_equal existing.key_prefix, raced.key_prefix
+  end
+
+  test "revoke! invalidates the Go auth cache for this key_prefix" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.revoke!(reason: "test")
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
+  test "direct revoked_at updates invalidate the Go auth cache" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.update!(revoked_at: Time.current)
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
+  test "rotating key material invalidates both old and new Go auth cache prefixes" do
+    redis = go_auth_test_redis
+    old_prefix = @api_key.key_prefix
+    new_raw_key = "requiem_#{"A" * 24}"
+    new_prefix = ApiKeyGenerator.extract_prefix(new_raw_key)
+    old_cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{old_prefix}"
+    new_cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{new_prefix}"
+    redis.set(old_cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+    redis.set(new_cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.update!(key_prefix: new_prefix, key_hash: ApiKeyGenerator.hash_key(new_raw_key))
+
+    assert_nil redis.get(old_cache_key)
+    assert_nil redis.get(new_cache_key)
+  ensure
+    redis&.del(old_cache_key, new_cache_key) if old_cache_key && new_cache_key
+  end
+
+  test "destroying an api key invalidates the Go auth cache for this key_prefix" do
+    redis = go_auth_test_redis
+    cache_key = "#{GoAuthCache::CACHE_KEY_PREFIX}#{@api_key.key_prefix}"
+    redis.set(cache_key, '{"user_id":1,"plan":"free","revoked":false}')
+
+    @api_key.destroy!
+
+    assert_nil redis.get(cache_key)
+  ensure
+    redis&.del(cache_key) if cache_key
+  end
+
+  test "creates a valid local key with no Cloudflare/network call, in a non-test-like environment" do
     Rails.env.define_singleton_method(:test?) { false }
 
     begin
-      api_key = @user.api_keys.build(name: "Server Fail", environment: "live")
-      assert_not api_key.save
-      assert_includes api_key.errors[:base], I18n.t("api_key.failed_to_generate_api_key_please_try")
+      api_key = @user.api_keys.build(name: "Non-test env key", environment: "live")
+      assert api_key.save
+      assert_match(/\Arequiem_[0-9a-zA-Z]{24}\z/, api_key.full_key)
     ensure
       Rails.env.singleton_class.remove_method(:test?)
-      Cloudflare::ApiManagementService.singleton_class.remove_method(:new)
     end
+  end
+
+  private
+
+  def go_auth_test_redis
+    redis = Redis.new(url: ENV.fetch("REDIS_URL", "redis://localhost:6379"))
+    redis.ping
+    redis
+  rescue StandardError => e
+    skip "Redis unavailable: #{e.message}"
   end
 end

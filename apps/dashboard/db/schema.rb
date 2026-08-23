@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_22_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -44,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["key_prefix"], name: "index_api_keys_on_key_prefix_trgm", opclass: :gin_trgm_ops, using: :gin
+    t.index ["key_prefix"], name: "index_api_keys_on_key_prefix_unique", unique: true
     t.index ["user_id"], name: "index_api_keys_on_user_id"
   end
 
@@ -80,6 +81,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.bigint "user_id", null: false
     t.index ["user_id", "date"], name: "index_daily_usage_on_user_and_date"
     t.index ["user_id"], name: "index_daily_usage_summaries_on_user_id"
+  end
+
+  create_table "plans", id: :string, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "rate_limit_per_minute"
+    t.integer "request_limit"
+    t.datetime "updated_at", null: false
   end
 
   create_table "private_deployment_requests", force: :cascade do |t|
@@ -119,22 +127,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.check_constraint "referrer_id <> referred_user_id", name: "chk_referrals_no_self_referral"
   end
 
-  create_table "solid_cache_entries", force: :cascade do |t|
-    t.integer "byte_size", null: false
-    t.datetime "created_at", null: false
-    t.binary "key", null: false
-    t.bigint "key_hash", null: false
-    t.binary "value", null: false
-    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
-    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
-    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
-  end
-
   create_table "subscriptions", force: :cascade do |t|
     t.boolean "cancel_at_period_end", default: false
     t.datetime "canceled_at"
     t.datetime "created_at", null: false
-    t.integer "credit_limit"
     t.datetime "current_period_end"
     t.datetime "current_period_start"
     t.string "lemonsqueezy_customer_id"
@@ -145,8 +141,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.datetime "promotion_expires_at"
     t.text "promotion_reason"
     t.string "status"
-    t.string "stripe_customer_id"
-    t.string "stripe_subscription_id"
     t.datetime "trial_ends_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -219,14 +213,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_06_000002) do
     t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["status"], name: "index_users_on_status"
-    t.check_constraint "locale IS NULL OR (locale::text = ANY (ARRAY['en'::character varying, 'es'::character varying, 'fr'::character varying]::text[]))", name: "locale_valid_values"
+    t.check_constraint "locale IS NULL OR (locale::text = ANY (ARRAY['en'::character varying::text, 'es'::character varying::text, 'fr'::character varying::text]))", name: "locale_valid_values"
   end
 
   add_foreign_key "abuse_reports", "api_keys"
   add_foreign_key "abuse_reports", "users"
+  add_foreign_key "abuse_reports", "users", column: "resolved_by_id"
   add_foreign_key "api_keys", "users"
   add_foreign_key "audit_logs", "users"
+  add_foreign_key "audit_logs", "users", column: "admin_user_id"
   add_foreign_key "credit_adjustments", "users"
+  add_foreign_key "credit_adjustments", "users", column: "admin_user_id"
   add_foreign_key "daily_usage_summaries", "users"
   add_foreign_key "private_deployment_requests", "users"
   add_foreign_key "referrals", "subscriptions", column: "converting_subscription_id"

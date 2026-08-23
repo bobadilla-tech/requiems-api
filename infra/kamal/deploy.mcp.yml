@@ -8,11 +8,18 @@ servers:
     - <%= ENV["HETZNER_VPS_IP"] %>
 
 proxy:
-  ssl: true
+  ssl: false
   host: mcp.requiems.xyz
   app_port: 3000
+  forward_headers: true
   healthcheck:
     path: /healthz
+  run:
+    http_port: 8080
+    https_port: 8443
+    publish: true
+    bind_ips:
+      - 127.0.0.1
 
 registry:
   server: ghcr.io

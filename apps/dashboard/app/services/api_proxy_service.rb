@@ -29,7 +29,7 @@ class ApiProxyService
     Rails.logger.debug { "ApiProxyService: #{@method} #{base.host}#{@endpoint} params=#{@params.inspect}" }
 
     headers = {
-      "X-Backend-Secret" => ::AppConfig.backend_secret,
+      "requiems-api-key" => ::AppConfig.playground_api_key,
       "Content-Type" => "application/json",
       "User-Agent" => "Requiems-Playground/1.0",
       "X-Forwarded-For" => @forwarded_for

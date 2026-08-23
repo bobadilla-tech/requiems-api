@@ -57,8 +57,7 @@
               <p class="text-gray-700 dark:text-gray-300">
                 <% code_cls = "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded" %>
                 <%= t("home.faq.authentication.a2_html",
-                      test_key: content_tag(:code, "rq_test_", class: code_cls),
-                      live_key: content_tag(:code, "rq_live_", class: code_cls)) %>
+                      key_prefix: content_tag(:code, "requiem_", class: code_cls)) %>
               </p>
             </div>
 

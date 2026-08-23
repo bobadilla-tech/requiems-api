@@ -175,7 +175,7 @@ describe("stdio transport", () => {
             env: {
                 ...process.env,
                 MCP_TRANSPORT: "stdio",
-                REQUIEMS_API_KEY: "rq_test_key",
+                REQUIEMS_API_KEY: "requiem_test_key",
                 REQUIEMS_BASE_URL: "https://api.example.test",
             },
             stdout: "pipe",
@@ -204,7 +204,7 @@ describe("stdio transport", () => {
             env: {
                 ...process.env,
                 MCP_TRANSPORT: "stdio",
-                REQUIEMS_API_KEY: "rq_test_key",
+                REQUIEMS_API_KEY: "requiem_test_key",
                 REQUIEMS_BASE_URL: "",
             },
             stdout: "pipe",

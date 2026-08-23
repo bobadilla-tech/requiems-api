@@ -4,7 +4,7 @@
 #
 # Runs hourly via Sidekiq Cron. Finds all subscriptions where
 # a promotion has passed its expiry date and downgrades them back to the free
-# plan, syncing Cloudflare and writing an audit log entry.
+# plan, writing an audit log entry.
 #
 class ExpirePromotionalSubscriptionsJob < ApplicationJob
   queue_as :default
@@ -29,8 +29,6 @@ class ExpirePromotionalSubscriptionsJob < ApplicationJob
           promotion_expires_at: nil,
           current_period_end: nil
         )
-
-        # sync_to_cloudflare fires via after_update callback on plan_name change
 
         AuditLog.create!(
           user: subscription.user,

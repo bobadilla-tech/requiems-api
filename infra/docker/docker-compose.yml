@@ -73,6 +73,14 @@ services:
 
   redis:
     image: redis:7-alpine
+    # REDIS_MAXMEMORY is an explicit deployment input, not a tuned default.
+    # Set it only after measuring protected auth/quota state, Sidekiq, and the
+    # bounded TTL disposable caches with headroom; noeviction otherwise turns
+    # memory pressure into rejected protected writes.
+    command: >-
+      sh -c 'test -n "$${REDIS_MAXMEMORY}" || { echo "REDIS_MAXMEMORY must be set after capacity validation" >&2; exit 1; }; exec redis-server --maxmemory "$${REDIS_MAXMEMORY}" --maxmemory-policy noeviction'
+    environment:
+      REDIS_MAXMEMORY: ${REDIS_MAXMEMORY:?set REDIS_MAXMEMORY after Redis capacity validation}
     volumes:
       - redis_data:/data
     healthcheck:

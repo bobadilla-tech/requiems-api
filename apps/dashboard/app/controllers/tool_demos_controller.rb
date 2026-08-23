@@ -771,7 +771,7 @@ class ToolDemosController < ApplicationController
       endpoint: endpoint,
       method: method,
       params: params,
-      forwarded_for: request.headers["CF-Connecting-IP"] || request.remote_ip
+      forwarded_for: TrustedProxy.client_ip(request)
     )
   rescue StandardError => e
     Rails.logger.error("ToolDemosController error: #{e.message}")

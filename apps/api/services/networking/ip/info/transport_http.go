@@ -4,7 +4,6 @@ import (
 	"context"
 	"net"
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/chi/v5"
 
@@ -20,7 +19,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 	handler := httpx.Guard(svc, func(w http.ResponseWriter, r *http.Request) {
 		ipStr := chi.URLParam(r, "ip")
 		if ipStr == "" {
-			ipStr = callerIP(r)
+			ipStr = httpx.ClientIP(r)
 		}
 
 		if net.ParseIP(ipStr) == nil {
@@ -45,23 +44,4 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return httpx.BatchResponse[BatchIPInfoItem]{Results: svc.CheckInfoBatch(ctx, req.IPs)}, nil
 		},
 	)))
-}
-
-// callerIP extracts the real client IP from the request, checking
-// X-Forwarded-For, X-Real-IP, and RemoteAddr in that order.
-func callerIP(r *http.Request) string {
-	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
-		if before, _, ok := strings.Cut(xff, ","); ok {
-			return strings.TrimSpace(before)
-		}
-		return strings.TrimSpace(xff)
-	}
-	if xri := r.Header.Get("X-Real-IP"); xri != "" {
-		return strings.TrimSpace(xri)
-	}
-	addr := r.RemoteAddr
-	if host, _, err := net.SplitHostPort(addr); err == nil {
-		return host
-	}
-	return addr
 }

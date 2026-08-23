@@ -374,9 +374,10 @@ fr:
       authentication:
         a1: 'Incluez votre clé API dans l''en-tête Authorization en tant que jeton
           Bearer :'
-        a2_html: Les clés de test (préfixe %{test_key}) servent au développement et
-          aux tests. Les clés de production (%{live_key}) sont pour la production.
-          Les deux types comptent dans le quota mensuel.
+        a2_html: Toutes les clés partagent le même préfixe requiem_. Les clés
+          « test » servent au développement et aux tests ; les clés « production »
+          sont pour la production — c'est juste une étiquette, pas le format de la
+          clé. Les deux types comptent dans le quota mensuel.
         a3: 'Oui ! Dans le tableau de bord, ouvrez la clé concernée et choisissez
           « Régénérer ». L''ancienne cesse de fonctionner immédiatement : mettez à
           jour toutes vos applications.'
@@ -528,7 +529,7 @@ fr:
           definition: Identifiant unique servant à authentifier les requêtes. Elle sert
             à la fois d'identifiant et de secret.
           example_prefix: "Exemple :"
-          example_code: rq_live_1234567890abcdef
+          example_code: requiem_1234567890abcdef
         - name: Limitation de débit
           definition: Technique pour limiter le nombre de requêtes dans une fenêtre
             de temps. Limite les abus et garantit un usage équitable.

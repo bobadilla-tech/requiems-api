@@ -10,13 +10,22 @@ servers:
   web:
     hosts:
       - <%= ENV["HETZNER_VPS_IP"] %>
+    options:
+      network-alias: requiems-api
 
 proxy:
-  ssl: true
-  host: internal.requiems.xyz
+  ssl: false
+  host: api.requiems.xyz
   app_port: 8080
+  forward_headers: true
   healthcheck:
     path: /healthz
+  run:
+    http_port: 8080
+    https_port: 8443
+    publish: true
+    bind_ips:
+      - 127.0.0.1
 
 registry:
   server: ghcr.io
@@ -48,7 +57,6 @@ env:
   secret:
     - DATABASE_URL
     - REDIS_URL
-    - BACKEND_SECRET
 
 # Go migrations run on boot (MigrateWithRetry), so allow extra time to become ready.
 deploy_timeout: 120
@@ -70,6 +78,11 @@ accessories:
     service: redis
     image: redis:7-alpine
     host: <%= ENV["HETZNER_VPS_IP"] %>
+    # Set REDIS_MAXMEMORY in the deploy environment only after measuring
+    # protected auth/quota state, Sidekiq, and bounded TTL disposable caches
+    # with headroom. A missing value must stop the deploy rather than silently
+    # enabling a placeholder capacity with noeviction.
+    cmd: redis-server --maxmemory <%= ENV.fetch("REDIS_MAXMEMORY") %> --maxmemory-policy noeviction
     directories:
       - data:/data
 
@@ -79,3 +92,15 @@ accessories:
     host: <%= ENV["HETZNER_VPS_IP"] %>
     options:
       restart: unless-stopped
+
+  caddy:
+    service: caddy
+    image: caddy:2-alpine
+    host: <%= ENV["HETZNER_VPS_IP"] %>
+    network: host
+    files:
+      - infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - infra/caddy/certs/cloudflare-origin-pull-ca.pem:/etc/caddy/certs/cloudflare-origin-pull-ca.pem:ro
+    directories:
+      - caddy_data:/data
+      - caddy_config:/config

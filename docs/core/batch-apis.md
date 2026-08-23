@@ -190,5 +190,5 @@ all-or-nothing behaviour.
 - [ ] Struct validation documents **min/max** batch size; tests cover boundary
       and oversize.
 - [ ] Public docs include curl example and error cases.
-- [ ] Confirmed with gateway owner that **usage** in D1/KV matches expectations
-      for a sample batch (e.g. 10 items → 10 units).
+- [ ] Confirmed with the Go API owner that **usage** in PostgreSQL matches
+      expectations for a sample batch (e.g. 10 items → 10 units).

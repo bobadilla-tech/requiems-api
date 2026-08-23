@@ -213,8 +213,8 @@ function generateSecurityPacket() {
     "High-entropy API keys issued per account — cryptographically random, not guessable",
     "Instant key revocation available via user dashboard",
     "TLS 1.3 required on every API request — keys transmitted only over encrypted channels",
-    "Rate limiting enforced at the Cloudflare edge layer",
-    "X-Backend-Secret header validation at the origin for Cloudflare-bypass protection",
+    "Rate limiting enforced by the Go API per API key",
+    "Cloudflare Origin Pulls and Caddy mTLS prevent direct-origin bypasses",
   ]);
 
   section(pdf, "6. Compliance Scope Alignment");
@@ -455,7 +455,7 @@ function generateApiAuthPolicy() {
   section(pdf, "7. Origin Security");
   bullet(pdf, [
     "Origin servers are not exposed directly to the internet",
-    "An X-Backend-Secret header mechanism prevents Cloudflare bypass attacks",
+    "Caddy requires a Cloudflare Origin Pull client certificate before proxying",
     "Server firewall rules whitelist only Cloudflare IP ranges for inbound traffic",
     "SSH access to servers is key-authenticated only — no password authentication",
   ]);

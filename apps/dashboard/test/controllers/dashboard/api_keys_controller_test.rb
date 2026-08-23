@@ -63,7 +63,7 @@ class Dashboard::ApiKeysControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user, new_key.user
     assert_not_nil new_key.key_hash
     assert_not_nil new_key.key_prefix
-    assert new_key.key_prefix.start_with?("rq_live_")
+    assert new_key.key_prefix.start_with?("requiem_")
   end
 
   test "create requires name" do

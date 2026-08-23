@@ -80,6 +80,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
 
     ActiveRecord::Base.transaction do
       subscription = user.subscription || user.build_subscription
@@ -87,6 +88,7 @@ class Webhooks::LemonsqueezyController < ApplicationController
         lemonsqueezy_subscription_id: params[:data][:id],
         lemonsqueezy_customer_id: data[:customer_id],
         plan_name: plan_name,
+        plan: billing_cycle == "yearly" ? "yearly" : "monthly",
         status: data[:status],
         current_period_start: data[:renews_at] ? Time.zone.parse(data[:renews_at]) - 1.month : Time.current,
         current_period_end: data[:renews_at],
@@ -101,11 +103,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
       # Mark referral as converted on first paid subscription — idempotent via pending? check
       user.referral_received&.mark_converted!(subscription) if plan_name != "free"
     end
-
-    # Cloudflare sync after transaction commits — keeps the transaction free of HTTP I/O.
-    # A Cloudflare failure here does not roll back the subscription record; the customer
-    # already paid and the DB is the source of truth.
-    Cloudflare::ApiManagementService.new.sync_user_plan(user, plan_name)
 
     SubscriptionMailer.upgrade_notification(user, plan_name).deliver_later if plan_name != "free"
 
@@ -146,18 +143,18 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
     previous_plan = subscription.plan_name
 
     ActiveRecord::Base.transaction do
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
+        plan: billing_cycle == "yearly" ? "yearly" : "monthly",
         current_period_end: data[:renews_at],
         cancel_at_period_end: data[:ends_at].present?
       )
     end
-
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
 
     if plan_name != "free" && plan_name != previous_plan
       SubscriptionMailer.upgrade_notification(subscription.user, plan_name).deliver_later
@@ -183,8 +180,6 @@ class Webhooks::LemonsqueezyController < ApplicationController
       )
     end
 
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, "free")
-
     Rails.logger.info "[LemonSqueezy] Subscription cancelled: #{subscription.id}"
   end
 
@@ -198,16 +193,16 @@ class Webhooks::LemonsqueezyController < ApplicationController
     end
 
     plan_name = determine_plan_name(data[:variant_id])
+    billing_cycle = determine_billing_cycle(data[:variant_id])
 
     ActiveRecord::Base.transaction do
       subscription.update!(
         status: data[:status],
         plan_name: plan_name,
+        plan: billing_cycle == "yearly" ? "yearly" : "monthly",
         cancel_at_period_end: false
       )
     end
-
-    Cloudflare::ApiManagementService.new.sync_user_plan(subscription.user, plan_name)
 
     Rails.logger.info "[LemonSqueezy] Subscription resumed: #{subscription.id}"
   end
@@ -230,6 +225,16 @@ class Webhooks::LemonsqueezyController < ApplicationController
     AppConfig.plan_name_for_variant_id(variant_id) || begin
       Rails.logger.warn "[LemonSqueezy] Unknown variant_id: #{variant_id}"
       "free"
+    end
+  end
+
+  # Falls back to "monthly", matching AnalyticsRevenueService's existing
+  # `sub.plan&.to_sym || :monthly` default for rows with no billing-cycle
+  # signal (nil `plan`, or an unrecognized variant_id).
+  def determine_billing_cycle(variant_id)
+    AppConfig.billing_cycle_for_variant_id(variant_id) || begin
+      Rails.logger.warn "[LemonSqueezy] Unknown variant_id for billing cycle: #{variant_id}"
+      "monthly"
     end
   end
 end

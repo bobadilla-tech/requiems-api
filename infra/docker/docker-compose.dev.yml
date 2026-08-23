@@ -15,6 +15,7 @@ services:
         required: false
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
     ports:
       - "127.0.0.1:5433:5432"
     healthcheck:
@@ -27,6 +28,27 @@ services:
     image: redis:7-alpine
     networks:
       - stack
+    env_file:
+      - .env.example
+      - path: .env.local
+        required: false
+    # noeviction + an explicit maxmemory: auth-cache/rate-limit/quota state
+    # (apikey:*, ratelimit:*, usage:*) must never be evicted under memory
+    # pressure, and they now share this instance with disposable response
+    # caches (geocode:*/crypto:*/exchange:*, TTL'd but otherwise unprotected
+    # under noeviction — acceptable since they're small and TTL'd, but this
+    # config does mean they lose any allkeys-lru-style protection a future
+    # contributor might otherwise assume they have). At capacity, noeviction
+    # doesn't drop data — Redis starts rejecting WRITE commands with "OOM
+    # command not allowed" while reads keep succeeding; the rate
+    # limiter/quota middleware (apps/api/platform/middleware) treat that
+    # identically to a connection error/timeout, not as a separate case.
+    # Development uses the bounded value in .env.example; production must set
+    # REDIS_MAXMEMORY only after validating its shared workload capacity.
+    # Read REDIS_MAXMEMORY inside the container so .env.local, supplied via
+    # env_file, is available before Redis is started. Compose service env_file
+    # values are not available to Compose-time interpolation.
+    command: ["sh", "-c", "exec redis-server --maxmemory \"$${REDIS_MAXMEMORY:-256mb}\" --maxmemory-policy noeviction"]
     volumes:
       - redis_data:/data
     ports:
@@ -90,12 +112,12 @@ services:
     command: >
       sh -c "
         bun install &&
-        bun run --watch src/server.ts
+        REQUIEMS_API_KEY=\$\$LOCAL_DEV_API_KEY bun run --watch src/server.ts
       "
     environment:
       - MCP_TRANSPORT=http
       - MCP_HTTP_PORT=3000
-      - REQUIEMS_BASE_URL=http://auth-gateway:4455
+      - REQUIEMS_BASE_URL=http://api:8080
     env_file:
       - .env.example
       - path: .env.local
@@ -105,8 +127,8 @@ services:
     ports:
       - "3100:3000"
     depends_on:
-      auth-gateway:
-        condition: service_healthy
+      api:
+        condition: service_started
 
   dashboard:
     build:
@@ -128,7 +150,6 @@ services:
         required: false
     volumes:
       - ../../apps/dashboard:/app
-      - ../../apps/workers/shared:/workers/shared
     ports:
       - "3000:3000"
     depends_on:
@@ -136,90 +157,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      api-management:
+      api:
         condition: service_started
     stdin_open: true
     tty: true
-
-  auth-gateway:
-    build:
-      context: ../../apps/workers/auth-gateway
-      dockerfile: ../../../infra/docker/auth-gateway.dev.Dockerfile
-    networks:
-      - stack
-    working_dir: /workers/auth-gateway
-    command: >
-      sh -c "
-        pnpm install --frozen-lockfile &&
-        echo BACKEND_URL=$$BACKEND_URL > .dev.vars &&
-        echo BACKEND_SECRET=$$BACKEND_SECRET >> .dev.vars &&
-        node ./scripts/seed-dev.ts &&
-        pnpm exec wrangler dev --ip 0.0.0.0 --port 4455 --persist-to=$$WRANGLER_PERSIST_TO
-      "
-    environment:
-      - WRANGLER_PERSIST_TO=/workers/.wrangler/state
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-    env_file:
-      - .env.example
-      - path: .env.local
-        required: false
-    volumes:
-      - ../../apps/workers/auth-gateway:/workers/auth-gateway
-      - ../../apps/workers/shared:/workers/shared
-      - auth_gateway_modules:/workers/auth-gateway/node_modules
-      - wrangler_state:/workers/.wrangler
-    ports:
-      - "4455:4455"
-    depends_on:
-      api:
-        condition: service_started
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "require('http').get('http://127.0.0.1:4455/healthz',(r)=>{r.resume();r.on('end',()=>process.exit(r.statusCode===200?0:1));}).on('error',()=>process.exit(1))",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 6
-      start_period: 180s
-
-  api-management:
-    build:
-      context: ../../apps/workers/api-management
-      dockerfile: ../../../infra/docker/api-management.dev.Dockerfile
-    networks:
-      - stack
-    working_dir: /workers/api-management
-    command: >
-      sh -c "
-        pnpm install --frozen-lockfile &&
-        pnpm install --frozen-lockfile --dir /workers/shared &&
-        echo API_MANAGEMENT_API_KEY=$$API_MANAGEMENT_API_KEY > .dev.vars &&
-        echo SWAGGER_USERNAME=$$SWAGGER_USERNAME >> .dev.vars &&
-        echo SWAGGER_PASSWORD=$$SWAGGER_PASSWORD >> .dev.vars &&
-        pnpm exec wrangler dev --ip 0.0.0.0 --port 5544 --persist-to=$$WRANGLER_PERSIST_TO
-      "
-    environment:
-      - WRANGLER_PERSIST_TO=/workers/.wrangler/state
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-    env_file:
-      - .env.example
-      - path: .env.local
-        required: false
-    volumes:
-      - ../../apps/workers/api-management:/workers/api-management
-      - ../../apps/workers/shared:/workers/shared
-      - api_management_modules:/workers/api-management/node_modules
-      - shared_modules:/workers/shared/node_modules
-      - wrangler_state:/workers/.wrangler
-    ports:
-      - "5544:5544"
-    depends_on:
-      auth-gateway:
-        condition: service_healthy
 
   sidekiq:
     build:
@@ -245,13 +186,9 @@ services:
         condition: service_healthy
       dashboard:
         condition: service_started
-      api-management:
+      api:
         condition: service_started
 
 volumes:
   db_data:
   redis_data:
-  auth_gateway_modules:
-  api_management_modules:
-  shared_modules:
-  wrangler_state:

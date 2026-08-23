@@ -40,12 +40,12 @@ concurrency:
 jobs:
   detect-changes:
     name: Detect Changed Apps
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
-      api: ${{ steps.filter.outputs.api }}
-      dashboard: ${{ steps.filter.outputs.dashboard }}
-      mcp: ${{ steps.filter.outputs.mcp }}
+      api: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.api }}
+      dashboard: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.dashboard }}
+      mcp: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.mcp }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -83,6 +83,7 @@ jobs:
       KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
       KAMAL_REGISTRY_PASSWORD: ${{ github.token }}
       HETZNER_VPS_IP: ${{ secrets.HETZNER_VPS_IP }}
+      REDIS_MAXMEMORY: 256mb
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -90,13 +91,12 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
-      BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.api.yml
-          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL
 
   deploy-dashboard:
     name: Deploy Dashboard
@@ -116,9 +116,8 @@ jobs:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
-      BACKEND_SECRET: ${{ secrets.BACKEND_SECRET }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      API_MANAGEMENT_API_KEY: ${{ secrets.API_MANAGEMENT_API_KEY }}
+      PLAYGROUND_API_KEY: ${{ secrets.PLAYGROUND_API_KEY }}
       LEMONSQUEEZY_SIGNING_SECRET: ${{ secrets.LEMONSQUEEZY_SIGNING_SECRET }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
     steps:
@@ -126,7 +125,7 @@ jobs:
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.dashboard.yml
-          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL BACKEND_SECRET SECRET_KEY_BASE API_MANAGEMENT_API_KEY LEMONSQUEEZY_SIGNING_SECRET SMTP_PASSWORD
+          required-secrets: SSH_PRIVATE_KEY SSH_KNOWN_HOSTS HETZNER_VPS_IP POSTGRES_USER POSTGRES_PASSWORD POSTGRES_DB DATABASE_URL REDIS_URL SECRET_KEY_BASE PLAYGROUND_API_KEY LEMONSQUEEZY_SIGNING_SECRET SMTP_PASSWORD
 
   deploy-mcp:
     name: Deploy MCP

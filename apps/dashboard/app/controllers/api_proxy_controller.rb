@@ -20,7 +20,7 @@ class ApiProxyController < ApplicationController
       endpoint: endpoint,
       method: method,
       params: request_params,
-      forwarded_for: request.headers["CF-Connecting-IP"] || request.remote_ip
+      forwarded_for: TrustedProxy.client_ip(request)
     )
     response_time = ((Time.current - start_time) * 1000).round
 

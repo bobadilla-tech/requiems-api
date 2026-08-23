@@ -30,6 +30,7 @@ func RegisterRoutes(r chi.Router, svc *Service) {
 			return
 		}
 
+		w.Header().Set("X-Usage-Count", "2")
 		httpx.JSON(w, http.StatusOK, result)
 	})
 

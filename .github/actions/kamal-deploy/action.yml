@@ -41,6 +41,12 @@ runs:
           fi
         done
 
+    - name: Remove legacy Caddy container
+      if: inputs.config == 'infra/kamal/deploy.api.yml'
+      shell: bash
+      run: |
+        ssh -o BatchMode=yes "deploy@$HETZNER_VPS_IP" 'service_label=$(docker inspect -f "{{ index .Config.Labels \"service\" }}" caddy 2>/dev/null || true); if [ "$service_label" != "caddy" ] && docker inspect caddy >/dev/null 2>&1; then docker rm --force caddy; fi'
+
     - name: Bootstrap and deploy
       shell: bash
       run: BUNDLE_GEMFILE="$GITHUB_WORKSPACE/infra/kamal/Gemfile" bundle exec kamal setup -c ${{ inputs.config }}

@@ -1,11 +1,8 @@
 /**
  * Shared k6 configuration for the Requiem API load testing suite.
  *
- * Targets the Auth Gateway (port 4455) which enforces authentication, rate
- * limiting and usage tracking before proxying to the Go backend.
- *
- * Dev API keys are seeded by `apps/workers/auth-gateway/scripts/seed-dev.ts`
- * when the dev stack is running.
+ * Targets the direct Go API, which owns authentication, rate limiting, quota,
+ * and usage recording.
  */
 
 import { Params } from "k6/http";
@@ -42,22 +39,26 @@ export interface SummaryData {
 }
 
 /** Base URL of the Auth Gateway (edge proxy). Override with BASE_URL env var. */
-export const BASE_URL: string = __ENV.BASE_URL || "http://localhost:4455";
+export const BASE_URL: string = __ENV.BASE_URL || "http://localhost:8080";
 
 /**
  * Dev API keys — one per plan tier.
  * Matches the keys written by seed-dev.ts.
  */
+const localKey = __ENV.LOCAL_DEV_API_KEY || __ENV.REQUIEMS_API_KEY || "";
+if (!/^requiem_[0-9A-Za-z]{24}$/.test(localKey)) {
+  throw new Error("Set LOCAL_DEV_API_KEY or REQUIEMS_API_KEY to a valid requiem_<24 alphanumeric characters> key");
+}
 export const API_KEYS: Record<PlanKey, string> = {
-  free: __ENV.API_KEY_FREE || "rq_free_000001",
-  developer: __ENV.API_KEY_DEVELOPER || "rq_devl_000001",
-  business: __ENV.API_KEY_BUSINESS || "rq_bizz_000001",
-  professional: __ENV.API_KEY_PROFESSIONAL || "rq_prof_000001",
+  free: __ENV.API_KEY_FREE || localKey,
+  developer: __ENV.API_KEY_DEVELOPER || localKey,
+  business: __ENV.API_KEY_BUSINESS || localKey,
+  professional: __ENV.API_KEY_PROFESSIONAL || localKey,
 };
 
 /**
  * Per-plan rate limits (requests per minute).
- * Values match PLANS in apps/workers/shared/src/config.ts.
+ * Values match the rate_limit_per_minute column in PostgreSQL plans.
  */
 export const RATE_LIMITS: Record<PlanKey, number> = {
   free: 30,

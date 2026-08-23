@@ -6,14 +6,12 @@ on:
     paths:
       - "apps/api/**"
       - "apps/dashboard/**"
-      - "apps/workers/**"
       - ".github/workflows/codeql.yml"
   pull_request:
     branches: [main]
     paths:
       - "apps/api/**"
       - "apps/dashboard/**"
-      - "apps/workers/**"
       - ".github/workflows/codeql.yml"
   schedule:
     - cron: "00 12 * * 1"
@@ -30,7 +28,7 @@ jobs:
     outputs:
       go: ${{ steps.changes.outputs.go }}
       ruby: ${{ steps.changes.outputs.ruby }}
-      workers: ${{ steps.changes.outputs.workers }}
+      js: ${{ steps.changes.outputs.js }}
 
     steps:
       - uses: actions/checkout@v7
@@ -45,8 +43,8 @@ jobs:
               - 'apps/api/**'
             ruby:
               - 'apps/dashboard/**'
-            workers:
-              - 'apps/workers/**'
+            js:
+              - 'apps/mcp/**'
 
       - name: Set scan targets
         id: changes
@@ -55,11 +53,11 @@ jobs:
             # Weekly full scan: all languages regardless of what changed
             echo "go=true" >> $GITHUB_OUTPUT
             echo "ruby=true" >> $GITHUB_OUTPUT
-            echo "workers=true" >> $GITHUB_OUTPUT
+            echo "js=true" >> $GITHUB_OUTPUT
           else
             echo "go=${{ steps.filter.outputs.go }}" >> $GITHUB_OUTPUT
             echo "ruby=${{ steps.filter.outputs.ruby }}" >> $GITHUB_OUTPUT
-            echo "workers=${{ steps.filter.outputs.workers }}" >> $GITHUB_OUTPUT
+            echo "js=${{ steps.filter.outputs.js }}" >> $GITHUB_OUTPUT
           fi
 
   analyze-go:
@@ -122,7 +120,7 @@ jobs:
   analyze-js:
     name: Analyze (javascript-typescript)
     needs: detect-changes
-    if: needs.detect-changes.outputs.workers == 'true'
+    if: needs.detect-changes.outputs.js == 'true'
     runs-on: ubuntu-latest
     permissions:
       security-events: write

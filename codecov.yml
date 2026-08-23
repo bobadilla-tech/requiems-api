@@ -17,18 +17,6 @@ flags:
     paths:
       - apps/dashboard/
     carryforward: true
-  auth-gateway:
-    paths:
-      - apps/workers/auth-gateway/
-    carryforward: true
-  api-management:
-    paths:
-      - apps/workers/api-management/
-    carryforward: true
-  shared:
-    paths:
-      - apps/workers/shared/
-    carryforward: true
 
 comment:
   layout: "reach,diff,flags,files"

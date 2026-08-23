@@ -1,23 +1,16 @@
-# Requiem API Overview
+# Core documentation
 
-This folder contains developer-focused documentation for Requiem API.
+- [Architecture](architecture.md)
+- [Infrastructure](infrastructure.md)
+- [Deployment](deployment.md)
+- [Getting started](getting-started.md)
+- [Rails app](rails-app.md)
+- [Background jobs](background-jobs.md)
+- [Adding Go endpoints](adding-go-endpoints.md)
+- [Code quality](code-quality.md)
+- [Local payment testing](local-payment-testing.md)
+- [Lemon Squeezy webhooks](lemonsqueezy-webhook-setup.md)
+- [Maintenance tasks](maintenance-tasks.md)
 
-1. [Getting started](./getting-started.md)
-2. [Code Quality](./code-quality.md)
-3. [Architecture](./architecture.md)
-4. [Business](./business.md)
-5. [The Go Backend](./backend.md)
-   - [Adding endpoints to the Go backend](./adding-go-endpoints.md)
-   - [Batch APIs](./batch-apis.md)
-6. [The Auth Gateway](./auth-gateway.md)
-7. [API Management](./api-management.md)
-8. [The Ruby on Rails App](./rails-app.md)
-   - [Background Jobs](./background-jobs.md)
-   - [Lemon Squeezy webhook setup](./lemonsqueezy-webhook-setup.md)
-9. [APIs](../apis/readme.md)
-10. [Adding a Tool Page](./adding-tools.md)
-11. [Adding a Static Page](./adding-static-pages.md)
-12. [Infrastructure](./infrastructure.md)
-13. [Deployment](./deployment.md)
-14. [Maintenance Tasks](./maintenance-tasks.md)
-15. [Local Payment Testing](./local-payment-testing.md)
+The current runtime is direct Go behind Cloudflare and Caddy. Historical audit
+and migration plans are retained under `docs/audits/` and `docs/plans/`.

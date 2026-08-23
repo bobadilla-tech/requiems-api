@@ -385,8 +385,9 @@ es:
     faq:
       authentication:
         a1: "Incluye tu clave API en el encabezado Authorization como token Bearer:"
-        a2_html: Las claves de prueba (que comienzan con %{test_key}) son para desarrollo
-          y pruebas. Las claves de producción (%{live_key}) son para uso en producción.
+        a2_html: Todas las claves comparten el mismo prefijo requiem_. Las claves
+          de "prueba" son para desarrollo y pruebas; las de "producción" son para uso
+          en producción — es solo una etiqueta de la clave, no parte de su formato.
           Ambos tipos de clave cuentan para tu cuota mensual de solicitudes.
         a3: ¡Sí! Ve a tu panel, haz clic en la clave API que deseas regenerar y selecciona
           "Regenerar". Ten en cuenta que la clave antigua dejará de funcionar de inmediato,
@@ -547,7 +548,7 @@ es:
             una API. Las claves API actúan como identificador y token secreto para la
             autenticación.
           example_prefix: "Ejemplo:"
-          example_code: rq_live_1234567890abcdef
+          example_code: requiem_1234567890abcdef
         - name: Limitación de tasa
           definition: Una técnica para controlar el número de solicitudes que un usuario
             puede hacer a una API dentro de un período de tiempo dado. Esto ayuda a

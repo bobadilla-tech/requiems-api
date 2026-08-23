@@ -28,8 +28,6 @@ jobs:
     outputs:
       api: ${{ steps.filter.outputs.api }}
       dashboard: ${{ steps.filter.outputs.dashboard }}
-      auth-gateway: ${{ steps.filter.outputs.auth-gateway }}
-      api-management: ${{ steps.filter.outputs.api-management }}
       mcp: ${{ steps.filter.outputs.mcp }}
     steps:
       - uses: actions/checkout@v7
@@ -45,14 +43,6 @@ jobs:
               - '.github/workflows/ci.yml'
             dashboard:
               - 'apps/dashboard/**'
-              - '.github/workflows/ci.yml'
-            auth-gateway:
-              - 'apps/workers/auth-gateway/**'
-              - 'apps/workers/shared/**'
-              - '.github/workflows/ci.yml'
-            api-management:
-              - 'apps/workers/api-management/**'
-              - 'apps/workers/shared/**'
               - '.github/workflows/ci.yml'
             mcp:
               - 'apps/mcp/**'
@@ -83,6 +73,16 @@ jobs:
         ports:
           - 5432:5432
 
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
     steps:
       - uses: actions/checkout@v7
 
@@ -109,7 +109,6 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
-          BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
           REDIS_URL: redis://127.0.0.1:6379/0
         run: go test -race -coverprofile=coverage.out ./...
 
@@ -221,7 +220,6 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
           REDIS_URL: redis://localhost:6379
-          BACKEND_SECRET: test_secret_min_32_chars_long_for_testing_only
         run: bin/rails test
 
       - name: Check for missing translations
@@ -297,28 +295,6 @@ jobs:
         continue-on-error: true # Non-blocking
         run: bundle exec rubocop
 
-  worker-test:
-    name: Worker Tests
-    needs: detect-changes
-    if: needs.detect-changes.outputs.auth-gateway == 'true'
-    uses: ./.github/workflows/_worker-ci.yml
-    with:
-      app-path: apps/workers/auth-gateway
-      app-name: auth-gateway
-      has-lint: true
-    secrets: inherit
-
-  api-management-test:
-    name: API Management Tests
-    needs: detect-changes
-    if: needs.detect-changes.outputs.api-management == 'true'
-    uses: ./.github/workflows/_worker-ci.yml
-    with:
-      app-path: apps/workers/api-management
-      app-name: api-management
-      has-lint: true
-    secrets: inherit
-
   mcp-test:
     name: MCP Tests
     runs-on: ubuntu-latest
@@ -354,8 +330,6 @@ jobs:
       - go-test
       - rails-test
       - rails-checks
-      - worker-test
-      - api-management-test
       - mcp-test
     if: always()
 
@@ -374,16 +348,6 @@ jobs:
 
           if [[ "${{ needs.rails-checks.result }}" == "failure" ]]; then
             echo "❌ Rails security checks failed"
-            exit 1
-          fi
-
-          if [[ "${{ needs.worker-test.result }}" == "failure" ]]; then
-            echo "❌ Worker tests failed"
-            exit 1
-          fi
-
-          if [[ "${{ needs.api-management-test.result }}" == "failure" ]]; then
-            echo "❌ API Management tests failed"
             exit 1
           fi
 
