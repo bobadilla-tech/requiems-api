@@ -52,23 +52,3 @@ api.requiems.xyz {
   }
 }
 
-# Kept as the transition/rollback hostname while the Worker route is being
-# disabled. It is protected by the same AOP gate and routes to the same Go
-# service through Kamal Proxy.
-internal.requiems.xyz {
-  encode gzip
-
-  tls {
-    client_auth {
-      mode require_and_verify
-      trust_pool file {
-        pem_file /etc/caddy/certs/cloudflare-origin-pull-ca.pem
-      }
-    }
-  }
-
-  reverse_proxy 127.0.0.1:8080 {
-    header_up Host api.requiems.xyz
-  }
-}
-

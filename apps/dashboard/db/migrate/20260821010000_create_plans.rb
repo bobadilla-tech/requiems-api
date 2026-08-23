@@ -2,7 +2,7 @@
 
 # New source of truth for plan limits that Go reads at request time (rate
 # limiter + quota middleware, see docs/plans/2026-08-21-go-auth-foundation-phase-2.md).
-# Deliberately NOT wired up to PlanConfig::PLANS or the Worker's config.ts in
+    # Deliberately NOT wired up to PlanConfig::PLANS in
 # this migration/phase — those two copies keep their existing hardcoded
 # values unchanged, so there are three manually-synced copies of plan limits
 # for now (see the plan doc's Context section). Seeded here, in the

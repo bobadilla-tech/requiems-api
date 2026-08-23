@@ -110,18 +110,4 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "PLAN_LIMITS matches workers-shared/plan-limits.json" do
-    json_path = Rails.root.join("../workers/shared/plan-limits.json")
-    shared_limits = JSON.parse(File.read(json_path))
-
-    shared_limits.each do |plan, limit|
-      assert_equal limit, User::PLAN_LIMITS[plan],
-        "User::PLAN_LIMITS[#{plan.inspect}] (#{User::PLAN_LIMITS[plan]}) " \
-        "does not match workers-shared/plan-limits.json (#{limit}). " \
-        "Update both files together to keep them in sync."
-    end
-
-    assert_equal shared_limits.keys.sort, User::PLAN_LIMITS.keys.sort,
-      "User::PLAN_LIMITS has different plan keys than workers-shared/plan-limits.json"
-  end
 end

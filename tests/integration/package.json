@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.26.0",
-  "description": "Local integration tests for the full request flow (Worker → Backend → DB)",
+  "description": "Local integration tests for the direct Go API request flow",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",

@@ -57,9 +57,8 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 
 	router.Group(func(protected chi.Router) {
 		// APIKeyAuth is the sole enforcing auth check for all traffic to this
-		// group, direct or Cloudflare-proxied — the Worker/BackendSecretAuth
-		// gate this repo used to run alongside it is retired (see
-		// docs/plans/2026-08-21-go-auth-foundation-phase-3-4.md Phase 3 item 5).
+		// group, direct or Cloudflare-proxied. API-key authentication is the
+		// sole enforcing application-layer auth boundary.
 		protected.Use(apiKeyAuth.Middleware())
 		// Rate limiting and usage/quota tracking both read the principal
 		// APIKeyAuth just attached, so they're mounted right after it, in

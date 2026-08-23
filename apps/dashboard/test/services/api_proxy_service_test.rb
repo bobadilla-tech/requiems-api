@@ -29,7 +29,7 @@ class ApiProxyServiceTest < ActiveSupport::TestCase
     response
   end
 
-  test "sends requiems-api-key alongside X-Backend-Secret to the Go backend" do
+  test "sends the Go API key to the private Go backend" do
     fake_http = FakeHTTP.new(stubbed_ok_response)
 
     Net::HTTP.stub :new, fake_http do
@@ -37,16 +37,6 @@ class ApiProxyServiceTest < ActiveSupport::TestCase
     end
 
     assert_equal AppConfig.playground_api_key, fake_http.last_request["requiems-api-key"]
-  end
-
-  test "still sends X-Backend-Secret (additive, not a replacement — Caddy still gates on it)" do
-    fake_http = FakeHTTP.new(stubbed_ok_response)
-
-    Net::HTTP.stub :new, fake_http do
-      ApiProxyService.call(endpoint: "/v1/entertainment/advice", method: "GET", params: {}, forwarded_for: "1.2.3.4")
-    end
-
-    assert_equal AppConfig.backend_secret, fake_http.last_request["X-Backend-Secret"]
   end
 
   test "valid_endpoint? accepts a colon (IPv6 address embedded in the path)" do

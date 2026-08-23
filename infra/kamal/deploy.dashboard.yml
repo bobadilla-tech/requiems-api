@@ -48,7 +48,6 @@ env:
     RAILS_LOG_LEVEL: warn
     INTERNAL_API_URL: http://requiems-api:8080
     API_BASE_URL: https://api.requiems.xyz
-    API_MANAGEMENT_URL: https://api-management.requiems.xyz
     LEMONSQUEEZY_STORE_ID: "241998"
     LEMONSQUEEZY_STORE_SLUG: ultirequiem
     LEMONSQUEEZY_TEST_MODE: "false"
@@ -75,8 +74,7 @@ env:
     - DATABASE_URL
     - REDIS_URL
     - SECRET_KEY_BASE
-    - BACKEND_SECRET
-    - API_MANAGEMENT_API_KEY
+    - PLAYGROUND_API_KEY
     - LEMONSQUEEZY_SIGNING_SECRET
     - SMTP_PASSWORD
 

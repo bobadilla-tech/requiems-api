@@ -3,7 +3,7 @@
  *
  * Purpose
  * -------
- * Confirm that the Auth Gateway (Cloudflare Worker) correctly enforces
+ * Confirm that the Go API directly enforces
  * per-plan rate limits.  Three behaviours are validated:
  *
  *   1. Burst over limit  — rapid-fire >N req/min on a free-plan key triggers
@@ -13,7 +13,7 @@
  *   3. Recovery          — after the 60-second window resets, the same
  *                          free-plan key is accepted again.
  *
- * Rate limits (from apps/workers/shared/src/config.ts):
+ * Rate limits are read from the PostgreSQL plans table by Go:
  *   free         →  30 req / min
  *   developer    →  5 000 req / min
  *   business     →  10 000 req / min

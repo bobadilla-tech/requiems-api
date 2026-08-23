@@ -1,10 +1,8 @@
 /**
  * Integration tests — Gateway / Auth layer
  *
- * These tests validate the full Worker → Backend flow by inspecting the
- * response headers injected by the Auth Gateway (rate-limit info, usage
- * headers, etc.) and by exercising the error paths (missing key, invalid
- * key).
+ * These tests validate the direct public Go API and its auth/usage response
+ * contract, including missing and invalid key paths.
  */
 
 import { describe, expect, it } from "vitest";
@@ -36,7 +34,7 @@ async function authenticated(path: string): Promise<Response> {
   });
 }
 
-describe("Gateway", () => {
+describe("Direct public API", () => {
   describe("Health check", () => {
     it("GET /healthz returns 200 without an API key", async () => {
       const cfg = getConfig();

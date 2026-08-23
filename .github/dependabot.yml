@@ -18,19 +18,3 @@ updates:
     directory: "/apps/dashboard"
     schedule:
       interval: "weekly"
-
-  # ── Node / Cloudflare Workers ─────────────────────────────────────────────
-  - package-ecosystem: "npm"
-    directory: "/apps/workers/shared"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/workers/auth-gateway"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/workers/api-management"
-    schedule:
-      interval: "weekly"

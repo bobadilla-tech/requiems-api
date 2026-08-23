@@ -9,8 +9,8 @@ namespace :playground do
       raise "PLAYGROUND_API_KEY must match the requiem_<24-char-alnum> format ApiKeyGenerator produces"
     end
 
-    # No Cloudflare/Worker round trip: this account never authenticates via
-    # Devise, only holds a Subscription + ApiKey for Go's auth path.
+    # This account never authenticates via Devise; it only holds the
+    # Subscription and ApiKey used by Go's auth path.
     user = User.find_or_create_by!(email: "playground@internal.requiems.xyz") do |u|
       u.password = SecureRandom.hex(32)
       u.name = "Playground (internal)"

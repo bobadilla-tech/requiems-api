@@ -1,11 +1,12 @@
-# Apps
+# Applications
 
-- **api** - Go backend. Handles business logic and database queries. Receives
-  requests from the auth gateway only, no auth of its own.
+- **api** — Go API. Owns API-key authentication, Redis rate limiting, quota,
+  usage rows, and product endpoints.
+- **dashboard** — Rails UI, users, API keys, subscriptions, plans, billing,
+  admin, and jobs.
+- **mcp** — Bun MCP server that calls the Go API.
+- **api data/tools** — Go product data and generated MCP/OpenAPI artifacts.
 
-- **dashboard** - Rails web app. User registration, subscription management, API
-  key management, and admin panel.
+The former Cloudflare Worker applications, KV namespace, and D1 usage ledger
+are retired and are not part of local or production runtime.
 
-- **workers** - Cloudflare Workers. Contains `auth-gateway` (public edge,
-  validates keys and proxies to Go), `api-management` (internal, manages API
-  keys and usage data for Rails), and `shared` (common types and utilities).

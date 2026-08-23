@@ -116,8 +116,7 @@ func TestRateLimiter_ConcurrentRequestsDontUndercount(t *testing.T) {
 
 	wg.Wait()
 
-	// If the atomic INCR script raced/undercounted the way the legacy KV
-	// limiter did (rate-limit.ts:38-53's non-atomic read-then-write), more
+	// If the atomic INCR script raced/undercounted, more
 	// than 5 of these 20 concurrent requests would have slipped through.
 	require.Equal(t, 5, successes)
 }

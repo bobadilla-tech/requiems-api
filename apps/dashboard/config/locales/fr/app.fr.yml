@@ -5,6 +5,3 @@ fr:
       app_config:
         lemonsqueezy_store_id_must_be_numeric: L'identifiant LEMONSQUEEZY_STORE_ID
           doit être numérique.
-    services:
-      d1_sync_service:
-        invalid_api_management_key: Clé de gestion API invalide

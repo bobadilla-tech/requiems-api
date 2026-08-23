@@ -57,7 +57,6 @@ env:
   secret:
     - DATABASE_URL
     - REDIS_URL
-    - BACKEND_SECRET
 
 # Go migrations run on boot (MigrateWithRetry), so allow extra time to become ready.
 deploy_timeout: 120

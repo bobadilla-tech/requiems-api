@@ -160,8 +160,7 @@ func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cy
 		// Cache miss: bootstrap from Postgres, summed across all of this
 		// user's API keys (not just the one on this request) — a user with
 		// more than one active key must have all of them summed into the
-		// baseline, or it silently under-counts. Mirrors the legacy
-		// Worker's own quota-cache-miss D1 read.
+		// baseline, or it silently under-counts.
 		baseline, sumErr := u.sumUsage(ctx, userID, cycle)
 		if sumErr != nil {
 			return 0, sumErr
@@ -297,8 +296,7 @@ func (u *UsageQuota) insertUsageRow(
 }
 
 // cycleStart returns the most recent occurrence of anchor's day-of-month, at
-// midnight UTC, at or before now — mirroring the legacy Worker's
-// getResetTime (apps/workers/auth-gateway/src/requests.ts): a billing cycle
+// midnight UTC, at or before now: a billing cycle
 // rolls over every month on the same day it started. This lets a static
 // anchor (free-tier users fall back to their key's created_at, which never
 // changes) still roll into a new monthly cycle automatically, rather than

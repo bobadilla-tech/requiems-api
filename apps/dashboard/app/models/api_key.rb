@@ -44,7 +44,7 @@ class ApiKey < ApplicationRecord
                       }
 
   # Generate and hash a new API key locally — the sole key-generation path in
-  # every environment. No Cloudflare/Worker round trip.
+  # every environment.
   def generate_key
     return if key_prefix.present? # Skip if already generated
 

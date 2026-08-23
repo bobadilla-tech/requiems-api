@@ -4,7 +4,7 @@ require "bcrypt"
 
 class ApiKeyGenerator
   # Matches apps/api/platform/middleware/apikeyauth.go's keyPrefixLength (12)
-  # and the validator both Go and the (retired) Worker enforce:
+  # and the Go validator:
   # ^requiem_[0-9a-zA-Z]{24}$
   ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 

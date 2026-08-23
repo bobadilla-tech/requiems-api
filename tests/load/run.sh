@@ -32,7 +32,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Defaults
 # ---------------------------------------------------------------------------
 
-BASE_URL="${BASE_URL:-http://localhost:4455}"
+BASE_URL="${BASE_URL:-http://localhost:8080}"
 SCENARIO="${1:-all}"
 shift || true          # remaining args are forwarded to k6
 

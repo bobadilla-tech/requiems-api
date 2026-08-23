@@ -13,14 +13,11 @@ import (
 	"requiems-api/platform/httpx"
 )
 
-// clientAuthHeader is the header the (eventually retired) Cloudflare Worker
-// gateway validates against KV today; this middleware validates the same
-// header directly against Postgres for requests that reach Go without going
-// through the Worker.
+// clientAuthHeader is the public credential header validated against Postgres
+// on the direct Go path.
 const clientAuthHeader = "requiems-api-key"
 
-// keyPrefixLength mirrors the Worker's extractKeyPrefix
-// (apps/workers/shared/src/api-key-generator.ts) and Rails'
+// keyPrefixLength mirrors Rails'
 // ApiKeyGenerator.extract_prefix (apps/dashboard/app/services/api_key_generator.rb):
 // the first 12 characters of the full key.
 const keyPrefixLength = 12
@@ -48,9 +45,8 @@ type APIKeyPrincipal struct {
 	// tracking (usage.go): subscriptions.current_period_start, falling back
 	// to the key's own created_at when the user has no subscription row
 	// (free-tier users, who may never have one). The quota middleware derives
-	// the *current* cycle boundary from this anchor's day-of-month, mirroring
-	// the legacy Worker's getResetTime (apps/workers/auth-gateway/src/requests.ts)
-	// — it is not itself the current cycle's start once more than one cycle
+	// the *current* cycle boundary from this anchor's day-of-month; it is not
+	// itself the current cycle's start once more than one cycle
 	// has elapsed since it was read.
 	CurrentPeriodStart time.Time
 }

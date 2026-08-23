@@ -6,8 +6,6 @@ class AppConfig
 
   include Singleton
 
-  attr_reader :api_management_api_key
-
   attr_reader :lemonsqueezy_store_id,
               :lemonsqueezy_store_slug,
               :lemonsqueezy_signing_secret,
@@ -39,8 +37,7 @@ class AppConfig
 
   attr_reader :api_base_url,
               :playground_api_key,
-              :internal_api_url,
-              :backend_secret
+              :internal_api_url
 
   attr_reader :smtp_address,
               :smtp_port,
@@ -146,8 +143,6 @@ class AppConfig
   private
 
   def load_config
-    @api_management_api_key = require_env("API_MANAGEMENT_API_KEY")
-
     @lemonsqueezy_store_id = require_env("LEMONSQUEEZY_STORE_ID")
     @lemonsqueezy_store_slug = optional_env("LEMONSQUEEZY_STORE_SLUG", default: "requiems")
     @lemonsqueezy_test_mode = optional_env("LEMONSQUEEZY_TEST_MODE", default: "false") == "true"
@@ -184,7 +179,6 @@ class AppConfig
     # is run with a real PLAYGROUND_API_KEY value (see that task).
     @playground_api_key = optional_env("PLAYGROUND_API_KEY", default: "requiem_notprovisioned0000000000")
     @internal_api_url = optional_env("INTERNAL_API_URL", default: "http://localhost:8080")
-    @backend_secret = optional_env("BACKEND_SECRET", default: "dev_backend_secret")
 
     @smtp_address = optional_env("SMTP_ADDRESS")
     @smtp_port = optional_env("SMTP_PORT", default: "587").to_i
@@ -234,7 +228,6 @@ class AppConfig
 
   def test_defaults
     {
-      "API_MANAGEMENT_API_KEY" => "test_api_management_key",
       "LEMONSQUEEZY_STORE_ID" => "12345",
       "LEMONSQUEEZY_SIGNING_SECRET" => "test_signing_secret",
       "LEMONSQUEEZY_DEVELOPER_MONTHLY_VARIANT_ID" => "123456",
@@ -265,7 +258,6 @@ class AppConfig
       "LEMONSQUEEZY_PRIVATE_SCALE_YEARLY_CHECKOUT_UUID_TEST"       => "00000000-0000-0000-0000-000000000026",
       "LEMONSQUEEZY_PRIVATE_ENTERPRISE_MONTHLY_CHECKOUT_UUID_TEST" => "00000000-0000-0000-0000-000000000027",
       "LEMONSQUEEZY_PRIVATE_ENTERPRISE_YEARLY_CHECKOUT_UUID_TEST"  => "00000000-0000-0000-0000-000000000028",
-      "BACKEND_SECRET" => "test_backend_secret",
       "PLAYGROUND_API_KEY" => "requiem_pgtestkey000000000000000",
       "LEMONSQUEEZY_SIGNING_SECRET_TEST" => "test_signing_secret_test",
       "LEMONSQUEEZY_DEVELOPER_MONTHLY_VARIANT_ID_TEST" => "223456",
