@@ -19,4 +19,3 @@ protected-table counts before and after validation.
 
 CI analyzes Go, Ruby, and MCP JavaScript/TypeScript. There are no Worker
 targets, flags, path filters, or reusable Worker workflows.
-

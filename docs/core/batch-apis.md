@@ -191,5 +191,4 @@ all-or-nothing behaviour.
       and oversize.
 - [ ] Public docs include curl example and error cases.
 - [ ] Confirmed with the Go API owner that **usage** in PostgreSQL matches
-      expectations
-      for a sample batch (e.g. 10 items → 10 units).
+      expectations for a sample batch (e.g. 10 items → 10 units).

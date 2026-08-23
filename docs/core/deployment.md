@@ -4,8 +4,8 @@
 
 Kamal deploys three application images:
 
-- `infra/kamal/deploy.api.yml`: Go API, Caddy, database, Redis, and
-  LanguageTool accessories.
+- `infra/kamal/deploy.api.yml`: Go API, Caddy, database, Redis, and LanguageTool
+  accessories.
 - `infra/kamal/deploy.dashboard.yml`: Rails web and Sidekiq.
 - `infra/kamal/deploy.mcp.yml`: MCP server.
 
@@ -15,8 +15,8 @@ restore the retired KV/D1 resources.
 ## Deploy
 
 The normal path is the GitHub Actions CD workflow. It supplies the Kamal
-registry and VPS secrets, then runs the same checked-in Kamal configuration
-used for a manual deploy. A direct local deploy requires the same environment:
+registry and VPS secrets, then runs the same checked-in Kamal configuration used
+for a manual deploy. A direct local deploy requires the same environment:
 
 ```bash
 kamal deploy -c infra/kamal/deploy.api.yml
@@ -24,8 +24,8 @@ kamal deploy -c infra/kamal/deploy.dashboard.yml
 kamal deploy -c infra/kamal/deploy.mcp.yml
 ```
 
-The API health check is `GET /healthz`. After every production deploy verify
-the public hostname, a valid-key request, invalid-key 401, and origin AOP
+The API health check is `GET /healthz`. After every production deploy verify the
+public hostname, a valid-key request, invalid-key 401, and origin AOP
 certificate rejection.
 
 ## Required secrets
@@ -38,19 +38,18 @@ certificate rejection.
 - SMTP password
 
 The normal public API path has no `BACKEND_SECRET`. The private-deployment
-`tenant_secret` is stored and delivered through its own Rails workflow and
-must remain supported.
+`tenant_secret` is stored and delivered through its own Rails workflow and must
+remain supported.
 
 ## Cloudflare
 
 Keep `api.requiems.xyz` proxied. Cloudflare should expose the DNS record,
-WAF/DDoS/TLS controls, and origin-pull authentication only. The retired
-Worker routes, custom domains, KV namespace, and D1 database are not
-rollback dependencies.
+WAF/DDoS/TLS controls, and origin-pull authentication only. The retired Worker
+routes, custom domains, KV namespace, and D1 database are not rollback
+dependencies.
 
 ## Rollback
 
 Rollback means reverting the Go/Caddy/Kamal commit and redeploying the
-application images. It does not mean recreating a deleted Worker, KV
-namespace, or D1 database.
-
+application images. It does not mean recreating a deleted Worker, KV namespace,
+or D1 database.

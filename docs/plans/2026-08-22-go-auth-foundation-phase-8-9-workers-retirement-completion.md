@@ -490,14 +490,15 @@ irreversible Cloudflare deletion calls.
 
 - Phase 7a direct ingress was re-verified on the production VPS at
   `89.167.53.98`. The successful Kamal-managed API deployment was CD run
-  `32604889613`, deploying API commit `217584c62e04026a9c96b564be2815e5362397b8`.
-  The dashboard direct-Go redeploy was CD run `32611190444`, deploying commit
+  `32604889613`, deploying API commit
+  `217584c62e04026a9c96b564be2815e5362397b8`. The dashboard direct-Go redeploy
+  was CD run `32611190444`, deploying commit
   `48f87a0d93f6ad25859669892c0fcfa6e866d941`; the final documentation-only
   follow-up was pushed as `d10b2673`.
-- `https://api.requiems.xyz/healthz` returned 200 through Cloudflare/Caddy.
-  AOP direct-origin enforcement was rechecked with
-  `curl --resolve api.requiems.xyz:443:89.167.53.98`; TLS failed with
-  LibreSSL reason/alert `1116` (`certificate_required`).
+- `https://api.requiems.xyz/healthz` returned 200 through Cloudflare/Caddy. AOP
+  direct-origin enforcement was rechecked with
+  `curl --resolve api.requiems.xyz:443:89.167.53.98`; TLS failed with LibreSSL
+  reason/alert `1116` (`certificate_required`).
 - The direct Cloudflare -> Caddy -> Kamal -> Go path was exercised with a
   Playground key (200), an invalid key (401), and a synthetic exhausted Redis
   rate bucket (429). The Rails private `ApiProxyService` path returned 200 and
@@ -513,15 +514,14 @@ irreversible Cloudflare deletion calls.
 - `sync_d1_usage` was removed from Sidekiq Cron with the exact job name. The
   exact cleanup removed 2 scheduled payloads, 1 retry payload, 0 dead payloads,
   and 0 queued payloads. The exact Redis keys inspected were
-  `cron_job:default:sync_d1_usage`,
-  `cron_job:default:sync_d1_usage:enqueued`, and
-  `cron_job:default:sync_d1_usage:jid_history`; the final exact-key delete
+  `cron_job:default:sync_d1_usage`, `cron_job:default:sync_d1_usage:enqueued`,
+  and `cron_job:default:sync_d1_usage:jid_history`; the final exact-key delete
   returned 0 because Cron deletion had already removed them.
 - Solid Queue's exact recurring task was removed with:
   `DELETE FROM solid_queue_recurring_tasks WHERE key=chr(115)||chr(121)||chr(110)||chr(99)||chr(95)||chr(100)||chr(49)||chr(95)||chr(117)||chr(115)||chr(97)||chr(103)||chr(101) RETURNING id;`
-  (returned task id 2, `sync_d1_usage`). There were 0
-  `SyncD1UsageJob` rows, 0 claimed/leased D1 jobs, 0 ready/queued D1 jobs,
-  and 0 scheduled D1 jobs. The 7 failed Solid Queue rows were unrelated
+  (returned task id 2, `sync_d1_usage`). There were 0 `SyncD1UsageJob` rows, 0
+  claimed/leased D1 jobs, 0 ready/queued D1 jobs, and 0 scheduled D1 jobs. The 7
+  failed Solid Queue rows were unrelated
   `ActionMailer::MailDeliveryJob`/`AggregateDailyUsageJob` rows. Sidekiq
   reported 0 workers, and the clean post-removal observation remained at zero
   for more than the former five-minute schedule interval.
@@ -531,13 +531,13 @@ irreversible Cloudflare deletion calls.
 
 ### Exact Cloudflare resources and deletion confirmation
 
-Account: `67157b9601e6a8628eb8db98d646e190`; zone:
-`requiems.xyz` (`9dceb9681679d346c9afff8d5e92cf2d`). Before deletion, the target
-Workers `requiem-auth-gateway`, `requiem-api-management`, and their wildcard
-variants were already absent; the zone Worker route list was `[]`; and the
-`requiems.xyz` Worker custom-domain list was empty. Therefore no target Worker,
-route, custom-domain, or target Worker-secret delete call was applicable. The
-unrelated four Workers and their domains were preserved.
+Account: `67157b9601e6a8628eb8db98d646e190`; zone: `requiems.xyz`
+(`9dceb9681679d346c9afff8d5e92cf2d`). Before deletion, the target Workers
+`requiem-auth-gateway`, `requiem-api-management`, and their wildcard variants
+were already absent; the zone Worker route list was `[]`; and the `requiems.xyz`
+Worker custom-domain list was empty. Therefore no target Worker, route,
+custom-domain, or target Worker-secret delete call was applicable. The unrelated
+four Workers and their domains were preserved.
 
 With owner approval, the exact destructive calls were:
 
@@ -548,8 +548,8 @@ With owner approval, the exact destructive calls were:
   longer contained that UUID/name. The pre-delete inventory reported
   `num_tables: 0`.
 
-Post-delete inventory reported zero KV namespaces and only the two unrelated
-D1 databases. The proxied A record `api.requiems.xyz -> 89.167.53.98` remained;
+Post-delete inventory reported zero KV namespaces and only the two unrelated D1
+databases. The proxied A record `api.requiems.xyz -> 89.167.53.98` remained;
 `api-management.requiems.xyz` remained absent from DNS.
 
 ### Repository removals and retained contracts
@@ -562,8 +562,8 @@ D1 databases. The proxied A record `api.requiems.xyz -> 89.167.53.98` remained;
   guidance, CodeQL, Codecov, Copilot setup, CI/CD, Kamal, Compose, seed, and
   README contracts to direct Go. `LOCAL_DEV_API_KEY` is the explicit local
   credential source. The normal Rails-to-Go path sends `requiems-api-key`.
-- Retained Cloudflare DNS/WAF/DDoS/TLS/AOP, Caddy, Kamal, Redis, PostgreSQL,
-  the public API DNS record, and the separate encrypted private-deployment
+- Retained Cloudflare DNS/WAF/DDoS/TLS/AOP, Caddy, Kamal, Redis, PostgreSQL, the
+  public API DNS record, and the separate encrypted private-deployment
   `tenant_secret`/`BACKEND_SECRET` contract. Historical audits/plans and
   historical product/blog references were not rewritten.
 
@@ -573,32 +573,34 @@ D1 databases. The proxied A record `api.requiems.xyz -> 89.167.53.98` remained;
   as database `prodbase`, role `prodking`, schema `public`, migration version
   `11`. Thus PostgreSQL rows removed from the five-table operational allowlist
   (`usage_logs`, `daily_usage_summaries`, `credit_adjustments`, `audit_logs`,
-  and deleted D1 `credit_usage`) were 0; no `CASCADE`, wildcard, or
-  schema-wide truncation was used. The D1 inventory also reported zero tables.
+  and deleted D1 `credit_usage`) were 0; no `CASCADE`, wildcard, or schema-wide
+  truncation was used. The D1 inventory also reported zero tables.
 - The scheduler-only `solid_queue_recurring_tasks` delete above was not product
   data cleanup. The five-table cleanup before/after values were identical
   because no cleanup query targeted those tables. Final production counts were:
-  `usage_logs` 2044,
-  `daily_usage_summaries` 0, `credit_adjustments` 0, `audit_logs` 12;
-  protected `users` 16, `api_keys` 18, `subscriptions` 8, `plans` 5; and Go
-  reference checks `advice` 6, `quotes` 3, `words` 3, `bin_data` 458044,
-  `inflation_data` 6740, `iban_countries` 116, `commodity_price_history` 523,
-  `exercises` 1500, `swift_codes` 109032, `counters` 2. No protected row was
-  deleted or truncated. The dedicated pre-launch Playground provisioning was
-  retained as the explicit smoke-key exception; no user was deleted.
+  `usage_logs` 2044, `daily_usage_summaries` 0, `credit_adjustments` 0,
+  `audit_logs` 12; protected `users` 16, `api_keys` 18, `subscriptions` 8,
+  `plans` 5; and Go reference checks `advice` 6, `quotes` 3, `words` 3,
+  `bin_data` 458044, `inflation_data` 6740, `iban_countries` 116,
+  `commodity_price_history` 523, `exercises` 1500, `swift_codes` 109032,
+  `counters` 2. No protected row was deleted or truncated. The dedicated
+  pre-launch Playground provisioning was retained as the explicit smoke-key
+  exception; no user was deleted.
 
 ### Validation and final production evidence
 
-- Passed `LOCAL_DEV_API_KEY=requiem_AAAAAAAAAAAAAAAAAAAAAAAA docker compose -f
-  infra/docker/docker-compose.dev.yml config --quiet` and `git diff --check`.
+- Passed
+  `LOCAL_DEV_API_KEY=requiem_AAAAAAAAAAAAAAAAAAAAAAAA docker compose -f
+  infra/docker/docker-compose.dev.yml config --quiet`
+  and `git diff --check`.
 - Passed Go `go test ./...` in the isolated API test target with
   `TEST_DATABASE_URL=postgres://requiem:requiem@db:5432/requiem_test` and an
   isolated Redis DB. Passed MCP `bun test` (40 tests). Passed Rails
-  `RAILS_ENV=test` against isolated `dashboard_test` and Redis DB 1: 4,903
-  runs, 12,311 assertions, 0 failures, 0 errors, 0 skips.
+  `RAILS_ENV=test` against isolated `dashboard_test` and Redis DB 1: 4,903 runs,
+  12,311 assertions, 0 failures, 0 errors, 0 skips.
 - Post-delete smoke at `2026-08-23T02:13Z`: health 200 Ray
-  `a2f698c11faa0528-AMS` / request `3a52ecca-28ac-4869-8a47-901fd4ebab2b`;
-  valid key 200 Ray `a2f698c42d3cb8ae-AMS` / request
+  `a2f698c11faa0528-AMS` / request `3a52ecca-28ac-4869-8a47-901fd4ebab2b`; valid
+  key 200 Ray `a2f698c42d3cb8ae-AMS` / request
   `e8ddf697-bb2d-4439-9e22-2bde06c50f26`; invalid key 401 Ray
   `a2f698c9bb4cf5b8-AMS` / request `be694d17-eb05-48c1-9ebf-61a458fc5141`;
   rate-limit 429 Ray `a2f698e1cebeb438-AMS` / request

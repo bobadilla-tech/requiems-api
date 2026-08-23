@@ -153,7 +153,7 @@ func TestUsageQuota_RejectedBatchReservationsAreRolledBack(t *testing.T) {
 	principal := APIKeyPrincipal{UserID: userID, Plan: planID, APIKeyID: userID, CurrentPeriodStart: time.Now()}
 	t.Cleanup(func() { _, _ = pool.Exec(context.Background(), `DELETE FROM usage_logs WHERE user_id = $1`, userID) })
 
-	first := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", nil)
+	first := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", http.NoBody)
 	first = first.WithContext(context.WithValue(first.Context(), apiKeyContextKey{}, principal))
 	w := httptest.NewRecorder()
 	handler.ServeHTTP(w, first)
@@ -164,7 +164,7 @@ func TestUsageQuota_RejectedBatchReservationsAreRolledBack(t *testing.T) {
 	require.EqualValues(t, "3", rdb.Get(context.Background(), usageKey).Val())
 
 	for range 3 {
-		req := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", nil)
+		req := httptest.NewRequest(http.MethodPost, "/v1/text/words/batch", http.NoBody)
 		req.Header.Set("X-Usage-Count", "999") // request headers are untrusted
 		req = req.WithContext(context.WithValue(req.Context(), apiKeyContextKey{}, principal))
 		w = httptest.NewRecorder()
@@ -316,7 +316,7 @@ func TestRequestCreditsUsesRouteCostNotRequestHeader(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req := httptest.NewRequest(tt.method, tt.path, nil)
+			req := httptest.NewRequest(tt.method, tt.path, http.NoBody)
 			req.Header.Set("X-Usage-Count", "999")
 			require.Equal(t, tt.want, requestCredits(req))
 		})
