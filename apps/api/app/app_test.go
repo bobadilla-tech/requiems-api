@@ -154,6 +154,40 @@ func TestNew_ErrorOnBadDatabaseURL(t *testing.T) {
 	require.Error(t, err)
 }
 
+// TestApp_Close verifies Close releases the pool and Redis client without
+// panicking, and that both are actually unusable afterward (not just that
+// Close returned).
+func TestApp_Close(t *testing.T) {
+	dsn := os.Getenv("TEST_DATABASE_URL")
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_URL")
+	}
+
+	if dsn == "" {
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping App integration test")
+	}
+
+	redisURL := os.Getenv("REDIS_URL")
+	if redisURL == "" {
+		redisURL = "redis://localhost:6379/0"
+	}
+
+	t.Chdir("..") // resolve "migrations" relative to api root, not package dir
+
+	app, err := New(context.Background(), config.Config{
+		DatabaseURL: dsn,
+		RedisURL:    redisURL,
+	})
+	if err != nil {
+		t.Skipf("infrastructure unavailable; skipping App integration test: %v", err)
+	}
+
+	app.Close()
+
+	assert.Error(t, app.pool.Ping(context.Background()))
+	assert.Error(t, app.rdb.Ping(context.Background()).Err())
+}
+
 // TestApp_Handler is an integration test that creates a real App and verifies
 // the HTTP handler has the expected routing structure:
 //   - GET /healthz is publicly accessible (no auth required)
@@ -207,7 +241,7 @@ func TestApp_Handler(t *testing.T) {
 	})
 
 	t.Run("v1 routes require an api key", func(t *testing.T) {
-		req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
+		req := httptest.NewRequest(http.MethodGet, "/v1/entertainment/advice", http.NoBody)
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)
 
@@ -222,7 +256,7 @@ func TestApp_Handler(t *testing.T) {
 		// plan's Context section, not just changed why it failed.
 		apiKey := seedAPIKeyFixture(t, dsn)
 
-		req := httptest.NewRequest(http.MethodGet, "/v1/text/advice", http.NoBody)
+		req := httptest.NewRequest(http.MethodGet, "/v1/entertainment/advice", http.NoBody)
 		req.Header.Set("requiems-api-key", apiKey)
 		w := httptest.NewRecorder()
 		h.ServeHTTP(w, req)

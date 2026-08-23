@@ -324,7 +324,10 @@ path.
   `-phase-0-1.md` (shorten the `apikey:{prefix}` cache TTL further). If it's
   deferred again, the next plan in this series should either schedule it
   explicitly or make a deliberate, written decision to accept the risk — not
-  defer it a fourth time by default.
+  defer it a fourth time by default. **Resolved — see
+  standing-issues-hardening.md: candidate-only cache +
+  bcrypt-reverify-every-hit,
+  `apps/api/platform/middleware/apikeyauth.go:120-126`.**
 - Confirming whether `api-management`'s `/analytics/*` endpoints have a hidden
   caller — irrelevant until Phase 3 item 7 actually deletes them.
 

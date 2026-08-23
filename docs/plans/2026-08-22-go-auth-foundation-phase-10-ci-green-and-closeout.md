@@ -2,27 +2,37 @@
 
 **Status:** proposed **Depends on:** Phases 0-1, 2, 3-4,
 standing-issues-hardening, 5, 6, 7, 8-9 (all shipped on
-`feat/go-auth-foundations`, PR #966, currently `MERGEABLE`, working tree clean
-at `04ef902e`) **Goal of this session:** this is very likely the last working
-session on PR #966. Everything architectural is done — Cloudflare Workers/KV/D1
-are deleted, the Go API is the sole auth/rate-limit/usage enforcer, live traffic
-is smoke-tested. What's left is not new feature work, it's making the PR itself
-clean and mergeable: real CI failures, doc corpus rot, and one stray branch.
-Nothing here should touch runtime behavior.
+`feat/go-auth-foundations`, PR #966, currently `MERGEABLE`). **Goal of this
+session:** this is very likely the last working session on PR #966. Everything
+architectural is done — Cloudflare Workers/KV/D1 are deleted, the Go API is the
+sole auth/rate-limit/usage enforcer, live traffic is smoke-tested. What's left
+is not new feature work, it's making the PR itself clean and mergeable: real CI
+failures, doc corpus rot, and one stray branch. Nothing here should touch
+runtime behavior.
+
+**Before doing anything else:** run `git log --oneline -5` and
+`gh pr checks
+966` fresh. This plan was drafted against commit `04ef902e`, but a
+follow-up commit (`7420312e`, "docs: formatting") landed on the branch afterward
+and already fixed 10.1's three `gocritic` findings, confirmed green on
+`Go Lint (Advisory)`. The state below is what was true when this plan was
+written — treat it as a starting hypothesis to re-verify, not as ground truth.
+Don't redo work that already landed.
 
 ## Context: what's actually failing right now
 
-Checked live via `gh pr checks 966` / `gh api .../check-runs` on 2026-08-22:
+Checked live via `gh pr checks 966` / `gh api .../check-runs`, last confirmed
+fresh as of commit `7420312e`:
 
-| Check                       | State               | Real issue?                                                                                                                                                 |
-| --------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Go Tests                    | pass                | —                                                                                                                                                           |
-| Rails Tests                 | pass                | —                                                                                                                                                           |
-| MCP Tests                   | pass                | —                                                                                                                                                           |
-| Go Lint (Advisory)          | **fail**            | yes — 3 trivial `gocritic` findings                                                                                                                         |
-| codecov/patch               | **fail**            | yes — patch coverage 53.57%, 221 lines missing across ~17 files                                                                                             |
-| Codacy Static Code Analysis | **action_required** | likely false positive — 6 "critical SQL Injection" findings, all in `_test.go` files, all on fully parameterized `pool.Exec(ctx, "...", $1, $2, ...)` calls |
-| CodeQL                      | neutral/skip        | not a blocker                                                                                                                                               |
+| Check                       | State                                                         | Real issue?                                                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Go Tests                    | pass                                                          | —                                                                                                                                                           |
+| Rails Tests                 | pass                                                          | —                                                                                                                                                           |
+| MCP Tests                   | pass                                                          | —                                                                                                                                                           |
+| Go Lint (Advisory)          | pass (already fixed by `7420312e`)                            | no — 10.1 below is effectively done, keep as a re-verify step only                                                                                          |
+| codecov/patch               | **fail**                                                      | yes — but the specific per-file numbers below may themselves be stale, see 10.2's caution                                                                   |
+| Codacy Static Code Analysis | **fail** (was `action_required` when last checked, re-verify) | likely false positive — 6 "critical SQL Injection" findings, all in `_test.go` files, all on fully parameterized `pool.Exec(ctx, "...", $1, $2, ...)` calls |
+| CodeQL                      | neutral/skip                                                  | not a blocker                                                                                                                                               |
 
 **Important scoping fact:** `main` has no branch protection
 (`gh api repos/.../branches/main/protection` → `404 Branch not protected`).
@@ -32,24 +42,35 @@ auth-migration PR going in red is bad practice, not because GitHub is stopping
 it. That changes prioritization: real bugs first, coverage next, Codacy triage
 last (it may not be fixable from the repo side at all — see 10.3).
 
-## 10.1 — Go Lint: 3 trivial `gocritic` fixes
+## 10.1 — Go Lint: re-verify the 3 `gocritic` fixes are actually in
 
-`apps/api/platform/middleware/usage_test.go:156`, `:167`, `:319` —
-`httptest.NewRequest(method, path, nil)` should use `http.NoBody` instead of
-`nil` per `gocritic`'s `httpNoBody` check.
+**Likely already done.** Commit `7420312e` (already on the branch) changed
+`apps/api/platform/middleware/usage_test.go` at lines 156, 167, 319, swapping
+`httptest.NewRequest(method, path, nil)` for
+`httptest.NewRequest(method, path,
+http.NoBody)` — exactly gocritic's
+`httpNoBody` fix. `gh pr checks 966` shows `Go Lint (Advisory)` passing as of
+that commit.
 
-- Fix: replace the `nil` body argument with `http.NoBody` at all three call
-  sites.
-- Verify: `cd apps/api && golangci-lint run ./...` (or however CI invokes it —
-  check `.github/workflows/ci.yml` for the exact `golangci-lint` version/flags,
-  currently v2.10.1) comes back clean.
-- Effort: trivial, ~5 minutes.
+- Confirm: `cd apps/api && golangci-lint run ./...` comes back clean (CI pins
+  `golangci-lint-action` at `v2.10`, matching what's installed).
+- If it's already clean, mark this done and move on — don't re-touch the file.
 
 ## 10.2 — Raise `codecov/patch` coverage (53.57% → passing)
 
 The PR comment (`gh pr view 966 --json comments`, codecov bot) lists the worst
 offenders; the comment itself truncates at "and 7 more" so the first task here
 is getting the _complete_ list, not just the top 10.
+
+**Caution — the numbers in Step 2 below may already be stale.** They were
+transcribed from a codecov comment posted against an earlier commit. A local
+`go test -race -coverprofile=coverage.out ./...` run against the current branch
+already shows `ratelimit.go`'s `Middleware` at 89.3% and `NewRateLimiter` at
+100%, and `app.go`'s `New`/`Handler` at 83-100% — nowhere near the "0.00%"
+figures quoted below. Treat Step 2's table as directional history, not current
+fact. **Always trust a fresh Step 1 run over this table.** If the fresh numbers
+already clear codecov's bar for a file, don't invent test cases to "fix" a gap
+that no longer exists.
 
 **Step 1 — get the full picture.** Run locally with real Postgres/Redis (same as
 CI's `apps/api` job:
@@ -87,21 +108,22 @@ comment):**
 - plus 7 more files not enumerated in the truncated comment — surface these in
   Step 1.
 
-**Step 3 — investigate the 0% files specifically.** `ratelimit_test.go` and
-`app_test.go` _already exist_ and already gate on live Postgres/Redis
-(`t.Skip("TEST_DATABASE_URL/DATABASE_URL not set...")` at `ratelimit_test.go:25`
-and `app_test.go:176,271`), and CI's `Go Tests` job does set both env vars and
-does pass — so these aren't simply skipped in CI. 0% patch coverage on
-`ratelimit.go`/`app.go`/`db.go`/`redis.go` despite passing integration tests
-most likely means: the specific _new lines this PR touches_ (error branches, new
-wiring, new config paths) aren't exercised by the existing happy-path scenarios.
-Read each flagged file's diff against `main`, identify which branches are new
-and untested (e.g. Lua-script error paths in `ratelimit.go`, pool/config
-construction in `db.go`/`redis.go`, new middleware wiring in `app.go`), and add
-targeted test cases — don't chase the coverage number, make sure the added tests
-actually exercise real failure/edge paths (bad connection strings, Lua script
-errors, plan lookup misses, etc.), consistent with this project's existing
-pattern of real-infra integration tests over mocks.
+**Step 3 — investigate whichever files the fresh Step 1 run actually shows as
+gapped.** `ratelimit_test.go` and `app_test.go` already exist and already gate
+on live Postgres/Redis (`t.Skip("TEST_DATABASE_URL/DATABASE_URL not set...")` at
+`ratelimit_test.go:25` and `app_test.go:176,271`), and a local run already shows
+`ratelimit.go`/`app.go` well-covered (see the caution above) — so those two are
+probably not real gaps. `db.go`/`redis.go` are a different story: they have no
+`_test.go` of their own, and `go test ./...` (no `-coverpkg`) only credits
+coverage to a package's own test binary, so exercising them indirectly via
+`app_test.go` doesn't count — that 0% is real and expected until a small test is
+added directly. For whatever files the fresh run confirms as genuinely gapped
+(start with `usage.go` and `apikeyauth.go`, the two large ones), read that
+file's diff against `main`, identify which branches are new and untested, and
+add targeted test cases — don't chase the coverage number, make sure the added
+tests actually exercise real failure/edge paths (bad connection strings, Lua
+script errors, plan lookup misses, etc.), consistent with this project's
+existing pattern of real-infra integration tests over mocks.
 
 **Step 4 — don't over-invest in db.go/redis.go.** These are thin infra-wiring
 files (pool/client construction). If a line is pure boilerplate with no
@@ -161,6 +183,15 @@ candidate-only cache + bcrypt-reverify-every-hit,
 
 - Grep each of the three docs for the relevant section, add a short "Resolved —
   see standing-issues-hardening.md" note (don't rewrite history, just annotate).
+- Phase 2's Final Notes paragraph (around line 477) lists the brute-force item
+  alongside two others in the same breath — don't annotate only the brute-force
+  one and leave the other two looking equally open by omission:
+  - The "three manually-synced copies of plan-tier values" gap is now moot — the
+    Worker's copy was deleted wholesale in Phase 8-9 (`apps/workers` has zero
+    tracked files). Note it as moot, not "fixed."
+  - The "usage-logs row-level dedup collision under rapid same-second traffic"
+    item was explicitly logged as an _accepted design tradeoff_, not a bug to
+    fix — note it as "accepted, not a gap," don't imply it needs action.
 - This is pure documentation hygiene — no code changes. Keep it brief; these are
   historical planning docs, not living reference docs.
 
@@ -194,9 +225,10 @@ branch is stale/superseded, not a source of pending work.
   Phase 6, still open per Phase 8-9) is captured somewhere durable as a
   post-merge owner action — it requires live production secrets access
   (`rails playground:provision_key` against a real key), which is not something
-  this session can do. Just verify it's not silently forgotten: check it's
-  referenced in a deploy runbook or the PR description itself, and if not, add
-  one line noting it as a required post-merge step.
+  this session can do. This is already tracked in
+  `docs/core/v2-deployment-playbook.md` as an explicit checklist item, so this
+  step is likely just a quick confirm, not new documentation work — only add a
+  line if it's genuinely missing.
 - Optional: PR title currently reads generically ("Requiems API v2" per
   CodeRabbit's pre-merge check, which passed but noted the title "does not
   specify the Go authentication, quota, or infrastructure work"). Consider

@@ -127,6 +127,35 @@ class Webhooks::LemonsqueezyControllerTest < ActionDispatch::IntegrationTest
     assert_equal "yearly", @user.subscription.reload.plan
   end
 
+  test "subscription_resumed updates plan (billing cycle) from the variant_id" do
+    created = subscription_created_payload(user_id: @user.id, variant_id: AppConfig.lemonsqueezy_developer_monthly_variant_id)
+    post webhooks_lemonsqueezy_path, params: created.to_json, headers: signed_headers(created)
+    assert_equal "monthly", @user.subscription.reload.plan
+
+    resumed = {
+      meta: { event_name: "subscription_resumed" },
+      data: {
+        id: created[:data][:id],
+        attributes: {
+          status: "active",
+          variant_id: AppConfig.lemonsqueezy_developer_yearly_variant_id
+        }
+      }
+    }
+    post webhooks_lemonsqueezy_path, params: resumed.to_json, headers: signed_headers(resumed)
+
+    assert_response :ok
+    assert_equal "yearly", @user.subscription.reload.plan
+  end
+
+  test "subscription_created falls back to monthly billing cycle for an unrecognized variant_id" do
+    payload = subscription_created_payload(user_id: @user.id, variant_id: "unrecognized_variant")
+    post webhooks_lemonsqueezy_path, params: payload.to_json, headers: signed_headers(payload)
+
+    assert_response :ok
+    assert_equal "monthly", @user.subscription.reload.plan
+  end
+
   private
 
   def subscription_created_payload(user_id:, variant_id: AppConfig.lemonsqueezy_developer_monthly_variant_id)

@@ -476,9 +476,14 @@ own verification method):
 
 **Known, accepted gaps carried forward as-is (already reasoned about in the plan
 doc's text, not revisited here):** the rate limiter's inability to bound the
-auth-cache prefix-guessing exposure; the usage-logs row-level dedup collision
-under rapid same-second traffic to one endpoint; the three manually-synced
-copies of plan-tier values.
+auth-cache prefix-guessing exposure **(Resolved — see
+standing-issues-hardening.md: candidate-only cache + bcrypt-reverify-every-hit,
+`apps/api/platform/middleware/apikeyauth.go:120-126`)**; the usage-logs
+row-level dedup collision under rapid same-second traffic to one endpoint
+**(accepted, not a gap — logged as a deliberate design tradeoff, not something
+to fix)**; the three manually-synced copies of plan-tier values **(moot — the
+Worker's copy was deleted wholesale in Phase 8-9; `apps/workers` has zero
+tracked files, so there are no longer three copies to sync)**.
 
 **Follow-ups (new, surfaced by this phase):**
 

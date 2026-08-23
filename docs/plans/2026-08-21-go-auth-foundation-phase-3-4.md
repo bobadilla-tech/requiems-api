@@ -506,7 +506,10 @@ consumers:**
 - The rate limiter's structural inability to bound the auth-cache
   prefix-guessing exposure (Phase 2's own flagged, carried-forward gap) —
   unrelated to key _generation_ (this plan's Phase 3), only to key
-  _verification_ cache behavior (Phase 1, already shipped).
+  _verification_ cache behavior (Phase 1, already shipped). **Resolved — see
+  standing-issues-hardening.md: candidate-only cache +
+  bcrypt-reverify-every-hit,
+  `apps/api/platform/middleware/apikeyauth.go:120-126`.**
 - Rewriting `AnalyticsRevenueService` beyond fixing the `plan` column input — no
   other correctness issue was found in it.
 
