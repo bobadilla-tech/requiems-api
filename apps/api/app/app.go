@@ -54,8 +54,13 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 	router.Use(middleware.RequestLogger(slog.Default()))
 
 	router.Get("/healthz", Healthz(pool))
+	router.Get("/openapi.json", OpenAPISpec())
 
 	router.Group(func(protected chi.Router) {
+		// CORS runs first so a preflight OPTIONS request (which never
+		// carries the requiems-api-key header) is answered before it can
+		// reach APIKeyAuth.
+		protected.Use(middleware.CORS)
 		// APIKeyAuth is the sole enforcing auth check for all traffic to this
 		// group, direct or Cloudflare-proxied. API-key authentication is the
 		// sole enforcing application-layer auth boundary.
