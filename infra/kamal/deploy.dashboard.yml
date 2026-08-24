@@ -14,7 +14,7 @@ servers:
 
 proxy:
   ssl: false
-  host: requiems.xyz
+  host: requiemsapi.com
   app_port: 80
   forward_headers: true
   run:
@@ -47,7 +47,7 @@ env:
     RAILS_ENV: production
     RAILS_LOG_LEVEL: warn
     INTERNAL_API_URL: http://requiems-api:8080
-    API_BASE_URL: https://api.requiems.xyz
+    API_BASE_URL: https://requiems.xyz
     LEMONSQUEEZY_STORE_ID: "241998"
     LEMONSQUEEZY_STORE_SLUG: ultirequiem
     LEMONSQUEEZY_TEST_MODE: "false"
@@ -68,7 +68,7 @@ env:
     SMTP_DOMAIN: mail.requiems.xyz
     SMTP_USERNAME: resend
     SMTP_FROM_EMAIL: noreply@mail.requiems.xyz
-    MAILER_HOST: requiems.xyz
+    MAILER_HOST: requiemsapi.com
     GA4_MEASUREMENT_ID: G-LS6S9MEGTW
   secret:
     - DATABASE_URL

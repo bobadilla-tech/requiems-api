@@ -46,7 +46,7 @@ services:
     environment:
       - MCP_TRANSPORT=http
       - MCP_HTTP_PORT=3000
-      - REQUIEMS_BASE_URL=https://api.requiems.xyz
+      - REQUIEMS_BASE_URL=https://requiems.xyz
     healthcheck:
       test:
         [

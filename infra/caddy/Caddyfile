@@ -6,7 +6,7 @@
 # router behind it and listens on 127.0.0.1:8080/8443.
 
 # Main application (landing page, dashboard, admin, docs)
-requiems.xyz {
+requiemsapi.com {
   # Exclude sitemaps from gzip — Googlebot HEAD requests fail when the gzip
   # Content-Length doesn't match, causing "Couldn't fetch" in Search Console.
   @compressible {
@@ -35,7 +35,7 @@ mcp.requiems.xyz {
 
 # Public API. Cloudflare AOP is enforced at this edge before the request can
 # reach Kamal Proxy or Go.
-api.requiems.xyz {
+requiems.xyz {
   encode gzip
 
   tls {
@@ -52,3 +52,22 @@ api.requiems.xyz {
   }
 }
 
+# DEPRECATED — retired host, kept only as a fallback vhost during the cutover
+# verification window (see docs/plans/2026-08-23-requiemsapi-domain-role-swap.md
+# §10 step 5, §11). Delete this block once cutover is verified.
+api.requiems.xyz {
+  encode gzip
+
+  tls {
+    client_auth {
+      mode require_and_verify
+      trust_pool file {
+        pem_file /etc/caddy/certs/cloudflare-origin-pull-ca.pem
+      }
+    }
+  }
+
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host {host}
+  }
+}

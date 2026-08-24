@@ -15,7 +15,7 @@ servers:
 
 proxy:
   ssl: false
-  host: api.requiems.xyz
+  host: requiems.xyz
   app_port: 8080
   forward_headers: true
   healthcheck:

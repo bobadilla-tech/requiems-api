@@ -39,4 +39,4 @@ ssh:
 
 env:
   clear:
-    REQUIEMS_BASE_URL: https://api.requiems.xyz
+    REQUIEMS_BASE_URL: https://requiems.xyz
