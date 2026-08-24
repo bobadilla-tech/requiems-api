@@ -174,7 +174,7 @@ class AppConfig
     @lemonsqueezy_private_enterprise_monthly_checkout_uuid = optional_env("LEMONSQUEEZY_PRIVATE_ENTERPRISE_MONTHLY_CHECKOUT_UUID#{suffix}")
     @lemonsqueezy_private_enterprise_yearly_checkout_uuid  = optional_env("LEMONSQUEEZY_PRIVATE_ENTERPRISE_YEARLY_CHECKOUT_UUID#{suffix}")
 
-    @api_base_url = optional_env("API_BASE_URL", default: "https://api.requiems.xyz")
+    @api_base_url = optional_env("API_BASE_URL", default: "https://requiems.xyz")
     # Format-valid but non-functional until `rails playground:provision_key`
     # is run with a real PLAYGROUND_API_KEY value (see that task).
     @playground_api_key = optional_env("PLAYGROUND_API_KEY", default: "requiem_notprovisioned0000000000")
@@ -185,7 +185,7 @@ class AppConfig
     @smtp_domain = optional_env("SMTP_DOMAIN")
     @smtp_username = optional_env("SMTP_USERNAME")
     @smtp_password = optional_env("SMTP_PASSWORD")
-    @mailer_host = optional_env("MAILER_HOST", default: "requiems.xyz")
+    @mailer_host = optional_env("MAILER_HOST", default: "requiemsapi.com")
   end
 
   def validate_config

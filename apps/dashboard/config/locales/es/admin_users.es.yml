@@ -5,7 +5,7 @@ es:
       promotion_section:
         duration: Duración
         e_g_youtube_video_collaboration_blog: Por ejemplo, colaboración en vídeo de
-          YouTube, publicación en el blog requiems.xyz
+          YouTube, publicación en el blog requiemsapi.com
         expires: Caduca
         grant_or_revoke_a_temporary_plan: Otorgar o revocar una mejora temporal del
           plan para este usuario sin requerir pago alguno.

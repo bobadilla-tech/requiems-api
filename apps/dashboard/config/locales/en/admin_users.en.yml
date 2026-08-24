@@ -5,7 +5,7 @@ en:
       promotion_section:
         duration: Duration
         e_g_youtube_video_collaboration_blog: e.g. YouTube video collaboration, blog
-          post on requiems.xyz
+          post on requiemsapi.com
         expires: Expires
         grant_or_revoke_a_temporary_plan: Grant or revoke a temporary plan upgrade
           for this user without requiring payment.

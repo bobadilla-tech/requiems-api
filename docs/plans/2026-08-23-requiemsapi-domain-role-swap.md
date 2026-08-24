@@ -660,6 +660,69 @@ explicitly out of scope, so nothing found along the way gets lost.
   `(method, path, operationId)` drift check from the original 2026-08-21 audit —
   not reverified by either review pass, independent of hostnames.
 
+## 13b. Implementation-time findings (owner decisions + gaps found while executing)
+
+Owner confirmed via direct questions at implementation start (2026-08-23):
+- §2.1: **no redirects** (clean break, plan default accepted).
+- Phase 0 step 2: **do not provision `www.requiemsapi.com`**.
+- §8.2: CORS wildcard `*` (plan default accepted).
+- Live Cloudflare/Lemon Squeezy dashboard access: **not granted this session** —
+  implementation covers repo-level changes only (Phases 1–5, 8); Phase 0, 6, and
+  7's live/manual steps are handed off as an explicit runbook, not executed.
+
+Additional inventory gaps found during fresh re-grep before Phase 3 (not in the
+plan's original §6/§14 file lists), folded into the Phase 3 sweep:
+
+- **`apps/dashboard/app/views/**/*.erb`** (~33 files: all `partials/tools/*/_what_it_does.html.erb`,
+  `api_reference.html.erb`, `quick_start/index.html.erb`, `show_key.html.erb`,
+  `sitemap/llms.text.erb`, `sitemap/llms-full.text.erb`) — reference
+  `api.requiems.xyz` in copy/curl examples. Missed by the original plan's Phase 3
+  inventory (`grep -rn "api\.requiems\.xyz"` at execution time found 166 files,
+  not ~90; the delta is almost entirely this directory). Folded into the same
+  bulk sweep as §6.
+- **Bare `requiems.xyz` (dashboard's own apex) also appears outside the files
+  §5.1–5.4 already list**, and needs the same `requiemsapi.com` swap:
+  `apps/dashboard/app/views/home/for_llms.html.erb` (curl examples, sign-up
+  link), `apps/dashboard/app/views/sitemap/llms.text.erb` (self-referential
+  doc links), `apps/dashboard/app/views/sales_mailer/contact_inquiry.html.erb:19`
+  ("Via requiems.xyz/contact" — describes the page a lead came from),
+  `apps/dashboard/config/locales/{en,es,fr}/admin_users.*.yml` ("blog post on
+  requiems.xyz" — the dashboard's own blog), `apps/dashboard/config/locales/{en,es,fr}/systems.*.yml`
+  (`"data": "https://requiems.xyz"` — JSON-LD, same class as §5.4).
+- **`apps/mcp/openapi.json`** — checked-in generated spec snapshot (from
+  `fetch-spec.ts`); has one `servers[0].url: https://api.requiems.xyz`. Hand-edited
+  in this pass since re-running the fetch script requires live network access to
+  the new host, which doesn't exist yet in this session.
+- **A fourth subdomain category, previously undocumented**: per-tool demo apps
+  (`email-validator-demo.requiems.xyz`, `quotes-demo.requiems.xyz`,
+  `lorem-demo.requiems.xyz` in `apps/dashboard/config/examples.yml`) — external
+  links to standalone demo mini-apps, not the apex/API/MCP/mail roles this plan
+  changes, not present in any repo infra config (no Caddy/Kamal entry found for
+  them). Structurally unaffected by this swap for the same reason tenant
+  subdomains are (§1) — flagged here rather than silently assumed equivalent,
+  since unlike tenant subdomains this plan had never enumerated them at all.
+  Worth the same "nobody can audit from the repo how these are provisioned"
+  note as §13's tenant-infra backlog item.
+- **`tests/integration/perf-baseline.json`** and **`tests/reports/perf-*.json`**
+  (8 timestamped files) both carry a `baseUrl: "https://api.requiems.xyz"`
+  metadata field recording what host a past benchmark run measured against.
+  Treated as historical measurement records (same class as `docs/audits/*.md`)
+  and **left unedited** — the field describes what was true when the benchmark
+  ran; rewriting it wouldn't make the recorded timings valid for a
+  re-benchmark against the new host, it would just misrepresent history. Any
+  future benchmark run against the new host will naturally write a fresh
+  `baseUrl`.
+- `apps/dashboard/app/models/private_deployment_request.rb:84` and
+  `apps/dashboard/app/views/admin/private_deployments/{index,show}.html.erb`
+  (tenant subdomain generation/display) and
+  `apps/dashboard/config/locales/**/{home,dashboard,private_deployments}.*.yml`
+  (marketing copy showing `yourcompany.requiems.xyz`) — confirmed **left
+  unchanged**, consistent with §1/§13's tenant-subdomain note; explicitly
+  verified here rather than assumed, since the string `requiems.xyz` appears in
+  all of them.
+- `support@requiems.xyz` in `account_deletion_mailer/*.erb` — an email address,
+  same policy as §5.5/§2.2 (mail domain untouched), left unchanged.
+
 ## 14. File change summary (for implementation tracking)
 
 | Area              | Files                                                                                                                                                                                                                                                                   | Nature of change                                                                             |

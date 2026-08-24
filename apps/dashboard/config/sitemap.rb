@@ -5,7 +5,7 @@ require_relative "../lib/division_slugs.rb"
 require_relative "../lib/comparison_slugs.rb"
 require_relative "../lib/industry_slugs.rb"
 
-SitemapGenerator::Sitemap.default_host = "https://requiems.xyz"
+SitemapGenerator::Sitemap.default_host = "https://requiemsapi.com"
 SitemapGenerator::Sitemap.compress      = false # write .xml, not .xml.gz
 SitemapGenerator::Sitemap.include_root  = false # all pages added manually
 SitemapGenerator::Sitemap.include_index = true  # emit sitemap.xml as index
@@ -88,8 +88,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
   # Static pages, case studies, and division marketing pages
   group(filename: :sitemap_static) do
     STATIC_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -100,8 +100,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     CASE_STUDY_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -112,8 +112,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     BLOG_POST_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -124,8 +124,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     DIVISION_MARKETING_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -136,8 +136,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     COMPARISON_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -148,8 +148,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     INDUSTRY_PAGES.each do |page|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}#{page[:path]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en#{page[:path]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
         add "/#{locale}#{page[:path]}/",
@@ -163,8 +163,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
   # System / engine pages
   group(filename: :sitemap_engines) do
     SYSTEM_SLUGS.each do |slug|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/systems/#{slug}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en/systems/#{slug}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}/systems/#{slug}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en/systems/#{slug}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? 0.8 : 0.3
         add "/#{locale}/systems/#{slug}/",
@@ -178,8 +178,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
   # Industry / category pages
   group(filename: :sitemap_categories) do
     categories.each do |cat_id|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/categories/#{cat_id}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en/categories/#{cat_id}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}/categories/#{cat_id}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en/categories/#{cat_id}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? 0.75 : 0.3
         add "/#{locale}/categories/#{cat_id}/",
@@ -193,8 +193,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
   # Example pages
   group(filename: :sitemap_examples) do
     examples.each do |example_id|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/examples/#{example_id}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en/examples/#{example_id}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}/examples/#{example_id}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en/examples/#{example_id}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? 0.6 : 0.2
         add "/#{locale}/examples/#{example_id}/",
@@ -210,8 +210,8 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     last_modified = Date.today
 
     live_apis.each do |api|
-      alts = locales.map { |l| { href: "https://requiems.xyz/#{l}/apis/#{api["id"]}/", lang: l } }
-      alts << { href: "https://requiems.xyz/en/apis/#{api["id"]}/", lang: "x-default" }
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}/apis/#{api["id"]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en/apis/#{api["id"]}/", lang: "x-default" }
       locales.each do |locale|
         locale_priority = locale == "en" ? 0.8 : 0.3
         add "/#{locale}/apis/#{api["id"]}/",

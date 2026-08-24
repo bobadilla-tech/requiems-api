@@ -5,7 +5,7 @@ fr:
       promotion_section:
         duration: Durée
         e_g_youtube_video_collaboration_blog: Par exemple, une collaboration vidéo
-          sur YouTube, un article de blog sur requiems.xyz
+          sur YouTube, un article de blog sur requiemsapi.com
         expires: Expire
         grant_or_revoke_a_temporary_plan: Accorder ou révoquer une mise à niveau temporaire
           du forfait pour cet utilisateur sans exiger de paiement.

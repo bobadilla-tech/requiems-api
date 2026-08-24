@@ -40,7 +40,7 @@ Rails.application.configure do
     }
   end
 
-  config.hosts << "requiems.xyz"
+  config.hosts << "requiemsapi.com"
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   config.i18n.fallbacks = true

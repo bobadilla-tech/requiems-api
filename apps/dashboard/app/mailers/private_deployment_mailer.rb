@@ -4,7 +4,7 @@ class PrivateDeploymentMailer < ApplicationMailer
   # Sent to the customer immediately after they submit the form.
   def request_received(deployment_request)
     @deployment_request = deployment_request
-    @docs_url = "https://requiems.xyz/docs"
+    @docs_url = "https://requiemsapi.com/docs"
 
     mail(
       to: @deployment_request.contact_email,
@@ -27,7 +27,7 @@ class PrivateDeploymentMailer < ApplicationMailer
   # Sent to the customer when the admin marks the deployment as active.
   def deployment_ready(deployment_request)
     @deployment_request = deployment_request
-    @docs_url = "https://requiems.xyz/docs"
+    @docs_url = "https://requiemsapi.com/docs"
 
     mail(
       to: @deployment_request.contact_email,

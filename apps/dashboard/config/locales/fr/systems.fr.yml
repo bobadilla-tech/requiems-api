@@ -81,7 +81,7 @@ fr:
           production.
         input: |
           {
-            "data": "https://requiems.xyz",
+            "data": "https://requiemsapi.com",
             "size": 256,
             "recovery": "medium"
           }

@@ -53,7 +53,7 @@ module CaseStudiesHelper
       "publisher" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       }
     }
 

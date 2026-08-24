@@ -88,13 +88,13 @@ module ApplicationHelper
     segments = base_path.split("/").reject(&:blank?)
     return nil if segments.empty?
 
-    items = [ { "@type" => "ListItem", "position" => 1, "name" => "Home", "item" => "https://requiems.xyz/#{I18n.locale}/" } ]
+    items = [ { "@type" => "ListItem", "position" => 1, "name" => "Home", "item" => "https://requiemsapi.com/#{I18n.locale}/" } ]
     segments.each_with_index do |segment, i|
       items << {
         "@type"    => "ListItem",
         "position" => i + 2,
         "name"     => BREADCRUMB_NAMES[segment] || segment.gsub(/[-_]/, " ").split.map(&:capitalize).join(" "),
-        "item"     => "https://requiems.xyz/#{I18n.locale}/#{segments[0..i].join("/")}"
+        "item"     => "https://requiemsapi.com/#{I18n.locale}/#{segments[0..i].join("/")}"
       }
     end
 
@@ -111,7 +111,7 @@ module ApplicationHelper
       [ t("home.faq.getting_started.q1"), strip_tags(t("home.faq.getting_started.a1_html", docs_link: t("home.faq.getting_started.docs_link"))) ],
       [ t("home.faq.getting_started.q2"), t("home.faq.getting_started.a2") ],
       [ t("home.faq.getting_started.q3"), t("home.faq.getting_started.a3") ],
-      [ t("home.faq.authentication.q1"),  "#{t("home.faq.authentication.a1")} Authorization: Bearer YOUR_API_KEY" ],
+      [ t("home.faq.authentication.q1"),  "#{t("home.faq.authentication.a1")} requiems-api-key: YOUR_API_KEY" ],
       [ t("home.faq.authentication.q2"),  strip_tags(t("home.faq.authentication.a2_html")) ],
       [ t("home.faq.authentication.q3"),  t("home.faq.authentication.a3") ],
       [ t("home.faq.billing.q1"),         t("home.faq.billing.a1") ],
@@ -139,14 +139,14 @@ module ApplicationHelper
       "@context" => "https://schema.org",
       "@type" => "Organization",
       "name" => "Requiems API",
-      "url" => "https://requiems.xyz",
+      "url" => "https://requiemsapi.com",
       "logo" => {
         "@type" => "ImageObject",
-        "url" => "https://requiems.xyz/logo.png",
+        "url" => "https://requiemsapi.com/logo.png",
         "width" => 512,
         "height" => 512
       },
-      "image" => "https://requiems.xyz/og-image.png",
+      "image" => "https://requiemsapi.com/og-image.png",
       "description" => "All-in-one backend for SaaS products. Authentication, validation, fraud detection, payments intelligence, and global data through one unified API.",
       "sameAs" => []
     }.to_json
@@ -157,7 +157,7 @@ module ApplicationHelper
       "@context" => "https://schema.org",
       "@type" => "WebSite",
       "name" => "Requiems API",
-      "url" => "https://requiems.xyz",
+      "url" => "https://requiemsapi.com",
       "potentialAction" => {
         "@type" => "SearchAction",
         "target" => {
@@ -182,7 +182,7 @@ module ApplicationHelper
       "publisher" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       },
       "mainEntityOfPage" => { "@type" => "WebPage", "@id" => url }
     }.to_json
@@ -198,7 +198,7 @@ module ApplicationHelper
       "provider" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       }
     }.compact_blank.to_json
   end
@@ -248,7 +248,7 @@ module ApplicationHelper
       "provider" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       }
     }.compact_blank.to_json
   end
@@ -274,7 +274,7 @@ module ApplicationHelper
       "publisher" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       }
     }.compact_blank.to_json
   end
@@ -299,7 +299,7 @@ module ApplicationHelper
       "mainEntity" => {
         "@type" => "Organization",
         "name" => "Requiems API",
-        "url" => "https://requiems.xyz"
+        "url" => "https://requiemsapi.com"
       }
     }.compact_blank.to_json
   end

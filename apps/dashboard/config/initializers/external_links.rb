@@ -12,7 +12,7 @@ module ExternalLinks
   }.freeze
 
   WEBSITE = {
-    home: "https://requiems.xyz",
-    api_docs: "https://requiems.xyz/apis"
+    home: "https://requiemsapi.com",
+    api_docs: "https://requiemsapi.com/apis"
   }.freeze
 end
