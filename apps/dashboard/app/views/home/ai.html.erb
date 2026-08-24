@@ -1,5 +1,8 @@
 <% content_for :title, t("home.ai.title") %>
 <% content_for :description, t("home.ai.intro") %>
+<% content_for :head do %>
+  <%= render "partials/shared/highlight_head" %>
+<% end %>
 
 <% mcp_config = <<~JSON.strip
   {

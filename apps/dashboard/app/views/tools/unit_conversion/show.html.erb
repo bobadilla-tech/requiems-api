@@ -1,9 +1,9 @@
 <% content_for :title, t('tools.unit_conversion.show.free_unit_conversion_api_miles_to_km_kg') %>
-<% content_for :description, "Convert miles to kilometers, kilograms to pounds, Celsius to Fahrenheit, liters to gallons, and more. Accurate unit conversion API with formulas included in every response." %>
+<% content_for :description, t('tools.unit_conversion.show.description') %>
 <% content_for :head do %>
   <script type="application/ld+json"><%= software_application_json_ld(
-    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
-    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    name: t("tools.catalog.#{@tool_id.tr('-', '_')}.name"),
+    description: t("tools.catalog.#{@tool_id.tr('-', '_')}.description"),
     url: tool_path(@tool_id)
   ).html_safe %></script>
 <% end %>

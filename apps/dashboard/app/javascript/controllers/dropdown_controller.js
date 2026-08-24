@@ -14,14 +14,17 @@ export default class extends Controller {
   toggle(event) {
     event.stopPropagation();
     this.menuTarget.classList.toggle("hidden");
+    this._syncAriaExpanded();
   }
 
   open() {
     this.menuTarget.classList.remove("hidden");
+    this._syncAriaExpanded();
   }
 
   close() {
     this.menuTarget.classList.add("hidden");
+    this._syncAriaExpanded();
   }
 
   hide(event) {
@@ -31,6 +34,15 @@ export default class extends Controller {
     if (this.hasTriggerTarget && this.triggerTarget.contains(t)) return;
     if (!this.hasTriggerTarget && this.element.contains(t)) return;
     this.menuTarget.classList.add("hidden");
+    this._syncAriaExpanded();
+  }
+
+  _syncAriaExpanded() {
+    if (!this.hasTriggerTarget) return;
+    this.triggerTarget.setAttribute(
+      "aria-expanded",
+      String(!this.menuTarget.classList.contains("hidden")),
+    );
   }
 
   connect() {

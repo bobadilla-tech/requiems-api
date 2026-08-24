@@ -1,5 +1,130 @@
 es:
   tools:
+    catalog:
+      advice:
+        description: Obtén un consejo aleatorio para apps de motivación diaria,
+          chatbots o contenido de relleno.
+        name: Consejo Aleatorio
+      barcode:
+        description: Genera códigos Code 128, Code 93, Code 39, EAN-8 y EAN-13 como
+          PNG o JSON en base64 en una sola llamada.
+        name: Generador de Códigos de Barras
+      base64:
+        description: Codifica y decodifica cadenas Base64, con variantes estándar
+          y URL-safe (base64url), en una sola llamada.
+        name: Codificar / Decodificar Base64
+      bin_lookup:
+        description: Red de la tarjeta, tipo, banco emisor y país a partir de los
+          primeros 6–8 dígitos de cualquier tarjeta de pago.
+        name: Búsqueda de BIN
+      domain_checker:
+        description: Comprueba la disponibilidad de dominios, registros DNS (A,
+          MX, NS) y datos WHOIS en una sola llamada.
+        name: Verificador de Dominios
+      email_normalizer:
+        description: Normaliza, pon en minúsculas, recorta y canonicaliza direcciones
+          de correo en una sola llamada.
+        name: Normalizador de Email
+      email_validator:
+        description: Verificación de sintaxis, búsqueda MX, detección de desechables
+          y corrección de errores tipográficos en una sola llamada.
+        name: Validador de Email
+      inflation:
+        description: Tasas de inflación CPI históricas y actuales para 241 países,
+          según datos del Banco Mundial.
+        name: Inflación
+      lorem_ipsum:
+        description: Genera texto de relleno Lorem Ipsum con párrafos y oraciones
+          configurables.
+        name: Generador de Lorem Ipsum
+      markdown:
+        description: Convierte Markdown a HTML en una sola llamada. Sanitiza opcionalmente
+          la salida para eliminar etiquetas inseguras y prevenir XSS.
+        name: Markdown a HTML
+      mortgage:
+        description: Calcula pagos mensuales, interés total y el calendario de
+          amortización completo para cualquier hipoteca a tasa fija.
+        name: Calculadora de Hipoteca
+      mx_lookup:
+        description: Consulta los registros MX de cualquier dominio — nombres de
+          servidores de correo y prioridades, ordenados por preferencia de entrega.
+        name: Búsqueda de Registros MX
+      number_base_conversion:
+        description: Convierte enteros entre binario, octal, decimal y hexadecimal,
+          con prefijos opcionales 0x/0b/0o.
+        name: Conversión de Base Numérica
+      phone_validator:
+        description: Valida números de teléfono con búsqueda de operador, detección
+          de tipo de línea y normalización de formato en una sola llamada.
+        name: Validador de Teléfono
+      profanity_filter:
+        description: Detecta y censura lenguaje ofensivo en cualquier texto. Devuelve
+          las palabras marcadas y una versión censurada.
+        name: Filtro de Groserías
+      qr_code:
+        description: Genera códigos QR escaneables desde cualquier texto o URL —
+          PNG sin procesar o JSON en base64, tamaño y corrección de errores configurables.
+        name: Generador de Códigos QR
+      quotes:
+        description: Obtén citas inspiradoras aleatorias con atribución de autor
+          en una sola llamada.
+        name: Citas Aleatorias
+      random_user:
+        description: Genera perfiles de usuario ficticios para pruebas y prototipos
+          — nombres, correos, teléfonos, direcciones y avatares.
+        name: Usuario Aleatorio
+      sentiment_analysis:
+        description: Clasifica un texto como positivo, negativo o neutral con una
+          puntuación de confianza.
+        name: Análisis de Sentimiento
+      spell_check:
+        description: Revisa la ortografía y obtén sugerencias de corrección para
+          palabras mal escritas en cualquier texto.
+        name: Corrector Ortográfico
+      sudoku:
+        description: Genera puzles de Sudoku con soluciones en varios niveles de
+          dificultad.
+        name: Sudoku
+      thesaurus:
+        description: Encuentra sinónimos y antónimos de cualquier palabra para
+          enriquecer tu vocabulario y escritura.
+        name: Tesauro
+      timezone:
+        description: Zona horaria IANA, desfase UTC, hora actual y estado de horario
+          de verano para cualquier ciudad o coordenadas.
+        name: Zona Horaria
+      trivia:
+        description: Preguntas de trivia aleatorias con respuestas de opción múltiple,
+          filtrables por categoría y dificultad.
+        name: Trivia
+      unit_conversion:
+        description: Convierte longitud, peso, volumen, temperatura y otras unidades
+          al instante.
+        name: Conversión de Unidades
+      useragent:
+        description: Analiza cadenas de user agent para extraer navegador, sistema
+          operativo, tipo de dispositivo y detección de bots.
+        name: Analizador de User Agent
+      vpn_detection:
+        description: Detecta si una IP pertenece a una VPN, proxy, nodo de salida
+          Tor o proveedor de hosting, con puntuación de amenaza y fraude.
+        name: Detección de VPN y Proxy
+      whois:
+        description: Consulta el registrador, servidores de nombres, indicadores
+          de estado y fechas de registro de un dominio con una sola consulta WHOIS.
+        name: Búsqueda WHOIS
+      words:
+        description: Obtén una palabra aleatoria con su definición y categoría
+          gramatical para pruebas, juegos y proyectos creativos.
+        name: Palabras Aleatorias
+      working_days:
+        description: Calcula los días laborables entre dos fechas, con ajustes
+          opcionales por país y festivos regionales.
+        name: Calculadora de Días Laborables
+      world_time:
+        description: Obtén la hora actual, el desfase UTC y el estado de horario
+          de verano para cualquier zona horaria IANA en una sola llamada.
+        name: Hora Mundial
     domain_checker:
       api_combinations:
         email_validator_benefit: Valida tanto el dominio como la dirección de correo electrónico específica.
@@ -63,6 +188,9 @@ es:
         title_highlight: en milisegundos
         try_live: Pruébalo en vivo
       show:
+        description: Comprueba la disponibilidad de dominios y registros DNS al
+          instante. Búsqueda de A, MX y NS en una sola llamada a la API — gratis,
+          sin necesidad de cuenta.
         free_domain_checker_availability_dns: "Comprobador de dominios gratuito: disponibilidad, DNS y WHOIS | API de Requiems"
       use_cases:
         auth_body: Verifique el estado del dominio antes de aceptarlo como dominio comercial proporcionado por el usuario. Rechace los dominios caducados, aparcados o marcados como sospechosos.
@@ -144,6 +272,9 @@ es:
         subtitle: Normaliza, convierte a minúsculas, recorta y canonicaliza las direcciones de correo electrónico en una sola llamada a la API.
         title: Limpia automáticamente las direcciones de correo electrónico, siempre.
       show:
+        description: Normaliza cualquier dirección de correo al instante. Pon en
+          minúsculas, recorta espacios, resuelve alias de proveedor y devuelve una
+          dirección canónica — gratis, sin necesidad de cuenta.
         free_email_normalizer_lowercase_trim: "Normalizador de correo electrónico gratuito: convierte a minúsculas, recorta y canonicaliza direcciones de correo electrónico | API de Requiems"
       use_cases:
         analytics_context: Analítica
@@ -178,6 +309,11 @@ es:
       api_combinations:
         email_validator_works_even_better_when: Email Validator funciona aún mejor cuando se combina con otras API de Requiems.
         heading: Utilizar junto con las API complementarias.
+      cta:
+        heading: "Automatiza esto con Requiems."
+        body: "Una clave API. Validación de email, más de 50 APIs adicionales en validación, finanzas, redes y más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         badge_disposable: "✗ Desechable"
         badge_invalid: Inválido
@@ -253,6 +389,8 @@ es:
       cta:
         body: Una sola clave API. Validación telefónica, verificación de correo electrónico, comprobación de dominio y más de 50 API adicionales en áreas como validación, redes, finanzas y mucho más.
         heading: Automatiza esto con Requiems.
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         error_empty: Introduce un número de teléfono para validar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
@@ -292,6 +430,9 @@ es:
         title_highlight: en tiempo real
         try_live: Pruébalo en vivo
       show:
+        description: Valida números de teléfono al instante con búsqueda de operador,
+          detección de tipo de línea y normalización de formato — gratis, sin necesidad
+          de cuenta.
         phone_validator_carrier_lookup_line: "Validador de teléfono: búsqueda de operador, tipo de línea y normalización de formato | API de Requiems"
       use_cases:
         auth_body: Asegúrese de que cada número de teléfono sea real, accesible y tenga el formato correcto antes de aceptarlo durante el registro del usuario.
@@ -408,6 +549,8 @@ es:
       cta:
         heading: "Automatiza esto con Requiems."
         body: "Una clave API. Búsqueda de BIN, además de más de 50 API adicionales en áreas como validación, finanzas, redes y mucho más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     inflation:
       demo:
         error_empty: "Introduzca un código de país de 2 letras (por ejemplo, EE. UU.)."
@@ -583,6 +726,8 @@ es:
       cta:
         heading: "Deja de escribir a mano funciones de conversión de bases."
         body: "Una sola clave API. Convierte entre binario, octal, decimal y hexadecimal al instante — además de más de 50 APIs para desarrolladores."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       show:
         title: "API gratuita de conversión de bases numéricas — Binario, Octal, Decimal, Hex"
         description: "Convierte enteros entre binario, octal, decimal y hexadecimal en una sola llamada a la API. Admite prefijos 0x/0b/0o y números negativos. Acceso gratuito disponible."
@@ -682,6 +827,8 @@ es:
         score_the_emotional_tone_of_a_quote: "Analiza el tono emocional de una cita antes de mostrarla: destaca solo los resultados positivos y alentadores."
         sentiment_analysis: Análisis de sentimientos
       cta:
+        cta_docs: "Lee la documentación →"
+        cta_primary: "Obtén tu clave API gratuita"
         ready_to_add_quotes_to_your_app: "¿Listo para agregar citas a tu aplicación?"
         sign_up_for_free_and_start_fetching: Regístrate gratis y empieza a recibir citas inspiradoras en minutos. No se requiere tarjeta de crédito.
       demo:
@@ -693,6 +840,9 @@ es:
       faq:
         heading: Preguntas frecuentes
       show:
+        description: Genera citas inspiradoras aleatorias de pensadores, líderes
+          e innovadores famosos. Prueba la demo en vivo e integra la API de Citas
+          en tu app en minutos.
         random_quote_generator_free_quotes_api: "Generador de citas aleatorias: herramienta API gratuita para citas"
       use_cases:
         add_a_rotating_quote_to_transactional: Agregue una cita que se vaya rotando a los correos electrónicos transaccionales, los resúmenes semanales o las firmas de los boletines informativos.
@@ -734,6 +884,8 @@ es:
       cta:
         heading: Automatiza esto con Requiems.
         body: Una clave API. Análisis de sentimientos, más de 50 API adicionales en validación, finanzas, redes y más.
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         error_empty: Introduce un texto para analizar.
         error_generic: Algo salió mal. Inténtalo de nuevo.
@@ -810,6 +962,11 @@ es:
         numbase_pair: Conversión de unidades + Conversión de base numérica
         numbase_benefit: Maneja transformaciones de medida y numéricas en aplicaciones de ingeniería, educación y técnicas.
         numbase_outcome: Conversión de medida y de base desde un solo proveedor de API.
+      cta:
+        heading: "Deja de programar fórmulas de conversión."
+        body: "Una clave API. Convierte unidades al instante entre longitud, peso, volumen, temperatura, área y velocidad — más de 50 APIs para desarrolladores."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         error_fill_all_fields: Rellene todos los campos.
         error_generic: Algo salió mal. Inténtalo de nuevo.
@@ -876,6 +1033,9 @@ es:
         tons_metric: Toneladas (sistema métrico)
         yards: Yardas
       show:
+        description: Convierte millas a kilómetros, kilogramos a libras, Celsius
+          a Fahrenheit, litros a galones y más. API de conversión de unidades precisa
+          con fórmulas incluidas en cada respuesta.
         free_unit_conversion_api_miles_to_km_kg: "API gratuita de conversión de unidades: millas a kilómetros, kilogramos a libras, grados Celsius a grados Fahrenheit | API de Requiems"
       use_cases:
         development: Desarrollo
@@ -1153,6 +1313,8 @@ es:
       cta:
         heading: "Automatizá esto con Requiems."
         body: "Una sola API key. Timezone, más de 50 otras APIs entre ubicación, validación, finanzas y más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
 
     spell_check:
       seo:
@@ -1460,6 +1622,8 @@ es:
       cta:
         heading: "Automatiza esto con Requiems."
         body: "Una API key. Detección de VPN y proxy, más de 50 APIs adicionales en validación, finanzas, redes y más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         error_empty: "Ingresa una dirección IP para verificar."
         error_invalid: "Ingresa una dirección IPv4 o IPv6 válida (ej: 8.8.8.8)."
@@ -1562,6 +1726,8 @@ es:
       cta:
         heading: "Dale a tu contenido las palabras justas."
         body: "Una API key. Thesaurus, corrector ortográfico, análisis de sentimiento y más de 50 APIs para crear herramientas de escritura más inteligentes."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
 
     random_user:
       seo:
@@ -1815,6 +1981,8 @@ es:
       cta:
         heading: "Automatiza esto con Requiems."
         body: "Una API key. MX Lookup, más 50+ APIs de DNS, validación de correo, redes y más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
       demo:
         error_empty: "Ingresa un nombre de dominio para consultar."
         error_invalid: "Ingresa un nombre de dominio válido (ej. gmail.com)."
@@ -1920,6 +2088,8 @@ es:
       cta:
         heading: "Agrega cálculos hipotecarios a tu producto con Requiems."
         body: "Una clave API. Calculadora de hipotecas, tasas de inflación, tipo de cambio y más de 50 API financieras."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     markdown:
       show:
         title: "Convertidor de Markdown a HTML gratuito — Herramienta API Markdown | Requiems"
@@ -1989,6 +2159,8 @@ es:
       cta:
         heading: "Convierte Markdown a escala con Requiems."
         body: "Una clave API. Markdown a HTML, más de 50 APIs adicionales en texto, redes, finanzas y más."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     barcode:
       seo:
         title: "API gratuita de generación de códigos de barras — Code 128, EAN-13 y más | Requiems API"
@@ -2077,6 +2249,8 @@ es:
       cta:
         heading: "Agrega generación de códigos de barras a tu producto con Requiems."
         body: "Una clave API. Generador de códigos de barras, códigos QR y más de 50 APIs adicionales para desarrolladores."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     advice:
       seo:
         title: "API gratuita de consejos aleatorios — Motivación diaria y sabiduría | Requiems API"
@@ -2148,6 +2322,8 @@ es:
       cta:
         heading: "Agrega consejos aleatorios a tu producto con Requiems."
         body: "Una clave API. Consejos aleatorios, citas, trivia y más de 50 APIs adicionales."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     base64:
       seo:
         title: "API gratuita de codificación/decodificación Base64 — Estándar y segura para URL | Requiems API"
@@ -2235,6 +2411,8 @@ es:
       cta:
         heading: "Agrega codificación/decodificación Base64 a tu producto con Requiems."
         body: "Una clave API. Codificación/decodificación Base64, más de 50 APIs adicionales para desarrolladores."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     whois:
       seo:
         title: "API gratuita de consulta WHOIS — Registrador, servidores de nombres y vencimiento | Requiems API"
@@ -2321,6 +2499,8 @@ es:
       cta:
         heading: "Agrega consultas WHOIS a tu producto con Requiems."
         body: "Una clave API. Consulta WHOIS, consulta MX, verificador de dominio y más de 50 APIs adicionales."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     lorem_ipsum:
       seo:
         title: "API gratuita generadora de Lorem Ipsum — Texto de relleno | Requiems API"
@@ -2402,6 +2582,8 @@ es:
       cta:
         heading: "Agrega generación de Lorem Ipsum a tu producto con Requiems."
         body: "Una clave API. Lorem Ipsum, Markdown a HTML y más de 50 APIs adicionales para desarrolladores."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     working_days:
       seo:
         title: "API gratuita de calculadora de días hábiles — Días laborables y festivos | Requiems API"
@@ -2487,6 +2669,8 @@ es:
       cta:
         heading: "Agrega cálculos de días hábiles a tu producto con Requiems."
         body: "Una clave API. Días hábiles, festivos, zona horaria y más de 50 APIs adicionales."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     world_time:
       seo:
         title: "API de hora mundial — Hora actual para cualquier zona horaria | Requiems API"
@@ -2571,6 +2755,8 @@ es:
       cta:
         heading: "Agrega hora mundial precisa a tu producto con Requiems."
         body: "Una clave API. Hora mundial, zona horaria, días hábiles y más de 50 APIs adicionales."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"
     words:
       seo:
         title: "API de palabras aleatorias — Palabra, definición y categoría gramatical | Requiems API"
@@ -2649,3 +2835,5 @@ es:
       cta:
         heading: "Agrega generación de palabras aleatorias a tu producto con Requiems."
         body: "Una clave API. Palabras aleatorias, consultas de diccionario, sinónimos y más de 50 APIs adicionales."
+        cta_primary: "Obtén tu clave API gratuita"
+        cta_docs: "Lee la documentación →"

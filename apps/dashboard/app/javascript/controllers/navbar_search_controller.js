@@ -108,6 +108,9 @@ export default class extends Controller {
 
     return `
       <a href="${item.url}"
+         id="${this.dropdownTarget.id}-option-${index}"
+         role="option"
+         aria-selected="false"
          class="navbar-search-result flex items-start px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/80 transition-colors border-l-4 border-transparent hover:border-blue-500 dark:hover:border-blue-400"
          data-index="${index}">
         <div class="flex-shrink-0 mr-3 text-2xl">
@@ -212,11 +215,14 @@ export default class extends Controller {
   // Show dropdown
   showDropdown() {
     this.dropdownTarget.classList.remove("hidden");
+    this.inputTarget.setAttribute("aria-expanded", "true");
   }
 
   // Hide dropdown
   hideDropdown() {
     this.dropdownTarget.classList.add("hidden");
+    this.inputTarget.setAttribute("aria-expanded", "false");
+    this.inputTarget.removeAttribute("aria-activedescendant");
     this.selectedIndex = -1;
   }
 
@@ -284,6 +290,8 @@ export default class extends Controller {
           "dark:border-blue-400",
         );
         result.classList.remove("border-transparent");
+        result.setAttribute("aria-selected", "true");
+        this.inputTarget.setAttribute("aria-activedescendant", result.id);
         result.scrollIntoView({ block: "nearest", behavior: "smooth" });
       } else {
         result.classList.remove(
@@ -293,8 +301,13 @@ export default class extends Controller {
           "dark:border-blue-400",
         );
         result.classList.add("border-transparent");
+        result.setAttribute("aria-selected", "false");
       }
     });
+
+    if (this.selectedIndex < 0) {
+      this.inputTarget.removeAttribute("aria-activedescendant");
+    }
   }
 
   // Focus search (called from keyboard shortcut controller)

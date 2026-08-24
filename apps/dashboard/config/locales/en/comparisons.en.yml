@@ -816,6 +816,8 @@ en:
               with a monthly free tier — use it when you need it.
             title: No credit-pool anxiety
     hub:
+      badge_no: "No"
+      badge_yes: "Yes"
       benchmarks_caption: Requiems API vs. top specialists across key decision criteria.
       benchmarks_columns:
         abstractapi: AbstractAPI

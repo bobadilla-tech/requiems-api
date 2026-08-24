@@ -3,6 +3,9 @@
      data-controller="dropdown"
      data-action="mouseenter->dropdown#open mouseleave->dropdown#close">
   <button type="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          data-dropdown-target="trigger"
           class="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
     <%= t("shared.nav.docs") %>
   </button>

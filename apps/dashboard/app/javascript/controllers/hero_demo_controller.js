@@ -8,7 +8,7 @@ import { Controller } from "@hotwired/stimulus";
 //   Bool/num    → #c084fc  (purple-400)
 //   Punctuation → #6b7280  (gray-500)
 export default class extends Controller {
-  static targets = ["urlPath", "demoLabel", "responseArea", "dot"];
+  static targets = ["urlPath", "demoLabel", "responseArea", "dot", "pauseButton"];
 
   // Inline-style span helpers
   _k(v) {
@@ -109,13 +109,32 @@ export default class extends Controller {
   connect() {
     this._index = 0;
     this._running = true;
+    this._paused = this._prefersReducedMotion;
     this._showImmediate(this.demos[0]);
+    this._updatePauseButton();
     this._loop();
   }
 
   disconnect() {
     this._running = false;
     clearTimeout(this._timer);
+  }
+
+  get _prefersReducedMotion() {
+    return typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  togglePause() {
+    this._paused = !this._paused;
+    this._updatePauseButton();
+  }
+
+  _updatePauseButton() {
+    if (!this.hasPauseButtonTarget) return;
+    this.pauseButtonTarget.textContent = this._paused
+      ? this.pauseButtonTarget.dataset.resumeLabel
+      : this.pauseButtonTarget.dataset.pauseLabel;
   }
 
   _showImmediate(demo) {
@@ -132,6 +151,7 @@ export default class extends Controller {
     while (this._running) {
       await this._sleep(5000);
       if (!this._running) return;
+      if (this._paused) continue;
 
       this._index = (this._index + 1) % this.demos.length;
       const demo = this.demos[this._index];
@@ -160,7 +180,7 @@ export default class extends Controller {
         el.style.transform = "translateY(3px)";
         el.style.transition = "opacity 0.12s ease, transform 0.12s ease";
         this.responseAreaTarget.appendChild(el);
-        void el.offsetWidth;
+        await this._doubleRaf();
         el.style.opacity = "1";
         el.style.transform = "translateY(0)";
         await this._sleep(65);
@@ -194,8 +214,8 @@ export default class extends Controller {
   _updateDots(activeIndex) {
     this.dotTargets.forEach((dot, i) => {
       dot.style.cssText = i === activeIndex
-        ? "width:8px;height:8px;background-color:rgb(96,165,250);border-radius:9999px;transition:all 0.3s;"
-        : "width:6px;height:6px;background-color:rgba(255,255,255,0.18);border-radius:9999px;transition:all 0.3s;";
+        ? "width:8px;height:8px;border-radius:9999px;transform:scale(1);background-color:rgb(96,165,250);transition:transform 0.3s,background-color 0.3s;"
+        : "width:8px;height:8px;border-radius:9999px;transform:scale(0.75);background-color:rgba(255,255,255,0.18);transition:transform 0.3s,background-color 0.3s;";
     });
   }
 
@@ -211,6 +231,12 @@ export default class extends Controller {
   _sleep(ms) {
     return new Promise((resolve) => {
       this._timer = setTimeout(resolve, ms);
+    });
+  }
+
+  _doubleRaf() {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
     });
   }
 }

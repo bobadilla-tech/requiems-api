@@ -29,10 +29,30 @@ en:
       use_cases_heading: Use cases
     entertainment:
       meta_title: Entertainment APIs | Requiems API
+      final_cta:
+        headline: Add instant entertainment to your product today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Make your product more engaging with one
+          API suite.
       hero:
         headline: Make every experience more fun with instant entertainment APIs.
-        subheadline: Trivia, quotes, jokes, and games that bring apps to life with one integration.
         primary_cta: Get API key
+        secondary_cta: Start free
+        subheadline: Trivia, quotes, jokes, and games that bring apps to life with one integration.
+      how_it_works:
+        step1_body: Pick a card that matches how you want retention to feel — trivia,
+          quotes, or reactions. Each result maps to lightweight content endpoints
+          you can swap in quickly.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          drop-offs, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: "These stories are about lightweight delight that still needs uptime:\
@@ -142,8 +162,27 @@ en:
           example: Morning push job reads the user’s sun sign from profile, requests
             today’s horoscope copy, and stores the rendered paragraph in the notification
             payload—no manual copy deck.
+      view_case: View case
     finance:
       meta_title: Finance APIs | Requiems API
+      final_cta:
+        headline: Ship payment data you can trust today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Cut fraud, declines, and manual corrections.
+      how_it_works:
+        step1_body: Pick a card that reflects how money moves through your product
+          — cards, bank rails, or FX. Each result maps to the finance endpoints you
+          validate against before funds leave the building.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: The headline covers what you can integrate. The examples below are
@@ -172,6 +211,7 @@ en:
       hero:
         headline: Move money with cleaner data
         primary_cta: Get started free
+        secondary_cta: Start free
         subheadline: BIN, IBAN, SWIFT, and exchange rates for fintech and checkout
           flows.
       industries:
@@ -261,13 +301,33 @@ en:
           example: "FP&A sheet runs Monday cron: pull YoY CPI for US and EU, write cells
             used by forecast macros. Decks cite the same series id as the internal wiki
             without copy-paste from random news sites."
+      view_case: View case
     health:
       meta_title: Health APIs | Requiems API
+      final_cta:
+        headline: Ship smarter health experiences today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Help users stay healthy with one API suite.
       hero:
         headline: Make health apps smarter with instant fitness and nutrition APIs.
+        primary_cta: Get API key
+        secondary_cta: Start free
         subheadline: Exercise guidance, nutrition insights, and wellness tools that
           improve retention and user outcomes.
-        primary_cta: Get API key
+      how_it_works:
+        step1_body: Pick a card that matches how people follow your product — workouts,
+          nutrition tips, or habits. Each result maps to health endpoints you can
+          blend with your own coaching UX.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about helping people finish routines—workouts, planning
@@ -365,6 +425,7 @@ en:
           example: Daily 7am local notification pulls “tip of the day,” stores idempotency
             key per user+date, and skips send if the user already completed a logged
             workout.
+      view_case: View case
     index:
       apis_catalog_cta: Browse APIs
       apis_catalog_subtitle: Every live and beta endpoint in one searchable catalog—same
@@ -404,6 +465,7 @@ en:
       hero:
         headline: Ship faster with reliable API data
         primary_cta: Get started free
+        secondary_cta: View pricing
         subheadline: Every division you need—validation, finance, places, and more—under
           one API key.
       meta_title: API divisions | Requiems API
@@ -417,11 +479,30 @@ en:
       view_division: View division
     networking:
       meta_title: Networking & Internet APIs | Requiems API
+      final_cta:
+        headline: Secure your network today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Protect against threats instantly.
       hero:
         headline: Secure your network with real-time intelligence.
+        primary_cta: Get API key
+        secondary_cta: Start free
         subheadline: IP geolocation, domain lookups, and threat detection for infrastructure
           and security teams.
-        primary_cta: Get API key
+      how_it_works:
+        step1_body: Pick a card that reflects how traffic reaches your edge — fraud
+          signals, country context, or domain checks. Each result maps to endpoints
+          that are easier to call here than to own long-term.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about what happens at the edge of your network—risky
@@ -526,13 +607,33 @@ en:
           example: Before a 50k-send campaign, marketing validates each recipient domain
             has live MX hosts. Rows missing mail exchange are quarantined so the ESP
             reputation does not tank.
+      view_case: View case
     places:
       meta_title: Places APIs | Requiems API
+      final_cta:
+        headline: Build world-ready apps today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Make every place feel local.
       hero:
         headline: Build global apps without location friction.
+        primary_cta: Get API key
+        secondary_cta: Start free
         subheadline: Timezone, holiday, and geolocation APIs for world-ready products
           that work everywhere.
-        primary_cta: Get API key
+      how_it_works:
+        step1_body: Pick a card that matches where logistics or calendars hurt you
+          — timezones, addresses, or launch windows. Each result maps to endpoints
+          that bake in regional rules.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about clocks, calendars, and addresses that break
@@ -638,13 +739,34 @@ en:
           example: A trading dashboard footer calls world-time for New York, London,
             and Tokyo venue codes. DST changes track automatically; engineers do not
             ship emergency hotfixes twice a year.
+      view_case: View case
     technology:
       meta_title: Developer tools APIs | Requiems API
+      final_cta:
+        headline: Ship developer features faster today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Turn routine utilities into production-ready
+          APIs.
       hero:
         headline: Build developer-ready features faster.
+        primary_cta: Get API key
+        secondary_cta: Start free
         subheadline: Utility APIs for encoding, parsing, conversion, and developer
           workflows that ship in minutes.
-        primary_cta: Get API key
+      how_it_works:
+        step1_body: Pick a card that matches the tasks your team keeps postponing
+          — format conversion, QR codes, or user-agent parsing. Each result maps
+          to utility endpoints that stay boring on purpose.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about the small utilities that still steal sprint
@@ -764,13 +886,34 @@ en:
           example: Product master stores weight in kilograms. The US storefront converts
             to pounds at render time with shared rounding rules so PDP, cart, and label
             APIs never disagree.
+      view_case: View case
     text:
       meta_title: Text & Language APIs | Requiems API
+      final_cta:
+        headline: Turn text into better experiences today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Improve every interaction with one API
+          suite.
       hero:
         headline: Improve every text interaction with a single API suite.
+        primary_cta: Get API key
+        secondary_cta: Start free
         subheadline: Spell checking, content moderation, language analysis, and text
           utilities that power better user experiences.
-        primary_cta: Get API key
+      how_it_works:
+        step1_body: Pick a card that matches where language hurts quality or trust
+          — moderation, spelling, detection, or synonyms. Each result maps to endpoints
+          you can layer onto editors or queues.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about language work that should not become a science
@@ -881,8 +1024,27 @@ en:
           example: Glossary tooltips resolve legal terms to dictionary entries on hover.
             CSR chats link the same definition so customers and agents share one canonical
             wording.
+      view_case: View case
     validation:
       meta_title: Validation APIs | Requiems API
+      final_cta:
+        headline: Start validating data today.
+        primary_cta: Get API key
+        secondary_cta: Explore all APIs
+        subheadline: Integrate in minutes. Catch problems before they cost you.
+      how_it_works:
+        step1_body: Pick a card that matches where you lose time today — bounces,
+          SMS failures, or noisy UGC. Each result maps to endpoints you can test
+          with a small change to your form or pipeline.
+        step1_title: Pick a pattern that sounds familiar
+        step2_body: Use the reference examples, add your API key, and call the HTTPS
+          endpoints from your backend or edge. Most teams ship a first version the
+          same week they read the docs.
+        step2_title: Wire it into your stack
+        step3_body: Compare before and after in dashboards you already trust — fewer
+          failures, shorter queues, calmer support, or faster pages once bad inputs
+          stop propagating.
+        step3_title: Prove it with your own metrics
       strategy_call:
         label: Book a strategy call
       tagline: These stories are about bad data before it compounds—fake signups, wrong
@@ -901,6 +1063,7 @@ en:
       hero:
         headline: Validate data before it breaks your app
         primary_cta: Get started free
+        secondary_cta: Start free
         subheadline: Catch bad emails, invalid phones, and toxic content at the edge—before
           it hits your database.
       industries:
@@ -993,3 +1156,4 @@ en:
           example: In-game chat is checked on send. High-risk strings are dropped or
             masked; repeat senders get a cooldown without shipping a huge blocklist
             in the client bundle.
+      view_case: View case

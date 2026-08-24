@@ -1,6 +1,131 @@
 ---
 en:
   tools:
+    catalog:
+      advice:
+        description: Fetch a random piece of advice for daily motivation apps, chatbots,
+          or content placeholders.
+        name: Random Advice
+      barcode:
+        description: Generate Code 128, Code 93, Code 39, EAN-8, and EAN-13 barcodes
+          as a raw PNG or base64 JSON in a single API call.
+        name: Barcode Generator
+      base64:
+        description: Encode and decode Base64 strings, with standard and URL-safe
+          (base64url) variants, in a single API call.
+        name: Base64 Encode / Decode
+      bin_lookup:
+        description: Card network, type, issuing bank, and country from the first
+          6–8 digits of any payment card.
+        name: BIN Lookup
+      domain_checker:
+        description: Check domain availability, DNS records (A, MX, NS), and WHOIS
+          data in one API call.
+        name: Domain Checker
+      email_normalizer:
+        description: Normalize, lowercase, trim, and canonicalize email addresses
+          in one API call.
+        name: Email Normalizer
+      email_validator:
+        description: Syntax check, MX lookup, disposable detection, and typo correction
+          in one call.
+        name: Email Validator
+      inflation:
+        description: Historical and current CPI inflation rates for 241 countries,
+          sourced from the World Bank.
+        name: Inflation
+      lorem_ipsum:
+        description: Generate Lorem Ipsum placeholder text with configurable paragraphs
+          and sentences per paragraph.
+        name: Lorem Ipsum Generator
+      markdown:
+        description: Convert Markdown to HTML in a single API call. Optionally sanitize
+          the output to strip unsafe tags and prevent XSS.
+        name: Markdown to HTML
+      mortgage:
+        description: Calculate monthly payments, total interest, and full amortization
+          schedules for any fixed-rate mortgage.
+        name: Mortgage Calculator
+      mx_lookup:
+        description: Look up MX records for any domain — mail server hostnames and
+          priorities, sorted by delivery preference.
+        name: MX Lookup
+      number_base_conversion:
+        description: Convert integers between binary, octal, decimal, and hexadecimal,
+          with optional 0x/0b/0o prefixes.
+        name: Number Base Conversion
+      phone_validator:
+        description: Validate phone numbers with carrier lookup, line type detection,
+          and format normalization in one API call.
+        name: Phone Validator
+      profanity_filter:
+        description: Detect and censor offensive language in any text. Returns flagged
+          words and a clean censored version.
+        name: Profanity Filter
+      qr_code:
+        description: Generate scannable QR codes from any text or URL — raw PNG or
+          base64 JSON, configurable size and error correction.
+        name: QR Code Generator
+      quotes:
+        description: Fetch random inspirational quotes with author attribution in
+          a single API call.
+        name: Random Quotes
+      random_user:
+        description: Generate random fake user profiles for testing and prototyping
+          — names, emails, phone numbers, addresses, and avatars.
+        name: Random User
+      sentiment_analysis:
+        description: Classify text as positive, negative, or neutral with a confidence
+          score.
+        name: Sentiment Analysis
+      spell_check:
+        description: Check spelling and get correction suggestions for misspelled
+          words in any text.
+        name: Spell Check
+      sudoku:
+        description: Generate Sudoku puzzles with solutions across multiple difficulty
+          levels.
+        name: Sudoku
+      thesaurus:
+        description: Find synonyms and antonyms for any word to enhance vocabulary
+          and writing.
+        name: Thesaurus
+      timezone:
+        description: IANA timezone, UTC offset, current time, and DST status for
+          any city or coordinates.
+        name: Timezone
+      trivia:
+        description: Random trivia questions with multiple-choice answers, filterable
+          by category and difficulty.
+        name: Trivia
+      unit_conversion:
+        description: Convert length, weight, volume, temperature and other units
+          instantly.
+        name: Unit Conversion
+      useragent:
+        description: Parse user agent strings to extract browser, OS, device type,
+          and bot detection.
+        name: User Agent Parser
+      vpn_detection:
+        description: Detect if an IP address belongs to a VPN, proxy, Tor exit node,
+          or hosting provider, with threat and fraud scoring.
+        name: VPN & Proxy Detection
+      whois:
+        description: Look up domain registrar, name servers, status flags, and registration
+          dates with a single WHOIS query.
+        name: WHOIS Lookup
+      words:
+        description: Fetch a random word with its definition and part of speech
+          for testing, games, and creative projects.
+        name: Random Words
+      working_days:
+        description: Calculate business days between two dates, with optional country
+          and subdivision holiday adjustments.
+        name: Working Days Calculator
+      world_time:
+        description: Get the current time, UTC offset, and DST status for any IANA
+          timezone name in a single API call.
+        name: World Time
     domain_checker:
       api_combinations:
         email_validator_benefit: Validate both the domain and specific email address.
@@ -90,6 +215,8 @@ en:
         title_highlight: in Milliseconds
         try_live: Try it live
       show:
+        description: Check domain availability and DNS records instantly. A, MX,
+          NS lookup in one API call — free, no account required.
         free_domain_checker_availability_dns:
           Free Domain Checker — Availability,
           DNS & WHOIS | Requiems API
@@ -219,6 +346,9 @@ en:
           one API call.
         title: Clean email addresses automatically, every time.
       show:
+        description: Normalize any email address instantly. Lowercase, trim whitespace,
+          resolve provider aliases, and return a canonical address — free, no account
+          required.
         free_email_normalizer_lowercase_trim:
           Free Email Normalizer — Lowercase, Trim
           & Canonicalize Email Addresses | Requiems API
@@ -276,6 +406,11 @@ en:
           Email Validator works even better
           when paired with other Requiems APIs.
         heading: Use together with complementary APIs.
+      cta:
+        heading: "Automate this with Requiems."
+        body: "One API key. Email validation, plus 50+ other APIs across validation, finance, networking, and more."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         badge_disposable: "✗ Disposable"
         badge_invalid: Invalid
@@ -374,6 +509,8 @@ en:
           One API key. Phone validation, email verification, domain checks, and
           50+ other APIs across validation, networking, finance, and more.
         heading: Automate this with Requiems.
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         error_empty: Enter a phone number to validate.
         error_generic: Something went wrong. Try again.
@@ -429,6 +566,8 @@ en:
         title_highlight: in Real Time
         try_live: Try it live
       show:
+        description: Validate phone numbers instantly with carrier lookup, line
+          type detection, and format normalization — free, no account required.
         phone_validator_carrier_lookup_line:
           Phone Validator — Carrier Lookup, Line
           Type & Format Normalization | Requiems API
@@ -484,8 +623,8 @@ en:
           — validity, carrier, line type, and normalized format.
     bin_lookup:
       seo:
-        title: "Free BIN Lookup — Card Scheme, Issuing Bank & Country | Requiems API"
-        description: "Look up any Bank Identification Number instantly. Get card network, type, issuing bank, country, and prepaid status from the first 6–8 digits of any payment card — free, no account required."
+        title: "Free BIN Lookup API — Card & Bank Info | Requiems API"
+        description: "Look up any Bank Identification Number instantly. Get card network, type, issuer, and country from the first 6–8 digits — free, no signup."
       logo_marquee:
         trusted_by: "Trusted by teams at"
       demo:
@@ -569,6 +708,8 @@ en:
       cta:
         heading: "Automate this with Requiems."
         body: "One API key. BIN Lookup, plus 50+ other APIs across validation, finance, networking, and more."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
 
     inflation:
       demo:
@@ -746,6 +887,8 @@ en:
       cta:
         heading: "Stop writing base-conversion functions by hand."
         body: "One API key. Convert between binary, octal, decimal, and hexadecimal instantly — plus 50+ APIs for developers."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       show:
         title: "Free Number Base Conversion API — Binary, Octal, Decimal, Hex"
         description: "Convert integers between binary, octal, decimal, and hexadecimal in a single API call. Supports 0x/0b/0o prefixes and negative numbers. Free tier available."
@@ -854,6 +997,8 @@ en:
           displaying it — surface only positive, uplifting results.
         sentiment_analysis: Sentiment Analysis
       cta:
+        cta_docs: "Read the docs →"
+        cta_primary: "Get your free API key"
         ready_to_add_quotes_to_your_app: Ready to add quotes to your app?
         sign_up_for_free_and_start_fetching:
           Sign up for free and start fetching inspirational
@@ -867,6 +1012,9 @@ en:
       faq:
         heading: Frequently Asked Questions
       show:
+        description: Generate random inspirational quotes from famous thinkers,
+          leaders, and innovators. Try the live demo and integrate the Quotes API
+          into your app in minutes.
         random_quote_generator_free_quotes_api:
           Random Quote Generator — Free Quotes
           API Tool
@@ -938,6 +1086,8 @@ en:
         body:
           One API key. Sentiment analysis, plus 50+ other APIs across validation,
           finance, networking, and more.
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         error_empty: Enter some text to analyze.
         error_generic: Something went wrong. Try again.
@@ -988,14 +1138,12 @@ en:
       logo_marquee:
         trusted_by: Trusted by teams at
       seo:
-        description:
-          Analyze the sentiment of any text instantly. Get a positive,
-          negative, or neutral classification with a confidence score and full breakdown
-          — free, no account required.
+        description: Analyze the sentiment of any text instantly. Get a positive,
+          negative, or neutral classification with a confidence score — free, no
+          signup.
       show:
-        free_sentiment_analysis_tool_positive:
-          Free Sentiment Analysis Tool — Positive,
-          Negative & Neutral Text Detection | Requiems API
+        free_sentiment_analysis_tool_positive: Free Sentiment Analysis API | Requiems
+          API
       use_cases:
         anywhere_text_flows_through_your_system:
           Anywhere text flows through your
@@ -1056,6 +1204,11 @@ en:
         numbase_pair: Unit Conversion + Number Base Conversion
         numbase_benefit: Handle both measurement and numeric transformations in engineering, educational, and technical applications.
         numbase_outcome: Measurement and radix conversion from a single API provider.
+      cta:
+        heading: "Stop hardcoding conversion formulas."
+        body: "One API key. Convert units instantly across length, weight, volume, temperature, area, and speed — plus 50+ APIs for developers."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         error_fill_all_fields: Fill in all fields.
         error_generic: Something went wrong. Try again.
@@ -1122,6 +1275,9 @@ en:
         tons_metric: Tons (metric)
         yards: Yards
       show:
+        description: Convert miles to kilometers, kilograms to pounds, Celsius
+          to Fahrenheit, liters to gallons, and more. Accurate unit conversion API
+          with formulas included in every response.
         free_unit_conversion_api_miles_to_km_kg:
           Free Unit Conversion API — Miles
           to KM, KG to LB, Celsius to Fahrenheit | Requiems API
@@ -1275,9 +1431,9 @@ en:
         badge_none: None detected
     useragent:
       seo:
-        title: Free User Agent Parser API — Detect Browser, OS & Device Type | Requiems API
-        description: Parse any user agent string to extract browser name, version, operating
-          system, device type, and bot detection. Try the free live demo — no account required.
+        title: Free User Agent Parser API | Requiems API
+        description: Parse any user agent string to get browser, version, OS, device
+          type, and bot detection — free, no account required.
       logo_marquee:
         trusted_by: Trusted by teams building smarter products
       hero:
@@ -1386,8 +1542,8 @@ en:
 
     timezone:
       seo:
-        title: "Free Timezone API — IANA Timezone, UTC Offset & DST by City or Coordinates | Requiems API"
-        description: "Get the IANA timezone identifier, UTC offset, current time, and DST status for any city or geographic coordinates. Free tier available — no credit card required."
+        title: "Free Timezone API — UTC Offset & DST | Requiems API"
+        description: "Get the IANA timezone, UTC offset, current time, and DST status for any city or coordinates — free, no signup."
       logo_marquee:
         trusted_by: "Trusted by teams at"
       demo:
@@ -1477,6 +1633,8 @@ en:
       cta:
         heading: "Automate this with Requiems."
         body: "One API key. Timezone, plus 50+ other APIs across places, validation, finance, and more."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
 
     spell_check:
       seo:
@@ -1733,10 +1891,9 @@ en:
         label_correct: Correct
     vpn_detection:
       seo:
-        title: Free VPN & Proxy Detection API — IP Threat & Fraud Scoring | Requiems API
-        description: Detect if an IP address belongs to a VPN, proxy, Tor exit node,
-          or hosting provider. Get threat scores and fraud indicators for fraud prevention
-          and risk assessment — free, no account required.
+        title: Free VPN & Proxy Detection API | Requiems API
+        description: Detect if an IP belongs to a VPN, proxy, Tor exit node, or hosting
+          provider, with threat and fraud scoring — free, no signup.
       logo_marquee:
         trusted_by: Trusted by teams at
       hero:
@@ -1828,6 +1985,8 @@ en:
         heading: Automate this with Requiems.
         body: One API key. VPN & Proxy Detection, plus 50+ other APIs across validation,
           finance, networking, and more.
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         error_empty: Enter an IP address to check.
         error_invalid: Enter a valid IPv4 or IPv6 address (e.g. 8.8.8.8).
@@ -1930,10 +2089,13 @@ en:
       cta:
         heading: "Give your content the right words."
         body: "One API key. Thesaurus, spell check, sentiment analysis, and 50+ other APIs for building smarter writing tools."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     random_user:
       seo:
-        title: Random User Generator — Generate Fake Profiles for Testing | Requiems API
-        description: Generate random fake user profiles for testing and prototyping. Names, emails, phone numbers, addresses, and avatars — one API call. Try the free live demo, no account required.
+        title: Free Random User Generator API | Requiems API
+        description: Generate random fake user profiles for testing — names, emails,
+          phones, addresses, and avatars in one API call. Free, no signup.
       logo_marquee:
         trusted_by: Trusted by teams building products
       hero:
@@ -2181,6 +2343,8 @@ en:
       cta:
         heading: "Automate this with Requiems."
         body: "One API key. MX Lookup, plus 50+ other APIs across DNS, email validation, networking, and more."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
       demo:
         error_empty: "Enter a domain name to look up."
         error_invalid: "Enter a valid domain name (e.g. gmail.com)."
@@ -2210,7 +2374,7 @@ en:
         label_balance: "Balance"
         badge_fixed_rate: "Fixed rate"
       seo:
-        title: "Free Mortgage Calculator API — Monthly Payments & Amortization Schedule | Requiems API"
+        title: "Free Mortgage Calculator API | Requiems API"
         description: "Calculate monthly mortgage payments, total interest, and a full amortization schedule for any fixed-rate loan. Free to try — no credit card required."
       logo_marquee:
         trusted_by: "Trusted by teams at"
@@ -2286,6 +2450,8 @@ en:
       cta:
         heading: "Add mortgage calculations to your product with Requiems."
         body: "One API key. Mortgage calculator, inflation rates, currency exchange, and 50+ other financial APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     markdown:
       show:
         title: "Free Markdown to HTML Converter — Markdown API Tool | Requiems"
@@ -2355,6 +2521,8 @@ en:
       cta:
         heading: "Convert Markdown at scale with Requiems."
         body: "One API key. Markdown to HTML, plus 50+ other APIs across text, networking, finance, and more."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     barcode:
       seo:
         title: "Free Barcode Generator API — Code 128, EAN-13 & More | Requiems API"
@@ -2443,6 +2611,8 @@ en:
       cta:
         heading: "Add barcode generation to your product with Requiems."
         body: "One API key. Barcode generator, QR codes, and 50+ other developer APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     advice:
       seo:
         title: "Free Random Advice API — Daily Motivation & Wisdom | Requiems API"
@@ -2514,6 +2684,8 @@ en:
       cta:
         heading: "Add random advice to your product with Requiems."
         body: "One API key. Random advice, quotes, trivia, and 50+ other APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     base64:
       seo:
         title: "Free Base64 Encode/Decode API — Standard & URL-Safe | Requiems API"
@@ -2601,6 +2773,8 @@ en:
       cta:
         heading: "Add Base64 encode/decode to your product with Requiems."
         body: "One API key. Base64 encode/decode, plus 50+ other developer APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     whois:
       seo:
         title: "Free WHOIS Lookup API — Registrar, Name Servers & Expiry | Requiems API"
@@ -2687,6 +2861,8 @@ en:
       cta:
         heading: "Add WHOIS lookups to your product with Requiems."
         body: "One API key. WHOIS lookup, MX lookup, domain checker, and 50+ other APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     lorem_ipsum:
       seo:
         title: "Free Lorem Ipsum Generator API — Placeholder Text | Requiems API"
@@ -2768,6 +2944,8 @@ en:
       cta:
         heading: "Add Lorem Ipsum generation to your product with Requiems."
         body: "One API key. Lorem Ipsum, Markdown to HTML, and 50+ other developer APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     working_days:
       seo:
         title: "Free Working Days Calculator API — Business Days & Holidays | Requiems API"
@@ -2853,6 +3031,8 @@ en:
       cta:
         heading: "Add working-day calculations to your product with Requiems."
         body: "One API key. Working days, holidays, timezone, and 50+ other APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     world_time:
       seo:
         title: "World Time API — Current Time for Any Timezone | Requiems API"
@@ -2937,6 +3117,8 @@ en:
       cta:
         heading: "Add accurate world time to your product with Requiems."
         body: "One API key. World time, timezone, working days, and 50+ other APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"
     words:
       seo:
         title: "Random Words API — Word, Definition & Part of Speech | Requiems API"
@@ -3015,3 +3197,5 @@ en:
       cta:
         heading: "Add random word generation to your product with Requiems."
         body: "One API key. Random words, dictionary lookups, thesaurus, and 50+ other APIs."
+        cta_primary: "Get your free API key"
+        cta_docs: "Read the docs →"

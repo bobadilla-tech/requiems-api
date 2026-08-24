@@ -38,11 +38,24 @@ export default class extends Controller {
       return;
     }
 
+    // Batch writes, then batch reads, instead of alternating write/read per
+    // slide — alternating forces one synchronous reflow per slide.
+    slides.forEach((el) => {
+      el.classList.remove("hidden");
+      el.style.position = "absolute";
+      el.style.visibility = "hidden";
+      el.style.pointerEvents = "none";
+    });
+
     let max = 0;
     slides.forEach((el) => {
-      slides.forEach((s) => s.classList.add("hidden"));
-      el.classList.remove("hidden");
       max = Math.max(max, el.offsetHeight);
+    });
+
+    slides.forEach((el) => {
+      el.style.position = "";
+      el.style.visibility = "";
+      el.style.pointerEvents = "";
     });
 
     this.renderSlide();

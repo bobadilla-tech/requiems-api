@@ -2,5 +2,7 @@
 es:
   navbar:
     search:
+      browse_apis: Ver APIs →
+      browse_examples: Ver ejemplos →
       try_different_keywords_or_browse_all: Pruebe con diferentes palabras clave o
         explore todo el contenido.

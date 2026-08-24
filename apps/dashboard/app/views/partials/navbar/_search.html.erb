@@ -14,6 +14,11 @@
 
     <!-- Input Field -->
     <input type="text"
+           role="combobox"
+           aria-expanded="false"
+           aria-haspopup="listbox"
+           aria-autocomplete="list"
+           aria-controls="navbar-search-listbox"
            data-navbar-search-target="input"
            data-action="input->navbar-search#search keydown->navbar-search#handleKeydown"
            placeholder="<%= t('shared.nav.search_placeholder') %>"
@@ -37,6 +42,8 @@
 
   <!-- Dropdown Results -->
   <div data-navbar-search-target="dropdown"
+       id="navbar-search-listbox"
+       role="listbox"
        class="hidden absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl
               border border-gray-200 dark:border-gray-700 overflow-hidden z-50 max-h-96 overflow-y-auto min-w-[400px]">
 
@@ -55,10 +62,10 @@
       <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= t('navbar.search.try_different_keywords_or_browse_all') %></p>
       <div class="mt-4 flex items-center justify-center space-x-3">
         <%= link_to apis_path, class: "inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium" do %>
-          Browse APIs →
+          <%= t('navbar.search.browse_apis') %>
         <% end %>
         <%= link_to examples_path, class: "inline-flex items-center text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium" do %>
-          Browse Examples →
+          <%= t('navbar.search.browse_examples') %>
         <% end %>
       </div>
     </div>

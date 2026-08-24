@@ -148,7 +148,7 @@ module ApplicationHelper
       },
       "image" => "https://requiemsapi.com/og-image.png",
       "description" => "All-in-one backend for SaaS products. Authentication, validation, fraud detection, payments intelligence, and global data through one unified API.",
-      "sameAs" => []
+      "sameAs" => [ ExternalLinks::GITHUB[:organization], ExternalLinks::SOCIAL[:linkedin] ]
     }.to_json
   end
 
@@ -162,7 +162,7 @@ module ApplicationHelper
         "@type" => "SearchAction",
         "target" => {
           "@type" => "EntryPoint",
-          "urlTemplate" => "#{request.base_url}/#{I18n.locale}/apis?search={search_term_string}"
+          "urlTemplate" => "#{request.base_url}/#{I18n.locale}/apis?q={search_term_string}"
         },
         "query-input" => "required name=search_term_string"
       }

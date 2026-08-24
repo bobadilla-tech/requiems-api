@@ -1,5 +1,5 @@
-<% content_for :title, "Blog - Requiems API" %>
-<% content_for :description, "Engineering notes from the team building Requiems API — how we ship features, APIs, and infrastructure." %>
+<% content_for :title, t("blog.hub.meta_title") %>
+<% content_for :description, t("blog.hub.meta_description") %>
 <% content_for :head do %>
   <script type="application/ld+json"><%= collection_json_ld(
     name: "Blog",
@@ -9,9 +9,9 @@
 
 <section class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-16 sm:py-20">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">Blog</h1>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4"><%= t("blog.hub.hero_headline") %></h1>
     <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
-      Engineering notes from the team building Requiems API — how we ship features, APIs, and infrastructure.
+      <%= t("blog.hub.hero_subheadline") %>
     </p>
   </div>
 </section>
@@ -19,7 +19,7 @@
 <section class="py-14 bg-gray-50 dark:bg-gray-950">
   <div class="max-w-3xl mx-auto px-4 sm:px-6">
     <% if @posts.empty? %>
-      <p class="text-center text-gray-500 dark:text-gray-400">No posts yet — check back soon.</p>
+      <p class="text-center text-gray-500 dark:text-gray-400"><%= t("blog.hub.empty_state") %></p>
     <% else %>
       <div class="space-y-6">
         <% @posts.each do |post| %>
@@ -28,14 +28,14 @@
             <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-3">
               <time datetime="<%= post.date.iso8601 %>"><%= post.date.strftime("%B %-d, %Y") %></time>
               <span aria-hidden="true">&middot;</span>
-              <span><%= post.reading_time_minutes %> min read</span>
+              <span><%= t("blog.hub.reading_time", minutes: post.reading_time_minutes) %></span>
             </div>
             <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400">
               <%= post.title %>
             </h2>
             <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4"><%= post.description %></p>
             <span class="text-sm font-semibold text-blue-600 dark:text-blue-400 inline-flex items-center">
-              Read post
+              <%= t("blog.hub.read_post") %>
               <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </span>
           <% end %>

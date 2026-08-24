@@ -23,17 +23,17 @@
       <div class="rounded-md shadow-sm space-y-4">
         <div>
           <%= f.label :name, t("auth.sign_up.name"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-          <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: t("auth.sign_up.name_placeholder") %>
+          <%= f.text_field :name, autofocus: true, autocomplete: "name", "aria-invalid": resource.errors[:name].present?, "aria-describedby": ("error_explanation" if resource.errors[:name].present?), class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: t("auth.sign_up.name_placeholder") %>
         </div>
 
         <div>
           <%= f.label :email, t("auth.sign_up.email"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-          <%= f.email_field :email, autocomplete: "email", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "you@example.com" %>
+          <%= f.email_field :email, autocomplete: "email", "aria-invalid": resource.errors[:email].present?, "aria-describedby": ("error_explanation" if resource.errors[:email].present?), class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "you@example.com" %>
         </div>
 
         <div>
           <%= f.label :company, t("auth.sign_up.company"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-          <%= f.text_field :company, autocomplete: "organization", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: t("auth.sign_up.company_placeholder") %>
+          <%= f.text_field :company, autocomplete: "organization", "aria-invalid": resource.errors[:company].present?, "aria-describedby": ("error_explanation" if resource.errors[:company].present?), class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: t("auth.sign_up.company_placeholder") %>
         </div>
 
         <div>
@@ -43,12 +43,12 @@
               <span class="text-gray-500 dark:text-gray-400 text-xs">(<%= t("auth.sign_up.password_min", min: @minimum_password_length) %>)</span>
             <% end %>
           <% end %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "••••••••" %>
+          <%= f.password_field :password, autocomplete: "new-password", "aria-invalid": resource.errors[:password].present?, "aria-describedby": ("error_explanation" if resource.errors[:password].present?), class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "••••••••" %>
         </div>
 
         <div>
           <%= f.label :password_confirmation, t("auth.sign_up.confirm_password"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "••••••••" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", "aria-invalid": resource.errors[:password_confirmation].present?, "aria-describedby": ("error_explanation" if resource.errors[:password_confirmation].present?), class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm", placeholder: "••••••••" %>
         </div>
       </div>
 

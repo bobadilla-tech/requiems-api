@@ -12,9 +12,13 @@ export default class extends Controller {
       if (i === index) {
         tab.className =
           "px-4 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600 transition-colors";
+        tab.setAttribute("aria-selected", "true");
+        tab.setAttribute("tabindex", "0");
       } else {
         tab.className =
           "px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors";
+        tab.setAttribute("aria-selected", "false");
+        tab.setAttribute("tabindex", "-1");
       }
     });
 

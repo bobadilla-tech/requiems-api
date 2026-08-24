@@ -1,0 +1,16 @@
+---
+es:
+  blog:
+    hub:
+      meta_title: Blog - Requiems API
+      meta_description: Notas de ingeniería del equipo que construye Requiems API
+        — cómo lanzamos funciones, APIs e infraestructura.
+      hero_headline: Blog
+      hero_subheadline: Notas de ingeniería del equipo que construye Requiems API
+        — cómo lanzamos funciones, APIs e infraestructura.
+      empty_state: Todavía no hay publicaciones — vuelve pronto.
+      reading_time: "%{minutes} min de lectura"
+      read_post: Leer publicación
+    show:
+      back_to_blog: "← Volver al blog"
+      reading_time: "%{minutes} min de lectura"

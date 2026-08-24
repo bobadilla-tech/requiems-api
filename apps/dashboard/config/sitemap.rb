@@ -82,6 +82,14 @@ INDUSTRY_PAGES = [
   end
 ).freeze
 
+TOOL_PAGES = [
+  { path: "/tools", changefreq: "weekly", priority: 0.75 }
+].concat(
+  ToolsController::SUPPORTED_TOOLS.map do |id|
+    { path: "/tools/#{id}", changefreq: "monthly", priority: 0.68 }
+  end
+).freeze
+
 locales = Rails.application.config.i18n.available_locales.map(&:to_s)
 
 SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
@@ -148,6 +156,21 @@ SitemapGenerator::Sitemap.create do # rubocop:disable Rails/SaveBang
     end
 
     INDUSTRY_PAGES.each do |page|
+      alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
+      alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
+      locales.each do |locale|
+        locale_priority = locale == "en" ? page[:priority] : (page[:priority] * 0.4).round(1).clamp(0.1, 0.5)
+        add "/#{locale}#{page[:path]}/",
+          changefreq: page[:changefreq],
+          priority:   locale_priority,
+          alternates: alts
+      end
+    end
+  end
+
+  # Tools catalog (index + individual tool pages)
+  group(filename: :sitemap_tools) do
+    TOOL_PAGES.each do |page|
       alts = locales.map { |l| { href: "https://requiemsapi.com/#{l}#{page[:path]}/", lang: l } }
       alts << { href: "https://requiemsapi.com/en#{page[:path]}/", lang: "x-default" }
       locales.each do |locale|

@@ -698,10 +698,12 @@ es:
         cta_secondary: Explorar sistemas
         description: Autenticación, validación, detección de fraude, inteligencia
           de pagos y datos globales, entregados a través de una API unificada.
+        pause_animation: Pausar animación
         proof_badges:
           - Pipelines de datos propietarios
           - Procesamiento en tiempo real
           - Construido para producción
+        resume_animation: Reanudar animación
         title_line1: Backend todo en uno
         title_line2: para SaaS.
       how_it_works:
@@ -1016,6 +1018,8 @@ es:
           text: Recopilamos automáticamente direcciones IP, cadenas de agente de usuario
             y otra información técnica con fines de seguridad y operativos.
       last_updated: "Última actualización: %{date}"
+      meta_description: Cómo Requiems API recopila, usa y protege tus datos — lee
+        la política de privacidad completa de la plataforma y los servicios API.
       overview:
         heading: Descripción general
         text: Requiems API ("nosotros", "nuestro" o "nos") se compromete a proteger
@@ -1262,6 +1266,8 @@ es:
           NI DE NINGUNA PÉRDIDA DE GANANCIAS O INGRESOS, YA SEA INCURRIDA DIRECTA
           O INDIRECTAMENTE, NI DE NINGUNA PÉRDIDA DE DATOS, USO, BUENA VOLUNTAD U
           OTRAS PÉRDIDAS INTANGIBLES.
+      meta_description: "Términos de servicio de Requiems API: reglas de uso, facturación,
+        acceso a la API, responsabilidad y acuerdo de nivel de servicio."
       sla:
         heading: 4. Nivel de servicio y disponibilidad
         intro: "Apuntamos a una disponibilidad del 99,99%, pero no garantizamos un

@@ -851,6 +851,8 @@ es:
               con un nivel gratuito mensual: úsalo cuando lo necesites."
             title: Sin ansiedad por el pool de créditos
     hub:
+      badge_no: "No"
+      badge_yes: "Sí"
       benchmarks_caption: Requiems API frente a los principales especialistas según
         criterios clave de decisión.
       benchmarks_columns:

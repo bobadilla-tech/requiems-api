@@ -1,4 +1,6 @@
 <%= render "partials/tools/shared/cta",
-      heading:  "Automate this with Requiems.",
-      body:     "One API key. Email validation, plus 50+ other APIs across validation, finance, networking, and more.",
-      docs_url: api_path("email-validate") %>
+      heading:  t("tools.email_validator.cta.heading"),
+      body:     t("tools.email_validator.cta.body"),
+      docs_url: api_path("email-validate"),
+      cta_primary: t("tools.email_validator.cta.cta_primary"),
+      cta_docs:    t("tools.email_validator.cta.cta_docs") %>
