@@ -45,10 +45,10 @@ remain supported.
 
 Keep `requiems.xyz` (Go API) and `requiemsapi.com` (Rails dashboard) both
 proxied — two separate Cloudflare zones. Cloudflare should expose the DNS
-record, WAF/DDoS/TLS controls, and origin-pull authentication only.
-Origin-pull (AOP) mTLS is enforced on `requiems.xyz` only; `requiemsapi.com`
-has never been behind AOP. The retired Worker routes, custom domains, KV
-namespace, and D1 database are not rollback dependencies.
+record, WAF/DDoS/TLS controls, and origin-pull authentication only. Origin-pull
+(AOP) mTLS is enforced on `requiems.xyz` only; `requiemsapi.com` has never been
+behind AOP. The retired Worker routes, custom domains, KV namespace, and D1
+database are not rollback dependencies.
 
 ## Rollback
 

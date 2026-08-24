@@ -13,8 +13,8 @@ AOP. It does not run application code and does not store API keys or usage.
 
 The other production applications are:
 
-- Rails dashboard at `requiemsapi.com` (no AOP — this host has never been
-  behind Cloudflare mTLS, only the API host has)
+- Rails dashboard at `requiemsapi.com` (no AOP — this host has never been behind
+  Cloudflare mTLS, only the API host has)
 - MCP server at `mcp.requiems.xyz`, upstream `https://requiems.xyz`
 - Postgres and Redis as Kamal accessories on the VPS
 - LanguageTool as an API accessory

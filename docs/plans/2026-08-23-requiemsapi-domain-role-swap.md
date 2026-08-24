@@ -663,6 +663,7 @@ explicitly out of scope, so nothing found along the way gets lost.
 ## 13b. Implementation-time findings (owner decisions + gaps found while executing)
 
 Owner confirmed via direct questions at implementation start (2026-08-23):
+
 - §2.1: **no redirects** (clean break, plan default accepted).
 - Phase 0 step 2: **do not provision `www.requiemsapi.com`**.
 - §8.2: CORS wildcard `*` (plan default accepted).
@@ -673,26 +674,28 @@ Owner confirmed via direct questions at implementation start (2026-08-23):
 Additional inventory gaps found during fresh re-grep before Phase 3 (not in the
 plan's original §6/§14 file lists), folded into the Phase 3 sweep:
 
-- **`apps/dashboard/app/views/**/*.erb`** (~33 files: all `partials/tools/*/_what_it_does.html.erb`,
-  `api_reference.html.erb`, `quick_start/index.html.erb`, `show_key.html.erb`,
-  `sitemap/llms.text.erb`, `sitemap/llms-full.text.erb`) — reference
-  `api.requiems.xyz` in copy/curl examples. Missed by the original plan's Phase 3
-  inventory (`grep -rn "api\.requiems\.xyz"` at execution time found 166 files,
-  not ~90; the delta is almost entirely this directory). Folded into the same
-  bulk sweep as §6.
+- **`apps/dashboard/app/views/**/*.erb`** (~33 files: all
+  `partials/tools/*/_what_it_does.html.erb`, `api_reference.html.erb`,
+  `quick_start/index.html.erb`, `show_key.html.erb`, `sitemap/llms.text.erb`,
+  `sitemap/llms-full.text.erb`) — reference `api.requiems.xyz` in copy/curl
+  examples. Missed by the original plan's Phase 3 inventory
+  (`grep -rn "api\.requiems\.xyz"` at execution time found 166 files, not ~90;
+  the delta is almost entirely this directory). Folded into the same bulk sweep
+  as §6.
 - **Bare `requiems.xyz` (dashboard's own apex) also appears outside the files
   §5.1–5.4 already list**, and needs the same `requiemsapi.com` swap:
   `apps/dashboard/app/views/home/for_llms.html.erb` (curl examples, sign-up
-  link), `apps/dashboard/app/views/sitemap/llms.text.erb` (self-referential
-  doc links), `apps/dashboard/app/views/sales_mailer/contact_inquiry.html.erb:19`
+  link), `apps/dashboard/app/views/sitemap/llms.text.erb` (self-referential doc
+  links), `apps/dashboard/app/views/sales_mailer/contact_inquiry.html.erb:19`
   ("Via requiems.xyz/contact" — describes the page a lead came from),
   `apps/dashboard/config/locales/{en,es,fr}/admin_users.*.yml` ("blog post on
-  requiems.xyz" — the dashboard's own blog), `apps/dashboard/config/locales/{en,es,fr}/systems.*.yml`
+  requiems.xyz" — the dashboard's own blog),
+  `apps/dashboard/config/locales/{en,es,fr}/systems.*.yml`
   (`"data": "https://requiems.xyz"` — JSON-LD, same class as §5.4).
 - **`apps/mcp/openapi.json`** — checked-in generated spec snapshot (from
-  `fetch-spec.ts`); has one `servers[0].url: https://api.requiems.xyz`. Hand-edited
-  in this pass since re-running the fetch script requires live network access to
-  the new host, which doesn't exist yet in this session.
+  `fetch-spec.ts`); has one `servers[0].url: https://api.requiems.xyz`.
+  Hand-edited in this pass since re-running the fetch script requires live
+  network access to the new host, which doesn't exist yet in this session.
 - **A fourth subdomain category, previously undocumented**: per-tool demo apps
   (`email-validator-demo.requiems.xyz`, `quotes-demo.requiems.xyz`,
   `lorem-demo.requiems.xyz` in `apps/dashboard/config/examples.yml`) — external
@@ -701,17 +704,16 @@ plan's original §6/§14 file lists), folded into the Phase 3 sweep:
   them). Structurally unaffected by this swap for the same reason tenant
   subdomains are (§1) — flagged here rather than silently assumed equivalent,
   since unlike tenant subdomains this plan had never enumerated them at all.
-  Worth the same "nobody can audit from the repo how these are provisioned"
-  note as §13's tenant-infra backlog item.
+  Worth the same "nobody can audit from the repo how these are provisioned" note
+  as §13's tenant-infra backlog item.
 - **`tests/integration/perf-baseline.json`** and **`tests/reports/perf-*.json`**
   (8 timestamped files) both carry a `baseUrl: "https://api.requiems.xyz"`
   metadata field recording what host a past benchmark run measured against.
   Treated as historical measurement records (same class as `docs/audits/*.md`)
   and **left unedited** — the field describes what was true when the benchmark
-  ran; rewriting it wouldn't make the recorded timings valid for a
-  re-benchmark against the new host, it would just misrepresent history. Any
-  future benchmark run against the new host will naturally write a fresh
-  `baseUrl`.
+  ran; rewriting it wouldn't make the recorded timings valid for a re-benchmark
+  against the new host, it would just misrepresent history. Any future benchmark
+  run against the new host will naturally write a fresh `baseUrl`.
 - `apps/dashboard/app/models/private_deployment_request.rb:84` and
   `apps/dashboard/app/views/admin/private_deployments/{index,show}.html.erb`
   (tenant subdomain generation/display) and
@@ -728,8 +730,9 @@ plan's original §6/§14 file lists), folded into the Phase 3 sweep:
   (the Authentication glossary entry's `example_prefix`/`example_code`, 3
   occurrences) and `apps/dashboard/app/views/home/faq.html.erb:51` (hardcoded,
   not translation-driven). All fixed in the same pass as §8.3/§8.4 to
-  `requiems-api-key: ...`, matching `apps/api/platform/middleware/apikeyauth.go:18`.
-  The `es/comparisons.es.yml` occurrences were also YAML-line-wrapped
+  `requiems-api-key: ...`, matching
+  `apps/api/platform/middleware/apikeyauth.go:18`. The `es/comparisons.es.yml`
+  occurrences were also YAML-line-wrapped
   (`` `Authorization:\n  Bearer <clave>` `` split across two folded-scalar
   lines), which a naive single-line sed would silently miss — required a
   multi-line-aware replace.
@@ -746,49 +749,47 @@ implementation session; this is the checklist for whoever runs the cutover.
 - [ ] Confirm `requiemsapi.com` nameservers point at Cloudflare (registrar
       delegation may still be pending — check live, not assumed).
 - [ ] Add `requiemsapi.com` as a new zone in Cloudflare.
-- [ ] Add a proxied (orange-cloud) `A` record for `requiemsapi.com` (apex
-      only — owner confirmed **no `www` variant**, per §13b) pointing at
+- [ ] Add a proxied (orange-cloud) `A` record for `requiemsapi.com` (apex only —
+      owner confirmed **no `www` variant**, per §13b) pointing at
       `HETZNER_VPS_IP`.
-- [ ] Match Universal SSL / Always Use HTTPS / min TLS version on the new
-      zone to whatever the `requiems.xyz` zone currently has (read live, not
+- [ ] Match Universal SSL / Always Use HTTPS / min TLS version on the new zone
+      to whatever the `requiems.xyz` zone currently has (read live, not
       assumed).
-- [ ] Do **not** enable Authenticated Origin Pulls (AOP) on `requiemsapi.com`
-      — this hostname takes over the Rails role, never behind AOP.
+- [ ] Do **not** enable Authenticated Origin Pulls (AOP) on `requiemsapi.com` —
+      this hostname takes over the Rails role, never behind AOP.
 - [ ] On the existing `requiems.xyz` zone: confirm how AOP is scoped today
       (zone-wide vs. hostname/Page-Rule specific to `api.requiems.xyz`). If
-      hostname-scoped, move that scoping to bare `requiems.xyz` — this must
-      land before or alongside the deploy of commit `fa88c01d` (Caddy vhost
-      swap), or the new `requiems.xyz` AOP block will reject Cloudflare's own
-      traffic.
-- [ ] Mirror WAF rules / rate-limiting / Page Rules from the `requiems.xyz`
-      zone onto the new `requiemsapi.com` zone (manual parity check — no
+      hostname-scoped, move that scoping to bare `requiems.xyz` — this must land
+      before or alongside the deploy of commit `fa88c01d` (Caddy vhost swap), or
+      the new `requiems.xyz` AOP block will reject Cloudflare's own traffic.
+- [ ] Mirror WAF rules / rate-limiting / Page Rules from the `requiems.xyz` zone
+      onto the new `requiemsapi.com` zone (manual parity check — no
       infra-as-code to diff against).
 - [ ] Check CAA records on the new `requiemsapi.com` zone don't block Caddy's
       automatic HTTPS cert issuance.
 - [ ] Leave `mail.requiems.xyz` DNS untouched (§2.2 — out of scope).
-- [ ] **Verify a real Private Deployment tenant subdomain still resolves**
-      (e.g. an actual `{slug}.requiems.xyz` in production) before and after —
-      these are DNS-only records, structurally unrelated to the proxied-zone
-      AOP change, but easy to forget since they share the zone (§1).
-- [ ] Gate: `curl -v https://requiemsapi.com` returns *some* TLS handshake
-      (even a 404) before proceeding to deploy.
+- [ ] **Verify a real Private Deployment tenant subdomain still resolves** (e.g.
+      an actual `{slug}.requiems.xyz` in production) before and after — these
+      are DNS-only records, structurally unrelated to the proxied-zone AOP
+      change, but easy to forget since they share the zone (§1).
+- [ ] Gate: `curl -v https://requiemsapi.com` returns _some_ TLS handshake (even
+      a 404) before proceeding to deploy.
 
 ### 14.2 Deploy the code (after 14.1 gate passes)
 
 - [ ] Deploy commit `b41b4743` (config.hosts allowlist, old host) **alone**
       first if it hasn't shipped yet at this point — confirm Kamal's `/up`
       health check still passes before deploying anything else. This is the
-      whole point of that commit being separate (§5.6) — don't skip verifying
-      it in isolation.
+      whole point of that commit being separate (§5.6) — don't skip verifying it
+      in isolation.
 - [ ] Deploy the remaining commits (`fa88c01d`, `a92bc66a`, `2765b74b`,
       `a4f3f1d5`, `bf4fc1fd`) together via the normal Kamal CD path, all three
       services (`dashboard`, `api`, `mcp`).
 - [ ] **Explicitly force-restart the Caddy accessory** — don't assume CD does
-      it:
-      `kamal accessory reboot caddy -c infra/kamal/deploy.api.yml`
-      (§10 step 2a — `kamal setup` on an already-running accessory may not
-      reliably pick up the changed mounted Caddyfile; an app-level deploy can
-      report success while Caddy silently keeps routing the old way).
+      it: `kamal accessory reboot caddy -c infra/kamal/deploy.api.yml` (§10 step
+      2a — `kamal setup` on an already-running accessory may not reliably pick
+      up the changed mounted Caddyfile; an app-level deploy can report success
+      while Caddy silently keeps routing the old way).
 
 ### 14.3 Smoke-test matrix (run immediately after deploy, before Phase 6)
 
@@ -800,12 +801,13 @@ Nothing in CI enforces this — assign a human to run it live.
       correctly, no CSRF/host errors
 - [ ] Password reset email → click link → link host is `requiemsapi.com`, not
       stale `requiems.xyz` (validates §5.5 — highest-risk item in Phase 2)
-- [ ] `curl https://requiems.xyz/v1/entertainment/advice -H "requiems-api-key: ..."` → 200
-- [ ] `curl -v https://requiems.xyz/v1/... ` direct to origin IP, no AOP
-      client cert → TLS `certificate_required` rejection (validates AOP moved)
+- [ ] `curl https://requiems.xyz/v1/entertainment/advice -H "requiems-api-key: ..."`
+      → 200
+- [ ] `curl -v https://requiems.xyz/v1/...` direct to origin IP, no AOP client
+      cert → TLS `certificate_required` rejection (validates AOP moved)
 - [ ] `curl https://requiems.xyz/healthz` → 200
-- [ ] `curl https://requiems.xyz/openapi.json` → 200, valid spec (validates
-      the new Go handler added in `a4f3f1d5`)
+- [ ] `curl https://requiems.xyz/openapi.json` → 200, valid spec (validates the
+      new Go handler added in `a4f3f1d5`)
 - [ ] `curl -H "Origin: https://requiemsapi.com" -X OPTIONS https://requiems.xyz/v1/...`
       → CORS preflight succeeds (validates the new CORS middleware)
 - [ ] `curl https://mcp.requiems.xyz/...` → unchanged behavior
@@ -814,8 +816,8 @@ Nothing in CI enforces this — assign a human to run it live.
 - [ ] `curl -I https://requiemsapi.com/` and `https://requiems.xyz/` →
       `Strict-Transport-Security` header present on both (pre-existing open
       item, verify while touching both hosts anyway)
-- [ ] Rails `/api/proxy` (server-to-server, private network path) → still
-      works unaffected
+- [ ] Rails `/api/proxy` (server-to-server, private network path) → still works
+      unaffected
 
 ### 14.4 Phase 6 — External services (same maintenance window as the deploy, not before/after)
 
@@ -824,46 +826,45 @@ Nothing in CI enforces this — assign a human to run it live.
       LS's webhook test-send feature immediately after.
 - [ ] **Lemon Squeezy checkout redirect URL** (separate setting from the
       webhook, LS dashboard → product/checkout settings) → update at the same
-      time. If missed, a customer who just paid gets redirected to the bare
-      Go API host right after checkout (subscription still activates via
-      webhook, but it looks like a broken payment flow).
+      time. If missed, a customer who just paid gets redirected to the bare Go
+      API host right after checkout (subscription still activates via webhook,
+      but it looks like a broken payment flow).
 - [ ] **Google Search Console** → add `requiemsapi.com` as a new property,
       submit the regenerated sitemap. Decide whether to keep the old
-      `requiems.xyz` property (now 404ing on old paths — owner confirmed
-      clean break, no redirects, per §2.1/§13b) or remove it.
+      `requiems.xyz` property (now 404ing on old paths — owner confirmed clean
+      break, no redirects, per §2.1/§13b) or remove it.
 - [ ] **GA4** → confirm `GA4_MEASUREMENT_ID` accepts `requiemsapi.com` as a
-      valid stream hostname (verify live, properties are usually
-      host-agnostic per measurement ID, but don't assume).
+      valid stream hostname (verify live, properties are usually host-agnostic
+      per measurement ID, but don't assume).
 - [ ] **Any OAuth app / webhook allow-lists at third parties** referencing
       `requiems.xyz` by exact origin — audit case by case (nothing found
-      in-repo, but this class of config lives outside the repo by
-      definition).
+      in-repo, but this class of config lives outside the repo by definition).
 - [ ] Before rebuilding/deploying: confirm the sitemap regeneration
       (`rails sitemap:refresh` or equivalent) ran and the regenerated
-      `apps/dashboard/public/sitemap*.xml` files were **committed pre-build**
-      — a Docker image is immutable at runtime, so "regenerate after deploy"
+      `apps/dashboard/public/sitemap*.xml` files were **committed pre-build** —
+      a Docker image is immutable at runtime, so "regenerate after deploy"
       doesn't work (§6 item 9). This wasn't done as part of the repo commits
-      above since it requires running the Rails sitemap task against live
-      data — do it as part of this deploy, not skipped.
+      above since it requires running the Rails sitemap task against live data —
+      do it as part of this deploy, not skipped.
 
 ### 14.5 Cleanup (only after 14.3 is fully green)
 
 - [ ] Delete the deprecated `api.requiems.xyz` Caddy vhost block (marked
       `DEPRECATED` in `infra/caddy/Caddyfile`) and its DNS record.
-- [ ] Remove the corresponding Cloudflare AOP scoping for `api.requiems.xyz`
-      if it was hostname-specific rather than zone-wide.
+- [ ] Remove the corresponding Cloudflare AOP scoping for `api.requiems.xyz` if
+      it was hostname-specific rather than zone-wide.
 
 ### 14.6 If a rollback becomes necessary
 
 See §11 in full, but the two non-code-revert items to not forget:
 
 - [ ] If real users authenticated on `requiemsapi.com` during the window,
-      rolling Rails back to `requiems.xyz` **logs all of them out** — treat as
-      a real incident to communicate, not a silent revert.
-- [ ] Revert the Lemon Squeezy webhook URL **and** checkout redirect URL back
-      to the pre-migration host in the same rollback window, and manually
-      reconcile any subscription events that landed during the window before
-      the revert completes.
+      rolling Rails back to `requiems.xyz` **logs all of them out** — treat as a
+      real incident to communicate, not a silent revert.
+- [ ] Revert the Lemon Squeezy webhook URL **and** checkout redirect URL back to
+      the pre-migration host in the same rollback window, and manually reconcile
+      any subscription events that landed during the window before the revert
+      completes.
 
 ### 14.7 Still open, not part of this implementation pass
 
