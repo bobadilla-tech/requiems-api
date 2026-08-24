@@ -40,6 +40,9 @@ Rails.application.configure do
     }
   end
 
+  config.hosts << "requiems.xyz"
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
   config.i18n.fallbacks = true
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [ :id ]
