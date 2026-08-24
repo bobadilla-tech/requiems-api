@@ -122,6 +122,31 @@ jobs:
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
+        with:
+          ruby-version: "3.4.8"
+          bundler-cache: true
+          working-directory: apps/dashboard
+
+      # Sitemap XML files are committed static assets baked into the Docker
+      # image at build time (no volume, no runtime write path) — see
+      # docs/plans/2026-08-23-requiemsapi-domain-role-swap.md §6 item 9. This
+      # regenerates them from the current config/sitemap.rb (page lists,
+      # blog posts, live API catalog) right before the build so every deploy
+      # ships an up-to-date sitemap instead of whatever was last hand-run
+      # and committed. No DB/secrets needed — sitemap.rb only reads local
+      # YAML/constants and file-backed BlogPost; SECRET_KEY_BASE_DUMMY is the
+      # same escape hatch assets:precompile already uses to boot AppConfig
+      # without real production secrets.
+      - name: Regenerate sitemap
+        working-directory: apps/dashboard
+        env:
+          RAILS_ENV: production
+          SECRET_KEY_BASE_DUMMY: "1"
+        run: bundle exec rails sitemap:refresh:no_ping
+
       - uses: ./.github/actions/kamal-deploy
         with:
           config: infra/kamal/deploy.dashboard.yml
