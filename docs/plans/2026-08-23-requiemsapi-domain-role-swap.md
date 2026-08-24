@@ -829,6 +829,47 @@ implementation session; this is the checklist for whoever runs the cutover.
       race. Worth a follow-up (not done here): either serialize the three jobs
       in `.github/workflows/`, or make the Kamal deploy action retry once on
       this specific kamal-proxy error class.
+- [x] **Follow-up finding, same day: the race surface is wider than "changes
+      to proxy.host."** Each of the three `paths:` filters in
+      `.github/workflows/cd.yml` (`api`/`dashboard`/`mcp`) independently lists
+      `.github/workflows/cd.yml` itself as a trigger path — so *any* edit to
+      the CD workflow file (like the sitemap step added below) fires all
+      three `Deploy *` jobs in parallel, every time, regardless of which
+      app's code actually changed. This is presumably intentional (validate
+      the workflow change against all three deploy paths at once), but it
+      means every future CD workflow edit reopens the exact race window
+      described above, not just host-changing deploys. Confirmed low-risk
+      *this specific time* only because no service was reassigning its
+      `proxy.host` — verified via `gh run watch`, all three jobs (including
+      `Deploy API` again) completed successfully with no conflict.
+
+### 14.2b Sitemap: broken post-cutover, fixed and now auto-refreshed — 2026-08-24
+
+Found live after the cutover: `https://requiemsapi.com/sitemap.xml` and its
+child sitemaps were 100% stale — every URL still pointed at `requiems.xyz`.
+Root cause was exactly what §6 item 9 flagged and deferred: the committed
+`public/sitemap*.xml` files are baked into the immutable Docker image at
+build time (no volume, no runtime write path), and nothing ever regenerated
+them after `config/sitemap.rb`'s `default_host` was changed to
+`requiemsapi.com` earlier in this implementation.
+
+Fixed two ways:
+- Regenerated the files once via `RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1
+  bundle exec rails sitemap:refresh:no_ping` (commit `691e9952`) — no DB or
+  real secrets needed, confirmed: `config/sitemap.rb` is entirely
+  YAML/constant-driven, and even `BlogPost` (used for `/blog/*` sitemap
+  entries) is file-backed (`content/blog/*.md`), not `ActiveRecord`. The
+  `SECRET_KEY_BASE_DUMMY` escape hatch already existed in
+  `config/initializers/app_config.rb` for exactly this class of build-time
+  task (same one `assets:precompile` uses) — no new mechanism needed.
+- Added a "Regenerate sitemap" step to `deploy-dashboard` in
+  `.github/workflows/cd.yml`, running the same command before every
+  dashboard build, so this can't go stale again silently — per the owner's
+  explicit ask ("we should always ship updated sitemaps"), not scoped to
+  this migration.
+- [x] Verified live post-deploy: `curl https://requiemsapi.com/sitemap.xml`
+      → fresh `lastmod` timestamp matching the deploy time, zero remaining
+      `requiems.xyz` references across all 6 sitemap files.
 
 ### 14.3 Smoke-test matrix — run 2026-08-24, after the Caddy restart + API redeploy above
 
