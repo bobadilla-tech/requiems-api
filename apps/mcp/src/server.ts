@@ -108,7 +108,7 @@ async function startStdio() {
 async function startHttp() {
     const port = Number(process.env.MCP_HTTP_PORT ?? 3000);
 
-    Bun.serve({
+    const server = Bun.serve({
         port,
         async fetch(req: Request) {
             const url = new URL(req.url);
@@ -146,7 +146,7 @@ async function startHttp() {
         },
     });
 
-    console.error(`[server] MCP server running (http transport, port ${port})`);
+    console.error(`[server] MCP server running (http transport, port ${server.port})`);
 }
 
 async function start() {

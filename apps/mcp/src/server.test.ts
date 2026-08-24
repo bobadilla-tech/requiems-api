@@ -5,13 +5,12 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 // would. This is what actually caught the content-wrapping, header-rejection,
 // and stdout-pollution bugs earlier — unit tests on the pieces wouldn't have.
 
-const MCP_PORT = 34_567;
-const MOCK_BACKEND_PORT = 34_568;
 const ROOT = new URL("..", import.meta.url).pathname;
 
 let receivedKeys: (string | null)[] = [];
-let mockBackend: ReturnType<typeof Bun.serve>;
-let serverProc: ReturnType<typeof Bun.spawn>;
+let mcpPort: number;
+let mockBackend: ReturnType<typeof Bun.serve> | undefined;
+let serverProc: ReturnType<typeof Bun.spawn> | undefined;
 
 async function waitForHealthy(url: string, timeoutMs = 10_000) {
     const deadline = Date.now() + timeoutMs;
@@ -55,7 +54,7 @@ async function readStreamUntil(
 }
 
 async function callTool(name: string, args: Record<string, unknown>, headers: Record<string, string> = {}) {
-    const res = await fetch(`http://localhost:${MCP_PORT}/mcp`, {
+    const res = await fetch(`http://localhost:${mcpPort}/mcp`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -75,7 +74,7 @@ async function callTool(name: string, args: Record<string, unknown>, headers: Re
 beforeAll(async () => {
     receivedKeys = [];
     mockBackend = Bun.serve({
-        port: MOCK_BACKEND_PORT,
+        port: 0,
         fetch(req) {
             receivedKeys.push(req.headers.get("requiems-api-key"));
             return new Response(JSON.stringify({ fact: "mock fact" }), {
@@ -84,31 +83,46 @@ beforeAll(async () => {
         },
     });
 
-    serverProc = Bun.spawn({
+    const proc = Bun.spawn({
         cmd: ["bun", "run", "src/server.ts"],
         cwd: ROOT,
         env: {
             ...process.env,
             MCP_TRANSPORT: "http",
-            MCP_HTTP_PORT: String(MCP_PORT),
-            REQUIEMS_BASE_URL: `http://localhost:${MOCK_BACKEND_PORT}`,
+            MCP_HTTP_PORT: "0",
+            REQUIEMS_BASE_URL: `http://localhost:${mockBackend.port}`,
         },
         stdout: "pipe",
         stderr: "pipe",
     });
+    serverProc = proc;
 
-    await waitForHealthy(`http://localhost:${MCP_PORT}/healthz`);
+    const startupLog = await readStreamUntil(
+        proc.stderr,
+        ["MCP server running (http transport, port"],
+    );
+    const portMatch = startupLog.match(/MCP server running \(http transport, port (\d+)\)/);
+    if (!portMatch) {
+        throw new Error(`MCP server failed to report its HTTP port. Startup log:\n${startupLog}`);
+    }
+    mcpPort = Number(portMatch[1]);
+
+    await waitForHealthy(`http://localhost:${mcpPort}/healthz`);
 });
 
 afterAll(async () => {
-    serverProc.kill();
-    await serverProc.exited;
-    mockBackend.stop(true);
+    if (serverProc) {
+        serverProc.kill();
+        await serverProc.exited;
+    }
+    if (mockBackend) {
+        await mockBackend.stop(true);
+    }
 });
 
 describe("HTTP transport", () => {
     test("/healthz returns 200", async () => {
-        const res = await fetch(`http://localhost:${MCP_PORT}/healthz`);
+        const res = await fetch(`http://localhost:${mcpPort}/healthz`);
         expect(res.status).toBe(200);
     });
 
@@ -145,7 +159,7 @@ describe("HTTP transport", () => {
     });
 
     test("initialize handshake works without any api key header", async () => {
-        const res = await fetch(`http://localhost:${MCP_PORT}/mcp`, {
+        const res = await fetch(`http://localhost:${mcpPort}/mcp`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
