@@ -1,8 +1,8 @@
 # requiemsapi.com / requiems.xyz Domain Role Swap — Implementation Plan
 
 Status: cutover live as of 2026-08-24 (Phases 1–5, 8 code deployed and
-smoke-tested against production; Phase 6 external services and full Devise
-auth verification still pending — see §14.3/§14.4).
+smoke-tested against production; Phase 6 external services and full Devise auth
+verification still pending — see §14.3/§14.4).
 
 Supersedes nothing. Per this repo's own convention (see
 `docs/audits/2026-08-22-domain-migration-audit-current-state.md`, itself
@@ -781,10 +781,10 @@ implementation session; this is the checklist for whoever runs the cutover.
 ### 14.2 Deploy the code (after 14.1 gate passes) — DONE 2026-08-24
 
 - [x] Deploy commit `52535385` (config.hosts allowlist, old host) shipped as
-      part of the same push as everything else (owner pushed the full branch
-      at once, after rebasing onto a `main` that had moved — see the "commit
-      hashes changed" note below). No isolated pre-deploy of just this commit
-      happened, but Kamal's `/up` health check was never a problem in practice.
+      part of the same push as everything else (owner pushed the full branch at
+      once, after rebasing onto a `main` that had moved — see the "commit hashes
+      changed" note below). No isolated pre-deploy of just this commit happened,
+      but Kamal's `/up` health check was never a problem in practice.
 - [x] Deploy the remaining commits together via Kamal CD, all three services.
       **Note:** the commit hashes above were captured before push; the owner's
       push landed on top of a `main` that had advanced (dependabot PR #968
@@ -793,88 +793,89 @@ implementation session; this is the checklist for whoever runs the cutover.
       hashes.
 - [x] Caddy accessory force-restart — **the §10.2a risk was real, not
       theoretical.** The CD run's log for `Deploy API` literally showed
-      `Skipping booting `caddy` on ***, a container already exists`. The new
+      `Skipping booting`caddy`on ***, a container already exists`. The new
       Caddyfile (with the `requiemsapi.com` block) was uploaded to disk
-      correctly, but the running Caddy process kept serving the **pre-migration**
-      config for ~20 minutes after deploy — confirmed live: `requiemsapi.com`
-      failed TLS handshake entirely (`tlsv1 alert internal error`, no matching
-      site), and `requiems.xyz` accepted connections *without* a client cert
-      (should have required AOP post-swap, but the old, non-AOP `requiems.xyz`
-      Rails vhost was still what Caddy had loaded). Fixed with a direct
-      `docker restart caddy` on the VPS (equivalent to
-      `kamal accessory reboot caddy`, run directly since the SSH session was
-      already open). Confirmed fixed: `requiems.xyz` now correctly demands the
-      client cert (`tlsv1.3 alert certificate required` when connecting
-      directly to the origin without one).
+      correctly, but the running Caddy process kept serving the
+      **pre-migration** config for ~20 minutes after deploy — confirmed live:
+      `requiemsapi.com` failed TLS handshake entirely
+      (`tlsv1 alert internal error`, no matching site), and `requiems.xyz`
+      accepted connections _without_ a client cert (should have required AOP
+      post-swap, but the old, non-AOP `requiems.xyz` Rails vhost was still what
+      Caddy had loaded). Fixed with a direct `docker restart caddy` on the VPS
+      (equivalent to `kamal accessory reboot caddy`, run directly since the SSH
+      session was already open). Confirmed fixed: `requiems.xyz` now correctly
+      demands the client cert (`tlsv1.3 alert certificate required` when
+      connecting directly to the origin without one).
 - [x] **New incident, not anticipated by the plan: `Deploy API` failed on the
       first CD run** (`gh run 32683308842`) with
-      `kamal-proxy: Error: host settings conflict with another service`
-      when trying to register `requiems-api-web` → `requiems.xyz`. Root cause:
-      GitHub Actions ran `Deploy API` and `Deploy Dashboard` as **parallel**
-      jobs against the same shared `kamal-proxy` instance on the VPS, and lost
-      a race — at the instant Deploy API tried to claim host `requiems.xyz`,
-      `requiems-dashboard-web` (not yet finished migrating off its
-      pre-migration host) still held that exact hostname, so kamal-proxy
-      correctly refused the duplicate claim. Deploy API's Kamal run rolled its
-      new container back on failure, leaving `requiems-api-web` stuck
-      registered to the **old** `api.requiems.xyz` host in kamal-proxy (visible
-      via `docker exec kamal-proxy kamal-proxy list` on the VPS) even though
-      Deploy Dashboard went on to succeed a moment later. Fixed by re-running
-      only the failed job (`gh run rerun 32683308842 --failed`) — Dashboard/MCP
-      were not re-run since they'd already succeeded, so there was no repeat
-      race the second time. **Not previously called out in this plan** — the
-      Kamal deploy workflow has no explicit ordering/dependency between the
-      three `Deploy *` jobs, so any future redeploy that touches `proxy.host`
-      on two services sharing a hostname transition is exposed to the same
-      race. Worth a follow-up (not done here): either serialize the three jobs
-      in `.github/workflows/`, or make the Kamal deploy action retry once on
-      this specific kamal-proxy error class.
-- [x] **Follow-up finding, same day: the race surface is wider than "changes
-      to proxy.host."** Each of the three `paths:` filters in
+      `kamal-proxy: Error: host settings conflict with another service` when
+      trying to register `requiems-api-web` → `requiems.xyz`. Root cause: GitHub
+      Actions ran `Deploy API` and `Deploy Dashboard` as **parallel** jobs
+      against the same shared `kamal-proxy` instance on the VPS, and lost a race
+      — at the instant Deploy API tried to claim host `requiems.xyz`,
+      `requiems-dashboard-web` (not yet finished migrating off its pre-migration
+      host) still held that exact hostname, so kamal-proxy correctly refused the
+      duplicate claim. Deploy API's Kamal run rolled its new container back on
+      failure, leaving `requiems-api-web` stuck registered to the **old**
+      `api.requiems.xyz` host in kamal-proxy (visible via
+      `docker exec kamal-proxy kamal-proxy list` on the VPS) even though Deploy
+      Dashboard went on to succeed a moment later. Fixed by re-running only the
+      failed job (`gh run rerun 32683308842 --failed`) — Dashboard/MCP were not
+      re-run since they'd already succeeded, so there was no repeat race the
+      second time. **Not previously called out in this plan** — the Kamal deploy
+      workflow has no explicit ordering/dependency between the three `Deploy *`
+      jobs, so any future redeploy that touches `proxy.host` on two services
+      sharing a hostname transition is exposed to the same race. Worth a
+      follow-up (not done here): either serialize the three jobs in
+      `.github/workflows/`, or make the Kamal deploy action retry once on this
+      specific kamal-proxy error class.
+- [x] **Follow-up finding, same day: the race surface is wider than "changes to
+      proxy.host."** Each of the three `paths:` filters in
       `.github/workflows/cd.yml` (`api`/`dashboard`/`mcp`) independently lists
-      `.github/workflows/cd.yml` itself as a trigger path — so *any* edit to
-      the CD workflow file (like the sitemap step added below) fires all
-      three `Deploy *` jobs in parallel, every time, regardless of which
-      app's code actually changed. This is presumably intentional (validate
-      the workflow change against all three deploy paths at once), but it
-      means every future CD workflow edit reopens the exact race window
-      described above, not just host-changing deploys. Confirmed low-risk
-      *this specific time* only because no service was reassigning its
-      `proxy.host` — verified via `gh run watch`, all three jobs (including
-      `Deploy API` again) completed successfully with no conflict.
+      `.github/workflows/cd.yml` itself as a trigger path — so _any_ edit to the
+      CD workflow file (like the sitemap step added below) fires all three
+      `Deploy *` jobs in parallel, every time, regardless of which app's code
+      actually changed. This is presumably intentional (validate the workflow
+      change against all three deploy paths at once), but it means every future
+      CD workflow edit reopens the exact race window described above, not just
+      host-changing deploys. Confirmed low-risk _this specific time_ only
+      because no service was reassigning its `proxy.host` — verified via
+      `gh run watch`, all three jobs (including `Deploy API` again) completed
+      successfully with no conflict.
 
 ### 14.2b Sitemap: broken post-cutover, fixed and now auto-refreshed — 2026-08-24
 
 Found live after the cutover: `https://requiemsapi.com/sitemap.xml` and its
-child sitemaps were 100% stale — every URL still pointed at `requiems.xyz`.
-Root cause was exactly what §6 item 9 flagged and deferred: the committed
-`public/sitemap*.xml` files are baked into the immutable Docker image at
-build time (no volume, no runtime write path), and nothing ever regenerated
-them after `config/sitemap.rb`'s `default_host` was changed to
-`requiemsapi.com` earlier in this implementation.
+child sitemaps were 100% stale — every URL still pointed at `requiems.xyz`. Root
+cause was exactly what §6 item 9 flagged and deferred: the committed
+`public/sitemap*.xml` files are baked into the immutable Docker image at build
+time (no volume, no runtime write path), and nothing ever regenerated them after
+`config/sitemap.rb`'s `default_host` was changed to `requiemsapi.com` earlier in
+this implementation.
 
 Fixed two ways:
-- Regenerated the files once via `RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1
-  bundle exec rails sitemap:refresh:no_ping` (commit `691e9952`) — no DB or
-  real secrets needed, confirmed: `config/sitemap.rb` is entirely
-  YAML/constant-driven, and even `BlogPost` (used for `/blog/*` sitemap
-  entries) is file-backed (`content/blog/*.md`), not `ActiveRecord`. The
-  `SECRET_KEY_BASE_DUMMY` escape hatch already existed in
-  `config/initializers/app_config.rb` for exactly this class of build-time
-  task (same one `assets:precompile` uses) — no new mechanism needed.
+
+- Regenerated the files once via
+  `RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1
+  bundle exec rails sitemap:refresh:no_ping`
+  (commit `691e9952`) — no DB or real secrets needed, confirmed:
+  `config/sitemap.rb` is entirely YAML/constant-driven, and even `BlogPost`
+  (used for `/blog/*` sitemap entries) is file-backed (`content/blog/*.md`), not
+  `ActiveRecord`. The `SECRET_KEY_BASE_DUMMY` escape hatch already existed in
+  `config/initializers/app_config.rb` for exactly this class of build-time task
+  (same one `assets:precompile` uses) — no new mechanism needed.
 - Added a "Regenerate sitemap" step to `deploy-dashboard` in
-  `.github/workflows/cd.yml`, running the same command before every
-  dashboard build, so this can't go stale again silently — per the owner's
-  explicit ask ("we should always ship updated sitemaps"), not scoped to
-  this migration.
-- [x] Verified live post-deploy: `curl https://requiemsapi.com/sitemap.xml`
-      → fresh `lastmod` timestamp matching the deploy time, zero remaining
+  `.github/workflows/cd.yml`, running the same command before every dashboard
+  build, so this can't go stale again silently — per the owner's explicit ask
+  ("we should always ship updated sitemaps"), not scoped to this migration.
+- [x] Verified live post-deploy: `curl https://requiemsapi.com/sitemap.xml` →
+      fresh `lastmod` timestamp matching the deploy time, zero remaining
       `requiems.xyz` references across all 6 sitemap files.
 
 ### 14.3 Smoke-test matrix — run 2026-08-24, after the Caddy restart + API redeploy above
 
-Nothing in CI enforces this; it was run manually, from a laptop through the
-real Cloudflare edge (not SSH'd into the origin), except where noted.
+Nothing in CI enforces this; it was run manually, from a laptop through the real
+Cloudflare edge (not SSH'd into the origin), except where noted.
 
 - [x] `curl https://requiemsapi.com/` → 301 → `/en/` (Rails locale redirect,
       expected — not a routing error)
@@ -895,9 +896,9 @@ real Cloudflare edge (not SSH'd into the origin), except where noted.
       handler)
 - [x] `curl -H "Origin: https://requiemsapi.com" -X OPTIONS https://requiems.xyz/v1/...`
       → 204, `access-control-allow-origin: *` present (CORS middleware working)
-- [x] `curl https://mcp.requiems.xyz/` → 406 (an application-level response,
-      not a routing failure — confirms the request reached the MCP backend
-      through the unchanged Caddy vhost)
+- [x] `curl https://mcp.requiems.xyz/` → 406 (an application-level response, not
+      a routing failure — confirms the request reached the MCP backend through
+      the unchanged Caddy vhost)
 - [ ] `bun run scripts/fetch-spec.ts` in `apps/mcp` — **not run** against the
       live host in this session
 - [x] `curl -I https://requiemsapi.com/` and `https://requiems.xyz/healthz` →
