@@ -106,9 +106,28 @@ jobs:
       - name: Download dependencies
         run: go mod download
 
+      - name: Create dedicated migration test database
+        # app_test.go is the only test that runs golang-migrate's real
+        # migrations (via App.New -> db.MigrateWithRetry). Several
+        # services/*/*_integration_test.go files independently run their own
+        # `CREATE TABLE IF NOT EXISTS` for the same tables those migrations
+        # create (e.g. swift_codes) as a self-sufficiency fallback for
+        # running that one package in isolation. go test ./... runs packages
+        # concurrently by default, so if both hit the same database, they
+        # race on table creation — Postgres doesn't make CREATE TABLE (IF NOT
+        # EXISTS) safe against a genuinely concurrent CREATE. Giving
+        # app_test.go's migration bootstrap (TEST_DATABASE_URL, which it
+        # already prefers) its own database keeps it out of that race,
+        # mirroring infra/docker/postgres-init/01-create-test-db.sh's
+        # existing Rails-vs-Go database split for the same reason.
+        env:
+          PGPASSWORD: requiem
+        run: psql -h localhost -U requiem -d requiem_test -c "CREATE DATABASE requiem_migrate_test"
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_test?sslmode=disable
+          TEST_DATABASE_URL: postgres://requiem:requiem@localhost:5432/requiem_migrate_test?sslmode=disable
           REDIS_URL: redis://127.0.0.1:6379/0
         run: go test -race -coverprofile=coverage.out ./...
 
