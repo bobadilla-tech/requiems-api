@@ -7,7 +7,7 @@ Rails reads configuration through `AppConfig`.
 - `INTERNAL_API_URL`: private Go destination; production is
   `http://requiems-api:8080`.
 - `API_BASE_URL`: public Cloudflare API URL, normally
-  `https://api.requiems.xyz`.
+  `https://requiems.xyz`.
 - `PLAYGROUND_API_KEY`: raw key used only by server-side Playground demos.
 - `LOCAL_DEV_API_KEY`: local seed credential; it is not a production secret.
 

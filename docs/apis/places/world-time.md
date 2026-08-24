@@ -27,7 +27,7 @@ Returns the current time for the given IANA timezone identifier.
 #### Example Request
 
 ```bash
-curl "https://api.requiems.xyz/v1/places/time/America/New_York" \
+curl "https://requiems.xyz/v1/places/time/America/New_York" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 

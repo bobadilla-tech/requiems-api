@@ -183,7 +183,7 @@ colors with Tailwind spans (`text-sky-300`, `text-amber-300`, …) or a flat
 
 <%= render "partials/tools/shared/code_sample", language: "http" do %>
 GET /v1/…/…
-Host: api.requiems.xyz
+Host: requiems.xyz
 requiems-api-key: YOUR_API_KEY
 <% end %>
 ```

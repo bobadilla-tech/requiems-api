@@ -3,7 +3,7 @@ api_name: Inflation
 description: >-
   Historical and current CPI inflation rates for 241 countries, sourced from the World Bank. Returns up to 30 years of
   annual data per country.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Economic dashboards and financial research tools
@@ -84,12 +84,12 @@ endpoints:
         description: Unexpected server error.
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/finance/inflation?country=US" \
+        curl "https://requiems.xyz/v1/finance/inflation?country=US" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/finance/inflation"
+        url = "https://requiems.xyz/v1/finance/inflation"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         params = {"country": "US"}
 
@@ -99,7 +99,7 @@ endpoints:
         print(data["period"])  # "2024"
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/finance/inflation?country=US',
+          'https://requiems.xyz/v1/finance/inflation?country=US',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
 
@@ -111,7 +111,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/finance/inflation')
+        uri = URI('https://requiems.xyz/v1/finance/inflation')
         uri.query = URI.encode_www_form(country: 'US')
 
         request = Net::HTTP::Get.new(uri)
@@ -201,14 +201,14 @@ endpoints:
         description: Unexpected server error.
     code_examples:
       curl: |
-        curl -X POST "https://api.requiems.xyz/v1/finance/inflation/batch" \
+        curl -X POST "https://requiems.xyz/v1/finance/inflation/batch" \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"countries": ["US", "AR", "DE"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/finance/inflation/batch"
+        url = "https://requiems.xyz/v1/finance/inflation/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -224,7 +224,7 @@ endpoints:
                 print(f"{item['country']}: no data")
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/finance/inflation/batch',
+          'https://requiems.xyz/v1/finance/inflation/batch',
           {
             method: 'POST',
             headers: {
@@ -247,7 +247,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/finance/inflation/batch')
+        uri = URI('https://requiems.xyz/v1/finance/inflation/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

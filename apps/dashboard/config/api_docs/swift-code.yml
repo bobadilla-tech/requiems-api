@@ -1,7 +1,7 @@
 api_id: swift-code
 api_name: SWIFT Code
 description: Validate and look up bank information by SWIFT/BIC code. Returns bank name, city, country, and parsed code components.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -161,14 +161,14 @@ endpoints:
 
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/finance/swift/DEUTDEDB \
+        curl https://requiems.xyz/v1/finance/swift/DEUTDEDB \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
         code = "DEUTDEDB"
-        url = f"https://api.requiems.xyz/v1/finance/swift/{code}"
+        url = f"https://requiems.xyz/v1/finance/swift/{code}"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
@@ -180,7 +180,7 @@ endpoints:
 
       javascript: |
         const code = 'DEUTDEDB';
-        const response = await fetch(`https://api.requiems.xyz/v1/finance/swift/${code}`, {
+        const response = await fetch(`https://requiems.xyz/v1/finance/swift/${code}`, {
           headers: {
             'requiems-api-key': 'YOUR_API_KEY'
           }
@@ -196,7 +196,7 @@ endpoints:
         require 'json'
 
         code = 'DEUTDEDB'
-        uri = URI("https://api.requiems.xyz/v1/finance/swift/#{code}")
+        uri = URI("https://requiems.xyz/v1/finance/swift/#{code}")
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 

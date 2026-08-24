@@ -71,7 +71,7 @@ system, device type, and bot detection.
 ### cURL
 
 ```bash
-curl "https://api.requiems.xyz/v1/technology/useragent?ua=Mozilla%2F5.0+%28Windows+NT+10.0%29+Chrome%2F120.0.0.0" \
+curl "https://requiems.xyz/v1/technology/useragent?ua=Mozilla%2F5.0+%28Windows+NT+10.0%29+Chrome%2F120.0.0.0" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -82,7 +82,7 @@ import requests
 from urllib.parse import quote
 
 ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"
-url = f"https://api.requiems.xyz/v1/technology/useragent?ua={quote(ua)}"
+url = f"https://requiems.xyz/v1/technology/useragent?ua={quote(ua)}"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)
@@ -96,7 +96,7 @@ print(f"Device: {result['device']}")
 
 ```javascript
 const ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0";
-const url = `https://api.requiems.xyz/v1/technology/useragent?ua=${
+const url = `https://requiems.xyz/v1/technology/useragent?ua=${
   encodeURIComponent(ua)
 }`;
 
@@ -117,7 +117,7 @@ require 'net/http'
 require 'json'
 
 ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"
-uri = URI("https://api.requiems.xyz/v1/technology/useragent?ua=#{URI.encode_www_form_component(ua)}")
+uri = URI("https://requiems.xyz/v1/technology/useragent?ua=#{URI.encode_www_form_component(ua)}")
 request = Net::HTTP::Get.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 

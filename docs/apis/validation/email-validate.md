@@ -87,7 +87,7 @@ All responses are wrapped in the standard envelope:
 ### Valid address
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/validation/email \
+curl -X POST https://requiems.xyz/v1/validation/email \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"email": "user@gmail.com"}'
@@ -159,7 +159,7 @@ Batch Response:
 ### Typo in domain
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/validation/email \
+curl -X POST https://requiems.xyz/v1/validation/email \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"email": "user@gmial.com"}'

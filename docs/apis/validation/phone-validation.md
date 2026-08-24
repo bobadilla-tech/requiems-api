@@ -167,11 +167,11 @@ order as the input.
 
 ```bash
 # Single
-curl "https://api.requiems.xyz/v1/validation/phone?number=%2B447400123456" \
+curl "https://requiems.xyz/v1/validation/phone?number=%2B447400123456" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # Batch
-curl -X POST "https://api.requiems.xyz/v1/validation/phone/batch" \
+curl -X POST "https://requiems.xyz/v1/validation/phone/batch" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"numbers":["+447400123456","+12015551234"]}'
@@ -186,7 +186,7 @@ headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 # Single
 r = requests.get(
-    "https://api.requiems.xyz/v1/validation/phone",
+    "https://requiems.xyz/v1/validation/phone",
     headers=headers,
     params={"number": "+447400123456"},
 )
@@ -200,7 +200,7 @@ if result["valid"]:
 
 # Batch
 r = requests.post(
-    "https://api.requiems.xyz/v1/validation/phone/batch",
+    "https://requiems.xyz/v1/validation/phone/batch",
     headers={**headers, "Content-Type": "application/json"},
     json={"numbers": ["+447400123456", "+12015551234"]},
 )
@@ -215,7 +215,7 @@ const headers = { "requiems-api-key": "YOUR_API_KEY" };
 
 // Single
 const single = await fetch(
-  `https://api.requiems.xyz/v1/validation/phone?number=${
+  `https://requiems.xyz/v1/validation/phone?number=${
     encodeURIComponent("+447400123456")
   }`,
   { headers },
@@ -229,7 +229,7 @@ if (data.valid) {
 
 // Batch
 const batch = await fetch(
-  "https://api.requiems.xyz/v1/validation/phone/batch",
+  "https://requiems.xyz/v1/validation/phone/batch",
   {
     method: "POST",
     headers: { ...headers, "Content-Type": "application/json" },
@@ -249,7 +249,7 @@ require 'json'
 headers = { 'requiems-api-key' => 'YOUR_API_KEY' }
 
 # Single
-uri = URI('https://api.requiems.xyz/v1/validation/phone')
+uri = URI('https://requiems.xyz/v1/validation/phone')
 uri.query = URI.encode_www_form(number: '+447400123456')
 req = Net::HTTP::Get.new(uri, headers)
 res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }
@@ -257,7 +257,7 @@ data = JSON.parse(res.body)['data']
 puts "#{data['type']} in #{data['country']}" if data['valid']
 
 # Batch
-uri = URI('https://api.requiems.xyz/v1/validation/phone/batch')
+uri = URI('https://requiems.xyz/v1/validation/phone/batch')
 req = Net::HTTP::Post.new(uri, headers.merge('Content-Type' => 'application/json'))
 req.body = { numbers: ['+447400123456', '+12015551234'] }.to_json
 res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |h| h.request(req) }

@@ -52,7 +52,7 @@ All endpoints are mounted under `/v1/convert`
 **Example:**
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/technology/format \
+curl -X POST https://requiems.xyz/v1/technology/format \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"from":"json","to":"yaml","content":"{\"name\":\"Alice\",\"age\":30}"}'
@@ -129,19 +129,19 @@ The `content` field is capped at **512 KB**. Requests exceeding this return
 
 ```bash
 # JSON → YAML
-curl -X POST https://api.requiems.xyz/v1/technology/format \
+curl -X POST https://requiems.xyz/v1/technology/format \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"from":"json","to":"yaml","content":"{\"name\":\"Alice\",\"age\":30}"}'
 
 # CSV → JSON
-curl -X POST https://api.requiems.xyz/v1/technology/format \
+curl -X POST https://requiems.xyz/v1/technology/format \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"from":"csv","to":"json","content":"name,age\nAlice,30\nBob,25"}'
 
 # JSON → TOML
-curl -X POST https://api.requiems.xyz/v1/technology/format \
+curl -X POST https://requiems.xyz/v1/technology/format \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"from":"json","to":"toml","content":"{\"title\":\"Config\",\"debug\":false}"}'
@@ -152,7 +152,7 @@ curl -X POST https://api.requiems.xyz/v1/technology/format \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/technology/format"
+url = "https://requiems.xyz/v1/technology/format"
 headers = {
     "requiems-api-key": "YOUR_API_KEY",
     "Content-Type": "application/json",
@@ -180,7 +180,7 @@ print(response.json()["data"]["result"])
 ### JavaScript
 
 ```javascript
-const url = "https://api.requiems.xyz/v1/technology/format";
+const url = "https://requiems.xyz/v1/technology/format";
 const headers = {
   "requiems-api-key": "YOUR_API_KEY",
   "Content-Type": "application/json",
@@ -211,7 +211,7 @@ console.log(data.result);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/technology/format')
+uri = URI('https://requiems.xyz/v1/technology/format')
 request = Net::HTTP::Post.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 request['Content-Type'] = 'application/json'

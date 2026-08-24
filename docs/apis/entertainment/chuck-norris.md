@@ -51,7 +51,7 @@ Returns a randomly selected Chuck Norris fact.
 ### cURL
 
 ```bash
-curl https://api.requiems.xyz/v1/entertainment/chuck-norris \
+curl https://requiems.xyz/v1/entertainment/chuck-norris \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -60,7 +60,7 @@ curl https://api.requiems.xyz/v1/entertainment/chuck-norris \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/entertainment/chuck-norris"
+url = "https://requiems.xyz/v1/entertainment/chuck-norris"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)
@@ -72,7 +72,7 @@ print(f"[{result['id']}] {result['fact']}")
 
 ```javascript
 const response = await fetch(
-  "https://api.requiems.xyz/v1/entertainment/chuck-norris",
+  "https://requiems.xyz/v1/entertainment/chuck-norris",
   { headers: { "requiems-api-key": "YOUR_API_KEY" } },
 );
 const { data } = await response.json();
@@ -85,7 +85,7 @@ console.log(`[${data.id}] ${data.fact}`);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/entertainment/chuck-norris')
+uri = URI('https://requiems.xyz/v1/entertainment/chuck-norris')
 request = Net::HTTP::Get.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 

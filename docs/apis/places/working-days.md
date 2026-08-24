@@ -57,15 +57,15 @@ optional support for country-specific holidays.
 
 ```bash
 # Without country (only excludes weekends)
-curl "https://api.requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28" \
+curl "https://requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # With country (excludes weekends and US federal holidays)
-curl "https://api.requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28&country=US" \
+curl "https://requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28&country=US" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # With country and subdivision (excludes weekends and US + NY holidays)
-curl "https://api.requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28&country=US&subdivision=NY" \
+curl "https://requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02-28&country=US&subdivision=NY" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -74,7 +74,7 @@ curl "https://api.requiems.xyz/v1/places/working-days?from=2024-02-23&to=2024-02
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/places/working-days"
+url = "https://requiems.xyz/v1/places/working-days"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 params = {
     "from": "2024-02-23",
@@ -99,7 +99,7 @@ const params = new URLSearchParams({
 });
 
 const response = await fetch(
-  `https://api.requiems.xyz/v1/places/working-days?${params}`,
+  `https://requiems.xyz/v1/places/working-days?${params}`,
   {
     headers: {
       "requiems-api-key": "YOUR_API_KEY",
@@ -119,7 +119,7 @@ console.log(
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/places/working-days')
+uri = URI('https://requiems.xyz/v1/places/working-days')
 uri.query = URI.encode_www_form(
   from: '2024-02-23',
   to: '2024-02-28',

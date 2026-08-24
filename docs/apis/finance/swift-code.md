@@ -45,11 +45,11 @@ Look up bank metadata for a SWIFT/BIC code.
 
 ```bash
 # Primary office (8-char)
-curl https://api.requiems.xyz/v1/finance/swift/DEUTDEDB \
+curl https://requiems.xyz/v1/finance/swift/DEUTDEDB \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # Specific branch (11-char)
-curl https://api.requiems.xyz/v1/finance/swift/DEUTDEDB001 \
+curl https://requiems.xyz/v1/finance/swift/DEUTDEDB001 \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -109,7 +109,7 @@ List SWIFT records with optional filters and pagination.
 #### Example Request
 
 ```bash
-curl "https://api.requiems.xyz/v1/finance/swift?country_code=DE&limit=3" \
+curl "https://requiems.xyz/v1/finance/swift?country_code=DE&limit=3" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -128,6 +128,6 @@ List SWIFT records for a country with optional search/pagination.
 #### Example Request
 
 ```bash
-curl "https://api.requiems.xyz/v1/finance/swift/country/US?q=chase&limit=2" \
+curl "https://requiems.xyz/v1/finance/swift/country/US?q=chase&limit=2" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```

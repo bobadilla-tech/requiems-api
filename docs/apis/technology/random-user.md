@@ -43,7 +43,7 @@ Returns a randomly generated fake user profile.
 **Example:**
 
 ```bash
-curl https://api.requiems.xyz/v1/technology/random-user \
+curl https://requiems.xyz/v1/technology/random-user \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 

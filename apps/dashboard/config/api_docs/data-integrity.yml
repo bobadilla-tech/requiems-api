@@ -1,7 +1,7 @@
 api_id: data-integrity
 api_name: Data Integrity System
 description: Validate, moderate, and normalize user input at the boundary of your product. Stop bad data before it enters your database or downstream services.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Validate and normalize email, phone, and text fields on form submission
@@ -158,7 +158,7 @@ endpoints:
         description: Missing or invalid API key.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/input/validate/batch \
+        curl -X POST https://requiems.xyz/v1/systems/input/validate/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -172,7 +172,7 @@ endpoints:
         import requests
 
         response = requests.post(
-          "https://api.requiems.xyz/v1/systems/input/validate/batch",
+          "https://requiems.xyz/v1/systems/input/validate/batch",
           headers={"requiems-api-key": "YOUR_API_KEY"},
           json={
             "items": [
@@ -199,7 +199,7 @@ endpoints:
             print(f"  Phone valid: {item['phone']['valid']} | Score: {item['phone']['quality_score']}")
           print(f"  Overall quality score: {item['overall_quality_score']}")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/input/validate/batch', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/input/validate/batch', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -225,7 +225,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/input/validate/batch')
+        uri = URI('https://requiems.xyz/v1/systems/input/validate/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -435,7 +435,7 @@ endpoints:
         description: Missing or invalid API key.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/input/validate \
+        curl -X POST https://requiems.xyz/v1/systems/input/validate \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"email": "user@example.com", "phone": "+12015551234", "text": "I just wanted to say that your customer service team was incredibly helpful."}'
@@ -443,7 +443,7 @@ endpoints:
         import requests
 
         response = requests.post(
-          "https://api.requiems.xyz/v1/systems/input/validate",
+          "https://requiems.xyz/v1/systems/input/validate",
           headers={"requiems-api-key": "YOUR_API_KEY"},
           json={
             "email": "user@example.com",
@@ -461,7 +461,7 @@ endpoints:
           print("Text safe:", data["text"]["is_safe"], "| Sentiment:", data["text"]["sentiment"])
         print("Overall quality score:", data["overall_quality_score"])
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/input/validate', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/input/validate', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -479,7 +479,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/input/validate')
+        uri = URI('https://requiems.xyz/v1/systems/input/validate')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -573,7 +573,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/content/moderate \
+        curl -X POST https://requiems.xyz/v1/systems/content/moderate \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"text": "This is some user-generated content.", "language": "en"}'
@@ -581,7 +581,7 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/content/moderate",
+            "https://requiems.xyz/v1/systems/content/moderate",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"text": "This is some user-generated content.", "language": "en"}
         )
@@ -593,7 +593,7 @@ endpoints:
         else:
             print(f"Safe. Sentiment: {data['sentiment']}")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/content/moderate', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/content/moderate', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: 'This is some user-generated content.', language: 'en' })
@@ -608,7 +608,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/content/moderate')
+        uri = URI('https://requiems.xyz/v1/systems/content/moderate')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -670,7 +670,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/text/normalize \
+        curl -X POST https://requiems.xyz/v1/systems/text/normalize \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -681,7 +681,7 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/text/normalize",
+            "https://requiems.xyz/v1/systems/text/normalize",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={
                 "text": "  Hello,   World!  ",
@@ -691,7 +691,7 @@ endpoints:
         data = response.json()["data"]
         print(data["normalized"])  # hello, world!
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/text/normalize', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/text/normalize', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -705,7 +705,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/text/normalize')
+        uri = URI('https://requiems.xyz/v1/systems/text/normalize')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -825,13 +825,13 @@ endpoints:
         description: Invalid or malformed domain value in the request path.
     code_examples:
       curl: |
-        curl -X GET https://api.requiems.xyz/v1/systems/domain/trust/github.com \
+        curl -X GET https://requiems.xyz/v1/systems/domain/trust/github.com \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
         response = requests.get(
-          "https://api.requiems.xyz/v1/systems/domain/trust/github.com",
+          "https://requiems.xyz/v1/systems/domain/trust/github.com",
           headers={"requiems-api-key": "YOUR_API_KEY"}
         )
         data = response.json()["data"]
@@ -848,7 +848,7 @@ endpoints:
           print(f"Registrar: {data['who_is']['registrar']}")
           print(f"Age: {data['who_is']['age_days']} days")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/domain/trust/github.com', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/domain/trust/github.com', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         }).then(r => r.json());
 
@@ -869,7 +869,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/domain/trust/github.com')
+        uri = URI('https://requiems.xyz/v1/systems/domain/trust/github.com')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 

@@ -19,7 +19,7 @@ let _config: Config | undefined;
 export function getConfig(): Config {
   if (_config) return _config;
 
-  const baseUrl = process.env["API_BASE_URL"] ?? "https://api.requiems.xyz";
+  const baseUrl = process.env["API_BASE_URL"] ?? "https://requiems.xyz";
   const apiKey = process.env["REQUIEMS_API_KEY"] ?? "";
   const runs = Number(process.env["INTEGRATION_RUNS"] ?? "20");
   const requestTimeoutMs = Number(

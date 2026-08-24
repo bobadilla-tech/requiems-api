@@ -3,7 +3,7 @@ api_name: Emoji
 description: >-
   Look up emoji by name, search by keyword, or get a random emoji. Each response includes the rendered glyph, CLDR
   snake_case name, Unicode category, and code-point.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Emoji pickers and reaction features
@@ -48,19 +48,19 @@ endpoints:
         description: Unicode code-point in U+XXXX notation (e.g. U+1F600)
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/entertainment/emoji/random \
+        curl https://requiems.xyz/v1/entertainment/emoji/random \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/emoji/random"
+        url = "https://requiems.xyz/v1/entertainment/emoji/random"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/emoji/random',
+          'https://requiems.xyz/v1/entertainment/emoji/random',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -69,7 +69,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/emoji/random')
+        uri = URI('https://requiems.xyz/v1/entertainment/emoji/random')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -122,12 +122,12 @@ endpoints:
         description: The q query parameter is missing or empty.
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/entertainment/emoji/search?q=happy" \
+        curl "https://requiems.xyz/v1/entertainment/emoji/search?q=happy" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/emoji/search"
+        url = "https://requiems.xyz/v1/entertainment/emoji/search"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         params = {"q": "happy"}
 
@@ -137,7 +137,7 @@ endpoints:
             print(emoji['emoji'], emoji['name'])
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/emoji/search?q=happy',
+          'https://requiems.xyz/v1/entertainment/emoji/search?q=happy',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -146,7 +146,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/emoji/search')
+        uri = URI('https://requiems.xyz/v1/entertainment/emoji/search')
         uri.query = URI.encode_www_form(q: 'happy')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
@@ -199,19 +199,19 @@ endpoints:
         description: No emoji found with the given name.
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/entertainment/emoji/grinning_face \
+        curl https://requiems.xyz/v1/entertainment/emoji/grinning_face \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/emoji/grinning_face"
+        url = "https://requiems.xyz/v1/entertainment/emoji/grinning_face"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/emoji/grinning_face',
+          'https://requiems.xyz/v1/entertainment/emoji/grinning_face',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -220,7 +220,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/emoji/grinning_face')
+        uri = URI('https://requiems.xyz/v1/entertainment/emoji/grinning_face')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 

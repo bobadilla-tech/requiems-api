@@ -3,7 +3,7 @@ api_name: Random User
 description: >-
   Generate random fake user profiles for testing and prototyping. Each call returns a unique name, email address, phone
   number, mailing address, and avatar URL.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Populate test databases with realistic-looking user records
@@ -73,12 +73,12 @@ endpoints:
         description: Internal server error
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/technology/random-user \
+        curl https://requiems.xyz/v1/technology/random-user \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/random-user"
+        url = "https://requiems.xyz/v1/technology/random-user"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
@@ -86,7 +86,7 @@ endpoints:
         print(f"Generated user: {user['name']} <{user['email']}>")
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/technology/random-user',
+          'https://requiems.xyz/v1/technology/random-user',
           {
             headers: {
               'requiems-api-key': 'YOUR_API_KEY'
@@ -100,7 +100,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/random-user')
+        uri = URI('https://requiems.xyz/v1/technology/random-user')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -184,14 +184,14 @@ endpoints:
         description: Internal server error
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/random-user/batch \
+        curl -X POST https://requiems.xyz/v1/technology/random-user/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"count": 5}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/random-user/batch"
+        url = "https://requiems.xyz/v1/technology/random-user/batch"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.post(url, headers=headers, json={"count": 5})
@@ -200,7 +200,7 @@ endpoints:
             print(f"Generated user: {user['name']} <{user['email']}>")
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/technology/random-user/batch',
+          'https://requiems.xyz/v1/technology/random-user/batch',
           {
             method: 'POST',
             headers: {
@@ -219,7 +219,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/random-user/batch')
+        uri = URI('https://requiems.xyz/v1/technology/random-user/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

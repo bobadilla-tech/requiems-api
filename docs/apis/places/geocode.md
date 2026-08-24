@@ -15,7 +15,7 @@ convert coordinates back into addresses (reverse geocoding). Powered by
 | `address` | query    | Yes      | Free-text address to geocode |
 
 ```bash
-curl "https://api.requiems.xyz/v1/places/geocode?address=1600+Pennsylvania+Ave+NW" \
+curl "https://requiems.xyz/v1/places/geocode?address=1600+Pennsylvania+Ave+NW" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -46,7 +46,7 @@ Response:
 | `lon`     | query    | Yes      | Longitude (-180 to 180) |
 
 ```bash
-curl "https://api.requiems.xyz/v1/places/reverse-geocode?lat=38.8977&lon=-77.0365" \
+curl "https://requiems.xyz/v1/places/reverse-geocode?lat=38.8977&lon=-77.0365" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 

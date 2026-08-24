@@ -3,7 +3,7 @@ api_name: Data Format Conversion
 description: >-
   Convert structured data between JSON, YAML, CSV, XML, and TOML in a single API call. Accepts any supported format as
   input and returns the content serialized in the target format.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Transform configuration files between formats (TOML → YAML, JSON → TOML)
@@ -89,20 +89,20 @@ endpoints:
     code_examples:
       curl: |
         # JSON → YAML
-        curl -X POST https://api.requiems.xyz/v1/technology/format \
+        curl -X POST https://requiems.xyz/v1/technology/format \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"from":"json","to":"yaml","content":"{\"name\":\"Alice\",\"age\":30}"}'
 
         # CSV → JSON
-        curl -X POST https://api.requiems.xyz/v1/technology/format \
+        curl -X POST https://requiems.xyz/v1/technology/format \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"from":"csv","to":"json","content":"name,age\nAlice,30\nBob,25"}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/format"
+        url = "https://requiems.xyz/v1/technology/format"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json",
@@ -128,7 +128,7 @@ endpoints:
         response = requests.post(url, json=csv_payload, headers=headers)
         print(response.json()["data"]["result"])
       javascript: |
-        const url = 'https://api.requiems.xyz/v1/technology/format';
+        const url = 'https://requiems.xyz/v1/technology/format';
         const headers = {
           'requiems-api-key': 'YOUR_API_KEY',
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/format')
+        uri = URI('https://requiems.xyz/v1/technology/format')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

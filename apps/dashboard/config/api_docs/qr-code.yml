@@ -3,7 +3,7 @@
 api_id: qr-code
 api_name: QR Code Generator
 description: Generate QR codes from any text or URL. Returns a raw PNG image or base64-encoded JSON, with configurable size and error-correction level.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -69,19 +69,19 @@ endpoints:
     code_examples:
       curl: |
         # Save a 200px PNG with high error-correction
-        curl "https://api.requiems.xyz/v1/technology/qr?data=https://example.com&size=200&recovery=high" \
+        curl "https://requiems.xyz/v1/technology/qr?data=https://example.com&size=200&recovery=high" \
           -H "requiems-api-key: YOUR_API_KEY" \
           --output qrcode.png
 
         # Default size (256px), medium error-correction
-        curl "https://api.requiems.xyz/v1/technology/qr?data=https://example.com" \
+        curl "https://requiems.xyz/v1/technology/qr?data=https://example.com" \
           -H "requiems-api-key: YOUR_API_KEY" \
           --output qrcode.png
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/qr"
+        url = "https://requiems.xyz/v1/technology/qr"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         params = {"data": "https://example.com", "size": 200, "recovery": "high"}
 
@@ -97,7 +97,7 @@ endpoints:
         });
 
         const response = await fetch(
-          `https://api.requiems.xyz/v1/technology/qr?${params}`,
+          `https://requiems.xyz/v1/technology/qr?${params}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const blob = await response.blob();
@@ -106,7 +106,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/qr')
+        uri = URI('https://requiems.xyz/v1/technology/qr')
         uri.query = URI.encode_www_form(data: 'https://example.com', size: 200, recovery: 'high')
 
         request = Net::HTTP::Get.new(uri)
@@ -179,13 +179,13 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/technology/qr/base64?data=https://example.com&size=200&recovery=highest" \
+        curl "https://requiems.xyz/v1/technology/qr/base64?data=https://example.com&size=200&recovery=highest" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/qr/base64"
+        url = "https://requiems.xyz/v1/technology/qr/base64"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         params = {"data": "https://example.com", "size": 200, "recovery": "highest"}
 
@@ -201,7 +201,7 @@ endpoints:
         });
 
         const response = await fetch(
-          `https://api.requiems.xyz/v1/technology/qr/base64?${params}`,
+          `https://requiems.xyz/v1/technology/qr/base64?${params}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const { data } = await response.json();
@@ -212,7 +212,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/qr/base64')
+        uri = URI('https://requiems.xyz/v1/technology/qr/base64')
         uri.query = URI.encode_www_form(data: 'https://example.com', size: 200, recovery: 'highest')
 
         request = Net::HTTP::Get.new(uri)
@@ -298,14 +298,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/qr/base64/batch \
+        curl -X POST https://requiems.xyz/v1/technology/qr/base64/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"items": [{"data": "https://example.com"}, {"data": "Hello, World!"}]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/qr/base64/batch"
+        url = "https://requiems.xyz/v1/technology/qr/base64/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -322,7 +322,7 @@ endpoints:
             if item.get("image"):
                 print(f"{item['data']}: {item['image'][:20]}...")
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/technology/qr/base64/batch', {
+        const response = await fetch('https://requiems.xyz/v1/technology/qr/base64/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -346,7 +346,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/qr/base64/batch')
+        uri = URI('https://requiems.xyz/v1/technology/qr/base64/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

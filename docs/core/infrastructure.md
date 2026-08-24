@@ -2,18 +2,20 @@
 
 ## Production
 
-`api.requiems.xyz` is an orange-cloud DNS record pointing to the VPS. Cloudflare
-terminates the public edge and requires the Cloudflare Origin Pull client
-certificate at Caddy. Caddy forwards only to the Kamal Go proxy. The Go process
-listens on port 8080 inside the application network.
+`requiems.xyz` is an orange-cloud DNS record pointing to the VPS and is the
+public Go API host. Cloudflare terminates the public edge and requires the
+Cloudflare Origin Pull client certificate at Caddy. Caddy forwards only to the
+Kamal Go proxy. The Go process listens on port 8080 inside the application
+network.
 
 Cloudflare remains responsible for DNS, proxying, WAF, DDoS protection, TLS, and
 AOP. It does not run application code and does not store API keys or usage.
 
 The other production applications are:
 
-- Rails dashboard at `requiems.xyz`
-- MCP server at `mcp.requiems.xyz`
+- Rails dashboard at `requiemsapi.com` (no AOP — this host has never been
+  behind Cloudflare mTLS, only the API host has)
+- MCP server at `mcp.requiems.xyz`, upstream `https://requiems.xyz`
 - Postgres and Redis as Kamal accessories on the VPS
 - LanguageTool as an API accessory
 

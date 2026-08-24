@@ -3,7 +3,7 @@
 require "test_helper"
 
 class ApiDocs::SnippetGeneratorTest < ActiveSupport::TestCase
-  BASE_URL = "https://api.requiems.xyz"
+  BASE_URL = "https://requiems.xyz"
 
   # ---------------------------------------------------------------------------
   # Helpers

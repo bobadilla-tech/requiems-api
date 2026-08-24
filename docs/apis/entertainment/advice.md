@@ -45,7 +45,7 @@ None required.
 ### cURL
 
 ```bash
-curl https://api.requiems.xyz/v1/entertainment/advice \
+curl https://requiems.xyz/v1/entertainment/advice \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -54,7 +54,7 @@ curl https://api.requiems.xyz/v1/entertainment/advice \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/entertainment/advice"
+url = "https://requiems.xyz/v1/entertainment/advice"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)
@@ -66,7 +66,7 @@ print(f"Advice #{advice['id']}: {advice['advice']}")
 
 ```javascript
 const response = await fetch(
-  "https://api.requiems.xyz/v1/entertainment/advice",
+  "https://requiems.xyz/v1/entertainment/advice",
   {
     headers: {
       "requiems-api-key": "YOUR_API_KEY",
@@ -84,7 +84,7 @@ console.log(`Advice #${data.id}: ${data.advice}`);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/entertainment/advice')
+uri = URI('https://requiems.xyz/v1/entertainment/advice')
 request = Net::HTTP::Get.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 

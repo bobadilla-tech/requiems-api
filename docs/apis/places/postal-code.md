@@ -37,15 +37,15 @@ Data sourced from the
 
 ```bash
 # US zip code (default)
-curl "https://api.requiems.xyz/v1/places/postal/10001" \
+curl "https://requiems.xyz/v1/places/postal/10001" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # UK postcode
-curl "https://api.requiems.xyz/v1/places/postal/SW1A1AA?country=GB" \
+curl "https://requiems.xyz/v1/places/postal/SW1A1AA?country=GB" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # German postcode
-curl "https://api.requiems.xyz/v1/places/postal/10115?country=DE" \
+curl "https://requiems.xyz/v1/places/postal/10115?country=DE" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 

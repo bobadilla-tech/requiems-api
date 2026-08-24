@@ -1,7 +1,7 @@
 api_id: identity-risk
 api_name: Identity & Risk System
 description: Compose email, phone, IP, and behavioral signals into a single risk decision. One call returns whether a user is real, safe, and trustworthy.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Block fake signups, disposable emails, and high-risk IPs at registration
@@ -111,7 +111,7 @@ endpoints:
         description: Missing or invalid API key in the requiems-api-key header
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/signup/protect \
+        curl -X POST https://requiems.xyz/v1/systems/signup/protect \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -122,7 +122,7 @@ endpoints:
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/systems/signup/protect"
+        url = "https://requiems.xyz/v1/systems/signup/protect"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         payload = {
             "email": "user@tempmail.io",
@@ -138,7 +138,7 @@ endpoints:
         else:
             print("User passed risk check")
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/systems/signup/protect', {
+        const response = await fetch('https://requiems.xyz/v1/systems/signup/protect', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -159,7 +159,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/signup/protect')
+        uri = URI('https://requiems.xyz/v1/systems/signup/protect')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -238,7 +238,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/risk/score \
+        curl -X POST https://requiems.xyz/v1/systems/risk/score \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"email": "user@example.com", "ip_address": "45.33.32.156"}'
@@ -246,14 +246,14 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/risk/score",
+            "https://requiems.xyz/v1/systems/risk/score",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"email": "user@example.com", "ip_address": "45.33.32.156"}
         )
         data = response.json()["data"]
         print(f"risk_score={data['risk_score']}, is_safe={data['is_safe']}")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/risk/score', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/risk/score', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: 'user@example.com', ip_address: '45.33.32.156' })
@@ -345,7 +345,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/user/verify \
+        curl -X POST https://requiems.xyz/v1/systems/user/verify \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"email": "user@example.com", "ip_address": "45.33.32.156"}'
@@ -353,14 +353,14 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/user/verify",
+            "https://requiems.xyz/v1/systems/user/verify",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"email": "user@example.com", "ip_address": "45.33.32.156"}
         )
         data = response.json()["data"]
         print(f"verified={data['verified']}, confidence={data['confidence']}")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/user/verify', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/user/verify', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: 'user@example.com', ip_address: '45.33.32.156' })

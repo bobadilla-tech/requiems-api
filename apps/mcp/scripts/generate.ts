@@ -7,7 +7,7 @@
 //
 // Usage:
 //   bun run scripts/generate.ts \
-//     --input https://api.requiems.xyz/openapi.json \
+//     --input https://requiems.xyz/openapi.json \
 //     --output generated
 //
 //   bun run scripts/generate.ts --input ./openapi.json --output generated

@@ -1,4 +1,4 @@
-const SPEC_URL = "https://api.requiems.xyz/openapi.json";
+const SPEC_URL = "https://requiems.xyz/openapi.json";
 
 console.log(`Downloading OpenAPI spec from ${SPEC_URL}...`);
 

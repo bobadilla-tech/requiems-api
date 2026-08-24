@@ -3,7 +3,7 @@ api_name: Sudoku
 description: >-
   Generate Sudoku puzzles of varying difficulty levels. Each response includes the puzzle grid (with 0 for empty cells)
   and the complete solution.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Puzzle and brain-training apps
@@ -100,14 +100,14 @@ endpoints:
         description: Invalid or revoked API key
     code_examples:
       curl: |
-        curl -X POST "https://api.requiems.xyz/v1/entertainment/sudoku/batch" \
+        curl -X POST "https://requiems.xyz/v1/entertainment/sudoku/batch" \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"puzzles":["easy","medium","hard"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/sudoku/batch"
+        url = "https://requiems.xyz/v1/entertainment/sudoku/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -119,7 +119,7 @@ endpoints:
             print(puzzle["difficulty"], puzzle["puzzle"])
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/sudoku/batch',
+          'https://requiems.xyz/v1/entertainment/sudoku/batch',
           {
             method: 'POST',
             headers: {
@@ -136,7 +136,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/sudoku/batch')
+        uri = URI('https://requiems.xyz/v1/entertainment/sudoku/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -213,12 +213,12 @@ endpoints:
         description: Invalid or revoked API key
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/entertainment/sudoku?difficulty=hard" \
+        curl "https://requiems.xyz/v1/entertainment/sudoku?difficulty=hard" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/sudoku"
+        url = "https://requiems.xyz/v1/entertainment/sudoku"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         params = {"difficulty": "hard"}
 
@@ -227,7 +227,7 @@ endpoints:
         print(data["data"]["puzzle"])
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/sudoku?difficulty=hard',
+          'https://requiems.xyz/v1/entertainment/sudoku?difficulty=hard',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const { data } = await response.json();
@@ -236,7 +236,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/sudoku')
+        uri = URI('https://requiems.xyz/v1/entertainment/sudoku')
         uri.query = URI.encode_www_form(difficulty: 'hard')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'

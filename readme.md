@@ -1,6 +1,6 @@
 <p align="center">
   <p align="center">
-    <a href="https://requiems.xyz/?utm_source=github&utm_medium=logo" target="_blank">
+    <a href="https://requiemsapi.com/?utm_source=github&utm_medium=logo" target="_blank">
       <img src="https://raw.githubusercontent.com/bobadilla-tech/requiems-api/refs/heads/main/apps/dashboard/app/assets/images/logo.png" alt="Requiems API" width="280" />
     </a>
   </p>
@@ -21,8 +21,8 @@ Stop rebuilding the same backend plumbing for every SaaS product.
 
 [![CI](https://github.com/bobadilla-tech/requiems-api/actions/workflows/ci.yml/badge.svg)](https://github.com/bobadilla-tech/requiems-api/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bobadilla-tech/requiems-api/graph/badge.svg?token=N3O0R9J0SN)](https://codecov.io/gh/bobadilla-tech/requiems-api)
-[![Get Started](https://img.shields.io/badge/Get_Started-→-blue)](https://requiems.xyz/en)
-[![Documentation](https://img.shields.io/badge/Documentation-📖-green)](https://requiems.xyz/en/apis)
+[![Get Started](https://img.shields.io/badge/Get_Started-→-blue)](https://requiemsapi.com/en)
+[![Documentation](https://img.shields.io/badge/Documentation-📖-green)](https://requiemsapi.com/en/apis)
 
 ## Systems
 
@@ -91,20 +91,20 @@ parallel, then hands back one structured result.
   [requiems-api-clients](https://github.com/bobadilla-tech/requiems-api-clients)
 - **MCP server & Agent Skills** - connect via MCP or install skills straight
   into Claude and other coding agents:
-  [requiems.xyz/ai](https://requiems.xyz/en/ai)
+  [requiemsapi.com/ai](https://requiemsapi.com/en/ai)
 
 ## Quick Start
 
-Grab an API key at [requiems.xyz](https://requiems.xyz), then try it:
+Grab an API key at [requiemsapi.com](https://requiemsapi.com), then try it:
 
 ```bash
 # Example: Protect a signup with one call
-curl -X POST https://api.requiems.xyz/v1/signup/protect \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+curl -X POST https://requiems.xyz/v1/signup/protect \
+  -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"email": "user@tempmail.io", "ip_address": "45.33.32.156"}'
 ```
 
-Explore the full catalog in the [documentation](https://requiems.xyz/en/apis),
-or start with the [systems overview](https://requiems.xyz/en/systems) to pick
+Explore the full catalog in the [documentation](https://requiemsapi.com/en/apis),
+or start with the [systems overview](https://requiemsapi.com/en/systems) to pick
 the problem you want to solve.

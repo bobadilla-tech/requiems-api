@@ -3,7 +3,7 @@
 api_id: timezone
 api_name: Timezone
 description: Get timezone information for any location by geographic coordinates or city name. Returns the IANA timezone identifier, UTC offset, current time, and DST status.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -67,18 +67,18 @@ endpoints:
     code_examples:
       curl: |
         # Lookup by coordinates
-        curl "https://api.requiems.xyz/v1/places/timezone?lat=51.5&lon=-0.1" \
+        curl "https://requiems.xyz/v1/places/timezone?lat=51.5&lon=-0.1" \
           -H "requiems-api-key: YOUR_API_KEY"
 
         # Lookup by city
-        curl "https://api.requiems.xyz/v1/places/timezone?city=Tokyo" \
+        curl "https://requiems.xyz/v1/places/timezone?city=Tokyo" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
         # Lookup by coordinates
-        url = "https://api.requiems.xyz/v1/places/timezone"
+        url = "https://requiems.xyz/v1/places/timezone"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, params={"lat": 51.5, "lon": -0.1}, headers=headers)
@@ -91,7 +91,7 @@ endpoints:
       javascript: |
         // Lookup by coordinates
         const response = await fetch(
-          'https://api.requiems.xyz/v1/places/timezone?lat=51.5&lon=-0.1',
+          'https://requiems.xyz/v1/places/timezone?lat=51.5&lon=-0.1',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -99,7 +99,7 @@ endpoints:
 
         // Lookup by city
         const cityResponse = await fetch(
-          'https://api.requiems.xyz/v1/places/timezone?city=Tokyo',
+          'https://requiems.xyz/v1/places/timezone?city=Tokyo',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const cityData = await cityResponse.json();
@@ -110,7 +110,7 @@ endpoints:
         require 'json'
 
         # Lookup by coordinates
-        uri = URI('https://api.requiems.xyz/v1/places/timezone')
+        uri = URI('https://requiems.xyz/v1/places/timezone')
         uri.query = URI.encode_www_form(lat: 51.5, lon: -0.1)
 
         request = Net::HTTP::Get.new(uri)
@@ -204,14 +204,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/places/timezone/batch \
+        curl -X POST https://requiems.xyz/v1/places/timezone/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"items": [{"timezone": "America/New_York"}, {"city": "Tokyo"}, {"lat": 51.5, "lon": -0.1}]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/timezone/batch"
+        url = "https://requiems.xyz/v1/places/timezone/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -229,7 +229,7 @@ endpoints:
             if item.get("info"):
                 print(item["info"]["timezone"], item["info"]["offset"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/places/timezone/batch', {
+        const response = await fetch('https://requiems.xyz/v1/places/timezone/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -252,7 +252,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/timezone/batch')
+        uri = URI('https://requiems.xyz/v1/places/timezone/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

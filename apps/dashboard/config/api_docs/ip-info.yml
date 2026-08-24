@@ -3,7 +3,7 @@ api_name: IP Geolocation
 description: >-
   Get geolocation data for any IP address including country, city, ISP, and VPN detection. Use this endpoint to enrich
   user data with location information for personalization, fraud detection, or content localization.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - User location personalization
@@ -62,18 +62,18 @@ endpoints:
         description: Unexpected server error
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/networking/ip" \
+        curl "https://requiems.xyz/v1/networking/ip" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip"
+        url = "https://requiems.xyz/v1/networking/ip"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         });
 
@@ -82,7 +82,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip')
+        uri = URI('https://requiems.xyz/v1/networking/ip')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -144,18 +144,18 @@ endpoints:
         description: Unexpected server error
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/networking/ip/8.8.8.8" \
+        curl "https://requiems.xyz/v1/networking/ip/8.8.8.8" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/8.8.8.8"
+        url = "https://requiems.xyz/v1/networking/ip/8.8.8.8"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/8.8.8.8', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/8.8.8.8', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         });
 
@@ -164,7 +164,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/8.8.8.8')
+        uri = URI('https://requiems.xyz/v1/networking/ip/8.8.8.8')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -229,14 +229,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/networking/ip/info/batch \
+        curl -X POST https://requiems.xyz/v1/networking/ip/info/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"ips": ["8.8.8.8", "1.1.1.1"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/info/batch"
+        url = "https://requiems.xyz/v1/networking/ip/info/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -248,7 +248,7 @@ endpoints:
             if item.get("result"):
                 print(item["ip"], item["result"]["country"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/info/batch', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/info/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -265,7 +265,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/info/batch')
+        uri = URI('https://requiems.xyz/v1/networking/ip/info/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

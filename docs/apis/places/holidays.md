@@ -70,11 +70,11 @@ a list of national holidays with their dates.
 
 ```bash
 # Get US holidays for 2025
-curl "https://api.requiems.xyz/v1/places/holidays?country=US&year=2025" \
+curl "https://requiems.xyz/v1/places/holidays?country=US&year=2025" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # Get UK holidays for 2025
-curl "https://api.requiems.xyz/v1/places/holidays?country=GB&year=2025" \
+curl "https://requiems.xyz/v1/places/holidays?country=GB&year=2025" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -83,7 +83,7 @@ curl "https://api.requiems.xyz/v1/places/holidays?country=GB&year=2025" \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/places/holidays"
+url = "https://requiems.xyz/v1/places/holidays"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 params = {"country": "US", "year": 2025}
 
@@ -103,7 +103,7 @@ const params = new URLSearchParams({
 });
 
 const response = await fetch(
-  `https://api.requiems.xyz/v1/places/holidays?${params}`,
+  `https://requiems.xyz/v1/places/holidays?${params}`,
   {
     headers: {
       "requiems-api-key": "YOUR_API_KEY",
@@ -122,7 +122,7 @@ data.holidays.forEach((h) => console.log(`  ${h.date}: ${h.name}`));
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/places/holidays')
+uri = URI('https://requiems.xyz/v1/places/holidays')
 uri.query = URI.encode_www_form(country: 'US', year: 2025)
 
 request = Net::HTTP::Get.new(uri)

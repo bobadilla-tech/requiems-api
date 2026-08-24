@@ -69,7 +69,7 @@ Returns a daily horoscope reading for the given zodiac sign.
 ### cURL
 
 ```bash
-curl https://api.requiems.xyz/v1/entertainment/horoscope/aries \
+curl https://requiems.xyz/v1/entertainment/horoscope/aries \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -78,7 +78,7 @@ curl https://api.requiems.xyz/v1/entertainment/horoscope/aries \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/entertainment/horoscope/aries"
+url = "https://requiems.xyz/v1/entertainment/horoscope/aries"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)
@@ -91,7 +91,7 @@ print(f"Lucky number: {result['lucky_number']}, Mood: {result['mood']}")
 
 ```javascript
 const response = await fetch(
-  "https://api.requiems.xyz/v1/entertainment/horoscope/aries",
+  "https://requiems.xyz/v1/entertainment/horoscope/aries",
   { headers: { "requiems-api-key": "YOUR_API_KEY" } },
 );
 const { data } = await response.json();
@@ -105,7 +105,7 @@ console.log(`Lucky number: ${data.lucky_number}, Mood: ${data.mood}`);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/entertainment/horoscope/aries')
+uri = URI('https://requiems.xyz/v1/entertainment/horoscope/aries')
 request = Net::HTTP::Get.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 

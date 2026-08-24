@@ -1,7 +1,7 @@
 api_id: ip-asn
 api_name: ASN Lookup
 description: Look up Autonomous System Number (ASN), organization, ISP, domain, and network route information for any IP address. Use this endpoint to identify which organization or ISP owns an IP address and understand the network topology.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -70,20 +70,20 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/networking/ip/asn" \
+        curl "https://requiems.xyz/v1/networking/ip/asn" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/asn"
+        url = "https://requiems.xyz/v1/networking/ip/asn"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
 
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/asn', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/asn', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         });
 
@@ -93,7 +93,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/asn')
+        uri = URI('https://requiems.xyz/v1/networking/ip/asn')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -165,20 +165,20 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/networking/ip/asn/8.8.8.8" \
+        curl "https://requiems.xyz/v1/networking/ip/asn/8.8.8.8" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/asn/8.8.8.8"
+        url = "https://requiems.xyz/v1/networking/ip/asn/8.8.8.8"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
 
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/asn/8.8.8.8', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/asn/8.8.8.8', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         });
 
@@ -188,7 +188,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/asn/8.8.8.8')
+        uri = URI('https://requiems.xyz/v1/networking/ip/asn/8.8.8.8')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 
@@ -254,14 +254,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/networking/ip/asn/batch \
+        curl -X POST https://requiems.xyz/v1/networking/ip/asn/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"ips": ["8.8.8.8", "1.1.1.1"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/asn/batch"
+        url = "https://requiems.xyz/v1/networking/ip/asn/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -273,7 +273,7 @@ endpoints:
             if item.get("result"):
                 print(item["ip"], item["result"]["asn"], item["result"]["org"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/asn/batch', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/asn/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -290,7 +290,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/asn/batch')
+        uri = URI('https://requiems.xyz/v1/networking/ip/asn/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

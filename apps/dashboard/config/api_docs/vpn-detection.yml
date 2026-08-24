@@ -1,7 +1,7 @@
 api_id: vpn-detection
 api_name: VPN & Proxy Detection
 description: Detect if an IP address belongs to a VPN, proxy, Tor exit node, or hosting provider. Returns threat scores and fraud indicators for fraud prevention, risk assessment, and bot detection.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -91,20 +91,20 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/networking/ip/vpn/8.8.8.8" \
+        curl "https://requiems.xyz/v1/networking/ip/vpn/8.8.8.8" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/networking/ip/vpn/8.8.8.8"
+        url = "https://requiems.xyz/v1/networking/ip/vpn/8.8.8.8"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
         print(response.json())
 
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/networking/ip/vpn/8.8.8.8', {
+        const response = await fetch('https://requiems.xyz/v1/networking/ip/vpn/8.8.8.8', {
           headers: { 'requiems-api-key': 'YOUR_API_KEY' }
         });
 
@@ -114,7 +114,7 @@ endpoints:
       ruby: |
         require 'net/http'
 
-        uri = URI('https://api.requiems.xyz/v1/networking/ip/vpn/8.8.8.8')
+        uri = URI('https://requiems.xyz/v1/networking/ip/vpn/8.8.8.8')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 

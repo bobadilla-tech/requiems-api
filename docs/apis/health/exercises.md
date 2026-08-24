@@ -58,7 +58,7 @@ exercises match the given filters.
 
 ```bash
 # Random bodyweight back exercise
-curl "https://api.requiems.xyz/v1/health/exercises/random?body_part=back&equipment=body+weight" \
+curl "https://requiems.xyz/v1/health/exercises/random?body_part=back&equipment=body+weight" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -70,7 +70,7 @@ Fetch up to 50 exercises in a single request. Results are returned in the same
 order as the input IDs. IDs that do not exist are silently skipped.
 
 ```bash
-curl -X POST "https://api.requiems.xyz/v1/health/exercises/batch" \
+curl -X POST "https://requiems.xyz/v1/health/exercises/batch" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"ids": [1, 7, 42]}'

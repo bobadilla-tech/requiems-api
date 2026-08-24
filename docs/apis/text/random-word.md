@@ -49,7 +49,7 @@ None required.
 ### cURL
 
 ```bash
-curl https://api.requiems.xyz/v1/text/words/random \
+curl https://requiems.xyz/v1/text/words/random \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -58,7 +58,7 @@ curl https://api.requiems.xyz/v1/text/words/random \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/text/words/random"
+url = "https://requiems.xyz/v1/text/words/random"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)
@@ -70,7 +70,7 @@ print(f"Definition: {word_data['definition']}")
 ### JavaScript
 
 ```javascript
-const response = await fetch("https://api.requiems.xyz/v1/text/words/random", {
+const response = await fetch("https://requiems.xyz/v1/text/words/random", {
   headers: {
     "requiems-api-key": "YOUR_API_KEY",
   },
@@ -87,7 +87,7 @@ console.log(`Definition: ${data.definition}`);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/text/words/random')
+uri = URI('https://requiems.xyz/v1/text/words/random')
 request = Net::HTTP::Get.new(uri)
 request['requiems-api-key'] = 'YOUR_API_KEY'
 

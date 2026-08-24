@@ -1,7 +1,7 @@
 api_id: payments-intelligence
 api_name: Payments Intelligence System
 description: Validate financial identifiers and score transaction risk in a single call. Combines BIN lookup, IBAN parsing, SWIFT verification, and IP intelligence.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Validate card BIN, IBAN, and SWIFT data before submitting to a payment processor
@@ -108,7 +108,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/payment/validate \
+        curl -X POST https://requiems.xyz/v1/systems/payment/validate \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -120,7 +120,7 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/payment/validate",
+            "https://requiems.xyz/v1/systems/payment/validate",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"bin": "424242", "iban": "DE89370400440532013000", "swift": "DEUTDEDB"}
         )
@@ -131,7 +131,7 @@ endpoints:
         else:
             print("All identifiers consistent")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/payment/validate', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/payment/validate', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ bin: '424242', iban: 'DE89370400440532013000', swift: 'DEUTDEDB' })
@@ -144,7 +144,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/payment/validate')
+        uri = URI('https://requiems.xyz/v1/systems/payment/validate')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -242,7 +242,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/transaction/risk \
+        curl -X POST https://requiems.xyz/v1/systems/transaction/risk \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{
@@ -255,7 +255,7 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/transaction/risk",
+            "https://requiems.xyz/v1/systems/transaction/risk",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={
                 "card_bin": "424242",
@@ -269,7 +269,7 @@ endpoints:
         if data["flags"]:
             print("Flags:", data["flags"])
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/transaction/risk', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/transaction/risk', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({

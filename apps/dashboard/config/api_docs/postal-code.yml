@@ -1,7 +1,7 @@
 api_id: postal-code
 api_name: Postal Code
 description: Look up city, state, and geographic coordinates for any postal code worldwide. Covers 100+ countries using the GeoNames postal code dataset.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -82,17 +82,17 @@ endpoints:
     code_examples:
       curl: |
         # US zip code (default country)
-        curl "https://api.requiems.xyz/v1/places/postal/10001" \
+        curl "https://requiems.xyz/v1/places/postal/10001" \
           -H "requiems-api-key: YOUR_API_KEY"
 
         # UK postcode
-        curl "https://api.requiems.xyz/v1/places/postal/SW1A1AA?country=GB" \
+        curl "https://requiems.xyz/v1/places/postal/SW1A1AA?country=GB" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/postal/10001"
+        url = "https://requiems.xyz/v1/places/postal/10001"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, params={"country": "US"}, headers=headers)
@@ -101,7 +101,7 @@ endpoints:
 
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/places/postal/10001?country=US',
+          'https://requiems.xyz/v1/places/postal/10001?country=US',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -111,7 +111,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/postal/10001')
+        uri = URI('https://requiems.xyz/v1/places/postal/10001')
         uri.query = URI.encode_www_form(country: 'US')
 
         request = Net::HTTP::Get.new(uri)
@@ -196,14 +196,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/places/postal/batch \
+        curl -X POST https://requiems.xyz/v1/places/postal/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"items": [{"code": "10001", "country": "US"}, {"code": "SW1A1AA", "country": "GB"}]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/postal/batch"
+        url = "https://requiems.xyz/v1/places/postal/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -220,7 +220,7 @@ endpoints:
             if item["found"]:
                 print(item["code"], item["result"]["city"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/places/postal/batch', {
+        const response = await fetch('https://requiems.xyz/v1/places/postal/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -242,7 +242,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/postal/batch')
+        uri = URI('https://requiems.xyz/v1/places/postal/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

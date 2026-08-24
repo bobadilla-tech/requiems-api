@@ -13,7 +13,7 @@ above 15,000 from the [GeoNames dataset](https://www.geonames.org/).
 | `city`    | path     | Yes      | City name (case-insensitive) |
 
 ```bash
-curl "https://api.requiems.xyz/v1/places/cities/london" \
+curl "https://requiems.xyz/v1/places/cities/london" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 

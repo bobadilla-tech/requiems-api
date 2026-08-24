@@ -44,7 +44,7 @@ Check if a single email address is disposable.
 
 ```bash
 # Production
-curl -X POST https://api.requiems.xyz/v1/networking/disposable/check \
+curl -X POST https://requiems.xyz/v1/networking/disposable/check \
   -H "Content-Type: application/json" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -d '{"email": "user@mailinator.com"}'
@@ -101,7 +101,7 @@ batch.
 
 ```bash
 # Production
-curl -X POST https://api.requiems.xyz/v1/networking/disposable/batch \
+curl -X POST https://requiems.xyz/v1/networking/disposable/batch \
   -H "Content-Type: application/json" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -d '{
@@ -148,7 +148,7 @@ Check if a specific domain is in the disposable list.
 
 ```bash
 # Production
-curl https://api.requiems.xyz/v1/networking/disposable/domain/guerrillamail.com \
+curl https://requiems.xyz/v1/networking/disposable/domain/guerrillamail.com \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -191,11 +191,11 @@ Get a paginated list of all disposable email domains in the blocklist.
 
 ```bash
 # Production - Get first page (default 100 results)
-curl https://api.requiems.xyz/v1/networking/disposable/domains \
+curl https://requiems.xyz/v1/networking/disposable/domains \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # Production - Get page 2 with 50 results per page
-curl "https://api.requiems.xyz/v1/networking/disposable/domains?page=2&per_page=50" \
+curl "https://requiems.xyz/v1/networking/disposable/domains?page=2&per_page=50" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -230,7 +230,7 @@ Get statistics about the disposable domains blocklist.
 
 ```bash
 # Production
-curl https://api.requiems.xyz/v1/networking/disposable/stats \
+curl https://requiems.xyz/v1/networking/disposable/stats \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -262,7 +262,7 @@ Prevent users from signing up with disposable email addresses:
 
 ```javascript
 const response = await fetch(
-  "https://api.requiems.xyz/v1/networking/disposable/check",
+  "https://requiems.xyz/v1/networking/disposable/check",
   {
     method: "POST",
     headers: {
@@ -290,7 +290,7 @@ const emails = [
 ];
 
 const response = await fetch(
-  "https://api.requiems.xyz/v1/networking/disposable/batch",
+  "https://requiems.xyz/v1/networking/disposable/batch",
   {
     method: "POST",
     headers: {
@@ -314,7 +314,7 @@ Check if a domain should be blocked:
 ```javascript
 const domain = email.split("@")[1];
 const response = await fetch(
-  `https://api.requiems.xyz/v1/networking/disposable/domain/${domain}`,
+  `https://requiems.xyz/v1/networking/disposable/domain/${domain}`,
   {
     headers: { "requiems-api-key": "YOUR_API_KEY" },
   },

@@ -51,7 +51,7 @@ Encode a plain-text string to Base64.
 **Example:**
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+curl -X POST https://requiems.xyz/v1/technology/base64/encode \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value": "Hello, world!"}'
@@ -95,7 +95,7 @@ Decode a Base64-encoded string back to plain text.
 **Example:**
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+curl -X POST https://requiems.xyz/v1/technology/base64/decode \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value": "SGVsbG8sIHdvcmxkIQ=="}'
@@ -150,7 +150,7 @@ Encode multiple strings to Base64 in a single request.
 **Example**
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/technology/base64/encode/batch \
+curl -X POST https://requiems.xyz/v1/technology/base64/encode/batch \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -266,19 +266,19 @@ where `+` and `/` are problematic.
 
 ```bash
 # Encode
-curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+curl -X POST https://requiems.xyz/v1/technology/base64/encode \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value": "Hello, world!"}'
 
 # Decode
-curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+curl -X POST https://requiems.xyz/v1/technology/base64/decode \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value": "SGVsbG8sIHdvcmxkIQ=="}'
 
 # URL-safe variant
-curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+curl -X POST https://requiems.xyz/v1/technology/base64/encode \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"value": "Hello, world!", "variant": "url"}'
@@ -289,7 +289,7 @@ curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
 ```python
 import requests
 
-url_base = "https://api.requiems.xyz/v1/technology/base64"
+url_base = "https://requiems.xyz/v1/technology/base64"
 headers = {
     "requiems-api-key": "YOUR_API_KEY",
     "Content-Type": "application/json",
@@ -309,7 +309,7 @@ print(f"Decoded: {decoded}")  # Hello, world!
 ### JavaScript
 
 ```javascript
-const BASE = "https://api.requiems.xyz/v1/technology/base64";
+const BASE = "https://requiems.xyz/v1/technology/base64";
 const headers = {
   "requiems-api-key": "YOUR_API_KEY",
   "Content-Type": "application/json",
@@ -341,7 +341,7 @@ require 'net/http'
 require 'json'
 
 def base64_request(path, payload)
-  uri = URI("https://api.requiems.xyz/v1/technology/base64/#{path}")
+  uri = URI("https://requiems.xyz/v1/technology/base64/#{path}")
   req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json', 'requiems-api-key' => 'YOUR_API_KEY')
   req.body = payload.to_json
   Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }

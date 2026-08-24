@@ -1,7 +1,7 @@
 api_id: base64
 api_name: Base64 Encode / Decode
 description: Encode strings to Base64 and decode Base64 back to plain text. Supports standard and URL-safe (base64url) variants.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Encode binary data for safe transmission in JSON or HTML
@@ -55,27 +55,27 @@ endpoints:
         description: Validation constraint on the variant field (must be standard or url)
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/encode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "Hello, world!"}'
 
         # URL-safe variant
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/encode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "Hello, world!", "variant": "url"}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/base64/encode"
+        url = "https://requiems.xyz/v1/technology/base64/encode"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         payload = {"value": "Hello, world!"}
 
         response = requests.post(url, json=payload, headers=headers)
         print(response.json()["data"]["result"])  # SGVsbG8sIHdvcmxkIQ==
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/technology/base64/encode', {
+        const response = await fetch('https://requiems.xyz/v1/technology/base64/encode', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -90,7 +90,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/base64/encode')
+        uri = URI('https://requiems.xyz/v1/technology/base64/encode')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -141,20 +141,20 @@ endpoints:
         description: The value is not valid Base64 and cannot be decoded
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/decode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "SGVsbG8sIHdvcmxkIQ=="}'
 
         # URL-safe variant
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/decode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "SGVsbG8sIHdvcmxkIQ==", "variant": "url"}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/technology/base64/decode"
+        url = "https://requiems.xyz/v1/technology/base64/decode"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
         payload = {"value": "SGVsbG8sIHdvcmxkIQ=="}
 
@@ -166,7 +166,7 @@ endpoints:
         else:
             print(f"Error: {result['error']}")  # invalid_base64
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/technology/base64/decode', {
+        const response = await fetch('https://requiems.xyz/v1/technology/base64/decode', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -186,7 +186,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/base64/decode')
+        uri = URI('https://requiems.xyz/v1/technology/base64/decode')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

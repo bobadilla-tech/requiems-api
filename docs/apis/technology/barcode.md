@@ -98,7 +98,7 @@ request. Results are returned in the same order as the input.
 ### Batch Request
 
 ```bash
-curl -X POST "https://api.requiems.xyz/v1/technology/barcode/batch" \
+curl -X POST "https://requiems.xyz/v1/technology/barcode/batch" \
   -H "requiems-api-key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -120,7 +120,7 @@ curl -X POST "https://api.requiems.xyz/v1/technology/barcode/batch" \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/technology/barcode/batch"
+url = "https://requiems.xyz/v1/technology/barcode/batch"
 
 response = requests.post(
     url,

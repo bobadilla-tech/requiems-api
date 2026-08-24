@@ -1,7 +1,7 @@
 api_id: geocode
 api_name: Geocoding
 description: Convert human-readable addresses into geographic coordinates (geocoding) and convert coordinates back into addresses (reverse geocoding). Powered by OpenStreetMap via the Nominatim API.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -74,13 +74,13 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/places/geocode?address=1600+Pennsylvania+Ave+NW" \
+        curl "https://requiems.xyz/v1/places/geocode?address=1600+Pennsylvania+Ave+NW" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/geocode"
+        url = "https://requiems.xyz/v1/places/geocode"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, params={"address": "1600 Pennsylvania Ave NW"}, headers=headers)
@@ -90,7 +90,7 @@ endpoints:
       javascript: |
         const params = new URLSearchParams({ address: '1600 Pennsylvania Ave NW' });
         const response = await fetch(
-          `https://api.requiems.xyz/v1/places/geocode?${params}`,
+          `https://requiems.xyz/v1/places/geocode?${params}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -100,7 +100,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/geocode')
+        uri = URI('https://requiems.xyz/v1/places/geocode')
         uri.query = URI.encode_www_form(address: '1600 Pennsylvania Ave NW')
 
         request = Net::HTTP::Get.new(uri)
@@ -176,13 +176,13 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/places/reverse-geocode?lat=38.8977&lon=-77.0365" \
+        curl "https://requiems.xyz/v1/places/reverse-geocode?lat=38.8977&lon=-77.0365" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/reverse-geocode"
+        url = "https://requiems.xyz/v1/places/reverse-geocode"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, params={"lat": 38.8977, "lon": -77.0365}, headers=headers)
@@ -192,7 +192,7 @@ endpoints:
       javascript: |
         const params = new URLSearchParams({ lat: 38.8977, lon: -77.0365 });
         const response = await fetch(
-          `https://api.requiems.xyz/v1/places/reverse-geocode?${params}`,
+          `https://requiems.xyz/v1/places/reverse-geocode?${params}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const data = await response.json();
@@ -202,7 +202,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/reverse-geocode')
+        uri = URI('https://requiems.xyz/v1/places/reverse-geocode')
         uri.query = URI.encode_www_form(lat: 38.8977, lon: -77.0365)
 
         request = Net::HTTP::Get.new(uri)
@@ -274,14 +274,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/places/geocode/batch \
+        curl -X POST https://requiems.xyz/v1/places/geocode/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"addresses": ["1600 Pennsylvania Ave NW, Washington DC", "Eiffel Tower, Paris"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/geocode/batch"
+        url = "https://requiems.xyz/v1/places/geocode/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -293,7 +293,7 @@ endpoints:
             if item.get("result"):
                 print(item["result"]["lat"], item["result"]["lon"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/places/geocode/batch', {
+        const response = await fetch('https://requiems.xyz/v1/places/geocode/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -312,7 +312,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/geocode/batch')
+        uri = URI('https://requiems.xyz/v1/places/geocode/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -401,14 +401,14 @@ endpoints:
         description: The request body is missing or malformed.
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/places/reverse-geocode/batch \
+        curl -X POST https://requiems.xyz/v1/places/reverse-geocode/batch \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"items": [{"lat": 38.8977, "lon": -77.0365}, {"lat": 48.8584, "lon": 2.2945}]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/places/reverse-geocode/batch"
+        url = "https://requiems.xyz/v1/places/reverse-geocode/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -425,7 +425,7 @@ endpoints:
             if item.get("result"):
                 print(item["result"]["address"])
       javascript: |
-        const response = await fetch('https://api.requiems.xyz/v1/places/reverse-geocode/batch', {
+        const response = await fetch('https://requiems.xyz/v1/places/reverse-geocode/batch', {
           method: 'POST',
           headers: {
             'requiems-api-key': 'YOUR_API_KEY',
@@ -447,7 +447,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/places/reverse-geocode/batch')
+        uri = URI('https://requiems.xyz/v1/places/reverse-geocode/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

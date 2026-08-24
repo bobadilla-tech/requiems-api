@@ -3,7 +3,7 @@ api_name: Chuck Norris Facts
 description: >-
   Get a random Chuck Norris fact from a curated built-in database. Every call returns a different fact selected with a
   cryptographically secure random number generator.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Entertainment widgets and fun sidebars
@@ -38,12 +38,12 @@ endpoints:
         description: The Chuck Norris fact text
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/entertainment/chuck-norris \
+        curl https://requiems.xyz/v1/entertainment/chuck-norris \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/entertainment/chuck-norris"
+        url = "https://requiems.xyz/v1/entertainment/chuck-norris"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
@@ -51,7 +51,7 @@ endpoints:
         print(f"[{result['id']}] {result['fact']}")
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/entertainment/chuck-norris',
+          'https://requiems.xyz/v1/entertainment/chuck-norris',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
         const { data } = await response.json();
@@ -60,7 +60,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/entertainment/chuck-norris')
+        uri = URI('https://requiems.xyz/v1/entertainment/chuck-norris')
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
 

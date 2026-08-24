@@ -1,7 +1,7 @@
 api_id: developer-utilities
 api_name: Developer Utilities
 description: Common developer tools available on the same API key as your production systems. QR codes, Base64 encoding, Markdown rendering, and more.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Generate QR codes for URLs, payment links, or product identifiers
@@ -75,13 +75,13 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/technology/qr/base64?data=https%3A%2F%2Frequiems.xyz&size=256" \
+        curl "https://requiems.xyz/v1/technology/qr/base64?data=https%3A%2F%2Frequiems.xyz&size=256" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import base64, requests
 
         response = requests.get(
-            "https://api.requiems.xyz/v1/technology/qr/base64",
+            "https://requiems.xyz/v1/technology/qr/base64",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             params={"data": "https://requiems.xyz", "size": 256, "recovery": "medium"}
         )
@@ -93,7 +93,7 @@ endpoints:
         print(f"QR saved: {data['width']}x{data['height']}px")
       javascript: |
         const { data } = await fetch(
-          'https://api.requiems.xyz/v1/technology/qr/base64?' +
+          'https://requiems.xyz/v1/technology/qr/base64?' +
           new URLSearchParams({ data: 'https://requiems.xyz', size: 256, recovery: 'medium' }),
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         ).then(r => r.json());
@@ -105,7 +105,7 @@ endpoints:
         require 'json'
         require 'base64'
 
-        uri = URI('https://api.requiems.xyz/v1/technology/qr/base64')
+        uri = URI('https://requiems.xyz/v1/technology/qr/base64')
         uri.query = URI.encode_www_form(data: 'https://requiems.xyz', size: 256)
 
         response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
@@ -163,7 +163,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/encode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/encode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "Hello, world!"}'
@@ -171,13 +171,13 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/technology/base64/encode",
+            "https://requiems.xyz/v1/technology/base64/encode",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"value": "Hello, world!"}
         )
         print(response.json()["data"]["result"])  # SGVsbG8sIHdvcmxkIQ==
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/technology/base64/encode', {
+        const { data } = await fetch('https://requiems.xyz/v1/technology/base64/encode', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ value: 'Hello, world!' })
@@ -233,7 +233,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/base64/decode \
+        curl -X POST https://requiems.xyz/v1/technology/base64/decode \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"value": "SGVsbG8sIHdvcmxkIQ=="}'
@@ -241,13 +241,13 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/technology/base64/decode",
+            "https://requiems.xyz/v1/technology/base64/decode",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"value": "SGVsbG8sIHdvcmxkIQ=="}
         )
         print(response.json()["data"]["result"])  # Hello, world!
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/technology/base64/decode', {
+        const { data } = await fetch('https://requiems.xyz/v1/technology/base64/decode', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ value: 'SGVsbG8sIHdvcmxkIQ==' })
@@ -292,7 +292,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/technology/markdown \
+        curl -X POST https://requiems.xyz/v1/technology/markdown \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"text": "# Hello\n\nThis is **bold** text."}'
@@ -300,13 +300,13 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/technology/markdown",
+            "https://requiems.xyz/v1/technology/markdown",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"text": "# Hello\n\nThis is **bold** text."}
         )
         print(response.json()["data"]["html"])
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/technology/markdown', {
+        const { data } = await fetch('https://requiems.xyz/v1/technology/markdown', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: '# Hello\n\nThis is **bold** text.' })

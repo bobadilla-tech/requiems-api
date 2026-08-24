@@ -39,7 +39,7 @@ Atomically increment a counter by 1 and return the updated value.
 **Example:**
 
 ```bash
-curl -X POST https://api.requiems.xyz/v1/technology/counter/page-views \
+curl -X POST https://requiems.xyz/v1/technology/counter/page-views \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -68,7 +68,7 @@ PostgreSQL on a cache miss and re-hydrates the cache automatically.
 **Example:**
 
 ```bash
-curl https://api.requiems.xyz/v1/technology/counter/page-views \
+curl https://requiems.xyz/v1/technology/counter/page-views \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -118,7 +118,7 @@ Invalid namespaces return `400 Bad Request`.
 
 ```bash
 # Increment on every page load
-curl -X POST https://api.requiems.xyz/v1/technology/counter/homepage-views \
+curl -X POST https://requiems.xyz/v1/technology/counter/homepage-views \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -127,7 +127,7 @@ curl -X POST https://api.requiems.xyz/v1/technology/counter/homepage-views \
 ```javascript
 // Increment whenever a feature is used
 await fetch(
-  "https://api.requiems.xyz/v1/technology/counter/dark-mode-enabled",
+  "https://requiems.xyz/v1/technology/counter/dark-mode-enabled",
   {
     method: "POST",
     headers: { "requiems-api-key": "YOUR_API_KEY" },
@@ -136,7 +136,7 @@ await fetch(
 
 // Read the current count
 const res = await fetch(
-  "https://api.requiems.xyz/v1/technology/counter/dark-mode-enabled",
+  "https://requiems.xyz/v1/technology/counter/dark-mode-enabled",
   { headers: { "requiems-api-key": "YOUR_API_KEY" } },
 );
 const { value } = await res.json();
@@ -150,7 +150,7 @@ import httpx
 
 def track_event(event_name: str):
     httpx.post(
-        f"https://api.requiems.xyz/v1/technology/counter/{event_name}",
+        f"https://requiems.xyz/v1/technology/counter/{event_name}",
         headers={"requiems-api-key": "YOUR_API_KEY"},
     )
 

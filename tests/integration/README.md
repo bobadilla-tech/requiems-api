@@ -1,7 +1,7 @@
 # Integration tests
 
 These black-box tests exercise the direct public API at
-`https://api.requiems.xyz` (or `http://localhost:8080` locally). They
+`https://requiems.xyz` (or `http://localhost:8080` locally). They
 verify health, missing/invalid API-key behavior, valid requests, usage headers,
 and response shapes.
 

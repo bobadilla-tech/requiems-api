@@ -1,7 +1,7 @@
 api_id: iban
 api_name: IBAN Validator
 description: Validate IBAN numbers and extract the bank code and account number. Supports all countries in the official SWIFT IBAN Registry. Returns a structured response for both valid and invalid IBANs — the valid field tells you whether the IBAN passed checksum validation.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 
 overview:
   use_cases:
@@ -72,18 +72,18 @@ endpoints:
 
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/finance/iban/DE89370400440532013000" \
+        curl "https://requiems.xyz/v1/finance/iban/DE89370400440532013000" \
           -H "requiems-api-key: YOUR_API_KEY"
 
         # With spaces (URL-encoded):
-        curl "https://api.requiems.xyz/v1/finance/iban/DE89%203704%200044%200532%200130%2000" \
+        curl "https://requiems.xyz/v1/finance/iban/DE89%203704%200044%200532%200130%2000" \
           -H "requiems-api-key: YOUR_API_KEY"
 
       python: |
         import requests
 
         iban = "DE89370400440532013000"
-        url = f"https://api.requiems.xyz/v1/finance/iban/{iban}"
+        url = f"https://requiems.xyz/v1/finance/iban/{iban}"
         headers = {"requiems-api-key": "YOUR_API_KEY"}
 
         response = requests.get(url, headers=headers)
@@ -99,7 +99,7 @@ endpoints:
       javascript: |
         const iban = "DE89370400440532013000";
         const response = await fetch(
-          `https://api.requiems.xyz/v1/finance/iban/${iban}`,
+          `https://requiems.xyz/v1/finance/iban/${iban}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         );
 
@@ -118,7 +118,7 @@ endpoints:
         require 'json'
 
         iban = "DE89370400440532013000"
-        uri = URI("https://api.requiems.xyz/v1/finance/iban/#{iban}")
+        uri = URI("https://requiems.xyz/v1/finance/iban/#{iban}")
 
         request = Net::HTTP::Get.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
@@ -197,14 +197,14 @@ endpoints:
         description: The numbers array is missing, empty, or contains more than 50 items.
     code_examples:
       curl: |
-        curl -X POST "https://api.requiems.xyz/v1/finance/iban/batch" \
+        curl -X POST "https://requiems.xyz/v1/finance/iban/batch" \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"numbers":["GB29NWBK60161331926819","DE89370400440532013000"]}'
       python: |
         import requests
 
-        url = "https://api.requiems.xyz/v1/finance/iban/batch"
+        url = "https://requiems.xyz/v1/finance/iban/batch"
         headers = {
             "requiems-api-key": "YOUR_API_KEY",
             "Content-Type": "application/json"
@@ -216,7 +216,7 @@ endpoints:
             print(result["iban"], result["valid"])
       javascript: |
         const response = await fetch(
-          'https://api.requiems.xyz/v1/finance/iban/batch',
+          'https://requiems.xyz/v1/finance/iban/batch',
           {
             method: 'POST',
             headers: {
@@ -233,7 +233,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/finance/iban/batch')
+        uri = URI('https://requiems.xyz/v1/finance/iban/batch')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'

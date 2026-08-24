@@ -74,7 +74,7 @@ export default class PerformanceReporter implements Reporter {
     console.log();
 
     const now = new Date().toISOString();
-    const baseUrl = process.env["API_BASE_URL"] ?? "https://api.requiems.xyz";
+    const baseUrl = process.env["API_BASE_URL"] ?? "https://requiems.xyz";
 
     // Write timestamped JSON report (always)
     try {

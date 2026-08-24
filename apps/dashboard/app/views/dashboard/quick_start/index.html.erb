@@ -84,7 +84,7 @@
           <%= t("dashboard.quick_start.step_3.body") %>
         </p>
 
-        <% first_call_example = "curl https://api.requiems.xyz/v1/text/advice \\\n  -H 'requiems-api-key: YOUR_API_KEY'" %>
+        <% first_call_example = "curl https://requiems.xyz/v1/text/advice \\\n  -H 'requiems-api-key: YOUR_API_KEY'" %>
         <div class="relative mb-3" data-controller="highlight">
           <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto"><code class="language-bash"><%= first_call_example %></code></pre>
           <button type="button"
@@ -119,10 +119,10 @@
 
         <%
           examples = {
-            "curl" => "curl https://api.requiems.xyz/v1/text/advice \\\n  -H 'requiems-api-key: YOUR_API_KEY'",
-            "javascript" => "const response = await fetch('https://api.requiems.xyz/v1/text/advice', {\n  headers: {\n    'requiems-api-key': 'YOUR_API_KEY'\n  }\n});\n\nconst data = await response.json();\nconsole.log(data);",
-            "python" => "import requests\n\nresponse = requests.get(\n    'https://api.requiems.xyz/v1/text/advice',\n    headers={'requiems-api-key': 'YOUR_API_KEY'}\n)\n\nprint(response.json())",
-            "go" => "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://api.requiems.xyz/v1/text/advice\", nil)\n\treq.Header.Set(\"requiems-api-key\", \"YOUR_API_KEY\")\n\n\tclient := &http.Client{}\n\tresp, _ := client.Do(req)\n\tdefer resp.Body.Close()\n\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}"
+            "curl" => "curl https://requiems.xyz/v1/text/advice \\\n  -H 'requiems-api-key: YOUR_API_KEY'",
+            "javascript" => "const response = await fetch('https://requiems.xyz/v1/text/advice', {\n  headers: {\n    'requiems-api-key': 'YOUR_API_KEY'\n  }\n});\n\nconst data = await response.json();\nconsole.log(data);",
+            "python" => "import requests\n\nresponse = requests.get(\n    'https://requiems.xyz/v1/text/advice',\n    headers={'requiems-api-key': 'YOUR_API_KEY'}\n)\n\nprint(response.json())",
+            "go" => "package main\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n)\n\nfunc main() {\n\treq, _ := http.NewRequest(\"GET\", \"https://requiems.xyz/v1/text/advice\", nil)\n\treq.Header.Set(\"requiems-api-key\", \"YOUR_API_KEY\")\n\n\tclient := &http.Client{}\n\tresp, _ := client.Do(req)\n\tdefer resp.Body.Close()\n\n\tbody, _ := io.ReadAll(resp.Body)\n\tfmt.Println(string(body))\n}"
           }
         %>
 

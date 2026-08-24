@@ -52,11 +52,11 @@ and testing.
 
 ```bash
 # Generate 3 paragraphs with 5 sentences each
-curl "https://api.requiems.xyz/v1/text/lorem?paragraphs=3&sentences=5" \
+curl "https://requiems.xyz/v1/text/lorem?paragraphs=3&sentences=5" \
   -H "requiems-api-key: YOUR_API_KEY"
 
 # Generate 1 paragraph with 10 sentences
-curl "https://api.requiems.xyz/v1/text/lorem?sentences=10" \
+curl "https://requiems.xyz/v1/text/lorem?sentences=10" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -65,7 +65,7 @@ curl "https://api.requiems.xyz/v1/text/lorem?sentences=10" \
 ```python
 import requests
 
-url = "https://api.requiems.xyz/v1/text/lorem"
+url = "https://requiems.xyz/v1/text/lorem"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 params = {"paragraphs": 3, "sentences": 5}
 
@@ -80,7 +80,7 @@ print(f"Word count: {result['wordCount']}")
 ```javascript
 const params = new URLSearchParams({ paragraphs: 3, sentences: 5 });
 const response = await fetch(
-  `https://api.requiems.xyz/v1/text/lorem?${params}`,
+  `https://requiems.xyz/v1/text/lorem?${params}`,
   {
     headers: {
       "requiems-api-key": "YOUR_API_KEY",
@@ -99,7 +99,7 @@ console.log(`Word count: ${data.wordCount}`);
 require 'net/http'
 require 'json'
 
-uri = URI('https://api.requiems.xyz/v1/text/lorem')
+uri = URI('https://requiems.xyz/v1/text/lorem')
 uri.query = URI.encode_www_form(paragraphs: 3, sentences: 5)
 
 request = Net::HTTP::Get.new(uri)

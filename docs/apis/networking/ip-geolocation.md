@@ -68,14 +68,14 @@ All responses are wrapped in the standard envelope:
 ### Lookup Caller IP
 
 ```bash
-curl "https://api.requiems.xyz/v1/networking/ip" \
+curl "https://requiems.xyz/v1/networking/ip" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
 ### Lookup Specific IP
 
 ```bash
-curl "https://api.requiems.xyz/v1/networking/ip/8.8.8.8" \
+curl "https://requiems.xyz/v1/networking/ip/8.8.8.8" \
   -H "requiems-api-key: YOUR_API_KEY"
 ```
 
@@ -85,7 +85,7 @@ curl "https://api.requiems.xyz/v1/networking/ip/8.8.8.8" \
 import requests
 
 # Lookup specific IP
-url = "https://api.requiems.xyz/v1/networking/ip/8.8.8.8"
+url = "https://requiems.xyz/v1/networking/ip/8.8.8.8"
 headers = {"requiems-api-key": "YOUR_API_KEY"}
 
 response = requests.get(url, headers=headers)

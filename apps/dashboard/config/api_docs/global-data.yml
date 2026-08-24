@@ -1,7 +1,7 @@
 api_id: global-data
 api_name: Global Data System
 description: Resolve addresses, coordinates, and IPs into complete location profiles. Timezone, UTC offset, public holidays, and working day counts included in every response.
-base_url: https://api.requiems.xyz
+base_url: https://requiems.xyz
 overview:
   use_cases:
     - Detect timezone and locale from an address or coordinates for personalized UX
@@ -125,7 +125,7 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl -X POST https://api.requiems.xyz/v1/systems/location/resolve \
+        curl -X POST https://requiems.xyz/v1/systems/location/resolve \
           -H "requiems-api-key: YOUR_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{"address": "Alexanderplatz 1, Berlin", "country_code": "DE"}'
@@ -133,7 +133,7 @@ endpoints:
         import requests
 
         response = requests.post(
-            "https://api.requiems.xyz/v1/systems/location/resolve",
+            "https://requiems.xyz/v1/systems/location/resolve",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             json={"address": "Alexanderplatz 1, Berlin", "country_code": "DE"}
         )
@@ -142,7 +142,7 @@ endpoints:
         if data["next_holiday"]:
             print(f"Next holiday: {data['next_holiday']['name']} on {data['next_holiday']['date']}")
       javascript: |
-        const { data } = await fetch('https://api.requiems.xyz/v1/systems/location/resolve', {
+        const { data } = await fetch('https://requiems.xyz/v1/systems/location/resolve', {
           method: 'POST',
           headers: { 'requiems-api-key': 'YOUR_API_KEY', 'Content-Type': 'application/json' },
           body: JSON.stringify({ address: 'Alexanderplatz 1, Berlin', country_code: 'DE' })
@@ -153,7 +153,7 @@ endpoints:
         require 'net/http'
         require 'json'
 
-        uri = URI('https://api.requiems.xyz/v1/systems/location/resolve')
+        uri = URI('https://requiems.xyz/v1/systems/location/resolve')
         request = Net::HTTP::Post.new(uri)
         request['requiems-api-key'] = 'YOUR_API_KEY'
         request['Content-Type'] = 'application/json'
@@ -226,14 +226,14 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl https://api.requiems.xyz/v1/systems/timezone/from-ip/92.168.1.1 \
+        curl https://requiems.xyz/v1/systems/timezone/from-ip/92.168.1.1 \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
         ip = "92.168.1.1"
         response = requests.get(
-            f"https://api.requiems.xyz/v1/systems/timezone/from-ip/{ip}",
+            f"https://requiems.xyz/v1/systems/timezone/from-ip/{ip}",
             headers={"requiems-api-key": "YOUR_API_KEY"}
         )
         data = response.json()["data"]
@@ -241,7 +241,7 @@ endpoints:
       javascript: |
         const ip = '92.168.1.1';
         const { data } = await fetch(
-          `https://api.requiems.xyz/v1/systems/timezone/from-ip/${ip}`,
+          `https://requiems.xyz/v1/systems/timezone/from-ip/${ip}`,
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         ).then(r => r.json());
 
@@ -334,13 +334,13 @@ endpoints:
         description: Missing or invalid API key
     code_examples:
       curl: |
-        curl "https://api.requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6" \
+        curl "https://requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6" \
           -H "requiems-api-key: YOUR_API_KEY"
       python: |
         import requests
 
         response = requests.get(
-            "https://api.requiems.xyz/v1/systems/business-calendar/DE",
+            "https://requiems.xyz/v1/systems/business-calendar/DE",
             headers={"requiems-api-key": "YOUR_API_KEY"},
             params={"year": 2026, "month": 6}
         )
@@ -348,7 +348,7 @@ endpoints:
         print(f"Working days: {data['working_days']}, Holidays: {data['holiday_count']}")
       javascript: |
         const { data } = await fetch(
-          'https://api.requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6',
+          'https://requiems.xyz/v1/systems/business-calendar/DE?year=2026&month=6',
           { headers: { 'requiems-api-key': 'YOUR_API_KEY' } }
         ).then(r => r.json());
 
