@@ -722,6 +722,17 @@ plan's original §6/§14 file lists), folded into the Phase 3 sweep:
   all of them.
 - `support@requiems.xyz` in `account_deletion_mailer/*.erb` — an email address,
   same policy as §5.5/§2.2 (mail domain untouched), left unchanged.
+- **§8.3's Bearer-auth bug inventory was itself incomplete.** Beyond
+  `application_helper.rb`, `readme.md:103`, and the 30 `comparisons.*.yml`
+  occurrences, also found: `apps/dashboard/config/locales/{en,es,fr}/home.*.yml`
+  (the Authentication glossary entry's `example_prefix`/`example_code`, 3
+  occurrences) and `apps/dashboard/app/views/home/faq.html.erb:51` (hardcoded,
+  not translation-driven). All fixed in the same pass as §8.3/§8.4 to
+  `requiems-api-key: ...`, matching `apps/api/platform/middleware/apikeyauth.go:18`.
+  The `es/comparisons.es.yml` occurrences were also YAML-line-wrapped
+  (`` `Authorization:\n  Bearer <clave>` `` split across two folded-scalar
+  lines), which a naive single-line sed would silently miss — required a
+  multi-line-aware replace.
 
 ## 14. File change summary (for implementation tracking)
 

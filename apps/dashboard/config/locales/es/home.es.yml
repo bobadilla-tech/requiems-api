@@ -541,8 +541,8 @@ es:
           definition: El proceso de verificar la identidad de un usuario o aplicación.
             Las APIs generalmente requieren autenticación para garantizar que solo los
             usuarios autorizados puedan acceder al servicio.
-          example_prefix: "Ejemplo: Incluir tu clave API en el encabezado Authorization:"
-          example_code: "Authorization: Bearer TU_CLAVE_API"
+          example_prefix: "Ejemplo: Incluir tu clave API en el encabezado requiems-api-key:"
+          example_code: "requiems-api-key: TU_CLAVE_API"
         - name: Clave API
           definition: Un identificador único utilizado para autenticar solicitudes a
             una API. Las claves API actúan como identificador y token secreto para la

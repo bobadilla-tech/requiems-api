@@ -62,8 +62,8 @@ fr:
           heading: Migrating from AbstractAPI
           steps:
             - Replace `emailvalidation.abstractapi.com`, `ipgeolocation.abstractapi.com`,
-              etc. with `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Swap `api_key` query param for `Authorization: Bearer <key>` header —
+              etc. with `requiems.xyz/v1/{category}/{endpoint}`
+            - "Swap `api_key` query param for `requiems-api-key: <key>` header —
               same key works for every endpoint"
             - Response field names are similar; consult per-endpoint migration notes
               in our docs
@@ -142,8 +142,8 @@ fr:
         migration:
           heading: Migrating from API Ninjas
           steps:
-            - Replace `api.api-ninjas.com/v1/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Swap `X-Api-Key` header for `Authorization: Bearer <key>`"
+            - Replace `api.api-ninjas.com/v1/{endpoint}` with `requiems.xyz/v1/{category}/{endpoint}`
+            - "Swap `X-Api-Key` header for `requiems-api-key: <key>`"
             - Consult per-endpoint migration docs for field mapping
         philosophy:
           body: API Ninjas is a data catalogue — thousands of facts served via REST.
@@ -225,7 +225,7 @@ fr:
           heading: Migrating from Bouncify
           steps:
             - Move from batch upload workflow to real-time API call on form submission
-            - "Use `Authorization: Bearer <key>` header with `api.requiems.dev/v1/email/validate`"
+            - "Use `requiems-api-key: <key>` header with `requiems.xyz/v1/email/validate`"
             - "Map result fields: `deliverable` stays; `invalid` → `undeliverable`;
               `accept_all` → `catch_all`"
         philosophy:
@@ -304,8 +304,8 @@ fr:
         migration:
           heading: Migrating from IPstack
           steps:
-            - Replace `api.ipstack.com/{ip}` with `api.requiems.dev/v1/ip/lookup?ip={ip}`
-            - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
+            - Replace `api.ipstack.com/{ip}` with `requiems.xyz/v1/ip/lookup?ip={ip}`
+            - "Swap `access_key` query param for `requiems-api-key: <key>` header"
             - Most response fields are identical; map `location.geoname_id` to `geoname_id`
               at root level
         philosophy:
@@ -388,8 +388,8 @@ fr:
         migration:
           heading: Migrating from Kickbox
           steps:
-            - Replace `api.kickbox.com` base URL with `api.requiems.dev`
-            - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
+            - Replace `api.kickbox.com` base URL with `requiems.xyz`
+            - "Swap `apikey` query param for `requiems-api-key: <key>` header"
             - "Map `result` field: `deliverable` stays; `undeliverable` stays; `risky`
               maps to Requiems `risky`"
         philosophy:
@@ -468,8 +468,8 @@ fr:
         migration:
           heading: Migrating from Mailboxlayer
           steps:
-            - Replace `apilayer.net/api/check` with `api.requiems.dev/v1/email/validate`
-            - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
+            - Replace `apilayer.net/api/check` with `requiems.xyz/v1/email/validate`
+            - "Swap `access_key` query param for `requiems-api-key: <key>` header"
             - Map `format_valid` → `syntax_valid`; `smtp_check` → `smtp_valid`; `score`
               → `deliverability_score`
         philosophy:
@@ -551,8 +551,8 @@ fr:
         migration:
           heading: Migrating from Neutrinoapi
           steps:
-            - Replace `neutrinoapi.net/api/{endpoint}` with `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Swap user-id + api-key combo for `Authorization: Bearer <key>` header"
+            - Replace `neutrinoapi.net/api/{endpoint}` with `requiems.xyz/v1/{category}/{endpoint}`
+            - "Swap user-id + api-key combo for `requiems-api-key: <key>` header"
             - Map credit-based rate limits to per-call metering in your Requiems dashboard
         philosophy:
           body: "Neutrinoapi pioneered the general-purpose API concept and offers
@@ -635,8 +635,8 @@ fr:
         migration:
           heading: Migrating from NeverBounce
           steps:
-            - Replace `api.neverbounce.com` base URL with `api.requiems.dev`
-            - "Swap API key from query param to `Authorization: Bearer <key>` header"
+            - Replace `api.neverbounce.com` base URL with `requiems.xyz`
+            - "Swap API key from query param to `requiems-api-key: <key>` header"
             - "Map result codes: `valid` → `deliverable`; `invalid` → `undeliverable`;
               `disposable` → `risky`"
         philosophy:
@@ -710,8 +710,8 @@ fr:
         migration:
           heading: Migrating from Numverify
           steps:
-            - Replace `apilayer.net/api/validate` with `api.requiems.dev/v1/phone/validate`
-            - "Swap `access_key` query param for `Authorization: Bearer <key>` header"
+            - Replace `apilayer.net/api/validate` with `requiems.xyz/v1/phone/validate`
+            - "Swap `access_key` query param for `requiems-api-key: <key>` header"
             - "Map `line_type` values: `mobile` stays; `landline` stays; `special_services`
               → `other`"
         philosophy:
@@ -794,8 +794,8 @@ fr:
         migration:
           heading: Migrating from ZeroBounce
           steps:
-            - Replace `api.zerobounce.net` base URL with `api.requiems.dev`
-            - "Swap `apikey` query param for `Authorization: Bearer <key>` header"
+            - Replace `api.zerobounce.net` base URL with `requiems.xyz`
+            - "Swap `apikey` query param for `requiems-api-key: <key>` header"
             - "Map `status` field: ZeroBounce `valid` → Requiems `deliverable`; `invalid`
               → `undeliverable`"
         philosophy:

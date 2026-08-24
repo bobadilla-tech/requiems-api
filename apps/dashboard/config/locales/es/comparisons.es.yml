@@ -63,9 +63,8 @@ es:
           heading: Migración desde AbstractAPI
           steps:
             - Reemplaza `emailvalidation.abstractapi.com`, `ipgeolocation.abstractapi.com`,
-              etc. por `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Cambia el parámetro de consulta `api_key` por el encabezado `Authorization:
-              Bearer <clave>`: la misma clave funciona para todos los endpoints"
+              etc. por `requiems.xyz/v1/{category}/{endpoint}`
+            - "Cambia el parámetro de consulta `api_key` por el encabezado `requiems-api-key: <clave>`: la misma clave funciona para todos los endpoints"
             - Los nombres de los campos de respuesta son similares; consulta las notas
               de migración por endpoint en nuestra documentación
         philosophy:
@@ -146,8 +145,8 @@ es:
         migration:
           heading: Migrando desde API Ninjas
           steps:
-            - Reemplaza `api.api-ninjas.com/v1/{endpoint}` por `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Cambia el encabezado `X-Api-Key` por `Authorization: Bearer <clave>`"
+            - Reemplaza `api.api-ninjas.com/v1/{endpoint}` por `requiems.xyz/v1/{category}/{endpoint}`
+            - "Cambia el encabezado `X-Api-Key` por `requiems-api-key: <clave>`"
             - Consulta la documentación de migración por endpoint para el mapeo de campos
         philosophy:
           body: "API Ninjas es un catálogo de datos con miles de datos disponibles
@@ -234,7 +233,7 @@ es:
           steps:
             - Pasa de un flujo de carga por lotes a una llamada API en tiempo real al
               enviar el formulario
-            - "Usa el encabezado `Authorization: Bearer <clave>` con `api.requiems.dev/v1/email/validate`"
+            - "Usa el encabezado `requiems-api-key: <clave>` con `requiems.xyz/v1/email/validate`"
             - "Mapea los campos de resultado: `deliverable` se mantiene; `invalid` →
               `undeliverable`; `accept_all` → `catch_all`"
         philosophy:
@@ -316,9 +315,8 @@ es:
         migration:
           heading: Migración desde IPstack
           steps:
-            - Reemplaza `api.ipstack.com/{ip}` por `api.requiems.dev/v1/ip/lookup?ip={ip}`
-            - "Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza `api.ipstack.com/{ip}` por `requiems.xyz/v1/ip/lookup?ip={ip}`
+            - "Cambia el parámetro de consulta `access_key` por el encabezado `requiems-api-key: <clave>`"
             - La mayoría de los campos de respuesta son idénticos; mapea `location.geoname_id`
               a `geoname_id` en el nivel raíz
         philosophy:
@@ -404,9 +402,8 @@ es:
         migration:
           heading: Migración desde Kickbox
           steps:
-            - Reemplaza la URL base `api.kickbox.com` por `api.requiems.dev`
-            - "Cambia el parámetro de consulta `apikey` por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza la URL base `api.kickbox.com` por `requiems.xyz`
+            - "Cambia el parámetro de consulta `apikey` por el encabezado `requiems-api-key: <clave>`"
             - "Mapea el campo `result`: `deliverable` se mantiene; `undeliverable` se
               mantiene; `risky` se mapea al `risky` de Requiems"
         philosophy:
@@ -488,9 +485,8 @@ es:
         migration:
           heading: Migración desde Mailboxlayer
           steps:
-            - Reemplaza `apilayer.net/api/check` por `api.requiems.dev/v1/email/validate`
-            - "Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza `apilayer.net/api/check` por `requiems.xyz/v1/email/validate`
+            - "Cambia el parámetro de consulta `access_key` por el encabezado `requiems-api-key: <clave>`"
             - Mapea `format_valid` → `syntax_valid`; `smtp_check` → `smtp_valid`; `score`
               → `deliverability_score`
         philosophy:
@@ -576,9 +572,8 @@ es:
         migration:
           heading: Migrando desde Neutrinoapi
           steps:
-            - Reemplaza `neutrinoapi.net/api/{endpoint}` por `api.requiems.dev/v1/{category}/{endpoint}`
-            - "Cambia la combinación de user-id + api-key por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza `neutrinoapi.net/api/{endpoint}` por `requiems.xyz/v1/{category}/{endpoint}`
+            - "Cambia la combinación de user-id + api-key por el encabezado `requiems-api-key: <clave>`"
             - Mapea los límites basados en créditos a la medición por llamada en tu
               panel de Requiems
         philosophy:
@@ -665,9 +660,8 @@ es:
         migration:
           heading: Migración desde NeverBounce
           steps:
-            - Reemplaza la URL base `api.neverbounce.com` por `api.requiems.dev`
-            - "Cambia la clave API del parámetro de consulta al encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza la URL base `api.neverbounce.com` por `requiems.xyz`
+            - "Cambia la clave API del parámetro de consulta al encabezado `requiems-api-key: <clave>`"
             - "Mapea los códigos de resultado: `valid` → `deliverable`; `invalid` →
               `undeliverable`; `disposable` → `risky`"
         philosophy:
@@ -746,9 +740,8 @@ es:
         migration:
           heading: Migración desde Numverify
           steps:
-            - Reemplaza `apilayer.net/api/validate` por `api.requiems.dev/v1/phone/validate`
-            - "Cambia el parámetro de consulta `access_key` por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza `apilayer.net/api/validate` por `requiems.xyz/v1/phone/validate`
+            - "Cambia el parámetro de consulta `access_key` por el encabezado `requiems-api-key: <clave>`"
             - "Mapea los valores de `line_type`: `mobile` se mantiene; `landline` se
               mantiene; `special_services` → `other`"
         philosophy:
@@ -834,9 +827,8 @@ es:
         migration:
           heading: Migración desde ZeroBounce
           steps:
-            - Reemplaza la URL base `api.zerobounce.net` por `api.requiems.dev`
-            - "Cambia el parámetro de consulta `apikey` por el encabezado `Authorization:
-              Bearer <clave>`"
+            - Reemplaza la URL base `api.zerobounce.net` por `requiems.xyz`
+            - "Cambia el parámetro de consulta `apikey` por el encabezado `requiems-api-key: <clave>`"
             - "Mapea el campo `status`: ZeroBounce `valid` → Requiems `deliverable`;
               `invalid` → `undeliverable`"
         philosophy:

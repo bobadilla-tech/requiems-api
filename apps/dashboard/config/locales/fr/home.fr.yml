@@ -522,9 +522,9 @@ fr:
           definition: Vérification de l'identité d'un utilisateur ou d'une application.
             Les APIs exigent en général une authentification pour limiter l'accès aux
             clients autorisés.
-          example_prefix: 'Exemple : inclure votre clé API dans l''en-tête Authorization
+          example_prefix: 'Exemple : inclure votre clé API dans l''en-tête requiems-api-key
             :'
-          example_code: "Authorization: Bearer VOTRE_CLE_API"
+          example_code: "requiems-api-key: VOTRE_CLE_API"
         - name: Clé API
           definition: Identifiant unique servant à authentifier les requêtes. Elle sert
             à la fois d'identifiant et de secret.
