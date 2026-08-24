@@ -734,7 +734,144 @@ plan's original §6/§14 file lists), folded into the Phase 3 sweep:
   lines), which a naive single-line sed would silently miss — required a
   multi-line-aware replace.
 
-## 14. File change summary (for implementation tracking)
+## 14. Manual execution runbook (Phase 0, 6, 7)
+
+All repo-level changes (Phases 1–5, 8) are committed — see §13b for the commit
+list. Everything below happens **outside this repo**, in live dashboards, and
+needs a human with credentials. Nothing here has been executed by the
+implementation session; this is the checklist for whoever runs the cutover.
+
+### 14.1 Phase 0 — Cloudflare & DNS (do this first, before deploying the commits above)
+
+- [ ] Confirm `requiemsapi.com` nameservers point at Cloudflare (registrar
+      delegation may still be pending — check live, not assumed).
+- [ ] Add `requiemsapi.com` as a new zone in Cloudflare.
+- [ ] Add a proxied (orange-cloud) `A` record for `requiemsapi.com` (apex
+      only — owner confirmed **no `www` variant**, per §13b) pointing at
+      `HETZNER_VPS_IP`.
+- [ ] Match Universal SSL / Always Use HTTPS / min TLS version on the new
+      zone to whatever the `requiems.xyz` zone currently has (read live, not
+      assumed).
+- [ ] Do **not** enable Authenticated Origin Pulls (AOP) on `requiemsapi.com`
+      — this hostname takes over the Rails role, never behind AOP.
+- [ ] On the existing `requiems.xyz` zone: confirm how AOP is scoped today
+      (zone-wide vs. hostname/Page-Rule specific to `api.requiems.xyz`). If
+      hostname-scoped, move that scoping to bare `requiems.xyz` — this must
+      land before or alongside the deploy of commit `fa88c01d` (Caddy vhost
+      swap), or the new `requiems.xyz` AOP block will reject Cloudflare's own
+      traffic.
+- [ ] Mirror WAF rules / rate-limiting / Page Rules from the `requiems.xyz`
+      zone onto the new `requiemsapi.com` zone (manual parity check — no
+      infra-as-code to diff against).
+- [ ] Check CAA records on the new `requiemsapi.com` zone don't block Caddy's
+      automatic HTTPS cert issuance.
+- [ ] Leave `mail.requiems.xyz` DNS untouched (§2.2 — out of scope).
+- [ ] **Verify a real Private Deployment tenant subdomain still resolves**
+      (e.g. an actual `{slug}.requiems.xyz` in production) before and after —
+      these are DNS-only records, structurally unrelated to the proxied-zone
+      AOP change, but easy to forget since they share the zone (§1).
+- [ ] Gate: `curl -v https://requiemsapi.com` returns *some* TLS handshake
+      (even a 404) before proceeding to deploy.
+
+### 14.2 Deploy the code (after 14.1 gate passes)
+
+- [ ] Deploy commit `b41b4743` (config.hosts allowlist, old host) **alone**
+      first if it hasn't shipped yet at this point — confirm Kamal's `/up`
+      health check still passes before deploying anything else. This is the
+      whole point of that commit being separate (§5.6) — don't skip verifying
+      it in isolation.
+- [ ] Deploy the remaining commits (`fa88c01d`, `a92bc66a`, `2765b74b`,
+      `a4f3f1d5`, `bf4fc1fd`) together via the normal Kamal CD path, all three
+      services (`dashboard`, `api`, `mcp`).
+- [ ] **Explicitly force-restart the Caddy accessory** — don't assume CD does
+      it:
+      `kamal accessory reboot caddy -c infra/kamal/deploy.api.yml`
+      (§10 step 2a — `kamal setup` on an already-running accessory may not
+      reliably pick up the changed mounted Caddyfile; an app-level deploy can
+      report success while Caddy silently keeps routing the old way).
+
+### 14.3 Smoke-test matrix (run immediately after deploy, before Phase 6)
+
+Nothing in CI enforces this — assign a human to run it live.
+
+- [ ] `curl https://requiemsapi.com/` → Rails home page, 200
+- [ ] `curl https://requiemsapi.com/up` → 200
+- [ ] Full Devise login/logout on `requiemsapi.com` → session cookie set/read
+      correctly, no CSRF/host errors
+- [ ] Password reset email → click link → link host is `requiemsapi.com`, not
+      stale `requiems.xyz` (validates §5.5 — highest-risk item in Phase 2)
+- [ ] `curl https://requiems.xyz/v1/entertainment/advice -H "requiems-api-key: ..."` → 200
+- [ ] `curl -v https://requiems.xyz/v1/... ` direct to origin IP, no AOP
+      client cert → TLS `certificate_required` rejection (validates AOP moved)
+- [ ] `curl https://requiems.xyz/healthz` → 200
+- [ ] `curl https://requiems.xyz/openapi.json` → 200, valid spec (validates
+      the new Go handler added in `a4f3f1d5`)
+- [ ] `curl -H "Origin: https://requiemsapi.com" -X OPTIONS https://requiems.xyz/v1/...`
+      → CORS preflight succeeds (validates the new CORS middleware)
+- [ ] `curl https://mcp.requiems.xyz/...` → unchanged behavior
+- [ ] `bun run scripts/fetch-spec.ts` in `apps/mcp` → downloads from
+      `requiems.xyz/openapi.json` successfully
+- [ ] `curl -I https://requiemsapi.com/` and `https://requiems.xyz/` →
+      `Strict-Transport-Security` header present on both (pre-existing open
+      item, verify while touching both hosts anyway)
+- [ ] Rails `/api/proxy` (server-to-server, private network path) → still
+      works unaffected
+
+### 14.4 Phase 6 — External services (same maintenance window as the deploy, not before/after)
+
+- [ ] **Lemon Squeezy webhook URL** → update to
+      `requiemsapi.com/webhooks/lemonsqueezy` in the LS dashboard. Test with
+      LS's webhook test-send feature immediately after.
+- [ ] **Lemon Squeezy checkout redirect URL** (separate setting from the
+      webhook, LS dashboard → product/checkout settings) → update at the same
+      time. If missed, a customer who just paid gets redirected to the bare
+      Go API host right after checkout (subscription still activates via
+      webhook, but it looks like a broken payment flow).
+- [ ] **Google Search Console** → add `requiemsapi.com` as a new property,
+      submit the regenerated sitemap. Decide whether to keep the old
+      `requiems.xyz` property (now 404ing on old paths — owner confirmed
+      clean break, no redirects, per §2.1/§13b) or remove it.
+- [ ] **GA4** → confirm `GA4_MEASUREMENT_ID` accepts `requiemsapi.com` as a
+      valid stream hostname (verify live, properties are usually
+      host-agnostic per measurement ID, but don't assume).
+- [ ] **Any OAuth app / webhook allow-lists at third parties** referencing
+      `requiems.xyz` by exact origin — audit case by case (nothing found
+      in-repo, but this class of config lives outside the repo by
+      definition).
+- [ ] Before rebuilding/deploying: confirm the sitemap regeneration
+      (`rails sitemap:refresh` or equivalent) ran and the regenerated
+      `apps/dashboard/public/sitemap*.xml` files were **committed pre-build**
+      — a Docker image is immutable at runtime, so "regenerate after deploy"
+      doesn't work (§6 item 9). This wasn't done as part of the repo commits
+      above since it requires running the Rails sitemap task against live
+      data — do it as part of this deploy, not skipped.
+
+### 14.5 Cleanup (only after 14.3 is fully green)
+
+- [ ] Delete the deprecated `api.requiems.xyz` Caddy vhost block (marked
+      `DEPRECATED` in `infra/caddy/Caddyfile`) and its DNS record.
+- [ ] Remove the corresponding Cloudflare AOP scoping for `api.requiems.xyz`
+      if it was hostname-specific rather than zone-wide.
+
+### 14.6 If a rollback becomes necessary
+
+See §11 in full, but the two non-code-revert items to not forget:
+
+- [ ] If real users authenticated on `requiemsapi.com` during the window,
+      rolling Rails back to `requiems.xyz` **logs all of them out** — treat as
+      a real incident to communicate, not a silent revert.
+- [ ] Revert the Lemon Squeezy webhook URL **and** checkout redirect URL back
+      to the pre-migration host in the same rollback window, and manually
+      reconcile any subscription events that landed during the window before
+      the revert completes.
+
+### 14.7 Still open, not part of this implementation pass
+
+- [ ] **§6 item 7** — the 2026-07-27 blog post's `api.requiems.xyz` example
+      still needs an explicit owner call (leave as historical snapshot vs.
+      correct it). Not resolved by this pass.
+
+## 15. File change summary (for implementation tracking)
 
 | Area              | Files                                                                                                                                                                                                                                                                   | Nature of change                                                                             |
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
