@@ -1,6 +1,8 @@
 # requiemsapi.com / requiems.xyz Domain Role Swap — Implementation Plan
 
-Status: proposed, not started.
+Status: cutover live as of 2026-08-24 (Phases 1–5, 8 code deployed and
+smoke-tested against production; Phase 6 external services and full Devise
+auth verification still pending — see §14.3/§14.4).
 
 Supersedes nothing. Per this repo's own convention (see
 `docs/audits/2026-08-22-domain-migration-audit-current-state.md`, itself
@@ -749,9 +751,10 @@ implementation session; this is the checklist for whoever runs the cutover.
 - [ ] Confirm `requiemsapi.com` nameservers point at Cloudflare (registrar
       delegation may still be pending — check live, not assumed).
 - [ ] Add `requiemsapi.com` as a new zone in Cloudflare.
-- [ ] Add a proxied (orange-cloud) `A` record for `requiemsapi.com` (apex only —
+- [x] Add a proxied (orange-cloud) `A` record for `requiemsapi.com` (apex only —
       owner confirmed **no `www` variant**, per §13b) pointing at
-      `HETZNER_VPS_IP`.
+      `HETZNER_VPS_IP` — done by owner 2026-08-24, confirmed via screenshot
+      (89.167.53.98, Proxied, Auto TTL).
 - [ ] Match Universal SSL / Always Use HTTPS / min TLS version on the new zone
       to whatever the `requiems.xyz` zone currently has (read live, not
       assumed).
@@ -760,7 +763,7 @@ implementation session; this is the checklist for whoever runs the cutover.
 - [ ] On the existing `requiems.xyz` zone: confirm how AOP is scoped today
       (zone-wide vs. hostname/Page-Rule specific to `api.requiems.xyz`). If
       hostname-scoped, move that scoping to bare `requiems.xyz` — this must land
-      before or alongside the deploy of commit `fa88c01d` (Caddy vhost swap), or
+      before or alongside the deploy of commit `5c2297d6` (Caddy vhost swap), or
       the new `requiems.xyz` AOP block will reject Cloudflare's own traffic.
 - [ ] Mirror WAF rules / rate-limiting / Page Rules from the `requiems.xyz` zone
       onto the new `requiemsapi.com` zone (manual parity check — no
@@ -775,49 +778,92 @@ implementation session; this is the checklist for whoever runs the cutover.
 - [ ] Gate: `curl -v https://requiemsapi.com` returns _some_ TLS handshake (even
       a 404) before proceeding to deploy.
 
-### 14.2 Deploy the code (after 14.1 gate passes)
+### 14.2 Deploy the code (after 14.1 gate passes) — DONE 2026-08-24
 
-- [ ] Deploy commit `b41b4743` (config.hosts allowlist, old host) **alone**
-      first if it hasn't shipped yet at this point — confirm Kamal's `/up`
-      health check still passes before deploying anything else. This is the
-      whole point of that commit being separate (§5.6) — don't skip verifying it
-      in isolation.
-- [ ] Deploy the remaining commits (`fa88c01d`, `a92bc66a`, `2765b74b`,
-      `a4f3f1d5`, `bf4fc1fd`) together via the normal Kamal CD path, all three
-      services (`dashboard`, `api`, `mcp`).
-- [ ] **Explicitly force-restart the Caddy accessory** — don't assume CD does
-      it: `kamal accessory reboot caddy -c infra/kamal/deploy.api.yml` (§10 step
-      2a — `kamal setup` on an already-running accessory may not reliably pick
-      up the changed mounted Caddyfile; an app-level deploy can report success
-      while Caddy silently keeps routing the old way).
+- [x] Deploy commit `52535385` (config.hosts allowlist, old host) shipped as
+      part of the same push as everything else (owner pushed the full branch
+      at once, after rebasing onto a `main` that had moved — see the "commit
+      hashes changed" note below). No isolated pre-deploy of just this commit
+      happened, but Kamal's `/up` health check was never a problem in practice.
+- [x] Deploy the remaining commits together via Kamal CD, all three services.
+      **Note:** the commit hashes above were captured before push; the owner's
+      push landed on top of a `main` that had advanced (dependabot PR #968
+      merged in the interim), so the pushed hashes are `5c2297d6`, `52535385`,
+      `02e988e1`, `4ded60c2`, `1a151df5`, `e29a529c` — same messages, rebased
+      hashes.
+- [x] Caddy accessory force-restart — **the §10.2a risk was real, not
+      theoretical.** The CD run's log for `Deploy API` literally showed
+      `Skipping booting `caddy` on ***, a container already exists`. The new
+      Caddyfile (with the `requiemsapi.com` block) was uploaded to disk
+      correctly, but the running Caddy process kept serving the **pre-migration**
+      config for ~20 minutes after deploy — confirmed live: `requiemsapi.com`
+      failed TLS handshake entirely (`tlsv1 alert internal error`, no matching
+      site), and `requiems.xyz` accepted connections *without* a client cert
+      (should have required AOP post-swap, but the old, non-AOP `requiems.xyz`
+      Rails vhost was still what Caddy had loaded). Fixed with a direct
+      `docker restart caddy` on the VPS (equivalent to
+      `kamal accessory reboot caddy`, run directly since the SSH session was
+      already open). Confirmed fixed: `requiems.xyz` now correctly demands the
+      client cert (`tlsv1.3 alert certificate required` when connecting
+      directly to the origin without one).
+- [x] **New incident, not anticipated by the plan: `Deploy API` failed on the
+      first CD run** (`gh run 32683308842`) with
+      `kamal-proxy: Error: host settings conflict with another service`
+      when trying to register `requiems-api-web` → `requiems.xyz`. Root cause:
+      GitHub Actions ran `Deploy API` and `Deploy Dashboard` as **parallel**
+      jobs against the same shared `kamal-proxy` instance on the VPS, and lost
+      a race — at the instant Deploy API tried to claim host `requiems.xyz`,
+      `requiems-dashboard-web` (not yet finished migrating off its
+      pre-migration host) still held that exact hostname, so kamal-proxy
+      correctly refused the duplicate claim. Deploy API's Kamal run rolled its
+      new container back on failure, leaving `requiems-api-web` stuck
+      registered to the **old** `api.requiems.xyz` host in kamal-proxy (visible
+      via `docker exec kamal-proxy kamal-proxy list` on the VPS) even though
+      Deploy Dashboard went on to succeed a moment later. Fixed by re-running
+      only the failed job (`gh run rerun 32683308842 --failed`) — Dashboard/MCP
+      were not re-run since they'd already succeeded, so there was no repeat
+      race the second time. **Not previously called out in this plan** — the
+      Kamal deploy workflow has no explicit ordering/dependency between the
+      three `Deploy *` jobs, so any future redeploy that touches `proxy.host`
+      on two services sharing a hostname transition is exposed to the same
+      race. Worth a follow-up (not done here): either serialize the three jobs
+      in `.github/workflows/`, or make the Kamal deploy action retry once on
+      this specific kamal-proxy error class.
 
-### 14.3 Smoke-test matrix (run immediately after deploy, before Phase 6)
+### 14.3 Smoke-test matrix — run 2026-08-24, after the Caddy restart + API redeploy above
 
-Nothing in CI enforces this — assign a human to run it live.
+Nothing in CI enforces this; it was run manually, from a laptop through the
+real Cloudflare edge (not SSH'd into the origin), except where noted.
 
-- [ ] `curl https://requiemsapi.com/` → Rails home page, 200
-- [ ] `curl https://requiemsapi.com/up` → 200
-- [ ] Full Devise login/logout on `requiemsapi.com` → session cookie set/read
-      correctly, no CSRF/host errors
-- [ ] Password reset email → click link → link host is `requiemsapi.com`, not
-      stale `requiems.xyz` (validates §5.5 — highest-risk item in Phase 2)
-- [ ] `curl https://requiems.xyz/v1/entertainment/advice -H "requiems-api-key: ..."`
-      → 200
-- [ ] `curl -v https://requiems.xyz/v1/...` direct to origin IP, no AOP client
-      cert → TLS `certificate_required` rejection (validates AOP moved)
-- [ ] `curl https://requiems.xyz/healthz` → 200
-- [ ] `curl https://requiems.xyz/openapi.json` → 200, valid spec (validates the
-      new Go handler added in `a4f3f1d5`)
-- [ ] `curl -H "Origin: https://requiemsapi.com" -X OPTIONS https://requiems.xyz/v1/...`
-      → CORS preflight succeeds (validates the new CORS middleware)
-- [ ] `curl https://mcp.requiems.xyz/...` → unchanged behavior
-- [ ] `bun run scripts/fetch-spec.ts` in `apps/mcp` → downloads from
-      `requiems.xyz/openapi.json` successfully
-- [ ] `curl -I https://requiemsapi.com/` and `https://requiems.xyz/` →
-      `Strict-Transport-Security` header present on both (pre-existing open
-      item, verify while touching both hosts anyway)
-- [ ] Rails `/api/proxy` (server-to-server, private network path) → still works
-      unaffected
+- [x] `curl https://requiemsapi.com/` → 301 → `/en/` (Rails locale redirect,
+      expected — not a routing error)
+- [x] `curl https://requiemsapi.com/up` → 200
+- [ ] Full Devise login/logout on `requiemsapi.com` — **not run**, needs a real
+      account; not exercised in this session
+- [ ] Password reset email → click link — **not run**, same reason (§5.5 is
+      still the highest-risk untested item — do this before calling the
+      migration fully done)
+- [x] `curl https://requiems.xyz/v1/entertainment/advice` (no key) → 401, as
+      expected (auth middleware reachable and enforcing)
+- [x] Direct-to-origin, no AOP client cert (run from the VPS itself, curling
+      `127.0.0.1`, so genuinely bypassing Cloudflare) →
+      `tlsv1.3 alert certificate required` — AOP confirmed enforced on
+      `requiems.xyz` post-swap
+- [x] `curl https://requiems.xyz/healthz` → 200, `{"status":"ok"}`
+- [x] `curl https://requiems.xyz/openapi.json` → 200 (validates the new Go
+      handler)
+- [x] `curl -H "Origin: https://requiemsapi.com" -X OPTIONS https://requiems.xyz/v1/...`
+      → 204, `access-control-allow-origin: *` present (CORS middleware working)
+- [x] `curl https://mcp.requiems.xyz/` → 406 (an application-level response,
+      not a routing failure — confirms the request reached the MCP backend
+      through the unchanged Caddy vhost)
+- [ ] `bun run scripts/fetch-spec.ts` in `apps/mcp` — **not run** against the
+      live host in this session
+- [x] `curl -I https://requiemsapi.com/` and `https://requiems.xyz/healthz` →
+      **`Strict-Transport-Security` is absent on both** — confirms the
+      pre-existing open item (§12/§13) is still open; out of scope for this
+      migration to fix, but now doubly confirmed live rather than assumed
+- [ ] Rails `/api/proxy` — **not run** in this session
 
 ### 14.4 Phase 6 — External services (same maintenance window as the deploy, not before/after)
 
