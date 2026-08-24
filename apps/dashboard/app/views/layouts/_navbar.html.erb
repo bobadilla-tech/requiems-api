@@ -54,6 +54,9 @@
           <!-- User Dropdown Menu -->
           <div class="relative" data-controller="dropdown">
             <button type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    data-dropdown-target="trigger"
                     class="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     data-action="click->dropdown#toggle">
               <span><%= current_user.display_name %></span>
@@ -167,6 +170,11 @@
                     </svg>
                   </div>
                   <input type="text"
+                         role="combobox"
+                         aria-expanded="false"
+                         aria-haspopup="listbox"
+                         aria-autocomplete="list"
+                         aria-controls="navbar-search-listbox-mobile"
                          data-navbar-search-target="input"
                          data-action="input->navbar-search#search keydown->navbar-search#handleKeydown"
                          placeholder="<%= t("shared.nav.search_placeholder") %>"
@@ -188,6 +196,8 @@
 
                 <!-- Mobile Dropdown Results -->
                 <div data-navbar-search-target="dropdown"
+                     id="navbar-search-listbox-mobile"
+                     role="listbox"
                      class="hidden mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden max-h-96 overflow-y-auto">
                   <!-- Results Container -->
                   <div data-navbar-search-target="results"></div>

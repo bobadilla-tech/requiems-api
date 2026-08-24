@@ -2,4 +2,6 @@
 en:
   navbar:
     search:
+      browse_apis: Browse APIs →
+      browse_examples: Browse Examples →
       try_different_keywords_or_browse_all: Try different keywords or browse all content

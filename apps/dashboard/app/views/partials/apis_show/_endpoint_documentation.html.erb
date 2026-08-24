@@ -138,9 +138,14 @@
 
       <div data-controller="code-tabs highlight">
         <!-- Tabs -->
-        <div class="flex space-x-2 border-b border-gray-200 dark:border-gray-700 mb-4">
+        <div class="flex space-x-2 border-b border-gray-200 dark:border-gray-700 mb-4" role="tablist">
           <% endpoint_code_examples.each_with_index do |(language, code), idx| %>
             <button type="button"
+                    id="endpoint-<%= endpoint_index %>-tab-<%= idx %>"
+                    role="tab"
+                    aria-selected="<%= idx == 0 %>"
+                    aria-controls="endpoint-<%= endpoint_index %>-panel-<%= idx %>"
+                    tabindex="<%= idx == 0 ? '0' : '-1' %>"
                     class="px-4 py-2 text-sm font-medium transition-colors <%= idx == 0 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100' %>"
                     data-code-tabs-target="tab"
                     data-action="click->code-tabs#switch"
@@ -152,7 +157,7 @@
 
         <!-- Code blocks -->
         <% endpoint_code_examples.each_with_index do |(language, code), idx| %>
-          <div class="<%= 'hidden' unless idx == 0 %>" data-code-tabs-target="content">
+          <div class="<%= 'hidden' unless idx == 0 %>" id="endpoint-<%= endpoint_index %>-panel-<%= idx %>" role="tabpanel" aria-labelledby="endpoint-<%= endpoint_index %>-tab-<%= idx %>" data-code-tabs-target="content">
             <div class="relative">
               <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm"><code class="language-<%= language == 'curl' ? 'bash' : language %>"><%= code.strip %></code></pre>
               <button type="button"

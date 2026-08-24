@@ -9,55 +9,55 @@
       </p>
     </div>
 
-    <div class="space-y-4" data-controller="tabs">
+    <div class="space-y-4" data-controller="faq-accordion">
       <!-- FAQ 1 -->
       <%= render "partials/shared/card", padding: true do %>
-        <button class="w-full flex justify-between items-center text-left" data-action="click->tabs#select" data-tabs-index-param="0">
+        <button type="button" class="w-full flex justify-between items-center text-left" aria-expanded="false" data-action="click->faq-accordion#toggle" data-faq-accordion-target="button">
           <span class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("home.index.faq.q1") %></span>
           <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-tabs-target="panel">
+        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-faq-accordion-target="content">
           <%= t("home.index.faq.a1") %>
         </div>
       <% end %>
 
       <!-- FAQ 2 -->
       <%= render "partials/shared/card", padding: true do %>
-        <button class="w-full flex justify-between items-center text-left" data-action="click->tabs#select" data-tabs-index-param="1">
+        <button type="button" class="w-full flex justify-between items-center text-left" aria-expanded="false" data-action="click->faq-accordion#toggle" data-faq-accordion-target="button">
           <span class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("home.index.faq.q2") %></span>
           <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-tabs-target="panel">
+        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-faq-accordion-target="content">
           <%= t("home.index.faq.a2") %>
         </div>
       <% end %>
 
       <!-- FAQ 3 -->
       <%= render "partials/shared/card", padding: true do %>
-        <button class="w-full flex justify-between items-center text-left" data-action="click->tabs#select" data-tabs-index-param="2">
+        <button type="button" class="w-full flex justify-between items-center text-left" aria-expanded="false" data-action="click->faq-accordion#toggle" data-faq-accordion-target="button">
           <span class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("home.index.faq.q3") %></span>
           <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-tabs-target="panel">
+        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-faq-accordion-target="content">
           <%= t("home.index.faq.a3") %>
         </div>
       <% end %>
 
       <!-- FAQ 4 -->
       <%= render "partials/shared/card", padding: true do %>
-        <button class="w-full flex justify-between items-center text-left" data-action="click->tabs#select" data-tabs-index-param="3">
+        <button type="button" class="w-full flex justify-between items-center text-left" aria-expanded="false" data-action="click->faq-accordion#toggle" data-faq-accordion-target="button">
           <span class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("home.index.faq.q4") %></span>
           <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-tabs-target="panel">
+        <div class="mt-4 text-gray-600 dark:text-gray-400 hidden" data-faq-accordion-target="content">
           <%= t("home.index.faq.a4") %>
         </div>
       <% end %>

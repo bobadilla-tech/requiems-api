@@ -1,9 +1,9 @@
 <% content_for :title, t('tools.email_normalizer.show.free_email_normalizer_lowercase_trim') %>
-<% content_for :description, "Normalize any email address instantly. Lowercase, trim whitespace, resolve provider aliases, and return a canonical address — free, no account required." %>
+<% content_for :description, t('tools.email_normalizer.show.description') %>
 <% content_for :head do %>
   <script type="application/ld+json"><%= software_application_json_ld(
-    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
-    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    name: t("tools.catalog.#{@tool_id.tr('-', '_')}.name"),
+    description: t("tools.catalog.#{@tool_id.tr('-', '_')}.description"),
     url: tool_path(@tool_id)
   ).html_safe %></script>
 <% end %>

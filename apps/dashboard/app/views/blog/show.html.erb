@@ -1,13 +1,14 @@
 <% content_for :title, "#{@post.title} - Requiems API Blog" %>
 <% content_for :description, @post.description %>
 <% content_for :head do %>
+  <%= render "partials/shared/highlight_head" %>
   <script type="application/ld+json"><%= blog_post_json_ld(@post).html_safe %></script>
 <% end %>
 
 <article class="py-16">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <p class="mb-6">
-      <%= link_to "&larr; Back to blog".html_safe, blog_path, class: "text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" %>
+      <%= link_to t("blog.show.back_to_blog"), blog_path, class: "text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" %>
     </p>
 
     <header class="mb-10">
@@ -19,7 +20,7 @@
         <span aria-hidden="true">&middot;</span>
         <time datetime="<%= @post.date.iso8601 %>"><%= @post.date.strftime("%B %-d, %Y") %></time>
         <span aria-hidden="true">&middot;</span>
-        <span><%= @post.reading_time_minutes %> min read</span>
+        <span><%= t("blog.show.reading_time", minutes: @post.reading_time_minutes) %></span>
       </div>
     </header>
 

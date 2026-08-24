@@ -1,9 +1,9 @@
 <% content_for :title, t('tools.domain_checker.show.free_domain_checker_availability_dns') %>
-<% content_for :description, "Check domain availability and DNS records instantly. A, MX, NS lookup in one API call — free, no account required." %>
+<% content_for :description, t('tools.domain_checker.show.description') %>
 <% content_for :head do %>
   <script type="application/ld+json"><%= software_application_json_ld(
-    name: ToolsController::TOOLS_METADATA[@tool_id][:name],
-    description: ToolsController::TOOLS_METADATA[@tool_id][:description],
+    name: t("tools.catalog.#{@tool_id.tr('-', '_')}.name"),
+    description: t("tools.catalog.#{@tool_id.tr('-', '_')}.description"),
     url: tool_path(@tool_id)
   ).html_safe %></script>
 <% end %>

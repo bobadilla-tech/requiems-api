@@ -1,4 +1,5 @@
 <% content_for :title, "#{@category["name"]} - API Directory" %>
+<% content_for :description, "Browse #{@category["name"]} APIs — production-ready endpoints, live docs, and copy-paste examples in one catalog." %>
 <% content_for :head do %>
   <script type="application/ld+json"><%= collection_json_ld(
     name: @category["name"],

@@ -1,31 +1,6 @@
-<section class="py-20 px-4 bg-white dark:bg-gray-950">
-  <div class="max-w-2xl mx-auto text-center">
-    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4"><%= t('tools.quotes.cta.ready_to_add_quotes_to_your_app') %></h2>
-
-
-    <p class="text-gray-500 dark:text-gray-400 mb-8"><%= t('tools.quotes.cta.sign_up_for_free_and_start_fetching') %></p>
-
-
-
-
-    <div class="flex flex-wrap justify-center gap-4">
-      <%= link_to new_user_registration_path,
-            class: "inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D9E75]",
-            style: "background-color:#1D9E75;" do %>
-        Get your free API key
-      <% end %>
-
-      <%= link_to api_path("quotes"),
-            class: "inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition" do %>
-        View API documentation
-      <% end %>
-    </div>
-
-    <p class="mt-6 text-xs text-gray-400">
-      Free plan includes 1,000 requests/month.
-      <%= link_to pricing_path, class: "underline hover:text-gray-600 dark:hover:text-gray-300" do %>
-        See all plans
-      <% end %>
-    </p>
-  </div>
-</section>
+<%= render "partials/tools/shared/cta",
+      heading:  t("tools.quotes.cta.ready_to_add_quotes_to_your_app"),
+      body:     t("tools.quotes.cta.sign_up_for_free_and_start_fetching"),
+      docs_url: api_path("quotes"),
+      cta_primary: t("tools.quotes.cta.cta_primary"),
+      cta_docs:    t("tools.quotes.cta.cta_docs") %>

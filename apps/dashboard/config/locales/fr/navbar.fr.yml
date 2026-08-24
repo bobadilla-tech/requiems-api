@@ -2,5 +2,7 @@
 fr:
   navbar:
     search:
+      browse_apis: Voir les API →
+      browse_examples: Voir les exemples →
       try_different_keywords_or_browse_all: Essayez différents mots-clés ou parcourez
         tout le contenu

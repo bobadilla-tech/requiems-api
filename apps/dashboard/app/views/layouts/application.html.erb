@@ -2,15 +2,49 @@
 <html lang="<%= I18n.locale %>">
   <head>
     <% if !user_signed_in? && ENV["GA4_MEASUREMENT_ID"].present? %>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA4_MEASUREMENT_ID"] %>"></script>
-    
       <script>
-        window.dataLayer = window.dataLayer || [];
-      
-        function gtag(){dataLayer.push(arguments);}
-      
-        gtag('js', new Date());
-        gtag('config', '<%= ENV["GA4_MEASUREMENT_ID"] %>');
+        (function() {
+          // Defer GTM's bootstrap off the critical rendering path: it competes
+          // with first paint / interaction otherwise. requestIdleCallback is the
+          // primary path, but Safari/WebKit ships no requestIdleCallback at all,
+          // so setTimeout is a first-class path here too, not just a fallback —
+          // feature detection naturally routes all Safari traffic through it.
+          var loaded = false;
+          function loadGTM() {
+            if (loaded) return;
+            loaded = true;
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function() { dataLayer.push(arguments); };
+            gtag('js', new Date());
+            gtag('config', '<%= ENV["GA4_MEASUREMENT_ID"] %>');
+
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=<%= ENV["GA4_MEASUREMENT_ID"] %>';
+            document.head.appendChild(s);
+          }
+
+          var scheduled = false;
+          function schedule() {
+            if (scheduled) return;
+            scheduled = true;
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(loadGTM, { timeout: 4000 });
+            } else {
+              setTimeout(loadGTM, 1500);
+            }
+          }
+
+          if (document.readyState === 'complete') {
+            schedule();
+          } else {
+            window.addEventListener('load', schedule, { once: true });
+          }
+          [ 'pointerdown', 'keydown', 'touchstart' ].forEach(function(evt) {
+            window.addEventListener(evt, schedule, { once: true, passive: true });
+          });
+        })();
       </script>
     <% end %>
 
@@ -66,8 +100,6 @@
     <%= json_ld_tags %>
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css"></noscript>
     <%= javascript_importmap_tags %>
     
   </head>

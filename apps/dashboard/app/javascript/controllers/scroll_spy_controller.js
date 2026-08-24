@@ -6,7 +6,15 @@ export default class extends Controller {
     this.targets = this.links.map((a) =>
       document.querySelector(a.getAttribute("href"))
     ).filter(Boolean);
-    this._onScroll = this._update.bind(this);
+    this._ticking = false;
+    this._onScroll = () => {
+      if (this._ticking) return;
+      this._ticking = true;
+      requestAnimationFrame(() => {
+        this._ticking = false;
+        this._update();
+      });
+    };
     window.addEventListener("scroll", this._onScroll, { passive: true });
     this._update();
   }

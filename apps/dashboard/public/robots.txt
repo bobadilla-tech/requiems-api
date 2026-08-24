@@ -5,4 +5,4 @@ Disallow: /*/dashboard/
 Disallow: /*/admin/
 Disallow: /*/users/
 
-Sitemap: https://requiems.xyz/sitemap.xml
+Sitemap: https://requiemsapi.com/sitemap.xml

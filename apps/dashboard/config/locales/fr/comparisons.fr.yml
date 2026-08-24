@@ -816,6 +816,8 @@ fr:
             body: ZeroBounce sells credits that expire. Requiems API bills per call
               with a monthly free tier — use it when you need it.
     hub:
+      badge_no: "Non"
+      badge_yes: "Oui"
       benchmarks_caption: Requiems API vs. top specialists across key decision criteria.
       benchmarks_columns:
         abstractapi: AbstractAPI
