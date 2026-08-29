@@ -112,7 +112,7 @@ services:
     command: >
       sh -c "
         bun install &&
-        REQUIEMS_API_KEY=\$\$LOCAL_DEV_API_KEY bun run --watch src/server.ts
+        REQUIEMS_API_KEY=$$LOCAL_DEV_API_KEY bun run --watch src/server.ts
       "
     environment:
       - MCP_TRANSPORT=http

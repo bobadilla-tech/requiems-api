@@ -38,12 +38,12 @@ export interface SummaryData {
   metrics: Record<string, MetricData | undefined>;
 }
 
-/** Base URL of the Auth Gateway (edge proxy). Override with BASE_URL env var. */
+/** Base URL of the direct Go API. Override with BASE_URL env var. */
 export const BASE_URL: string = __ENV.BASE_URL || "http://localhost:8080";
 
 /**
- * Dev API keys — one per plan tier.
- * Matches the keys written by seed-dev.ts.
+ * Dev API key from the Rails development seed. Provide API_KEY_* values
+ * explicitly when a load scenario needs distinct subscription plan tiers.
  */
 const localKey = __ENV.LOCAL_DEV_API_KEY || __ENV.REQUIEMS_API_KEY || "";
 if (!/^requiem_[0-9A-Za-z]{24}$/.test(localKey)) {
