@@ -10,7 +10,16 @@ optional LanguageTool dependency. Dashboard, Sidekiq, and MCP call the direct
 Go service at `api:8080`. There are no Worker containers, Wrangler state
 volumes, D1 migrations, or KV mounts.
 
-Set `LOCAL_DEV_API_KEY` in `.env.local` before running the dashboard seed.
+The checked-in Compose default is `requiem_AAAAAAAAAAAAAAAAAAAAAAAA`; it is a
+local-only development credential. To use another disposable key, set
+`LOCAL_DEV_API_KEY` in `.env.local`. The dashboard startup hook runs
+`db:seed`, which creates or reconciles the dedicated local key in Postgres on
+every development start, including after an existing database volume has been
+carried across the auth migration.
+
+Call the API with the `requiems-api-key` header. The retired
+`X-Backend-Secret` header is not accepted by the normal local or production
+path.
+
 Use `TEST_DATABASE_URL` for Go integration tests and never run validation
 against the development database.
-

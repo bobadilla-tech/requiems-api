@@ -17,20 +17,23 @@ docker compose -f docker-compose.dev.yml up
 | PostgreSQL      | localhost:5433                |
 | Redis           | localhost:6379                |
 
-Before starting Rails, put a disposable key in `infra/docker/.env.local`:
+The Compose default development key is:
 
 ```text
-LOCAL_DEV_API_KEY=requiem_<24 alphanumeric characters>
+LOCAL_DEV_API_KEY=requiem_AAAAAAAAAAAAAAAAAAAAAAAA
 ```
 
-The development seed uses this exact value when it creates the test user's key.
-Do not commit the local file or use a production key for development.
+You can override it with any disposable `requiem_<24 alphanumeric characters>`
+value in `infra/docker/.env.local`. The development seed uses the configured
+value and reconciles the test user's key on startup, so an old Docker database
+volume does not retain an unusable key. Do not use a production key for
+development.
 
 ## Direct API smoke test
 
 ```bash
 curl --fail http://localhost:8080/healthz
-curl -H "requiems-api-key: $LOCAL_DEV_API_KEY" \
+curl -H "requiems-api-key: ${LOCAL_DEV_API_KEY:-requiem_AAAAAAAAAAAAAAAAAAAAAAAA}" \
   http://localhost:8080/v1/entertainment/advice
 ```
 
