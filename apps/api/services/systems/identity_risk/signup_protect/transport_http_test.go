@@ -9,7 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/alicebob/miniredis/v2"
 	"github.com/go-chi/chi/v5"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -53,9 +55,12 @@ func cleanEmail() email.Validation {
 	return email.Validation{Valid: v, SyntaxValid: true, MxValid: mx, Disposable: false, Normalized: &normalized, Domain: &domain}
 }
 
-func setupRouter(e *stubEmail, p *stubPhone, v *stubVPN, i *stubIPInfo) chi.Router {
+func setupRouter(t *testing.T, e *stubEmail, p *stubPhone, v *stubVPN, i *stubIPInfo) chi.Router {
+	t.Helper()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
 	r := chi.NewRouter()
-	RegisterRoutes(r, NewService(e, p, v, i))
+	RegisterRoutes(r, NewService(e, p, v, i, rdb))
 	return r
 }
 
@@ -71,6 +76,7 @@ func post(t *testing.T, r chi.Router, body string) *httptest.ResponseRecorder {
 func TestSignupProtect_AllClean(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(
+		t,
 		&stubEmail{r: cleanEmail()},
 		&stubPhone{r: phone.ValidateResponse{Valid: true, Country: "US", Risk: &phone.Risk{}}},
 		&stubVPN{r: ipvpn.IPCheckResponse{}},
@@ -93,6 +99,7 @@ func TestSignupProtect_DisposableEmail(t *testing.T) {
 	normalized := "user@tempmail.io"
 	domain := "tempmail.io"
 	r := setupRouter(
+		t,
 		&stubEmail{r: email.Validation{Valid: true, SyntaxValid: true, MxValid: true, Disposable: true, Normalized: &normalized, Domain: &domain}},
 		&stubPhone{r: phone.ValidateResponse{Valid: true, Risk: &phone.Risk{}}},
 		&stubVPN{r: ipvpn.IPCheckResponse{}},
@@ -111,6 +118,7 @@ func TestSignupProtect_DisposableEmail(t *testing.T) {
 func TestSignupProtect_TORDetected(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(
+		t,
 		&stubEmail{r: cleanEmail()},
 		&stubPhone{r: phone.ValidateResponse{Valid: true, Risk: &phone.Risk{}}},
 		&stubVPN{r: ipvpn.IPCheckResponse{IsTor: true}},
@@ -130,6 +138,7 @@ func TestSignupProtect_TORDetected(t *testing.T) {
 func TestSignupProtect_VoIPPhone(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(
+		t,
 		&stubEmail{r: cleanEmail()},
 		&stubPhone{r: phone.ValidateResponse{Valid: true, Risk: &phone.Risk{IsVoIP: true}}},
 		&stubVPN{r: ipvpn.IPCheckResponse{}},
@@ -147,6 +156,7 @@ func TestSignupProtect_VoIPPhone(t *testing.T) {
 func TestSignupProtect_GeoMismatchPhoneIP(t *testing.T) {
 	t.Parallel()
 	r := setupRouter(
+		t,
 		&stubEmail{r: cleanEmail()},
 		&stubPhone{r: phone.ValidateResponse{Valid: true, Country: "US", Risk: &phone.Risk{}}},
 		&stubVPN{r: ipvpn.IPCheckResponse{}},
@@ -161,7 +171,7 @@ func TestSignupProtect_GeoMismatchPhoneIP(t *testing.T) {
 
 func TestSignupProtect_OnlyEmailSignalsNullPhoneIP(t *testing.T) {
 	t.Parallel()
-	r := setupRouter(&stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{}, &stubIPInfo{})
+	r := setupRouter(t, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{}, &stubIPInfo{})
 	w := post(t, r, `{"email":"user@example.com"}`)
 	require.Equal(t, http.StatusOK, w.Code)
 	var resp httpx.Response[Result]
@@ -173,7 +183,7 @@ func TestSignupProtect_OnlyEmailSignalsNullPhoneIP(t *testing.T) {
 
 func TestSignupProtect_NoFieldsProvided(t *testing.T) {
 	t.Parallel()
-	r := setupRouter(&stubEmail{}, &stubPhone{}, &stubVPN{}, &stubIPInfo{})
+	r := setupRouter(t, &stubEmail{}, &stubPhone{}, &stubVPN{}, &stubIPInfo{})
 	w := post(t, r, `{}`)
 	assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 }
