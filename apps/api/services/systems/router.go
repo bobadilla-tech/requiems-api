@@ -32,6 +32,7 @@ func RegisterRoutes(r chi.Router, pool *pgxpool.Pool, rdb *redis.Client, cfg con
 	identityrisk.RegisterRoutes(r, identityrisk.Deps{
 		Pool:      pool,
 		IPIClient: ipiClient,
+		RDB:       rdb,
 	})
 
 	payments.RegisterRoutes(r, payments.Deps{

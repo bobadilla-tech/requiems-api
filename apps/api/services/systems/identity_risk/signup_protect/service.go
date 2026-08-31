@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"requiems-api/services/systems/identity_risk/internal/scorer"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type Service struct {
@@ -11,10 +13,11 @@ type Service struct {
 	phone  scorer.PhoneChecker
 	vpn    scorer.VPNChecker
 	ipInfo scorer.IPInfoChecker
+	rdb    *redis.Client
 }
 
-func NewService(e scorer.EmailChecker, p scorer.PhoneChecker, v scorer.VPNChecker, i scorer.IPInfoChecker) *Service {
-	return &Service{email: e, phone: p, vpn: v, ipInfo: i}
+func NewService(e scorer.EmailChecker, p scorer.PhoneChecker, v scorer.VPNChecker, i scorer.IPInfoChecker, rdb *redis.Client) *Service {
+	return &Service{email: e, phone: p, vpn: v, ipInfo: i, rdb: rdb}
 }
 
 type EmailSignal struct {
@@ -56,7 +59,7 @@ type Result struct {
 
 func (s *Service) Protect(ctx context.Context, req Request) (Result, error) {
 	resolved := scorer.Resolve(ctx, s.email, s.phone, s.vpn, s.ipInfo,
-		req.Email, req.Phone, req.IPAddress)
+		req.Email, req.Phone, req.IPAddress, s.rdb)
 	r := scorer.Compute(resolved.Signals)
 
 	flags := r.Flags
