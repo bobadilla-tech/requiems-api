@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/alicebob/miniredis/v2 v2.38.0
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
@@ -30,6 +31,7 @@ require (
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tidwall/geoindex v1.7.0 // indirect
 	github.com/tidwall/rtree v1.10.0 // indirect
+	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
