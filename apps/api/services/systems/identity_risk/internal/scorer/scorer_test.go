@@ -4,7 +4,10 @@ import (
 	"context"
 	"net"
 	"testing"
+	"time"
 
+	"github.com/alicebob/miniredis/v2"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 
 	ipinfo "requiems-api/services/networking/ip/info"
@@ -56,6 +59,7 @@ func TestResolve_CleanEmail_SetsExpectedSignals(t *testing.T) {
 		nil,
 		nil,
 		"user@example.com", "", "",
+		nil,
 	)
 
 	assert.True(t, resolved.Signals.EmailPresent)
@@ -75,6 +79,7 @@ func TestResolve_PhonePresent_SetsExpectedSignals(t *testing.T) {
 		nil,
 		nil,
 		"user@example.com", "+13235551234", "",
+		nil,
 	)
 
 	assert.True(t, resolved.Signals.PhonePresent)
@@ -85,6 +90,9 @@ func TestResolve_PhonePresent_SetsExpectedSignals(t *testing.T) {
 func TestResolve_IPRiskChecked_WhenVPNSucceeds(t *testing.T) {
 	ctx := context.Background()
 
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+
 	resolved := Resolve(
 		ctx,
 		&stubEmail{r: cleanEmail()},
@@ -92,6 +100,7 @@ func TestResolve_IPRiskChecked_WhenVPNSucceeds(t *testing.T) {
 		&stubVPN{r: ipvpn.IPCheckResponse{IsProxy: false, IsTor: false, FraudScore: 0}},
 		&stubIPInfo{},
 		"user@example.com", "", "8.8.8.8",
+		rdb,
 	)
 
 	assert.True(t, resolved.Signals.IPRiskChecked)
@@ -249,4 +258,187 @@ func TestSignalConfidence_IPAllRisk(t *testing.T) {
 	got := signalConfidence(s)
 
 	assert.Equal(t, 0.0, got)
+}
+func TestResolve_Velocity_FirstCheck_BothCountersAreOne(t *testing.T) {
+	ctx := context.Background()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{},
+		&stubVPN{r: ipvpn.IPCheckResponse{}},
+		&stubIPInfo{},
+		"user@example.com", "", "8.8.8.8",
+		rdb,
+	)
+
+	assert.True(t, resolved.Signals.VelocityChecked)
+	assert.Equal(t, int64(1), resolved.Signals.VelocityCount1h)
+	assert.Equal(t, int64(1), resolved.Signals.VelocityCount24h)
+}
+
+func TestResolve_Velocity_1hAnd24hAreIndependentCounters(t *testing.T) {
+	ctx := context.Background()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+	mr.Set("identity_risk:ip:8.8.8.8:1h", "5")
+	mr.Set("identity_risk:ip:8.8.8.8:24h", "40")
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{},
+		&stubVPN{r: ipvpn.IPCheckResponse{}},
+		&stubIPInfo{},
+		"user@example.com", "", "8.8.8.8",
+		rdb,
+	)
+
+	// each key increments from its own prior value, they don't collide
+	assert.Equal(t, int64(6), resolved.Signals.VelocityCount1h)
+	assert.Equal(t, int64(41), resolved.Signals.VelocityCount24h)
+}
+
+func TestResolve_Velocity_IncrementsAcrossMultipleCalls(t *testing.T) {
+	ctx := context.Background()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+
+	var resolved Resolved
+	for range 3 {
+		resolved = Resolve(ctx, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{r: ipvpn.IPCheckResponse{}}, &stubIPInfo{}, "user@example.com", "", "8.8.8.8", rdb)
+	}
+
+	assert.Equal(t, int64(3), resolved.Signals.VelocityCount1h)
+	assert.Equal(t, int64(3), resolved.Signals.VelocityCount24h)
+}
+
+func TestResolve_Velocity_KeysHaveDistinctTTLs(t *testing.T) {
+	ctx := context.Background()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+
+	Resolve(ctx, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{r: ipvpn.IPCheckResponse{}}, &stubIPInfo{}, "user@example.com", "", "8.8.8.8", rdb)
+
+	ttl1h := mr.TTL("identity_risk:ip:8.8.8.8:1h")
+	ttl24h := mr.TTL("identity_risk:ip:8.8.8.8:24h")
+
+	assert.True(t, ttl1h > 0 && ttl1h <= time.Hour)
+	assert.True(t, ttl24h > time.Hour && ttl24h <= 24*time.Hour)
+}
+
+func TestResolve_Velocity_DifferentIPsHaveIndependentCounters(t *testing.T) {
+	ctx := context.Background()
+	mr := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{Addr: mr.Addr()})
+
+	Resolve(ctx, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{r: ipvpn.IPCheckResponse{}}, &stubIPInfo{}, "user@example.com", "", "1.1.1.1", rdb)
+	Resolve(ctx, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{r: ipvpn.IPCheckResponse{}}, &stubIPInfo{}, "user@example.com", "", "1.1.1.1", rdb)
+	resolved := Resolve(ctx, &stubEmail{r: cleanEmail()}, &stubPhone{}, &stubVPN{r: ipvpn.IPCheckResponse{}}, &stubIPInfo{}, "user@example.com", "", "2.2.2.2", rdb)
+
+	assert.Equal(t, int64(1), resolved.Signals.VelocityCount1h) // new IP, unaffected by 1.1.1.1's history
+}
+
+func TestResolve_Velocity_NotCheckedWhenNoIP(t *testing.T) {
+	ctx := context.Background()
+
+	resolved := Resolve(
+		ctx,
+		&stubEmail{r: cleanEmail()},
+		&stubPhone{},
+		nil,
+		nil,
+		"user@example.com", "", "",
+		nil,
+	)
+
+	assert.False(t, resolved.Signals.VelocityChecked)
+	assert.Equal(t, int64(0), resolved.Signals.VelocityCount1h)
+	assert.Equal(t, int64(0), resolved.Signals.VelocityCount24h)
+}
+
+func TestCompute_Velocity_LowTier_NoScoreNoFlag(t *testing.T) {
+	s := Signals{VelocityChecked: true, VelocityCount1h: 10}
+
+	result := Compute(s)
+
+	assert.Equal(t, 0.0, result.RiskScore)
+	assert.Empty(t, result.Flags)
+}
+
+func TestCompute_Velocity_MediumTier_At11(t *testing.T) {
+	s := Signals{VelocityChecked: true, VelocityCount1h: 11}
+
+	result := Compute(s)
+
+	assert.Equal(t, 0.10, result.RiskScore)
+	assert.Contains(t, result.Flags, "velocity_medium")
+}
+
+func TestCompute_Velocity_MediumTier_At50_StillMedium(t *testing.T) {
+	// scoreVelocity uses > 50 for high, so exactly 50 still falls in medium (> 10)
+	s := Signals{VelocityChecked: true, VelocityCount1h: 50}
+
+	result := Compute(s)
+
+	assert.Equal(t, 0.10, result.RiskScore)
+	assert.Contains(t, result.Flags, "velocity_medium")
+	assert.NotContains(t, result.Flags, "velocity_high")
+}
+
+func TestCompute_Velocity_HighTier_Above50(t *testing.T) {
+	s := Signals{VelocityChecked: true, VelocityCount1h: 51}
+
+	result := Compute(s)
+
+	assert.Equal(t, 0.25, result.RiskScore)
+	assert.Contains(t, result.Flags, "velocity_high")
+}
+
+func TestCompute_Velocity_NotCheckedContributesZero(t *testing.T) {
+	s := Signals{VelocityChecked: false, VelocityCount1h: 999} // should be ignored when not checked
+
+	result := Compute(s)
+
+	assert.Equal(t, 0.0, result.RiskScore)
+	assert.Empty(t, result.Flags)
+}
+
+func TestSignalConfidence_VelocityLow_FullWeight(t *testing.T) {
+	s := Signals{VelocityChecked: true, VelocityCount1h: 5}
+
+	got := signalConfidence(s)
+
+	assert.Equal(t, 1.0, got) // only signal present, and it's "clean" (<=10)
+}
+
+func TestSignalConfidence_VelocityHigh_ZeroWeight(t *testing.T) {
+	s := Signals{VelocityChecked: true, VelocityCount1h: 51}
+
+	got := signalConfidence(s)
+
+	assert.Equal(t, 0.0, got) // only signal present, and it's well over the threshold (>10)
+}
+
+func TestSignalConfidence_VelocityNotChecked_ExcludedFromDenominator(t *testing.T) {
+	withoutVelocity := Signals{EmailPresent: true}
+
+	// VelocityCount1h alone (without VelocityChecked=true) must not affect the result
+	assert.Equal(t, signalConfidence(withoutVelocity), signalConfidence(Signals{EmailPresent: true, VelocityCount1h: 999}))
+}
+
+func TestSignalConfidence_VelocityCheckedAndClean_MatchesUnchecked(t *testing.T) {
+	withoutVelocity := Signals{EmailPresent: true}
+	withVelocityCheckedAndClean := Signals{EmailPresent: true, VelocityChecked: true, VelocityCount1h: 1}
+
+	assert.Equal(t, signalConfidence(withoutVelocity), signalConfidence(withVelocityCheckedAndClean))
+}
+
+func TestSignalConfidence_VelocityCheckedAndDirty_LowersConfidence(t *testing.T) {
+	withoutVelocity := Signals{EmailPresent: true}
+	withVelocityCheckedAndDirty := Signals{EmailPresent: true, VelocityChecked: true, VelocityCount1h: 999}
+
+	assert.Less(t, signalConfidence(withVelocityCheckedAndDirty), signalConfidence(withoutVelocity))
 }
