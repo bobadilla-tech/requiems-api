@@ -19,7 +19,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/ip2location/ip2proxy-go/v4 v4.1.0 // indirect
-	github.com/kr/text v0.1.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/likexian/gokit v0.25.16 // indirect
 	github.com/oschwald/geoip2-golang v1.13.0 // indirect
@@ -73,6 +72,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/lib/pq v1.10.9 // indirect
+	github.com/pashagolub/pgxmock/v3 v3.4.0
 	golang.org/x/crypto v0.55.0
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/text v0.41.0
