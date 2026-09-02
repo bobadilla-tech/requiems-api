@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
@@ -187,4 +188,19 @@ func TestServiceLookupBatch_OrderPreserved(t *testing.T) {
 	require.Len(t, results, 2)
 	assert.Equal(t, "510000", results[0].BIN)
 	assert.Equal(t, "424242", results[1].BIN)
+}
+
+func TestServiceLookup_DataFreshnessPopulated(t *testing.T) {
+	pool := setupBINTestDB(t)
+	svc := NewService(pool)
+
+	insertBINFixture(t, pool, "424242", "visa", "credit", "classic", "Chase", "US", "United States", false, 0.95)
+
+	result, err := svc.Lookup(context.Background(), "424242")
+	require.NoError(t, err)
+
+	// last_updated defaults to NOW() on insert, so DataFreshness should
+	// reflect the current year-month.
+	expected := time.Now().Format("2006-01")
+	assert.Equal(t, expected, result.DataFreshness)
 }
