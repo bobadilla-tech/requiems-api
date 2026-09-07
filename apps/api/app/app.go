@@ -39,6 +39,8 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		return nil, err
 	}
 
+	checkBINDataFreshness(ctx, pool, slog.Default())
+
 	rdb, err := reqredis.Connect(ctx, cfg.RedisURL)
 	if err != nil {
 		return nil, err

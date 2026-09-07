@@ -3,6 +3,7 @@ package bin
 import (
 	"context"
 	"log"
+	"time"
 )
 
 // This file contains all database query helpers for the BIN service.
@@ -15,18 +16,25 @@ func (s *Service) queryBIN(ctx context.Context, prefix string) (LookupResponse, 
 			bin_prefix, scheme, card_type, card_level,
 			issuer_name, issuer_url, issuer_phone,
 			country_code, country_name,
-			prepaid, confidence
+			prepaid, confidence, last_updated
 		FROM bin_data
 		WHERE bin_prefix = $1
 	`, prefix)
 
 	var r LookupResponse
+	var lastUpdated time.Time
 	err := row.Scan(
 		&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
 		&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
 		&r.CountryCode, &r.CountryName,
-		&r.Prepaid, &r.Confidence,
+		&r.Prepaid, &r.Confidence, &lastUpdated,
 	)
+
+	if err != nil {
+		return r, err
+	}
+
+	r.DataFreshness = lastUpdated.Format("2006-01")
 	return r, err
 }
 
@@ -39,7 +47,7 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 			bin_prefix, scheme, card_type, card_level,
 			issuer_name, issuer_url, issuer_phone,
 			country_code, country_name,
-			prepaid, confidence
+			prepaid, confidence, last_updated
 		FROM bin_data
 		WHERE LEFT(bin_prefix, 6) = $1
 		ORDER BY LENGTH(bin_prefix) DESC, bin_prefix ASC
@@ -47,12 +55,19 @@ func (s *Service) queryBINByPrefix6(ctx context.Context, prefix6 string) (Lookup
 	`, prefix6)
 
 	var r LookupResponse
+	var lastUpdated time.Time
 	err := row.Scan(
 		&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
 		&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
 		&r.CountryCode, &r.CountryName,
-		&r.Prepaid, &r.Confidence,
+		&r.Prepaid, &r.Confidence, &lastUpdated,
 	)
+
+	if err != nil {
+		return r, err
+	}
+
+	r.DataFreshness = lastUpdated.Format("2006-01")
 	return r, err
 }
 
@@ -64,7 +79,7 @@ func (s *Service) queryBINBatch(ctx context.Context, prefixes []string) (map[str
 			bin_prefix, scheme, card_type, card_level,
 			issuer_name, issuer_url, issuer_phone,
 			country_code, country_name,
-			prepaid, confidence
+			prepaid, confidence, last_updated
 		FROM bin_data
 		WHERE bin_prefix = ANY($1::text[])
 	`, prefixes)
@@ -76,15 +91,17 @@ func (s *Service) queryBINBatch(ctx context.Context, prefixes []string) (map[str
 	hits := make(map[string]LookupResponse)
 	for rows.Next() {
 		var r LookupResponse
+		var lastUpdated time.Time
 		if err := rows.Scan(
 			&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
 			&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
 			&r.CountryCode, &r.CountryName,
-			&r.Prepaid, &r.Confidence,
+			&r.Prepaid, &r.Confidence, &lastUpdated,
 		); err != nil {
 			log.Printf("bin: queryBINBatch scan error: %v", err)
 			return nil, err
 		}
+		r.DataFreshness = lastUpdated.Format("2006-01")
 		hits[r.BIN] = r
 	}
 	if err := rows.Err(); err != nil {
@@ -101,7 +118,8 @@ func (s *Service) queryBINByPrefix6Batch(ctx context.Context, prefixes6 []string
 			bin_prefix, scheme, card_type, card_level,
 			issuer_name, issuer_url, issuer_phone,
 			country_code, country_name,
-			prepaid, confidence
+			prepaid, confidence, last_updated
+
 		FROM bin_data
 		WHERE LEFT(bin_prefix, 6) = ANY($1::text[])
 		ORDER BY LEFT(bin_prefix, 6), LENGTH(bin_prefix) DESC, bin_prefix ASC
@@ -114,15 +132,17 @@ func (s *Service) queryBINByPrefix6Batch(ctx context.Context, prefixes6 []string
 	hits := make(map[string]LookupResponse)
 	for rows.Next() {
 		var r LookupResponse
+		var lastUpdated time.Time
 		if err := rows.Scan(
 			&r.BIN, &r.Scheme, &r.CardType, &r.CardLevel,
 			&r.IssuerName, &r.IssuerURL, &r.IssuerPhone,
 			&r.CountryCode, &r.CountryName,
-			&r.Prepaid, &r.Confidence,
+			&r.Prepaid, &r.Confidence, &lastUpdated,
 		); err != nil {
 			log.Printf("bin: queryBINByPrefix6Batch scan error: %v", err)
 			return nil, err
 		}
+		r.DataFreshness = lastUpdated.Format("2006-01")
 		prefix6 := r.BIN
 		if len(r.BIN) > 6 {
 			prefix6 = r.BIN[:6]

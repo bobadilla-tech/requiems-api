@@ -27,6 +27,7 @@ type LookupResponse struct {
 	// passes the Luhn checksum — it does not validate a full card PAN.
 	LuhnPrefixValid bool    `json:"luhn_prefix_valid"`
 	Confidence      float64 `json:"confidence"`
+	DataFreshness   string  `json:"data_freshness,omitempty"`
 }
 
 // BatchBINItem is the result for a single item in a batch BIN lookup request.

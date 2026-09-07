@@ -93,6 +93,9 @@ endpoints:
       - name: confidence
         type: number
         description: "Data quality score (0.00–1.00). Multi-source confirmed records score higher."
+      - name: data_freshness
+        type: string
+        description: "Year and month the underlying BIN data was last refreshed (YYYY-MM), based on the most recent seed run for this record"
 
     errors:
       - code: bad_request
