@@ -2,14 +2,18 @@ package scorer
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"net"
 	"sync"
+	"time"
 
 	ipinfo "requiems-api/services/networking/ip/info"
 	ipvpn "requiems-api/services/networking/ip/vpn"
 	"requiems-api/services/validation/email"
 	"requiems-api/services/validation/phone"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type EmailChecker interface {
@@ -45,6 +49,7 @@ const (
 	ipFraudWeight         = 0.80 // ipFraudWeight reflects external provider accuracy, which varies by data freshness.
 	proxyWeight           = 0.90 // proxyWeight is high — proxy detection is well-established and reliable.
 	torWeight             = 0.90 // torWeight is high — TOR exit node lists are maintained and highly accurate.
+	velocityWeight        = 0.75 // velocityWeight reflects strong fraud correlation for high-velocity IPs, tempered by thresholds that are heuristic and pending tuning against real traffic.
 )
 
 func Resolve(
@@ -54,6 +59,7 @@ func Resolve(
 	vpnSvc VPNChecker,
 	ipInfoSvc IPInfoChecker,
 	emailAddr, phoneNum, ipAddr string,
+	rdb *redis.Client,
 ) Resolved {
 	var (
 		mu  sync.Mutex
@@ -123,6 +129,26 @@ func Resolve(
 				mu.Unlock()
 			})
 		}
+
+		wg.Go(func() {
+			key1h := fmt.Sprintf("identity_risk:ip:%s:1h", ipAddr)
+			key24h := fmt.Sprintf("identity_risk:ip:%s:24h", ipAddr)
+
+			count1h, err1 := incrVelocityKey(ctx, rdb, key1h, time.Hour)
+			count24h, err2 := incrVelocityKey(ctx, rdb, key24h, 24*time.Hour)
+			if err1 != nil {
+				return
+			}
+
+			mu.Lock()
+			out.Signals.VelocityChecked = true
+			out.Signals.VelocityCount1h = count1h
+			if err2 == nil {
+				out.Signals.VelocityCount24h = count24h
+			}
+			mu.Unlock()
+
+		})
 	}
 
 	wg.Wait()
@@ -149,6 +175,10 @@ type Signals struct {
 	IsHosting     bool
 	FraudScore    int
 	IPCountry     string
+
+	VelocityChecked  bool
+	VelocityCount1h  int64
+	VelocityCount24h int64
 }
 
 type ScoreResult struct {
@@ -160,7 +190,7 @@ type ScoreResult struct {
 
 func Compute(s Signals) ScoreResult {
 	flags := make([]string, 0, 4)
-	score := scoreEmail(s, &flags) + scorePhone(s, &flags) + scoreIP(s, &flags)
+	score := scoreEmail(s, &flags) + scorePhone(s, &flags) + scoreIP(s, &flags) + scoreVelocity(s, &flags)
 	score = roundScore(score)
 
 	confidence := signalConfidence(s)
@@ -290,9 +320,51 @@ func signalConfidence(s Signals) float64 {
 
 	}
 
+	if s.VelocityChecked {
+		denominator += velocityWeight
+		if s.VelocityCount1h <= 10 {
+			numerator += velocityWeight
+		}
+	}
+
 	if denominator == 0 {
 		return 0
 	}
 
 	return math.Round(numerator/denominator*100) / 100
+}
+
+func incrVelocityKey(ctx context.Context, rdb *redis.Client, key string, ttl time.Duration) (int64, error) {
+	ok, err := rdb.SetNX(ctx, key, 1, ttl).Result()
+
+	if err != nil {
+		return 0, err
+	}
+
+	if ok {
+		return 1, nil
+	}
+
+	count, err := rdb.Incr(ctx, key).Result()
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func scoreVelocity(s Signals, flags *[]string) float64 {
+	if s.VelocityChecked {
+		switch {
+		case s.VelocityCount1h > 50:
+			*flags = append(*flags, "velocity_high")
+			return 0.25
+		case s.VelocityCount1h > 10:
+			*flags = append(*flags, "velocity_medium")
+			return 0.10
+		default:
+			return 0
+		}
+	}
+	return 0
 }

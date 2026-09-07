@@ -4,6 +4,7 @@ import (
 	"github.com/bobadilla-tech/go-ip-intelligence/v2/ipi"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 
 	"requiems-api/services/networking/domain"
 	ipinfo "requiems-api/services/networking/ip/info"
@@ -22,6 +23,7 @@ import (
 type Deps struct {
 	Pool      *pgxpool.Pool
 	IPIClient *ipi.Client
+	RDB       *redis.Client
 }
 
 // RegisterRoutes mounts all Identity & Risk system endpoints on r.
@@ -39,10 +41,10 @@ func RegisterRoutes(r chi.Router, deps Deps) {
 		infoSvc = ipinfo.NewService(deps.IPIClient)
 	}
 
-	riskSvc := riskscore.NewService(emailSvc, phoneSvc, vpnSvc, infoSvc)
+	riskSvc := riskscore.NewService(emailSvc, phoneSvc, vpnSvc, infoSvc, deps.RDB)
 	riskscore.RegisterRoutes(r, riskSvc)
 
-	signupSvc := signupprotect.NewService(emailSvc, phoneSvc, vpnSvc, infoSvc)
+	signupSvc := signupprotect.NewService(emailSvc, phoneSvc, vpnSvc, infoSvc, deps.RDB)
 	signupprotect.RegisterRoutes(r, signupSvc)
 
 	whoisSvc := whois.NewService()
