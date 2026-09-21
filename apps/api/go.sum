@@ -18,8 +18,8 @@ github.com/bobadilla-tech/go-email-normalizer v1.2.1 h1:JiWS02AC34Lyou7lMjn0XABy
 github.com/bobadilla-tech/go-email-normalizer v1.2.1/go.mod h1:iHGTIZ9nc2tSPLssbRmwKsum84dm8oXGt8lAceKnDdk=
 github.com/bobadilla-tech/go-ip-intelligence/v2 v2.2.0 h1:yngokNsJ/ZFpzmMJtBEgN9cE3jKPLQCLN0sYkm/Eezo=
 github.com/bobadilla-tech/go-ip-intelligence/v2 v2.2.0/go.mod h1:ljKlD9nwuqNRb5gsh25yQ+a6zzB+2g9kqkKRE0/BmZU=
-github.com/bobadilla-tech/holidays-per-country v1.0.1 h1:AFH9uxSkyMCLcZ/F2fbzmwdoix5Pbq+q3Vfye8uYoQw=
-github.com/bobadilla-tech/holidays-per-country v1.0.1/go.mod h1:uZq0qDg1zJ1bccuGOOAkaGsnwCDs6iQyAeAeT94ige4=
+github.com/bobadilla-tech/holidays-per-country v1.1.0 h1:DjrG76UwA/4TPcrrhRyuA/qwahgS8o7SwXZpCXpKQ1A=
+github.com/bobadilla-tech/holidays-per-country v1.1.0/go.mod h1:uZq0qDg1zJ1bccuGOOAkaGsnwCDs6iQyAeAeT94ige4=
 github.com/bobadilla-tech/is-email-disposable v1.0.2 h1:pZ06AF4IOmyWemsJmxcy6A+fZTQ8t41ObMutkBlJayE=
 github.com/bobadilla-tech/is-email-disposable v1.0.2/go.mod h1:LbrCYPScVuAZoePtpPeYOIi0PMGbCPvCpW8daBKNAi0=
 github.com/bobadilla-tech/lorelai v1.3.3 h1:59SqSzL+ICSW6MCA2OTzj6r+EJ7Nv7FXtbXd/uEhwVk=
