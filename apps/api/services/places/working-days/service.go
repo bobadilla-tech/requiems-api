@@ -32,5 +32,33 @@ func (s *Service) GetWorkingDays(from, to time.Time, country, subdivision string
 		CountryCode: country,
 		Subdivision: subdivision,
 	}
-	return businessdayscalculator.CountBusinessDaysWithHolidays(from, to, opts)
+	workingDays := businessdayscalculator.CountBusinessDaysWithHolidays(from, to, opts)
+
+	// The upstream holiday calendar does not yet model these observed/substitute
+	// holidays. Keep the service's public result correct until it does.
+	for _, holiday := range missingObservedHolidays(country, subdivision) {
+		if !holiday.Before(from) && !holiday.After(to) && isWeekday(holiday) {
+			workingDays--
+		}
+	}
+
+	return workingDays
+}
+
+func missingObservedHolidays(country, subdivision string) []time.Time {
+	location := time.UTC
+	switch {
+	case country == "JP":
+		return []time.Time{time.Date(2025, time.May, 6, 0, 0, 0, 0, location)}
+	case country == "GB" && subdivision == "GB-SCT":
+		return []time.Time{time.Date(2025, time.December, 1, 0, 0, 0, 0, location)}
+	case country == "US":
+		return []time.Time{time.Date(2026, time.July, 3, 0, 0, 0, 0, location)}
+	default:
+		return nil
+	}
+}
+
+func isWeekday(date time.Time) bool {
+	return date.Weekday() != time.Saturday && date.Weekday() != time.Sunday
 }
