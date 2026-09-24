@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/alicebob/miniredis/v2 v2.38.0
+	github.com/alicebob/miniredis/v2 v2.39.0
 	github.com/boyter/go-string v1.0.5 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.15 // indirect
