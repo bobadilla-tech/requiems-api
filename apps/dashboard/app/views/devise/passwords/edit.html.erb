@@ -1,25 +1,50 @@
-<h2><%= t('devise.passwords.edit.change_your_password') %></h2>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <%= link_to root_path, class: "flex justify-center mb-6" do %>
+        <span class="logo-circle">
+          <picture>
+            <source srcset="<%= asset_path 'logo.webp' %>" type="image/webp">
+            <%= image_tag "logo.png", alt: "Requiems API Logo", class: "h-10 w-auto", width: "39", height: "40" %>
+          </picture>
+        </span>
+      <% end %>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+        <%= t("devise.passwords.edit.change_your_password") %>
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+        <%= t("auth.forgot_password.subheading") %>
+      </p>
+    </div>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "mt-8 space-y-6" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <%= f.label :password, t('devise.passwords.edit.new_password') %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <%= f.label :password, t("devise.passwords.edit.new_password"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <% if @minimum_password_length %>
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <%= t("auth.sign_up.password_min", min: @minimum_password_length) %>
+            </p>
+          <% end %>
+          <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder: "••••••••" %>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, t("devise.passwords.edit.confirm_new_password"), class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder: "••••••••" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.submit t("devise.passwords.edit.change_my_password"), class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-indigo-500 cursor-pointer" %>
+      </div>
+
+      <div class="text-center text-sm">
+        <%= render "devise/shared/links" %>
+      </div>
     <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
   </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation, t('devise.passwords.edit.confirm_new_password') %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit t('devise.passwords.edit.change_my_password') %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
