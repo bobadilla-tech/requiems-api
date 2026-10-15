@@ -66,7 +66,7 @@ var fixtures = []fixture{
 	{
 		name: "japan/golden_week_substitute", country: "JP", region: "",
 		start: "2025-05-01", end: "2025-05-06", expected: 2,
-		note: "KNOWN GAP: Greenery Day (4-May, Sunday) has no substitute holiday in the library. Expected to still FAIL until fixed upstream or overridden in service.go.",
+		note: "Greenery Day (4-May, Sunday) substitute holiday is now modeled by the holiday library",
 	},
 	{
 		name: "japan/showa_day_fixed", country: "JP", region: "",
@@ -102,7 +102,7 @@ var fixtures = []fixture{
 	{
 		name: "uk/st_andrews_substitute_scotland", country: "GB", region: "GB-SCT",
 		start: "2025-11-28", end: "2025-12-02", expected: 2,
-		note: "KNOWN GAP (separate from region-code bug): St Andrew's Day substitute (30-Nov Sun -> 1-Dec Mon) not implemented for Scotland. Expected to still FAIL.",
+		note: "St Andrew's Day substitute (30-Nov Sun -> 1-Dec Mon) is now modeled for Scotland",
 	},
 	{
 		name: "uk/st_andrews_not_observed_england", country: "GB", region: "GB-ENG",
@@ -177,7 +177,7 @@ var fixtures = []fixture{
 	{
 		name: "usa/july4_observed_friday", country: "US", region: "",
 		start: "2026-06-29", end: "2026-07-05", expected: 4,
-		note: "KNOWN GAP: 4-Jul-2026 falls Saturday, library returned 0 holidays in range — 'observed' rule not implemented for 2026. Expected to still FAIL.",
+		note: "Observed-day rule is modeled for 4-Jul-2026 (Saturday -> Friday observation)",
 	},
 	{
 		name: "usa/labor_day_nth_monday", country: "US", region: "",
