@@ -4,10 +4,11 @@ class Dashboard::BillingController < Dashboard::BaseController
   helper_method :valid_plan?
 
   def show
-    @subscription = current_user.subscription
-    @current_plan = @subscription&.plan_name || "free"
-
+    # The subscription the Go API enforces (active/trialing), so the plan,
+    # dates and usage numbers on this page all describe the same row.
     @usage = current_user.usage_summary
+    @subscription = @usage.cycle.subscription
+    @current_plan = @usage.plan_name
 
     # Get plan limits and pricing
     @plan_info = get_plan_info(@current_plan)

@@ -174,16 +174,16 @@ fr:
         view_all: Voir toutes les formules et les tarifs →
         yearly: Annuel
       usage:
-        heading: Utilisation sur la période
-        of_requests: sur %{limit} requêtes
+        heading: "Utilisation sur ce cycle"
+        of_requests: "sur %{limit} crédits"
         percent_used: "%{percent}% utilisé"
         rate_limit_heading: Limite de débit
         rate_limit_unit: requêtes par minute
-        warning_critical_body: Vous approchez du plafond mensuel. Envisagez une formule
-          supérieure pour éviter une interruption.
-        warning_critical_heading: Peu de requêtes restantes !
-        warning_moderate_body: Vous avez utilisé %{percent}% de votre quota mensuel.
-          Une mise à niveau peut être utile bientôt.
+        warning_critical_body: "Vous approchez de votre limite de crédits pour ce cycle. Envisagez une formule supérieure pour éviter une interruption."
+        warning_critical_heading: "Peu de crédits restants !"
+        warning_exhausted_body: "Les requêtes renvoient une erreur 429 jusqu'à la réinitialisation de votre cycle ou un changement de formule."
+        warning_exhausted_heading: "Limite de crédits atteinte"
+        warning_moderate_body: "Vous avez utilisé %{percent}% de vos crédits sur ce cycle. Une mise à niveau peut être utile bientôt."
         warning_moderate_heading: Attention
     mailers:
       account_deletion:
@@ -302,7 +302,7 @@ fr:
         state:
           exhausted: Limite atteinte. Les requêtes renvoient 429 jusqu'à la réinitialisation de votre cycle.
           high: Presque plus de crédits
-          ok: Beaucoup de crédits disponibles
+          ok: "Dans les temps"
           warn: Crédits bientôt épuisés
         title: Crédits utilisés ce cycle
       view_all: Tout voir

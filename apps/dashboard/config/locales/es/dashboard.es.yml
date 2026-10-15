@@ -172,16 +172,16 @@ es:
         view_all: Ver todos los planes y detalles de precios →
         yearly: Anual
       usage:
-        heading: Uso en este período
-        of_requests: de %{limit} solicitudes
+        heading: "Uso en este ciclo"
+        of_requests: "de %{limit} créditos"
         percent_used: "%{percent}% usado"
         rate_limit_heading: Límite de tasa
         rate_limit_unit: solicitudes por minuto
-        warning_critical_body: Te estás acercando a tu límite mensual. Considera actualizar
-          para evitar interrupciones del servicio.
-        warning_critical_heading: "¡Quedando pocas solicitudes!"
-        warning_moderate_body: Has usado el %{percent}% de tu cuota mensual. Puede
-          que quieras actualizar pronto.
+        warning_critical_body: "Te estás acercando a tu límite de créditos de este ciclo. Considera actualizar para evitar interrupciones del servicio."
+        warning_critical_heading: "¡Quedan pocos créditos!"
+        warning_exhausted_body: "Las solicitudes devuelven un error 429 hasta que se reinicie tu ciclo o actualices tu plan."
+        warning_exhausted_heading: "Límite de créditos alcanzado"
+        warning_moderate_body: "Has usado el %{percent}% de tus créditos de este ciclo. Puede que quieras actualizar pronto."
         warning_moderate_heading: "¡Atención!"
     mailers:
       account_deletion:
@@ -298,7 +298,7 @@ es:
         state:
           exhausted: Límite alcanzado. Las solicitudes devuelven 429 hasta que se reinicie tu ciclo.
           high: Casi sin créditos
-          ok: Hay créditos de sobra
+          ok: "Vas bien"
           warn: Quedan pocos
         title: Créditos usados este ciclo
       view_all: Ver todo

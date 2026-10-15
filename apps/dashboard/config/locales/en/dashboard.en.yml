@@ -170,16 +170,16 @@ en:
         view_all: View all plans and pricing details →
         yearly: Yearly
       usage:
-        heading: Usage This Period
-        of_requests: of %{limit} requests
+        heading: "Usage This Cycle"
+        of_requests: "of %{limit} credits"
         percent_used: "%{percent}% used"
         rate_limit_heading: Rate Limit
         rate_limit_unit: requests per minute
-        warning_critical_body: You're approaching your monthly limit. Consider upgrading
-          to avoid service interruption.
-        warning_critical_heading: Running low on requests!
-        warning_moderate_body: You've used %{percent}% of your monthly quota. You
-          may want to upgrade soon.
+        warning_critical_body: "You're approaching your credit limit for this cycle. Consider upgrading to avoid service interruption."
+        warning_critical_heading: "Running low on credits!"
+        warning_exhausted_body: "Requests return a 429 error until your cycle resets or you upgrade your plan."
+        warning_exhausted_heading: "Credit limit reached"
+        warning_moderate_body: "You've used %{percent}% of your credits for this cycle. You may want to upgrade soon."
         warning_moderate_heading: Heads up!
     mailers:
       account_deletion:
@@ -295,7 +295,7 @@ en:
         state:
           exhausted: Limit reached. Requests return 429 until your cycle resets.
           high: Almost out of credits
-          ok: Plenty available
+          ok: "On track"
           warn: Running low
         title: Credits Used This Cycle
       view_all: View All

@@ -26,7 +26,11 @@ class UsageSummaryTest < ActiveSupport::TestCase
   end
 
   test "used equals the ledger sum the Go sumUsage query computes on the shared fixture" do
-    skip "shared fixture is not in this checkout" unless LEDGER_FIXTURE.exist?
+    unless LEDGER_FIXTURE.exist?
+      flunk "#{LEDGER_FIXTURE} is missing" if ENV["CI"]
+
+      skip "shared fixture is not in this checkout"
+    end
 
     fixture = JSON.parse(LEDGER_FIXTURE.read)
     other = create_user(email: "other-ledger@example.com")

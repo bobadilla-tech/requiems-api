@@ -57,7 +57,7 @@ class Dashboard::BillingControllerTest < ActionDispatch::IntegrationTest
     travel_to(NOW) { get dashboard_billing_path }
 
     assert_select ".bg-yellow-50", 1
-    assert_select ".bg-yellow-50", text: /76% of your monthly quota/
+    assert_select ".bg-yellow-50", text: /76% of your credits/
     assert_select "[role=alert]", 0
   end
 
@@ -66,18 +66,34 @@ class Dashboard::BillingControllerTest < ActionDispatch::IntegrationTest
     travel_to(NOW) { get dashboard_billing_path }
     assert_select "[role=alert].bg-red-50", 1
 
+    assert_select "[role=alert]", text: /Running low on credits/
+
     log(100, at: Time.utc(2026, 10, 2))
     travel_to(NOW) { get dashboard_billing_path }
     assert_select "[role=alert].bg-red-50", 1
+    assert_select "[role=alert]", text: /Credit limit reached/
+    assert_select "[role=alert]", text: /429/
     assert_select "[role=progressbar] > div[style*='width: 100%']"
   end
 
-  test "a cancelled paid subscription is measured against the free limit" do
+  test "a cancelled paid subscription is shown and measured as the free plan" do
     Subscription.create!(user: @user, plan_name: "professional", status: "cancelled", current_period_start: Time.utc(2026, 4, 16))
     log(460)
 
     travel_to(NOW) { get dashboard_billing_path }
 
     assert_select "[role=alert].bg-red-50", 1
+    assert_select "span", text: "of 500 credits"
+    assert_select "h3", text: /Free Plan/
+    assert_select "h3", text: /\$150/, count: 0
+  end
+
+  test "the plan shown and the usage limit come from the same active subscription" do
+    Subscription.create!(user: @user, plan_name: "business", status: "cancelled", current_period_start: Time.utc(2026, 1, 1))
+    Subscription.create!(user: @user, plan_name: "developer", status: "active", current_period_start: Time.utc(2026, 4, 16))
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select "span", text: "of 100,000 credits"
   end
 end

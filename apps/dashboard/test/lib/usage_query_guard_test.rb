@@ -19,7 +19,7 @@ class UsageQueryGuardTest < ActiveSupport::TestCase
     /beginning_of_month[^;]{0,200}used_at/m,
     /used_at[^;]{0,200}current_period_start/m,
     /current_period_start[^;]{0,200}used_at/m,
-    /used_at\s*>=\s*\?"?,\s*period_start/m
+    /used_at\s*>=\s*\?"?,\s*\w*(?:cycle|period)\w*/m
   ].freeze
 
   def app_files
@@ -42,6 +42,12 @@ class UsageQueryGuardTest < ActiveSupport::TestCase
     RUBY
 
     assert(FORBIDDEN.any? { |pattern| old_code.match?(pattern) })
+  end
+
+  test "the guard detects a second copy of the cycle query" do
+    copy = %(user.usage_logs.where("used_at >= ?", cycle_start).sum(:credits_used))
+
+    assert(FORBIDDEN.any? { |pattern| copy.match?(pattern) })
   end
 
   test "UsageLog no longer exposes a calendar month scope" do

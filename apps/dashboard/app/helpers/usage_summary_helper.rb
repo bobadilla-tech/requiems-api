@@ -17,7 +17,7 @@ module UsageSummaryHelper
 
   # "0.02", "12.5", "100" or "<0.01" (used > 0 but rounds to nothing).
   def usage_percent_text(summary)
-    return "<0.01" if summary.percent_below_floor?
+    return "<#{number_with_precision(0.01, precision: 2)}" if summary.percent_below_floor?
 
     number_with_precision(summary.percent, precision: 2, strip_insignificant_zeros: true)
   end

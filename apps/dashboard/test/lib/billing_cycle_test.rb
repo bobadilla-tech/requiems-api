@@ -3,16 +3,28 @@
 require "test_helper"
 
 class BillingCycleTest < ActiveSupport::TestCase
-  VECTORS_PATH = Rails.root.join("../api/platform/middleware/testdata/billing_cycle_vectors.json")
+  TESTDATA = Rails.root.join("../api/platform/middleware/testdata")
+  VECTORS_PATH = TESTDATA.join("billing_cycle_vectors.json")
+  PICK_VECTORS_PATH = TESTDATA.join("subscription_pick_vectors.json")
 
   def setup
     @user = create_user(email: "cycle@example.com")
   end
 
-  def vectors
-    skip "shared vectors are not in this checkout (outside the monorepo)" unless VECTORS_PATH.exist?
+  # Shared with the Go API tests. A missing file is only tolerated outside CI
+  # (e.g. a checkout of apps/dashboard alone); in CI it must fail loudly.
+  def load_shared(path)
+    unless path.exist?
+      flunk "#{path} is missing" if ENV["CI"]
 
-    JSON.parse(VECTORS_PATH.read)
+      skip "shared vectors are not in this checkout (outside the monorepo)"
+    end
+
+    JSON.parse(path.read)
+  end
+
+  def vectors
+    load_shared(VECTORS_PATH)
   end
 
   test "start and next_start match the vectors shared with the Go API" do
@@ -26,10 +38,32 @@ class BillingCycleTest < ActiveSupport::TestCase
   end
 
   test "shared vectors cover the edge cases that matter" do
-    names = vectors.map { |v| v["name"] }.join(" ")
+    names = vectors.map { |v| v["name"] }
 
-    %w[leap future boundary non\ midnight year\ wrap day\ 30 day\ 31 jan\ 31].each do |needle|
-      assert_includes names, needle
+    [ /leap/, /future/, /day before the boundary/, /non midnight/, /year wrap backwards/, /year wrap forwards/,
+      /day 30/, /day 31/, /jan 31/, /utc offset/ ].each do |needle|
+      assert(names.any? { |n| n.match?(needle) }, "no shared vector named like #{needle.inspect}")
+    end
+  end
+
+  test "subscription pick and anchor match the vectors shared with the Go API" do
+    load_shared(PICK_VECTORS_PATH).each do |v|
+      user = create_user(email: "pick-#{SecureRandom.hex(4)}@example.com")
+      key = user.api_keys.create!(name: "k", environment: "test")
+      key.update_columns(created_at: Time.iso8601(v["key_created_at"]))
+
+      v["subscriptions"].each do |s|
+        sub = Subscription.create!(
+          user: user, plan_name: s["plan_name"], status: s["status"],
+          current_period_start: s["current_period_start"]&.then { |t| Time.iso8601(t) }
+        )
+        sub.update_columns(updated_at: Time.iso8601(s["updated_at"]))
+      end
+
+      cycle = BillingCycle.for(user, now: Time.utc(2026, 10, 15))
+
+      assert_equal v["expect_plan"], cycle.plan_name, v["name"]
+      assert_equal Time.iso8601(v["expect_anchor"]), cycle.anchor.utc, v["name"]
     end
   end
 

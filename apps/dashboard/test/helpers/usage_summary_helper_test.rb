@@ -24,6 +24,10 @@ class UsageSummaryHelperTest < ActionView::TestCase
     assert_equal "<0.01", usage_percent_text(summary(used: 1, below: true))
   end
 
+  test "the below-floor text is localised too" do
+    I18n.with_locale(:fr) { assert_equal "<0,01", usage_percent_text(summary(used: 1, below: true)) }
+  end
+
   test "percent text is localised but bar width always uses a decimal point" do
     I18n.with_locale(:es) do
       assert_equal "12,5", usage_percent_text(summary(used: 1_250_000))
