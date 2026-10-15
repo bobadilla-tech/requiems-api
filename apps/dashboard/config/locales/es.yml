@@ -11,4 +11,5 @@ es:
         other: "%{count} errores impidieron que este registro se guardara:"
   time:
     formats:
+      activity_timestamp: "%-d %b %Y %H:%M:%S UTC"
       status_timestamp: "%d de %B de %Y a las %H:%M %Z"

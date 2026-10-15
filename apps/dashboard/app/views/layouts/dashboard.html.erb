@@ -11,7 +11,10 @@
     </script>
     <title><%= content_for(:title) || "Dashboard" %> - Requiems API</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-visit-control" content="reload">
+    <%# Dashboard pages reload on Turbo visits unless a page opts in (the Overview does, so its activity filters can advance the URL without a full reload). %>
+    <% unless content_for?(:allow_turbo_visit) %>
+      <meta name="turbo-visit-control" content="reload">
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta name="robots" content="noindex, nofollow">

@@ -6,6 +6,7 @@ en:
       month_year: "%B %Y"
   time:
     formats:
+      activity_timestamp: "%b %-d, %Y %H:%M:%S UTC"
       status_timestamp: "%B %d, %Y at %H:%M %Z"
   errors:
     messages:

@@ -1,0 +1,102 @@
+<%# locals: (logs:, usage:, filter:, has_keys:, refocus: false) %>
+<%= turbo_frame_tag "overview-activity" do %>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div class="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.recent_activity") %></h2>
+      <%= link_to dashboard_usage_path, data: { turbo_frame: "_top" }, class: "text-sm font-medium text-blue-700 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300" do %>
+        <%= t("dashboard.overview.view_all") %>
+        <svg class="inline h-4 w-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      <% end %>
+    </div>
+
+    <nav class="px-4 sm:px-6 py-3 flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700" aria-label="<%= t("dashboard.overview.activity.filter_label") %>">
+      <% UsageLog::ACTIVITY_FILTERS.each do |key| %>
+        <% active = filter == key %>
+        <%= link_to t("dashboard.overview.activity.filter_#{key}"),
+              dashboard_root_path(key == "all" ? {} : { activity: key }),
+              class: activity_filter_classes(active),
+              data: { turbo_action: "advance", filter: key },
+              autofocus: (active && refocus),
+              aria: { current: (active ? "true" : nil) } %>
+      <% end %>
+    </nav>
+
+    <p class="sr-only" role="status" data-testid="activity-summary">
+      <%= logs.any? ? t("dashboard.overview.activity.summary", count: logs.size) : t("dashboard.overview.activity.no_match") %>
+    </p>
+
+    <% if usage.last_request_at && usage.anchored? && usage.last_request_at < usage.cycle_start %>
+      <p class="px-4 sm:px-6 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-700" data-testid="stale-activity">
+        <%= t("dashboard.overview.activity.stale", time: time_ago_in_words(usage.last_request_at)) %>
+      </p>
+    <% end %>
+
+    <% if logs.any? %>
+      <div role="region" tabindex="0" class="max-h-[28rem] overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500" aria-label="<%= t("dashboard.overview.activity.list_label") %>">
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700" data-testid="activity-list">
+        <% logs.each do |log| %>
+          <% kind = activity_status_kind(log) %>
+          <li class="px-4 sm:px-6 py-3" data-status-kind="<%= kind %>">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold tabular-nums <%= activity_status_chip_classes(log) %>">
+                <% case kind %>
+                <% when :success %>
+                  <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <% when :redirect %>
+                  <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5-5 5M6 12h12"/></svg>
+                <% when :client_error %>
+                  <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4a2 2 0 00-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/></svg>
+                <% when :server_error %>
+                  <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                <% else %>
+                  <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8.23 8.23a3 3 0 115.54 1.54c-.54.93-1.77 1.23-1.77 2.73M12 17h.01"/></svg>
+                <% end %>
+                <span class="sr-only"><%= t("dashboard.overview.activity.status.#{kind}") %></span>
+                <span><%= log.status_code.to_i.positive? ? log.status_code : t("dashboard.overview.activity.status.legacy_ok") %></span>
+              </span>
+              <%= render "partials/shared/badge", text: log.request_method.presence || "—", variant: "default", size: "xs" %>
+              <code class="min-w-0 flex-1 basis-40 break-all text-xs text-gray-900 dark:text-gray-100"><%= log.endpoint %></code>
+            </div>
+            <div class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
+              <span><%= log.response_time_ms ? t("dashboard.overview.activity.latency", ms: number_with_delimiter(log.response_time_ms)) : "—" %></span>
+              <span data-testid="credits"><%= activity_credits_label(log) %></span>
+              <span class="min-w-0 break-all" data-testid="key-name">
+                <%= log.api_key.revoked_at ? t("dashboard.overview.activity.revoked_key") : log.api_key.name %>
+              </span>
+              <time datetime="<%= log.used_at.utc.iso8601 %>" title="<%= l(log.used_at.utc, format: :activity_timestamp) %>">
+                <%= t("dashboard.overview.time_ago", time: time_ago_in_words(log.used_at)) %>
+              </time>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      </div>
+    <% elsif filter != "all" %>
+      <div class="px-6 py-10 text-center" data-testid="no-matching-activity">
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.activity.no_match") %></p>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400"><%= t("dashboard.overview.activity.no_match_desc") %></p>
+      </div>
+    <% else %>
+      <div class="px-6 py-12 text-center" data-testid="empty-activity">
+        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.no_activity") %></h3>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400"><%= t("dashboard.overview.no_activity_desc") %></p>
+        <div class="mt-6">
+          <% if has_keys %>
+            <%= link_to apis_path, data: { turbo_frame: "_top" }, class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors" do %>
+              <%= t("dashboard.overview.browse_docs") %>
+            <% end %>
+          <% else %>
+            <%= link_to new_dashboard_api_key_path, data: { turbo_frame: "_top", testid: "create-key-cta" }, class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors" do %>
+              <%= t("dashboard.overview.activity.create_key") %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

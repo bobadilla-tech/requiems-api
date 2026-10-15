@@ -251,6 +251,36 @@ en:
       active_key:
         one: Active key
         other: Active keys
+      activity:
+        create_key: Create your first API key
+        credits:
+          one: "%{count} credit"
+          other: "%{count} credits"
+        credits_charged:
+          one: "%{count} credit (charged)"
+          other: "%{count} credits (charged)"
+        credits_none: not charged
+        credits_unrecorded: not recorded
+        filter_all: All
+        filter_errors: Errors
+        filter_label: Filter recent activity
+        filter_success: Successful
+        latency: "%{ms} ms"
+        list_label: Recent API requests
+        no_match: No matching requests
+        no_match_desc: Try another filter to see more of your recent activity.
+        revoked_key: Revoked key
+        stale: "No requests this cycle · last request %{time} ago"
+        summary:
+          one: Showing %{count} recent request
+          other: Showing %{count} recent requests
+        status:
+          client_error: Client error
+          legacy_ok: OK
+          redirect: Redirect
+          server_error: Server error
+          success: Success
+          unknown: Unknown status
       api_keys: API Keys
       billing: Billing
       browse_docs: Browse API Documentation
@@ -266,10 +296,8 @@ en:
       recent_activity: Recent API Activity
       requests_col: Requests
       response_col: Response
-      status_col: Status
       subtitle: Here's your API usage overview for %{date}
       time_ago: "%{time} ago"
-      time_col: Time
       title: Dashboard
       upgrade_desc: Get more requests, faster rate limits, and priority support.
       upgrade_heading: Upgrade Your Plan

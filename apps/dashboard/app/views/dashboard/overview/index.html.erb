@@ -1,4 +1,5 @@
 <% content_for :title, t("dashboard.overview.title") %>
+<% content_for :allow_turbo_visit, true %>
 
 <!-- Welcome Banner -->
 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-8 text-white mb-8">
@@ -20,80 +21,8 @@
 <!-- Recent Activity & Quick Actions Row -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
   <!-- Recent API Activity (Takes 2 columns) -->
-  <div class="lg:col-span-2">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.recent_activity") %></h2>
-        <%= link_to dashboard_usage_path, class: "text-sm font-medium text-blue-600 hover:text-blue-700" do %>
-          <%= t("dashboard.overview.view_all") %>
-          <svg class="inline h-4 w-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-          </svg>
-        <% end %>
-      </div>
-
-      <div class="max-h-[24rem] overflow-y-auto overflow-x-auto">
-        <% if @recent_activity.any? %>
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t("dashboard.overview.time_col") %></th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t("dashboard.overview.endpoint_col") %></th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t("dashboard.overview.status_col") %></th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t("dashboard.overview.response_col") %></th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"><%= t("dashboard.overview.requests_col") %></th>
-              </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              <% @recent_activity.each do |log| %>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                    <%= t("dashboard.overview.time_ago", time: time_ago_in_words(log.used_at)) %>
-                  </td>
-                  <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 max-w-[16rem]">
-                    <code class="inline-block max-w-full truncate align-middle text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded" title="<%= log.endpoint %>"><%= log.endpoint %></code>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-sm">
-                    <%
-                      status_color = if log.status_code.to_s.start_with?("2")
-                        "success"
-                      elsif log.status_code.to_s.start_with?("4")
-                        "warning"
-                      else
-                        "danger"
-                      end
-                    %>
-                    <%= render "partials/shared/badge", text: log.status_code.to_s, variant: status_color, size: "xs" %>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                    <%= log.response_time_ms || "—" %>ms
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                    <%= log.credits_used || 1 %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <div class="px-6 py-12 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.no_activity") %></h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= t("dashboard.overview.no_activity_desc") %></p>
-            <div class="mt-6">
-              <%= link_to apis_path, class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors" do %>
-                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                <%= t("dashboard.overview.browse_docs") %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
+  <div class="lg:col-span-2 min-w-0">
+    <%= render "dashboard/overview/activity_feed", logs: @recent_activity, usage: @usage, filter: @activity_filter, has_keys: @api_keys_count.positive?, refocus: turbo_frame_request? %>
   </div>
 
   <!-- Sidebar Widgets (1 column) -->
@@ -102,7 +31,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-semibold text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.api_keys") %></h3>
-        <%= link_to dashboard_api_keys_path, class: "text-sm text-blue-600 hover:text-blue-700 font-medium" do %>
+        <%= link_to dashboard_api_keys_path, class: "text-sm text-blue-700 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium" do %>
           <%= t("dashboard.overview.manage") %>
         <% end %>
       </div>
@@ -134,7 +63,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-gray-900 dark:text-gray-100"><%= t("dashboard.overview.billing") %></h3>
-          <%= link_to dashboard_billing_path, class: "text-sm text-blue-600 hover:text-blue-700 font-medium" do %>
+          <%= link_to dashboard_billing_path, class: "text-sm text-blue-700 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium" do %>
             <%= t("dashboard.overview.manage") %>
           <% end %>
         </div>

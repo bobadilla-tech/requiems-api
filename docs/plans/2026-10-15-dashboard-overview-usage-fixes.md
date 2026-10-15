@@ -1,9 +1,9 @@
 # Dashboard Overview & Usage Accuracy
 
-Status: IMPLEMENTED in PR-0, PR-A and PR-B (PR-C in progress; see Final notes).
-It was drafted as v9 (planning only; rounds 1–8 of review folded in). Deviation
-from `docs/plans/readme.md` ("save after work lands"): written up-front at the
-user's request; **Final notes** is filled in as each PR ships.
+Status: IMPLEMENTED in PR-0, PR-A, PR-B and PR-C (see Final notes). It was
+drafted as v9 (planning only; rounds 1–8 of review folded in). Deviation from
+`docs/plans/readme.md` ("save after work lands"): written up-front at the user's
+request; **Final notes** is filled in as each PR ships.
 
 ## Context
 
@@ -452,3 +452,58 @@ parameter named `api_key` was avoided by renaming it.
   against miniredis and two of them cannot pass there (rate limiter timeout and
   OOM), CI runs them against real Redis.
 - Pricing/ToS check: no page promises that errors are billed.
+
+PR-B merged as #1022 after five review rounds. Review also moved the 405 `Allow`
+header back in, split the post-handler accounting into `settle`, kept
+`response_time_ms` as the handler's own time while `used_at` is the request
+start, pinned the OpenAPI wording and the byte-identical MCP copy with a test,
+and removed the changelog claim about empty batches: every batch endpoint
+validates `min=1`, so that path is unreachable over HTTP.
+
+### PR-C (activity feed)
+
+- Shipped: the Recent API Activity table is now a feed inside
+  `turbo_frame_tag "overview-activity"`: a status chip (code, icon and a
+  screen-reader label for success, redirect, client error, server error; legacy
+  status 0 or NULL reads as success), method chip, escaped endpoint
+  (`break-all`, wraps), latency, credits label (`N credit(s)`,
+  `N credit(s) (charged)` on an error row that still carries credits,
+  `not charged`, `not recorded` for NULL), key name or `Revoked key`, and a
+  `<time>` with relative text and a localized absolute UTC title (formats in the
+  root `en/es/fr.yml`). All / Successful / Errors are real links
+  (`aria-current`, `data-turbo-action="advance"`) with an allow-listed
+  `params[:activity]`, always scoped to `current_user`. States: empty, no keys
+  (create-key CTA), no matches for a filter, and a stale line ("No requests this
+  cycle · last request 3 months ago"). Ten rows, newest first.
+- Verified in a real browser (Chrome driven by playwright-core against the Rails
+  test environment on a throwaway database, seeded with every legacy variant, a
+  revoked key, a hostile endpoint and a very long endpoint): no horizontal
+  scroll at 360px or 1280px, axe (WCAG 2 A/AA, 2.1 AA) clean in light and dark,
+  the Turbo filter click updates only the frame and advances the URL, Back
+  restores it. Axe found three real problems that were fixed: the scrollable
+  list was not keyboard focusable (`tabindex="0"` and a focus ring), and the two
+  sidebar "Manage" links were `text-blue-600` on the dark card (2.79:1; now
+  `dark:text-blue-400`). Stale prebuilt Tailwind output makes new utility
+  classes missing locally (run `bin/rails tailwindcss:build`); CI and production
+  build it.
+- The "white panel in dark mode" claim did not reproduce: a scan of every large
+  element in dark mode found no white background on the Overview, so nothing was
+  changed for it.
+- Review found, and a browser check confirmed, that the dashboard layout's
+  `turbo-visit-control: reload` meta turned the advancing filter links into a
+  full page reload (a `window` marker did not survive the click). The Overview
+  now opts out of that meta (`content_for :allow_turbo_visit`; other dashboard
+  pages keep it), so the click swaps the page without a reload, advances the URL
+  and Back restores it, and the active chip is autofocused only on a Turbo frame
+  request so keyboard focus is not lost. The list is a labelled, focusable
+  `role="region"` scroller. Statuses above 599 count as server errors.
+- Follow-up (not done): the Errors/Successful filters query `usage_logs` by
+  `user_id`, `status_code` and `used_at DESC`; only `(user_id, used_at)` is
+  indexed, so a user with very few matching rows makes a filter click walk their
+  history. A partial index on `(user_id, used_at) WHERE status_code >= 400` (or
+  summaries, D5) would fix it; it needs a schema migration, which this plan does
+  not authorise, so it is left for the retention/summaries work.
+- Not done (left for D5 as the plan allows): grouping consecutive identical rows
+  and the 7-day sparkline.
+- Removed keys: `overview.time_col` and `overview.status_col` (the admin views
+  still use `endpoint_col`, `response_col` and `requests_col`).
