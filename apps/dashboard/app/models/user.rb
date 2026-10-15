@@ -109,8 +109,8 @@ class User < ApplicationRecord
     (logs.average(:response_time_ms) || 0).round
   end
 
-  def recent_activity(limit = 10)
-    usage_logs.recent(limit)
+  def recent_activity(limit = 10, filter: "all")
+    usage_logs.for_activity_filter(filter).recent(limit)
   end
 
   def ban!(reason:, admin_user:)

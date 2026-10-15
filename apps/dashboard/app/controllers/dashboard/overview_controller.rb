@@ -9,7 +9,7 @@ class Dashboard::OverviewController < Dashboard::BaseController
     @current_plan = @usage.plan_name
     @subscription = @usage.cycle.subscription
     @activity_filter = UsageLog::ACTIVITY_FILTERS.include?(params[:activity]) ? params[:activity] : "all"
-    @recent_activity = current_user.usage_logs.for_activity_filter(@activity_filter).recent(10)
+    @recent_activity = current_user.recent_activity(10, filter: @activity_filter)
     @api_keys_count = current_user.api_keys.active_keys.count
     @next_billing_date = @subscription&.current_period_end
   end

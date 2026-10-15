@@ -338,6 +338,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     visit
     assert_equal %w[unknown], rows.map { |r| r["data-status-kind"] }
     assert_equal "Unknown status", rows.first.at_css(".sr-only").text
+    assert_no_match(/M6 18L18 6M6 6l12 12/, rows.first.to_s, "an unknown status must not wear the server error icon")
 
     visit({ activity: "success" })
     assert_equal 0, rows.size
