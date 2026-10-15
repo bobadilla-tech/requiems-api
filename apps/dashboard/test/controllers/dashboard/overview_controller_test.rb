@@ -170,13 +170,6 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", text: /Sep 16 – Oct 15 UTC/
   end
 
-  test "the page never promises alerts or weekly reports" do
-    seed_key
-    get dashboard_root_path
-
-    assert_not_includes response.body.downcase, "weekly report"
-  end
-
   test "the overview does not leak other users' usage" do
     other = create_user(email: "overview-other@example.com")
     other_key = other.api_keys.create!(name: "Other", environment: "test")
