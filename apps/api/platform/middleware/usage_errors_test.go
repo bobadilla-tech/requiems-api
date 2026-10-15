@@ -36,6 +36,7 @@ type ledgerRow struct {
 	Status   int
 	Credits  *int
 	UsedAt   time.Time
+	Latency  int
 }
 
 func newUsageHarness(t *testing.T) *usageHarness {
@@ -116,14 +117,14 @@ func (h *usageHarness) ledger() []ledgerRow {
 	h.t.Helper()
 
 	rows, err := h.pool.Query(context.Background(),
-		`SELECT endpoint, status_code, credits_used, used_at FROM usage_logs WHERE user_id = $1 ORDER BY id`, h.principal.UserID)
+		`SELECT endpoint, status_code, credits_used, used_at, COALESCE(response_time_ms, 0) FROM usage_logs WHERE user_id = $1 ORDER BY id`, h.principal.UserID)
 	require.NoError(h.t, err)
 	defer rows.Close()
 
 	var out []ledgerRow
 	for rows.Next() {
 		var r ledgerRow
-		require.NoError(h.t, rows.Scan(&r.Endpoint, &r.Status, &r.Credits, &r.UsedAt))
+		require.NoError(h.t, rows.Scan(&r.Endpoint, &r.Status, &r.Credits, &r.UsedAt, &r.Latency))
 		out = append(out, r)
 	}
 	require.NoError(h.t, rows.Err())
@@ -373,6 +374,7 @@ func TestUsageQuota_UsedAtIsTheRequestStart(t *testing.T) {
 	}), h.request(http.MethodGet, "/v1/text/slow"))
 
 	row := h.last()
+	require.GreaterOrEqual(t, row.Latency, 350, "latency is the handler's own time")
 	require.Less(t, row.UsedAt.Sub(start), 200*time.Millisecond, "used_at is the request start, not when the handler finished")
 }
 

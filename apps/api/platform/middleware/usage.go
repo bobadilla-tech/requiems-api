@@ -267,9 +267,10 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			trackedCtx, routeMissed := trackRouteMiss(r.Context(), matcher)
 			r = r.WithContext(trackedCtx)
 
+			handlerStart := time.Now()
 			recovered, panicked := u.serve(ww, r, next, principal)
 
-			u.settle(r, principal, key, requestedCredits, now, ww, routeMissed(), panicked)
+			u.settle(r, principal, key, requestedCredits, now, handlerStart, ww, routeMissed(), panicked)
 
 			if panicked && recovered == http.ErrAbortHandler {
 				// An intentional abort must still reach net/http.
@@ -283,7 +284,7 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 // ledger row.
 func (u *UsageQuota) settle(
 	r *http.Request, principal APIKeyPrincipal, key string, requestedCredits int64,
-	now time.Time, ww chimw.WrapResponseWriter, routeMissed, panicked bool,
+	now, handlerStart time.Time, ww chimw.WrapResponseWriter, routeMissed, panicked bool,
 ) {
 	if routeMissed {
 		// The router answered 404/405 itself (pre-matching was not
@@ -319,7 +320,7 @@ func (u *UsageQuota) settle(
 		}
 	}
 
-	u.recordUsage(r.Context(), principal, r, status, now, creditsUsed)
+	u.recordUsage(r.Context(), principal, r, status, now, handlerStart, creditsUsed)
 }
 
 // serve runs the downstream handler and recovers a panic so the reservation
@@ -483,14 +484,15 @@ func (u *UsageQuota) sumUsage(ctx context.Context, userID int64, cycle time.Time
 // write itself fails (a real error, not a conflict), it's logged and
 // dropped: the response has already been sent, so there's nothing left to
 // reject.
-func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, status int, start time.Time, creditsUsed int64) {
+func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, status int, usedAt, handlerStart time.Time, creditsUsed int64) {
 	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
 	defer cancel()
 
 	// used_at is the request start (the same instant the cycle key was
-	// derived from); status is the normalised one, never a raw 0.
+	// derived from); latency is the handler's alone; status is the normalised
+	// one, never a raw 0.
 	err := u.insertUsageRow(writeCtx, principal, r.URL.Path, r.Method, creditsUsed,
-		status, time.Since(start).Milliseconds(), start.UTC())
+		status, time.Since(handlerStart).Milliseconds(), usedAt.UTC())
 
 	if err != nil {
 		u.logger.Error("usage quota: failed to write usage_logs row, dropping",
