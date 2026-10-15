@@ -149,11 +149,11 @@
       </div>
     <% else %>
       <% max_count = @endpoint_usage.values.max %>
-      <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[26rem] overflow-y-auto">
+      <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[26rem] overflow-y-auto" role="region" tabindex="0" aria-label="<%= t("dashboard.usage.charts.by_endpoint") %>">
         <% @endpoint_usage.each do |endpoint, count| %>
           <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <div class="flex items-center justify-between gap-4">
-              <code class="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded truncate flex-1 min-w-0"><%= endpoint %></code>
+              <code class="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded truncate flex-1 min-w-0" title="<%= endpoint %>"><%= endpoint %></code>
               <span class="text-sm font-semibold text-gray-900 dark:text-gray-100 shrink-0"><%= number_with_delimiter(count) %></span>
             </div>
             <div class="mt-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">

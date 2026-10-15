@@ -51,6 +51,27 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     assert_equal "/v1/a", css_select("#usage-by-endpoint-container code").first.text
   end
 
+  test "show breaks count ties by endpoint and respects the date range" do
+    create_log(endpoint: "/v1/b")
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/old").update!(used_at: 60.days.ago)
+
+    get dashboard_usage_path
+
+    assert_equal %w[/v1/a /v1/b], css_select("#usage-by-endpoint-container code").map(&:text)
+
+    get dashboard_usage_path(range: "90d")
+    assert_includes css_select("#usage-by-endpoint-container code").map(&:text), "/v1/old"
+  end
+
+  test "show caps the endpoint list at 100 entries" do
+    101.times { |i| create_log(endpoint: "/v1/e#{i}") }
+
+    get dashboard_usage_path
+
+    assert_select "#usage-by-endpoint-container code", count: 100
+  end
+
   test "show does not list other users endpoints" do
     other = create_user(email: "other-usage@example.com")
     other_key = other.api_keys.create!(name: "Theirs", environment: "test")
@@ -75,6 +96,26 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     assert_equal 6, endpoints.size
     endpoints.each { |e| assert e.start_with?("'"), "#{e.inspect} should be prefixed" }
     assert(rows.all? { |r| r["API Key"] == "'=1+1" })
+  end
+
+  test "export neutralises formulas in the method and with leading whitespace" do
+    create_log(endpoint: " =1+1", method: "=cmd")
+    create_log(endpoint: "\n=1+1")
+
+    get export_dashboard_usage_path
+
+    rows = CSV.parse(response.body, headers: true)
+    assert(rows.all? { |r| r["Endpoint"].start_with?("'") })
+    assert_includes rows.map { |r| r["Method"] }, "'=cmd"
+  end
+
+  test "export is ordered newest first" do
+    create_log(endpoint: "/v1/old").update!(used_at: 3.days.ago)
+    create_log(endpoint: "/v1/new")
+
+    get export_dashboard_usage_path
+
+    assert_equal %w[/v1/new /v1/old], CSV.parse(response.body, headers: true).map { |r| r["Endpoint"] }
   end
 
   test "export leaves ordinary cells untouched" do

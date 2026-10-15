@@ -144,7 +144,7 @@ class Dashboard::UsageController < Dashboard::BaseController
     nil
   end
 
-  CSV_FORMULA_PREFIX = /\A[=+\-@\t\r]/
+  CSV_FORMULA_PREFIX = /\A(?:[\t\r\n ]*[=+\-@]|[\t\r\n])/
 
   # Neutralise spreadsheet formula injection in attacker-controlled cells.
   def csv_safe(value)
@@ -169,7 +169,7 @@ class Dashboard::UsageController < Dashboard::BaseController
       ]
 
       # Data rows
-      usage_logs.find_each do |log|
+      usage_logs.each do |log|
         csv << [
           log.used_at.iso8601,
           csv_safe(log.endpoint),
