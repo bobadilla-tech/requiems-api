@@ -94,7 +94,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
   end
 
   test "status chips cover success, redirect, client and server errors with distinct labels" do
-    { 200 => "Success", 302 => "Redirect", 404 => "Client error", 503 => "Server error" }.each_with_index do |(status, label), i|
+    { 200 => "Success", 302 => "Redirect", 404 => "Client error", 503 => "Server error" }.each_with_index do |(status, _label), i|
       log(status: status, at: Time.utc(2026, 10, 14, 9, i))
     end
     visit
@@ -390,5 +390,17 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
 
     visit({ activity: "errors" })
     assert_select "[data-testid=activity-summary][role=status]", text: /No matching requests/
+  end
+
+  test "credit labels use the singular for one credit and charge wording on 5xx errors" do
+    log(status: 200, credits: 1, at: Time.utc(2026, 10, 14, 9, 1), endpoint: "/v1/one")
+    log(status: 503, credits: 1, at: Time.utc(2026, 10, 14, 9, 2), endpoint: "/v1/five-hundred")
+    log(status: 503, credits: 3, at: Time.utc(2026, 10, 14, 9, 3), endpoint: "/v1/five-hundred-three")
+    visit
+
+    labels = rows.to_h { |r| [ r.at_css("code").text, r.at_css("[data-testid=credits]").text.strip ] }
+    assert_equal "1 credit", labels["/v1/one"]
+    assert_equal "1 credit (charged)", labels["/v1/five-hundred"]
+    assert_equal "3 credits (charged)", labels["/v1/five-hundred-three"]
   end
 end

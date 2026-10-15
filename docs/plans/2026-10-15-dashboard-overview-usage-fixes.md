@@ -497,6 +497,12 @@ validates `min=1`, so that path is unreachable over HTTP.
   and Back restores it, and the active chip is autofocused only on a Turbo frame
   request so keyboard focus is not lost. The list is a labelled, focusable
   `role="region"` scroller. Statuses above 599 count as server errors.
+- Follow-up (not done): the Errors/Successful filters query `usage_logs` by
+  `user_id`, `status_code` and `used_at DESC`; only `(user_id, used_at)` is
+  indexed, so a user with very few matching rows makes a filter click walk their
+  history. A partial index on `(user_id, used_at) WHERE status_code >= 400` (or
+  summaries, D5) would fix it; it needs a schema migration, which this plan does
+  not authorise, so it is left for the retention/summaries work.
 - Not done (left for D5 as the plan allows): grouping consecutive identical rows
   and the 7-day sparkline.
 - Removed keys: `overview.time_col` and `overview.status_col` (the admin views
