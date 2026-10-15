@@ -10,6 +10,14 @@ class Dashboard::UsageController < Dashboard::BaseController
     @avg_response_time = calculate_avg_response_time
     @error_rate = calculate_error_rate
 
+    # Rendered server-side so endpoint strings are escaped by ERB
+    @endpoint_usage = current_user.usage_logs
+      .where(used_at: @start_date..@end_date)
+      .group(:endpoint)
+      .order(Arel.sql("COUNT(*) DESC"), :endpoint)
+      .limit(100)
+      .count
+
     # Paginated recent requests
     scope = current_user.usage_logs
       .includes(:api_key)
@@ -136,6 +144,15 @@ class Dashboard::UsageController < Dashboard::BaseController
     nil
   end
 
+  CSV_FORMULA_PREFIX = /\A[=+\-@\t\r]/
+
+  # Neutralise spreadsheet formula injection in attacker-controlled cells.
+  def csv_safe(value)
+    return value unless value.is_a?(String) && value.match?(CSV_FORMULA_PREFIX)
+
+    "'#{value}"
+  end
+
   def generate_csv(usage_logs)
     require "csv"
 
@@ -152,15 +169,15 @@ class Dashboard::UsageController < Dashboard::BaseController
       ]
 
       # Data rows
-      usage_logs.each do |log|
+      usage_logs.find_each do |log|
         csv << [
           log.used_at.iso8601,
-          log.endpoint,
-          log.request_method.presence || "UNKNOWN",
+          csv_safe(log.endpoint),
+          csv_safe(log.request_method.presence || "UNKNOWN"),
           log.status_code,
           log.response_time_ms,
           log.credits_used || 1,
-          log.api_key&.name || "Unknown"
+          csv_safe(log.api_key&.name || "Unknown")
         ]
       end
     end
