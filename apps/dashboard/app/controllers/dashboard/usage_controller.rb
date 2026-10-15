@@ -72,6 +72,7 @@ class Dashboard::UsageController < Dashboard::BaseController
   def endpoint_usage
     current_user.usage_logs
       .where(used_at: @start_date..@end_date)
+      .where.not(endpoint: nil)
       .group(:endpoint)
       .order(Arel.sql("COUNT(*) DESC"), :endpoint)
       .limit(100)
@@ -140,7 +141,7 @@ class Dashboard::UsageController < Dashboard::BaseController
     nil
   end
 
-  CSV_FORMULA_PREFIX = /\A(?:[\t\r\n ]*[=+\-@]|[\t\r\n])/
+  CSV_FORMULA_PREFIX = /\A(?:[\t\r\n ]*[=+\-@＝＋－＠]|[\t\r\n])/
 
   # Neutralise spreadsheet formula injection in attacker-controlled cells.
   def csv_safe(value)

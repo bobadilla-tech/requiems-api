@@ -120,6 +120,16 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     assert_includes rows.map { |r| r["Method"] }, "'=cmd"
   end
 
+  test "export neutralises full-width formula operators" do
+    %w[＝1 ＋1 －1 ＠SUM].each { |payload| create_log(endpoint: payload) }
+
+    get export_dashboard_usage_path
+
+    endpoints = CSV.parse(response.body, headers: true).map { |r| r["Endpoint"] }
+    assert_equal 4, endpoints.size
+    endpoints.each { |e| assert e.start_with?("'"), "#{e.inspect} should be prefixed" }
+  end
+
   test "export is ordered newest first" do
     create_log(endpoint: "/v1/old").update!(used_at: 3.days.ago)
     create_log(endpoint: "/v1/new")

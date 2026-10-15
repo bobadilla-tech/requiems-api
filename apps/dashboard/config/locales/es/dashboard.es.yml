@@ -432,7 +432,6 @@ es:
         by_endpoint: Uso por endpoint
         by_endpoint_sub: Endpoints principales por número de solicitudes
         loading: Cargando gráfica...
-        loading_short: Cargando...
         no_data_body: No se encontraron datos de solicitudes en el rango de fechas
           seleccionado.
         no_data_heading: Sin datos disponibles

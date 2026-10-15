@@ -425,7 +425,6 @@ en:
         by_endpoint: Usage by Endpoint
         by_endpoint_sub: Top endpoints by request count
         loading: Loading chart...
-        loading_short: Loading...
         no_data_body: No request data found in the selected date range.
         no_data_heading: No data available
         no_endpoints_body: No endpoint data in the selected date range.

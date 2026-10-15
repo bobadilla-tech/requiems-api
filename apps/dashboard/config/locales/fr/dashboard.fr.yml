@@ -435,7 +435,6 @@ fr:
         by_endpoint: Par point de terminaison
         by_endpoint_sub: Principaux points de terminaison par nombre de requêtes
         loading: Chargement du graphique...
-        loading_short: Chargement...
         no_data_body: Aucune donnée de requête pour la plage sélectionnée.
         no_data_heading: Aucune donnée
         no_endpoints_body: Aucune donnée par point de terminaison pour la plage sélectionnée.

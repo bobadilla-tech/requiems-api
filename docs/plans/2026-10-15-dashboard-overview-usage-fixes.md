@@ -191,10 +191,18 @@ deferred follow-ups. Each PR is safe in either Rails/Go deploy order
   the request). Rails does not read this Redis for app data today, so **admin
   surfacing is a follow-on**; at minimum emit a structured log line.
 - Panic safety (independent bug fix): recover inside `UsageQuota` around `next`
-  (re-panic `http.ErrAbortHandler`); if `ww.BytesWritten()==0` write a JSON 500,
-  log the row with status **500** (not 0), report to Sentry, refund in `defer`.
-  Panics in earlier middleware (auth, rate limiter) remain uncovered — stated,
-  not fixed. Test: response 500 and row `status_code` 500.
+  (re-panic `http.ErrAbortHandler`); if `ww.Status()==0` (response not yet
+  committed; `BytesWritten()` stays 0 after a bare `WriteHeader(200)`) write a
+  JSON 500, log the row with status **500** (not 0, even when the committed
+  client status was 200), report to Sentry. A recovered panic then continues
+  through the normal post-handler flow (status 500 sets credits to 0 and the
+  reconcile refunds the reservation), so there is exactly one refund path: no
+  separate deferred refund, or the reservation is refunded twice. Tests: an
+  uncommitted panic returns 500 and records 500; a panic after
+  `WriteHeader(200)` keeps the 200 response, records 500; both leave the counter
+  at its pre-request value. Panics in earlier middleware (auth, rate limiter)
+  remain uncovered — stated, not fixed. Test: response 500 and row
+  `status_code` 500.
 - Compute `now` **once** and use it for both the cycle key and `used_at`
   (request start). Side effect: ledger order becomes start-time order (slow
   requests shift in Recent Activity); mention in PR.
