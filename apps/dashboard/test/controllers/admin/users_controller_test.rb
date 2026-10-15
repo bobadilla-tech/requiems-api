@@ -73,9 +73,9 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
   test "usage stats count credits for the billing cycle" do
     key = @regular_user.api_keys.create!(name: "k", environment: "test")
     key.update_columns(created_at: Time.utc(2026, 4, 16))
-    create_usage_log(user: @regular_user, api_key: key, used_at: Time.utc(2026, 10, 1), credits_used: 40)
-    create_usage_log(user: @regular_user, api_key: key, used_at: Time.utc(2026, 9, 20), credits_used: 2)
-    create_usage_log(user: @regular_user, api_key: key, used_at: Time.utc(2026, 9, 1), credits_used: 900)
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 40)
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 9, 20), credits_used: 2)
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 9, 1), credits_used: 900)
 
     controller = Admin::UsersController.new
     controller.instance_variable_set(:@user, @regular_user)

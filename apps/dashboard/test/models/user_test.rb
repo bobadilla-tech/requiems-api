@@ -130,8 +130,8 @@ class UserTest < ActiveSupport::TestCase
   test "usage_this_month and requests_remaining delegate to the billing cycle summary" do
     key = @user.api_keys.create!(name: "k", environment: "test")
     key.update_columns(created_at: Time.utc(2026, 4, 16))
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 7, 1), credits_used: 400)
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 10, 1), credits_used: 120)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 7, 1), credits_used: 400)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 120)
 
     travel_to(Time.utc(2026, 10, 15)) do
       assert_equal 120, @user.usage_this_month

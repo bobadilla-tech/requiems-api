@@ -18,7 +18,7 @@ class UsageSummaryTest < ActiveSupport::TestCase
   end
 
   def log(used_at, credits)
-    create_usage_log(user: @user, api_key: @key, used_at: used_at, credits_used: credits)
+    create_usage_log(user: @user, key: @key, used_at: used_at, credits_used: credits)
   end
 
   def subscribe(plan, status: "active", period_start: Time.utc(2026, 4, 16), **attrs)
@@ -39,7 +39,7 @@ class UsageSummaryTest < ActiveSupport::TestCase
 
     fixture["rows"].each do |row|
       user, key = owners.fetch(row["owner"])
-      create_usage_log(user: user, api_key: key, used_at: Time.iso8601(row["used_at"]), credits_used: row["credits_used"])
+      create_usage_log(user: user, key: key, used_at: Time.iso8601(row["used_at"]), credits_used: row["credits_used"])
     end
 
     cycle_start = Time.iso8601(fixture["cycle_start"])
@@ -114,7 +114,7 @@ class UsageSummaryTest < ActiveSupport::TestCase
   test "another user's usage is not counted" do
     other = create_user(email: "other-summary@example.com")
     other_key = other.api_keys.create!(name: "Other", environment: "test")
-    create_usage_log(user: other, api_key: other_key, used_at: Time.utc(2026, 10, 1), credits_used: 99)
+    create_usage_log(user: other, key: other_key, used_at: Time.utc(2026, 10, 1), credits_used: 99)
 
     assert_equal 0, summary.used
   end

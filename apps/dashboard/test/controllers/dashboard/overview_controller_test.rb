@@ -50,7 +50,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
     admin = create_user(email: "overview-admin@example.com", admin: true)
     subscribe("professional", promoted_by: admin, promotion_reason: "x", current_period_end: Time.utc(2027, 4, 16))
     key = seed_key
-    3.times { |i| create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 7, 10 + i)) }
+    3.times { |i| create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 7, 10 + i)) }
 
     travel_to(NOW) { get dashboard_root_path }
 
@@ -65,7 +65,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
   test "2,018 of 10M shows 0.02 percent with the exact count" do
     subscribe("professional", current_period_start: Time.utc(2026, 10, 1))
     key = seed_key
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 10, 5), credits_used: 2018)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 5), credits_used: 2018)
 
     travel_to(NOW) { get dashboard_root_path }
 
@@ -79,7 +79,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
   test "the bar width uses a decimal point in every locale and is hidden at zero usage" do
     subscribe("developer", current_period_start: Time.utc(2026, 10, 1))
     key = seed_key
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 10, 5), credits_used: 12_500)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 5), credits_used: 12_500)
 
     %w[en es fr].each do |locale|
       travel_to(NOW) { get dashboard_root_path(locale: locale) }
@@ -99,7 +99,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
 
   test "a user over the free limit sees the exhausted state with text and a red bar" do
     key = seed_key
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 10, 1), credits_used: 600)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 600)
 
     travel_to(NOW) { get dashboard_root_path }
 
@@ -111,7 +111,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
 
   test "threshold states are conveyed with text, not colour alone" do
     key = seed_key
-    create_usage_log(user: @user, api_key: key, used_at: Time.utc(2026, 10, 1), credits_used: 380)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 380)
 
     travel_to(NOW) { get dashboard_root_path }
 
@@ -181,7 +181,7 @@ class Dashboard::OverviewControllerTest < ActionDispatch::IntegrationTest
     other = create_user(email: "overview-other@example.com")
     other_key = other.api_keys.create!(name: "Other", environment: "test")
     other_key.update_columns(created_at: Time.utc(2026, 4, 16))
-    create_usage_log(user: other, api_key: other_key, used_at: Time.utc(2026, 10, 1), credits_used: 400)
+    create_usage_log(user: other, key: other_key, used_at: Time.utc(2026, 10, 1), credits_used: 400)
     seed_key
 
     travel_to(NOW) { get dashboard_root_path }

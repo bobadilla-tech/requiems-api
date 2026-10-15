@@ -13,7 +13,7 @@ class Dashboard::BillingControllerTest < ActionDispatch::IntegrationTest
   end
 
   def log(credits, at: Time.utc(2026, 10, 1))
-    create_usage_log(user: @user, api_key: @key, used_at: at, credits_used: credits)
+    create_usage_log(user: @user, key: @key, used_at: at, credits_used: credits)
   end
 
   test "show requires authentication" do
