@@ -52,4 +52,25 @@ class UsageCopyTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  %w[en es fr].each do |locale|
+    test "faq explains that errors are not charged in #{locale}" do
+      get "/#{locale}/faq"
+
+      assert_response :success
+      assert_includes response.body, ERB::Util.html_escape(I18n.t("home.faq.billing.q5", locale: locale))
+      assert_includes response.body, ERB::Util.html_escape(I18n.t("home.faq.billing.a5", locale: locale))
+      assert_includes response.body, "(4xx)"
+    end
+
+    test "changelog announces free errors in #{locale}" do
+      get "/#{locale}/changelog"
+
+      assert_response :success
+      assert_select "h2", text: I18n.t("home.changelog.usage_errors_free.title", locale: locale)
+      I18n.t("home.changelog.usage_errors_free.items", locale: locale).each do |item|
+        assert_includes response.body, ERB::Util.html_escape(item)
+      end
+    end
+  end
 end

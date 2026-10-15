@@ -171,6 +171,12 @@ fr:
           - "La page d'aperçu affiche les crédits exacts utilisés, le pourcentage exact (par exemple 0,02 %) et la date de réinitialisation (00:00 UTC le jour de votre facturation)."
           - "Les mentions des alertes d'utilisation et des rapports hebdomadaires sont retirées jusqu'à leur disponibilité."
         title: "Correction du décompte d'utilisation"
+      usage_errors_free:
+        items:
+          - "Les erreurs client (4xx) et serveur (5xx) ne sont plus facturées. Elles apparaissent toujours dans votre historique d'utilisation avec 0 crédit."
+          - "Les requêtes vers des routes inexistantes ne sont plus enregistrées ni décomptées de votre quota."
+          - "Une requête par lot vide ne coûte plus un crédit."
+        title: "Les erreurs ne sont plus facturées"
       v001:
         gateway:
           heading: Passerelle Cloudflare Worker
@@ -395,11 +401,13 @@ fr:
           Les montées sont immédiates ; les descentes s'appliquent au début de la
           période suivante.
         a4: "Non, les crédits non utilisés ne sont pas reportés. Votre allocation se réinitialise le jour de votre facturation (00:00 UTC). Choisissez une formule adaptée à votre usage mensuel type."
+        a5: "Non. Les erreurs client (4xx) et serveur (5xx) ne sont pas facturées, et les requêtes vers des routes inexistantes ne sont pas enregistrées. Les requêtes en échec sur une route valide figurent toujours dans votre historique d'utilisation pour faciliter le débogage."
         heading: Facturation et usage
         q1: Comment est calculée la facturation ?
         q2: Que se passe-t-il si je dépasse ma limite de requêtes ?
         q3: Puis-je monter ou descendre de formule ?
         q4: Les requêtes non utilisées sont-elles reportées ?
+        q5: "Les requêtes en échec sont-elles facturées ?"
       getting_started:
         a1_html: C'est simple ! Créez un compte gratuit, générez votre clé API depuis
           le tableau de bord et lancez vos requêtes. Consultez notre %{docs_link}

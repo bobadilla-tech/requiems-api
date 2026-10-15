@@ -336,7 +336,7 @@ func TestHeaderCredits_BoundsUnvalidatedParseInt(t *testing.T) {
 	}{
 		{"missing header defaults to 1", "", 1},
 		{"non-numeric defaults to 1", "not-a-number", 1},
-		{"zero defaults to 1", "0", 1},
+		{"explicit zero charges nothing (empty batch)", "0", 0},
 		{"negative defaults to 1", "-5", 1},
 		{"typical batch count passes through", "50", 50},
 		{"exactly MaxInt32 passes through", "2147483647", 2147483647},
