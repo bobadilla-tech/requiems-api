@@ -139,15 +139,30 @@
     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t("dashboard.usage.charts.by_endpoint_sub") %></p>
   </div>
   <div id="usage-by-endpoint-container">
-    <div class="flex items-center justify-center p-6" style="min-height: 300px;">
-      <div class="text-center">
-        <svg class="animate-spin h-8 w-8 text-blue-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    <% if @endpoint_usage.empty? %>
+      <div class="px-6 py-12 text-center">
+        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <p class="text-sm text-gray-500 dark:text-gray-400"><%= t("dashboard.usage.charts.loading_short") %></p>
+        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= t("dashboard.usage.charts.no_endpoints_heading") %></h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= t("dashboard.usage.charts.no_endpoints_body") %></p>
       </div>
-    </div>
+    <% else %>
+      <% max_count = @endpoint_usage.values.max %>
+      <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[26rem] overflow-y-auto">
+        <% @endpoint_usage.each do |endpoint, count| %>
+          <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <div class="flex items-center justify-between gap-4">
+              <code class="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded truncate flex-1 min-w-0"><%= endpoint %></code>
+              <span class="text-sm font-semibold text-gray-900 dark:text-gray-100 shrink-0"><%= number_with_delimiter(count) %></span>
+            </div>
+            <div class="mt-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+              <div class="bg-blue-500 h-1.5 rounded-full transition-all" style="width: <%= number_with_precision(count.to_f / max_count * 100, precision: 1, locale: :en) %>%"></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -320,15 +335,6 @@
       </div>
     </div>`;
 
-  const EMPTY_STATE_ENDPOINTS = `
-    <div class="px-6 py-12 text-center">
-      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-      </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100"><%= j t("dashboard.usage.charts.no_endpoints_heading") %></h3>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><%= j t("dashboard.usage.charts.no_endpoints_body") %></p>
-    </div>`;
-
   document.addEventListener('turbo:load', function() {
     // Usage over time chart
     fetch('<%= by_date_dashboard_usage_path(range: params[:range], start_date: params[:start_date], end_date: params[:end_date]) %>')
@@ -353,37 +359,6 @@
             }
           }
         });
-      });
-
-    // Usage by endpoint — rendered as a list like Recent Requests
-    fetch('<%= by_endpoint_dashboard_usage_path(range: params[:range], start_date: params[:start_date], end_date: params[:end_date]) %>')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('usage-by-endpoint-container');
-        const entries = data ? Object.entries(data) : [];
-
-        if (entries.length === 0) {
-          container.innerHTML = EMPTY_STATE_ENDPOINTS;
-          return;
-        }
-
-        const maxCount = Math.max(...entries.map(([, v]) => v));
-
-        const rows = entries.map(([endpoint, count]) => {
-          const pct = maxCount > 0 ? ((count / maxCount) * 100).toFixed(1) : 0;
-          return `
-            <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <div class="flex items-center justify-between gap-4">
-                <code class="text-xs bg-gray-100 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded truncate flex-1 min-w-0">${endpoint}</code>
-                <span class="text-sm font-semibold text-gray-900 dark:text-gray-100 shrink-0">${count.toLocaleString()}</span>
-              </div>
-              <div class="mt-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
-                <div class="bg-blue-500 h-1.5 rounded-full transition-all" style="width: ${pct}%"></div>
-              </div>
-            </div>`;
-        }).join('');
-
-        container.innerHTML = `<div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[26rem] overflow-y-auto">${rows}</div>`;
       });
   });
 </script>
