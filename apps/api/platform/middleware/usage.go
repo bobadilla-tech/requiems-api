@@ -370,9 +370,9 @@ func (u *UsageQuota) routeExists(r *http.Request) (exists bool) {
 const routeMissTTL = 8 * 24 * time.Hour
 
 // recordRouteMiss keeps a best-effort per-user, per-day count of requests for
-// routes that do not exist, so scanner traffic stays visible to abuse tooling
-// even though it is no longer in usage_logs. A Redis error never affects the
-// request.
+// routes that do not exist, so scanner traffic is not lost now that it is no
+// longer in usage_logs. Nothing reads the bucket yet (surfacing it to the
+// admin abuse tooling is a follow-on). A Redis error never affects the request.
 func (u *UsageQuota) recordRouteMiss(ctx context.Context, principal APIKeyPrincipal) {
 	u.logger.Debug("usage quota: route miss", "user_id", principal.UserID)
 

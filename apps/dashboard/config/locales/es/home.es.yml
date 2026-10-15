@@ -170,7 +170,7 @@ es:
         title: "Corrección del conteo de uso"
       usage_errors_free:
         items:
-          - "Los errores de cliente (4xx) y de servidor (5xx) ya no se cobran. Siguen apareciendo en tu historial de uso con 0 créditos."
+          - "Los errores de cliente (4xx) y de servidor (5xx) devueltos por un endpoint ya no se cobran. Siguen apareciendo en tu historial de uso con 0 créditos."
           - "Las solicitudes a rutas que no existen ya no se registran ni cuentan para tu cuota."
           - "Una solicitud por lotes vacía ya no cuesta un crédito."
         title: "Los errores ya no se cobran"
@@ -412,7 +412,7 @@ es:
           Las actualizaciones surten efecto de inmediato. Las reducciones surten efecto
           al inicio de tu próximo período de facturación."
         a4: "No, los créditos no utilizados no se acumulan. Tu asignación se restablece el día de tu facturación (00:00 UTC). Recomendamos elegir un plan que se ajuste a tu uso mensual típico."
-        a5: "No. Los errores de cliente (4xx) y de servidor (5xx) no se cobran, y las solicitudes a rutas que no existen no se registran. Las solicitudes fallidas en una ruta válida siguen apareciendo en tu historial de uso para que puedas depurarlas."
+        a5: "No. Los errores de cliente (4xx) y de servidor (5xx) devueltos por un endpoint no se cobran, y las solicitudes a rutas que no existen no se registran. Los errores de una ruta válida siguen apareciendo en tu historial de uso con 0 créditos para que puedas depurarlos."
         heading: Facturación y uso
         q1: "¿Cómo se calcula la facturación?"
         q2: "¿Qué pasa si supero mi límite de solicitudes?"
