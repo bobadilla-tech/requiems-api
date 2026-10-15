@@ -1,0 +1,84 @@
+[
+  {
+    "name": "no subscription: free plan anchored on the key",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [],
+    "expect_plan": "free",
+    "expect_anchor": "2026-03-05T10:00:00Z"
+  },
+  {
+    "name": "active subscription anchors on its period start",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "developer", "status": "active", "current_period_start": "2026-04-16T09:00:00Z", "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "developer",
+    "expect_anchor": "2026-04-16T09:00:00Z"
+  },
+  {
+    "name": "trialing subscription counts",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "business", "status": "trialing", "current_period_start": "2026-09-03T00:00:00Z", "updated_at": "2026-09-03T00:00:00Z" }
+    ],
+    "expect_plan": "business",
+    "expect_anchor": "2026-09-03T00:00:00Z"
+  },
+  {
+    "name": "cancelled subscription is ignored",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "professional", "status": "cancelled", "current_period_start": "2026-04-16T00:00:00Z", "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "free",
+    "expect_anchor": "2026-03-05T10:00:00Z"
+  },
+  {
+    "name": "past_due subscription is ignored",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "business", "status": "past_due", "current_period_start": "2026-04-16T00:00:00Z", "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "free",
+    "expect_anchor": "2026-03-05T10:00:00Z"
+  },
+  {
+    "name": "active wins over a newer trialing subscription",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "developer", "status": "active", "current_period_start": "2026-01-01T00:00:00Z", "updated_at": "2026-08-01T00:00:00Z" },
+      { "plan_name": "business", "status": "trialing", "current_period_start": "2026-02-02T00:00:00Z", "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "developer",
+    "expect_anchor": "2026-01-01T00:00:00Z"
+  },
+  {
+    "name": "the most recently updated of two active subscriptions wins",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "developer", "status": "active", "current_period_start": "2026-01-01T00:00:00Z", "updated_at": "2026-08-01T00:00:00Z" },
+      { "plan_name": "professional", "status": "active", "current_period_start": "2026-02-02T00:00:00Z", "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "professional",
+    "expect_anchor": "2026-02-02T00:00:00Z"
+  },
+  {
+    "name": "an updated_at tie goes to the highest id (last inserted)",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "developer", "status": "active", "current_period_start": "2026-01-01T00:00:00Z", "updated_at": "2026-08-01T00:00:00Z" },
+      { "plan_name": "business", "status": "active", "current_period_start": "2026-02-02T00:00:00Z", "updated_at": "2026-08-01T00:00:00Z" }
+    ],
+    "expect_plan": "business",
+    "expect_anchor": "2026-02-02T00:00:00Z"
+  },
+  {
+    "name": "a subscription without a period start keeps its plan and anchors on the key",
+    "key_created_at": "2026-03-05T10:00:00Z",
+    "subscriptions": [
+      { "plan_name": "developer", "status": "active", "current_period_start": null, "updated_at": "2026-09-01T00:00:00Z" }
+    ],
+    "expect_plan": "developer",
+    "expect_anchor": "2026-03-05T10:00:00Z"
+  }
+]

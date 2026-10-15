@@ -1,0 +1,39 @@
+<%# locals: (usage:, plan:) %>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6" id="usage-card">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t("dashboard.overview.usage.title") %></h3>
+    <%= render "partials/shared/badge", text: t("dashboard.plans.#{plan}"), variant: plan == "free" ? "default" : "primary", size: "xs" %>
+  </div>
+
+  <div class="mb-2">
+    <p class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 tabular-nums leading-tight" data-testid="credits-used">
+      <%= number_with_delimiter(usage.used) %>
+    </p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+      <% if usage.unlimited? %>
+        <%= t("dashboard.overview.usage.no_limit") %>
+      <% else %>
+        <%= t("dashboard.overview.usage.of_limit", limit: compact_number(usage.limit)) %>
+      <% end %>
+    </p>
+  </div>
+
+  <% unless usage.unlimited? %>
+    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-3"
+         role="progressbar"
+         aria-label="<%= t("dashboard.overview.usage.title") %>"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-valuenow="<%= number_with_precision(usage.percent.clamp(0, 100), precision: 2, strip_insignificant_zeros: true, locale: :en) %>"
+         aria-valuetext="<%= t("dashboard.overview.usage.percent_used", percent: usage_percent_text(usage)) %>">
+      <div class="<%= usage_bar_color(usage) %> h-2 rounded-full transition-all" style="width: <%= usage_bar_width(usage) %>%"></div>
+    </div>
+    <p class="text-xs text-gray-600 dark:text-gray-400 mt-2" data-testid="percent-used"><%= t("dashboard.overview.usage.percent_used", percent: usage_percent_text(usage)) %></p>
+  <% end %>
+
+  <% if usage.anchored? %>
+    <p class="text-xs text-gray-600 dark:text-gray-400 mt-2" data-testid="cycle-line">
+      <%= t("dashboard.overview.usage.cycle_line", count: usage_resets_in_days(usage), range: usage_cycle_range(usage), resets: usage_resets_on(usage)) %>
+    </p>
+  <% end %>
+</div>

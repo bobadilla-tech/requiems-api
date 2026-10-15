@@ -17,6 +17,19 @@ class Subscription < ApplicationRecord
   scope :paying, -> { paid.where(cancel_at_period_end: [ false, nil ]) }
   scope :promotional, -> { where.not(promoted_by_id: nil) }
 
+  # The subscription the Go API bills against: active before trialing, then
+  # the most recently updated. Several rows per user are possible because
+  # subscriptions.user_id is not unique.
+  def self.effective_for(user)
+    active.where(user_id: user.id)
+      .order(
+        Arel.sql("CASE status WHEN 'active' THEN 0 ELSE 1 END"),
+        Arel.sql("COALESCE(updated_at, created_at) DESC"),
+        id: :desc
+      )
+      .first
+  end
+
   def promoted?
     promoted_by_id.present?
   end

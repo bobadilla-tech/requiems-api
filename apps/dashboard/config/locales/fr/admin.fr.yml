@@ -54,7 +54,7 @@ fr:
         suspended: Suspendu
         take_action_on_this_abuse_report: Prenez des mesures concernant ce signalement
           d'abus
-        this_month: Ce mois-ci
+        this_cycle: Ce cycle
         view_full_profile: Voir le profil complet
     access_denied: Accès refusé. Privilèges administrateur requis.
     analytics:
@@ -346,14 +346,14 @@ fr:
         no_recent_activity: Aucune activité récente
         page_title: Détails de l'utilisateur - %{email}
         recent_activity: Activité récente
-        started: Commencé
+        cycle_anchor: Ancre du cycle
         subscription: Abonnement
         suspend: Suspendre
         suspended: Suspendu
         suspended_at: Suspendu à
         these_actions_are_permanent_and_cannot: Ces actions sont irréversibles et
           ne peuvent être facilement annulées.
-        this_month: Ce mois-ci
+        this_cycle: Ce cycle
         timestamp: Horodatage
         usage_statistics: Statistiques d'utilisation
         user_details: Détails de l'utilisateur

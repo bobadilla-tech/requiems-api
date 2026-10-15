@@ -165,6 +165,12 @@ fr:
         text: Souhaitez-vous être averti des nouvelles versions et fonctionnalités
           ?
       title: Journal des modifications — Requiems API
+      usage_cycle_fix:
+        items:
+          - "Le tableau de bord affiche désormais l'utilisation de votre cycle de facturation en cours, la même fenêtre que celle utilisée par l'API pour appliquer votre quota. Auparavant, il pouvait compter des requêtes datant de plusieurs mois."
+          - "La page d'aperçu affiche les crédits exacts utilisés, le pourcentage exact (par exemple 0,02 %) et la date de réinitialisation (00:00 UTC le jour de votre facturation)."
+          - "Les mentions des alertes d'utilisation et des rapports hebdomadaires sont retirées jusqu'à leur disponibilité."
+        title: "Correction du décompte d'utilisation"
       v001:
         gateway:
           heading: Passerelle Cloudflare Worker
@@ -374,10 +380,7 @@ fr:
       authentication:
         a1: 'Incluez votre clé API dans l''en-tête Authorization en tant que jeton
           Bearer :'
-        a2_html: Toutes les clés partagent le même préfixe requiem_. Les clés
-          « test » servent au développement et aux tests ; les clés « production »
-          sont pour la production — c'est juste une étiquette, pas le format de la
-          clé. Les deux types comptent dans le quota mensuel.
+        a2_html: "Toutes les clés partagent le même préfixe requiem_. Les clés « test » servent au développement et aux tests ; les clés « production » sont pour la production — c'est juste une étiquette, pas le format de la clé. Les deux types de clé utilisent la même allocation mensuelle de crédits."
         a3: 'Oui ! Dans le tableau de bord, ouvrez la clé concernée et choisissez
           « Régénérer ». L''ancienne cesse de fonctionner immédiatement : mettez à
           jour toutes vos applications.'
@@ -386,17 +389,12 @@ fr:
         q2: Quelle est la différence entre les clés de test et de production ?
         q3: Puis-je régénérer ma clé API ?
       billing:
-        a1: Chaque appel API coûte 1 requête. Votre formule inclut un quota mensuel
-          réinitialisé au début de chaque période. Certains points de terminaison
-          peuvent compter plus d'une requête ; c'est indiqué dans leur documentation.
-        a2: À 75 % du quota, nous vous envoyons une alerte. À 90 %, un second avertissement.
-          À 100 %, les requêtes renvoient 429 jusqu'à changement de formule ou prochain
-          cycle de facturation.
+        a1: "Chaque appel API coûte 1 crédit. Votre formule inclut une allocation mensuelle de crédits réinitialisée le jour de votre facturation (00:00 UTC). Certains points de terminaison peuvent coûter plus d'un crédit ; c'est indiqué dans leur documentation."
+        a2: "Si vous utilisez 100 % de vos crédits, les requêtes API renvoient une erreur 429 jusqu'à un changement de formule ou la réinitialisation de votre cycle le jour de votre facturation. Votre tableau de bord affiche toujours votre consommation et la date de réinitialisation."
         a3: Oui ! Vous pouvez changer de formule à tout moment depuis la facturation.
           Les montées sont immédiates ; les descentes s'appliquent au début de la
           période suivante.
-        a4: Non. Le quota se réinitialise à chaque période. Choisissez une formule
-          adaptée à votre usage mensuel type.
+        a4: "Non, les crédits non utilisés ne sont pas reportés. Votre allocation se réinitialise le jour de votre facturation (00:00 UTC). Choisissez une formule adaptée à votre usage mensuel type."
         heading: Facturation et usage
         q1: Comment est calculée la facturation ?
         q2: Que se passe-t-il si je dépasse ma limite de requêtes ?
@@ -535,11 +533,8 @@ fr:
             de temps. Limite les abus et garantit un usage équitable.
           example_prefix: "Exemple : la formule gratuite autorise 30 requêtes par minute"
         - name: Requêtes
-          definition: Unité d'usage de l'API. Chaque appel compte pour 1 requête sur
-            votre quota mensuel. Certains points de terminaison peuvent compter plus
-            ; c'est indiqué dans leur documentation.
-          example_prefix: "Exemple : un appel au point de terminaison de validation
-            e-mail consomme 1 requête sur votre quota."
+          definition: "L'unité d'usage de l'API est le crédit. Chaque appel coûte 1 crédit sur votre allocation mensuelle, réinitialisée le jour de votre facturation. Certains points de terminaison coûtent plus d'un crédit ; c'est toujours indiqué dans leur documentation."
+          example_prefix: "Exemple : un appel au point de terminaison de validation e-mail consomme 1 crédit sur votre allocation mensuelle."
         - name: REST (Representational State Transfer)
           definition: Style d'architecture pour applications réseau. Les APIs REST utilisent
             HTTP pour les opérations CRUD sur les ressources.

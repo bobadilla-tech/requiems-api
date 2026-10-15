@@ -53,7 +53,7 @@ es:
         suspended: Suspendido
         take_action_on_this_abuse_report: Tome medidas con respecto a este informe
           de abuso.
-        this_month: Este mes
+        this_cycle: Este ciclo
         view_full_profile: Ver perfil completo
     access_denied: Acceso denegado. Se requieren privilegios de administrador.
     analytics:
@@ -341,14 +341,14 @@ es:
         no_recent_activity: No hay actividad reciente
         page_title: Detalles del usuario - %{email}
         recent_activity: Actividad reciente
-        started: Comenzó
+        cycle_anchor: Ancla del ciclo
         subscription: Suscripción
         suspend: Suspender
         suspended: Suspendido
         suspended_at: Suspendido en
         these_actions_are_permanent_and_cannot: Estas acciones son permanentes y no
           se pueden deshacer fácilmente.
-        this_month: Este mes
+        this_cycle: Este ciclo
         timestamp: Marca de tiempo
         usage_statistics: Estadísticas de uso
         user_details: Detalles del usuario

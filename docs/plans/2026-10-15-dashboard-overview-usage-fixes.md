@@ -360,4 +360,49 @@ deferred follow-ups. Each PR is safe in either Rails/Go deploy order
 
 ## Final notes
 
-_(fill after the work lands)_
+### PR-0 (#1012, merged)
+
+- Shipped: the endpoint usage list on the Usage page is rendered server-side
+  (ERB-escaped, ordered by count, capped at 100, nil/blank endpoints skipped)
+  and shares one scope with the `by_endpoint` JSON action; the CSV export
+  prefixes cells that start with `= + - @ \t \r \n`, full-width `＝＋－＠`, or
+  those after leading whitespace, with `'`.
+- Deviations: `find_each` was tried for the export and reverted because it
+  ignores the newest-first order (streaming and row caps stay in D4). The
+  `by_endpoint` action and route stay (now only used by tests and any external
+  caller). Review feedback to use a tab prefix and cursor streaming was not
+  taken (plan specifies `'`; streaming is D4). Seven review rounds.
+- The panic-recovery guidance for PR-B was tightened after review: use
+  `ww.Status()==0` (not `BytesWritten()==0`) to decide if a JSON 500 can still
+  be written, and keep a single refund path (the normal reconcile) so a
+  recovered panic cannot refund the reservation twice.
+
+### PR-A (Rails numbers)
+
+- Shipped: `BillingCycle` and `UsageSummary`, `User#current_plan` now follows
+  the active/trialing subscription (callers: Overview, `rack_attack.rb`
+  free-plan throttles), `User#usage_this_month`/`requests_remaining` delegate to
+  `UsageSummary`, dead `User::PLAN_LIMITS` and `UsageLog.this_month` deleted,
+  Overview cards and Billing page use the summary, admin "this month" is now
+  "this cycle" (credits), admin "Started" is "Cycle anchor" and hidden for
+  promotions, copy that promised alerts and weekly reports is marked "coming
+  soon", FAQ/glossary say credits and "billing day", changelog entry added.
+  Shared Go/Rails parity vectors and a ledger fixture live in
+  `apps/api/platform/middleware/testdata/` (the CI dashboard path filter now
+  includes that folder).
+- Percent is shown with two decimals (`0.02%`), because the plan's "1 decimal"
+  could not render the required `0.02%`; below `0.01` shows `<0.01%`.
+- Deviations: no explicit blocking `i18n-tasks unused` CI step (main already
+  reports about 80 unused keys); the unused check was done as a before/after
+  diff instead, and `dashboard.overview.usage.state.*` is ignored (dynamic key).
+  `PlanConfig` feature labels ("500 requests/month") were left as is (cosmetic,
+  plan allowed a footnote instead). The Usage page and CSV still say requests
+  (D4).
+- Out-of-scope bugs found (not fixed): `admin/users/show.html.erb:256` calls
+  `UsageLog#http_method` (the column is `request_method`), so the admin user
+  page raises for any user with recent usage logs;
+  `admin/abuse_reports/show.html.erb:107` calls the nonexistent `ApiKey#prefix`,
+  so the abuse report page always raises; the Billing page raises in
+  `PlanConfig.for` for a subscription whose `plan_name` is not a known plan
+  (reachable only by bypassing validations); `UsageLog.credits_used` is
+  nullable, so Usage page/CSV `|| 1` and the ledger sum disagree (D4).

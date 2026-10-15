@@ -43,6 +43,7 @@ jobs:
               - '.github/workflows/ci.yml'
             dashboard:
               - 'apps/dashboard/**'
+              - 'apps/api/platform/middleware/testdata/**'
               - '.github/workflows/ci.yml'
             mcp:
               - 'apps/mcp/**'

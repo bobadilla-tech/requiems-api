@@ -7,7 +7,6 @@ class UsageLog < ApplicationRecord
   scope :in_range, ->(start_date, end_date) { where(used_at: start_date..end_date) }
   scope :successful, -> { where(status_code: 200..299) }
   scope :with_errors, -> { where("status_code >= ?", 400) }
-  scope :this_month, -> { where("used_at >= ?", Time.current.beginning_of_month) }
   scope :last_7_days, -> { where("used_at >= ?", 7.days.ago) }
   scope :with_response_time, -> { where.not(response_time_ms: nil) }
   scope :recent, ->(limit = 10) { order(used_at: :desc).limit(limit).includes(:api_key) }

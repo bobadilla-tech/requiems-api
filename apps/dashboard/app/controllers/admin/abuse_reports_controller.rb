@@ -45,7 +45,7 @@ class Admin::AbuseReportsController < Admin::BaseController
     # Get user's API usage statistics
     @usage_stats = {
       total_requests: @user.usage_logs.count,
-      requests_this_month: @user.usage_logs.where("used_at >= ?", Time.current.beginning_of_month).count,
+      credits_this_cycle: @user.usage_summary.used,
       error_rate: calculate_error_rate(@user),
       last_request_at: @user.usage_logs.maximum(:used_at)
     }

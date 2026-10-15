@@ -174,16 +174,16 @@ fr:
         view_all: Voir toutes les formules et les tarifs →
         yearly: Annuel
       usage:
-        heading: Utilisation sur la période
-        of_requests: sur %{limit} requêtes
-        percent_used: "%{percent}% utilisé"
+        heading: "Utilisation sur ce cycle"
+        of_requests: "sur %{limit} crédits"
+        percent_used: "%{percent} % utilisé"
         rate_limit_heading: Limite de débit
         rate_limit_unit: requêtes par minute
-        warning_critical_body: Vous approchez du plafond mensuel. Envisagez une formule
-          supérieure pour éviter une interruption.
-        warning_critical_heading: Peu de requêtes restantes !
-        warning_moderate_body: Vous avez utilisé %{percent}% de votre quota mensuel.
-          Une mise à niveau peut être utile bientôt.
+        warning_critical_body: "Vous approchez de votre limite de crédits pour ce cycle. Envisagez une formule supérieure pour éviter une interruption."
+        warning_critical_heading: "Peu de crédits restants !"
+        warning_exhausted_body: "Les requêtes renvoient une erreur 429 jusqu'à la réinitialisation de votre cycle ou un changement de formule."
+        warning_exhausted_heading: "Limite de crédits atteinte"
+        warning_moderate_body: "Vous avez utilisé %{percent} % de vos crédits sur ce cycle. Une mise à niveau peut être utile bientôt."
         warning_moderate_heading: Attention
     mailers:
       account_deletion:
@@ -258,25 +258,20 @@ fr:
         one: Clé active
         other: Clés actives
       api_keys: Clés API
-      available_month: Disponible ce mois-ci
       billing: Facturation
       browse_docs: Parcourir la documentation API
       create_key: Créer une clé
       current_plan: Formule actuelle
-      current_usage: Requêtes utilisées
+      current_usage: Crédits utilisés
       endpoint_col: Point de terminaison
       manage: Gérer
-      monthly_quota: Quota mensuel
       next_billing: Prochaine date de facturation
       no_activity: Aucune activité pour l'instant
       no_activity_desc: Commencez par votre premier appel API.
-      of_requests: sur %{limit} requêtes
+      plan_ends: Fin du forfait
       recent_activity: Activité API récente
       requests_col: Requêtes
-      requests_remaining: Requêtes restantes
-      resets_monthly: Réinitialisé chaque mois
       response_col: Réponse
-      running_low: Bientôt épuisé !
       status_col: Statut
       subtitle: Voici votre résumé d'utilisation API pour %{date}
       time_ago: il y a %{time}
@@ -285,7 +280,31 @@ fr:
       upgrade_desc: Plus de requêtes, des limites de débit plus élevées et un support
         prioritaire.
       upgrade_heading: Passez à une formule supérieure
-      used_this_month: "%{percent}% utilisé ce mois-ci"
+      usage:
+        create_key_first: Créez une clé API pour démarrer votre cycle d'utilisation
+        cycle_line:
+          one: "Cycle %{range} · réinitialisation le %{resets} (dans %{count} jour)"
+          other: "Cycle %{range} · réinitialisation le %{resets} (dans %{count} jours)"
+        cycle_range: "%{from} – %{to} UTC"
+        last_request: Dernière requête il y a %{time}
+        ledger_help: Compte ce qui a été enregistré pour votre compte. L'application
+          de la limite utilise un compteur en direct qui peut être légèrement supérieur.
+        no_cycle: Votre cycle démarre à la création d'une clé API
+        no_limit: Ce forfait n'a pas de limite de crédits
+        no_requests_yet: Aucune requête pour le moment
+        of_limit: sur %{limit} crédits
+        percent_used: "%{percent} % utilisé"
+        remaining_heading: Crédits restants
+        resets_heading: Réinitialisation de l'utilisation
+        resets_in:
+          one: dans %{count} jour (00:00 UTC)
+          other: dans %{count} jours (00:00 UTC)
+        state:
+          exhausted: Limite atteinte. Les requêtes renvoient 429 jusqu'à la réinitialisation de votre cycle.
+          high: Presque plus de crédits
+          ok: "Dans les temps"
+          warn: Crédits bientôt épuisés
+        title: Crédits utilisés ce cycle
       view_all: Tout voir
       view_details: Voir les détails
       view_pricing: Voir les tarifs
@@ -391,10 +410,9 @@ fr:
           importantes
         notifications_label: Notifications par e-mail
         subheading: Contrôlez les e-mails que nous vous envoyons
-        usage_alerts_hint: Notifications à 75 % et 90 % du quota mensuel
+        usage_alerts_hint: "Bientôt disponible : soyez notifié à 75 % et 90 % de vos crédits"
         usage_alerts_label: Alertes d'utilisation
-        weekly_reports_hint: Résumé hebdomadaire d'utilisation et de performances
-          API
+        weekly_reports_hint: "Bientôt disponible : recevez un résumé hebdomadaire de l'utilisation et des performances API"
         weekly_reports_label: Rapports hebdomadaires
       errors:
         one: "%{count} erreur a empêché l'enregistrement :"
@@ -429,8 +447,8 @@ fr:
         avg_latency: Latence moyenne
         avg_response: Temps de réponse moyen
         error_rate: Taux d'erreur
-        failed_requests: Requêtes en échec
-        total_requests: Requêtes totales
+        failed_requests: "Appels en échec"
+        total_requests: "Total des appels"
       charts:
         by_endpoint: Par point de terminaison
         by_endpoint_sub: Principaux points de terminaison par nombre de requêtes

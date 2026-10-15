@@ -110,4 +110,42 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+
+  test "current_plan follows the active or trialing subscription, like the Go API" do
+    assert_equal "free", @user.current_plan
+
+    sub = Subscription.create!(user: @user, plan_name: "business", status: "cancelled")
+    assert_equal "free", @user.current_plan
+
+    sub.update!(status: "past_due")
+    assert_equal "free", @user.current_plan
+
+    sub.update!(status: "trialing")
+    assert_equal "business", @user.current_plan
+
+    sub.update!(status: "active")
+    assert_equal "business", @user.current_plan
+  end
+
+  test "usage_this_month and requests_remaining delegate to the billing cycle summary" do
+    key = @user.api_keys.create!(name: "k", environment: "test")
+    key.update_columns(created_at: Time.utc(2026, 4, 16))
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 7, 1), credits_used: 400)
+    create_usage_log(user: @user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 120)
+
+    travel_to(Time.utc(2026, 10, 15)) do
+      assert_equal 120, @user.usage_this_month
+      assert_equal 380, @user.requests_remaining
+    end
+  end
+
+  test "requests_remaining is nil when the plan has no limit" do
+    Subscription.create!(user: @user, plan_name: "developer", status: "active").update_columns(plan_name: "mystery")
+
+    assert_nil @user.requests_remaining
+  end
+
+  test "PLAN_LIMITS was removed in favour of PlanConfig" do
+    assert_not User.const_defined?(:PLAN_LIMITS)
+  end
 end

@@ -162,6 +162,12 @@ es:
           %{email}"
         text: "¿Quieres recibir notificaciones sobre nuevas versiones y funcionalidades?"
       title: Registro de cambios - Requiems API
+      usage_cycle_fix:
+        items:
+          - "El panel ahora muestra el uso de tu ciclo de facturación actual, la misma ventana que usa la API para aplicar tu cuota. Antes podía contar solicitudes de varios meses atrás."
+          - "La página de resumen muestra los créditos exactos usados, el porcentaje exacto (por ejemplo 0,02%) y la fecha en que se restablece tu uso (00:00 UTC el día de tu facturación)."
+          - "Se eliminaron las menciones a alertas de uso e informes semanales hasta que estén disponibles."
+        title: "Corrección del conteo de uso"
       v001:
         gateway:
           heading: Cloudflare Worker Gateway
@@ -385,10 +391,7 @@ es:
     faq:
       authentication:
         a1: "Incluye tu clave API en el encabezado Authorization como token Bearer:"
-        a2_html: Todas las claves comparten el mismo prefijo requiem_. Las claves
-          de "prueba" son para desarrollo y pruebas; las de "producción" son para uso
-          en producción — es solo una etiqueta de la clave, no parte de su formato.
-          Ambos tipos de clave cuentan para tu cuota mensual de solicitudes.
+        a2_html: "Todas las claves comparten el mismo prefijo requiem_. Las claves de \"prueba\" son para desarrollo y pruebas; las de \"producción\" son para uso en producción — es solo una etiqueta de la clave, no parte de su formato. Ambos tipos de clave usan la misma asignación mensual de créditos."
         a3: ¡Sí! Ve a tu panel, haz clic en la clave API que deseas regenerar y selecciona
           "Regenerar". Ten en cuenta que la clave antigua dejará de funcionar de inmediato,
           así que actualiza todas tus aplicaciones.
@@ -397,21 +400,12 @@ es:
         q2: "¿Cuál es la diferencia entre las claves API de prueba y las de producción?"
         q3: "¿Puedo regenerar mi clave API?"
       billing:
-        a1: Cada llamada a la API cuesta 1 solicitud. Tu plan incluye una asignación
-          mensual de solicitudes que se restablece al inicio de cada período de facturación.
-          Algunos endpoints pueden contar como más de 1 solicitud; esto siempre se
-          indica explícitamente en la documentación de ese endpoint.
-        a2: Cuando alcances el 75% de tu cuota, te enviaremos una alerta. Al 90%,
-          recibirás otra advertencia. Si alcanzas el 100%, las solicitudes a la API
-          devolverán un error 429 hasta que actualices tu plan o esperes tu próximo
-          ciclo de facturación.
+        a1: "Cada llamada a la API cuesta 1 crédito. Tu plan incluye una asignación mensual de créditos que se restablece el día de tu facturación (00:00 UTC). Algunos endpoints pueden costar más de 1 crédito; esto siempre se indica explícitamente en la documentación de ese endpoint."
+        a2: "Si usas el 100% de tus créditos, las solicitudes a la API devuelven un error 429 hasta que actualices tu plan o se restablezca tu ciclo el día de tu facturación. Tu panel siempre muestra tu uso actual y cuándo se restablece."
         a3: "¡Sí! Puedes cambiar tu plan en cualquier momento desde tu panel de facturación.
           Las actualizaciones surten efecto de inmediato. Las reducciones surten efecto
           al inicio de tu próximo período de facturación."
-        a4: No, las solicitudes no utilizadas no se acumulan para el mes siguiente.
-          Tu asignación de solicitudes se restablece al inicio de cada período de
-          facturación. Recomendamos elegir un plan que se ajuste a tu uso mensual
-          típico.
+        a4: "No, los créditos no utilizados no se acumulan. Tu asignación se restablece el día de tu facturación (00:00 UTC). Recomendamos elegir un plan que se ajuste a tu uso mensual típico."
         heading: Facturación y uso
         q1: "¿Cómo se calcula la facturación?"
         q2: "¿Qué pasa si supero mi límite de solicitudes?"
@@ -555,12 +549,8 @@ es:
             prevenir abusos y garantiza un uso justo.
           example_prefix: "Ejemplo: El plan gratuito permite 30 solicitudes por minuto"
         - name: Solicitudes
-          definition: La unidad de uso de la API. Cada llamada a la API cuenta como
-            1 solicitud contra tu cuota mensual del plan. Algunos endpoints pueden contar
-            como más de 1 solicitud, lo cual siempre se indica explícitamente en la
-            documentación de ese endpoint.
-          example_prefix: "Ejemplo: Llamar al endpoint de validación de correo una vez
-            usa 1 solicitud de tu cuota mensual."
+          definition: "La unidad de uso de la API es el crédito. Cada llamada a la API cuesta 1 crédito de tu asignación mensual del plan, que se restablece el día de tu facturación. Algunos endpoints cuestan más de 1 crédito, lo cual siempre se indica explícitamente en la documentación de ese endpoint."
+          example_prefix: "Ejemplo: Llamar al endpoint de validación de correo una vez usa 1 crédito de tu asignación mensual."
         - name: REST (Transferencia de estado representacional)
           definition: Un estilo arquitectónico para diseñar aplicaciones en red. Las
             APIs REST usan solicitudes HTTP para realizar operaciones CRUD (Crear, Leer,

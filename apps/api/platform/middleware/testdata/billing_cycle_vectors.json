@@ -1,0 +1,107 @@
+[
+  {
+    "name": "jan 31 anchor clamps to feb 28 and starts on jan 31 mid-february",
+    "anchor": "2026-01-31T10:00:00Z",
+    "now": "2026-02-15T12:00:00Z",
+    "start": "2026-01-31T00:00:00Z",
+    "next_start": "2026-02-28T00:00:00Z"
+  },
+  {
+    "name": "jan 31 anchor on the clamped feb 28 boundary",
+    "anchor": "2026-01-31T10:00:00Z",
+    "now": "2026-02-28T00:00:00Z",
+    "start": "2026-02-28T00:00:00Z",
+    "next_start": "2026-03-31T00:00:00Z"
+  },
+  {
+    "name": "jan 31 anchor on march 1 belongs to the feb 28 cycle",
+    "anchor": "2026-01-31T10:00:00Z",
+    "now": "2026-03-01T00:00:00Z",
+    "start": "2026-02-28T00:00:00Z",
+    "next_start": "2026-03-31T00:00:00Z"
+  },
+  {
+    "name": "leap year feb 29",
+    "anchor": "2024-01-31T00:00:00Z",
+    "now": "2024-02-29T05:00:00Z",
+    "start": "2024-02-29T00:00:00Z",
+    "next_start": "2024-03-31T00:00:00Z"
+  },
+  {
+    "name": "day 30 anchor in a non leap february",
+    "anchor": "2026-01-30T08:00:00Z",
+    "now": "2026-02-28T23:59:59Z",
+    "start": "2026-02-28T00:00:00Z",
+    "next_start": "2026-03-30T00:00:00Z"
+  },
+  {
+    "name": "anchor in the future of now",
+    "anchor": "2027-04-16T00:00:00Z",
+    "now": "2026-10-15T12:00:00Z",
+    "start": "2026-09-16T00:00:00Z",
+    "next_start": "2026-10-16T00:00:00Z"
+  },
+  {
+    "name": "anchor day 16 on the day before the boundary",
+    "anchor": "2026-04-16T00:00:00Z",
+    "now": "2026-10-15T23:59:59Z",
+    "start": "2026-09-16T00:00:00Z",
+    "next_start": "2026-10-16T00:00:00Z"
+  },
+  {
+    "name": "non midnight anchor rolls at midnight utc of the anchor day",
+    "anchor": "2026-04-16T18:30:00Z",
+    "now": "2026-10-16T01:00:00Z",
+    "start": "2026-10-16T00:00:00Z",
+    "next_start": "2026-11-16T00:00:00Z"
+  },
+  {
+    "name": "day 30 anchor on the last day of a 30 day month",
+    "anchor": "2026-01-30T00:00:00Z",
+    "now": "2026-04-30T00:00:00Z",
+    "start": "2026-04-30T00:00:00Z",
+    "next_start": "2026-05-30T00:00:00Z"
+  },
+  {
+    "name": "day 31 anchor before a 30 day month boundary",
+    "anchor": "2026-01-31T00:00:00Z",
+    "now": "2026-04-15T00:00:00Z",
+    "start": "2026-03-31T00:00:00Z",
+    "next_start": "2026-04-30T00:00:00Z"
+  },
+  {
+    "name": "year wrap backwards",
+    "anchor": "2025-12-31T00:00:00Z",
+    "now": "2026-01-10T00:00:00Z",
+    "start": "2025-12-31T00:00:00Z",
+    "next_start": "2026-01-31T00:00:00Z"
+  },
+  {
+    "name": "year wrap forwards",
+    "anchor": "2026-01-15T00:00:00Z",
+    "now": "2026-12-20T00:00:00Z",
+    "start": "2026-12-15T00:00:00Z",
+    "next_start": "2027-01-15T00:00:00Z"
+  },
+  {
+    "name": "one second before the boundary",
+    "anchor": "2026-01-15T00:00:00Z",
+    "now": "2026-06-14T23:59:59Z",
+    "start": "2026-05-15T00:00:00Z",
+    "next_start": "2026-06-15T00:00:00Z"
+  },
+  {
+    "name": "anchor day 1",
+    "anchor": "2026-03-01T00:00:00Z",
+    "now": "2026-10-01T00:00:00Z",
+    "start": "2026-10-01T00:00:00Z",
+    "next_start": "2026-11-01T00:00:00Z"
+  },
+  {
+    "name": "anchor with a utc offset is read in utc",
+    "anchor": "2026-01-31T23:30:00-05:00",
+    "now": "2026-03-20T00:00:00Z",
+    "start": "2026-03-01T00:00:00Z",
+    "next_start": "2026-04-01T00:00:00Z"
+  }
+]

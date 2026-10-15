@@ -62,6 +62,39 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_match @regular_user.email, response.body
   end
 
+  test "show labels usage as the billing cycle, not the calendar month" do
+    get admin_user_path(@regular_user)
+
+    assert_response :success
+    assert_select "p", text: "This Cycle"
+    assert_select "p", text: "This Month", count: 0
+  end
+
+  test "usage stats count credits for the billing cycle" do
+    key = @regular_user.api_keys.create!(name: "k", environment: "test")
+    key.update_columns(created_at: Time.utc(2026, 4, 16))
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 10, 1), credits_used: 40)
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 9, 20), credits_used: 2)
+    create_usage_log(user: @regular_user, key: key, used_at: Time.utc(2026, 9, 1), credits_used: 900)
+
+    controller = Admin::UsersController.new
+    controller.instance_variable_set(:@user, @regular_user)
+    stats = travel_to(Time.utc(2026, 10, 15)) { controller.send(:calculate_user_usage_stats) }
+
+    assert_equal 42, stats[:credits_this_cycle]
+    assert_equal 3, stats[:total_requests]
+  end
+
+  test "show labels the subscription anchor and hides it for promotions" do
+    Subscription.create!(user: @regular_user, plan_name: "developer", status: "active", current_period_start: Time.utc(2026, 4, 16))
+    get admin_user_path(@regular_user)
+    assert_select "label", text: "Cycle anchor"
+
+    @regular_user.subscription.update!(promoted_by: @admin, promotion_reason: "x")
+    get admin_user_path(@regular_user)
+    assert_select "label", text: "Cycle anchor", count: 0
+  end
+
   test "show displays user details" do
     get admin_user_path(@regular_user)
 

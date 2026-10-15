@@ -16,7 +16,6 @@ class User < ApplicationRecord
   has_many :referrals_given, class_name: "Referral", foreign_key: "referrer_id", dependent: :destroy, inverse_of: :referrer
   has_one :referral_received, class_name: "Referral", foreign_key: "referred_user_id", dependent: :destroy, inverse_of: :referred_user
 
-  PLAN_LIMITS = PlanConfig::PLANS.transform_values { |v| v[:requests_per_month] }.freeze
   SUPPORTED_LOCALES = Rails.application.config.i18n.available_locales.map(&:to_s).freeze
 
   validates :locale, inclusion: { in: SUPPORTED_LOCALES }, allow_nil: true
@@ -80,22 +79,27 @@ class User < ApplicationRecord
     name.presence || email.split("@").first.titleize
   end
 
+  # Plan the Go API enforces: the active/trialing subscription, else free.
   def current_plan
-    subscription&.plan_name || "free"
+    Subscription.effective_for(self)&.plan_name || "free"
   end
 
+  def usage_summary(now: Time.current)
+    UsageSummary.new(self, now: now)
+  end
+
+  # Credits used in the current billing cycle (see UsageSummary).
   def usage_this_month
-    period_start = subscription&.current_period_start || Time.current.beginning_of_month
-    usage_logs.where("used_at >= ?", period_start).count
+    usage_summary.used
   end
 
   def total_requests
     usage_logs.count
   end
 
+  # nil when the plan has no known limit.
   def requests_remaining
-    limit = PlanConfig.requests_per_month(current_plan)
-    [ limit - usage_this_month, 0 ].max
+    usage_summary.remaining
   end
 
   def avg_response_time_ms

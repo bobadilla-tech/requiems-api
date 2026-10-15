@@ -4,28 +4,19 @@ class Dashboard::BillingController < Dashboard::BaseController
   helper_method :valid_plan?
 
   def show
-    @subscription = current_user.subscription
-    @current_plan = @subscription&.plan_name || "free"
-
-    # Calculate usage for current billing period
-    if @subscription
-      period_start = @subscription.current_period_start || Time.current.beginning_of_month
-      @usage_this_period = current_user.usage_logs
-        .where("used_at >= ?", period_start)
-        .count
-    else
-      @usage_this_period = current_user.usage_logs
-        .where("used_at >= ?", Time.current.beginning_of_month)
-        .count
-    end
+    # The subscription the Go API enforces (active/trialing), so the plan,
+    # dates and usage numbers on this page all describe the same row.
+    @usage = current_user.usage_summary
+    @subscription = @usage.cycle.subscription
+    @current_plan = @usage.plan_name
+    # A paid row that is not active (e.g. past_due) is enforced as free, but its
+    # owner still needs the customer portal to fix the payment.
+    legacy = current_user.subscription
+    @portal_for_inactive_subscription = @current_plan == "free" && legacy&.lemonsqueezy_subscription_id.present? && !legacy.promoted?
 
     # Get plan limits and pricing
     @plan_info = get_plan_info(@current_plan)
     @available_plans = get_all_plans
-
-    # Calculate quota usage percentage
-    quota_limit = @plan_info[:requests_per_month]
-    @quota_used_percent = quota_limit > 0 ? ((@usage_this_period.to_f / quota_limit) * 100).round(1) : 0
 
     # Handle success/cancel callbacks from LemonSqueezy
     if params[:success] == "true"

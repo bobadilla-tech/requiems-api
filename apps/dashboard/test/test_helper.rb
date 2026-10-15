@@ -47,6 +47,16 @@ module ActiveSupport
         **attributes
       )
     end
+
+    # Ledger row; the endpoint is made unique so the (api_key, used_at,
+    # endpoint) dedup index never collides between rows in one test.
+    def create_usage_log(user:, key:, used_at:, credits_used: 1, status_code: 200, endpoint: nil)
+      UsageLog.create!(
+        user: user, api_key_id: key.id, used_at: used_at, credits_used: credits_used,
+        status_code: status_code, request_method: "GET",
+        endpoint: endpoint || "/v1/test/#{SecureRandom.hex(4)}"
+      )
+    end
   end
 end
 
