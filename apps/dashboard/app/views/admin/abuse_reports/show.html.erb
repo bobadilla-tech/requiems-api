@@ -150,8 +150,8 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.abuse_reports.show.this_month') %></p>
-        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.abuse_reports.show.this_cycle') %></p>
+        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:credits_this_cycle]) %></p>
       </div>
       <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.usage.cards.error_rate') %></p>

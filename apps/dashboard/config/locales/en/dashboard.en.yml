@@ -252,25 +252,20 @@ en:
         one: Active key
         other: Active keys
       api_keys: API Keys
-      available_month: Available this month
       billing: Billing
       browse_docs: Browse API Documentation
       create_key: Create New Key
       current_plan: Current Plan
-      current_usage: Requests Used
+      current_usage: Credits Used
       endpoint_col: Endpoint
       manage: Manage
-      monthly_quota: Monthly Quota
       next_billing: Next Billing Date
       no_activity: No activity yet
       no_activity_desc: Get started by making your first API call.
-      of_requests: of %{limit} requests
+      plan_ends: Plan Ends
       recent_activity: Recent API Activity
       requests_col: Requests
-      requests_remaining: Requests Remaining
-      resets_monthly: Resets every month
       response_col: Response
-      running_low: Running low!
       status_col: Status
       subtitle: Here's your API usage overview for %{date}
       time_ago: "%{time} ago"
@@ -278,7 +273,31 @@ en:
       title: Dashboard
       upgrade_desc: Get more requests, faster rate limits, and priority support.
       upgrade_heading: Upgrade Your Plan
-      used_this_month: "%{percent}% used this month"
+      usage:
+        create_key_first: Create an API key to start your usage cycle
+        cycle_line:
+          one: "Cycle %{range} · resets %{resets} (in %{count} day)"
+          other: "Cycle %{range} · resets %{resets} (in %{count} days)"
+        cycle_range: "%{from} – %{to} UTC"
+        last_request: Last request %{time} ago
+        ledger_help: Counts what was recorded for your account. Enforcement uses
+          a live counter that can be slightly higher.
+        no_cycle: Your cycle starts when you create an API key
+        no_limit: No credit limit on this plan
+        no_requests_yet: No requests yet
+        of_limit: of %{limit} credits
+        percent_used: "%{percent}% used"
+        remaining_heading: Credits Remaining
+        resets_heading: Usage Resets
+        resets_in:
+          one: in %{count} day (00:00 UTC)
+          other: in %{count} days (00:00 UTC)
+        state:
+          exhausted: Limit reached. Requests return 429 until your cycle resets.
+          high: Almost out of credits
+          ok: Plenty available
+          warn: Running low
+        title: Credits Used This Cycle
       view_all: View All
       view_details: View Details
       view_pricing: View Pricing
@@ -381,10 +400,9 @@ en:
           and important updates
         notifications_label: Email Notifications
         subheading: Control what emails you receive from us
-        usage_alerts_hint: Get notified when you reach 75% and 90% of your monthly
-          quota
+        usage_alerts_hint: "Coming soon: get notified when you reach 75% and 90% of your credits"
         usage_alerts_label: Usage Alerts
-        weekly_reports_hint: Receive a weekly summary of your API usage and performance
+        weekly_reports_hint: "Coming soon: receive a weekly summary of your API usage and performance"
         weekly_reports_label: Weekly Usage Reports
       errors:
         one: "%{count} error prohibited these settings from being saved:"
@@ -419,8 +437,8 @@ en:
         avg_latency: Average latency
         avg_response: Avg Response Time
         error_rate: Error Rate
-        failed_requests: Failed requests
-        total_requests: Total Requests
+        failed_requests: "Failed calls"
+        total_requests: "Total calls"
       charts:
         by_endpoint: Usage by Endpoint
         by_endpoint_sub: Top endpoints by request count

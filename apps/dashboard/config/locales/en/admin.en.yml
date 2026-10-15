@@ -51,7 +51,7 @@ en:
         suspend: "Suspend:"
         suspended: Suspended
         take_action_on_this_abuse_report: Take action on this abuse report
-        this_month: This Month
+        this_cycle: This Cycle
         view_full_profile: View Full Profile
     access_denied: Access denied. Admin privileges required.
     analytics:
@@ -321,14 +321,14 @@ en:
         no_recent_activity: No recent activity
         page_title: User Details - %{email}
         recent_activity: Recent Activity
-        started: Started
+        cycle_anchor: Cycle anchor
         subscription: Subscription
         suspend: Suspend
         suspended: Suspended
         suspended_at: Suspended At
         these_actions_are_permanent_and_cannot: These actions are permanent and cannot
           be undone easily.
-        this_month: This Month
+        this_cycle: This Cycle
         timestamp: Timestamp
         usage_statistics: Usage Statistics
         user_details: User Details

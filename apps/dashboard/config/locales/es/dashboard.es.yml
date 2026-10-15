@@ -255,25 +255,20 @@ es:
         one: Clave activa
         other: Claves activas
       api_keys: Claves API
-      available_month: Disponibles este mes
       billing: Facturación
       browse_docs: Ver documentación de la API
       create_key: Crear nueva clave
       current_plan: Plan actual
-      current_usage: Solicitudes usadas
+      current_usage: Créditos usados
       endpoint_col: Endpoint
       manage: Gestionar
-      monthly_quota: Cuota mensual
       next_billing: Próxima fecha de facturación
       no_activity: Sin actividad aún
       no_activity_desc: Comienza realizando tu primera llamada a la API.
-      of_requests: de %{limit} solicitudes
+      plan_ends: El plan termina
       recent_activity: Actividad reciente de la API
       requests_col: Solicitudes
-      requests_remaining: Solicitudes restantes
-      resets_monthly: Se restablece cada mes
       response_col: Respuesta
-      running_low: "¡Quedando pocas!"
       status_col: Estado
       subtitle: Aquí está tu resumen de uso de API para %{date}
       time_ago: hace %{time}
@@ -281,7 +276,31 @@ es:
       title: Panel
       upgrade_desc: Obtén más solicitudes, límites de tasa más rápidos y soporte prioritario.
       upgrade_heading: Actualiza tu plan
-      used_this_month: "%{percent}% usado este mes"
+      usage:
+        create_key_first: Crea una clave de API para iniciar tu ciclo de uso
+        cycle_line:
+          one: "Ciclo %{range} · se reinicia el %{resets} (en %{count} día)"
+          other: "Ciclo %{range} · se reinicia el %{resets} (en %{count} días)"
+        cycle_range: "%{from} – %{to} UTC"
+        last_request: Última solicitud hace %{time}
+        ledger_help: Cuenta lo registrado para tu cuenta. La aplicación del límite
+          usa un contador en vivo que puede ser algo mayor.
+        no_cycle: Tu ciclo comienza cuando creas una clave de API
+        no_limit: Este plan no tiene límite de créditos
+        no_requests_yet: Aún no hay solicitudes
+        of_limit: de %{limit} créditos
+        percent_used: "%{percent}% usado"
+        remaining_heading: Créditos restantes
+        resets_heading: Reinicio del uso
+        resets_in:
+          one: en %{count} día (00:00 UTC)
+          other: en %{count} días (00:00 UTC)
+        state:
+          exhausted: Límite alcanzado. Las solicitudes devuelven 429 hasta que se reinicie tu ciclo.
+          high: Casi sin créditos
+          ok: Hay créditos de sobra
+          warn: Quedan pocos
+        title: Créditos usados este ciclo
       view_all: Ver todo
       view_details: Ver detalles
       view_pricing: Ver precios
@@ -387,11 +406,9 @@ es:
           claves API y actualizaciones importantes
         notifications_label: Notificaciones por correo
         subheading: Controla qué correos recibes de nosotros
-        usage_alerts_hint: Recibe notificaciones cuando alcances el 75% y 90% de tu
-          cuota mensual
+        usage_alerts_hint: "Próximamente: recibe avisos cuando alcances el 75% y 90% de tus créditos"
         usage_alerts_label: Alertas de uso
-        weekly_reports_hint: Recibe un resumen semanal del uso y rendimiento de tu
-          API
+        weekly_reports_hint: "Próximamente: recibe un resumen semanal del uso y rendimiento de tu API"
         weekly_reports_label: Informes semanales de uso
       errors:
         one: "%{count} error impidió guardar estos ajustes:"
@@ -426,8 +443,8 @@ es:
         avg_latency: Latencia promedio
         avg_response: Tiempo de respuesta promedio
         error_rate: Tasa de errores
-        failed_requests: Solicitudes fallidas
-        total_requests: Total de solicitudes
+        failed_requests: "Llamadas fallidas"
+        total_requests: "Total de llamadas"
       charts:
         by_endpoint: Uso por endpoint
         by_endpoint_sub: Endpoints principales por número de solicitudes

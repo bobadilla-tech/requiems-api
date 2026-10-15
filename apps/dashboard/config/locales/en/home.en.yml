@@ -156,6 +156,12 @@ en:
         signed_in: 'We''ll send update notifications to your registered email: %{email}'
         text: Want to be notified about new releases and features?
       title: Changelog - Requiems API
+      usage_cycle_fix:
+        items:
+          - "The dashboard now shows usage for your current billing cycle, the same window the API uses to enforce your quota. Previously it could count requests from several months back."
+          - "The Overview page shows exact credits used, the exact percentage (for example 0.02%) and the date your usage resets (00:00 UTC on your billing day)."
+          - "Removed references to usage alerts and weekly reports until they ship."
+        title: "Usage accounting correction"
       v001:
         gateway:
           heading: Cloudflare Worker Gateway
@@ -370,10 +376,7 @@ en:
     faq:
       authentication:
         a1: "Include your API key in the Authorization header as a Bearer token:"
-        a2_html: All keys share the same requiem_ prefix. "Test" keys are for
-          development and testing; "Live" keys are for production use — this is just
-          a label on the key, not part of its format. Both key types count against
-          your monthly request quota.
+        a2_html: "All keys share the same requiem_ prefix. \"Test\" keys are for development and testing; \"Live\" keys are for production use — this is just a label on the key, not part of its format. Both key types use the same monthly credit allowance."
         a3: Yes! Go to your dashboard, click on the API key you want to regenerate,
           and select "Regenerate". Note that the old key will stop working immediately,
           so update all your applications.
@@ -382,19 +385,12 @@ en:
         q2: What's the difference between test and live API keys?
         q3: Can I regenerate my API key?
       billing:
-        a1: Each API call costs 1 request. Your plan includes a monthly request allowance
-          that resets at the start of each billing period. Some endpoints may count
-          as more than 1 request; this is always stated explicitly in that endpoint's
-          documentation.
-        a2: When you hit 75% of your quota, we'll send you an alert. At 90%, you'll
-          get another warning. If you hit 100%, API requests will return a 429 error
-          until you upgrade your plan or wait for your next billing cycle.
+        a1: "Each API call costs 1 credit. Your plan includes a monthly credit allowance that resets on your billing day (00:00 UTC). Some endpoints may cost more than 1 credit; this is always stated explicitly in that endpoint's documentation."
+        a2: "If you use 100% of your credits, API requests return a 429 error until you upgrade your plan or your cycle resets on your billing day. Your dashboard always shows your current usage and when it resets."
         a3: Yes! You can change your plan anytime from your billing dashboard. Upgrades
           take effect immediately. Downgrades take effect at the start of your next
           billing period.
-        a4: No, unused requests don't roll over to the next month. Your request allowance
-          resets at the beginning of each billing period. We recommend choosing a
-          plan that matches your typical monthly usage.
+        a4: "No, unused credits don't roll over. Your allowance resets on your billing day (00:00 UTC). We recommend choosing a plan that matches your typical monthly usage."
         heading: Billing & Usage
         q1: How is billing calculated?
         q2: What happens if I exceed my request limit?
@@ -531,11 +527,8 @@ en:
             ensures fair usage.
           example_prefix: "Example: Free plan allows 30 requests per minute"
         - name: Requests
-          definition: The unit of API usage. Each API call counts as 1 request against
-            your monthly plan allowance. Some endpoints may count as more than 1 request;
-            this is always stated explicitly in that endpoint's documentation.
-          example_prefix: "Example: Calling the email validation endpoint once uses
-            1 request from your monthly allowance."
+          definition: "The unit of API usage is the credit. Each API call costs 1 credit against your monthly plan allowance, which resets on your billing day. Some endpoints cost more than 1 credit; this is always stated explicitly in that endpoint's documentation."
+          example_prefix: "Example: Calling the email validation endpoint once uses 1 credit from your monthly allowance."
         - name: REST (Representational State Transfer)
           definition: An architectural style for designing networked applications. REST
             APIs use HTTP requests to perform CRUD (Create, Read, Update, Delete) operations

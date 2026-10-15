@@ -1,0 +1,83 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class Dashboard::BillingControllerTest < ActionDispatch::IntegrationTest
+  NOW = Time.utc(2026, 10, 15, 12)
+
+  def setup
+    @user = create_user(email: "billing-usage@example.com")
+    @key = @user.api_keys.create!(name: "Main", environment: "test")
+    @key.update_columns(created_at: Time.utc(2026, 4, 16, 8))
+    sign_in @user
+  end
+
+  def log(credits, at: Time.utc(2026, 10, 1))
+    create_usage_log(user: @user, api_key: @key, used_at: at, credits_used: credits)
+  end
+
+  test "show requires authentication" do
+    sign_out @user
+    get dashboard_billing_path
+
+    assert_redirected_to new_user_session_path
+  end
+
+  %w[en es fr].each do |locale|
+    test "show renders in #{locale}" do
+      travel_to(NOW) { get dashboard_billing_path(locale: locale) }
+
+      assert_response :success
+    end
+  end
+
+  test "usage uses the billing cycle and ignores older logs" do
+    log(7_000, at: Time.utc(2026, 7, 1))
+    log(12)
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_response :success
+    assert_select "span.tabular-nums", text: "12"
+    assert_select "[role=progressbar][aria-valuenow='2.4']"
+  end
+
+  test "no banner below 75 percent" do
+    log(100)
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select "[role=alert]", 0
+    assert_select ".bg-yellow-50", 0
+  end
+
+  test "warn state shows the moderate banner with the real percentage" do
+    log(380)
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select ".bg-yellow-50", 1
+    assert_select ".bg-yellow-50", text: /76% of your monthly quota/
+    assert_select "[role=alert]", 0
+  end
+
+  test "high and exhausted states show the critical banner" do
+    log(460)
+    travel_to(NOW) { get dashboard_billing_path }
+    assert_select "[role=alert].bg-red-50", 1
+
+    log(100, at: Time.utc(2026, 10, 2))
+    travel_to(NOW) { get dashboard_billing_path }
+    assert_select "[role=alert].bg-red-50", 1
+    assert_select "[role=progressbar] > div[style*='width: 100%']"
+  end
+
+  test "a cancelled paid subscription is measured against the free limit" do
+    Subscription.create!(user: @user, plan_name: "professional", status: "cancelled", current_period_start: Time.utc(2026, 4, 16))
+    log(460)
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select "[role=alert].bg-red-50", 1
+  end
+end

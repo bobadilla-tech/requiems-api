@@ -98,30 +98,38 @@
         <!-- Usage Bar -->
         <div class="mb-4">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_this_period) %></span>
-            <span class="text-sm text-gray-600 dark:text-gray-400"><%= t("dashboard.billing.usage.of_requests", limit: number_with_delimiter(@plan_info[:requests_per_month])) %></span>
+            <span class="text-2xl font-bold text-gray-900 dark:text-gray-100 tabular-nums"><%= number_with_delimiter(@usage.used) %></span>
+            <span class="text-sm text-gray-600 dark:text-gray-400">
+              <% if @usage.unlimited? %>
+                <%= t("dashboard.overview.usage.no_limit") %>
+              <% else %>
+                <%= t("dashboard.billing.usage.of_requests", limit: number_with_delimiter(@usage.limit)) %>
+              <% end %>
+            </span>
           </div>
 
-          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-            <%
-              bar_color = if @quota_used_percent >= 90
-                "bg-red-500"
-              elsif @quota_used_percent >= 75
-                "bg-yellow-500"
-              else
-                "bg-blue-500"
-              end
-            %>
-            <div class="<%= bar_color %> h-3 rounded-full transition-all" style="width: <%= [@quota_used_percent, 100].min %>%"></div>
-          </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2"><%= t("dashboard.billing.usage.percent_used", percent: @quota_used_percent) %></p>
+          <% unless @usage.unlimited? %>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3"
+                 role="progressbar"
+                 aria-label="<%= t("dashboard.billing.usage.heading") %>"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="<%= number_with_precision(@usage.percent.clamp(0, 100), precision: 2, strip_insignificant_zeros: true, locale: :en) %>"
+                 aria-valuetext="<%= t("dashboard.billing.usage.percent_used", percent: usage_percent_text(@usage)) %>">
+              <div class="<%= usage_bar_color(@usage) %> h-3 rounded-full transition-all" style="width: <%= usage_bar_width(@usage) %>%"></div>
+            </div>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-2"><%= t("dashboard.billing.usage.percent_used", percent: usage_percent_text(@usage)) %></p>
+          <% end %>
+          <% if @usage.anchored? %>
+            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1"><%= t("dashboard.overview.usage.cycle_line", count: usage_resets_in_days(@usage), range: usage_cycle_range(@usage), resets: usage_resets_on(@usage)) %></p>
+          <% end %>
         </div>
 
         <!-- Usage Warning -->
-        <% if @quota_used_percent >= 90 %>
-          <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
+        <% if %i[high exhausted].include?(@usage.threshold_state) %>
+          <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4" role="alert">
             <div class="flex items-start">
-              <svg class="h-5 w-5 text-red-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-5 w-5 text-red-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
               </svg>
               <div class="text-sm text-red-800 dark:text-red-300">
@@ -130,15 +138,15 @@
               </div>
             </div>
           </div>
-        <% elsif @quota_used_percent >= 75 %>
+        <% elsif @usage.threshold_state == :warn %>
           <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
             <div class="flex items-start">
-              <svg class="h-5 w-5 text-yellow-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-5 w-5 text-yellow-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
               </svg>
               <div class="text-sm text-yellow-800 dark:text-yellow-300">
                 <p class="font-medium mb-1"><%= t("dashboard.billing.usage.warning_moderate_heading") %></p>
-                <p><%= t("dashboard.billing.usage.warning_moderate_body", percent: @quota_used_percent) %></p>
+                <p><%= t("dashboard.billing.usage.warning_moderate_body", percent: usage_percent_text(@usage)) %></p>
               </div>
             </div>
           </div>

@@ -1,0 +1,31 @@
+<%# locals: (usage:) %>
+<% state = usage.threshold_state %>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6" id="remaining-card">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t("dashboard.overview.usage.remaining_heading") %></h3>
+    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+      <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+  </div>
+
+  <% if usage.unlimited? %>
+    <p class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight" data-testid="credits-remaining">—</p>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1"><%= t("dashboard.overview.usage.no_limit") %></p>
+  <% else %>
+    <p class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 tabular-nums leading-tight" data-testid="credits-remaining">
+      <%= number_with_delimiter(usage.remaining) %>
+    </p>
+    <p class="text-sm mt-1 flex items-center gap-1.5 <%= state == :ok ? "text-gray-600 dark:text-gray-400" : (state == :warn ? "text-yellow-700 dark:text-yellow-400" : "text-red-700 dark:text-red-400") %> font-medium" data-testid="threshold-state" data-state="<%= state %>">
+      <% if state == :ok %>
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      <% elsif state == :exhausted %>
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <% else %>
+        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <% end %>
+      <span><%= t("dashboard.overview.usage.state.#{state}") %></span>
+    </p>
+  <% end %>
+</div>

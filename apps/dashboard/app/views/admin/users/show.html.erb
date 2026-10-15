@@ -107,10 +107,12 @@
             <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.billing_cycle') %></label>
             <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.plan&.titleize || "—" %></p>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.started') %></label>
-            <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.current_period_start&.strftime("%B %d, %Y") || "—" %></p>
-          </div>
+          <% unless @user.subscription.promoted? %>
+            <div>
+              <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1"><%= t('admin.users.show.cycle_anchor') %></label>
+              <p class="text-sm text-gray-900 dark:text-gray-100"><%= @user.subscription.current_period_start&.strftime("%B %d, %Y") || "—" %></p>
+            </div>
+          <% end %>
           <% if @user.subscription.cancel_at_period_end? %>
             <div>
               <%= render "partials/shared/badge", text: t('admin.users.show.canceling_at_period_end'), variant: "warning", size: "xs" %>
@@ -150,8 +152,8 @@
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:total_requests]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.users.show.this_month') %></p>
-        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:requests_this_month]) %></p>
+        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('admin.users.show.this_cycle') %></p>
+        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100"><%= number_with_delimiter(@usage_stats[:credits_this_cycle]) %></p>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1"><%= t('dashboard.overview.current_usage') %></p>

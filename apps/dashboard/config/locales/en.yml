@@ -2,6 +2,7 @@
 en:
   date:
     formats:
+      cycle_day: "%b %-d"
       month_year: "%B %Y"
   time:
     formats:

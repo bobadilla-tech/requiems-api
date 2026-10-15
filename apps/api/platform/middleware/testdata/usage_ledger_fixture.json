@@ -1,0 +1,14 @@
+{
+  "cycle_start": "2026-09-16T00:00:00Z",
+  "expected_used": 10,
+  "rows": [
+    { "owner": "subject", "used_at": "2026-09-15T23:59:59Z", "credits_used": 5, "note": "one second before the cycle: excluded" },
+    { "owner": "subject", "used_at": "2026-09-16T00:00:00Z", "credits_used": 3, "note": "exact boundary: included" },
+    { "owner": "subject", "used_at": "2026-09-20T10:00:00Z", "credits_used": null, "note": "NULL counts as 0, never 1" },
+    { "owner": "subject", "used_at": "2026-09-21T10:00:00Z", "credits_used": 0, "note": "legacy free row counts 0" },
+    { "owner": "subject", "used_at": "2026-10-01T10:00:00Z", "credits_used": 2, "note": "dictionary style 2 credit call" },
+    { "owner": "subject", "used_at": "2026-10-05T10:00:00Z", "credits_used": 1, "note": "plain call" },
+    { "owner": "subject", "used_at": "2026-12-01T10:00:00Z", "credits_used": 4, "note": "no upper bound, mirrors Go" },
+    { "owner": "other", "used_at": "2026-10-02T10:00:00Z", "credits_used": 100, "note": "another user: excluded" }
+  ]
+}
