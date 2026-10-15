@@ -67,10 +67,12 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
 
   test "show caps the endpoint list at 100 entries" do
     101.times { |i| create_log(endpoint: "/v1/e#{i}") }
+    2.times { create_log(endpoint: "/v1/zzz-busiest") }
 
     get dashboard_usage_path
 
     assert_select "#usage-by-endpoint-container code", count: 100
+    assert_equal "/v1/zzz-busiest", css_select("#usage-by-endpoint-container code").first.text
   end
 
   test "by_endpoint returns the same ordered, scoped data as the page" do
@@ -97,6 +99,45 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     get export_dashboard_usage_path
     assert_response :success
     assert_equal 2, CSV.parse(response.body, headers: true).size
+  end
+
+  test "bar width uses a decimal point in every locale" do
+    2.times { create_log(endpoint: "/v1/a") }
+    3.times { create_log(endpoint: "/v1/b") }
+
+    %w[en es fr].each do |locale|
+      get dashboard_usage_path(locale: locale)
+
+      widths = css_select("#usage-by-endpoint-container [style*='width']").map { |n| n["style"] }
+      assert_equal [ "width: 100.0%", "width: 66.7%" ], widths, locale
+    end
+  end
+
+  test "by_endpoint honours the custom date range" do
+    create_log(endpoint: "/v1/old").update!(used_at: Time.zone.parse("2026-01-10 12:00"))
+    create_log(endpoint: "/v1/new")
+
+    get by_endpoint_dashboard_usage_path(range: "custom", start_date: "2026-01-01", end_date: "2026-01-31")
+
+    assert_equal({ "/v1/old" => 1 }, response.parsed_body)
+  end
+
+  test "blank endpoints are excluded" do
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/blank").update_column(:endpoint, "")
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({ "/v1/a" => 1 }, response.parsed_body)
+  end
+
+  test "show, by_endpoint and export require authentication" do
+    sign_out @user
+
+    [ dashboard_usage_path, by_endpoint_dashboard_usage_path, export_dashboard_usage_path ].each do |path|
+      get path
+      assert_redirected_to new_user_session_path, path
+    end
   end
 
   test "show does not list other users endpoints" do

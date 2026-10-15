@@ -72,7 +72,7 @@ class Dashboard::UsageController < Dashboard::BaseController
   def endpoint_usage
     current_user.usage_logs
       .where(used_at: @start_date..@end_date)
-      .where.not(endpoint: nil)
+      .where.not(endpoint: [ nil, "" ])
       .group(:endpoint)
       .order(Arel.sql("COUNT(*) DESC"), :endpoint)
       .limit(100)
