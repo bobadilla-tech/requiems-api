@@ -1,8 +1,9 @@
 # Dashboard Overview & Usage Accuracy
 
-Status: DRAFT v9 (planning only; rounds 1–8 of review folded in). Deviation from
-`docs/plans/readme.md` ("save after work lands"): written up-front at the user's
-request; **Final notes** is intentionally empty until the work ships.
+Status: IMPLEMENTED in PR-0, PR-A and PR-B (PR-C in progress; see Final notes).
+It was drafted as v9 (planning only; rounds 1–8 of review folded in). Deviation
+from `docs/plans/readme.md` ("save after work lands"): written up-front at the
+user's request; **Final notes** is filled in as each PR ships.
 
 ## Context
 
@@ -436,7 +437,9 @@ parameter named `api_key` was avoided by renaming it.
   reconcile, and the single reconcile path refunds. `adjust` runs under
   `context.WithoutCancel` so a client disconnect cannot leave Redis
   over-counted. `X-Usage-Count: 0` means 0 credits; an absent header still
-  means 1.
+  means 1. Every batch endpoint validates `min=1`, so an empty batch is not
+  reachable over HTTP today: this is defensive, and the changelog does not claim
+  it.
 - Public copy: new FAQ entry and changelog block with their own keys (en/es/fr),
   and the `info.description` of the served spec (`apps/api/app/openapi.json`,
   the only source; there is no generator in the repo) and its byte-identical

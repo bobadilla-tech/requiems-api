@@ -174,8 +174,7 @@ fr:
       usage_errors_free:
         items:
           - "Les erreurs client (4xx) et serveur (5xx) renvoyées par un point de terminaison ne sont plus facturées. Elles apparaissent toujours dans votre historique d'utilisation avec 0 crédit."
-          - "Les requêtes vers des routes inexistantes ne sont plus enregistrées ni décomptées de votre quota."
-          - "Une requête par lot vide ne coûte plus un crédit."
+          - "Les requêtes vers des routes inconnues ou avec une méthode non prise en charge ne sont plus enregistrées ni décomptées de votre quota."
         title: "Les erreurs ne sont plus facturées"
       v001:
         gateway:
@@ -401,7 +400,7 @@ fr:
           Les montées sont immédiates ; les descentes s'appliquent au début de la
           période suivante.
         a4: "Non, les crédits non utilisés ne sont pas reportés. Votre allocation se réinitialise le jour de votre facturation (00:00 UTC). Choisissez une formule adaptée à votre usage mensuel type."
-        a5: "Non. Les erreurs client (4xx) et serveur (5xx) renvoyées par un point de terminaison ne sont pas facturées, et les requêtes vers des routes inexistantes ne sont pas enregistrées. Les erreurs d'une route valide figurent toujours dans votre historique d'utilisation avec 0 crédit pour faciliter le débogage."
+        a5: "Non. Les erreurs client (4xx) et serveur (5xx) renvoyées par un point de terminaison ne sont pas facturées, et les requêtes vers des routes inconnues ou avec une méthode non prise en charge ne sont pas enregistrées. Les erreurs d'une route valide figurent toujours dans votre historique d'utilisation avec 0 crédit pour faciliter le débogage."
         heading: Facturation et usage
         q1: Comment est calculée la facturation ?
         q2: Que se passe-t-il si je dépasse ma limite de requêtes ?

@@ -520,7 +520,7 @@ func TestApp_RouteMissesAndErrorsAreNotCharged(t *testing.T) {
 		assert.Equal(t, beforeCounter, usageCounterSum(t, app.rdb, userID), "and refunded from the counter")
 	})
 
-	t.Run("the dictionary route still bills 2 on success and nothing on a miss", func(t *testing.T) {
+	t.Run("the dictionary route still bills 2 on success", func(t *testing.T) {
 		beforeCounter := usageCounterSum(t, app.rdb, userID)
 
 		w := do(http.MethodGet, "/v1/text/dictionary/ephemeral", "")

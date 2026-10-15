@@ -165,8 +165,7 @@ en:
       usage_errors_free:
         items:
           - "Client errors (4xx) and server errors (5xx) returned by an endpoint are no longer charged. They still appear in your usage history with 0 credits."
-          - "Requests to routes that do not exist are no longer recorded or counted against your quota."
-          - "An empty batch request no longer costs a credit."
+          - "Requests to unknown routes or with an unsupported method are no longer recorded or counted against your quota."
         title: "Errors are no longer charged"
       v001:
         gateway:
@@ -397,7 +396,7 @@ en:
           take effect immediately. Downgrades take effect at the start of your next
           billing period.
         a4: "No, unused credits don't roll over. Your allowance resets on your billing day (00:00 UTC). We recommend choosing a plan that matches your typical monthly usage."
-        a5: "No. Client errors (4xx) and server errors (5xx) returned by an endpoint are not charged, and requests to routes that do not exist are not recorded. Errors from a valid route still appear in your usage history with 0 credits so you can debug them."
+        a5: "No. Client errors (4xx) and server errors (5xx) returned by an endpoint are not charged, and requests to unknown routes or with an unsupported method are not recorded. Errors from a valid route still appear in your usage history with 0 credits so you can debug them."
         heading: Billing & Usage
         q1: How is billing calculated?
         q2: What happens if I exceed my request limit?
