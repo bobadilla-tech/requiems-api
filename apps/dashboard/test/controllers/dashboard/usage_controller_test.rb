@@ -1,0 +1,241 @@
+# frozen_string_literal: true
+
+require "test_helper"
+require "csv"
+
+class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
+  XSS_ENDPOINT = %(/v1/"><img src=x onerror=alert(1)>)
+
+  def setup
+    @user = create_user(email: "usage-controller@example.com")
+    @api_key = @user.api_keys.create!(name: "Main", environment: "test")
+    sign_in @user
+  end
+
+  def create_log(endpoint:, user: @user, api_key: @api_key, method: "GET", status: 200)
+    UsageLog.create!(
+      user: user, api_key: api_key, endpoint: endpoint, request_method: method,
+      status_code: status, credits_used: 1, used_at: 1.hour.ago
+    )
+  end
+
+  test "show escapes hostile endpoints in the endpoint usage list" do
+    create_log(endpoint: XSS_ENDPOINT)
+
+    get dashboard_usage_path
+
+    assert_response :success
+    doc = Nokogiri::HTML(response.body)
+    assert_empty doc.css("img[onerror]")
+    assert_empty doc.css("#usage-by-endpoint-container img")
+    assert_includes doc.at_css("#usage-by-endpoint-container code").text, "<img src=x onerror=alert(1)>"
+    assert_not_includes response.body, XSS_ENDPOINT
+  end
+
+  test "show escapes hostile endpoint, method and key name in recent requests" do
+    @api_key.update!(name: %(<img src=x onerror=alert(2)>))
+    create_log(endpoint: XSS_ENDPOINT, method: "<b>x</b>")
+
+    get dashboard_usage_path
+
+    doc = Nokogiri::HTML(response.body)
+    assert_empty doc.css("img[onerror]")
+    assert_empty doc.css("tbody b")
+    assert_not_includes response.body, "<img src=x onerror=alert(2)>"
+  end
+
+  test "by_endpoint does not include other users endpoints" do
+    other = create_user(email: "other-by-endpoint@example.com")
+    other_key = other.api_keys.create!(name: "Theirs", environment: "test")
+    create_log(endpoint: "/v1/secret", user: other, api_key: other_key)
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({}, response.parsed_body)
+  end
+
+  test "show does not build endpoint rows with innerHTML in page scripts" do
+    get dashboard_usage_path
+
+    assert_not_includes response.body, "usage-by-endpoint-container').innerHTML"
+    assert_not_includes response.body, "${endpoint}"
+  end
+
+  test "show lists endpoints by count and shows empty state without logs" do
+    get dashboard_usage_path
+    assert_select "#usage-by-endpoint-container code", count: 0
+    assert_select "#usage-by-endpoint-container h3", text: I18n.t("dashboard.usage.charts.no_endpoints_heading")
+
+    2.times { create_log(endpoint: "/v1/a") }
+    create_log(endpoint: "/v1/b")
+    get dashboard_usage_path
+
+    assert_select "#usage-by-endpoint-container code", count: 2
+    assert_equal "/v1/a", css_select("#usage-by-endpoint-container code").first.text
+  end
+
+  test "show breaks count ties by endpoint and respects the date range" do
+    create_log(endpoint: "/v1/b")
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/old").update!(used_at: 60.days.ago)
+
+    get dashboard_usage_path
+
+    assert_equal %w[/v1/a /v1/b], css_select("#usage-by-endpoint-container code").map(&:text)
+
+    get dashboard_usage_path(range: "90d")
+    assert_includes css_select("#usage-by-endpoint-container code").map(&:text), "/v1/old"
+  end
+
+  test "show caps the endpoint list at 100 entries" do
+    101.times { |i| create_log(endpoint: "/v1/e#{i}") }
+    2.times { create_log(endpoint: "/v1/zzz-busiest") }
+
+    get dashboard_usage_path
+
+    assert_select "#usage-by-endpoint-container code", count: 100
+    assert_equal "/v1/zzz-busiest", css_select("#usage-by-endpoint-container code").first.text
+  end
+
+  test "by_endpoint returns the same ordered, scoped data as the page" do
+    create_log(endpoint: "/v1/b")
+    2.times { create_log(endpoint: "/v1/a") }
+    create_log(endpoint: "/v1/old").update!(used_at: 60.days.ago)
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({ "/v1/a" => 2, "/v1/b" => 1 }, response.parsed_body)
+    assert_equal %w[/v1/a /v1/b], response.parsed_body.keys
+  end
+
+  test "nil endpoints are left out of the page list and JSON, and export handles them" do
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/tmp").update_column(:endpoint, nil)
+
+    get dashboard_usage_path
+    assert_select "#usage-by-endpoint-container code", count: 1
+
+    get by_endpoint_dashboard_usage_path
+    assert_equal({ "/v1/a" => 1 }, response.parsed_body)
+
+    get export_dashboard_usage_path
+    assert_response :success
+    assert_equal 2, CSV.parse(response.body, headers: true).size
+  end
+
+  test "bar width uses a decimal point in every locale" do
+    2.times { create_log(endpoint: "/v1/a") }
+    3.times { create_log(endpoint: "/v1/b") }
+
+    %w[en es fr].each do |locale|
+      get dashboard_usage_path(locale: locale)
+
+      widths = css_select("#usage-by-endpoint-container [style*='width']").map { |n| n["style"] }
+      assert_equal [ "width: 100.0%", "width: 66.7%" ], widths, locale
+    end
+  end
+
+  test "by_endpoint honours the custom date range" do
+    create_log(endpoint: "/v1/old").update!(used_at: Time.zone.parse("2026-01-10 12:00"))
+    create_log(endpoint: "/v1/new")
+
+    get by_endpoint_dashboard_usage_path(range: "custom", start_date: "2026-01-01", end_date: "2026-01-31")
+
+    assert_equal({ "/v1/old" => 1 }, response.parsed_body)
+  end
+
+  test "blank endpoints are excluded" do
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/blank").update_column(:endpoint, "")
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({ "/v1/a" => 1 }, response.parsed_body)
+  end
+
+  test "show, by_endpoint and export require authentication" do
+    sign_out @user
+
+    [ dashboard_usage_path, by_endpoint_dashboard_usage_path, export_dashboard_usage_path ].each do |path|
+      get path
+      assert_redirected_to new_user_session_path, path
+    end
+  end
+
+  test "show does not list other users endpoints" do
+    other = create_user(email: "other-usage@example.com")
+    other_key = other.api_keys.create!(name: "Theirs", environment: "test")
+    create_log(endpoint: "/v1/secret", user: other, api_key: other_key)
+
+    get dashboard_usage_path
+
+    assert_not_includes response.body, "/v1/secret"
+  end
+
+  test "export neutralises spreadsheet formula injection" do
+    [ "=HYPERLINK(\"http://evil\")", "+1+1", "-2+3", "@SUM(A1)", "\tcmd", "\rcmd" ].each do |payload|
+      create_log(endpoint: payload)
+    end
+    @api_key.update!(name: "=1+1")
+
+    get export_dashboard_usage_path
+
+    assert_response :success
+    rows = CSV.parse(response.body, headers: true)
+    endpoints = rows.map { |r| r["Endpoint"] }
+    assert_equal 6, endpoints.size
+    endpoints.each { |e| assert e.start_with?("'"), "#{e.inspect} should be prefixed" }
+    assert(rows.all? { |r| r["API Key"] == "'=1+1" })
+  end
+
+  test "export neutralises formulas in the method and with leading whitespace" do
+    create_log(endpoint: " =1+1", method: "=cmd")
+    create_log(endpoint: "\n=1+1")
+
+    get export_dashboard_usage_path
+
+    rows = CSV.parse(response.body, headers: true)
+    assert(rows.all? { |r| r["Endpoint"].start_with?("'") })
+    assert_includes rows.map { |r| r["Method"] }, "'=cmd"
+  end
+
+  test "export neutralises full-width formula operators" do
+    %w[＝1 ＋1 －1 ＠SUM].each { |payload| create_log(endpoint: payload) }
+
+    get export_dashboard_usage_path
+
+    endpoints = CSV.parse(response.body, headers: true).map { |r| r["Endpoint"] }
+    assert_equal 4, endpoints.size
+    endpoints.each { |e| assert e.start_with?("'"), "#{e.inspect} should be prefixed" }
+  end
+
+  test "export is ordered newest first" do
+    create_log(endpoint: "/v1/old").update!(used_at: 3.days.ago)
+    create_log(endpoint: "/v1/new")
+
+    get export_dashboard_usage_path
+
+    assert_equal %w[/v1/new /v1/old], CSV.parse(response.body, headers: true).map { |r| r["Endpoint"] }
+  end
+
+  test "export leaves ordinary cells untouched" do
+    create_log(endpoint: "/v1/text/advice")
+
+    get export_dashboard_usage_path
+
+    row = CSV.parse(response.body, headers: true).first
+    assert_equal "/v1/text/advice", row["Endpoint"]
+    assert_equal "GET", row["Method"]
+    assert_equal "Main", row["API Key"]
+  end
+
+  test "export only includes the signed-in user's rows" do
+    other = create_user(email: "other-export@example.com")
+    other_key = other.api_keys.create!(name: "Theirs", environment: "test")
+    create_log(endpoint: "/v1/secret", user: other, api_key: other_key)
+
+    get export_dashboard_usage_path
+
+    assert_not_includes response.body, "/v1/secret"
+  end
+end
