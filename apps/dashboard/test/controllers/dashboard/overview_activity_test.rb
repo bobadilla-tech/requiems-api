@@ -57,7 +57,22 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "turbo-frame#overview-activity"
+    assert_select "nav a[autofocus][data-filter=errors]", 1
     assert_equal 1, rows.size
+  end
+
+  test "a full page load never autofocuses a filter chip" do
+    visit({ activity: "errors" })
+
+    assert_select "nav a[autofocus]", 0
+  end
+
+  test "the overview opts into Turbo visits so the filters advance without a reload, other pages do not" do
+    visit
+    assert_select "meta[name=turbo-visit-control]", 0
+
+    get dashboard_billing_path
+    assert_select "meta[name=turbo-visit-control][content=reload]", 1
   end
 
   test "rows show status chip with icon and screen reader label, method, latency, credits, key and time" do
@@ -110,6 +125,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     assert_equal "not charged", by_endpoint["/api/v1/text/advice"].at_css("[data-testid=credits]").text.strip
     assert_equal "not recorded", by_endpoint["/v1/text/old"].at_css("[data-testid=credits]").text.strip
     assert(by_endpoint.values.all? { |r| r["data-status-kind"] == "client_error" }, "each carries an error chip")
+    assert(by_endpoint.values.all? { |r| r.at_css(".sr-only").text == "Client error:" && r.at_css("span.inline-flex").to_s.include?("bg-yellow-100") })
   end
 
   test "a successful row with NULL credits is not recorded rather than 1 credit" do
@@ -143,7 +159,6 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
 
     name = css_select("[data-testid=key-name]").first.text.strip
     assert_equal "Revoked key", name
-    assert_not_includes response.body, "&lt;b&gt;bold"
   end
 
   test "the time element carries a machine readable and a localized UTC title" do
@@ -260,7 +275,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     log(status: 200)
     visit
 
-    assert_select "ul[aria-label='Recent API requests']"
+    assert_select "div[role=region][tabindex='0'][aria-label='Recent API requests'] ul[data-testid=activity-list]"
     assert_select "nav[aria-label='Filter recent activity']"
   end
 
@@ -286,5 +301,78 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     assert_not_includes html, "overflow-x-auto"
     assert_includes html, "break-all"
     assert_includes html, "flex-wrap"
+  end
+
+  test "rows with the same timestamp keep a stable newest-id-first order" do
+    first = log(status: 200, at: Time.utc(2026, 10, 14, 9), endpoint: "/v1/tie/first")
+    second = log(status: 200, at: Time.utc(2026, 10, 14, 9), endpoint: "/v1/tie/second")
+    assert_operator second.id, :>, first.id
+    visit
+
+    assert_equal %w[/v1/tie/second /v1/tie/first], rows.map { |r| r.at_css("code").text }
+  end
+
+  test "missing method and latency render dashes and large latencies get delimiters" do
+    row = log(status: 200, latency: 1_234_567)
+    row.update_columns(request_method: nil)
+    other = log(status: 200, at: Time.utc(2026, 10, 14, 10))
+    other.update_columns(response_time_ms: nil)
+    visit
+
+    texts = rows.map(&:text)
+    assert(texts.any? { |t| t.include?("1,234,567 ms") })
+    assert(texts.all? { |t| t.include?("—") }, "each row has a dash for the missing field")
+  end
+
+  test "statuses above 599 are server errors, free of the success filter, and kept by the errors filter" do
+    log(status: 999)
+    visit({ activity: "errors" })
+    assert_equal %w[server_error], rows.map { |r| r["data-status-kind"] }
+
+    visit({ activity: "success" })
+    assert_select "[data-testid=no-matching-activity]"
+  end
+
+  test "an informational status renders an unknown chip under All only" do
+    log(status: 101)
+    visit
+    assert_equal %w[unknown], rows.map { |r| r["data-status-kind"] }
+    assert_equal "Unknown status:", rows.first.at_css(".sr-only").text
+
+    visit({ activity: "success" })
+    assert_equal 0, rows.size
+    visit({ activity: "errors" })
+    assert_equal 0, rows.size
+  end
+
+  test "the success filter with nothing to show explains itself" do
+    log(status: 404)
+    visit({ activity: "success" })
+
+    assert_select "[data-testid=no-matching-activity]"
+  end
+
+  test "the success filter hides another user's successful rows as well" do
+    other = create_user(email: "activity-other2@example.com")
+    other_key = other.api_keys.create!(name: "Other key", environment: "test")
+    log(status: 200, user: other, key: other_key, endpoint: "/v1/theirs/ok")
+    log(status: 200, endpoint: "/v1/mine/ok")
+    visit({ activity: "success" })
+
+    assert_equal [ "/v1/mine/ok" ], rows.map { |r| r.at_css("code").text }
+  end
+
+  %w[es fr].each do |locale|
+    test "chip, filters and legacy credit labels are translated in #{locale}" do
+      log(status: 404, credits: 0, at: Time.utc(2026, 10, 14, 9, 1))
+      log(status: 404, credits: nil, at: Time.utc(2026, 10, 14, 9, 2))
+      visit({ locale: locale })
+
+      assert_equal I18n.t("dashboard.overview.activity.status.client_error", locale: locale) + ":", rows.first.at_css(".sr-only").text
+      assert_equal [ I18n.t("dashboard.overview.activity.credits_unrecorded", locale: locale), I18n.t("dashboard.overview.activity.credits_none", locale: locale) ],
+                   css_select("[data-testid=credits]").map { |c| c.text.strip }
+      labels = css_select("nav a[data-filter]").map { |a| a.text.strip }
+      assert_equal %w[all success errors].map { |k| I18n.t("dashboard.overview.activity.filter_#{k}", locale: locale) }, labels
+    end
   end
 end

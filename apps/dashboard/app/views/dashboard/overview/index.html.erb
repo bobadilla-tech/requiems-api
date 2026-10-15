@@ -1,4 +1,5 @@
 <% content_for :title, t("dashboard.overview.title") %>
+<% content_for :allow_turbo_visit, true %>
 
 <!-- Welcome Banner -->
 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-lg p-8 text-white mb-8">
@@ -21,7 +22,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
   <!-- Recent API Activity (Takes 2 columns) -->
   <div class="lg:col-span-2 min-w-0">
-    <%= render "dashboard/overview/activity_feed", logs: @recent_activity, usage: @usage, filter: @activity_filter, has_keys: @api_keys_count.positive? %>
+    <%= render "dashboard/overview/activity_feed", logs: @recent_activity, usage: @usage, filter: @activity_filter, has_keys: @api_keys_count.positive?, refocus: turbo_frame_request? %>
   </div>
 
   <!-- Sidebar Widgets (1 column) -->

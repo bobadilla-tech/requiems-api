@@ -489,6 +489,14 @@ validates `min=1`, so that path is unreachable over HTTP.
 - The "white panel in dark mode" claim did not reproduce: a scan of every large
   element in dark mode found no white background on the Overview, so nothing was
   changed for it.
+- Review found, and a browser check confirmed, that the dashboard layout's
+  `turbo-visit-control: reload` meta turned the advancing filter links into a
+  full page reload (a `window` marker did not survive the click). The Overview
+  now opts out of that meta (`content_for :allow_turbo_visit`; other dashboard
+  pages keep it), so the click swaps the page without a reload, advances the URL
+  and Back restores it, and the active chip is autofocused only on a Turbo frame
+  request so keyboard focus is not lost. The list is a labelled, focusable
+  `role="region"` scroller. Statuses above 599 count as server errors.
 - Not done (left for D5 as the plan allows): grouping consecutive identical rows
   and the 7-day sparkline.
 - Removed keys: `overview.time_col` and `overview.status_col` (the admin views

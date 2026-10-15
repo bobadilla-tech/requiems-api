@@ -16,7 +16,7 @@ module Dashboard::OverviewHelper
     when 0, 200..299 then :success
     when 300..399 then :redirect
     when 400..499 then :client_error
-    when 500..599 then :server_error
+    when 500.. then :server_error
     else :unknown
     end
   end

@@ -64,4 +64,33 @@ class UsageLogTest < ActiveSupport::TestCase
     assert_not_includes results, inside_ok
     assert_not_includes results, outside_ok
   end
+
+  test "activity_success keeps nil, 0 and 200..399 and drops everything else" do
+    kept = [ nil, 0, 200, 204, 302, 399 ].map { |code| create_log(used_at: 1.day.ago, status_code: code) }
+    dropped = [ 101, 199, 400, 404, 500, 999 ].map { |code| create_log(used_at: 1.day.ago, status_code: code) }
+
+    assert_equal kept.map(&:id).sort, UsageLog.activity_success.pluck(:id).sort
+    assert_empty(UsageLog.activity_success.pluck(:id) & dropped.map(&:id))
+  end
+
+  test "for_activity_filter maps the allow list and treats anything else as all" do
+    ok = create_log(used_at: 1.day.ago, status_code: 200)
+    bad = create_log(used_at: 1.day.ago, status_code: 500)
+
+    assert_equal [ ok.id ], UsageLog.for_activity_filter("success").pluck(:id)
+    assert_equal [ bad.id ], UsageLog.for_activity_filter("errors").pluck(:id)
+    assert_equal [ ok.id, bad.id ].sort, UsageLog.for_activity_filter("all").pluck(:id).sort
+    assert_equal [ ok.id, bad.id ].sort, UsageLog.for_activity_filter("anything else").pluck(:id).sort
+    assert_equal [ ok.id, bad.id ].sort, UsageLog.for_activity_filter(nil).pluck(:id).sort
+  end
+
+  test "recent orders newest first and breaks timestamp ties by id" do
+    at = 1.day.ago.change(usec: 0)
+    first = UsageLog.create!(user: @user, api_key: @api_key, endpoint: "/a", status_code: 200, used_at: at)
+    second = UsageLog.create!(user: @user, api_key: @api_key, endpoint: "/b", status_code: 200, used_at: at)
+    newest = UsageLog.create!(user: @user, api_key: @api_key, endpoint: "/c", status_code: 200, used_at: 1.hour.ago)
+
+    assert_equal [ newest.id, second.id, first.id ], UsageLog.recent(10).pluck(:id)
+    assert_equal 1, UsageLog.recent(1).size
+  end
 end
