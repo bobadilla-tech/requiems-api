@@ -507,3 +507,20 @@ validates `min=1`, so that path is unreachable over HTTP.
   and the 7-day sparkline.
 - Removed keys: `overview.time_col` and `overview.status_col` (the admin views
   still use `endpoint_col`, `response_col` and `requests_col`).
+
+PR-C merged as #1023 after five review rounds (the first attempt at round five
+failed on a rate limit and was re-run, not counted as clean). All four PRs are
+merged: #1012 (PR-0, seven rounds), #1013 (PR-A, four), #1022 (PR-B, five) and
+#1023 (PR-C, five).
+
+Process notes: an editor-side sync committed and pushed unrelated work to
+`origin/fix/usage-pr0-security` early on, so PR-0 shipped from
+`fix/usage-pr0-security-escaping` and the stray remote branch was left alone for
+its owner to delete.
+
+Follow-ups not done: the filter index for `usage_logs` (above), grouping and the
+sparkline (D5), surfacing the Redis `route_miss:<date>` buckets to admin abuse
+tooling, D1, D3 and D4. Out-of-scope bugs found and left alone: the admin user
+page (`UsageLog#http_method`), the admin abuse report page (`ApiKey#prefix`),
+the Billing page for a subscription with an unknown plan name, and the Usage
+page and CSV still presenting `credits_used || 1` (D4).
