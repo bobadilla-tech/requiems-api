@@ -11,12 +11,7 @@ class Dashboard::UsageController < Dashboard::BaseController
     @error_rate = calculate_error_rate
 
     # Rendered server-side so endpoint strings are escaped by ERB
-    @endpoint_usage = current_user.usage_logs
-      .where(used_at: @start_date..@end_date)
-      .group(:endpoint)
-      .order(Arel.sql("COUNT(*) DESC"), :endpoint)
-      .limit(100)
-      .count
+    @endpoint_usage = endpoint_usage
 
     # Paginated recent requests
     scope = current_user.usage_logs
@@ -24,21 +19,12 @@ class Dashboard::UsageController < Dashboard::BaseController
       .where(used_at: @start_date..@end_date)
       .order(used_at: :desc)
     @pagy, @recent_requests = pagy(scope, limit: 25)
-
-    # Data for charts (will be loaded via AJAX)
-    # Charts will call by_endpoint, by_date, etc.
   end
 
   def by_endpoint
     set_date_range
 
-    # Group requests by endpoint and count
-    usage_by_endpoint = current_user.usage_logs
-      .where(used_at: @start_date..@end_date)
-      .group(:endpoint)
-      .count
-
-    render json: usage_by_endpoint
+    render json: endpoint_usage
   end
 
   def by_date
@@ -81,6 +67,16 @@ class Dashboard::UsageController < Dashboard::BaseController
   end
 
   private
+
+  # Top endpoints by call count; capped because endpoints are caller-controlled.
+  def endpoint_usage
+    current_user.usage_logs
+      .where(used_at: @start_date..@end_date)
+      .group(:endpoint)
+      .order(Arel.sql("COUNT(*) DESC"), :endpoint)
+      .limit(100)
+      .count
+  end
 
   def set_date_range
     # Default to last 30 days if no params provided

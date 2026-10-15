@@ -72,6 +72,17 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     assert_select "#usage-by-endpoint-container code", count: 100
   end
 
+  test "by_endpoint returns the same ordered, scoped data as the page" do
+    create_log(endpoint: "/v1/b")
+    2.times { create_log(endpoint: "/v1/a") }
+    create_log(endpoint: "/v1/old").update!(used_at: 60.days.ago)
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({ "/v1/a" => 2, "/v1/b" => 1 }, response.parsed_body)
+    assert_equal %w[/v1/a /v1/b], response.parsed_body.keys
+  end
+
   test "show does not list other users endpoints" do
     other = create_user(email: "other-usage@example.com")
     other_key = other.api_keys.create!(name: "Theirs", environment: "test")
