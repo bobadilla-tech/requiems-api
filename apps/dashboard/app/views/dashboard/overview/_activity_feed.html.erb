@@ -23,6 +23,10 @@
       <% end %>
     </nav>
 
+    <p class="sr-only" role="status" data-testid="activity-summary">
+      <%= logs.any? ? t("dashboard.overview.activity.summary", count: logs.size) : t("dashboard.overview.activity.no_match") %>
+    </p>
+
     <% if usage.last_request_at && usage.anchored? && usage.last_request_at < usage.cycle_start %>
       <p class="px-4 sm:px-6 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-700" data-testid="stale-activity">
         <%= t("dashboard.overview.activity.stale", time: time_ago_in_words(usage.last_request_at)) %>
@@ -47,7 +51,7 @@
                 <% else %>
                   <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                 <% end %>
-                <span class="sr-only"><%= t("dashboard.overview.activity.status.#{kind}") %>:</span>
+                <span class="sr-only"><%= t("dashboard.overview.activity.status.#{kind}") %></span>
                 <span><%= log.status_code.to_i.positive? ? log.status_code : t("dashboard.overview.activity.status.legacy_ok") %></span>
               </span>
               <%= render "partials/shared/badge", text: log.request_method.presence || "—", variant: "default", size: "xs" %>

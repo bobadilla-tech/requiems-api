@@ -274,6 +274,9 @@ es:
         no_match_desc: Prueba con otro filtro para ver más de tu actividad reciente.
         revoked_key: Clave revocada
         stale: "Sin solicitudes en este ciclo · última solicitud hace %{time}"
+        summary:
+          one: Mostrando %{count} solicitud reciente
+          other: Mostrando %{count} solicitudes recientes
         status:
           client_error: Error del cliente
           legacy_ok: OK

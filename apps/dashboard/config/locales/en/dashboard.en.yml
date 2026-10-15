@@ -271,6 +271,9 @@ en:
         no_match_desc: Try another filter to see more of your recent activity.
         revoked_key: Revoked key
         stale: "No requests this cycle · last request %{time} ago"
+        summary:
+          one: Showing %{count} recent request
+          other: Showing %{count} recent requests
         status:
           client_error: Client error
           legacy_ok: OK

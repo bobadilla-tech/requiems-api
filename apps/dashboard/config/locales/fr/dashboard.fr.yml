@@ -277,6 +277,9 @@ fr:
         no_match_desc: Essayez un autre filtre pour voir plus de votre activité récente.
         revoked_key: Clé révoquée
         stale: "Aucune requête sur ce cycle · dernière requête il y a %{time}"
+        summary:
+          one: "%{count} requête récente affichée"
+          other: "%{count} requêtes récentes affichées"
         status:
           client_error: Erreur client
           legacy_ok: OK

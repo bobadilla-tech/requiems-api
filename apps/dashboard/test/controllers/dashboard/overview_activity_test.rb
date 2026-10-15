@@ -83,7 +83,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     chip = row.at_css("span.inline-flex")
     assert_equal "success", row["data-status-kind"]
     assert chip.at_css("svg[aria-hidden=true]")
-    assert_equal "Success:", chip.at_css(".sr-only").text
+    assert_equal "Success", chip.at_css(".sr-only").text
     assert_includes chip.text, "200"
     assert_includes row.text, "GET"
     assert_includes row.text, "/v1/text/dictionary/hello"
@@ -94,13 +94,13 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
   end
 
   test "status chips cover success, redirect, client and server errors with distinct labels" do
-    { 200 => "Success:", 302 => "Redirect:", 404 => "Client error:", 503 => "Server error:" }.each_with_index do |(status, label), i|
+    { 200 => "Success", 302 => "Redirect", 404 => "Client error", 503 => "Server error" }.each_with_index do |(status, label), i|
       log(status: status, at: Time.utc(2026, 10, 14, 9, i))
     end
     visit
 
     labels = rows.map { |r| r.at_css(".sr-only").text }
-    assert_equal [ "Server error:", "Client error:", "Redirect:", "Success:" ], labels
+    assert_equal [ "Server error", "Client error", "Redirect", "Success" ], labels
     assert_equal %w[server_error client_error redirect success], rows.map { |r| r["data-status-kind"] }
   end
 
@@ -125,7 +125,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     assert_equal "not charged", by_endpoint["/api/v1/text/advice"].at_css("[data-testid=credits]").text.strip
     assert_equal "not recorded", by_endpoint["/v1/text/old"].at_css("[data-testid=credits]").text.strip
     assert(by_endpoint.values.all? { |r| r["data-status-kind"] == "client_error" }, "each carries an error chip")
-    assert(by_endpoint.values.all? { |r| r.at_css(".sr-only").text == "Client error:" && r.at_css("span.inline-flex").to_s.include?("bg-yellow-100") })
+    assert(by_endpoint.values.all? { |r| r.at_css(".sr-only").text == "Client error" && r.at_css("span.inline-flex").to_s.include?("bg-yellow-100") })
   end
 
   test "a successful row with NULL credits is not recorded rather than 1 credit" do
@@ -337,7 +337,7 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
     log(status: 101)
     visit
     assert_equal %w[unknown], rows.map { |r| r["data-status-kind"] }
-    assert_equal "Unknown status:", rows.first.at_css(".sr-only").text
+    assert_equal "Unknown status", rows.first.at_css(".sr-only").text
 
     visit({ activity: "success" })
     assert_equal 0, rows.size
@@ -368,11 +368,27 @@ class Dashboard::OverviewActivityTest < ActionDispatch::IntegrationTest
       log(status: 404, credits: nil, at: Time.utc(2026, 10, 14, 9, 2))
       visit({ locale: locale })
 
-      assert_equal I18n.t("dashboard.overview.activity.status.client_error", locale: locale) + ":", rows.first.at_css(".sr-only").text
+      assert_equal I18n.t("dashboard.overview.activity.status.client_error", locale: locale), rows.first.at_css(".sr-only").text
       assert_equal [ I18n.t("dashboard.overview.activity.credits_unrecorded", locale: locale), I18n.t("dashboard.overview.activity.credits_none", locale: locale) ],
                    css_select("[data-testid=credits]").map { |c| c.text.strip }
       labels = css_select("nav a[data-filter]").map { |a| a.text.strip }
       assert_equal %w[all success errors].map { |k| I18n.t("dashboard.overview.activity.filter_#{k}", locale: locale) }, labels
     end
+  end
+
+  test "the response varies on Turbo-Frame" do
+    visit
+
+    assert_includes response.headers["Vary"].to_s, "Turbo-Frame"
+  end
+
+  test "a polite status summary announces how many rows show" do
+    2.times { |i| log(status: 200, at: Time.utc(2026, 10, 14, i)) }
+    visit
+
+    assert_select "[data-testid=activity-summary][role=status]", text: /Showing 2 recent requests/
+
+    visit({ activity: "errors" })
+    assert_select "[data-testid=activity-summary][role=status]", text: /No matching requests/
   end
 end
