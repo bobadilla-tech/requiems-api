@@ -11,4 +11,5 @@ fr:
         other: "%{count} erreurs ont empêché l'enregistrement :"
   time:
     formats:
+      activity_timestamp: "%-d %b %Y %H:%M:%S UTC"
       status_timestamp: "%d %B %Y à %H:%M %Z"

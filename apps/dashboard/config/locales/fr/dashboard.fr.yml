@@ -257,6 +257,33 @@ fr:
       active_key:
         one: Clé active
         other: Clés actives
+      activity:
+        create_key: Créez votre première clé API
+        credits:
+          one: "%{count} crédit"
+          other: "%{count} crédits"
+        credits_charged:
+          one: "%{count} crédit (facturé)"
+          other: "%{count} crédits (facturés)"
+        credits_none: non facturé
+        credits_unrecorded: non enregistré
+        filter_all: Toutes
+        filter_errors: Erreurs
+        filter_label: Filtrer l'activité récente
+        filter_success: Réussies
+        latency: "%{ms} ms"
+        list_label: Requêtes API récentes
+        no_match: Aucune requête correspondante
+        no_match_desc: Essayez un autre filtre pour voir plus de votre activité récente.
+        revoked_key: Clé révoquée
+        stale: "Aucune requête sur ce cycle · dernière requête il y a %{time}"
+        status:
+          client_error: Erreur client
+          legacy_ok: OK
+          redirect: Redirection
+          server_error: Erreur serveur
+          success: Succès
+          unknown: Statut inconnu
       api_keys: Clés API
       billing: Facturation
       browse_docs: Parcourir la documentation API
@@ -272,10 +299,8 @@ fr:
       recent_activity: Activité API récente
       requests_col: Requêtes
       response_col: Réponse
-      status_col: Statut
       subtitle: Voici votre résumé d'utilisation API pour %{date}
       time_ago: il y a %{time}
-      time_col: Heure
       title: Tableau de bord
       upgrade_desc: Plus de requêtes, des limites de débit plus élevées et un support
         prioritaire.

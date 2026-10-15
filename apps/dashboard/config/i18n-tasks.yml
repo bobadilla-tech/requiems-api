@@ -36,6 +36,10 @@ ignore_unused:
   # Accessed via t("dashboard.plans.#{@current_plan}") — enterprise is a valid plan tier
   - "dashboard.plans.enterprise"
   - "dashboard.overview.usage.state.*"
+  - "dashboard.overview.activity.status.*"
+  - "dashboard.overview.activity.credits.*"
+  - "dashboard.overview.activity.credits_charged.*"
+  - "dashboard.overview.activity.filter_*"
   # Accessed via t("home.faq.rate_limits.#{plan}", rate_limit: ...)
   - "home.faq.rate_limits.*"
   # Accessed via t("comparisons.hub.benchmarks_columns.#{slug}")
