@@ -475,14 +475,15 @@ func TestApp_RouteMissesAndErrorsAreNotCharged(t *testing.T) {
 	misses := []struct {
 		name, method, target string
 		want                 int
+		allow                string
 	}{
-		{"unknown top-level route", http.MethodGet, "/v1/nonexistent", http.StatusNotFound},
-		{"unknown route inside a service", http.MethodGet, "/v1/text/nonexistent", http.StatusNotFound},
-		{"route that never existed in the text service", http.MethodGet, "/v1/text/advice", http.StatusNotFound},
-		{"wrong method", http.MethodPost, "/v1/entertainment/advice", http.StatusMethodNotAllowed},
-		{"percent-encoded path", http.MethodGet, "/v1/text/non%2Fexistent", http.StatusNotFound},
-		{"percent-encoded unreserved path", http.MethodGet, "/v1/text/%6Eonexistent", http.StatusNotFound},
-		{"deep unknown path", http.MethodGet, "/v1/text/a/b/c/d", http.StatusNotFound},
+		{"unknown top-level route", http.MethodGet, "/v1/nonexistent", http.StatusNotFound, ""},
+		{"unknown route inside a service", http.MethodGet, "/v1/text/nonexistent", http.StatusNotFound, ""},
+		{"route that never existed in the text service", http.MethodGet, "/v1/text/advice", http.StatusNotFound, ""},
+		{"wrong method", http.MethodPost, "/v1/entertainment/advice", http.StatusMethodNotAllowed, "GET"},
+		{"percent-encoded path", http.MethodGet, "/v1/text/non%2Fexistent", http.StatusNotFound, ""},
+		{"percent-encoded unreserved path", http.MethodGet, "/v1/text/%6Eonexistent", http.StatusNotFound, ""},
+		{"deep unknown path", http.MethodGet, "/v1/text/a/b/c/d", http.StatusNotFound, ""},
 	}
 
 	for _, tt := range misses {
@@ -492,6 +493,7 @@ func TestApp_RouteMissesAndErrorsAreNotCharged(t *testing.T) {
 			w := do(tt.method, tt.target, "")
 
 			assert.Equal(t, tt.want, w.Code)
+			assert.Equal(t, tt.allow, w.Header().Get("Allow"), "a 405 keeps its Allow header")
 			assert.Equal(t, beforeRows, rows(), "a route miss writes no ledger row")
 			assert.Equal(t, beforeCounter, usageCounterSum(t, app.rdb, userID), "and moves no quota")
 		})

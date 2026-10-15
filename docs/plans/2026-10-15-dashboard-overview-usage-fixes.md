@@ -440,6 +440,187 @@ parameter named `api_key` was avoided by renaming it.
   and the `info.description` of the served spec (`apps/api/app/openapi.json`,
   the only source; there is no generator in the repo) and its byte-identical
   copy `apps/mcp/openapi.json`.
+- Deviations: the 404/405 handlers write chi's default responses, and a 405
+  keeps its `Allow` header by probing the root matcher for each method (chi
+  hands the allowed methods only to its own default handler); no Redis
+  route-miss surfacing in Rails; the Go middleware tests that need a real Redis
+  (`CONFIG SET`, `DEBUG SLEEP`) were run locally against miniredis and two of
+  them cannot pass there (rate limiter timeout and OOM), CI runs them against
+  real Redis.
+- Pricing/ToS check: confirm no page promises otherwise.
+- Rewrite (not just extend) `usage_test.go` and `app_test.go` 404 cases; tests:
+  422/500/404-handler ⇒ row with `credits_used=0` and Redis counter back to
+  pre-request value; 2xx dictionary still 2, batch still N; route-miss no row +
+  Redis unchanged; 405; panic refunds; refund when key expired mid-request (-1
+  path); handler 404 still logged.
+- **Acceptance:** `GET /v1/nonexistent` and `/v1/text/nonexistent` ⇒ no
+  `usage_logs` row and Redis counter unchanged; `GET /v1/text/advice` valid ⇒
+  one row; a handler 422/500 ⇒ one row with 0 credits and unchanged Redis
+  counter; panic test leaves counter correct.
+
+### PR-C — readable Recent API Activity (Rails view; fixes R3 readability)
+
+- Replace table by a two-line feed row inside
+  `turbo_frame_tag "overview-activity"`: status chip (text + icon + sr-only
+  label), method chip, endpoint (ERB-escaped; no `html_safe`; `min-w-0`,
+  wrap/truncate), latency, **credits as `1 credit` / `not charged`** (rename
+  column semantic), key name (keys are only soft-revoked — `api_key_id` is NOT
+  NULL + FK — so show "Revoked key" when `revoked_at` is set; no nil fallback
+  needed; note `ApiKey has_many :usage_logs, dependent: :destroy` would delete
+  ledger rows if a key were ever destroyed), `<time datetime>` relative +
+  localized absolute title (UTC labelled). `flex-wrap` at 360px, no horizontal
+  scroll.
+- Filter pills (All / Successful / Errors) as real links with `aria-current`,
+  `data-turbo-action="advance"`, allow-listed `params[:activity]`, scoped to
+  `current_user`. Empty/stale state ("No requests this cycle · last request N
+  ago"; no-keys state).
+- Grouping (collapse consecutive identical endpoint+status, fetch ≈50 → cap 10
+  groups) and the 7-day sparkline are **in scope only if time allows; otherwise
+  D5**. Dark-mode contrast pass on icons/links/warnings (verify the "white
+  panel" in a browser first).
+- No flag mechanism exists in the app: **no ship-dark flag**; rely on staged PRs
+  (A before C) and revert.
+- Legacy rows: pre-PR-B error rows were stored with 1 credit (Worker-era ones
+  with 0). `UsageSummary` mirrors Go's stored-credit sum (no error filter), so
+  the feed uses neutral wording that is true regardless of PR-B ordering: error
+  row with `credits_used > 0` ⇒ "1 credit (charged)" (count shown as stored),
+  `credits_used == 0` ⇒ "not charged", **NULL ⇒ "not recorded"** (never "1
+  credit"; the counter treats NULL as 0). The Usage page/CSV keep `|| 1` until
+  D4 (known mismatch, noted). Seeded acceptance data must include both.
+- **Depends on PR-A** (cycle/`last_request_at`); `not charged` label keys off
+  `credits_used == 0` as stored (also true for legacy rows). PR-0 and PR-B are
+  independent of everything.
+- Tests: feed rendering (zero/stale/errors/revoked key), filter allow-list,
+  cross-user isolation, escaped endpoint, a11y labels.
+- **Acceptance:** no horizontal scroll at 360px; axe clean on `/dashboard`;
+  seeded rows render correctly in all three variants — Go-era 404 with 1 credit
+  ("1 credit (charged)"), Worker-era 404 with 0 ("not charged"), NULL ("not
+  recorded") — each with an error chip; user B never sees user A rows via any
+  param.
+
+### Deferred (separate plans)
+
+- **D1 Go anchor/cycle correctness:** user-level anchor (`users.created_at`
+  preferred over MIN(key.created_at) — stable under key deletion/revocation),
+  `cycle_end` fix for 29–31, rolling-deploy cache-key semantics (cache JSON
+  field rename/versioning), subscription `after_commit` →
+  `GoAuthCache.invalidate`, deterministic subscription pick / unique index,
+  fail-closed unknown plan in `plancache.go`. Ships with a Ruby `BillingCycle`
+  update + same vectors **in the same release**; quota-impacting; sign-off.
+- (D2 removed: error charging is now part of PR-B.)
+- **D3 Webhook anchor hygiene** (don't set `Time.current` on payment; keep
+  monthly renewal day for yearly; promo expiry resets anchor). Changes real
+  quotas — explicit sign-off; no backfill unless approved (dry-run diff,
+  `CONFIRM=1`, human-run).
+- **D4 Usage page rework:** default "this billing cycle", i18n labels, span cap,
+  UTC day grouping, Stimulus chart controller, theme-aware colours/table
+  fallback, CSV streaming + row cap + `Credits`/`Billed` columns + rate-limit.
+- **D5 Sparkline/grouping/alerts job**, summaries schema (error_count, avg
+  latency) + backfill, then retention. No deletion of legacy rows (kept for
+  disputes/analytics; filter in reads). PII note: raw request paths are shown
+  back to the user; no privacy-text change since no new data is collected.
+
+## Open decisions (defaults)
+
+1. ~~Charge 4xx/5xx?~~ **Decided: never charged** (now part of PR-B).
+2. Keep route-miss abuse signal as a per-user Redis bucket + log line? Default
+   yes.
+3. Go anchor change accepted (D1)? Default yes, later, separately.
+
+## Risks
+
+- Rolling back PR-A's `User#usage_this_month` delegation changes
+  `requests_remaining` for all callers (user.rb, billing, overview, admin) —
+  list them in the PR description.
+- Displayed usage drops for affected users (a correction; changelog).
+  Enforcement is unchanged by PR-0/A/C.
+- PR-B changes billing (errors/route misses become free) — customer-visible, in
+  copy + changelog; rollback = revert (no data migration). Monitor quota-reject
+  rate after deploy. Existing historical error rows keep their stored credits.
+- Rails/Go may disagree briefly for multi-key free users until D1 (documented).
+
+## Final notes
+
+### PR-0 (#1012, merged)
+
+- Shipped: the endpoint usage list on the Usage page is rendered server-side
+  (ERB-escaped, ordered by count, capped at 100, nil/blank endpoints skipped)
+  and shares one scope with the `by_endpoint` JSON action; the CSV export
+  prefixes cells that start with `= + - @ \t \r \n`, full-width `＝＋－＠`, or
+  those after leading whitespace, with `'`.
+- Deviations: `find_each` was tried for the export and reverted because it
+  ignores the newest-first order (streaming and row caps stay in D4). The
+  `by_endpoint` action and route stay (now only used by tests and any external
+  caller). Review feedback to use a tab prefix and cursor streaming was not
+  taken (plan specifies `'`; streaming is D4). Seven review rounds.
+- The panic-recovery guidance for PR-B was tightened after review: use
+  `ww.Status()==0` (not `BytesWritten()==0`) to decide if a JSON 500 can still
+  be written, and keep a single refund path (the normal reconcile) so a
+  recovered panic cannot refund the reservation twice.
+
+### PR-A (Rails numbers)
+
+- Shipped: `BillingCycle` and `UsageSummary`, `User#current_plan` now follows
+  the active/trialing subscription (callers: Overview, `rack_attack.rb`
+  free-plan throttles), `User#usage_this_month`/`requests_remaining` delegate to
+  `UsageSummary`, dead `User::PLAN_LIMITS` and `UsageLog.this_month` deleted,
+  Overview cards and Billing page use the summary, admin "this month" is now
+  "this cycle" (credits), admin "Started" is "Cycle anchor" and hidden for
+  promotions, copy that promised alerts and weekly reports is marked "coming
+  soon", FAQ/glossary say credits and "billing day", changelog entry added.
+  Shared Go/Rails parity vectors and a ledger fixture live in
+  `apps/api/platform/middleware/testdata/` (the CI dashboard path filter now
+  includes that folder).
+- Percent is shown with two decimals (`0.02%`), because the plan's "1 decimal"
+  could not render the required `0.02%`; below `0.01` shows `<0.01%`.
+- Deviations: no explicit blocking `i18n-tasks unused` CI step (main already
+  reports about 80 unused keys); the unused check was done as a before/after
+  diff instead, and `dashboard.overview.usage.state.*` is ignored (dynamic key).
+  `PlanConfig` feature labels ("500 requests/month") were left as is (cosmetic,
+  plan allowed a footnote instead). The Usage page and CSV still say requests
+  (D4).
+- Out-of-scope bugs found (not fixed): `admin/users/show.html.erb:256` calls
+  `UsageLog#http_method` (the column is `request_method`), so the admin user
+  page raises for any user with recent usage logs;
+  `admin/abuse_reports/show.html.erb:107` calls the nonexistent `ApiKey#prefix`,
+  so the abuse report page always raises; the Billing page raises in
+  `PlanConfig.for` for a subscription whose `plan_name` is not a known plan
+  (reachable only by bypassing validations); `UsageLog.credits_used` is
+  nullable, so Usage page/CSV `|| 1` and the ledger sum disagree (D4).
+
+PR-A merged as #1013 after four review rounds. Late additions: the Billing page
+now describes the effective (active/trialing) subscription like the Overview and
+keeps a customer-portal button for a paid row that is not active (for example
+`past_due`), `UsageSummary#percent` never shows 100% before the limit is
+reached, a `subscription_pick_vectors.json` fixture proves the Go and Rails
+subscription pick (status filter, active before trialing, newest by `updated_at`
+then id, NULL period start) from the same rows, and the parity tests fail
+instead of skipping when `CI` is set. A CodeQL false positive on a test helper
+parameter named `api_key` was avoided by renaming it.
+
+### PR-B (Go: route misses and free errors)
+
+- Shipped: `UsageQuota` asks a late-bound matcher (`SetRouteMatcher`, wired in
+  `app.go` to `router.Match` on the root router, using `RawPath` when set)
+  before doing anything; a request with no route (unknown path, wrong method)
+  skips reservation and ledger, still reaches the router for its normal answer,
+  and bumps a best-effort `route_miss:<date>` Redis hash per user (8 day TTL;
+  admin surfacing is a follow-on). The matcher fails open (nil or panicking).
+  Every `/v1` router (and each service router, so nested `Route`s inherit) also
+  carries `NotFoundHandler`/`MethodNotAllowedHandler`, which flag the request so
+  the same refund-and-no-row outcome holds if pre-matching is unavailable.
+- `now` is taken once (cycle key and `used_at` are the request start). After the
+  handler: status 0 becomes 200, a recovered panic becomes 500 (JSON 500 when
+  nothing was committed, `ww.Status()==0`; Sentry; `http.ErrAbortHandler` is
+  accounted then re-panicked), status >= 400 sets credits to 0 before the
+  reconcile, and the single reconcile path refunds. `adjust` runs under
+  `context.WithoutCancel` so a client disconnect cannot leave Redis
+  over-counted. `X-Usage-Count: 0` means 0 credits; an absent header still
+  means 1.
+- Public copy: new FAQ entry and changelog block with their own keys (en/es/fr),
+  and the `info.description` of the served spec (`apps/api/app/openapi.json`,
+  the only source; there is no generator in the repo) and its byte-identical
+  copy `apps/mcp/openapi.json`.
 - Deviations: the 404/405 handlers write chi's default responses, so a 405 still
   has no `Allow` header (chi exposes the allowed methods only to its own default
   handler); no Redis route-miss surfacing in Rails; the Go middleware tests that

@@ -93,7 +93,38 @@ func (u *UsageQuota) SetRouteMatcher(m RouteMatcher) {
 // router itself answered, i.e. no real route ran.
 type routeMissKey struct{}
 
-type routeMiss struct{ flagged atomic.Bool }
+type routeMiss struct {
+	flagged atomic.Bool
+	// matcher lets MethodNotAllowedHandler rebuild the Allow header, which
+	// chi only hands to its own default 405 handler.
+	matcher RouteMatcher
+}
+
+// allowedMethods probes the router for the methods that would serve path.
+func (m *routeMiss) allowedMethods(path string) []string {
+	if m == nil || m.matcher == nil {
+		return nil
+	}
+
+	var allowed []string
+
+	defer func() {
+		if rec := recover(); rec != nil {
+			allowed = nil
+		}
+	}()
+
+	for _, method := range []string{
+		http.MethodConnect, http.MethodDelete, http.MethodGet, http.MethodHead, http.MethodOptions,
+		http.MethodPatch, http.MethodPost, http.MethodPut, http.MethodTrace,
+	} {
+		if m.matcher(method, path) {
+			allowed = append(allowed, method)
+		}
+	}
+
+	return allowed
+}
 
 // NotFoundHandler is the 404 handler for every /v1 router: it flags the
 // request as a route miss (so a reserved credit is refunded and no ledger row
@@ -108,17 +139,38 @@ func NotFoundHandler() http.HandlerFunc {
 // MethodNotAllowedHandler is the 405 counterpart of NotFoundHandler.
 func MethodNotAllowedHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		flagRouteMiss(r.Context())
+		miss, _ := r.Context().Value(routeMissKey{}).(*routeMiss)
+		if miss != nil {
+			miss.flagged.Store(true)
+
+			if allowed := miss.allowedMethods(requestRoutePath(r)); len(allowed) > 0 {
+				w.Header().Set("Allow", strings.Join(allowed, ", "))
+			}
+		}
+
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
+}
+
+// requestRoutePath is the path chi routes on: RawPath when set, else Path.
+func requestRoutePath(r *http.Request) string {
+	if r.URL.RawPath != "" {
+		return r.URL.RawPath
+	}
+
+	return r.URL.Path
 }
 
 // TrackRouteMiss returns a context in which NotFoundHandler and
 // MethodNotAllowedHandler record that the router answered, and a function that
 // reports it. UsageQuota uses it per request; router tests use it to prove a
 // mount carries the handlers.
-func TrackRouteMiss(ctx context.Context) (context.Context, func() bool) {
-	miss := &routeMiss{}
+func TrackRouteMiss(ctx context.Context) (tracked context.Context, missed func() bool) {
+	return trackRouteMiss(ctx, nil)
+}
+
+func trackRouteMiss(ctx context.Context, matcher RouteMatcher) (tracked context.Context, missed func() bool) {
+	miss := &routeMiss{matcher: matcher}
 
 	return context.WithValue(ctx, routeMissKey{}, miss), miss.flagged.Load
 }
@@ -158,6 +210,14 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			// it misbehaves.
 			if !u.routeExists(r) {
 				u.recordRouteMiss(r.Context(), principal)
+
+				// The router still answers; give a 405 what it needs to
+				// rebuild its Allow header.
+				if m := u.matcher.Load(); m != nil {
+					missCtx, _ := trackRouteMiss(r.Context(), *m)
+					r = r.WithContext(missCtx)
+				}
+
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -199,46 +259,17 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			}
 
 			ww := chimw.NewWrapResponseWriter(w, r.ProtoMajor)
-			trackedCtx, routeMissed := TrackRouteMiss(r.Context())
+			var matcher RouteMatcher
+			if m := u.matcher.Load(); m != nil {
+				matcher = *m
+			}
+
+			trackedCtx, routeMissed := trackRouteMiss(r.Context(), matcher)
 			r = r.WithContext(trackedCtx)
 
 			recovered, panicked := u.serve(ww, r, next, principal)
 
-			if routeMissed() {
-				// The router answered 404/405 itself (pre-matching was not
-				// available): give the reservation back, write no ledger row.
-				if err := u.adjust(r.Context(), key, -requestedCredits); err != nil {
-					u.logger.Error("usage quota: failed to refund route miss", "error", err, "user_id", principal.UserID)
-				}
-				u.recordRouteMiss(r.Context(), principal)
-
-				return
-			}
-
-			status := ww.Status()
-			if status == 0 {
-				// The handler never called WriteHeader: net/http sends 200.
-				status = http.StatusOK
-			}
-			if panicked {
-				status = http.StatusInternalServerError
-			}
-
-			// Client (4xx) and server (5xx) errors are never charged. The
-			// override runs before the reconcile below so Redis and the
-			// ledger agree, even when X-Usage-Count was set.
-			creditsUsed := responseCredits(ww.Header())
-			if status >= http.StatusBadRequest {
-				creditsUsed = 0
-			}
-
-			if creditsUsed != requestedCredits {
-				if err := u.adjust(r.Context(), key, creditsUsed-requestedCredits); err != nil {
-					u.logger.Error("usage quota: failed to reconcile Redis credits", "error", err, "user_id", principal.UserID)
-				}
-			}
-
-			u.recordUsage(r.Context(), principal, r, status, now, creditsUsed)
+			u.settle(r, principal, key, requestedCredits, now, ww, routeMissed(), panicked)
 
 			if panicked && recovered == http.ErrAbortHandler {
 				// An intentional abort must still reach net/http.
@@ -246,6 +277,49 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			}
 		})
 	}
+}
+
+// settle reconciles the reservation with what actually happened and writes the
+// ledger row.
+func (u *UsageQuota) settle(
+	r *http.Request, principal APIKeyPrincipal, key string, requestedCredits int64,
+	now time.Time, ww chimw.WrapResponseWriter, routeMissed, panicked bool,
+) {
+	if routeMissed {
+		// The router answered 404/405 itself (pre-matching was not
+		// available): give the reservation back, write no ledger row.
+		if err := u.adjust(r.Context(), key, -requestedCredits); err != nil {
+			u.logger.Error("usage quota: failed to refund route miss", "error", err, "user_id", principal.UserID)
+		}
+		u.recordRouteMiss(r.Context(), principal)
+
+		return
+	}
+
+	status := ww.Status()
+	if status == 0 {
+		// The handler never called WriteHeader: net/http sends 200.
+		status = http.StatusOK
+	}
+	if panicked {
+		status = http.StatusInternalServerError
+	}
+
+	// Client (4xx) and server (5xx) errors are never charged. The override runs
+	// before the reconcile below so Redis and the ledger agree, even when
+	// X-Usage-Count was set.
+	creditsUsed := responseCredits(ww.Header())
+	if status >= http.StatusBadRequest {
+		creditsUsed = 0
+	}
+
+	if creditsUsed != requestedCredits {
+		if err := u.adjust(r.Context(), key, creditsUsed-requestedCredits); err != nil {
+			u.logger.Error("usage quota: failed to reconcile Redis credits", "error", err, "user_id", principal.UserID)
+		}
+	}
+
+	u.recordUsage(r.Context(), principal, r, status, now, creditsUsed)
 }
 
 // serve runs the downstream handler and recovers a panic so the reservation
@@ -289,12 +363,7 @@ func (u *UsageQuota) routeExists(r *http.Request) (exists bool) {
 		}
 	}()
 
-	path := r.URL.RawPath
-	if path == "" {
-		path = r.URL.Path
-	}
-
-	return (*m)(r.Method, path)
+	return (*m)(r.Method, requestRoutePath(r))
 }
 
 // routeMissTTL bounds the per-day route-miss buckets.
