@@ -42,6 +42,7 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
   test "show lists endpoints by count and shows empty state without logs" do
     get dashboard_usage_path
     assert_select "#usage-by-endpoint-container code", count: 0
+    assert_select "#usage-by-endpoint-container h3", text: I18n.t("dashboard.usage.charts.no_endpoints_heading")
 
     2.times { create_log(endpoint: "/v1/a") }
     create_log(endpoint: "/v1/b")
@@ -81,6 +82,21 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal({ "/v1/a" => 2, "/v1/b" => 1 }, response.parsed_body)
     assert_equal %w[/v1/a /v1/b], response.parsed_body.keys
+  end
+
+  test "nil endpoints are left out of the page list and JSON, and export handles them" do
+    create_log(endpoint: "/v1/a")
+    create_log(endpoint: "/v1/tmp").update_column(:endpoint, nil)
+
+    get dashboard_usage_path
+    assert_select "#usage-by-endpoint-container code", count: 1
+
+    get by_endpoint_dashboard_usage_path
+    assert_equal({ "/v1/a" => 1 }, response.parsed_body)
+
+    get export_dashboard_usage_path
+    assert_response :success
+    assert_equal 2, CSV.parse(response.body, headers: true).size
   end
 
   test "show does not list other users endpoints" do
