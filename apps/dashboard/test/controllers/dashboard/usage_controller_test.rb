@@ -32,6 +32,28 @@ class Dashboard::UsageControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, XSS_ENDPOINT
   end
 
+  test "show escapes hostile endpoint, method and key name in recent requests" do
+    @api_key.update!(name: %(<img src=x onerror=alert(2)>))
+    create_log(endpoint: XSS_ENDPOINT, method: "<b>x</b>")
+
+    get dashboard_usage_path
+
+    doc = Nokogiri::HTML(response.body)
+    assert_empty doc.css("img[onerror]")
+    assert_empty doc.css("tbody b")
+    assert_not_includes response.body, "<img src=x onerror=alert(2)>"
+  end
+
+  test "by_endpoint does not include other users endpoints" do
+    other = create_user(email: "other-by-endpoint@example.com")
+    other_key = other.api_keys.create!(name: "Theirs", environment: "test")
+    create_log(endpoint: "/v1/secret", user: other, api_key: other_key)
+
+    get by_endpoint_dashboard_usage_path
+
+    assert_equal({}, response.parsed_body)
+  end
+
   test "show does not build endpoint rows with innerHTML in page scripts" do
     get dashboard_usage_path
 
