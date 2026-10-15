@@ -9,6 +9,10 @@ class Dashboard::BillingController < Dashboard::BaseController
     @usage = current_user.usage_summary
     @subscription = @usage.cycle.subscription
     @current_plan = @usage.plan_name
+    # A paid row that is not active (e.g. past_due) is enforced as free, but its
+    # owner still needs the customer portal to fix the payment.
+    legacy = current_user.subscription
+    @portal_for_inactive_subscription = @current_plan == "free" && legacy&.lemonsqueezy_subscription_id.present? && !legacy.promoted?
 
     # Get plan limits and pricing
     @plan_info = get_plan_info(@current_plan)

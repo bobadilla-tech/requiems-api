@@ -400,7 +400,9 @@ deferred follow-ups. Each PR is safe in either Rails/Go deploy order
   (D4).
 - Out-of-scope bugs found (not fixed): `admin/users/show.html.erb:256` calls
   `UsageLog#http_method` (the column is `request_method`), so the admin user
-  page raises for any user with recent usage logs; the Billing page raises in
+  page raises for any user with recent usage logs;
+  `admin/abuse_reports/show.html.erb:107` calls the nonexistent `ApiKey#prefix`,
+  so the abuse report page always raises; the Billing page raises in
   `PlanConfig.for` for a subscription whose `plan_name` is not a known plan
   (reachable only by bypassing validations); `UsageLog.credits_used` is
   nullable, so Usage page/CSV `|| 1` and the ledger sum disagree (D4).

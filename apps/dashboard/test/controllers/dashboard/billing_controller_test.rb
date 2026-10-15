@@ -96,4 +96,22 @@ class Dashboard::BillingControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "span", text: "of 100,000 credits"
   end
+
+  test "a past_due paid subscriber keeps a way to the customer portal" do
+    Subscription.create!(
+      user: @user, plan_name: "developer", status: "past_due",
+      current_period_start: Time.utc(2026, 4, 16), lemonsqueezy_subscription_id: "ls_past_due"
+    )
+
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select "form[action=?]", dashboard_portal_billing_path
+    assert_select "a", text: /Upgrade/i
+  end
+
+  test "free users without a payment record see no portal button" do
+    travel_to(NOW) { get dashboard_billing_path }
+
+    assert_select "form[action=?]", dashboard_portal_billing_path, count: 0
+  end
 end

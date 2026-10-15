@@ -192,6 +192,20 @@ class UsageSummaryTest < ActiveSupport::TestCase
     end
   end
 
+  test "percent never rounds up to 100 before the limit is reached" do
+    log(Time.utc(2026, 10, 1), 499)
+
+    assert_equal :high, summary.threshold_state
+    assert_operator summary.percent, :<, 100
+    assert_equal 1, summary.remaining
+
+    sub = subscribe("professional")
+    UsageLog.delete_all
+    log(Time.utc(2026, 10, 1), 9_999_999)
+    assert_operator summary.percent, :<, 100
+    sub.destroy
+  end
+
   test "over the limit never reports negative remaining" do
     log(Time.utc(2026, 10, 1), 800)
 

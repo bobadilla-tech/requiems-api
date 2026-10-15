@@ -55,7 +55,9 @@ class UsageSummary
   def percent
     return nil if unlimited?
 
-    (used.to_f / limit * 100).round(2)
+    value = (used.to_f / limit * 100).round(2)
+    # Never show 100% until the limit is actually reached.
+    used < limit ? [ value, 99.99 ].min : value
   end
 
   # True when something was used but it rounds to 0.00%.
