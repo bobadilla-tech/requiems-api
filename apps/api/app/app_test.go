@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/bcrypt"
@@ -384,5 +385,147 @@ func TestApp_UsageMultiplier_DictionaryAndThesaurus(t *testing.T) {
 		require.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
 		assert.Equal(t, 2, creditsUsedFor(t, pool, prefix, "/v1/text/thesaurus/batch"))
+	})
+}
+
+// usageCounterSum totals the Redis quota counters (usage:<user>:<cycle>) of a
+// user, which is what enforces the monthly quota.
+func usageCounterSum(t *testing.T, rdb *redis.Client, userID int64) int64 {
+	t.Helper()
+
+	keys, err := rdb.Keys(context.Background(), fmt.Sprintf("usage:%d:*", userID)).Result()
+	require.NoError(t, err)
+
+	var sum int64
+	for _, k := range keys {
+		n, err := rdb.Get(context.Background(), k).Int64()
+		require.NoError(t, err)
+		sum += n
+	}
+
+	return sum
+}
+
+// TestApp_RouteMissesAndErrorsAreNotCharged is the end-to-end proof for the
+// usage plan's PR-B (docs/plans/2026-10-15-dashboard-overview-usage-fixes.md):
+// requests for routes that do not exist are not usage at all (no ledger row,
+// no quota movement), and handler-level 4xx/5xx are logged but never charged.
+func TestApp_RouteMissesAndErrorsAreNotCharged(t *testing.T) {
+	dsn := os.Getenv("TEST_DATABASE_URL")
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_URL")
+	}
+
+	if dsn == "" {
+		t.Skip("TEST_DATABASE_URL/DATABASE_URL not set; skipping route-miss integration test")
+	}
+
+	redisURL := os.Getenv("REDIS_URL")
+	if redisURL == "" {
+		redisURL = "redis://localhost:6379/0"
+	}
+
+	t.Chdir("..")
+
+	app, err := New(context.Background(), config.Config{DatabaseURL: dsn, RedisURL: redisURL})
+	if err != nil {
+		t.Skipf("infrastructure unavailable; skipping route-miss integration test: %v", err)
+	}
+
+	t.Cleanup(app.Close)
+
+	h := app.Handler()
+
+	pool, err := pgxpool.New(context.Background(), dsn)
+	require.NoError(t, err)
+	t.Cleanup(pool.Close)
+
+	randSuffix := make([]byte, 4)
+	_, err = rand.Read(randSuffix)
+	require.NoError(t, err)
+
+	apiKey := seedAPIKeyFixtureWithKey(t, dsn, fmt.Sprintf("requiem_%x00000000000000000000", randSuffix))
+	prefix := apiKey[:12]
+
+	var userID int64
+	require.NoError(t, pool.QueryRow(context.Background(), `SELECT user_id FROM api_keys WHERE key_prefix = $1`, prefix).Scan(&userID))
+	t.Cleanup(func() { _, _ = pool.Exec(context.Background(), `DELETE FROM usage_logs WHERE user_id = $1`, userID) })
+
+	do := func(method, target, body string) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(method, target, strings.NewReader(body))
+		req.Header.Set("requiems-api-key", apiKey)
+		req.Header.Set("Content-Type", "application/json")
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, req)
+
+		return w
+	}
+
+	rows := func() int {
+		var n int
+		require.NoError(t, pool.QueryRow(context.Background(), `SELECT COUNT(*) FROM usage_logs WHERE user_id = $1`, userID).Scan(&n))
+		return n
+	}
+
+	// A valid request first: one ledger row, one credit on the counter.
+	require.Equal(t, http.StatusOK, do(http.MethodGet, "/v1/entertainment/advice", "").Code)
+	require.Equal(t, 1, rows(), "a valid route is recorded")
+	require.EqualValues(t, 1, usageCounterSum(t, app.rdb, userID))
+
+	misses := []struct {
+		name, method, target string
+		want                 int
+		allow                string
+	}{
+		{"unknown top-level route", http.MethodGet, "/v1/nonexistent", http.StatusNotFound, ""},
+		{"unknown route inside a service", http.MethodGet, "/v1/text/nonexistent", http.StatusNotFound, ""},
+		{"route that never existed in the text service", http.MethodGet, "/v1/text/advice", http.StatusNotFound, ""},
+		{"wrong method", http.MethodPost, "/v1/entertainment/advice", http.StatusMethodNotAllowed, "GET"},
+		{"percent-encoded path", http.MethodGet, "/v1/text/non%2Fexistent", http.StatusNotFound, ""},
+		{"percent-encoded unreserved path", http.MethodGet, "/v1/text/%6Eonexistent", http.StatusNotFound, ""},
+		{"deep unknown path", http.MethodGet, "/v1/text/a/b/c/d", http.StatusNotFound, ""},
+	}
+
+	for _, tt := range misses {
+		t.Run(tt.name, func(t *testing.T) {
+			beforeRows, beforeCounter := rows(), usageCounterSum(t, app.rdb, userID)
+
+			w := do(tt.method, tt.target, "")
+
+			assert.Equal(t, tt.want, w.Code)
+			assert.Equal(t, tt.allow, w.Header().Get("Allow"), "a 405 keeps its Allow header")
+			assert.Equal(t, beforeRows, rows(), "a route miss writes no ledger row")
+			assert.Equal(t, beforeCounter, usageCounterSum(t, app.rdb, userID), "and moves no quota")
+		})
+	}
+
+	t.Run("a valid route is still recorded after the misses", func(t *testing.T) {
+		beforeRows, beforeCounter := rows(), usageCounterSum(t, app.rdb, userID)
+
+		require.Equal(t, http.StatusOK, do(http.MethodGet, "/v1/entertainment/advice", "").Code)
+
+		assert.Equal(t, beforeRows+1, rows())
+		assert.Equal(t, beforeCounter+1, usageCounterSum(t, app.rdb, userID))
+	})
+
+	t.Run("a handler-level validation error is logged but free", func(t *testing.T) {
+		beforeRows, beforeCounter := rows(), usageCounterSum(t, app.rdb, userID)
+
+		w := do(http.MethodPost, "/v1/text/words/batch", `{}`)
+
+		require.GreaterOrEqual(t, w.Code, http.StatusBadRequest)
+		require.Less(t, w.Code, http.StatusInternalServerError)
+		assert.Equal(t, beforeRows+1, rows(), "the error is still in the ledger")
+		assert.Equal(t, 0, creditsUsedFor(t, pool, prefix, "/v1/text/words/batch"))
+		assert.Equal(t, beforeCounter, usageCounterSum(t, app.rdb, userID), "and refunded from the counter")
+	})
+
+	t.Run("the dictionary route still bills 2 on success", func(t *testing.T) {
+		beforeCounter := usageCounterSum(t, app.rdb, userID)
+
+		w := do(http.MethodGet, "/v1/text/dictionary/ephemeral", "")
+		require.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "2", w.Header().Get("X-Usage-Count"))
+		assert.Equal(t, beforeCounter+2, usageCounterSum(t, app.rdb, userID))
 	})
 }

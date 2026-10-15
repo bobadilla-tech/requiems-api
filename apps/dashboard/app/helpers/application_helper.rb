@@ -118,6 +118,7 @@ module ApplicationHelper
       [ t("home.faq.billing.q2"),         t("home.faq.billing.a2") ],
       [ t("home.faq.billing.q3"),         t("home.faq.billing.a3") ],
       [ t("home.faq.billing.q4"),         t("home.faq.billing.a4") ],
+      [ t("home.faq.billing.q5"),         t("home.faq.billing.a5") ],
       [ t("home.faq.rate_limits.q1"),     rate_answer ],
       [ t("home.faq.rate_limits.q2"),     strip_tags(t("home.faq.rate_limits.a2_html")) ],
       [ t("home.faq.support.q1"),         "#{t("home.faq.support.a1")} #{t("home.faq.support.docs_channel.label")}: #{t("home.faq.support.docs_channel.description")}. #{t("home.faq.support.contact_channel.label")}: #{t("home.faq.support.contact_channel.description")}." ],

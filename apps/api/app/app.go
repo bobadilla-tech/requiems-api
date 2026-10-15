@@ -79,6 +79,12 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		})
 	})
 
+	// Late-bound: the middleware is mounted before the router is complete.
+	// Requests the router has no handler for are not usage.
+	usageQuota.SetRouteMatcher(func(method, path string) bool {
+		return router.Match(chi.NewRouteContext(), method, path)
+	})
+
 	return &App{
 		cfg:     cfg,
 		handler: router,

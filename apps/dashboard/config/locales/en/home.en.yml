@@ -162,6 +162,11 @@ en:
           - "The Overview page shows exact credits used, the exact percentage (for example 0.02%) and the date your usage resets (00:00 UTC on your billing day)."
           - "Removed references to usage alerts and weekly reports until they ship."
         title: "Usage accounting correction"
+      usage_errors_free:
+        items:
+          - "Client errors (4xx) and server errors (5xx) returned by an endpoint are no longer charged. They still appear in your usage history with 0 credits."
+          - "Requests to unknown routes or with an unsupported method are no longer recorded or counted against your quota."
+        title: "Errors are no longer charged"
       v001:
         gateway:
           heading: Cloudflare Worker Gateway
@@ -391,11 +396,13 @@ en:
           take effect immediately. Downgrades take effect at the start of your next
           billing period.
         a4: "No, unused credits don't roll over. Your allowance resets on your billing day (00:00 UTC). We recommend choosing a plan that matches your typical monthly usage."
+        a5: "No. Client errors (4xx) and server errors (5xx) returned by an endpoint are not charged, and requests to unknown routes or with an unsupported method are not recorded. Errors from a valid route still appear in your usage history with 0 credits so you can debug them."
         heading: Billing & Usage
         q1: How is billing calculated?
         q2: What happens if I exceed my request limit?
         q3: Can I upgrade or downgrade my plan?
         q4: Do unused requests roll over?
+        q5: "Are failed requests charged?"
       getting_started:
         a1_html: Getting started is easy! Sign up for a free account, generate your
           API key from the dashboard, and start making requests. Check out our %{docs_link}

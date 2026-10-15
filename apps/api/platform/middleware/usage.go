@@ -8,8 +8,10 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	chimw "github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
@@ -65,6 +67,118 @@ type UsageQuota struct {
 	rdb    *redis.Client
 	plans  *PlanCache
 	logger *slog.Logger
+
+	// matcher is late-bound (the router is built after this middleware) and
+	// nil until SetRouteMatcher is called; a nil matcher fails open.
+	matcher atomic.Pointer[RouteMatcher]
+}
+
+// RouteMatcher reports whether the router has a handler for method+path.
+type RouteMatcher func(method, path string) bool
+
+// SetRouteMatcher installs the pre-dispatch route check. Requests the matcher
+// rejects (unknown routes, wrong methods) skip quota, ledger and Redis work
+// entirely: they are not usage. Safe to call after the middleware is mounted.
+func (u *UsageQuota) SetRouteMatcher(m RouteMatcher) {
+	if m == nil {
+		u.matcher.Store(nil)
+		return
+	}
+
+	u.matcher.Store(&m)
+}
+
+// routeMissKey carries a *routeMiss through the request context so the
+// router's NotFound/MethodNotAllowed handlers can tell UsageQuota that the
+// router itself answered, i.e. no real route ran.
+type routeMissKey struct{}
+
+type routeMiss struct {
+	flagged atomic.Bool
+	// matcher lets MethodNotAllowedHandler rebuild the Allow header, which
+	// chi only hands to its own default 405 handler.
+	matcher RouteMatcher
+}
+
+// allowedMethods probes the router for the methods that would serve path.
+func (m *routeMiss) allowedMethods(path string) []string {
+	if m == nil || m.matcher == nil {
+		return nil
+	}
+
+	var allowed []string
+
+	defer func() {
+		if rec := recover(); rec != nil {
+			allowed = nil
+		}
+	}()
+
+	for _, method := range []string{
+		http.MethodConnect, http.MethodDelete, http.MethodGet, http.MethodHead, http.MethodOptions,
+		http.MethodPatch, http.MethodPost, http.MethodPut, http.MethodTrace,
+	} {
+		if m.matcher(method, path) {
+			allowed = append(allowed, method)
+		}
+	}
+
+	return allowed
+}
+
+// NotFoundHandler is the 404 handler for every /v1 router: it flags the
+// request as a route miss (so a reserved credit is refunded and no ledger row
+// is written when pre-matching was unavailable) and writes chi's default 404.
+func NotFoundHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		flagRouteMiss(r.Context())
+		http.NotFound(w, r)
+	}
+}
+
+// MethodNotAllowedHandler is the 405 counterpart of NotFoundHandler.
+func MethodNotAllowedHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		miss, _ := r.Context().Value(routeMissKey{}).(*routeMiss)
+		if miss != nil {
+			miss.flagged.Store(true)
+
+			if allowed := miss.allowedMethods(requestRoutePath(r)); len(allowed) > 0 {
+				w.Header().Set("Allow", strings.Join(allowed, ", "))
+			}
+		}
+
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+// requestRoutePath is the path chi routes on: RawPath when set, else Path.
+func requestRoutePath(r *http.Request) string {
+	if r.URL.RawPath != "" {
+		return r.URL.RawPath
+	}
+
+	return r.URL.Path
+}
+
+// TrackRouteMiss returns a context in which NotFoundHandler and
+// MethodNotAllowedHandler record that the router answered, and a function that
+// reports it. UsageQuota uses it per request; router tests use it to prove a
+// mount carries the handlers.
+func TrackRouteMiss(ctx context.Context) (tracked context.Context, missed func() bool) {
+	return trackRouteMiss(ctx, nil)
+}
+
+func trackRouteMiss(ctx context.Context, matcher RouteMatcher) (tracked context.Context, missed func() bool) {
+	miss := &routeMiss{matcher: matcher}
+
+	return context.WithValue(ctx, routeMissKey{}, miss), miss.flagged.Load
+}
+
+func flagRouteMiss(ctx context.Context) {
+	if m, ok := ctx.Value(routeMissKey{}).(*routeMiss); ok {
+		m.flagged.Store(true)
+	}
 }
 
 // NewUsageQuota builds a UsageQuota. plans should be shared with RateLimiter.
@@ -91,7 +205,26 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 				return
 			}
 
-			cycle := cycleStart(principal.CurrentPeriodStart, time.Now())
+			// A request the router has no handler for is not usage: no
+			// reservation, no ledger row. Fails open when no matcher is set or
+			// it misbehaves.
+			if !u.routeExists(r) {
+				u.recordRouteMiss(r.Context(), principal)
+
+				// The router still answers; give a 405 what it needs to
+				// rebuild its Allow header.
+				if m := u.matcher.Load(); m != nil {
+					missCtx, _ := trackRouteMiss(r.Context(), *m)
+					r = r.WithContext(missCtx)
+				}
+
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			// Taken once so the cycle key and the ledger's used_at agree.
+			now := time.Now()
+			cycle := cycleStart(principal.CurrentPeriodStart, now)
 			key := fmt.Sprintf("usage:%d:%d", principal.UserID, cycle.Unix())
 
 			limits, hasStaleLimits, planErr := u.plans.get(r.Context(), principal.Plan)
@@ -126,19 +259,139 @@ func (u *UsageQuota) Middleware() func(http.Handler) http.Handler {
 			}
 
 			ww := chimw.NewWrapResponseWriter(w, r.ProtoMajor)
-			start := time.Now()
-
-			next.ServeHTTP(ww, r)
-
-			creditsUsed := responseCredits(ww.Header())
-			if creditsUsed != requestedCredits {
-				if err := u.adjust(r.Context(), key, creditsUsed-requestedCredits); err != nil {
-					u.logger.Error("usage quota: failed to reconcile Redis credits", "error", err, "user_id", principal.UserID)
-				}
+			var matcher RouteMatcher
+			if m := u.matcher.Load(); m != nil {
+				matcher = *m
 			}
 
-			u.recordUsage(r.Context(), principal, r, ww, start, creditsUsed)
+			trackedCtx, routeMissed := trackRouteMiss(r.Context(), matcher)
+			r = r.WithContext(trackedCtx)
+
+			handlerStart := time.Now()
+			recovered, panicked := u.serve(ww, r, next, principal)
+
+			u.settle(r, principal, key, requestedCredits, now, handlerStart, ww, routeMissed(), panicked)
+
+			if panicked && recovered == http.ErrAbortHandler {
+				// An intentional abort must still reach net/http.
+				panic(http.ErrAbortHandler)
+			}
 		})
+	}
+}
+
+// settle reconciles the reservation with what actually happened and writes the
+// ledger row.
+func (u *UsageQuota) settle(
+	r *http.Request, principal APIKeyPrincipal, key string, requestedCredits int64,
+	now, handlerStart time.Time, ww chimw.WrapResponseWriter, routeMissed, panicked bool,
+) {
+	if routeMissed {
+		// The router answered 404/405 itself (pre-matching was not
+		// available): give the reservation back, write no ledger row.
+		if err := u.adjust(r.Context(), key, -requestedCredits); err != nil {
+			u.logger.Error("usage quota: failed to refund route miss", "error", err, "user_id", principal.UserID)
+		}
+		u.recordRouteMiss(r.Context(), principal)
+
+		return
+	}
+
+	status := ww.Status()
+	if status == 0 {
+		// The handler never called WriteHeader: net/http sends 200.
+		status = http.StatusOK
+	}
+	if panicked {
+		status = http.StatusInternalServerError
+	}
+
+	// Client (4xx) and server (5xx) errors are never charged. The override runs
+	// before the reconcile below so Redis and the ledger agree, even when
+	// X-Usage-Count was set.
+	creditsUsed := responseCredits(ww.Header())
+	if status >= http.StatusBadRequest {
+		creditsUsed = 0
+	}
+
+	if creditsUsed != requestedCredits {
+		if err := u.adjust(r.Context(), key, creditsUsed-requestedCredits); err != nil {
+			u.logger.Error("usage quota: failed to reconcile Redis credits", "error", err, "user_id", principal.UserID)
+		}
+	}
+
+	u.recordUsage(r.Context(), principal, r, status, now, handlerStart, creditsUsed)
+}
+
+// serve runs the downstream handler and recovers a panic so the reservation
+// is reconciled and the request is logged. If nothing was written yet it
+// answers a JSON 500. http.ErrAbortHandler is returned (not swallowed) so the
+// caller can finish accounting and re-panic.
+func (u *UsageQuota) serve(ww chimw.WrapResponseWriter, r *http.Request, next http.Handler, principal APIKeyPrincipal) (recovered any, panicked bool) {
+	defer func() {
+		rec := recover()
+		if rec == nil {
+			return
+		}
+
+		recovered, panicked = rec, true
+
+		if rec != http.ErrAbortHandler {
+			u.logger.Error("usage quota: handler panicked", "panic", rec, "user_id", principal.UserID, "path", r.URL.Path)
+			sentry.CurrentHub().Recover(rec)
+
+			if ww.Status() == 0 {
+				httpx.Error(ww, http.StatusInternalServerError, "internal_error", "internal server error")
+			}
+		}
+	}()
+
+	next.ServeHTTP(ww, r)
+
+	return nil, false
+}
+
+// routeExists asks the late-bound matcher whether the router would handle r.
+func (u *UsageQuota) routeExists(r *http.Request) (exists bool) {
+	m := u.matcher.Load()
+	if m == nil {
+		return true
+	}
+
+	defer func() {
+		if rec := recover(); rec != nil {
+			exists = true
+		}
+	}()
+
+	return (*m)(r.Method, requestRoutePath(r))
+}
+
+// routeMissTTL bounds the per-day route-miss buckets.
+const routeMissTTL = 8 * 24 * time.Hour
+
+// recordRouteMiss keeps a best-effort per-user, per-day count of requests for
+// routes that do not exist, so scanner traffic is not lost now that it is no
+// longer in usage_logs. Nothing reads the bucket yet (surfacing it to the
+// admin abuse tooling is a follow-on). A Redis error never affects the request.
+func (u *UsageQuota) recordRouteMiss(ctx context.Context, principal APIKeyPrincipal) {
+	u.logger.Debug("usage quota: route miss", "user_id", principal.UserID)
+
+	if u.rdb == nil {
+		return
+	}
+
+	rctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), redisCallTimeout)
+	defer cancel()
+
+	bucket := "route_miss:" + time.Now().UTC().Format("2006-01-02")
+
+	pipe := u.rdb.Pipeline()
+	pipe.HIncrBy(rctx, bucket, strconv.FormatInt(principal.UserID, 10), 1)
+	pipe.Expire(rctx, bucket, routeMissTTL)
+
+	if _, err := pipe.Exec(rctx); err != nil {
+		u.logger.Debug("usage quota: route miss counter unavailable", "error", err, "user_id", principal.UserID)
 	}
 }
 
@@ -189,12 +442,15 @@ func (u *UsageQuota) increment(ctx context.Context, key string, userID int64, cy
 	return 0, fmt.Errorf("redis quota reservation failed: %w", err)
 }
 
+// adjust applies a delta to the reserved counter. It detaches from the request
+// context's cancellation: a client that disconnects mid-request must not leave
+// Redis over-counted while the ledger says the request was free.
 func (u *UsageQuota) adjust(ctx context.Context, key string, delta int64) error {
 	if delta == 0 {
 		return nil
 	}
 
-	rctx, cancel := context.WithTimeout(ctx, redisCallTimeout)
+	rctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), redisCallTimeout)
 	defer cancel()
 
 	value, err := quotaAdjustScript.Run(rctx, u.rdb, []string{key}, delta).Int64()
@@ -228,12 +484,15 @@ func (u *UsageQuota) sumUsage(ctx context.Context, userID int64, cycle time.Time
 // write itself fails (a real error, not a conflict), it's logged and
 // dropped: the response has already been sent, so there's nothing left to
 // reject.
-func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, ww chimw.WrapResponseWriter, start time.Time, creditsUsed int64) {
+func (u *UsageQuota) recordUsage(ctx context.Context, principal APIKeyPrincipal, r *http.Request, status int, usedAt, handlerStart time.Time, creditsUsed int64) {
 	writeCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
 	defer cancel()
 
+	// used_at is the request start (the same instant the cycle key was
+	// derived from); latency is the handler's alone; status is the normalised
+	// one, never a raw 0.
 	err := u.insertUsageRow(writeCtx, principal, r.URL.Path, r.Method, creditsUsed,
-		ww.Status(), time.Since(start).Milliseconds(), time.Now().UTC())
+		status, time.Since(handlerStart).Milliseconds(), usedAt.UTC())
 
 	if err != nil {
 		u.logger.Error("usage quota: failed to write usage_logs row, dropping",
@@ -262,12 +521,13 @@ func responseCredits(headers http.Header) int64 {
 	return headerCredits(headers)
 }
 
-// headerCredits parses X-Usage-Count, bounded to [1, math.MaxInt32] so the
-// usage_logs.credits_used is an integer column, so values outside this range
-// are treated as the default unit charge rather than being persisted.
+// headerCredits parses X-Usage-Count, bounded to [0, math.MaxInt32] so the
+// usage_logs.credits_used is an integer column. An absent header is the default
+// unit charge; an explicit "0" (an empty batch) charges nothing; anything else
+// out of range or malformed is treated as the default rather than persisted.
 func headerCredits(headers http.Header) int64 {
 	if raw := headers.Get("X-Usage-Count"); raw != "" {
-		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n > 0 && n <= math.MaxInt32 {
+		if n, err := strconv.ParseInt(raw, 10, 64); err == nil && n >= 0 && n <= math.MaxInt32 {
 			return n
 		}
 	}

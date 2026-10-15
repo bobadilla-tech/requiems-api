@@ -1,8 +1,9 @@
 # Dashboard Overview & Usage Accuracy
 
-Status: DRAFT v9 (planning only; rounds 1–8 of review folded in). Deviation from
-`docs/plans/readme.md` ("save after work lands"): written up-front at the user's
-request; **Final notes** is intentionally empty until the work ships.
+Status: IMPLEMENTED in PR-0, PR-A and PR-B (PR-C in progress; see Final notes).
+It was drafted as v9 (planning only; rounds 1–8 of review folded in). Deviation
+from `docs/plans/readme.md` ("save after work lands"): written up-front at the
+user's request; **Final notes** is filled in as each PR ships.
 
 ## Context
 
@@ -406,3 +407,48 @@ deferred follow-ups. Each PR is safe in either Rails/Go deploy order
   `PlanConfig.for` for a subscription whose `plan_name` is not a known plan
   (reachable only by bypassing validations); `UsageLog.credits_used` is
   nullable, so Usage page/CSV `|| 1` and the ledger sum disagree (D4).
+
+PR-A merged as #1013 after four review rounds. Late additions: the Billing page
+now describes the effective (active/trialing) subscription like the Overview and
+keeps a customer-portal button for a paid row that is not active (for example
+`past_due`), `UsageSummary#percent` never shows 100% before the limit is
+reached, a `subscription_pick_vectors.json` fixture proves the Go and Rails
+subscription pick (status filter, active before trialing, newest by `updated_at`
+then id, NULL period start) from the same rows, and the parity tests fail
+instead of skipping when `CI` is set. A CodeQL false positive on a test helper
+parameter named `api_key` was avoided by renaming it.
+
+### PR-B (Go: route misses and free errors)
+
+- Shipped: `UsageQuota` asks a late-bound matcher (`SetRouteMatcher`, wired in
+  `app.go` to `router.Match` on the root router, using `RawPath` when set)
+  before doing anything; a request with no route (unknown path, wrong method)
+  skips reservation and ledger, still reaches the router for its normal answer,
+  and bumps a best-effort `route_miss:<date>` Redis hash per user (8 day TTL;
+  nothing reads it yet, admin surfacing is a follow-on). The matcher fails open
+  (nil or panicking). Every `/v1` router (and each service router, so nested
+  `Route`s inherit) also carries `NotFoundHandler`/`MethodNotAllowedHandler`,
+  which flag the request so the same refund-and-no-row outcome holds if
+  pre-matching is unavailable.
+- `now` is taken once (cycle key and `used_at` are the request start). After the
+  handler: status 0 becomes 200, a recovered panic becomes 500 (JSON 500 when
+  nothing was committed, `ww.Status()==0`; Sentry; `http.ErrAbortHandler` is
+  accounted then re-panicked), status >= 400 sets credits to 0 before the
+  reconcile, and the single reconcile path refunds. `adjust` runs under
+  `context.WithoutCancel` so a client disconnect cannot leave Redis
+  over-counted. `X-Usage-Count: 0` means 0 credits; an absent header still
+  means 1. Every batch endpoint validates `min=1`, so an empty batch is not
+  reachable over HTTP today: this is defensive, and the changelog does not claim
+  it.
+- Public copy: new FAQ entry and changelog block with their own keys (en/es/fr),
+  and the `info.description` of the served spec (`apps/api/app/openapi.json`,
+  the only source; there is no generator in the repo) and its byte-identical
+  copy `apps/mcp/openapi.json`.
+- Deviations: the 404/405 handlers write chi's default responses, and a 405
+  keeps its `Allow` header by probing the root matcher for each method (chi
+  hands the allowed methods only to its own default handler); nothing reads the
+  route-miss bucket yet (Rails surfacing is a follow-on); the Go middleware
+  tests that need a real Redis (`CONFIG SET`, `DEBUG SLEEP`) were run locally
+  against miniredis and two of them cannot pass there (rate limiter timeout and
+  OOM), CI runs them against real Redis.
+- Pricing/ToS check: no page promises that errors are billed.

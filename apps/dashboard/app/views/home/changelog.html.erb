@@ -14,6 +14,18 @@
       </p>
 
       <div class="space-y-12">
+        <!-- Errors are no longer charged -->
+        <div class="border-l-4 border-amber-500 pl-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("home.changelog.usage_errors_free.title") %></h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4"><%= l(Date.new(2026, 10, 15), format: :long) %></p>
+
+          <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+            <% t("home.changelog.usage_errors_free.items").each do |item| %>
+              <li><%= item %></li>
+            <% end %>
+          </ul>
+        </div>
+
         <!-- Usage accounting correction -->
         <div class="border-l-4 border-amber-500 pl-6">
           <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"><%= t("home.changelog.usage_cycle_fix.title") %></h2>
