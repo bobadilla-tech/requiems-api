@@ -56,7 +56,7 @@ gem "kramdown"
 gem "kramdown-parser-gfm"
 
 # Charts and pagination
-gem "chartkick", "~> 5.0"
+gem "chartkick", "~> 5.3"
 gem "pagy", "~> 43.7"
 
 # Groupdate for time-series queries
