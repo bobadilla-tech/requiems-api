@@ -43,7 +43,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.6.0
 	github.com/TwiN/go-away v1.8.1
-	github.com/agnivade/levenshtein v1.2.1
+	github.com/agnivade/levenshtein v1.2.2
 	github.com/bobadilla-tech/business-days-calculator v1.1.0
 	github.com/bobadilla-tech/go-dictionary v1.0.0
 	github.com/bobadilla-tech/go-email-normalizer v1.2.1
