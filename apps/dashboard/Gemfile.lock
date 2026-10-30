@@ -224,7 +224,7 @@ GEM
     nokogiri (1.19.4-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (43.7.0)
+    pagy (43.8.1)
       json
       uri
       yaml
@@ -454,7 +454,7 @@ DEPENDENCIES
   minitest (~> 6.0)
   minitest-mock (~> 5.0)
   nanoid (~> 2.0)
-  pagy (~> 43.7)
+  pagy (~> 43.8)
   pg (~> 1.7)
   propshaft
   puma (>= 8.0.2)
