@@ -24,7 +24,7 @@ concurrency:
 jobs:
   detect-changes:
     name: Detect Changed Apps
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       api: ${{ steps.filter.outputs.api }}
       dashboard: ${{ steps.filter.outputs.dashboard }}
@@ -51,7 +51,7 @@ jobs:
 
   go-test:
     name: Go Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.api == 'true'
     timeout-minutes: 15
@@ -143,7 +143,7 @@ jobs:
 
   go-lint:
     name: Go Lint (Advisory)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.api == 'true' && github.actor != 'dependabot[bot]'
     continue-on-error: true
@@ -176,7 +176,7 @@ jobs:
 
   rails-test:
     name: Rails Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.dashboard == 'true'
     timeout-minutes: 15
@@ -257,7 +257,7 @@ jobs:
 
   rails-checks:
     name: Rails Security & Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.dashboard == 'true'
 
@@ -317,7 +317,7 @@ jobs:
 
   mcp-test:
     name: MCP Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.mcp == 'true'
     timeout-minutes: 15
@@ -344,7 +344,7 @@ jobs:
 
   ci-success:
     name: CI Success
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - detect-changes
       - go-test
