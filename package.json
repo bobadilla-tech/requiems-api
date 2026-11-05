@@ -13,7 +13,7 @@
     "regenerate": "node scripts/build/index.ts"
   },
   "devDependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^5.5.0"
   },
   "publishConfig": {
     "access": "public",
