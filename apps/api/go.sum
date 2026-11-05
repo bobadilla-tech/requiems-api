@@ -139,8 +139,8 @@ github.com/oschwald/geoip2-golang v1.13.0 h1:Q44/Ldc703pasJeP5V9+aFSZFmBN7DKHbNs
 github.com/oschwald/geoip2-golang v1.13.0/go.mod h1:P9zG+54KPEFOliZ29i7SeYZ/GM6tfEL+rgSn03hYuUo=
 github.com/oschwald/maxminddb-golang v1.13.0 h1:R8xBorY71s84yO06NgTmQvqvTvlS/bnYZrrWX1MElnU=
 github.com/oschwald/maxminddb-golang v1.13.0/go.mod h1:BU0z8BfFVhi1LQaonTwwGQlsHUEu9pWNdMfmq4ztm0o=
-github.com/pashagolub/pgxmock/v5 v5.2.0 h1:9MYpoUUDNGfIE72atGdztUzZ3fsCmrH0N0u5RCYLnyQ=
-github.com/pashagolub/pgxmock/v5 v5.2.0/go.mod h1:occvXk2WVNxOCPPU7bpz7GuEbFMU+rbRcfNyaLu7Y1A=
+github.com/pashagolub/pgxmock/v6 v6.0.0-beta2 h1:8nEQJ9gukk/4OcECNO+QKzJRhbzTeqCpn5MiuLSiGlc=
+github.com/pashagolub/pgxmock/v6 v6.0.0-beta2/go.mod h1:LyMChJBEOGR/xYF1K7LeUvlwddjX5V4FhhcF+YFoG+E=
 github.com/pemistahl/lingua-go v1.4.0 h1:ifYhthrlW7iO4icdubwlduYnmwU37V1sbNrwhKBR4rM=
 github.com/pemistahl/lingua-go v1.4.0/go.mod h1:ECuM1Hp/3hvyh7k8aWSqNCPlTxLemFZsRjocUf3KgME=
 github.com/pingcap/errors v0.11.4 h1:lFuQV/oaUMGcD2tqt+01ROSmJs75VG1ToEOkZIZ4nE4=

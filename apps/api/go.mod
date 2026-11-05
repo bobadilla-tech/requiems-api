@@ -59,6 +59,7 @@ require (
 	github.com/likexian/whois-parser v1.24.21
 	github.com/medama-io/go-useragent v1.2.5
 	github.com/nyaruka/phonenumbers v1.8.1
+	github.com/pashagolub/pgxmock/v6 v6.0.0-beta2
 	github.com/pemistahl/lingua-go v1.4.0
 	github.com/ringsaturn/tzf v1.2.5
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
@@ -76,7 +77,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.3 // indirect
 	github.com/lib/pq v1.10.9 // indirect
-	github.com/pashagolub/pgxmock/v5 v5.2.0
 	golang.org/x/crypto v0.58.0
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/text v0.43.0
