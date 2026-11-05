@@ -41,7 +41,7 @@ jobs:
   detect-changes:
     name: Detect Changed Apps
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       api: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.api }}
       dashboard: ${{ github.event_name == 'workflow_dispatch' && 'false' || steps.filter.outputs.dashboard }}
@@ -76,7 +76,7 @@ jobs:
     name: Deploy API
     if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'api' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.api == 'true'
     needs: detect-changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 30
     env:
@@ -102,7 +102,7 @@ jobs:
     name: Deploy Dashboard
     if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'dashboard' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.dashboard == 'true'
     needs: detect-changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 45
     env:
@@ -156,7 +156,7 @@ jobs:
     name: Deploy MCP
     if: (github.event_name == 'workflow_dispatch' && (github.event.inputs.app == 'mcp' || github.event.inputs.app == 'all')) || needs.detect-changes.outputs.mcp == 'true'
     needs: detect-changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 20
     env:
