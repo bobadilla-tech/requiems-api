@@ -1,5 +1,5 @@
 // Server-only module — never import from client components.
-// The REQUIEMS_API_KEY env var has no NEXT_PUBLIC_ prefix so Next.js
+// The REQUIEMS_API env var has no NEXT_PUBLIC_ prefix so Next.js
 // will never include it in the browser bundle.
 
 import { env } from "@/env";
@@ -37,7 +37,7 @@ export async function validateEmail(email: string): Promise<ValidateEmailResult>
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				"requiems-api-key": env.REQUIEMS_API_KEY,
+				"requiems-api-key": env.REQUIEMS_API,
 			},
 			body: JSON.stringify({ email }),
 			cache: "no-store", // never cache validation results
