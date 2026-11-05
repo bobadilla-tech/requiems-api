@@ -31,3 +31,6 @@ jobs:
           cache-dependency-path: nextjs-email-validation/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+        env:
+          REQUIEMS_API: ci-placeholder
+          BETTER_AUTH_SECRET: ci-placeholder-secret-0123456789abcdef0123
