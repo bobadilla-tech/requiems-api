@@ -365,7 +365,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: pnpm/action-setup@v5
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
           package_json_file: apps/tutorials/nextjs-email-validation/package.json
