@@ -29,7 +29,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bobadilla-tech/requiems-api-skills.git"
+    "url": "git+https://github.com/bobadilla-tech/requiems-api.git",
+    "directory": "apps/skills"
   },
   "homepage": "https://requiems.xyz/en/skills",
   "dependencies": {

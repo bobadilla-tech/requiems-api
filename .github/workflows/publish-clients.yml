@@ -1,0 +1,28 @@
+name: Publish Clients
+
+# PLANNED, not implemented yet. Triggered when a merged change bumps
+# apps/clients/VERSION (the PR opened by release-sync.yml after a release).
+# Intended steps per language: TypeScript -> npm, Python -> PyPI,
+# Ruby -> RubyGems, C# -> NuGet, Go -> tagged module release.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/clients/VERSION"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish (not implemented)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Placeholder
+        run: |
+          echo "::notice::Client publishing is planned but not implemented. Version: $(cat apps/clients/VERSION)"

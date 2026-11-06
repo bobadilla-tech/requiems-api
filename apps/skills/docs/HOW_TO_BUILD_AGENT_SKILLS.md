@@ -12,7 +12,7 @@ Requiems-specific implementation details, see [DESIGN.md](DESIGN.md).
 Treat an agent skill as a **build artifact**, not hand-written content. If you
 already maintain structured docs for humans (OpenAPI, YAML endpoint specs,
 whatever), you have a source of truth. A "skill" is just that source of truth,
-transformed into the format an agent expects, regenerated on a schedule, and
+transformed into the format an agent expects, regenerated on every release, and
 shipped like any other package.
 
 That reframing gets you two things for free that a hand-maintained `AGENT.md`
@@ -65,9 +65,8 @@ anything, the next run just produces a bigger diff), and it's the one thing git
 is already good at.
 
 **5. A human gate before anything ships.** Regeneration produces a pull request,
-not a direct commit, and merging that PR is _not_ the same event as publishing a
-new package version. Two separate, deliberate actions: "this reflects current
-docs" (merge) and "this is now public" (a maintainer pushes a release tag). See
+not a direct commit, and merging that PR is the deliberate action that ships: the PR carries the
+version bump, and merging it publishes. See
 [Current Architecture](DESIGN.md#current-architecture) for the concrete version
 of this.
 
@@ -81,26 +80,18 @@ without reading the whole diff. `skills/<api>-<method>-<path>/SKILL.md` per
 endpoint keeps diffs scoped: if only one endpoint's docs changed upstream, only
 one file shows up in the PR.
 
-### Gate the version bump on the actual diff, not the cron firing
+### Gate the version bump on the actual diff, not the trigger firing
 
-A weekly job that always bumps the version — even when nothing changed —
+A job that always bumps the version — even when nothing changed —
 produces a version-only PR every single week, forever. Diff `skills/` first;
-only bump if there's a real change. No-op weeks produce no PR at all.
+only bump if there's a real change. No-op runs produce no PR at all.
 
-### Decouple "merged" from "published"
+### Trigger on releases, publish on the version bump
 
-The tempting version of this pipeline auto-publishes whenever `main` changes. We
-deliberately didn't do that: publishing requires a maintainer to push a `vX.Y.Z`
-tag by hand. The honest tradeoff is that it's an extra step someone can forget —
-but it means nothing reaches the public registry that a human didn't explicitly
-decide to ship, which matters a lot more once real users depend on the package.
-
-### Guard the publish step by cross-checking the tag against the package version
-
-Before `npm publish` runs, verify the pushed tag's version actually matches
-`package.json`. Costs three lines of bash; the alternative is discovering the
-mismatch as a cryptic npm 403, or worse, successfully publishing the wrong
-version.
+A cron fires whether or not anything changed. Triggering regeneration when the
+source repo publishes a release means the check runs exactly when docs can have
+changed, and publishing keys off the merged version bump (skipping versions
+already on npm), so nothing reaches the registry that a human did not merge.
 
 ### Keep the toolchain boring
 
@@ -139,6 +130,6 @@ If you want to do this for your own API:
 6. Pick one runtime and stay boring about it.
 
 This repo currently generates 60+ `SKILL.md` files from ~60 source YAML docs,
-regenerated weekly with zero manual editing, published as a single npm package.
+regenerated on each release with zero manual editing, published as a single npm package.
 The pipeline that does it is under 200 lines of TypeScript plus three GitHub
 Actions steps.

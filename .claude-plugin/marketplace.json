@@ -4,7 +4,7 @@
   "plugins": [
     {
       "name": "requiems-api-skills",
-      "source": "./",
+      "source": "./apps/skills",
       "description": "Installable AI skills for Requiems API endpoints."
     }
   ]

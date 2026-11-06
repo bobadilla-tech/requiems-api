@@ -85,43 +85,33 @@ approach is proven — see [No granular versioning](#known-limitations-and-risks
 ### Option D — npm package with automated sync pipeline (chosen, implemented)
 
 Package all skills into a single installable npm package. A GitHub Action
-regenerates the content from `requiems-api` weekly and opens a PR; a maintainer
-reviews and merges; publishing to npm happens separately, gated behind an
-explicit release tag rather than firing automatically on merge. This is what's
+regenerates the content whenever a `requiems-api` release is published and opens
+a PR if anything changed; a maintainer reviews and merges it; merging a version
+bump publishes to npm. This is what's
 implemented today — see [Current Architecture](#current-architecture).
 
 ## Current Architecture
 
-The pipeline has three stages, and deliberately does **not** auto-publish on
-every merge — a human decides when a batch of regenerated skills becomes a
-public release:
+The package lives in the `requiems-api` monorepo (`apps/skills`) next to the
+YAML it is generated from. The pipeline has three stages, driven by releases
+rather than a cron:
 
-1. **Regenerate** (weekly, automated) — fetch the latest `api_docs/` YAML from
-   `requiems-api`, transform it into skill bundles, and open a PR against this
-   repo if anything changed.
-2. **Review & merge** (human) — a reviewer spot-checks the PR, which links the
-   live doc page for each API that changed.
-3. **Release** (human-triggered) — a maintainer pushes a `vX.Y.Z` tag once
-   they're ready to ship; that tag push, and only that, triggers
-   `npm
-   publish`.
-
-Decoupling step 2 from step 3 is intentional: merging a regen PR only means
-"this reflects the current docs," not "this is now public on npm." A maintainer
-still has to explicitly cut a release. The tradeoff is an easy step to forget —
-see [Known Limitations](#known-limitations-and-risks).
+1. **Regenerate** (on release) — when a GitHub release is published,
+   `.github/workflows/release-sync.yml` regenerates the skills from
+   `apps/dashboard/config/api_docs/` and opens a PR (with a patch version bump)
+   only if anything changed.
+2. **Review & merge** (human, or auto-merge when `SYNC_PR_TOKEN` is set) — a
+   reviewer spot-checks the PR, which links the live doc page for each API that
+   changed.
+3. **Publish** (on merge) — a merged change to `apps/skills/package.json` runs
+   `.github/workflows/publish-skills.yml`, which publishes to npm if that
+   version is not already published.
 
 ## Repository Structure
 
 ```
-requiems-api-skills/
-├── .github/
-│   ├── workflows/
-│   │   ├── regenerate-skills.yml  # weekly cron + manual: fetch, transform, open a PR
-│   │   └── publish.yml            # on tag push v*: verify version, npm publish
-│   ├── scripts/
-│   │   └── build-pr-body.sh       # builds the regen PR description
-│   └── CODEOWNERS
+apps/skills/   (workflows live in the repo root `.github/`:
+               release-sync.yml, publish-skills.yml, scripts/build-skills-pr-body.sh)
 ├── scripts/
 │   └── build/
 │       ├── index.ts               # transform pipeline (YAML -> SKILL.md)
@@ -209,52 +199,39 @@ One file per endpoint (not one per API) keeps each skill small enough for an
 agent to load on demand, and keeps regen PR diffs scoped to exactly the
 endpoints that changed.
 
-## Automation Plan
+## Automation
 
-### regenerate-skills.yml
+### release-sync.yml (`skills` job)
 
-Triggers: weekly cron (`0 0 * * 1`, Monday 00:00 UTC) and manual
-`workflow_dispatch`.
+Triggers: a published GitHub release, and manual `workflow_dispatch`. Also
+regenerates the API clients in a sibling job.
 
-1. Checks out both this repo and `requiems-api` (`persist-credentials:
-   false`
-   on both — this job never needs to push with its own git identity).
-2. Installs Node from `.nvmrc`, runs `npm ci`.
-3. Runs
-   `node scripts/build/index.ts --source
-   requiems-api/apps/dashboard/config/api_docs --output ./skills`.
-4. Checks `git status --porcelain -- skills/` to see if anything actually
-   changed. If not, the job ends here — no PR, no version bump.
-5. If something changed, bumps `package.json`'s patch version
-   (`npm version patch --no-git-tag-version`) so the eventual release tag won't
-   collide with an already-published version.
-6. Builds the PR body via `.github/scripts/build-pr-body.sh` — it pings
-   `@bobadilla-tech/requiems-api` and links the `requiems.xyz/en/apis/<api_id>`
-   doc page for each API that changed, so a reviewer can spot-check without
-   reading the raw YAML diff.
-7. Opens or updates a PR (`peter-evans/create-pull-request`) from
-   `chore/automated-skill-regeneration` into `main`.
+1. Checks out `main` (the YAML source is in the same repo).
+2. Installs Node from `apps/skills/.nvmrc`, runs `npm ci`.
+3. Runs `node scripts/build/index.ts --source ../dashboard/config/api_docs
+   --output ./skills` from `apps/skills`.
+4. Checks `git status --porcelain -- apps/skills/skills/`. If nothing changed,
+   the job ends: no PR, no version bump.
+5. Otherwise bumps the patch version (`npm version patch --no-git-tag-version`).
+6. Builds the PR body via `.github/scripts/build-skills-pr-body.sh`, linking the
+   `requiems.xyz/en/apis/<api_id>` page of each changed API.
+7. Opens or updates a PR from `chore/automated-skill-regeneration` into `main`.
+   Set the `SYNC_PR_TOKEN` secret so CI runs on that PR and auto-merge is
+   enabled; PRs created with the default token do not trigger CI.
 
-### publish.yml
+### publish-skills.yml
 
-Trigger: push of a tag matching `v*` — **not** automatic on merge to `main`.
-
-1. Checkout (`persist-credentials: false`), setup Node from `.nvmrc` with the
-   npm registry configured.
-2. Verify the pushed tag's version matches `package.json`'s version (stripping
-   the `v` prefix); fail fast with a clear error if they disagree, instead of
-   finding out via a confusing registry error.
-3. `npm publish --access public`, authenticated via `NODE_AUTH_TOKEN`
-   (`secrets.NPM_TOKEN`).
-
-No GitHub Release object is created — that's a possible future addition, not
-implemented.
+Trigger: push to `main` touching `apps/skills/package.json` (and manual
+dispatch). Checks whether `name@version` already exists on npm, and if not runs
+`npm publish --access public --provenance` using npm Trusted Publishing (OIDC).
+The trusted publisher on npmjs.com must reference this repository and workflow
+file.
 
 ## Known Limitations and Risks
 
-**Sync lag**: Skills are regenerated weekly. If an endpoint is added or changed
-mid-week, the package won't reflect it until the next cycle (or a manual
-`workflow_dispatch` trigger).
+**Sync lag**: Skills are regenerated when a release is published. If an endpoint
+is added or changed between releases, the package won't reflect it until the
+next release (or a manual `workflow_dispatch` run of `release-sync.yml`).
 
 **Format coupling**: The transform assumes the current shape of `api_docs/` YAML
 files. A schema change in `requiems-api` breaks the sync until

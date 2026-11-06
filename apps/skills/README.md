@@ -23,10 +23,11 @@ copying docs or writing boilerplate.
 
 ## Install in Claude Code
 
-Register this repository as a Claude Code plugin marketplace:
+Register the Requiems API repository as a Claude Code plugin marketplace (the
+plugin lives in `apps/skills`):
 
 ```
-/plugin marketplace add bobadilla-tech/requiems-api-skills
+/plugin marketplace add bobadilla-tech/requiems-api
 ```
 
 Then browse and install:

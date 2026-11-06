@@ -110,7 +110,7 @@ OpenCode, and GitHub Copilot's agent-skills support. No proprietary schema, no
 SDK to install.
 
 The transform is one pure function, `buildSkillMarkdown()` in
-`requiems-api-skills/scripts/build/index.ts`: it takes a parsed YAML doc and
+`apps/skills/scripts/build/index.ts`: it takes a parsed YAML doc and
 one of its endpoints, and returns a Markdown string. No file I/O, no CLI
 parsing inside it — that mattered directly when this script migrated off Deno
 onto Node: the markdown-building logic needed zero changes, only the I/O shell

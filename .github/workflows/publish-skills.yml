@@ -1,0 +1,60 @@
+name: Publish Skills
+
+# Publishes @requiems/api-skills to npm when a merged change bumps the version
+# in apps/skills/package.json (normally the PR opened by release-sync.yml).
+# Idempotent: skips when that version is already on npm.
+#
+# npm Trusted Publishing must point at this repository and this workflow file
+# (npmjs.com -> package settings -> Trusted Publisher).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/skills/package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-skills
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/skills
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: apps/skills/.nvmrc
+          registry-url: "https://registry.npmjs.org"
+
+      # Trusted Publishing needs npm >= 11.5.1 to negotiate the OIDC token.
+      - name: Ensure npm supports Trusted Publishing
+        run: npm install -g npm@latest
+
+      - name: Check whether this version is already published
+        id: check
+        run: |
+          NAME="$(node -p "require('./package.json').name")"
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::notice::$NAME@$VERSION is already on npm; nothing to publish."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to npm
+        if: steps.check.outputs.publish == 'true'
+        run: npm publish --access public --provenance

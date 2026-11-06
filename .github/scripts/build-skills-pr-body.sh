@@ -9,13 +9,13 @@ set -euo pipefail
 OUTPUT_FILE="${1:-pr-body.md}"
 
 {
-  echo "Skills regenerated automatically from the latest \`requiems-api\` documentation."
+  echo "Skills regenerated from \`apps/dashboard/config/api_docs\` after a release."
   echo ""
-  echo "Triggered by: ${GITHUB_EVENT_NAME:-unknown}"
+  echo "Triggered by: ${GITHUB_EVENT_NAME:-unknown} ${RELEASE_TAG:-}"
   echo ""
   echo "cc @bobadilla-tech/requiems-api — please review."
 
-  apis="$(git status --porcelain -- skills/ | awk '{print $2}' | cut -d/ -f2 | sed -E 's/-(get|post|put|patch|delete)-.*$//' | sort -u)"
+  apis="$(git status --porcelain -- apps/skills/skills/ | awk '{print $2}' | cut -d/ -f4 | sed -E 's/-(get|post|put|patch|delete)-.*$//' | sort -u)"
   if [ -n "$apis" ]; then
     echo ""
     echo "<details>"

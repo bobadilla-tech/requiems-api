@@ -39,3 +39,7 @@ apps/clients/clients/** -diff
 
 # Tutorials (apps/tutorials) — keep out of language stats
 apps/tutorials/** linguist-vendored
+
+# Generated agent skills (apps/skills)
+apps/skills/skills/** linguist-generated
+apps/skills/skills/** -diff
