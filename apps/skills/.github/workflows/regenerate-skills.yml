@@ -1,0 +1,63 @@
+name: Weekly Skill Regeneration
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout requiems-api-skills
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Checkout requiems-api (source of YAML docs)
+        uses: actions/checkout@v7
+        with:
+          repository: bobadilla-tech/requiems-api
+          path: requiems-api
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate skills
+        run: |
+          node scripts/build/index.ts \
+            --source requiems-api/apps/dashboard/config/api_docs \
+            --output ./skills
+
+      - name: Detect changes in skills/
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain -- skills/)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump patch version
+        if: steps.diff.outputs.changed == 'true'
+        run: npm version patch --no-git-tag-version
+
+      - name: Build PR body
+        run: .github/scripts/build-pr-body.sh pr-body.md
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: regenerate skills from latest api_docs"
+          title: "Automated: Weekly Skill Regeneration"
+          body-path: pr-body.md
+          branch: "chore/automated-skill-regeneration"
+          base: "main"
+          delete-branch: true

@@ -1,0 +1,11 @@
+{
+  "name": "requiems-api-skills",
+  "owner": { "name": "Bobadilla Technologies" },
+  "plugins": [
+    {
+      "name": "requiems-api-skills",
+      "source": "./",
+      "description": "Installable AI skills for Requiems API endpoints."
+    }
+  ]
+}

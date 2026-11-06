@@ -1,0 +1,6 @@
+{
+  "name": "requiems-api-skills",
+  "description": "Installable AI skills for Requiems API endpoints.",
+  "version": "0.1.1",
+  "author": { "name": "Bobadilla Technologies" }
+}
