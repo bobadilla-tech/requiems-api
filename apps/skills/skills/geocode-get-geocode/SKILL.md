@@ -1,10 +1,10 @@
 ---
 name: geocode-get-geocode
-api: Geocoding
+api: "Geocoding"
 method: GET
 path: /v1/places/geocode
 base_url: https://requiems.xyz
-description: Converts a free-text address into latitude and longitude coordinates.
+description: "Converts a free-text address into latitude and longitude coordinates."
 ---
 
 ## Endpoint

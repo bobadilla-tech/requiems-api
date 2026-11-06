@@ -1,10 +1,10 @@
 ---
 name: data-integrity-post-moderate
-api: Data Integrity System
+api: "Data Integrity System"
 method: POST
 path: /v1/systems/content/moderate
 base_url: https://requiems.xyz
-description: Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+description: "Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: email-normalize-post-batch
-api: Email Normalizer
+api: "Email Normalizer"
 method: POST
 path: /v1/text/normalize/batch
 base_url: https://requiems.xyz
-description: Normalizes up to 100 email addresses in one request. Results are in the same order as the input. Each item includes valid (boolean); when false, only original and message are set. Usage is billed per email processed (see gateway usage headers).
+description: "Normalizes up to 100 email addresses in one request. Results are in the same order as the input. Each item includes valid (boolean); when false, only original and message are set. Usage is billed per email processed (see gateway usage headers)."
 ---
 
 ## Endpoint

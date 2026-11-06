@@ -1,10 +1,10 @@
 ---
 name: developer-utilities-get-base64
-api: Developer Utilities
+api: "Developer Utilities"
 method: GET
 path: /v1/technology/qr/base64
 base_url: https://requiems.xyz
-description: Generate a QR code for any string and return a base64-encoded PNG. Configurable size and error correction level.
+description: "Generate a QR code for any string and return a base64-encoded PNG. Configurable size and error correction level."
 ---
 
 ## Endpoint

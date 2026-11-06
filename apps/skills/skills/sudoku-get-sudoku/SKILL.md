@@ -1,10 +1,10 @@
 ---
 name: sudoku-get-sudoku
-api: Sudoku
+api: "Sudoku"
 method: GET
 path: /v1/entertainment/sudoku
 base_url: https://requiems.xyz
-description: Returns a randomly generated Sudoku puzzle and its solution. Difficulty defaults to medium when not specified.
+description: "Returns a randomly generated Sudoku puzzle and its solution. Difficulty defaults to medium when not specified."
 ---
 
 ## Endpoint

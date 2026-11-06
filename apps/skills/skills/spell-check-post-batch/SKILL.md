@@ -1,10 +1,10 @@
 ---
 name: spell-check-post-batch
-api: Spell Check
+api: "Spell Check"
 method: POST
 path: /v1/text/spellcheck/batch
 base_url: https://requiems.xyz
-description: Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+description: "Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array."
 ---
 
 ## Endpoint

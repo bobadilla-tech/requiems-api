@@ -1,10 +1,10 @@
 ---
 name: chuck-norris-get-chuck-norris
-api: Chuck Norris Facts
+api: "Chuck Norris Facts"
 method: GET
 path: /v1/entertainment/chuck-norris
 base_url: https://requiems.xyz
-description: Returns a randomly selected Chuck Norris fact from the built-in database.
+description: "Returns a randomly selected Chuck Norris fact from the built-in database."
 ---
 
 ## Endpoint

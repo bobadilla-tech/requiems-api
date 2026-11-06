@@ -1,10 +1,10 @@
 ---
 name: ip-asn-get-asn
-api: ASN Lookup
+api: "ASN Lookup"
 method: GET
 path: /v1/networking/ip/asn
 base_url: https://requiems.xyz
-description: Look up ASN, organization, ISP, and network details for the requesting client's IP address. Useful when you want information about the user making the request without specifying an IP explicitly.
+description: "Look up ASN, organization, ISP, and network details for the requesting client's IP address. Useful when you want information about the user making the request without specifying an IP explicitly."
 ---
 
 ## Endpoint

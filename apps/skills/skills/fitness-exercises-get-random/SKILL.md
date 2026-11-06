@@ -1,10 +1,10 @@
 ---
 name: fitness-exercises-get-random
-api: Fitness Exercises
+api: "Fitness Exercises"
 method: GET
 path: /v1/health/exercises/random
 base_url: https://requiems.xyz
-description: Returns a single randomly selected exercise. Accepts the same filter parameters as the list endpoint, so you can get a random chest exercise, a random bodyweight exercise, etc.
+description: "Returns a single randomly selected exercise. Accepts the same filter parameters as the list endpoint, so you can get a random chest exercise, a random bodyweight exercise, etc."
 ---
 
 ## Endpoint

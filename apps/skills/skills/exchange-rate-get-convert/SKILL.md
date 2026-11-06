@@ -1,10 +1,10 @@
 ---
 name: exchange-rate-get-convert
-api: Exchange Rate
+api: "Exchange Rate"
 method: GET
 path: /v1/finance/convert
 base_url: https://requiems.xyz
-description: Converts an amount from one currency to another and returns the rate alongside the converted value.
+description: "Converts an amount from one currency to another and returns the rate alongside the converted value."
 ---
 
 ## Endpoint

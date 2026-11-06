@@ -1,10 +1,10 @@
 ---
 name: mx-lookup-post-batch
-api: MX Lookup
+api: "MX Lookup"
 method: POST
 path: /v1/networking/mx/batch
 base_url: https://requiems.xyz
-description: Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+description: "Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321)."
 ---
 
 ## Endpoint

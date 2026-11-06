@@ -1,10 +1,10 @@
 ---
 name: fitness-exercises-get-muscles
-api: Fitness Exercises
+api: "Fitness Exercises"
 method: GET
 path: /v1/health/muscles
 base_url: https://requiems.xyz
-description: Returns a sorted list of all distinct muscle names (combining target and secondary muscles). Use these as valid values for the muscle filter.
+description: "Returns a sorted list of all distinct muscle names (combining target and secondary muscles). Use these as valid values for the muscle filter."
 ---
 
 ## Endpoint

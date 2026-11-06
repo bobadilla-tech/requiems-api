@@ -1,10 +1,10 @@
 ---
 name: geocode-get-reverse-geocode
-api: Geocoding
+api: "Geocoding"
 method: GET
 path: /v1/places/reverse-geocode
 base_url: https://requiems.xyz
-description: Converts geographic coordinates into a human-readable address.
+description: "Converts geographic coordinates into a human-readable address."
 ---
 
 ## Endpoint

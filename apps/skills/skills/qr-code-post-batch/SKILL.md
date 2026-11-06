@@ -1,10 +1,10 @@
 ---
 name: qr-code-post-batch
-api: QR Code Generator
+api: "QR Code Generator"
 method: POST
 path: /v1/technology/qr/base64/batch
 base_url: https://requiems.xyz
-description: Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+description: "Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation."
 ---
 
 ## Endpoint

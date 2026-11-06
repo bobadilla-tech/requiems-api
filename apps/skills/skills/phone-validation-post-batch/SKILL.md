@@ -1,10 +1,10 @@
 ---
 name: phone-validation-post-batch
-api: Phone Validation
+api: "Phone Validation"
 method: POST
 path: /v1/validation/phone/batch
 base_url: https://requiems.xyz
-description: Validates up to 50 phone numbers in a single request. Results are returned in the same order as the input.
+description: "Validates up to 50 phone numbers in a single request. Results are returned in the same order as the input."
 ---
 
 ## Endpoint

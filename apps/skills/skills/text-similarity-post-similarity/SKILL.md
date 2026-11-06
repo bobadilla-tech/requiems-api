@@ -1,10 +1,10 @@
 ---
 name: text-similarity-post-similarity
-api: Text Similarity
+api: "Text Similarity"
 method: POST
 path: /v1/text/similarity
 base_url: https://requiems.xyz
-description: Compares two texts and returns a cosine similarity score.
+description: "Compares two texts and returns a cosine similarity score."
 ---
 
 ## Endpoint

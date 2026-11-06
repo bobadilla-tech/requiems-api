@@ -1,10 +1,10 @@
 ---
 name: fitness-exercises-post-batch
-api: Fitness Exercises
+api: "Fitness Exercises"
 method: POST
 path: /v1/health/exercises/batch
 base_url: https://requiems.xyz
-description: Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+description: "Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: identity-risk-post-protect
-api: Identity & Risk System
+api: "Identity & Risk System"
 method: POST
 path: /v1/systems/signup/protect
 base_url: https://requiems.xyz
-description: Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+description: "Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP."
 ---
 
 ## Endpoint

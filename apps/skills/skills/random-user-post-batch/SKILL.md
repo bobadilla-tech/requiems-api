@@ -1,10 +1,10 @@
 ---
 name: random-user-post-batch
-api: Random User
+api: "Random User"
 method: POST
 path: /v1/technology/random-user/batch
 base_url: https://requiems.xyz
-description: Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+description: "Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request."
 ---
 
 ## Endpoint

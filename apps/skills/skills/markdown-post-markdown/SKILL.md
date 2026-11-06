@@ -1,10 +1,10 @@
 ---
 name: markdown-post-markdown
-api: Markdown to HTML
+api: "Markdown to HTML"
 method: POST
 path: /v1/technology/markdown
 base_url: https://requiems.xyz
-description: Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output.
+description: "Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: swift-code-get-swift
-api: SWIFT Code
+api: "SWIFT Code"
 method: GET
 path: /v1/finance/swift
 base_url: https://requiems.xyz
-description: List SWIFT records with optional filters and pagination.
+description: "List SWIFT records with optional filters and pagination."
 ---
 
 ## Endpoint

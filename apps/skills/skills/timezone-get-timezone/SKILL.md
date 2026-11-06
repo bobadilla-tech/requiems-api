@@ -1,10 +1,10 @@
 ---
 name: timezone-get-timezone
-api: Timezone
+api: "Timezone"
 method: GET
 path: /v1/places/timezone
 base_url: https://requiems.xyz
-description: Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`.
+description: "Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: barcode-get-base64
-api: Barcode Generator
+api: "Barcode Generator"
 method: GET
 path: /v1/technology/barcode/base64
 base_url: https://requiems.xyz
-description: Returns a JSON envelope containing the barcode as a base64-encoded PNG string, along with its type and dimensions.
+description: "Returns a JSON envelope containing the barcode as a base64-encoded PNG string, along with its type and dimensions."
 ---
 
 ## Endpoint

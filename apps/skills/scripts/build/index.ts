@@ -13,21 +13,37 @@ import type { ApiDoc, Endpoint } from "./types.ts";
 // Markdown builder
 // ---------------------------------------------------------------------------
 
-function buildSkillMarkdown(api: ApiDoc, endpoint: Endpoint): string {
+// Claude Code skill names: lowercase letters, digits and hyphens only. Path
+// params like `{bin}` and ids with underscores are normalized.
+function skillSlug(api: ApiDoc, endpoint: Endpoint, segments = 1): string {
+  return `${api.api_id}-${endpoint.method.toLowerCase()}-${
+    endpoint.path.split("/").slice(-segments).join("-")
+  }`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function buildSkillMarkdown(
+  api: ApiDoc,
+  endpoint: Endpoint,
+  slug: string,
+): string {
   const lines: string[] = [];
 
   // Front-matter
   lines.push("---");
-  lines.push(
-    `name: ${api.api_id}-${endpoint.method.toLowerCase()}-${
-      endpoint.path.split("/").pop()
-    }`,
-  );
-  lines.push(`api: ${api.api_name}`);
+  lines.push(`name: ${slug}`);
+  lines.push(`api: ${JSON.stringify(api.api_name)}`);
   lines.push(`method: ${endpoint.method}`);
   lines.push(`path: ${endpoint.path}`);
   lines.push(`base_url: ${api.base_url}`);
-  lines.push(`description: ${endpoint.description.replace(/\n/g, " ").trim()}`);
+  // JSON strings are valid YAML scalars, so colons/quotes in descriptions are safe.
+  lines.push(
+    `description: ${
+      JSON.stringify(endpoint.description.replace(/\s+/g, " ").trim())
+    }`,
+  );
   lines.push("---");
   lines.push("");
 
@@ -132,6 +148,7 @@ async function main() {
 
   await mkdir(outputPath, { recursive: true });
 
+  const seen = new Set<string>();
   let processed = 0;
   let skipped = 0;
 
@@ -162,13 +179,20 @@ async function main() {
     }
 
     for (const endpoint of api.endpoints) {
-      const slug = `${api.api_id}-${endpoint.method.toLowerCase()}-${
-        endpoint.path.split("/").pop()
-      }`;
+      // Different paths can share a last segment (e.g. .../encode/batch and
+      // .../decode/batch); widen every colliding name instead of overwriting.
+      const base = skillSlug(api, endpoint);
+      const collides = api.endpoints.filter((e) => skillSlug(api, e) === base)
+        .length > 1;
+      const slug = collides ? skillSlug(api, endpoint, 2) : base;
+      if (seen.has(slug)) {
+        throw new Error(`Duplicate skill name "${slug}" (${entry.name})`);
+      }
+      seen.add(slug);
       const skillDir = join(outputPath, slug);
       await mkdir(skillDir, { recursive: true });
       const outFile = join(skillDir, "SKILL.md");
-      const content = buildSkillMarkdown(api, endpoint);
+      const content = buildSkillMarkdown(api, endpoint, slug);
       await writeFile(outFile, content, "utf-8");
       console.log(`✓ ${slug}.md`);
       processed++;

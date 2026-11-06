@@ -1,10 +1,10 @@
 ---
 name: global-data-post-resolve
-api: Global Data System
+api: "Global Data System"
 method: POST
 path: /v1/systems/location/resolve
 base_url: https://requiems.xyz
-description: Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+description: "Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday."
 ---
 
 ## Endpoint

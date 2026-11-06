@@ -23,6 +23,10 @@ copying docs or writing boilerplate.
 
 ## Install in Claude Code
 
+In Claude Code you install the **plugin**, which bundles every Requiems API
+skill; individual skills are not installed one by one. (To use just a few, see
+[Install Manually](#install-manually-any-agent).)
+
 Register the Requiems API repository as a Claude Code plugin marketplace (the
 plugin lives in `apps/skills`):
 
@@ -42,8 +46,18 @@ Or install directly:
 /plugin install requiems-api-skills@requiems-api-skills
 ```
 
-Once installed, mention the skill naturally: _"Use the identity skill to protect
-this signup endpoint."_
+### Use a skill
+
+Claude picks a skill automatically when your request matches it, so you can just
+ask: _"Use the identity skill to protect this signup endpoint."_
+
+Plugin skills are also available as namespaced slash commands,
+`/requiems-api-skills:<skill-name>`, where `<skill-name>` is a folder under
+[`skills/`](./skills). For example:
+
+```
+/requiems-api-skills:email-validate-post-batch validate these 500 signup emails
+```
 
 ## Install in OpenCode
 

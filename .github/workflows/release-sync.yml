@@ -71,14 +71,15 @@ jobs:
 
           generate_clients() {
             local ver=$1
+            local gp="--global-property apiTests=false,modelTests=false,apiDocs=false,modelDocs=false"
             local props="npmName=api-client,packageVersion=$ver,npmVersion=$ver,gemVersion=$ver,targetFramework=net8.0"
             # Wipe previous output so files for renamed/removed API tags don't linger
             rm -rf clients/typescript clients/csharp clients/python clients/ruby clients/go
-            npx @openapitools/openapi-generator-cli generate -i "$RUNNER_TEMP/openapi.json" -g typescript-axios -o clients/typescript -p $props
-            npx @openapitools/openapi-generator-cli generate -i "$RUNNER_TEMP/openapi.json" -g csharp -o clients/csharp -p $props,library=httpclient
-            npx @openapitools/openapi-generator-cli generate -i "$RUNNER_TEMP/openapi.json" -g python -o clients/python -p $props
-            npx @openapitools/openapi-generator-cli generate -i "$RUNNER_TEMP/openapi.json" -g ruby -o clients/ruby -p $props
-            npx @openapitools/openapi-generator-cli generate -i "$RUNNER_TEMP/openapi.json" -g go -o clients/go -p $props
+            npx @openapitools/openapi-generator-cli generate $gp -i "$RUNNER_TEMP/openapi.json" -g typescript-axios -o clients/typescript -p $props
+            npx @openapitools/openapi-generator-cli generate $gp -i "$RUNNER_TEMP/openapi.json" -g csharp -o clients/csharp -p $props,library=httpclient
+            npx @openapitools/openapi-generator-cli generate $gp -i "$RUNNER_TEMP/openapi.json" -g python -o clients/python -p $props
+            npx @openapitools/openapi-generator-cli generate $gp -i "$RUNNER_TEMP/openapi.json" -g ruby -o clients/ruby -p $props
+            npx @openapitools/openapi-generator-cli generate $gp -i "$RUNNER_TEMP/openapi.json" -g go -o clients/go -p $props
           }
 
           generate_clients $CURRENT_VERSION
@@ -155,7 +156,10 @@ jobs:
 
       - name: Regenerate skills
         working-directory: apps/skills
-        run: node scripts/build/index.ts --source ../dashboard/config/api_docs --output ./skills
+        run: |
+          rm -rf skills
+          node scripts/build/index.ts --source ../dashboard/config/api_docs --output ./skills
+          node scripts/validate.ts skills
 
       - name: Detect changes
         id: diff
@@ -169,7 +173,10 @@ jobs:
       - name: Bump patch version
         if: steps.diff.outputs.changed == 'true'
         working-directory: apps/skills
-        run: npm version patch --no-git-tag-version
+        run: |
+          npm version patch --no-git-tag-version
+          # keep the Claude Code plugin manifest in lockstep with package.json
+          node -e "const fs=require('fs');const v=require('./package.json').version;const p=JSON.parse(fs.readFileSync('.claude-plugin/plugin.json','utf8'));p.version=v;fs.writeFileSync('.claude-plugin/plugin.json',JSON.stringify(p,null,2)+'\\n')"
 
       - name: Build PR body
         if: steps.diff.outputs.changed == 'true'

@@ -1,10 +1,10 @@
 ---
 name: useragent-get-useragent
-api: User Agent Parser
+api: "User Agent Parser"
 method: GET
 path: /v1/technology/useragent
 base_url: https://requiems.xyz
-description: Parses a user agent string and returns structured information about the browser, OS, device, and bot status.
+description: "Parses a user agent string and returns structured information about the browser, OS, device, and bot status."
 ---
 
 ## Endpoint

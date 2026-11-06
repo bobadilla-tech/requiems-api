@@ -1,10 +1,10 @@
 ---
 name: horoscope-post-batch
-api: Horoscope
+api: "Horoscope"
 method: POST
 path: /v1/entertainment/horoscope/batch
 base_url: https://requiems.xyz
-description: Returns up to 12 daily horoscopes in a single request.
+description: "Returns up to 12 daily horoscopes in a single request."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: facts-get-facts
-api: Random Facts
+api: "Random Facts"
 method: GET
 path: /v1/entertainment/facts
 base_url: https://requiems.xyz
-description: Returns a randomly selected fact, optionally filtered by category.
+description: "Returns a randomly selected fact, optionally filtered by category."
 ---
 
 ## Endpoint

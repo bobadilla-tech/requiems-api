@@ -1,10 +1,10 @@
 ---
 name: quotes-get-random
-api: Random Quotes
+api: "Random Quotes"
 method: GET
 path: /v1/entertainment/quotes/random
 base_url: https://requiems.xyz
-description: Returns a random inspirational quote with author attribution
+description: "Returns a random inspirational quote with author attribution"
 ---
 
 ## Endpoint

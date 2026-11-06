@@ -1,10 +1,10 @@
 ---
 name: identity-risk-post-verify
-api: Identity & Risk System
+api: "Identity & Risk System"
 method: POST
 path: /v1/systems/user/verify
 base_url: https://requiems.xyz
-description: Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+description: "Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts."
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: postal-code-post-batch
-api: Postal Code
+api: "Postal Code"
 method: POST
 path: /v1/places/postal/batch
 base_url: https://requiems.xyz
-description: Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+description: "Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order."
 ---
 
 ## Endpoint

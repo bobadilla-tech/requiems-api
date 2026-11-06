@@ -1,10 +1,10 @@
 ---
 name: holidays-post-batch
-api: Holidays
+api: "Holidays"
 method: POST
 path: /v1/places/holidays/batch
 base_url: https://requiems.xyz
-description: Returns holidays for up to 50 (country, year) pairs in a single request. Each pair is processed independently — if one combination has no data, it returns found:false without failing the entire batch.
+description: "Returns holidays for up to 50 (country, year) pairs in a single request. Each pair is processed independently — if one combination has no data, it returns found:false without failing the entire batch."
 ---
 
 ## Endpoint

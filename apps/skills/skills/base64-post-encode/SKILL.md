@@ -1,10 +1,10 @@
 ---
 name: base64-post-encode
-api: Base64 Encode / Decode
+api: "Base64 Encode / Decode"
 method: POST
 path: /v1/technology/base64/encode
 base_url: https://requiems.xyz
-description: Encode a plain-text string to Base64
+description: "Encode a plain-text string to Base64"
 ---
 
 ## Endpoint

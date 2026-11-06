@@ -1,10 +1,10 @@
 ---
 name: emoji-get-random
-api: Emoji
+api: "Emoji"
 method: GET
 path: /v1/entertainment/emoji/random
 base_url: https://requiems.xyz
-description: Returns a randomly selected emoji with its full metadata.
+description: "Returns a randomly selected emoji with its full metadata."
 ---
 
 ## Endpoint

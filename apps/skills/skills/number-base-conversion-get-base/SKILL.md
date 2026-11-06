@@ -1,10 +1,10 @@
 ---
 name: number-base-conversion-get-base
-api: Number Base Conversion
+api: "Number Base Conversion"
 method: GET
 path: /v1/technology/base
 base_url: https://requiems.xyz
-description: Convert an integer from one number base to another.
+description: "Convert an integer from one number base to another."
 ---
 
 ## Endpoint

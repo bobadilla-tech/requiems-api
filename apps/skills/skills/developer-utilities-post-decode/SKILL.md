@@ -1,10 +1,10 @@
 ---
 name: developer-utilities-post-decode
-api: Developer Utilities
+api: "Developer Utilities"
 method: POST
 path: /v1/technology/base64/decode
 base_url: https://requiems.xyz
-description: Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+description: "Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input."
 ---
 
 ## Endpoint

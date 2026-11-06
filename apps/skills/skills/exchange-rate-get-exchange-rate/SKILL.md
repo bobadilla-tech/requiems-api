@@ -1,10 +1,10 @@
 ---
 name: exchange-rate-get-exchange-rate
-api: Exchange Rate
+api: "Exchange Rate"
 method: GET
 path: /v1/finance/exchange-rate
 base_url: https://requiems.xyz
-description: Returns the current exchange rate between two currencies.
+description: "Returns the current exchange rate between two currencies."
 ---
 
 ## Endpoint

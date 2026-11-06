@@ -1,10 +1,10 @@
 ---
 name: lorem-ipsum-get-lorem
-api: Lorem Ipsum Generator
+api: "Lorem Ipsum Generator"
 method: GET
 path: /v1/text/lorem
 base_url: https://requiems.xyz
-description: Generate Lorem Ipsum placeholder text with customizable length and format
+description: "Generate Lorem Ipsum placeholder text with customizable length and format"
 ---
 
 ## Endpoint

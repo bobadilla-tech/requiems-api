@@ -1,10 +1,10 @@
 ---
 name: random-user-get-random-user
-api: Random User
+api: "Random User"
 method: GET
 path: /v1/technology/random-user
 base_url: https://requiems.xyz
-description: Returns a randomly generated fake user profile.
+description: "Returns a randomly generated fake user profile."
 ---
 
 ## Endpoint

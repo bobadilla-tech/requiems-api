@@ -1,10 +1,10 @@
 ---
 name: color-conversion-get-color
-api: Color Format Conversion
+api: "Color Format Conversion"
 method: GET
 path: /v1/technology/color
 base_url: https://requiems.xyz
-description: Convert a color value from one format to another. The response always includes all four formats.
+description: "Convert a color value from one format to another. The response always includes all four formats."
 ---
 
 ## Endpoint

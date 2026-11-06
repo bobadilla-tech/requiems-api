@@ -1,10 +1,10 @@
 ---
 name: dictionary-post-batch
-api: Dictionary
+api: "Dictionary"
 method: POST
 path: /v1/text/words/batch
 base_url: https://requiems.xyz
-description: Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset.
+description: "Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset."
 ---
 
 ## Endpoint

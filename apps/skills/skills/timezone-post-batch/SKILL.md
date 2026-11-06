@@ -1,10 +1,10 @@
 ---
 name: timezone-post-batch
-api: Timezone
+api: "Timezone"
 method: POST
 path: /v1/places/timezone/batch
 base_url: https://requiems.xyz
-description: Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+description: "Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order."
 ---
 
 ## Endpoint

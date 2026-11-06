@@ -1,10 +1,10 @@
 ---
 name: unit-conversion-post-batch
-api: Unit Conversion
+api: "Unit Conversion"
 method: POST
 path: /v1/technology/convert/batch
 base_url: https://requiems.xyz
-description: convert up to 50 unit conversion operations in a single request.
+description: "convert up to 50 unit conversion operations in a single request."
 ---
 
 ## Endpoint

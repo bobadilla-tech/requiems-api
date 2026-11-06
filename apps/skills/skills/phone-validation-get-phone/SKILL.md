@@ -1,10 +1,10 @@
 ---
 name: phone-validation-get-phone
-api: Phone Validation
+api: "Phone Validation"
 method: GET
 path: /v1/validation/phone
 base_url: https://requiems.xyz
-description: Validates a single phone number and returns its country, type, formatted representation, carrier, and VOIP/virtual risk flags.
+description: "Validates a single phone number and returns its country, type, formatted representation, carrier, and VOIP/virtual risk flags."
 ---
 
 ## Endpoint

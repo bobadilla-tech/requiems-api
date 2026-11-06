@@ -1,10 +1,10 @@
 ---
 name: advice-get-advice
-api: Random Advice
+api: "Random Advice"
 method: GET
 path: /v1/entertainment/advice
 base_url: https://requiems.xyz
-description: Returns a random piece of advice
+description: "Returns a random piece of advice"
 ---
 
 ## Endpoint

@@ -1,10 +1,10 @@
 ---
 name: fitness-exercises-get-body-parts
-api: Fitness Exercises
+api: "Fitness Exercises"
 method: GET
 path: /v1/health/body-parts
 base_url: https://requiems.xyz
-description: Returns a sorted list of all distinct body part values present in the dataset. Use these as valid values for the body_part filter.
+description: "Returns a sorted list of all distinct body part values present in the dataset. Use these as valid values for the body_part filter."
 ---
 
 ## Endpoint

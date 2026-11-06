@@ -1,10 +1,10 @@
 ---
 name: developer-utilities-post-markdown
-api: Developer Utilities
+api: "Developer Utilities"
 method: POST
 path: /v1/technology/markdown
 base_url: https://requiems.xyz
-description: Convert a Markdown string to HTML. Useful for rendering user-submitted content, documentation previews, or README files.
+description: "Convert a Markdown string to HTML. Useful for rendering user-submitted content, documentation previews, or README files."
 ---
 
 ## Endpoint

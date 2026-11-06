@@ -1,10 +1,10 @@
 ---
 name: useragent-post-batch
-api: User Agent Parser
+api: "User Agent Parser"
 method: POST
 path: /v1/technology/useragent/batch
 base_url: https://requiems.xyz
-description: Parses up to 50 user agents in a single request.
+description: "Parses up to 50 user agents in a single request."
 ---
 
 ## Endpoint

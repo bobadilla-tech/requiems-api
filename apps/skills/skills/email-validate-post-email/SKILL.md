@@ -1,10 +1,10 @@
 ---
 name: email-validate-post-email
-api: Email Validator
+api: "Email Validator"
 method: POST
 path: /v1/validation/email
 base_url: https://requiems.xyz
-description: Validates a single email address and returns a full breakdown of syntax validity, MX record status, disposable domain check, normalized form, and any typo suggestion.
+description: "Validates a single email address and returns a full breakdown of syntax validity, MX record status, disposable domain check, normalized form, and any typo suggestion."
 ---
 
 ## Endpoint

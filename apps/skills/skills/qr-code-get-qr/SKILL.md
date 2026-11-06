@@ -1,10 +1,10 @@
 ---
 name: qr-code-get-qr
-api: QR Code Generator
+api: "QR Code Generator"
 method: GET
 path: /v1/technology/qr
 base_url: https://requiems.xyz
-description: Returns a raw PNG image of the QR code. Ideal for direct embedding or file download.
+description: "Returns a raw PNG image of the QR code. Ideal for direct embedding or file download."
 ---
 
 ## Endpoint

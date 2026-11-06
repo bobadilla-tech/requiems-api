@@ -1,10 +1,10 @@
 ---
 name: markdown-post-batch
-api: Markdown to HTML
+api: "Markdown to HTML"
 method: POST
 path: /v1/technology/markdown/batch
 base_url: https://requiems.xyz
-description: Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
+description: "Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe."
 ---
 
 ## Endpoint
