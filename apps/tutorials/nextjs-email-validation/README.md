@@ -31,7 +31,8 @@ sign-up and sign-in, blocking invalid emails even if someone bypasses the UI.
 ## Setup
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/bobadilla-tech/requiems-api
+cd requiems-api/apps/tutorials
 cd nextjs-email-validation
 pnpm install
 ```

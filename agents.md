@@ -6,6 +6,8 @@ Requiems API is a monorepo containing:
 - `apps/dashboard`: Rails users, API keys, subscriptions, plans, billing,
   admin, and jobs.
 - `apps/mcp`: Bun MCP server calling the Go API.
+- `apps/tutorials`: runnable example projects using the API (pnpm/uv, see
+  `apps/tutorials/contributing.md`).
 - `infra`: Cloudflare/DNS/WAF/TLS/AOP and Kamal/Compose deployment.
 
 Current production flow:

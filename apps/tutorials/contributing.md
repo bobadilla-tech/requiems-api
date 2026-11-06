@@ -1,6 +1,6 @@
 # Contributing — Adding New Examples
 
-Thanks for contributing to requiems-api-tutorials. This guide covers everything
+Thanks for contributing to the Requiems API tutorials (`apps/tutorials` in the requiems-api monorepo). This guide covers everything
 you need to add a new example project.
 
 ---
@@ -31,7 +31,7 @@ rails-weather-dashboard
 go-barcode-generator
 ```
 
-Place the directory at the **repo root** (not nested).
+Place the directory directly inside `apps/tutorials/` (not nested deeper).
 
 ---
 
@@ -50,7 +50,7 @@ Every project must include:
 ## Environment & Secrets
 
 - **Never commit API keys.**
-- The root `.env` holds `REQUIEMS_API` and is the single source of truth for
+- The `apps/tutorials/.env` file holds `REQUIEMS_API` and is the single source of truth for
   local development.
 - Projects should either read `../.env` (relative path) or document that users
   copy it:
@@ -329,7 +329,7 @@ pnpm dev # or: uv run python main.py \```
 - [ ] `.gitignore` excludes `.env`, build artifacts, and dependency directories
 - [ ] Project `README.md` includes example output
 - [ ] Code is linted (`ruff check .` / biome / etc. — no errors)
-- [ ] Root `readme.md` projects table updated with a new row
+- [ ] `apps/tutorials/readme.md` projects table updated with a new row
 - [ ] Directory name follows `{framework}-{api-feature}` convention
 
 ---
@@ -339,7 +339,7 @@ pnpm dev # or: uv run python main.py \```
 API docs are available two ways:
 
 - **Online**: https://requiems.xyz/en/apis
-- **Local**: `../requiems-api/docs/apis/{category}/{endpoint}.md`
+- **Local**: `../../docs/apis/{category}/{endpoint}.md`
 
 Categories: `ai-computer-vision`, `animals`, `email`, `entertainment`,
 `finance`, `health-wellness`, `internet-technology`, `miscellaneous`, `places`,

@@ -29,6 +29,7 @@ jobs:
       api: ${{ steps.filter.outputs.api }}
       dashboard: ${{ steps.filter.outputs.dashboard }}
       mcp: ${{ steps.filter.outputs.mcp }}
+      tutorials: ${{ steps.filter.outputs.tutorials }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -47,6 +48,9 @@ jobs:
               - '.github/workflows/ci.yml'
             mcp:
               - 'apps/mcp/**'
+              - '.github/workflows/ci.yml'
+            tutorials:
+              - 'apps/tutorials/**'
               - '.github/workflows/ci.yml'
 
   go-test:
@@ -342,6 +346,39 @@ jobs:
       - name: Run tests
         run: bun test
 
+  tutorials-build:
+    name: Tutorials Build
+    runs-on: ubuntu-24.04
+    needs: detect-changes
+    if: needs.detect-changes.outputs.tutorials == 'true'
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/tutorials/nextjs-email-validation
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+          package_json_file: apps/tutorials/nextjs-email-validation/package.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: apps/tutorials/nextjs-email-validation/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+        env:
+          REQUIEMS_API: ci-placeholder
+          BETTER_AUTH_SECRET: ci-placeholder-secret-0123456789abcdef0123
+
   ci-success:
     name: CI Success
     runs-on: ubuntu-24.04
@@ -351,6 +388,7 @@ jobs:
       - rails-test
       - rails-checks
       - mcp-test
+      - tutorials-build
     if: always()
 
     steps:
@@ -373,6 +411,11 @@ jobs:
 
           if [[ "${{ needs.mcp-test.result }}" == "failure" ]]; then
             echo "❌ MCP tests failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.tutorials-build.result }}" == "failure" ]]; then
+            echo "❌ Tutorials build failed"
             exit 1
           fi
 

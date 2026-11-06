@@ -18,3 +18,12 @@ updates:
     directory: "/apps/dashboard"
     schedule:
       interval: "weekly"
+
+  # ── Tutorials (apps/tutorials) ────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/apps/tutorials/nextjs-email-validation"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]

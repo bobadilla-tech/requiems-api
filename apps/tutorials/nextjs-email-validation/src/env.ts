@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    // Requiems API key — from the requiems-api-tutorials root .env
+    // Requiems API key — from apps/tutorials/.env
     REQUIEMS_API: z.string().min(1),
     // Better Auth secret — generate with: openssl rand -base64 32
     BETTER_AUTH_SECRET: z.string().min(32),

@@ -5,7 +5,7 @@ This repo contains self-contained example projects demonstrating how to use the
 uses real API calls, and is intended to be runnable from scratch in under five
 minutes.
 
-The full API source code is at `../requiems-api/` (sibling directory).
+The full API source code lives in the same repo: `../api/` (Go), with endpoint docs in `../../docs/`. This directory is `apps/tutorials` of the `requiems-api` monorepo.
 
 ---
 
@@ -14,8 +14,8 @@ The full API source code is at `../requiems-api/` (sibling directory).
 | Task                            | Read first                                           |
 | ------------------------------- | ---------------------------------------------------- |
 | Create any new example          | [contributing.md](./contributing.md)                 |
-| Understand the API architecture | `../requiems-api/claude.md`                          |
-| Look up a specific endpoint     | `../requiems-api/docs/apis/{category}/{endpoint}.md` |
+| Understand the API architecture | `../../claude.md`                          |
+| Look up a specific endpoint     | `../../docs/apis/{category}/{endpoint}.md` |
 
 ---
 
@@ -26,9 +26,9 @@ The full API source code is at `../requiems-api/` (sibling directory).
 | Base URL         | `https://api.requiems.xyz`               |
 | Auth header      | `requiems-api-key: YOUR_API_KEY`         |
 | Content-Type     | `application/json`                       |
-| API key location | `.env` at repo root → `REQUIEMS_API=...` |
+| API key location | `.env` in `apps/tutorials/` → `REQUIEMS_API=...` |
 | Online docs      | https://requiems.xyz/en/apis             |
-| Local docs       | `../requiems-api/docs/apis/`             |
+| Local docs       | `../../docs/apis/`             |
 
 **Minimal request example:**
 
@@ -54,7 +54,7 @@ All payload is inside `data`. Always check `data`, not the root object.
 
 ## Repo Conventions
 
-- Every project is a **self-contained directory** at the repo root.
+- Every project is a **self-contained directory** directly inside `apps/tutorials/`.
 - Directory naming: `{framework}-{api-feature}` — lowercase, hyphenated.
   - Examples: `nextjs-email-validation`, `fastapi-qr-code`,
     `express-spell-check`
@@ -93,10 +93,10 @@ All payload is inside `data`. Always check `data`, not the root object.
 ## How to Build a New Example
 
 1. **Read the endpoint doc** at
-   `../requiems-api/docs/apis/{category}/{endpoint}.md` — understand the request
+   `../../docs/apis/{category}/{endpoint}.md` — understand the request
    shape, response fields, and error cases.
 
-2. **Create the project directory**: `mkdir {framework}-{feature}` at the repo
+2. **Create the project directory**: `mkdir {framework}-{feature}` in `apps/tutorials/`
    root.
 
 3. **Init the project** with the correct tooling (pnpm / uv — see above).
@@ -109,7 +109,7 @@ All payload is inside `data`. Always check `data`, not the root object.
 
 6. **Create `.env.example`** with `REQUIEMS_API=your_api_key_here`.
 
-7. **Update the root `readme.md`** — add a row to the Projects table.
+7. **Update `apps/tutorials/readme.md`** — add a row to the Projects table.
 
 ---
 
@@ -117,18 +117,18 @@ All payload is inside `data`. Always check `data`, not the root object.
 
 | Category              | Local docs path                                  | Endpoint prefix       |
 | --------------------- | ------------------------------------------------ | --------------------- |
-| AI & Computer Vision  | `../requiems-api/docs/apis/ai-computer-vision/`  | `/v1/ai/`             |
-| Animals               | `../requiems-api/docs/apis/animals/`             | `/v1/animals/`        |
-| Email                 | `../requiems-api/docs/apis/email/`               | `/v1/email/`          |
-| Entertainment         | `../requiems-api/docs/apis/entertainment/`       | `/v1/entertainment/`  |
-| Finance               | `../requiems-api/docs/apis/finance/`             | `/v1/finance/`        |
-| Health & Wellness     | `../requiems-api/docs/apis/health-wellness/`     | `/v1/health/`         |
-| Internet & Technology | `../requiems-api/docs/apis/internet-technology/` | `/v1/tech/`           |
-| Miscellaneous         | `../requiems-api/docs/apis/miscellaneous/`       | `/v1/misc/`           |
-| Places                | `../requiems-api/docs/apis/places/`              | `/v1/places/`         |
-| Text                  | `../requiems-api/docs/apis/text/`                | `/v1/text/`           |
-| Transportation        | `../requiems-api/docs/apis/transportation/`      | `/v1/transportation/` |
-| Weather               | `../requiems-api/docs/apis/weather/`             | `/v1/weather/`        |
+| AI & Computer Vision  | `../../docs/apis/ai-computer-vision/`  | `/v1/ai/`             |
+| Animals               | `../../docs/apis/animals/`             | `/v1/animals/`        |
+| Email                 | `../../docs/apis/email/`               | `/v1/email/`          |
+| Entertainment         | `../../docs/apis/entertainment/`       | `/v1/entertainment/`  |
+| Finance               | `../../docs/apis/finance/`             | `/v1/finance/`        |
+| Health & Wellness     | `../../docs/apis/health-wellness/`     | `/v1/health/`         |
+| Internet & Technology | `../../docs/apis/internet-technology/` | `/v1/tech/`           |
+| Miscellaneous         | `../../docs/apis/miscellaneous/`       | `/v1/misc/`           |
+| Places                | `../../docs/apis/places/`              | `/v1/places/`         |
+| Text                  | `../../docs/apis/text/`                | `/v1/text/`           |
+| Transportation        | `../../docs/apis/transportation/`      | `/v1/transportation/` |
+| Weather               | `../../docs/apis/weather/`             | `/v1/weather/`        |
 
 ---
 

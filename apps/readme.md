@@ -5,6 +5,8 @@
 - **dashboard** — Rails UI, users, API keys, subscriptions, plans, billing,
   admin, and jobs.
 - **mcp** — Bun MCP server that calls the Go API.
+- **tutorials** — Self-contained example projects and tutorials built on the
+  API. Contribute new ones via `apps/tutorials/contributing.md`.
 - **api data/tools** — Go product data and generated MCP/OpenAPI artifacts.
 
 The former Cloudflare Worker applications, KV namespace, and D1 usage ledger
