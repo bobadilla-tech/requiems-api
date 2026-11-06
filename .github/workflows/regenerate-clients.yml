@@ -47,6 +47,8 @@ jobs:
           
           generate_clients() {
             local ver=$1
+            # Wipe previous output so files for renamed/removed API tags don't linger
+            rm -rf clients/typescript clients/csharp clients/python clients/ruby clients/go
             local props="npmName=api-client,packageVersion=$ver,npmVersion=$ver,gemVersion=$ver,targetFramework=net8.0"
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g typescript-axios -o clients/typescript -p $props
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g csharp -o clients/csharp -p $props,library=httpclient
