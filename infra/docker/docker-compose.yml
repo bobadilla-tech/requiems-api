@@ -93,8 +93,6 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.Dockerfile
-      additional_contexts:
-        scripts: ../../scripts
     env_file: .env
     environment:
       - RAILS_ENV=production
@@ -114,8 +112,6 @@ services:
     build:
       context: ../../apps/dashboard
       dockerfile: ../../infra/docker/dashboard.Dockerfile
-      additional_contexts:
-        scripts: ../../scripts
     env_file: .env
     environment:
       - RAILS_ENV=production

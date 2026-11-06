@@ -11,7 +11,6 @@ on:
       - "infra/docker/api.Dockerfile"
       - "infra/docker/dashboard.Dockerfile"
       - "infra/docker/mcp.Dockerfile"
-      - "scripts/**"
       - ".github/workflows/cd.yml"
       - ".github/actions/kamal-deploy/**"
   workflow_dispatch:
@@ -64,7 +63,6 @@ jobs:
               - 'apps/dashboard/**'
               - 'infra/kamal/**'
               - 'infra/docker/dashboard.Dockerfile'
-              - 'scripts/**'
               - '.github/workflows/cd.yml'
             mcp:
               - 'apps/mcp/**'
