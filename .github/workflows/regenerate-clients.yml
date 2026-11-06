@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
 
       - name: 🌐 Descargar la última especificación OpenAPI
-        run: curl -sL https://api.requiems.xyz/openapi.json -o openapi.json
+        run: curl -fsSL https://requiems.xyz/openapi.json -o openapi.json
 
       - name: 🛠️ Generar clientes y aplicar Version Bump
         id: process_clients
@@ -31,9 +31,9 @@ jobs:
           
           generate_clients() {
             local ver=$1
-            local props="npmName=api-client,packageVersion=$ver,npmVersion=$ver,gemVersion=$ver,targetFramework=net8.0,library=httpclient"
+            local props="npmName=api-client,packageVersion=$ver,npmVersion=$ver,gemVersion=$ver,targetFramework=net8.0"
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g typescript-axios -o clients/typescript -p $props
-            npx @openapitools/openapi-generator-cli generate -i openapi.json -g csharp -o clients/csharp -p $props
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g csharp -o clients/csharp -p $props,library=httpclient
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g python -o clients/python -p $props
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g ruby -o clients/ruby -p $props
             npx @openapitools/openapi-generator-cli generate -i openapi.json -g go -o clients/go -p $props
