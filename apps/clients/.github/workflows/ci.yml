@@ -1,0 +1,73 @@
+name: CI - Smoke Tests
+
+# Build/typecheck only: example apps are not run because they would hit the live API (needs an API key).
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    # El CI solo correrá si se modifican los clientes o las apps de prueba
+    paths:
+      - 'clients/**'
+      - 'example-apps/**'
+      - '.github/workflows/ci.yml'
+
+jobs:
+  test-clients:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js (TypeScript)
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: ⚙️ Setup .NET (C#)
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: ⚙️ Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+
+      - name: ⚙️ Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: ⚙️ Setup Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "1.22.x"
+
+      - name: 🧪 Test TypeScript Client
+        run: |
+          cd clients/typescript && npm install && npm run build
+          cd ../../example-apps/typescript && npm install
+          npx tsc --noEmit
+
+      - name: 🧪 Test C# Client
+        run: |
+          cd example-apps/csharp && dotnet build
+
+      - name: 🧪 Test Python Client
+        run: |
+          cd example-apps/python
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install urllib3 pydantic python-dateutil aiohttp
+          python3 -c "import sys; sys.path.insert(0, '../../clients/python'); import openapi_client; openapi_client.AdviceApi; print('Python client imports OK')"
+
+      - name: 🧪 Test Ruby Client
+        run: |
+          cd example-apps/ruby
+          gem install typhoeus
+          ruby -I ../../clients/ruby/lib -e "require 'openapi_client'; OpenapiClient::AdviceApi; puts 'Ruby client loads OK'"
+
+      - name: 🧪 Test Go Client
+        run: |
+          cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
+          cd example-apps/go && go mod tidy && go build -o /dev/null .
