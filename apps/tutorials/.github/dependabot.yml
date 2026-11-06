@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /nextjs-email-validation
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ":arrow_up:"
+    ignore:
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ":arrow_up:"
