@@ -3,8 +3,8 @@
  * OG Image Generator — 1200×630 PNG for requiems.xyz
  *
  * Usage:
- *   npm install @napi-rs/canvas   # once
- *   node scripts/gen-og-image.mjs
+ *   npm --prefix tools ci        # once, from apps/dashboard
+ *   node tools/gen-og-image.mjs
  *
  * Output: apps/dashboard/public/og-image.png
  */
@@ -15,12 +15,13 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+// Dashboard root (this file lives in apps/dashboard/tools).
 const ROOT = resolve(__dirname, "..");
 
 const W = 1200;
 const H = 630;
-const LOGO = resolve(ROOT, "apps/dashboard/app/assets/images/logo.png");
-const OUT = resolve(ROOT, "apps/dashboard/public/og-image.png");
+const LOGO = resolve(ROOT, "app/assets/images/logo.png");
+const OUT = resolve(ROOT, "public/og-image.png");
 
 const canvas = createCanvas(W, H);
 const ctx = canvas.getContext("2d");

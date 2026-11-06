@@ -4,7 +4,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = resolve(__dirname, "../apps/dashboard/public/documents");
+const OUT_DIR = resolve(__dirname, "../public/documents");
 
 mkdirSync(OUT_DIR, { recursive: true });
 
