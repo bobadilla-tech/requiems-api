@@ -13,4 +13,4 @@
 - [Maintenance tasks](maintenance-tasks.md)
 
 The current runtime is direct Go behind Cloudflare and Caddy. Historical audit
-and migration plans are retained under `docs/audits/` and `docs/plans/`.
+and migration plans are retained under `.artifacts/`.

@@ -11,7 +11,7 @@ module ApiDocs
   #   ApiDocs::SnippetGenerator.new(endpoint, base_url).call
   #   # => { "curl" => "...", "python" => "...", "javascript" => "...", "ruby" => "..." }
   #
-  # Design decisions (see docs/plans/2026-08-03-api-docs-codegen-spec.md):
+  # Design decisions (see .artifacts/2026/08/20260803--api-docs-codegen-spec/plan.md):
   #   - Prints response.json()["data"] as a whole object rather than cherry-picking
   #     a specific field. Hand-written examples cherry-pick, but replicating that
   #     heuristically requires per-endpoint knowledge the generator shouldn't need.

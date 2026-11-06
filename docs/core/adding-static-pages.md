@@ -100,7 +100,7 @@ bundle exec rake sitemap:refresh
 This rewrites all six `public/sitemap_*.xml` files (locales × every page in
 every group), so expect a large diff even for a one-line `sitemap.rb` change —
 that's expected, not a bug. See
-[Sitemap & Crawler Fetchability Hardening](../plans/2026-04-15-sitemap-crawler-fetchability-hardening.md)
+[Sitemap & Crawler Fetchability Hardening](../../.artifacts/2026/04/20260415--sitemap-crawler-fetchability-hardening/plan.md)
 for why the output is a static pre-generated file rather than a dynamic
 controller.
 

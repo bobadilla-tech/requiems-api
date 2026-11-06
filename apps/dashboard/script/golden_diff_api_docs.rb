@@ -37,7 +37,7 @@
 #
 # Output:
 #   Prints a summary to stdout and writes a full report to
-#   docs/plans/2026-08-21-golden-diff-report.md
+#   .artifacts/2026/08/20260821--golden-diff-report/plan.md
 
 require "yaml"
 require "json"
@@ -48,7 +48,7 @@ $LOAD_PATH.unshift(File.expand_path("../app/services", __dir__))
 require "api_docs/snippet_generator"
 
 DOCS_DIR    = File.expand_path("../config/api_docs", __dir__)
-REPORT_PATH = File.expand_path("../../../docs/plans/2026-08-21-golden-diff-report.md", __dir__)
+REPORT_PATH = File.expand_path("../../../.artifacts/2026/08/20260821--golden-diff-report/plan.md", __dir__)
 VERBOSE     = ARGV.include?("--verbose")
 
 Result = Struct.new(:file, :endpoint_name, :method, :path, :bucket, :reason, :generated, :handwritten, keyword_init: true)
@@ -368,7 +368,7 @@ md << "already in the manual-override bucket."
 
 File.write(REPORT_PATH, md.join("\n") + "\n")
 puts ""
-puts "Full report written to: docs/plans/2026-08-21-golden-diff-report.md"
+puts "Full report written to: .artifacts/2026/08/20260821--golden-diff-report/plan.md"
 end
 
 generate_report if $PROGRAM_NAME == __FILE__

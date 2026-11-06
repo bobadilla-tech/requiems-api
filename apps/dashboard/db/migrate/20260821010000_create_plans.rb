@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # New source of truth for plan limits that Go reads at request time (rate
-# limiter + quota middleware, see docs/plans/2026-08-21-go-auth-foundation-phase-2.md).
+# limiter + quota middleware, see .artifacts/2026/08/20260821--go-auth-foundation-phase-2/plan.md).
     # Deliberately NOT wired up to PlanConfig::PLANS in
 # this migration/phase — those two copies keep their existing hardcoded
 # values unchanged, so there are three manually-synced copies of plan limits

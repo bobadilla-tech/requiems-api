@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Confirmed zero references (re-grepped immediately before writing this
-# migration, per docs/plans/2026-08-22-go-auth-foundation-phase-5.md item 5):
+# migration, per .artifacts/2026/08/20260822--go-auth-foundation-phase-5/plan.md item 5):
 # - subscriptions.stripe_customer_id / stripe_subscription_id / credit_limit —
 #   dead Stripe-era columns; billing is LemonSqueezy-only.
 # - solid_cache_entries — Rails' cache store is always overridden to
