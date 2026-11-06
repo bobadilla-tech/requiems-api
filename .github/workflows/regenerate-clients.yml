@@ -13,12 +13,28 @@ jobs:
         working-directory: apps/clients
     steps:
       - name: 📥 Checkout del repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '20'
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: '1.22.x'
 
       - name: 🌐 Descargar la última especificación OpenAPI
         run: curl -fsSL https://requiems.xyz/openapi.json -o openapi.json
