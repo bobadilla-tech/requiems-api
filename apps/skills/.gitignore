@@ -1,0 +1,4 @@
+node_modules/
+*.tgz
+README.es.md
+requiems-api/

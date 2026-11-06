@@ -53,3 +53,9 @@ updates:
     directory: "/apps/example-apps/typescript"
     schedule:
       interval: "weekly"
+
+  # ── Agent skills (apps/skills) ────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/apps/skills"
+    schedule:
+      interval: "weekly"

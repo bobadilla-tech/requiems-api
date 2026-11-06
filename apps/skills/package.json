@@ -1,0 +1,40 @@
+{
+  "name": "@requiems/api-skills",
+  "version": "1.0.5",
+  "description": "Installable skill packages for Requiems API, enabling AI agents to interact with its endpoints natively.",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "skills/"
+  ],
+  "scripts": {
+    "regenerate": "node scripts/build/index.ts",
+    "validate": "node scripts/validate.ts skills"
+  },
+  "devDependencies": {
+    "js-yaml": "^5.5.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "requiems",
+    "api",
+    "skills",
+    "ai",
+    "claude"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobadilla-tech/requiems-api.git",
+    "directory": "apps/skills"
+  },
+  "homepage": "https://requiems.xyz/en/skills",
+  "dependencies": {
+    "@types/node": "^26.1.1"
+  }
+}

@@ -31,6 +31,7 @@ jobs:
       mcp: ${{ steps.filter.outputs.mcp }}
       tutorials: ${{ steps.filter.outputs.tutorials }}
       clients: ${{ steps.filter.outputs.clients }}
+      skills: ${{ steps.filter.outputs.skills }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -55,6 +56,9 @@ jobs:
               - '.github/workflows/ci.yml'
             clients:
               - 'apps/clients/**'
+              - '.github/workflows/ci.yml'
+            skills:
+              - 'apps/skills/**'
               - '.github/workflows/ci.yml'
 
   go-test:
@@ -448,6 +452,43 @@ jobs:
           cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
           cd example-apps/go && go mod tidy && go build -o /dev/null .
 
+  skills-check:
+    name: Skills Check
+    runs-on: ubuntu-24.04
+    needs: detect-changes
+    if: needs.detect-changes.outputs.skills == 'true'
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/skills
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: apps/skills/.nvmrc
+          cache: npm
+          cache-dependency-path: apps/skills/package-lock.json
+
+      - run: npm ci
+
+      - run: npm pack --dry-run
+
+      # Every committed SKILL.md must have loadable frontmatter, and the plugin
+      # manifest version must match package.json.
+      - name: Validate committed skills
+        run: node scripts/validate.ts skills
+
+      # The generator must still run against the current api_docs YAML and
+      # produce valid skills.
+      - name: Generator smoke test
+        run: |
+          node scripts/build/index.ts --source ../dashboard/config/api_docs --output "$RUNNER_TEMP/skills-out"
+          node scripts/validate.ts "$RUNNER_TEMP/skills-out"
+
   ci-success:
     name: CI Success
     runs-on: ubuntu-24.04
@@ -459,6 +500,7 @@ jobs:
       - mcp-test
       - tutorials-build
       - clients-smoke
+      - skills-check
     if: always()
 
     steps:
@@ -491,6 +533,11 @@ jobs:
 
           if [[ "${{ needs.clients-smoke.result }}" == "failure" ]]; then
             echo "❌ Clients smoke tests failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.skills-check.result }}" == "failure" ]]; then
+            echo "❌ Skills check failed"
             exit 1
           fi
 

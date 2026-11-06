@@ -8,6 +8,9 @@ Requiems API is a monorepo containing:
 - `apps/mcp`: Bun MCP server calling the Go API.
 - `apps/clients`: generated SDKs (TS, C#, Python, Ruby, Go) from the OpenAPI
   spec, regenerated weekly by `.github/workflows/regenerate-clients.yml`.
+- `apps/skills`: agent skills generated from `apps/dashboard/config/api_docs`,
+  published to npm as `@requiems/api-skills` and as the Claude Code plugin
+  marketplace (`.claude-plugin/`).
 - `apps/tutorials`: runnable example projects using the API (pnpm/uv, see
   `apps/tutorials/contributing.md`).
 - `infra`: Cloudflare/DNS/WAF/TLS/AOP and Kamal/Compose deployment.

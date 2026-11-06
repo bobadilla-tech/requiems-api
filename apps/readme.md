@@ -7,6 +7,8 @@
 - **mcp** — Bun MCP server that calls the Go API.
 - **clients** — OpenAPI-generated SDKs (TypeScript, C#, Python, Ruby, Go) and
   example apps, regenerated weekly.
+- **skills** — AI agent skills (SKILL.md per endpoint) generated from the API
+  docs YAML; npm package `@requiems/api-skills` and Claude Code plugin.
 - **tutorials** — Self-contained example projects and tutorials built on the
   API. Contribute new ones via `apps/tutorials/contributing.md`.
 - **api data/tools** — Go product data and generated MCP/OpenAPI artifacts.

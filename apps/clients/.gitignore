@@ -29,3 +29,22 @@ repomix-output.xml
 # OS
 .DS_Store
 Thumbs.db
+
+# Generator output we do not ship (regenerated on every release; keeping it out
+# of git avoids thousands of generated docs/tests in the repo)
+clients/*/docs/
+clients/python/test/
+clients/ruby/spec/
+clients/csharp/src/*.Test/
+clients/*/git_push.sh
+clients/*/.travis.yml
+clients/*/.gitlab-ci.yml
+clients/*/appveyor.yml
+clients/csharp/appveyor.yml
+clients/*/.github/
+clients/*/tox.ini
+clients/ruby/.rspec
+
+# Smoke-test build output
+example-apps/*/obj/
+example-apps/*/bin/

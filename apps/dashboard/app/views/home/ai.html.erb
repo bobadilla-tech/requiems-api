@@ -17,7 +17,7 @@
   }
 JSON
 %>
-<% claude_code_marketplace = "/plugin marketplace add bobadilla-tech/requiems-api-skills" %>
+<% claude_code_marketplace = "/plugin marketplace add bobadilla-tech/requiems-api" %>
 <% claude_code_install = "/plugin install requiems-api-skills@requiems-api-skills" %>
 <% opencode_install = <<~SH.strip
   npm install @requiems/api-skills
@@ -164,7 +164,7 @@ end %>
 
     <p class="text-center">
       <%= link_to t("home.ai.skills.repo_link_text"),
-                  "https://github.com/bobadilla-tech/requiems-api-skills",
+                  "https://github.com/bobadilla-tech/requiems-api/tree/main/apps/skills",
                   target: "_blank",
                   rel: "noopener noreferrer",
                   class: "text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium" %>
