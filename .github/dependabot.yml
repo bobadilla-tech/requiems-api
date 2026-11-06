@@ -28,23 +28,9 @@ updates:
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
 
-  # ── SDK clients & example apps (apps/clients) ─────────────────────────────
-  - package-ecosystem: "gomod"
-    directory: "/apps/clients/clients/go"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "pip"
-    directory: "/apps/clients/clients/python"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "bundler"
-    directory: "/apps/clients/clients/ruby"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/apps/clients/clients/typescript"
-    schedule:
-      interval: "weekly"
+  # ── SDK example apps (apps/clients/example-apps) ──────────────────────────
+  # The generated SDKs in apps/clients/clients/* are rewritten by release-sync,
+  # so Dependabot bumps to their manifests would be overwritten; not tracked.
   - package-ecosystem: "gomod"
     directory: "/apps/clients/example-apps/go"
     schedule:
@@ -53,6 +39,9 @@ updates:
     directory: "/apps/clients/example-apps/typescript"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # ── Agent skills (apps/skills) ────────────────────────────────────────────
   - package-ecosystem: "npm"
