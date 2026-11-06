@@ -4,8 +4,9 @@ name: Publish Skills
 # in apps/skills/package.json (normally the PR opened by release-sync.yml).
 # Idempotent: skips when that version is already on npm.
 #
-# npm Trusted Publishing must point at this repository and this workflow file
-# (npmjs.com -> package settings -> Trusted Publisher).
+# Disabled until the setup in .artifacts/2026/11/20261106--release-driven-sync-setup/
+# is done: npm Trusted Publishing must point at this repository and this
+# workflow file, then set the repository variable NPM_PUBLISH_ENABLED=true.
 
 on:
   push:
@@ -25,6 +26,7 @@ concurrency:
 jobs:
   publish:
     name: Publish to npm
+    if: vars.NPM_PUBLISH_ENABLED == 'true'
     runs-on: ubuntu-24.04
     defaults:
       run:

@@ -30,27 +30,27 @@ updates:
 
   # ── SDK clients & example apps (apps/clients) ─────────────────────────────
   - package-ecosystem: "gomod"
-    directory: "/apps/clients/go"
+    directory: "/apps/clients/clients/go"
     schedule:
       interval: "weekly"
   - package-ecosystem: "pip"
-    directory: "/apps/clients/python"
+    directory: "/apps/clients/clients/python"
     schedule:
       interval: "weekly"
   - package-ecosystem: "bundler"
-    directory: "/apps/clients/ruby"
+    directory: "/apps/clients/clients/ruby"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/apps/clients/typescript"
+    directory: "/apps/clients/clients/typescript"
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod"
-    directory: "/apps/example-apps/go"
+    directory: "/apps/clients/example-apps/go"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/apps/example-apps/typescript"
+    directory: "/apps/clients/example-apps/typescript"
     schedule:
       interval: "weekly"
 
