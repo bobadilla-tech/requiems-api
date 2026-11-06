@@ -5,9 +5,15 @@ on:
     - cron: '0 0 * * 1'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   regenerate:
     runs-on: ubuntu-24.04
+    env:
+      HAS_PR_TOKEN: ${{ secrets.CLIENTS_PR_TOKEN != '' }}
     defaults:
       run:
         working-directory: apps/clients
@@ -92,21 +98,32 @@ jobs:
           (cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy)
           (cd example-apps/go && go mod tidy && go build -o /dev/null .)
 
-      - name: 🚀 Crear Pull Request
+      # PRs opened with the default GITHUB_TOKEN do not trigger workflows, so the
+      # required "CI Success" check never reports and the PR cannot merge. Set a
+      # CLIENTS_PR_TOKEN secret (fine-grained PAT or GitHub App token with
+      # contents + pull-requests write) so CI runs and auto-merge can proceed.
+      - name: Open pull request
+        id: cpr
         if: steps.process_clients.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: regenerar clientes OpenAPI y ejecutar E2E tests"
+          token: ${{ secrets.CLIENTS_PR_TOKEN || secrets.GITHUB_TOKEN }}
+          commit-message: "chore: regenerate OpenAPI clients"
           title: "Automated: Weekly Client Regeneration"
           body: |
-            Se ha detectado una actualización en la especificación de la API.
-            
-            Este PR automático incluye:
-            - Clientes regenerados para JS/TS, C#, Python, Ruby y Go.
-            - **Version Bump** aplicado.
-            - **Validación Exitosa:** Las aplicaciones de prueba E2E compilaron y ejecutaron correctamente contra el nuevo código.
+            The OpenAPI spec changed, so the SDKs were regenerated.
+
+            - Clients regenerated for TypeScript, C#, Python, Ruby and Go.
+            - Version bump applied (`apps/clients/VERSION`).
+            - Build-only smoke tests passed in the workflow run (example apps are not run against the live API).
           add-paths: apps/clients
           branch: "chore/automated-client-regeneration"
           base: "main"
           delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-number != '' && env.HAS_PR_TOKEN == 'true'
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ secrets.CLIENTS_PR_TOKEN }}
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}" --repo "$GITHUB_REPOSITORY"

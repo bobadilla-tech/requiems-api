@@ -27,7 +27,7 @@ import (
 // creates subscriptions/plans/usage_logs — empty otherwise, but the protected
 // route group now runs APIKeyAuth's LEFT JOIN subscriptions query plus the
 // rate limiter and usage/quota middleware from
-// docs/plans/2026-08-21-go-auth-foundation-phase-2.md, both of which read
+// .artifacts/2026/08/20260821--go-auth-foundation-phase-2/plan.md, both of which read
 // plans and (on a served request) write usage_logs. A "free" plans row with
 // null limits keeps this test focused on auth header wiring rather than
 // rate-limit/quota specifics, which have their own dedicated tests in
@@ -194,7 +194,7 @@ func TestApp_Close(t *testing.T) {
 //   - GET /healthz is publicly accessible (no auth required)
 //   - GET /v1/* routes require a valid requiems-api-key header — APIKeyAuth
 //     is the sole enforcing gate now that BackendSecretAuth is retired (see
-//     docs/plans/2026-08-21-go-auth-foundation-phase-3-4.md Phase 3 item 5)
+//     .artifacts/2026/08/20260821--go-auth-foundation-phase-3-4/plan.md Phase 3 item 5)
 //
 // The test is skipped when DATABASE_URL is not set.
 func TestApp_Handler(t *testing.T) {
@@ -290,7 +290,7 @@ func creditsUsedFor(t *testing.T, pool *pgxpool.Pool, apiKeyPrefix, endpoint str
 }
 
 // TestApp_UsageMultiplier_DictionaryAndThesaurus is an integration test for
-// docs/plans/2026-08-22-go-auth-foundation-phase-6-usage-multiplier-and-loose-ends.md
+// .artifacts/2026/08/20260822--go-auth-foundation-phase-6-usage-multiplier-and-loose-ends/plan.md
 // Phase 6a: GET /v1/text/dictionary/{word} and GET /v1/text/thesaurus/{word}
 // must bill 2 credits (X-Usage-Count response header and the usage_logs
 // credits_used column), through the full APIKeyAuth -> rate limit -> usage
@@ -407,7 +407,7 @@ func usageCounterSum(t *testing.T, rdb *redis.Client, userID int64) int64 {
 }
 
 // TestApp_RouteMissesAndErrorsAreNotCharged is the end-to-end proof for the
-// usage plan's PR-B (docs/plans/2026-10-15-dashboard-overview-usage-fixes.md):
+// usage plan's PR-B (.artifacts/2026/10/20261015--dashboard-overview-usage-fixes/plan.md):
 // requests for routes that do not exist are not usage at all (no ledger row,
 // no quota movement), and handler-level 4xx/5xx are logged but never charged.
 func TestApp_RouteMissesAndErrorsAreNotCharged(t *testing.T) {

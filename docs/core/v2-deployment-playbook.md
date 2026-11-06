@@ -6,7 +6,7 @@ Go-auth-foundation rewrite (PR #966) to production. Not a full deployment guide
 accumulated while building v2.
 
 - [ ] **Provision `PLAYGROUND_API_KEY`.** As of
-      `docs/plans/2026-08-22-go-auth-foundation-phase-6-usage-multiplier-and-loose-ends.md`
+      `.artifacts/2026/08/20260822--go-auth-foundation-phase-6-usage-multiplier-and-loose-ends/plan.md`
       Phase 6b item 3, production's `PLAYGROUND_API_KEY` was not confirmed —
       check whether it's still `app_config.rb`'s
       `requiem_notprovisioned0000000000` default. If so, create a real,

@@ -35,7 +35,14 @@ Set `LOCAL_DEV_API_KEY` to `requiem_<24 alphanumeric characters>` in
 use `RAILS_ENV=test` and isolated Redis. Never run validation against
 production or the development database.
 
-Preserve unrelated worktree changes. Use `apply_patch` for edits. Keep
-historical audit and plan records unchanged except the implementation notes in
-the active completion plan.
+Preserve unrelated worktree changes. Use `apply_patch` for edits.
+
+Plans, audits, handoffs, and investigation notes go under `.artifacts/` (read
+`.artifacts/AGENTS.md` first): `.artifacts/YYYY/MM/YYYYMMDD--<TICKET-ID>--<slug>/`.
+Never add new plans to `docs/`. Keep historical artifacts unchanged except the
+implementation notes in the active completion plan. Maintained documentation
+stays in `docs/`.
+
+Skills (`.claude/skills`, mirrored in `.agents/skills`): `implementation-plan`,
+`pr-review`, `update-docs`, `product-update`.
 

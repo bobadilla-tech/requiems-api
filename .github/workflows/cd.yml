@@ -132,7 +132,7 @@ jobs:
 
       # Sitemap XML files are committed static assets baked into the Docker
       # image at build time (no volume, no runtime write path) — see
-      # docs/plans/2026-08-23-requiemsapi-domain-role-swap.md §6 item 9. This
+      # .artifacts/2026/08/20260823--requiemsapi-domain-role-swap/plan.md §6 item 9. This
       # regenerates them from the current config/sitemap.rb (page lists,
       # blog posts, live API catalog) right before the build so every deploy
       # ships an up-to-date sitemap instead of whatever was last hand-run

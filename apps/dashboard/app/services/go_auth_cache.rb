@@ -21,7 +21,7 @@ class GoAuthCache
       # key as valid until Go's cache TTL expires. At zero scale this is an
       # accepted, explicitly-documented gap (short TTL is the mitigation),
       # not something to build a durable-retry-queue for yet — see
-      # docs/plans/2026-08-21-go-auth-foundation-phase-0-1.md, Phase 1 item 3.
+      # .artifacts/2026/08/20260821--go-auth-foundation-phase-0-1/plan.md, Phase 1 item 3.
       Rails.logger.error("[GoAuthCache] Failed to invalidate key_prefix #{key_prefix}: #{e.message}")
     end
 

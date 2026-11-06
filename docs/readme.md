@@ -8,7 +8,7 @@ reference material maintained alongside the code.
 | Area             | What it is                                                                     |
 | ---------------- | ------------------------------------------------------------------------------ |
 | **Core**         | Architecture, local dev, Go/Rails, deployment, and engineering workflows       |
-| **Design plans** | Dated specs and implementation notes for larger features                       |
+| **Artifacts**    | Dated plans, audits, and specs live in [`.artifacts/`](../.artifacts/README.md) |
 | **APIs**         | Per-endpoint reference, category indexes, and sync notes for `api_catalog.yml` |
 
 ## Quick links
