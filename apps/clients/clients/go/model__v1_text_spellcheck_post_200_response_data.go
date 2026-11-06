@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -19,9 +19,9 @@ var _ MappedNullable = &V1TextSpellcheckPost200ResponseData{}
 
 // V1TextSpellcheckPost200ResponseData struct for V1TextSpellcheckPost200ResponseData
 type V1TextSpellcheckPost200ResponseData struct {
-	// The full input text with all misspelled words replaced by their suggested corrections
+	// The full input text with all misspelled words replaced by the top-ranked suggestion
 	Corrected *string `json:"corrected,omitempty"`
-	// List of individual corrections. Each item contains: original (the misspelled word), suggested (the correction), and position (0-based character offset in the original text)
+	// List of individual corrections. Each item contains: original (the misspelled word), suggested (the top-ranked replacement applied to corrected), suggestions (up to 3 ranked alternatives returned by LanguageTool, from most to least likely), and position (0-based Unicode character offset in the original text)
 	Corrections *string `json:"corrections,omitempty"`
 }
 

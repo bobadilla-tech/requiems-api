@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Requiems API
- * Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+ * Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -113,6 +113,46 @@ export interface V1EntertainmentFactsGet200ResponseData {
      */
     'source'?: string;
 }
+export interface V1EntertainmentHoroscopeBatchPost200Response {
+    'data'?: V1EntertainmentHoroscopeBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1EntertainmentHoroscopeBatchPost200ResponseData {
+    /**
+     * List of daily horoscopes returned in the same order as the input signs.
+     */
+    'results'?: Array<any>;
+    /**
+     * Zodiac sign the horoscope corresponds to.
+     */
+    'results[].sign'?: string;
+    /**
+     * Date the horoscope is for, in YYYY-MM-DD format.
+     */
+    'results[].date'?: string;
+    /**
+     * Daily horoscope reading for the given sign.
+     */
+    'results[].horoscope'?: string;
+    /**
+     * Lucky number for the given sign on that date.
+     */
+    'results[].lucky_number'?: number;
+    /**
+     * Predicted mood for the given sign on that date.
+     */
+    'results[].mood'?: string;
+    /**
+     * Total number of horoscopes returned.
+     */
+    'total'?: number;
+}
+export interface V1EntertainmentHoroscopeBatchPostRequest {
+    /**
+     * Array of signs to get (min: 1, max: 12). Allowed values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces.
+     */
+    'signs': Array<any>;
+}
 export interface V1EntertainmentHoroscopeSignGet200Response {
     'data'?: V1EntertainmentHoroscopeSignGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -152,6 +192,56 @@ export interface V1EntertainmentJokesDadGet200ResponseData {
      * The full text of the dad joke
      */
     'joke'?: string;
+}
+export interface V1EntertainmentQuotesRandomBatchPost200Response {
+    'data'?: V1EntertainmentQuotesRandomBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1EntertainmentQuotesRandomBatchPost200ResponseData {
+    /**
+     * Array of random quotes, one per requested count.
+     */
+    'results'?: Array<any>;
+    /**
+     * Unique identifier for the quote.
+     */
+    'results[].id'?: number;
+    /**
+     * The quote text.
+     */
+    'results[].text'?: string;
+    /**
+     * Name of the person who said or wrote the quote. May be empty.
+     */
+    'results[].author'?: string;
+    /**
+     * Total number of quotes returned. Always equals the requested count.
+     */
+    'total'?: number;
+}
+export interface V1EntertainmentQuotesRandomBatchPostRequest {
+    /**
+     * Number of random quotes to return. Between 1 and 50.
+     */
+    'count': number;
+}
+export interface V1EntertainmentQuotesRandomGet200Response {
+    'data'?: V1EntertainmentQuotesRandomGet200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1EntertainmentQuotesRandomGet200ResponseData {
+    /**
+     * Unique identifier for the quote
+     */
+    'id'?: number;
+    /**
+     * The quote text
+     */
+    'text'?: string;
+    /**
+     * Name of the person who said or wrote the quote
+     */
+    'author'?: string;
 }
 export interface V1EntertainmentSudokuBatchPost200Response {
     'data'?: V1EntertainmentSudokuBatchPost200ResponseData;
@@ -202,6 +292,62 @@ export interface V1EntertainmentSudokuGet200ResponseData {
      * 9×9 grid containing the complete, valid solution
      */
     'solution'?: string;
+}
+export interface V1EntertainmentTriviaBatchPost200Response {
+    'data'?: V1EntertainmentTriviaBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1EntertainmentTriviaBatchPost200ResponseData {
+    /**
+     * List of trivia questions returned in the same order as the input filters.
+     */
+    'results'?: Array<any>;
+    /**
+     * The topic filter used to retrieve the trivia question.
+     */
+    'results[].category'?: string;
+    /**
+     * The complexity level filter used to retrieve the trivia question.
+     */
+    'results[].difficulty'?: string;
+    /**
+     * Describes why the question could not be retrieved for this filter. Omitted if the query was successful.
+     */
+    'results[].error'?: string;
+    /**
+     * The trivia question returned for this filter. Empty if the query failed.
+     */
+    'results[].data'?: object;
+    /**
+     * The trivia question text.
+     */
+    'results[].data.question'?: string;
+    /**
+     * List of possible answers for the question.
+     */
+    'results[].data.options'?: Array<any>;
+    /**
+     * The correct answer to the trivia question.
+     */
+    'results[].data.answer'?: string;
+    /**
+     * The category the trivia question belongs to.
+     */
+    'results[].data.category'?: string;
+    /**
+     * The difficulty level of the trivia question.
+     */
+    'results[].data.difficulty'?: string;
+    /**
+     * Total number of trivia results returned.
+     */
+    'total'?: number;
+}
+export interface V1EntertainmentTriviaBatchPostRequest {
+    /**
+     * Array of filters to get (min: 1, max: 50).
+     */
+    'filters': Array<any>;
 }
 export interface V1EntertainmentTriviaGet200Response {
     'data'?: V1EntertainmentTriviaGet200ResponseData;
@@ -523,6 +669,26 @@ export interface V1FinanceInflationGet200ResponseData {
      */
     'historical[].rate'?: number;
 }
+export interface V1FinanceMortgageBatchPost200Response {
+    'data'?: V1FinanceMortgageBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1FinanceMortgageBatchPost200ResponseData {
+    /**
+     * Mortgage calculation result for each mortgage request in the same order as the input. Each item has the same fields as the single mortgage endpoint.
+     */
+    'results'?: Array<any>;
+    /**
+     * Number of results returned. Matches the length of the input array.
+     */
+    'total'?: number;
+}
+export interface V1FinanceMortgageBatchPostRequest {
+    /**
+     * Array of mortgages to calculate (min: 1, max: 50).
+     */
+    'mortgages': Array<any>;
+}
 export interface V1FinanceMortgageGet200Response {
     'data'?: V1FinanceMortgageGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -646,6 +812,54 @@ export interface V1HealthEquipmentGet200ResponseData {
      * Total number of distinct equipment types
      */
     'total'?: number;
+}
+export interface V1HealthExercisesBatchPost200Response {
+    'data'?: V1HealthExercisesBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1HealthExercisesBatchPost200ResponseData {
+    /**
+     * Exercises found for the given IDs, in input order. IDs not found are omitted.
+     */
+    'results'?: Array<any>;
+    /**
+     * Unique exercise identifier
+     */
+    'results[].id'?: number;
+    /**
+     * Exercise name
+     */
+    'results[].name'?: string;
+    /**
+     * Body part categories involved
+     */
+    'results[].body_parts'?: Array<any>;
+    /**
+     * Equipment required
+     */
+    'results[].equipment'?: Array<any>;
+    /**
+     * Primary muscles targeted
+     */
+    'results[].target_muscles'?: Array<any>;
+    /**
+     * Secondary muscles engaged
+     */
+    'results[].secondary_muscles'?: Array<any>;
+    /**
+     * Ordered step-by-step instructions
+     */
+    'results[].instructions'?: Array<any>;
+    /**
+     * Number of exercises returned
+     */
+    'total'?: number;
+}
+export interface V1HealthExercisesBatchPostRequest {
+    /**
+     * Array of numeric exercise IDs to fetch. Must contain between 1 and 50 items. Each ID must be a positive integer.
+     */
+    'ids': Array<any>;
 }
 export interface V1HealthExercisesGet200Response {
     'data'?: V1HealthExercisesGet200ResponseData;
@@ -881,6 +1095,38 @@ export interface V1NetworkingDomainDomainGet200ResponseData {
      */
     'dns.cname'?: string;
 }
+export interface V1NetworkingIpAsnBatchPost200Response {
+    'data'?: V1NetworkingIpAsnBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1NetworkingIpAsnBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The IP address that was looked up.
+     */
+    'results[].ip'?: string;
+    /**
+     * ASN data (omitted on error). Same fields as the single-item endpoint.
+     */
+    'results[].result'?: object;
+    /**
+     * Error message if the lookup failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1NetworkingIpAsnBatchPostRequest {
+    /**
+     * List of IP addresses to look up (1–50 items, each must be a valid IPv4 or IPv6 address).
+     */
+    'ips': string;
+}
 export interface V1NetworkingIpAsnGet200Response {
     'data'?: V1NetworkingIpAsnGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -979,6 +1225,32 @@ export interface V1NetworkingIpGet200ResponseData {
      */
     'is_vpn'?: boolean;
 }
+export interface V1NetworkingIpInfoBatchPost200Response {
+    'data'?: V1NetworkingIpInfoBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1NetworkingIpInfoBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The IP address that was looked up.
+     */
+    'results[].ip'?: string;
+    /**
+     * Geolocation data (omitted on error). Same fields as the single-item endpoint.
+     */
+    'results[].result'?: object;
+    /**
+     * Error message if the lookup failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
 export interface V1NetworkingIpIpGet200Response {
     'data'?: V1NetworkingIpIpGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1051,6 +1323,12 @@ export interface V1NetworkingIpVpnIpGet200ResponseData {
      */
     'asn_org'?: string;
 }
+export interface V1NetworkingMxBatchPostRequest {
+    /**
+     * Array of domains to lookup (min: 1, max: 50).
+     */
+    'domains': Array<any>;
+}
 export interface V1NetworkingMxDomainGet200Response {
     'data'?: V1NetworkingMxDomainGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1072,6 +1350,42 @@ export interface V1NetworkingMxDomainGet200ResponseData {
      * MX priority value. Lower values have higher delivery priority per RFC 5321.
      */
     'records[].priority'?: number;
+}
+export interface V1NetworkingWhoisBatchPost200Response {
+    'data'?: V1NetworkingWhoisBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1NetworkingWhoisBatchPost200ResponseData {
+    /**
+     * One entry per domain, in the same order as the input
+     */
+    'results'?: Array<any>;
+    /**
+     * Domain name requested in the batch
+     */
+    'results[].domain'?: string;
+    /**
+     * False when WHOIS data could not be found
+     */
+    'results[].found'?: boolean;
+    /**
+     * Error message when found is false
+     */
+    'results[].error'?: string;
+    /**
+     * WHOIS information for the domain when found is true
+     */
+    'results[].data'?: object;
+    /**
+     * Total number of results returned
+     */
+    'total'?: number;
+}
+export interface V1NetworkingWhoisBatchPostRequest {
+    /**
+     * Array of domain names. Min: 1, Max: 50.
+     */
+    'domains': Array<any>;
 }
 export interface V1NetworkingWhoisDomainGet200Response {
     'data'?: V1NetworkingWhoisDomainGet200ResponseData;
@@ -1140,6 +1454,38 @@ export interface V1PlacesCitiesCityGet200ResponseData {
      * Longitude of the city centre
      */
     'lon'?: number;
+}
+export interface V1PlacesGeocodeBatchPost200Response {
+    'data'?: V1PlacesGeocodeBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1PlacesGeocodeBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The original address as provided in the request.
+     */
+    'results[].address'?: string;
+    /**
+     * Geocoding result (omitted on error). Same fields as the single-item endpoint.
+     */
+    'results[].result'?: object;
+    /**
+     * Error message if geocoding failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1PlacesGeocodeBatchPostRequest {
+    /**
+     * List of addresses to geocode (1–20 items, each non-empty). Max 20 due to Nominatim usage policy.
+     */
+    'addresses': string;
 }
 export interface V1PlacesGeocodeGet200Response {
     'data'?: V1PlacesGeocodeGet200ResponseData;
@@ -1237,6 +1583,50 @@ export interface V1PlacesHolidaysGet200ResponseData {
      */
     'total'?: number;
 }
+export interface V1PlacesPostalBatchPost200Response {
+    'data'?: V1PlacesPostalBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1PlacesPostalBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The postal code as provided in the request.
+     */
+    'results[].code'?: string;
+    /**
+     * The country code used for the lookup (defaulted to US when omitted).
+     */
+    'results[].country'?: string;
+    /**
+     * Whether the postal code was found in the dataset.
+     */
+    'results[].found'?: boolean;
+    /**
+     * Postal code details (omitted when found is false).
+     */
+    'results[].result'?: object;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1PlacesPostalBatchPostRequest {
+    /**
+     * List of postal code lookups (1–50 items).
+     */
+    'items': string;
+    /**
+     * The postal code to look up.
+     */
+    'items[].code': string;
+    /**
+     * ISO 3166-1 alpha-2 country code (default: US).
+     */
+    'items[].country'?: string;
+}
 export interface V1PlacesPostalCodeGet200Response {
     'data'?: V1PlacesPostalCodeGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1266,6 +1656,50 @@ export interface V1PlacesPostalCodeGet200ResponseData {
      * Longitude of the postal code centroid
      */
     'lon'?: number;
+}
+export interface V1PlacesReverseGeocodeBatchPost200Response {
+    'data'?: V1PlacesReverseGeocodeBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1PlacesReverseGeocodeBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * Latitude as provided in the request.
+     */
+    'results[].lat'?: number;
+    /**
+     * Longitude as provided in the request.
+     */
+    'results[].lon'?: number;
+    /**
+     * Reverse geocoding result (omitted on error). Same fields as the single-item endpoint.
+     */
+    'results[].result'?: object;
+    /**
+     * Error message if reverse geocoding failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1PlacesReverseGeocodeBatchPostRequest {
+    /**
+     * List of coordinate pairs to reverse-geocode (1–20 items). Max 20 due to Nominatim usage policy.
+     */
+    'items': string;
+    /**
+     * Latitude (-90 to 90).
+     */
+    'items[].lat': number;
+    /**
+     * Longitude (-180 to 180).
+     */
+    'items[].lon': number;
 }
 export interface V1PlacesReverseGeocodeGet200Response {
     'data'?: V1PlacesReverseGeocodeGet200ResponseData;
@@ -1315,6 +1749,62 @@ export interface V1PlacesTimeTimezoneGet200ResponseData {
      */
     'is_dst'?: boolean;
 }
+export interface V1PlacesTimezoneBatchPost200Response {
+    'data'?: V1PlacesTimezoneBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1PlacesTimezoneBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * IANA timezone identifier.
+     */
+    'results[].info.timezone'?: string;
+    /**
+     * UTC offset in +HH:MM or -HH:MM format.
+     */
+    'results[].info.offset'?: string;
+    /**
+     * Current time in UTC (RFC 3339).
+     */
+    'results[].info.current_time'?: string;
+    /**
+     * Whether daylight saving time is currently active.
+     */
+    'results[].info.is_dst'?: boolean;
+    /**
+     * Error message if this item failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1PlacesTimezoneBatchPostRequest {
+    /**
+     * List of timezone lookup requests (1–50 items).
+     */
+    'items': string;
+    /**
+     * IANA timezone name (e.g. \'America/New_York\'). Highest priority.
+     */
+    'items[].timezone'?: string;
+    /**
+     * City name for city-based lookup. Used when timezone is not set.
+     */
+    'items[].city'?: string;
+    /**
+     * Latitude (-90 to 90). Used when neither timezone nor city is set.
+     */
+    'items[].lat'?: number;
+    /**
+     * Longitude (-180 to 180). Used alongside lat for coordinate-based lookup.
+     */
+    'items[].lon'?: number;
+}
 export interface V1PlacesTimezoneGet200Response {
     'data'?: V1PlacesTimezoneGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1362,6 +1852,442 @@ export interface V1PlacesWorkingDaysGet200ResponseData {
      * Subdivision code (echoed from request, empty string if not provided)
      */
     'subdivision'?: string;
+}
+export interface V1SystemsBusinessCalendarCountryGet200Response {
+    'data'?: V1SystemsBusinessCalendarCountryGet200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsBusinessCalendarCountryGet200ResponseData {
+    /**
+     * ISO 3166-1 alpha-2 country code echoed from the path parameter
+     */
+    'country_code'?: string;
+    /**
+     * Year the calendar covers
+     */
+    'year'?: number;
+    /**
+     * Month scope. Present only when the month query parameter was provided.
+     */
+    'month'?: string;
+    /**
+     * Number of working days (excluding weekends and public holidays) in the scope
+     */
+    'working_days'?: number;
+    /**
+     * Total calendar days in the month. Present only when month is provided.
+     */
+    'total_days'?: string;
+    /**
+     * Number of weekend days in the month. Present only when month is provided.
+     */
+    'weekend_days'?: string;
+    /**
+     * List of public holidays in the scope. Each item: {date: YYYY-MM-DD, name: string, type: national}
+     */
+    'holidays'?: Array<any>;
+    /**
+     * Count of holidays in the holidays array
+     */
+    'holiday_count'?: number;
+    /**
+     * Next public holiday within 90 days from today. Shape: {date, name, type}
+     */
+    'next_holiday'?: string;
+}
+export interface V1SystemsContentModeratePost200Response {
+    'data'?: V1SystemsContentModeratePost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsContentModeratePost200ResponseData {
+    /**
+     * False when any moderation category is triggered. True otherwise.
+     */
+    'is_safe'?: boolean;
+    /**
+     * Reserved for future use. Currently always null.
+     */
+    'toxicity_score'?: string;
+    /**
+     * Detected sentiment: positive, negative, or neutral
+     */
+    'sentiment'?: string;
+    /**
+     * Detected or provided ISO 639-1 language code. Null when detection confidence is 0.
+     */
+    'language'?: string;
+    /**
+     * Confidence in the detected language from 0.0 to 1.0. 1.0 when language was explicitly provided.
+     */
+    'language_confidence'?: string;
+    /**
+     * Triggered moderation flags. Currently possible: text_profanity
+     */
+    'flags'?: Array<any>;
+    /**
+     * Per-category boolean flags: profanity, hate_speech, spam, violence
+     */
+    'categories'?: object;
+}
+export interface V1SystemsContentModeratePostRequest {
+    /**
+     * The text to moderate. Any language. Required.
+     */
+    'text': string;
+    /**
+     * ISO 639-1 language code (e.g. en, de, fr). When provided, language detection is skipped and confidence is set to 1.0.
+     */
+    'language'?: string;
+}
+export interface V1SystemsLocationResolvePost200Response {
+    'data'?: V1SystemsLocationResolvePost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsLocationResolvePost200ResponseData {
+    /**
+     * Normalized full address returned by the geocoder
+     */
+    'address'?: string;
+    /**
+     * City name
+     */
+    'city'?: string;
+    /**
+     * Full country name
+     */
+    'country'?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     */
+    'country_code'?: string;
+    /**
+     * Resolved lat/lng coordinates
+     */
+    'coordinates'?: object;
+    /**
+     * IANA timezone identifier (e.g. Europe/Berlin). Null when timezone resolution fails.
+     */
+    'timezone'?: string;
+    /**
+     * UTC offset string (e.g. +02:00). Null when timezone resolution fails.
+     */
+    'utc_offset'?: string;
+    /**
+     * Current local time in RFC3339 format. Null when timezone resolution fails.
+     */
+    'current_time'?: string;
+    /**
+     * True when today is a public holiday in the resolved country
+     */
+    'is_holiday_today'?: boolean;
+    /**
+     * Number of working days (excluding weekends and public holidays) in the current calendar month
+     */
+    'working_days_this_month'?: number;
+    /**
+     * Next public holiday within 90 days. Shape: {date: YYYY-MM-DD, name: string, type: national}
+     */
+    'next_holiday'?: string;
+    /**
+     * Non-fatal warnings. Possible values: timezone_unavailable, calendar_unavailable
+     */
+    'flags'?: Array<any>;
+}
+export interface V1SystemsLocationResolvePostRequest {
+    /**
+     * Human-readable address string to geocode. Either address or coordinates is required.
+     */
+    'address'?: string;
+    /**
+     * Coordinates object for reverse geocoding. Either address or coordinates is required. Shape: {lat: float, lng: float}
+     */
+    'coordinates'?: object;
+    /**
+     * ISO 3166-1 alpha-2 country code hint. Overrides the geocoder-inferred country code when provided.
+     */
+    'country_code'?: string;
+}
+export interface V1SystemsPaymentValidatePost200Response {
+    'data'?: V1SystemsPaymentValidatePost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsPaymentValidatePost200ResponseData {
+    /**
+     * BIN result. Null when bin was not provided. Contains valid, scheme, card_type, card_level, country_code, issuer, prepaid, luhn.
+     */
+    'bin'?: string;
+    /**
+     * IBAN result. Null when iban was not provided. Contains valid, country_code, bank_code, account_number.
+     */
+    'iban'?: string;
+    /**
+     * SWIFT result. Null when swift was not provided. Contains valid, institution, country, branch.
+     */
+    'swift'?: string;
+    /**
+     * True when no cross-field mismatches were detected
+     */
+    'consistency.ok'?: boolean;
+    /**
+     * Mismatch flags. Possible values: country_mismatch_bin_iban, country_mismatch_bin_swift, country_mismatch_iban_swift, bank_mismatch_iban_swift
+     */
+    'consistency.flags'?: Array<any>;
+}
+export interface V1SystemsPaymentValidatePostRequest {
+    /**
+     * Card BIN (first 6–8 digits). At least one of bin, iban, or swift is required.
+     */
+    'bin'?: string;
+    /**
+     * IBAN string to validate. Checksum and format are verified.
+     */
+    'iban'?: string;
+    /**
+     * SWIFT/BIC code to look up institution and country.
+     */
+    'swift'?: string;
+}
+export interface V1SystemsRiskScorePost200Response {
+    'data'?: V1SystemsRiskScorePost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsRiskScorePost200ResponseData {
+    /**
+     * Composite risk score from 0.0 to 1.0
+     */
+    'risk_score'?: string;
+    /**
+     * True when the risk score is below the safety threshold
+     */
+    'is_safe'?: boolean;
+    /**
+     * Confidence in the score based on resolved signals
+     */
+    'confidence'?: string;
+    /**
+     * Array of triggered risk flags
+     */
+    'flags'?: Array<any>;
+}
+export interface V1SystemsRiskScorePostRequest {
+    /**
+     * Email address to include in the risk score.
+     */
+    'email'?: string;
+    /**
+     * Phone number in E.164 format.
+     */
+    'phone'?: string;
+    /**
+     * IPv4 or IPv6 address to check.
+     */
+    'ip_address'?: string;
+}
+export interface V1SystemsSignupProtectPost200Response {
+    'data'?: V1SystemsSignupProtectPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsSignupProtectPost200ResponseData {
+    /**
+     * Composite risk score from 0.0 (clean) to 1.0 (high risk)
+     */
+    'risk_score'?: string;
+    /**
+     * True when risk_score is below the safety threshold with no critical flags
+     */
+    'is_safe'?: boolean;
+    /**
+     * Confidence in the decision from 0.0 to 1.0, based on which signals resolved successfully
+     */
+    'confidence'?: string;
+    /**
+     * Array of triggered risk flags. Possible values: disposable_email, vpn_detected, proxy_detected, tor_detected, is_hosting
+     */
+    'flags'?: Array<any>;
+    /**
+     * Email validation result including disposable detection and MX check
+     */
+    'signals.email'?: object;
+    /**
+     * Phone number validation result with country code and VoIP/virtual detection
+     */
+    'signals.phone'?: object;
+    /**
+     * IP intelligence including VPN/proxy/TOR status and fraud score
+     */
+    'signals.ip'?: object;
+}
+export interface V1SystemsSignupProtectPostRequest {
+    /**
+     * Email address to validate and score. At least one of email, phone, or ip_address is required.
+     */
+    'email'?: string;
+    /**
+     * Phone number in E.164 format to validate and check for VoIP or virtual numbers.
+     */
+    'phone'?: string;
+    /**
+     * IPv4 or IPv6 address to check for VPN, proxy, TOR, and hosting status.
+     */
+    'ip_address'?: string;
+}
+export interface V1SystemsTextNormalizePost200Response {
+    'data'?: V1SystemsTextNormalizePost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsTextNormalizePost200ResponseData {
+    /**
+     * The input text as provided
+     */
+    'original'?: string;
+    /**
+     * The text after all operations have been applied in order
+     */
+    'normalized'?: string;
+    /**
+     * The operations list echoed from the request
+     */
+    'operations'?: Array<any>;
+}
+export interface V1SystemsTextNormalizePostRequest {
+    /**
+     * The text to normalize. Required.
+     */
+    'text': string;
+    /**
+     * Ordered list of normalization operations to apply. At least one required. Valid values: trim, lowercase, uppercase, normalize_unicode, collapse_whitespace, strip_html, remove_punctuation
+     */
+    'operations': Array<any>;
+}
+export interface V1SystemsTimezoneFromIpIpGet200Response {
+    'data'?: V1SystemsTimezoneFromIpIpGet200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsTimezoneFromIpIpGet200ResponseData {
+    /**
+     * The IP address as provided
+     */
+    'ip'?: string;
+    /**
+     * City resolved from the IP
+     */
+    'city'?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     */
+    'country_code'?: string;
+    /**
+     * IANA timezone identifier. Null when timezone resolution fails.
+     */
+    'timezone'?: string;
+    /**
+     * UTC offset string. Null when timezone resolution fails.
+     */
+    'utc_offset'?: string;
+    /**
+     * True when daylight saving time is currently active. Null when timezone resolution fails.
+     */
+    'dst_active'?: string;
+    /**
+     * Current local time in RFC3339 format
+     */
+    'current_time'?: string;
+}
+export interface V1SystemsTransactionRiskPost200Response {
+    'data'?: V1SystemsTransactionRiskPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsTransactionRiskPost200ResponseData {
+    /**
+     * Transaction risk score from 0.0 to 1.0
+     */
+    'risk_score'?: string;
+    /**
+     * True when score is below 0.5 and no TOR or proxy detected
+     */
+    'is_safe'?: boolean;
+    /**
+     * Triggered flags. Possible values: ip_country_mismatch, bin_country_mismatch, country_mismatch, vpn_detected, proxy_detected, tor_detected, high_value_vpn
+     */
+    'flags'?: Array<any>;
+    /**
+     * Country code resolved from the IP address
+     */
+    'signals.ip_country'?: string;
+    /**
+     * Billing country provided in the request, or null if omitted
+     */
+    'signals.billing_country'?: string;
+    /**
+     * Country of the card issuer resolved from the BIN
+     */
+    'signals.bin_country'?: string;
+    /**
+     * True when any country comparison produced a mismatch
+     */
+    'signals.country_mismatch'?: boolean;
+}
+export interface V1SystemsTransactionRiskPostRequest {
+    /**
+     * Card BIN (first 6–8 digits) to look up card issuing country.
+     */
+    'card_bin': string;
+    /**
+     * Customer\'s IPv4 or IPv6 address. Must be a valid IP.
+     */
+    'ip_address': string;
+    /**
+     * ISO 3166-1 alpha-2 billing country code. When provided, country mismatch checks are more precise.
+     */
+    'billing_country'?: string;
+    /**
+     * Transaction amount in USD. High-value transactions via VPN incur an additional risk score boost.
+     */
+    'amount_usd'?: number;
+}
+export interface V1SystemsUserVerifyPost200Response {
+    'data'?: V1SystemsUserVerifyPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1SystemsUserVerifyPost200ResponseData {
+    /**
+     * True when risk score is below 0.3, confidence is above 0.5, email is valid, domain has MX, and domain is registered
+     */
+    'verified'?: boolean;
+    /**
+     * Confidence in the verification result, based on how many signals resolved
+     */
+    'confidence'?: string;
+    /**
+     * Composite risk score from 0.0 to 1.0
+     */
+    'risk_score'?: string;
+    /**
+     * Triggered risk flags. Possible values: email_invalid, disposable_email, no_mx, domain_not_registered, young_domain, whois_unavailable, ip_risk
+     */
+    'flags'?: Array<any>;
+    /**
+     * Email validation result
+     */
+    'signals.email'?: object;
+    /**
+     * Domain intelligence including WHOIS age, MX and A record presence, and registration status
+     */
+    'signals.domain'?: object;
+    /**
+     * IP risk signals. Null when ip_address was not provided
+     */
+    'signals.ip'?: string;
+}
+export interface V1SystemsUserVerifyPostRequest {
+    /**
+     * Email address to verify. Domain-level WHOIS, MX, and DNS checks are run automatically.
+     */
+    'email': string;
+    /**
+     * Optional IPv4 or IPv6 address. When provided, VPN and proxy signals are added to the result.
+     */
+    'ip_address'?: string;
 }
 export interface V1TechnologyBarcodeBase64Get200Response {
     'data'?: V1TechnologyBarcodeBase64Get200ResponseData;
@@ -1411,7 +2337,7 @@ export interface V1TechnologyBase64EncodePost200Response {
 }
 export interface V1TechnologyBase64EncodePost200ResponseData {
     /**
-     * The Base64-encoded output
+     * The Base64-encoded output string
      */
     'result'?: string;
 }
@@ -1421,9 +2347,61 @@ export interface V1TechnologyBase64EncodePostRequest {
      */
     'value': string;
     /**
-     * Encoding variant: standard (default) or url (URL-safe base64url)
+     * Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5)
      */
     'variant'?: string;
+}
+export interface V1TechnologyBaseBatchPost200Response {
+    'data'?: V1TechnologyBaseBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyBaseBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The source base used for conversion.
+     */
+    'results[].from'?: number;
+    /**
+     * The target base used for conversion.
+     */
+    'results[].to'?: number;
+    /**
+     * The original value as provided in the request.
+     */
+    'results[].input'?: string;
+    /**
+     * The converted value in the target base (omitted on error).
+     */
+    'results[].result'?: string;
+    /**
+     * Error message if this item failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyBaseBatchPostRequest {
+    /**
+     * List of conversion requests (1–50 items).
+     */
+    'items': string;
+    /**
+     * Source base (2, 8, 10, or 16).
+     */
+    'items[].from': number;
+    /**
+     * Target base (2, 8, 10, or 16).
+     */
+    'items[].to': number;
+    /**
+     * The number as a string. Accepts optional prefixes: 0x (hex), 0b (binary), 0o (octal).
+     */
+    'items[].value': string;
 }
 export interface V1TechnologyBaseGet200Response {
     'data'?: V1TechnologyBaseGet200ResponseData;
@@ -1476,6 +2454,66 @@ export interface V1TechnologyColorGet200ResponseData {
      * CMYK representation (cmyk(c%, m%, y%, k%))
      */
     'formats.cmyk'?: string;
+}
+export interface V1TechnologyConvertBatchPost200Response {
+    'data'?: V1TechnologyConvertBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyConvertBatchPost200ResponseData {
+    /**
+     * List of unit conversion results returned in the same order as the input operations.
+     */
+    'results'?: Array<any>;
+    /**
+     * Source unit used for the conversion.
+     */
+    'results[].from'?: string;
+    /**
+     * Target unit used for the conversion.
+     */
+    'results[].to'?: string;
+    /**
+     * Indicates whether the conversion operation was successful.
+     */
+    'results[].success'?: boolean;
+    /**
+     * Error message if the conversion failed. Empty when success is true.
+     */
+    'results[].error'?: string;
+    /**
+     * Conversion result details. Contains empty values when the conversion fails.
+     */
+    'results[].data'?: object;
+    /**
+     * Source unit.
+     */
+    'results[].data.from'?: string;
+    /**
+     * Target unit.
+     */
+    'results[].data.to'?: string;
+    /**
+     * Original numeric value provided for conversion.
+     */
+    'results[].data.input'?: number;
+    /**
+     * Converted numeric result.
+     */
+    'results[].data.result'?: number;
+    /**
+     * Formula or conversion factor used to calculate the result.
+     */
+    'results[].data.formula'?: string;
+    /**
+     * Total number of conversion results returned.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyConvertBatchPostRequest {
+    /**
+     * Array of operations to convert (min: 1, max: 50).
+     */
+    'operations': Array<any>;
 }
 export interface V1TechnologyConvertGet200Response {
     'data'?: V1TechnologyConvertGet200ResponseData;
@@ -1585,6 +2623,30 @@ export interface V1TechnologyFormatPostRequest {
      */
     'content': string;
 }
+export interface V1TechnologyMarkdownBatchPost200Response {
+    'data'?: V1TechnologyMarkdownBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyMarkdownBatchPost200ResponseData {
+    /**
+     * One HTML result per Markdown input, preserving input order
+     */
+    'results'?: Array<any>;
+    /**
+     * Rendered HTML output for each Markdown string
+     */
+    'results[].html'?: string;
+}
+export interface V1TechnologyMarkdownBatchPostRequest {
+    /**
+     * Array of Markdown strings. Min: 1, Max: 50.
+     */
+    'markdowns': Array<any>;
+    /**
+     * When true, sanitizes HTML output to remove unsafe tags and attributes.
+     */
+    'sanitize'?: boolean;
+}
 export interface V1TechnologyMarkdownPost200Response {
     'data'?: V1TechnologyMarkdownPost200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1605,6 +2667,58 @@ export interface V1TechnologyMarkdownPostRequest {
      */
     'sanitize'?: boolean;
 }
+export interface V1TechnologyPasswordBatchPost200Response {
+    'data'?: V1TechnologyPasswordBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyPasswordBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The generated password (omitted on error).
+     */
+    'results[].result.password'?: string;
+    /**
+     * Length of the generated password.
+     */
+    'results[].result.length'?: number;
+    /**
+     * Strength assessment (weak, medium, or strong).
+     */
+    'results[].result.strength'?: string;
+    /**
+     * Error message if generation failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyPasswordBatchPostRequest {
+    /**
+     * List of password generation requests (1–50 items).
+     */
+    'items': string;
+    /**
+     * Password length (8–128). Defaults to 16 when omitted.
+     */
+    'items[].length'?: number;
+    /**
+     * Include uppercase letters (A–Z). Defaults to false.
+     */
+    'items[].uppercase'?: boolean;
+    /**
+     * Include numbers (0–9). Defaults to false.
+     */
+    'items[].numbers'?: boolean;
+    /**
+     * Include special characters. Defaults to false.
+     */
+    'items[].symbols'?: boolean;
+}
 export interface V1TechnologyPasswordGet200Response {
     'data'?: V1TechnologyPasswordGet200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1623,6 +2737,58 @@ export interface V1TechnologyPasswordGet200ResponseData {
      */
     'strength'?: string;
 }
+export interface V1TechnologyQrBase64BatchPost200Response {
+    'data'?: V1TechnologyQrBase64BatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyQrBase64BatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The input text or URL that was encoded.
+     */
+    'results[].data'?: string;
+    /**
+     * Base64-encoded PNG image data (omitted on error).
+     */
+    'results[].image'?: string;
+    /**
+     * Width of the generated image in pixels (omitted on error).
+     */
+    'results[].width'?: number;
+    /**
+     * Height of the generated image in pixels (omitted on error).
+     */
+    'results[].height'?: number;
+    /**
+     * Error message if generation failed (omitted on success).
+     */
+    'results[].error'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyQrBase64BatchPostRequest {
+    /**
+     * List of QR generation requests (1–50 items).
+     */
+    'items': string;
+    /**
+     * The text or URL to encode.
+     */
+    'items[].data': string;
+    /**
+     * Image size in pixels (50–1000). Defaults to 256.
+     */
+    'items[].size'?: number;
+    /**
+     * Error-correction level: low, medium, high, highest. Defaults to medium.
+     */
+    'items[].recovery'?: string;
+}
 export interface V1TechnologyQrBase64Get200Response {
     'data'?: V1TechnologyQrBase64Get200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
@@ -1640,6 +2806,26 @@ export interface V1TechnologyQrBase64Get200ResponseData {
      * Height of the generated image in pixels
      */
     'height'?: number;
+}
+export interface V1TechnologyRandomUserBatchPost200Response {
+    'data'?: V1TechnologyRandomUserBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyRandomUserBatchPost200ResponseData {
+    /**
+     * Ordered list of generated user profiles. Same fields as the single-user endpoint.
+     */
+    'results'?: Array<any>;
+    /**
+     * Number of users returned. Matches the requested count.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyRandomUserBatchPostRequest {
+    /**
+     * Number of users to generate (min: 1, max: 50).
+     */
+    'count': number;
 }
 export interface V1TechnologyRandomUserGet200Response {
     'data'?: V1TechnologyRandomUserGet200ResponseData;
@@ -1682,6 +2868,58 @@ export interface V1TechnologyRandomUserGet200ResponseData {
      * URL to a unique identicon avatar for the generated user (DiceBear)
      */
     'avatar'?: string;
+}
+export interface V1TechnologyUseragentBatchPost200Response {
+    'data'?: V1TechnologyUseragentBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TechnologyUseragentBatchPost200ResponseData {
+    /**
+     * List of parsed user agents results returned in the same order as the input user agents.
+     */
+    'results'?: Array<any>;
+    /**
+     * The original user agent string from the input.
+     */
+    'results[].user_agent'?: string;
+    /**
+     * Parsed user agent details.
+     */
+    'results[].data'?: object;
+    /**
+     * Detected browser name (e.g. Chrome, Firefox, Safari, Edge, Opera, Internet Explorer, Other). Empty if not detected.
+     */
+    'results[].data.browser'?: string;
+    /**
+     * Detected browser version (major.minor). Empty if not detected.
+     */
+    'results[].data.browser_version'?: string;
+    /**
+     * Detected operating system (e.g. Windows, macOS, Linux, Android, iOS, ChromeOS, Other). Empty if not detected.
+     */
+    'results[].data.os'?: string;
+    /**
+     * Detected OS version (format varies by platform). Empty if not detected.
+     */
+    'results[].data.os_version'?: string;
+    /**
+     * Device type — one of desktop, mobile, tablet, bot, or unknown
+     */
+    'results[].data.device'?: string;
+    /**
+     * True when the user agent matches a known bot or crawler pattern
+     */
+    'results[].data.is_bot'?: boolean;
+    /**
+     * Total number of parsed user agent results returned.
+     */
+    'total'?: number;
+}
+export interface V1TechnologyUseragentBatchPostRequest {
+    /**
+     * Array of user agents to parse (min: 1, max: 50).
+     */
+    'user_agents': Array<any>;
 }
 export interface V1TechnologyUseragentGet200Response {
     'data'?: V1TechnologyUseragentGet200ResponseData;
@@ -1768,13 +3006,13 @@ export interface V1TextDictionaryWordGet200ResponseData {
      */
     'phonetic'?: string;
     /**
-     * One or more definitions for the word, each with partOfSpeech, definition, and an optional example
+     * One or more definitions for the word, each with part_of_speech, definition, and an optional example
      */
     'definitions'?: string;
     /**
      * Grammatical category (e.g. noun, verb, adjective)
      */
-    'definitions[].partOfSpeech'?: string;
+    'definitions[].part_of_speech'?: string;
     /**
      * Plain-text definition of the word
      */
@@ -1787,6 +3025,34 @@ export interface V1TextDictionaryWordGet200ResponseData {
      * List of words with similar meaning
      */
     'synonyms'?: string;
+}
+export interface V1TextLoremBatchPost200Response {
+    'data'?: V1TextLoremBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TextLoremBatchPost200ResponseData {
+    /**
+     * Contains the generated text if the specific item was successful
+     */
+    'data[].data'?: object;
+    /**
+     * Error message if the specific item failed to generate
+     */
+    'data[].error'?: string;
+}
+export interface V1TextLoremBatchPostRequest {
+    /**
+     * Array of text generation requests. Minimum 1 item, maximum 50 items.
+     */
+    'items': Array<any>;
+    /**
+     * Number of paragraphs to generate (1-20)
+     */
+    'items[].paragraphs'?: number;
+    /**
+     * Number of sentences per paragraph (1-20)
+     */
+    'items[].sentences'?: number;
 }
 export interface V1TextLoremGet200Response {
     'data'?: V1TextLoremGet200ResponseData;
@@ -1804,7 +3070,7 @@ export interface V1TextLoremGet200ResponseData {
     /**
      * Total number of words in generated text
      */
-    'wordCount'?: number;
+    'word_count'?: number;
 }
 export interface V1TextNormalizeBatchPost200Response {
     'data'?: V1TextNormalizeBatchPost200ResponseData;
@@ -1858,47 +3124,45 @@ export interface V1TextNormalizePostRequest {
      */
     'email': string;
 }
-export interface V1TextProfanityPost200Response {
-    'data'?: V1TextProfanityPost200ResponseData;
+export interface V1TextSentimentBatchPost200Response {
+    'data'?: V1TextSentimentBatchPost200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
 }
-export interface V1TextProfanityPost200ResponseData {
+export interface V1TextSentimentBatchPost200ResponseData {
     /**
-     * Whether any profanity was detected in the text
+     * Sentiment results for each input text, in the same order as the input.
      */
-    'has_profanity'?: boolean;
+    'results'?: Array<any>;
     /**
-     * The input text with profane words replaced by asterisks
+     * The dominant sentiment class: positive, negative, or neutral
      */
-    'censored'?: string;
+    'results[].sentiment'?: string;
     /**
-     * Deduplicated list of profane words found (lowercase)
+     * Confidence score for the dominant sentiment, between 0.0 and 1.0
      */
-    'flagged_words'?: string;
+    'results[].score'?: number;
+    /**
+     * Proportional score for positive sentiment (sums to 1.0 with other classes)
+     */
+    'results[].breakdown.positive'?: number;
+    /**
+     * Proportional score for negative sentiment (sums to 1.0 with other classes)
+     */
+    'results[].breakdown.negative'?: number;
+    /**
+     * Proportional score for neutral sentiment (sums to 1.0 with other classes)
+     */
+    'results[].breakdown.neutral'?: number;
+    /**
+     * Total number of results returned.
+     */
+    'total'?: number;
 }
-export interface V1TextProfanityPostRequest {
+export interface V1TextSentimentBatchPostRequest {
     /**
-     * The text to check for profanity.
+     * The list of texts to analyze. Between 1 and 50 items.
      */
-    'text': string;
-}
-export interface V1TextQuotesRandomGet200Response {
-    'data'?: V1TextQuotesRandomGet200ResponseData;
-    'metadata'?: V1TextAdviceGet200ResponseMetadata;
-}
-export interface V1TextQuotesRandomGet200ResponseData {
-    /**
-     * Unique identifier for the quote
-     */
-    'id'?: number;
-    /**
-     * The quote text
-     */
-    'text'?: string;
-    /**
-     * Name of the person who said or wrote the quote
-     */
-    'author'?: string;
+    'texts': Array<any>;
 }
 export interface V1TextSentimentPost200Response {
     'data'?: V1TextSentimentPost200ResponseData;
@@ -1956,17 +3220,37 @@ export interface V1TextSimilarityPostRequest {
      */
     'text2': string;
 }
+export interface V1TextSpellcheckBatchPost200Response {
+    'data'?: V1TextSpellcheckBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TextSpellcheckBatchPost200ResponseData {
+    /**
+     * One entry per input text, in the same order as the input array. Each item contains corrected (the fixed text) and corrections (list of individual corrections with original, suggested, suggestions, and position).
+     */
+    'results'?: string;
+    /**
+     * Number of texts processed. Equals the length of the input array.
+     */
+    'total'?: number;
+}
+export interface V1TextSpellcheckBatchPostRequest {
+    /**
+     * The list of texts to spell-check. Between 1 and 50 items.
+     */
+    'texts': Array<any>;
+}
 export interface V1TextSpellcheckPost200Response {
     'data'?: V1TextSpellcheckPost200ResponseData;
     'metadata'?: V1TextAdviceGet200ResponseMetadata;
 }
 export interface V1TextSpellcheckPost200ResponseData {
     /**
-     * The full input text with all misspelled words replaced by their suggested corrections
+     * The full input text with all misspelled words replaced by the top-ranked suggestion
      */
     'corrected'?: string;
     /**
-     * List of individual corrections. Each item contains: original (the misspelled word), suggested (the correction), and position (0-based character offset in the original text)
+     * List of individual corrections. Each item contains: original (the misspelled word), suggested (the top-ranked replacement applied to corrected), suggestions (up to 3 ranked alternatives returned by LanguageTool, from most to least likely), and position (0-based Unicode character offset in the original text)
      */
     'corrections'?: string;
 }
@@ -1993,6 +3277,26 @@ export interface V1TextThesaurusWordGet200ResponseData {
      * List of words with opposite meaning
      */
     'antonyms'?: string;
+}
+export interface V1TextWordsBatchPost200Response {
+    'data'?: V1TextWordsBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1TextWordsBatchPost200ResponseData {
+    /**
+     * List of batch lookup results
+     */
+    'results'?: Array<any>;
+    /**
+     * Total number of items processed
+     */
+    'total'?: number;
+}
+export interface V1TextWordsBatchPostRequest {
+    /**
+     * List of words to look up in batch (max 50 items)
+     */
+    'items': Array<any>;
 }
 export interface V1TextWordsRandomGet200Response {
     'data'?: V1TextWordsRandomGet200ResponseData;
@@ -2159,6 +3463,66 @@ export interface V1ValidationPhoneGet200ResponseData {
      * true when the number is not tied to a physical SIM or fixed line: voip, personal_number, uan, pager, or voicemail
      */
     'risk.is_virtual'?: boolean;
+}
+export interface V1ValidationProfanityBatchPost200Response {
+    'data'?: V1ValidationProfanityBatchPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1ValidationProfanityBatchPost200ResponseData {
+    /**
+     * Per-item results in input order.
+     */
+    'results'?: Array<any>;
+    /**
+     * The original text that was checked.
+     */
+    'results[].text'?: string;
+    /**
+     * Whether any profanity was detected.
+     */
+    'results[].result.has_profanity'?: boolean;
+    /**
+     * Text with profane words replaced by asterisks.
+     */
+    'results[].result.censored'?: string;
+    /**
+     * Deduplicated list of detected profane words (lowercase).
+     */
+    'results[].result.flagged_words'?: string;
+    /**
+     * Total number of items processed.
+     */
+    'total'?: number;
+}
+export interface V1ValidationProfanityBatchPostRequest {
+    /**
+     * List of texts to check (1–50 items, each non-empty).
+     */
+    'texts': string;
+}
+export interface V1ValidationProfanityPost200Response {
+    'data'?: V1ValidationProfanityPost200ResponseData;
+    'metadata'?: V1TextAdviceGet200ResponseMetadata;
+}
+export interface V1ValidationProfanityPost200ResponseData {
+    /**
+     * Whether any profanity was detected in the text
+     */
+    'has_profanity'?: boolean;
+    /**
+     * The input text with profane words replaced by asterisks
+     */
+    'censored'?: string;
+    /**
+     * Deduplicated list of profane words found (lowercase)
+     */
+    'flagged_words'?: string;
+}
+export interface V1ValidationProfanityPostRequest {
+    /**
+     * The text to check for profanity.
+     */
+    'text': string;
 }
 
 /**
@@ -2453,183 +3817,6 @@ export class BarcodeApi extends BaseAPI {
      */
     public v1TechnologyBarcodeGet(data: string, type: string, options?: RawAxiosRequestConfig) {
         return BarcodeApiFp(this.configuration).v1TechnologyBarcodeGet(data, type, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * Base64Api - axios parameter creator
- */
-export const Base64ApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * Decode a Base64-encoded string back to plain text
-         * @summary Decode
-         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        v1TechnologyBase64DecodePost: async (v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'v1TechnologyBase64DecodePostRequest' is not null or undefined
-            assertParamExists('v1TechnologyBase64DecodePost', 'v1TechnologyBase64DecodePostRequest', v1TechnologyBase64DecodePostRequest)
-            const localVarPath = `/v1/technology/base64/decode`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication requiems-api-key required
-            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyBase64DecodePostRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Encode a plain-text string to Base64
-         * @summary Encode
-         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        v1TechnologyBase64EncodePost: async (v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'v1TechnologyBase64EncodePostRequest' is not null or undefined
-            assertParamExists('v1TechnologyBase64EncodePost', 'v1TechnologyBase64EncodePostRequest', v1TechnologyBase64EncodePostRequest)
-            const localVarPath = `/v1/technology/base64/encode`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication requiems-api-key required
-            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyBase64EncodePostRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * Base64Api - functional programming interface
- */
-export const Base64ApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = Base64ApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * Decode a Base64-encoded string back to plain text
-         * @summary Decode
-         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyBase64DecodePost200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['Base64Api.v1TechnologyBase64DecodePost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Encode a plain-text string to Base64
-         * @summary Encode
-         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyBase64EncodePost200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['Base64Api.v1TechnologyBase64EncodePost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * Base64Api - factory interface
- */
-export const Base64ApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = Base64ApiFp(configuration)
-    return {
-        /**
-         * Decode a Base64-encoded string back to plain text
-         * @summary Decode
-         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyBase64DecodePost200Response> {
-            return localVarFp.v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Encode a plain-text string to Base64
-         * @summary Encode
-         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyBase64EncodePost200Response> {
-            return localVarFp.v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * Base64Api - object-oriented interface
- */
-export class Base64Api extends BaseAPI {
-    /**
-     * Decode a Base64-encoded string back to plain text
-     * @summary Decode
-     * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig) {
-        return Base64ApiFp(this.configuration).v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Encode a plain-text string to Base64
-     * @summary Encode
-     * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig) {
-        return Base64ApiFp(this.configuration).v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3653,6 +4840,183 @@ export class DataFormatConversionApi extends BaseAPI {
 
 
 /**
+ * DataIntegrityApi - axios parameter creator
+ */
+export const DataIntegrityApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+         * @summary Moderate Content
+         * @param {V1SystemsContentModeratePostRequest} v1SystemsContentModeratePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsContentModeratePost: async (v1SystemsContentModeratePostRequest: V1SystemsContentModeratePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsContentModeratePostRequest' is not null or undefined
+            assertParamExists('v1SystemsContentModeratePost', 'v1SystemsContentModeratePostRequest', v1SystemsContentModeratePostRequest)
+            const localVarPath = `/v1/systems/content/moderate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsContentModeratePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Apply a composable pipeline of normalization operations to a string. Trim whitespace, fix encoding, normalize unicode, strip HTML, and more — in a single call.
+         * @summary Normalize Text
+         * @param {V1SystemsTextNormalizePostRequest} v1SystemsTextNormalizePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTextNormalizePost: async (v1SystemsTextNormalizePostRequest: V1SystemsTextNormalizePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsTextNormalizePostRequest' is not null or undefined
+            assertParamExists('v1SystemsTextNormalizePost', 'v1SystemsTextNormalizePostRequest', v1SystemsTextNormalizePostRequest)
+            const localVarPath = `/v1/systems/text/normalize`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsTextNormalizePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DataIntegrityApi - functional programming interface
+ */
+export const DataIntegrityApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DataIntegrityApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+         * @summary Moderate Content
+         * @param {V1SystemsContentModeratePostRequest} v1SystemsContentModeratePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest: V1SystemsContentModeratePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsContentModeratePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DataIntegrityApi.v1SystemsContentModeratePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Apply a composable pipeline of normalization operations to a string. Trim whitespace, fix encoding, normalize unicode, strip HTML, and more — in a single call.
+         * @summary Normalize Text
+         * @param {V1SystemsTextNormalizePostRequest} v1SystemsTextNormalizePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest: V1SystemsTextNormalizePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsTextNormalizePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DataIntegrityApi.v1SystemsTextNormalizePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DataIntegrityApi - factory interface
+ */
+export const DataIntegrityApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DataIntegrityApiFp(configuration)
+    return {
+        /**
+         * Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+         * @summary Moderate Content
+         * @param {V1SystemsContentModeratePostRequest} v1SystemsContentModeratePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest: V1SystemsContentModeratePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsContentModeratePost200Response> {
+            return localVarFp.v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Apply a composable pipeline of normalization operations to a string. Trim whitespace, fix encoding, normalize unicode, strip HTML, and more — in a single call.
+         * @summary Normalize Text
+         * @param {V1SystemsTextNormalizePostRequest} v1SystemsTextNormalizePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest: V1SystemsTextNormalizePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsTextNormalizePost200Response> {
+            return localVarFp.v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DataIntegrityApi - object-oriented interface
+ */
+export class DataIntegrityApi extends BaseAPI {
+    /**
+     * Check text for profanity, toxicity, sentiment, and language. Returns per-category flags and an is_safe boolean for gating content.
+     * @summary Moderate Content
+     * @param {V1SystemsContentModeratePostRequest} v1SystemsContentModeratePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest: V1SystemsContentModeratePostRequest, options?: RawAxiosRequestConfig) {
+        return DataIntegrityApiFp(this.configuration).v1SystemsContentModeratePost(v1SystemsContentModeratePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Apply a composable pipeline of normalization operations to a string. Trim whitespace, fix encoding, normalize unicode, strip HTML, and more — in a single call.
+     * @summary Normalize Text
+     * @param {V1SystemsTextNormalizePostRequest} v1SystemsTextNormalizePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest: V1SystemsTextNormalizePostRequest, options?: RawAxiosRequestConfig) {
+        return DataIntegrityApiFp(this.configuration).v1SystemsTextNormalizePost(v1SystemsTextNormalizePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * DetectLanguageApi - axios parameter creator
  */
 export const DetectLanguageApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -3752,6 +5116,183 @@ export class DetectLanguageApi extends BaseAPI {
      */
     public v1TextDetectLanguagePost(v1TextDetectLanguagePostRequest: V1TextDetectLanguagePostRequest, options?: RawAxiosRequestConfig) {
         return DetectLanguageApiFp(this.configuration).v1TextDetectLanguagePost(v1TextDetectLanguagePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * DeveloperUtilitiesApi - axios parameter creator
+ */
+export const DeveloperUtilitiesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+         * @summary Base64 Decode
+         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBase64DecodePost: async (v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyBase64DecodePostRequest' is not null or undefined
+            assertParamExists('v1TechnologyBase64DecodePost', 'v1TechnologyBase64DecodePostRequest', v1TechnologyBase64DecodePostRequest)
+            const localVarPath = `/v1/technology/base64/decode`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyBase64DecodePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Encode a plain-text string to Base64. Supports standard (RFC 4648) and URL-safe (base64url) variants.
+         * @summary Base64 Encode
+         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBase64EncodePost: async (v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyBase64EncodePostRequest' is not null or undefined
+            assertParamExists('v1TechnologyBase64EncodePost', 'v1TechnologyBase64EncodePostRequest', v1TechnologyBase64EncodePostRequest)
+            const localVarPath = `/v1/technology/base64/encode`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyBase64EncodePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DeveloperUtilitiesApi - functional programming interface
+ */
+export const DeveloperUtilitiesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DeveloperUtilitiesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+         * @summary Base64 Decode
+         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyBase64DecodePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperUtilitiesApi.v1TechnologyBase64DecodePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Encode a plain-text string to Base64. Supports standard (RFC 4648) and URL-safe (base64url) variants.
+         * @summary Base64 Encode
+         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyBase64EncodePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeveloperUtilitiesApi.v1TechnologyBase64EncodePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * DeveloperUtilitiesApi - factory interface
+ */
+export const DeveloperUtilitiesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DeveloperUtilitiesApiFp(configuration)
+    return {
+        /**
+         * Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+         * @summary Base64 Decode
+         * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyBase64DecodePost200Response> {
+            return localVarFp.v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Encode a plain-text string to Base64. Supports standard (RFC 4648) and URL-safe (base64url) variants.
+         * @summary Base64 Encode
+         * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyBase64EncodePost200Response> {
+            return localVarFp.v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DeveloperUtilitiesApi - object-oriented interface
+ */
+export class DeveloperUtilitiesApi extends BaseAPI {
+    /**
+     * Decode a Base64-encoded string back to plain text. Returns 422 for invalid or unpadded input.
+     * @summary Base64 Decode
+     * @param {V1TechnologyBase64DecodePostRequest} v1TechnologyBase64DecodePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest: V1TechnologyBase64DecodePostRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperUtilitiesApiFp(this.configuration).v1TechnologyBase64DecodePost(v1TechnologyBase64DecodePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Encode a plain-text string to Base64. Supports standard (RFC 4648) and URL-safe (base64url) variants.
+     * @summary Base64 Encode
+     * @param {V1TechnologyBase64EncodePostRequest} v1TechnologyBase64EncodePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest: V1TechnologyBase64EncodePostRequest, options?: RawAxiosRequestConfig) {
+        return DeveloperUtilitiesApiFp(this.configuration).v1TechnologyBase64EncodePost(v1TechnologyBase64EncodePostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5341,6 +6882,44 @@ export const FitnessExercisesApiAxiosParamCreator = function (configuration?: Co
             };
         },
         /**
+         * Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+         * @summary Batch Get Exercises
+         * @param {V1HealthExercisesBatchPostRequest} v1HealthExercisesBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1HealthExercisesBatchPost: async (v1HealthExercisesBatchPostRequest: V1HealthExercisesBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1HealthExercisesBatchPostRequest' is not null or undefined
+            assertParamExists('v1HealthExercisesBatchPost', 'v1HealthExercisesBatchPostRequest', v1HealthExercisesBatchPostRequest)
+            const localVarPath = `/v1/health/exercises/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1HealthExercisesBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns a paginated list of exercises. All filter parameters are optional and combinable.
          * @summary List Exercises
          * @param {string} [bodyPart] Filter by body part (e.g. chest, back, upper legs). Use /v1/health/body-parts for valid values.
@@ -5405,7 +6984,7 @@ export const FitnessExercisesApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * Returns a single exercise by its numeric ID.
-         * @summary Get Exercise by ID
+         * @summary Exercise by ID
          * @param {number} id Numeric exercise ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5560,6 +7139,19 @@ export const FitnessExercisesApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+         * @summary Batch Get Exercises
+         * @param {V1HealthExercisesBatchPostRequest} v1HealthExercisesBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest: V1HealthExercisesBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1HealthExercisesBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FitnessExercisesApi.v1HealthExercisesBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a paginated list of exercises. All filter parameters are optional and combinable.
          * @summary List Exercises
          * @param {string} [bodyPart] Filter by body part (e.g. chest, back, upper legs). Use /v1/health/body-parts for valid values.
@@ -5579,7 +7171,7 @@ export const FitnessExercisesApiFp = function(configuration?: Configuration) {
         },
         /**
          * Returns a single exercise by its numeric ID.
-         * @summary Get Exercise by ID
+         * @summary Exercise by ID
          * @param {number} id Numeric exercise ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5646,6 +7238,16 @@ export const FitnessExercisesApiFactory = function (configuration?: Configuratio
             return localVarFp.v1HealthEquipmentGet(options).then((request) => request(axios, basePath));
         },
         /**
+         * Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+         * @summary Batch Get Exercises
+         * @param {V1HealthExercisesBatchPostRequest} v1HealthExercisesBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest: V1HealthExercisesBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1HealthExercisesBatchPost200Response> {
+            return localVarFp.v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a paginated list of exercises. All filter parameters are optional and combinable.
          * @summary List Exercises
          * @param {string} [bodyPart] Filter by body part (e.g. chest, back, upper legs). Use /v1/health/body-parts for valid values.
@@ -5662,7 +7264,7 @@ export const FitnessExercisesApiFactory = function (configuration?: Configuratio
         },
         /**
          * Returns a single exercise by its numeric ID.
-         * @summary Get Exercise by ID
+         * @summary Exercise by ID
          * @param {number} id Numeric exercise ID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5720,6 +7322,17 @@ export class FitnessExercisesApi extends BaseAPI {
     }
 
     /**
+     * Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+     * @summary Batch Get Exercises
+     * @param {V1HealthExercisesBatchPostRequest} v1HealthExercisesBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest: V1HealthExercisesBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return FitnessExercisesApiFp(this.configuration).v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Returns a paginated list of exercises. All filter parameters are optional and combinable.
      * @summary List Exercises
      * @param {string} [bodyPart] Filter by body part (e.g. chest, back, upper legs). Use /v1/health/body-parts for valid values.
@@ -5737,7 +7350,7 @@ export class FitnessExercisesApi extends BaseAPI {
 
     /**
      * Returns a single exercise by its numeric ID.
-     * @summary Get Exercise by ID
+     * @summary Exercise by ID
      * @param {number} id Numeric exercise ID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5779,6 +7392,44 @@ export class FitnessExercisesApi extends BaseAPI {
 export const GeocodeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+         * @summary Batch Geocode Addresses
+         * @param {V1PlacesGeocodeBatchPostRequest} v1PlacesGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesGeocodeBatchPost: async (v1PlacesGeocodeBatchPostRequest: V1PlacesGeocodeBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1PlacesGeocodeBatchPostRequest' is not null or undefined
+            assertParamExists('v1PlacesGeocodeBatchPost', 'v1PlacesGeocodeBatchPostRequest', v1PlacesGeocodeBatchPostRequest)
+            const localVarPath = `/v1/places/geocode/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1PlacesGeocodeBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Converts a free-text address into latitude and longitude coordinates.
          * @summary Geocode Address
          * @param {string} address The address to geocode (street, city, country, or any combination)
@@ -5812,6 +7463,44 @@ export const GeocodeApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Reverse Geocode
+         * @param {V1PlacesReverseGeocodeBatchPostRequest} v1PlacesReverseGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesReverseGeocodeBatchPost: async (v1PlacesReverseGeocodeBatchPostRequest: V1PlacesReverseGeocodeBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1PlacesReverseGeocodeBatchPostRequest' is not null or undefined
+            assertParamExists('v1PlacesReverseGeocodeBatchPost', 'v1PlacesReverseGeocodeBatchPostRequest', v1PlacesReverseGeocodeBatchPostRequest)
+            const localVarPath = `/v1/places/reverse-geocode/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1PlacesReverseGeocodeBatchPostRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5875,6 +7564,19 @@ export const GeocodeApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = GeocodeApiAxiosParamCreator(configuration)
     return {
         /**
+         * Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+         * @summary Batch Geocode Addresses
+         * @param {V1PlacesGeocodeBatchPostRequest} v1PlacesGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest: V1PlacesGeocodeBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1PlacesGeocodeBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GeocodeApi.v1PlacesGeocodeBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Converts a free-text address into latitude and longitude coordinates.
          * @summary Geocode Address
          * @param {string} address The address to geocode (street, city, country, or any combination)
@@ -5885,6 +7587,19 @@ export const GeocodeApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.v1PlacesGeocodeGet(address, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['GeocodeApi.v1PlacesGeocodeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Reverse Geocode
+         * @param {V1PlacesReverseGeocodeBatchPostRequest} v1PlacesReverseGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest: V1PlacesReverseGeocodeBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1PlacesReverseGeocodeBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GeocodeApi.v1PlacesReverseGeocodeBatchPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5911,6 +7626,16 @@ export const GeocodeApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = GeocodeApiFp(configuration)
     return {
         /**
+         * Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+         * @summary Batch Geocode Addresses
+         * @param {V1PlacesGeocodeBatchPostRequest} v1PlacesGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest: V1PlacesGeocodeBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1PlacesGeocodeBatchPost200Response> {
+            return localVarFp.v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Converts a free-text address into latitude and longitude coordinates.
          * @summary Geocode Address
          * @param {string} address The address to geocode (street, city, country, or any combination)
@@ -5919,6 +7644,16 @@ export const GeocodeApiFactory = function (configuration?: Configuration, basePa
          */
         v1PlacesGeocodeGet(address: string, options?: RawAxiosRequestConfig): AxiosPromise<V1PlacesGeocodeGet200Response> {
             return localVarFp.v1PlacesGeocodeGet(address, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Reverse Geocode
+         * @param {V1PlacesReverseGeocodeBatchPostRequest} v1PlacesReverseGeocodeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest: V1PlacesReverseGeocodeBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1PlacesReverseGeocodeBatchPost200Response> {
+            return localVarFp.v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Converts geographic coordinates into a human-readable address.
@@ -5939,6 +7674,17 @@ export const GeocodeApiFactory = function (configuration?: Configuration, basePa
  */
 export class GeocodeApi extends BaseAPI {
     /**
+     * Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+     * @summary Batch Geocode Addresses
+     * @param {V1PlacesGeocodeBatchPostRequest} v1PlacesGeocodeBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest: V1PlacesGeocodeBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return GeocodeApiFp(this.configuration).v1PlacesGeocodeBatchPost(v1PlacesGeocodeBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Converts a free-text address into latitude and longitude coordinates.
      * @summary Geocode Address
      * @param {string} address The address to geocode (street, city, country, or any combination)
@@ -5947,6 +7693,17 @@ export class GeocodeApi extends BaseAPI {
      */
     public v1PlacesGeocodeGet(address: string, options?: RawAxiosRequestConfig) {
         return GeocodeApiFp(this.configuration).v1PlacesGeocodeGet(address, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+     * @summary Batch Reverse Geocode
+     * @param {V1PlacesReverseGeocodeBatchPostRequest} v1PlacesReverseGeocodeBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest: V1PlacesReverseGeocodeBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return GeocodeApiFp(this.configuration).v1PlacesReverseGeocodeBatchPost(v1PlacesReverseGeocodeBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5959,6 +7716,269 @@ export class GeocodeApi extends BaseAPI {
      */
     public v1PlacesReverseGeocodeGet(lat: number, lon: number, options?: RawAxiosRequestConfig) {
         return GeocodeApiFp(this.configuration).v1PlacesReverseGeocodeGet(lat, lon, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * GlobalDataApi - axios parameter creator
+ */
+export const GlobalDataApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Retrieve working days, public holidays, and next upcoming holiday for any country and optional year/month. Covers 100+ countries.
+         * @summary Business Calendar
+         * @param {string} country ISO 3166-1 alpha-2 country code (e.g. DE, US, FR)
+         * @param {number} [year] Year to retrieve the calendar for. Defaults to the current year.
+         * @param {number} [month] Month (1–12). When provided, returns month-scoped working day count, total days, weekend days, and filtered holidays.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsBusinessCalendarCountryGet: async (country: string, year?: number, month?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'country' is not null or undefined
+            assertParamExists('v1SystemsBusinessCalendarCountryGet', 'country', country)
+            const localVarPath = `/v1/systems/business-calendar/{country}`
+                .replace('{country}', encodeURIComponent(String(country)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            if (year !== undefined) {
+                localVarQueryParameter['year'] = year;
+            }
+
+            if (month !== undefined) {
+                localVarQueryParameter['month'] = month;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+         * @summary Resolve Location
+         * @param {V1SystemsLocationResolvePostRequest} v1SystemsLocationResolvePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsLocationResolvePost: async (v1SystemsLocationResolvePostRequest: V1SystemsLocationResolvePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsLocationResolvePostRequest' is not null or undefined
+            assertParamExists('v1SystemsLocationResolvePost', 'v1SystemsLocationResolvePostRequest', v1SystemsLocationResolvePostRequest)
+            const localVarPath = `/v1/systems/location/resolve`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsLocationResolvePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Resolve the timezone, UTC offset, and DST status for any IPv4 or IPv6 address without needing an address string.
+         * @summary Timezone from IP
+         * @param {string} ip IPv4 or IPv6 address to resolve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTimezoneFromIpIpGet: async (ip: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ip' is not null or undefined
+            assertParamExists('v1SystemsTimezoneFromIpIpGet', 'ip', ip)
+            const localVarPath = `/v1/systems/timezone/from-ip/{ip}`
+                .replace('{ip}', encodeURIComponent(String(ip)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * GlobalDataApi - functional programming interface
+ */
+export const GlobalDataApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GlobalDataApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Retrieve working days, public holidays, and next upcoming holiday for any country and optional year/month. Covers 100+ countries.
+         * @summary Business Calendar
+         * @param {string} country ISO 3166-1 alpha-2 country code (e.g. DE, US, FR)
+         * @param {number} [year] Year to retrieve the calendar for. Defaults to the current year.
+         * @param {number} [month] Month (1–12). When provided, returns month-scoped working day count, total days, weekend days, and filtered holidays.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsBusinessCalendarCountryGet(country: string, year?: number, month?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsBusinessCalendarCountryGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsBusinessCalendarCountryGet(country, year, month, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GlobalDataApi.v1SystemsBusinessCalendarCountryGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+         * @summary Resolve Location
+         * @param {V1SystemsLocationResolvePostRequest} v1SystemsLocationResolvePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest: V1SystemsLocationResolvePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsLocationResolvePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GlobalDataApi.v1SystemsLocationResolvePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Resolve the timezone, UTC offset, and DST status for any IPv4 or IPv6 address without needing an address string.
+         * @summary Timezone from IP
+         * @param {string} ip IPv4 or IPv6 address to resolve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsTimezoneFromIpIpGet(ip: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsTimezoneFromIpIpGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsTimezoneFromIpIpGet(ip, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['GlobalDataApi.v1SystemsTimezoneFromIpIpGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * GlobalDataApi - factory interface
+ */
+export const GlobalDataApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GlobalDataApiFp(configuration)
+    return {
+        /**
+         * Retrieve working days, public holidays, and next upcoming holiday for any country and optional year/month. Covers 100+ countries.
+         * @summary Business Calendar
+         * @param {string} country ISO 3166-1 alpha-2 country code (e.g. DE, US, FR)
+         * @param {number} [year] Year to retrieve the calendar for. Defaults to the current year.
+         * @param {number} [month] Month (1–12). When provided, returns month-scoped working day count, total days, weekend days, and filtered holidays.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsBusinessCalendarCountryGet(country: string, year?: number, month?: number, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsBusinessCalendarCountryGet200Response> {
+            return localVarFp.v1SystemsBusinessCalendarCountryGet(country, year, month, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+         * @summary Resolve Location
+         * @param {V1SystemsLocationResolvePostRequest} v1SystemsLocationResolvePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest: V1SystemsLocationResolvePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsLocationResolvePost200Response> {
+            return localVarFp.v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Resolve the timezone, UTC offset, and DST status for any IPv4 or IPv6 address without needing an address string.
+         * @summary Timezone from IP
+         * @param {string} ip IPv4 or IPv6 address to resolve
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTimezoneFromIpIpGet(ip: string, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsTimezoneFromIpIpGet200Response> {
+            return localVarFp.v1SystemsTimezoneFromIpIpGet(ip, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * GlobalDataApi - object-oriented interface
+ */
+export class GlobalDataApi extends BaseAPI {
+    /**
+     * Retrieve working days, public holidays, and next upcoming holiday for any country and optional year/month. Covers 100+ countries.
+     * @summary Business Calendar
+     * @param {string} country ISO 3166-1 alpha-2 country code (e.g. DE, US, FR)
+     * @param {number} [year] Year to retrieve the calendar for. Defaults to the current year.
+     * @param {number} [month] Month (1–12). When provided, returns month-scoped working day count, total days, weekend days, and filtered holidays.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsBusinessCalendarCountryGet(country: string, year?: number, month?: number, options?: RawAxiosRequestConfig) {
+        return GlobalDataApiFp(this.configuration).v1SystemsBusinessCalendarCountryGet(country, year, month, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Resolve an address or coordinates into a full location profile — city, country, timezone, UTC offset, current time, working days this month, and next holiday.
+     * @summary Resolve Location
+     * @param {V1SystemsLocationResolvePostRequest} v1SystemsLocationResolvePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest: V1SystemsLocationResolvePostRequest, options?: RawAxiosRequestConfig) {
+        return GlobalDataApiFp(this.configuration).v1SystemsLocationResolvePost(v1SystemsLocationResolvePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Resolve the timezone, UTC offset, and DST status for any IPv4 or IPv6 address without needing an address string.
+     * @summary Timezone from IP
+     * @param {string} ip IPv4 or IPv6 address to resolve
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsTimezoneFromIpIpGet(ip: string, options?: RawAxiosRequestConfig) {
+        return GlobalDataApiFp(this.configuration).v1SystemsTimezoneFromIpIpGet(ip, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6159,6 +8179,44 @@ export class HolidaysApi extends BaseAPI {
 export const HoroscopeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Returns up to 12 daily horoscopes in a single request.
+         * @summary Batch Daily Horoscopes
+         * @param {V1EntertainmentHoroscopeBatchPostRequest} v1EntertainmentHoroscopeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentHoroscopeBatchPost: async (v1EntertainmentHoroscopeBatchPostRequest: V1EntertainmentHoroscopeBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1EntertainmentHoroscopeBatchPostRequest' is not null or undefined
+            assertParamExists('v1EntertainmentHoroscopeBatchPost', 'v1EntertainmentHoroscopeBatchPostRequest', v1EntertainmentHoroscopeBatchPostRequest)
+            const localVarPath = `/v1/entertainment/horoscope/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1EntertainmentHoroscopeBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns a daily horoscope reading for the specified zodiac sign.
          * @summary Get Daily Horoscope
          * @param {string} sign Zodiac sign (case-insensitive). Supported values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces
@@ -6205,6 +8263,19 @@ export const HoroscopeApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = HoroscopeApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns up to 12 daily horoscopes in a single request.
+         * @summary Batch Daily Horoscopes
+         * @param {V1EntertainmentHoroscopeBatchPostRequest} v1EntertainmentHoroscopeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest: V1EntertainmentHoroscopeBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1EntertainmentHoroscopeBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HoroscopeApi.v1EntertainmentHoroscopeBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a daily horoscope reading for the specified zodiac sign.
          * @summary Get Daily Horoscope
          * @param {string} sign Zodiac sign (case-insensitive). Supported values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces
@@ -6227,6 +8298,16 @@ export const HoroscopeApiFactory = function (configuration?: Configuration, base
     const localVarFp = HoroscopeApiFp(configuration)
     return {
         /**
+         * Returns up to 12 daily horoscopes in a single request.
+         * @summary Batch Daily Horoscopes
+         * @param {V1EntertainmentHoroscopeBatchPostRequest} v1EntertainmentHoroscopeBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest: V1EntertainmentHoroscopeBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1EntertainmentHoroscopeBatchPost200Response> {
+            return localVarFp.v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a daily horoscope reading for the specified zodiac sign.
          * @summary Get Daily Horoscope
          * @param {string} sign Zodiac sign (case-insensitive). Supported values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces
@@ -6243,6 +8324,17 @@ export const HoroscopeApiFactory = function (configuration?: Configuration, base
  * HoroscopeApi - object-oriented interface
  */
 export class HoroscopeApi extends BaseAPI {
+    /**
+     * Returns up to 12 daily horoscopes in a single request.
+     * @summary Batch Daily Horoscopes
+     * @param {V1EntertainmentHoroscopeBatchPostRequest} v1EntertainmentHoroscopeBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest: V1EntertainmentHoroscopeBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return HoroscopeApiFp(this.configuration).v1EntertainmentHoroscopeBatchPost(v1EntertainmentHoroscopeBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns a daily horoscope reading for the specified zodiac sign.
      * @summary Get Daily Horoscope
@@ -6434,6 +8526,255 @@ export class IbanApi extends BaseAPI {
 
 
 /**
+ * IdentityRiskApi - axios parameter creator
+ */
+export const IdentityRiskApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Score a user for risk without the full signal breakdown. Lower latency than /signup/protect, suited for background re-scoring and rate limiting.
+         * @summary Score Risk
+         * @param {V1SystemsRiskScorePostRequest} v1SystemsRiskScorePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsRiskScorePost: async (v1SystemsRiskScorePostRequest: V1SystemsRiskScorePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsRiskScorePostRequest' is not null or undefined
+            assertParamExists('v1SystemsRiskScorePost', 'v1SystemsRiskScorePostRequest', v1SystemsRiskScorePostRequest)
+            const localVarPath = `/v1/systems/risk/score`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsRiskScorePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+         * @summary Protect Signup
+         * @param {V1SystemsSignupProtectPostRequest} v1SystemsSignupProtectPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsSignupProtectPost: async (v1SystemsSignupProtectPostRequest: V1SystemsSignupProtectPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsSignupProtectPostRequest' is not null or undefined
+            assertParamExists('v1SystemsSignupProtectPost', 'v1SystemsSignupProtectPostRequest', v1SystemsSignupProtectPostRequest)
+            const localVarPath = `/v1/systems/signup/protect`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsSignupProtectPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+         * @summary Verify User
+         * @param {V1SystemsUserVerifyPostRequest} v1SystemsUserVerifyPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsUserVerifyPost: async (v1SystemsUserVerifyPostRequest: V1SystemsUserVerifyPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsUserVerifyPostRequest' is not null or undefined
+            assertParamExists('v1SystemsUserVerifyPost', 'v1SystemsUserVerifyPostRequest', v1SystemsUserVerifyPostRequest)
+            const localVarPath = `/v1/systems/user/verify`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsUserVerifyPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * IdentityRiskApi - functional programming interface
+ */
+export const IdentityRiskApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = IdentityRiskApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Score a user for risk without the full signal breakdown. Lower latency than /signup/protect, suited for background re-scoring and rate limiting.
+         * @summary Score Risk
+         * @param {V1SystemsRiskScorePostRequest} v1SystemsRiskScorePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest: V1SystemsRiskScorePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsRiskScorePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IdentityRiskApi.v1SystemsRiskScorePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+         * @summary Protect Signup
+         * @param {V1SystemsSignupProtectPostRequest} v1SystemsSignupProtectPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest: V1SystemsSignupProtectPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsSignupProtectPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IdentityRiskApi.v1SystemsSignupProtectPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+         * @summary Verify User
+         * @param {V1SystemsUserVerifyPostRequest} v1SystemsUserVerifyPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest: V1SystemsUserVerifyPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsUserVerifyPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IdentityRiskApi.v1SystemsUserVerifyPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * IdentityRiskApi - factory interface
+ */
+export const IdentityRiskApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = IdentityRiskApiFp(configuration)
+    return {
+        /**
+         * Score a user for risk without the full signal breakdown. Lower latency than /signup/protect, suited for background re-scoring and rate limiting.
+         * @summary Score Risk
+         * @param {V1SystemsRiskScorePostRequest} v1SystemsRiskScorePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest: V1SystemsRiskScorePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsRiskScorePost200Response> {
+            return localVarFp.v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+         * @summary Protect Signup
+         * @param {V1SystemsSignupProtectPostRequest} v1SystemsSignupProtectPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest: V1SystemsSignupProtectPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsSignupProtectPost200Response> {
+            return localVarFp.v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+         * @summary Verify User
+         * @param {V1SystemsUserVerifyPostRequest} v1SystemsUserVerifyPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest: V1SystemsUserVerifyPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsUserVerifyPost200Response> {
+            return localVarFp.v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * IdentityRiskApi - object-oriented interface
+ */
+export class IdentityRiskApi extends BaseAPI {
+    /**
+     * Score a user for risk without the full signal breakdown. Lower latency than /signup/protect, suited for background re-scoring and rate limiting.
+     * @summary Score Risk
+     * @param {V1SystemsRiskScorePostRequest} v1SystemsRiskScorePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest: V1SystemsRiskScorePostRequest, options?: RawAxiosRequestConfig) {
+        return IdentityRiskApiFp(this.configuration).v1SystemsRiskScorePost(v1SystemsRiskScorePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Evaluate a new user at signup. Returns a full risk decision with per-signal breakdown across email, phone, and IP.
+     * @summary Protect Signup
+     * @param {V1SystemsSignupProtectPostRequest} v1SystemsSignupProtectPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest: V1SystemsSignupProtectPostRequest, options?: RawAxiosRequestConfig) {
+        return IdentityRiskApiFp(this.configuration).v1SystemsSignupProtectPost(v1SystemsSignupProtectPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Deep-verify an email address using domain-level signals including WHOIS age, MX records, and domain availability. Optional IP check. Use for high-value or suspicious accounts.
+     * @summary Verify User
+     * @param {V1SystemsUserVerifyPostRequest} v1SystemsUserVerifyPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest: V1SystemsUserVerifyPostRequest, options?: RawAxiosRequestConfig) {
+        return IdentityRiskApiFp(this.configuration).v1SystemsUserVerifyPost(v1SystemsUserVerifyPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * InflationApi - axios parameter creator
  */
 export const InflationApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -6618,6 +8959,44 @@ export class InflationApi extends BaseAPI {
 export const IpAsnApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+         * @summary Batch ASN Lookup
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingIpAsnBatchPost: async (v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1NetworkingIpAsnBatchPostRequest' is not null or undefined
+            assertParamExists('v1NetworkingIpAsnBatchPost', 'v1NetworkingIpAsnBatchPostRequest', v1NetworkingIpAsnBatchPostRequest)
+            const localVarPath = `/v1/networking/ip/asn/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1NetworkingIpAsnBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Look up ASN, organization, ISP, and network details for the requesting client\'s IP address. Useful when you want information about the user making the request without specifying an IP explicitly.
          * @summary Lookup ASN (Caller IP)
          * @param {*} [options] Override http request option.
@@ -6697,6 +9076,19 @@ export const IpAsnApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = IpAsnApiAxiosParamCreator(configuration)
     return {
         /**
+         * Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+         * @summary Batch ASN Lookup
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1NetworkingIpAsnBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IpAsnApi.v1NetworkingIpAsnBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Look up ASN, organization, ISP, and network details for the requesting client\'s IP address. Useful when you want information about the user making the request without specifying an IP explicitly.
          * @summary Lookup ASN (Caller IP)
          * @param {*} [options] Override http request option.
@@ -6731,6 +9123,16 @@ export const IpAsnApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = IpAsnApiFp(configuration)
     return {
         /**
+         * Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+         * @summary Batch ASN Lookup
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1NetworkingIpAsnBatchPost200Response> {
+            return localVarFp.v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Look up ASN, organization, ISP, and network details for the requesting client\'s IP address. Useful when you want information about the user making the request without specifying an IP explicitly.
          * @summary Lookup ASN (Caller IP)
          * @param {*} [options] Override http request option.
@@ -6756,6 +9158,17 @@ export const IpAsnApiFactory = function (configuration?: Configuration, basePath
  * IpAsnApi - object-oriented interface
  */
 export class IpAsnApi extends BaseAPI {
+    /**
+     * Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+     * @summary Batch ASN Lookup
+     * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return IpAsnApiFp(this.configuration).v1NetworkingIpAsnBatchPost(v1NetworkingIpAsnBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Look up ASN, organization, ISP, and network details for the requesting client\'s IP address. Useful when you want information about the user making the request without specifying an IP explicitly.
      * @summary Lookup ASN (Caller IP)
@@ -6812,6 +9225,44 @@ export const IpInfoApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch IP Geolocation
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingIpInfoBatchPost: async (v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1NetworkingIpAsnBatchPostRequest' is not null or undefined
+            assertParamExists('v1NetworkingIpInfoBatchPost', 'v1NetworkingIpAsnBatchPostRequest', v1NetworkingIpAsnBatchPostRequest)
+            const localVarPath = `/v1/networking/ip/info/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1NetworkingIpAsnBatchPostRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6877,6 +9328,19 @@ export const IpInfoApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch IP Geolocation
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1NetworkingIpInfoBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IpInfoApi.v1NetworkingIpInfoBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Get geolocation and network information for a specific IP address.
          * @summary Get IP Info for IP
          * @param {string} ip The IP address to look up (supports IPv4 and IPv6)
@@ -6908,6 +9372,16 @@ export const IpInfoApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.v1NetworkingIpGet(options).then((request) => request(axios, basePath));
         },
         /**
+         * Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch IP Geolocation
+         * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1NetworkingIpInfoBatchPost200Response> {
+            return localVarFp.v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get geolocation and network information for a specific IP address.
          * @summary Get IP Info for IP
          * @param {string} ip The IP address to look up (supports IPv4 and IPv6)
@@ -6935,6 +9409,17 @@ export class IpInfoApi extends BaseAPI {
     }
 
     /**
+     * Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+     * @summary Batch IP Geolocation
+     * @param {V1NetworkingIpAsnBatchPostRequest} v1NetworkingIpAsnBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest: V1NetworkingIpAsnBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return IpInfoApiFp(this.configuration).v1NetworkingIpInfoBatchPost(v1NetworkingIpAsnBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get geolocation and network information for a specific IP address.
      * @summary Get IP Info for IP
      * @param {string} ip The IP address to look up (supports IPv4 and IPv6)
@@ -6953,6 +9438,44 @@ export class IpInfoApi extends BaseAPI {
  */
 export const LoremIpsumApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+         * @summary Generate Lorem Ipsum (Batch)
+         * @param {V1TextLoremBatchPostRequest} v1TextLoremBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextLoremBatchPost: async (v1TextLoremBatchPostRequest: V1TextLoremBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TextLoremBatchPostRequest' is not null or undefined
+            assertParamExists('v1TextLoremBatchPost', 'v1TextLoremBatchPostRequest', v1TextLoremBatchPostRequest)
+            const localVarPath = `/v1/text/lorem/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TextLoremBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Generate Lorem Ipsum placeholder text with customizable length and format
          * @summary Generate Lorem Ipsum
@@ -7006,6 +9529,19 @@ export const LoremIpsumApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LoremIpsumApiAxiosParamCreator(configuration)
     return {
         /**
+         * Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+         * @summary Generate Lorem Ipsum (Batch)
+         * @param {V1TextLoremBatchPostRequest} v1TextLoremBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TextLoremBatchPost(v1TextLoremBatchPostRequest: V1TextLoremBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextLoremBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextLoremBatchPost(v1TextLoremBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LoremIpsumApi.v1TextLoremBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Generate Lorem Ipsum placeholder text with customizable length and format
          * @summary Generate Lorem Ipsum
          * @param {number} [paragraphs] Number of paragraphs to generate (1-20)
@@ -7029,6 +9565,16 @@ export const LoremIpsumApiFactory = function (configuration?: Configuration, bas
     const localVarFp = LoremIpsumApiFp(configuration)
     return {
         /**
+         * Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+         * @summary Generate Lorem Ipsum (Batch)
+         * @param {V1TextLoremBatchPostRequest} v1TextLoremBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextLoremBatchPost(v1TextLoremBatchPostRequest: V1TextLoremBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TextLoremBatchPost200Response> {
+            return localVarFp.v1TextLoremBatchPost(v1TextLoremBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Generate Lorem Ipsum placeholder text with customizable length and format
          * @summary Generate Lorem Ipsum
          * @param {number} [paragraphs] Number of paragraphs to generate (1-20)
@@ -7046,6 +9592,17 @@ export const LoremIpsumApiFactory = function (configuration?: Configuration, bas
  * LoremIpsumApi - object-oriented interface
  */
 export class LoremIpsumApi extends BaseAPI {
+    /**
+     * Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+     * @summary Generate Lorem Ipsum (Batch)
+     * @param {V1TextLoremBatchPostRequest} v1TextLoremBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TextLoremBatchPost(v1TextLoremBatchPostRequest: V1TextLoremBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return LoremIpsumApiFp(this.configuration).v1TextLoremBatchPost(v1TextLoremBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Generate Lorem Ipsum placeholder text with customizable length and format
      * @summary Generate Lorem Ipsum
@@ -7066,6 +9623,44 @@ export class LoremIpsumApi extends BaseAPI {
  */
 export const MarkdownApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
+         * @summary Convert Markdown Batch
+         * @param {V1TechnologyMarkdownBatchPostRequest} v1TechnologyMarkdownBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyMarkdownBatchPost: async (v1TechnologyMarkdownBatchPostRequest: V1TechnologyMarkdownBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyMarkdownBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyMarkdownBatchPost', 'v1TechnologyMarkdownBatchPostRequest', v1TechnologyMarkdownBatchPostRequest)
+            const localVarPath = `/v1/technology/markdown/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyMarkdownBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output.
          * @summary Convert Markdown to HTML
@@ -7114,6 +9709,19 @@ export const MarkdownApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MarkdownApiAxiosParamCreator(configuration)
     return {
         /**
+         * Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
+         * @summary Convert Markdown Batch
+         * @param {V1TechnologyMarkdownBatchPostRequest} v1TechnologyMarkdownBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest: V1TechnologyMarkdownBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyMarkdownBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarkdownApi.v1TechnologyMarkdownBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output.
          * @summary Convert Markdown to HTML
          * @param {V1TechnologyMarkdownPostRequest} v1TechnologyMarkdownPostRequest 
@@ -7136,6 +9744,16 @@ export const MarkdownApiFactory = function (configuration?: Configuration, baseP
     const localVarFp = MarkdownApiFp(configuration)
     return {
         /**
+         * Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
+         * @summary Convert Markdown Batch
+         * @param {V1TechnologyMarkdownBatchPostRequest} v1TechnologyMarkdownBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest: V1TechnologyMarkdownBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyMarkdownBatchPost200Response> {
+            return localVarFp.v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output.
          * @summary Convert Markdown to HTML
          * @param {V1TechnologyMarkdownPostRequest} v1TechnologyMarkdownPostRequest 
@@ -7152,6 +9770,17 @@ export const MarkdownApiFactory = function (configuration?: Configuration, baseP
  * MarkdownApi - object-oriented interface
  */
 export class MarkdownApi extends BaseAPI {
+    /**
+     * Converts multiple Markdown strings into HTML in a single request. Results are returned in the same order as the input array. Supports optional sanitization to remove unsafe HTML tags such as script and iframe.
+     * @summary Convert Markdown Batch
+     * @param {V1TechnologyMarkdownBatchPostRequest} v1TechnologyMarkdownBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest: V1TechnologyMarkdownBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return MarkdownApiFp(this.configuration).v1TechnologyMarkdownBatchPost(v1TechnologyMarkdownBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Converts a Markdown string to HTML. Pass sanitize true to strip potentially unsafe tags like script and iframe from the output.
      * @summary Convert Markdown to HTML
@@ -7171,6 +9800,44 @@ export class MarkdownApi extends BaseAPI {
  */
 export const MortgageApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+         * @summary Batch Calculate Mortgages
+         * @param {V1FinanceMortgageBatchPostRequest} v1FinanceMortgageBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1FinanceMortgageBatchPost: async (v1FinanceMortgageBatchPostRequest: V1FinanceMortgageBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1FinanceMortgageBatchPostRequest' is not null or undefined
+            assertParamExists('v1FinanceMortgageBatchPost', 'v1FinanceMortgageBatchPostRequest', v1FinanceMortgageBatchPostRequest)
+            const localVarPath = `/v1/finance/mortgage/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1FinanceMortgageBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns the monthly payment, total cost, and full amortization schedule for a fixed-rate mortgage.
          * @summary Calculate Mortgage
@@ -7235,6 +9902,19 @@ export const MortgageApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MortgageApiAxiosParamCreator(configuration)
     return {
         /**
+         * Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+         * @summary Batch Calculate Mortgages
+         * @param {V1FinanceMortgageBatchPostRequest} v1FinanceMortgageBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest: V1FinanceMortgageBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1FinanceMortgageBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MortgageApi.v1FinanceMortgageBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns the monthly payment, total cost, and full amortization schedule for a fixed-rate mortgage.
          * @summary Calculate Mortgage
          * @param {number} principal Loan amount in your chosen currency (e.g. 300000 for $300,000)
@@ -7259,6 +9939,16 @@ export const MortgageApiFactory = function (configuration?: Configuration, baseP
     const localVarFp = MortgageApiFp(configuration)
     return {
         /**
+         * Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+         * @summary Batch Calculate Mortgages
+         * @param {V1FinanceMortgageBatchPostRequest} v1FinanceMortgageBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest: V1FinanceMortgageBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1FinanceMortgageBatchPost200Response> {
+            return localVarFp.v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns the monthly payment, total cost, and full amortization schedule for a fixed-rate mortgage.
          * @summary Calculate Mortgage
          * @param {number} principal Loan amount in your chosen currency (e.g. 300000 for $300,000)
@@ -7277,6 +9967,17 @@ export const MortgageApiFactory = function (configuration?: Configuration, baseP
  * MortgageApi - object-oriented interface
  */
 export class MortgageApi extends BaseAPI {
+    /**
+     * Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+     * @summary Batch Calculate Mortgages
+     * @param {V1FinanceMortgageBatchPostRequest} v1FinanceMortgageBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest: V1FinanceMortgageBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return MortgageApiFp(this.configuration).v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns the monthly payment, total cost, and full amortization schedule for a fixed-rate mortgage.
      * @summary Calculate Mortgage
@@ -7298,6 +9999,43 @@ export class MortgageApi extends BaseAPI {
  */
 export const MxLookupApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+         * @summary Batch MX Lookup
+         * @param {V1NetworkingMxBatchPostRequest} v1NetworkingMxBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingMxBatchPost: async (v1NetworkingMxBatchPostRequest: V1NetworkingMxBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1NetworkingMxBatchPostRequest' is not null or undefined
+            assertParamExists('v1NetworkingMxBatchPost', 'v1NetworkingMxBatchPostRequest', v1NetworkingMxBatchPostRequest)
+            const localVarPath = `/v1/networking/mx/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1NetworkingMxBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Retrieve all MX records for a domain. Results are sorted by priority ascending (lowest numeric value has highest mail delivery priority per RFC 5321).
          * @summary MX Lookup
@@ -7345,6 +10083,19 @@ export const MxLookupApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MxLookupApiAxiosParamCreator(configuration)
     return {
         /**
+         * Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+         * @summary Batch MX Lookup
+         * @param {V1NetworkingMxBatchPostRequest} v1NetworkingMxBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest: V1NetworkingMxBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MxLookupApi.v1NetworkingMxBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieve all MX records for a domain. Results are sorted by priority ascending (lowest numeric value has highest mail delivery priority per RFC 5321).
          * @summary MX Lookup
          * @param {string} domain The domain name to look up MX records for (e.g. gmail.com)
@@ -7367,6 +10118,16 @@ export const MxLookupApiFactory = function (configuration?: Configuration, baseP
     const localVarFp = MxLookupApiFp(configuration)
     return {
         /**
+         * Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+         * @summary Batch MX Lookup
+         * @param {V1NetworkingMxBatchPostRequest} v1NetworkingMxBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest: V1NetworkingMxBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieve all MX records for a domain. Results are sorted by priority ascending (lowest numeric value has highest mail delivery priority per RFC 5321).
          * @summary MX Lookup
          * @param {string} domain The domain name to look up MX records for (e.g. gmail.com)
@@ -7383,6 +10144,17 @@ export const MxLookupApiFactory = function (configuration?: Configuration, baseP
  * MxLookupApi - object-oriented interface
  */
 export class MxLookupApi extends BaseAPI {
+    /**
+     * Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+     * @summary Batch MX Lookup
+     * @param {V1NetworkingMxBatchPostRequest} v1NetworkingMxBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest: V1NetworkingMxBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return MxLookupApiFp(this.configuration).v1NetworkingMxBatchPost(v1NetworkingMxBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Retrieve all MX records for a domain. Results are sorted by priority ascending (lowest numeric value has highest mail delivery priority per RFC 5321).
      * @summary MX Lookup
@@ -7402,6 +10174,44 @@ export class MxLookupApi extends BaseAPI {
  */
 export const NumberBaseConversionApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Convert Base
+         * @param {V1TechnologyBaseBatchPostRequest} v1TechnologyBaseBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBaseBatchPost: async (v1TechnologyBaseBatchPostRequest: V1TechnologyBaseBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyBaseBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyBaseBatchPost', 'v1TechnologyBaseBatchPostRequest', v1TechnologyBaseBatchPostRequest)
+            const localVarPath = `/v1/technology/base/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyBaseBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Convert an integer from one number base to another.
          * @summary Convert Base
@@ -7466,6 +10276,19 @@ export const NumberBaseConversionApiFp = function(configuration?: Configuration)
     const localVarAxiosParamCreator = NumberBaseConversionApiAxiosParamCreator(configuration)
     return {
         /**
+         * Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Convert Base
+         * @param {V1TechnologyBaseBatchPostRequest} v1TechnologyBaseBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest: V1TechnologyBaseBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyBaseBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['NumberBaseConversionApi.v1TechnologyBaseBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Convert an integer from one number base to another.
          * @summary Convert Base
          * @param {number} from Source base (2, 8, 10, or 16)
@@ -7490,6 +10313,16 @@ export const NumberBaseConversionApiFactory = function (configuration?: Configur
     const localVarFp = NumberBaseConversionApiFp(configuration)
     return {
         /**
+         * Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+         * @summary Batch Convert Base
+         * @param {V1TechnologyBaseBatchPostRequest} v1TechnologyBaseBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest: V1TechnologyBaseBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyBaseBatchPost200Response> {
+            return localVarFp.v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Convert an integer from one number base to another.
          * @summary Convert Base
          * @param {number} from Source base (2, 8, 10, or 16)
@@ -7508,6 +10341,17 @@ export const NumberBaseConversionApiFactory = function (configuration?: Configur
  * NumberBaseConversionApi - object-oriented interface
  */
 export class NumberBaseConversionApi extends BaseAPI {
+    /**
+     * Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+     * @summary Batch Convert Base
+     * @param {V1TechnologyBaseBatchPostRequest} v1TechnologyBaseBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest: V1TechnologyBaseBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return NumberBaseConversionApiFp(this.configuration).v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Convert an integer from one number base to another.
      * @summary Convert Base
@@ -7529,6 +10373,44 @@ export class NumberBaseConversionApi extends BaseAPI {
  */
 export const PasswordGeneratorApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Generate up to 50 passwords in a single request. Each item can have its own length and character set options. Results are returned in input order.
+         * @summary Batch Generate Passwords
+         * @param {V1TechnologyPasswordBatchPostRequest} v1TechnologyPasswordBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyPasswordBatchPost: async (v1TechnologyPasswordBatchPostRequest: V1TechnologyPasswordBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyPasswordBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyPasswordBatchPost', 'v1TechnologyPasswordBatchPostRequest', v1TechnologyPasswordBatchPostRequest)
+            const localVarPath = `/v1/technology/password/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyPasswordBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Generate a cryptographically secure random password with customizable character sets and length
          * @summary Generate Password
@@ -7592,6 +10474,19 @@ export const PasswordGeneratorApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PasswordGeneratorApiAxiosParamCreator(configuration)
     return {
         /**
+         * Generate up to 50 passwords in a single request. Each item can have its own length and character set options. Results are returned in input order.
+         * @summary Batch Generate Passwords
+         * @param {V1TechnologyPasswordBatchPostRequest} v1TechnologyPasswordBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest: V1TechnologyPasswordBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyPasswordBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PasswordGeneratorApi.v1TechnologyPasswordBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Generate a cryptographically secure random password with customizable character sets and length
          * @summary Generate Password
          * @param {number} [length] Password length (8-128 characters)
@@ -7617,6 +10512,16 @@ export const PasswordGeneratorApiFactory = function (configuration?: Configurati
     const localVarFp = PasswordGeneratorApiFp(configuration)
     return {
         /**
+         * Generate up to 50 passwords in a single request. Each item can have its own length and character set options. Results are returned in input order.
+         * @summary Batch Generate Passwords
+         * @param {V1TechnologyPasswordBatchPostRequest} v1TechnologyPasswordBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest: V1TechnologyPasswordBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyPasswordBatchPost200Response> {
+            return localVarFp.v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Generate a cryptographically secure random password with customizable character sets and length
          * @summary Generate Password
          * @param {number} [length] Password length (8-128 characters)
@@ -7637,6 +10542,17 @@ export const PasswordGeneratorApiFactory = function (configuration?: Configurati
  */
 export class PasswordGeneratorApi extends BaseAPI {
     /**
+     * Generate up to 50 passwords in a single request. Each item can have its own length and character set options. Results are returned in input order.
+     * @summary Batch Generate Passwords
+     * @param {V1TechnologyPasswordBatchPostRequest} v1TechnologyPasswordBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest: V1TechnologyPasswordBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return PasswordGeneratorApiFp(this.configuration).v1TechnologyPasswordBatchPost(v1TechnologyPasswordBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Generate a cryptographically secure random password with customizable character sets and length
      * @summary Generate Password
      * @param {number} [length] Password length (8-128 characters)
@@ -7648,6 +10564,183 @@ export class PasswordGeneratorApi extends BaseAPI {
      */
     public v1TechnologyPasswordGet(length?: number, uppercase?: boolean, numbers?: boolean, symbols?: boolean, options?: RawAxiosRequestConfig) {
         return PasswordGeneratorApiFp(this.configuration).v1TechnologyPasswordGet(length, uppercase, numbers, symbols, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * PaymentsIntelligenceApi - axios parameter creator
+ */
+export const PaymentsIntelligenceApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Validate and cross-check BIN, IBAN, and SWIFT identifiers in one call. Returns per-field results and a consistency check that flags country and bank mismatches.
+         * @summary Validate Payment
+         * @param {V1SystemsPaymentValidatePostRequest} v1SystemsPaymentValidatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsPaymentValidatePost: async (v1SystemsPaymentValidatePostRequest: V1SystemsPaymentValidatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsPaymentValidatePostRequest' is not null or undefined
+            assertParamExists('v1SystemsPaymentValidatePost', 'v1SystemsPaymentValidatePostRequest', v1SystemsPaymentValidatePostRequest)
+            const localVarPath = `/v1/systems/payment/validate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsPaymentValidatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Score a transaction for fraud risk by cross-checking the card BIN country against IP geolocation and billing country. Detects VPN, proxy, and TOR use.
+         * @summary Score Transaction Risk
+         * @param {V1SystemsTransactionRiskPostRequest} v1SystemsTransactionRiskPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTransactionRiskPost: async (v1SystemsTransactionRiskPostRequest: V1SystemsTransactionRiskPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1SystemsTransactionRiskPostRequest' is not null or undefined
+            assertParamExists('v1SystemsTransactionRiskPost', 'v1SystemsTransactionRiskPostRequest', v1SystemsTransactionRiskPostRequest)
+            const localVarPath = `/v1/systems/transaction/risk`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1SystemsTransactionRiskPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * PaymentsIntelligenceApi - functional programming interface
+ */
+export const PaymentsIntelligenceApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PaymentsIntelligenceApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Validate and cross-check BIN, IBAN, and SWIFT identifiers in one call. Returns per-field results and a consistency check that flags country and bank mismatches.
+         * @summary Validate Payment
+         * @param {V1SystemsPaymentValidatePostRequest} v1SystemsPaymentValidatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest: V1SystemsPaymentValidatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsPaymentValidatePost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PaymentsIntelligenceApi.v1SystemsPaymentValidatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Score a transaction for fraud risk by cross-checking the card BIN country against IP geolocation and billing country. Detects VPN, proxy, and TOR use.
+         * @summary Score Transaction Risk
+         * @param {V1SystemsTransactionRiskPostRequest} v1SystemsTransactionRiskPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest: V1SystemsTransactionRiskPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1SystemsTransactionRiskPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PaymentsIntelligenceApi.v1SystemsTransactionRiskPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * PaymentsIntelligenceApi - factory interface
+ */
+export const PaymentsIntelligenceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PaymentsIntelligenceApiFp(configuration)
+    return {
+        /**
+         * Validate and cross-check BIN, IBAN, and SWIFT identifiers in one call. Returns per-field results and a consistency check that flags country and bank mismatches.
+         * @summary Validate Payment
+         * @param {V1SystemsPaymentValidatePostRequest} v1SystemsPaymentValidatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest: V1SystemsPaymentValidatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsPaymentValidatePost200Response> {
+            return localVarFp.v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Score a transaction for fraud risk by cross-checking the card BIN country against IP geolocation and billing country. Detects VPN, proxy, and TOR use.
+         * @summary Score Transaction Risk
+         * @param {V1SystemsTransactionRiskPostRequest} v1SystemsTransactionRiskPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest: V1SystemsTransactionRiskPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1SystemsTransactionRiskPost200Response> {
+            return localVarFp.v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PaymentsIntelligenceApi - object-oriented interface
+ */
+export class PaymentsIntelligenceApi extends BaseAPI {
+    /**
+     * Validate and cross-check BIN, IBAN, and SWIFT identifiers in one call. Returns per-field results and a consistency check that flags country and bank mismatches.
+     * @summary Validate Payment
+     * @param {V1SystemsPaymentValidatePostRequest} v1SystemsPaymentValidatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest: V1SystemsPaymentValidatePostRequest, options?: RawAxiosRequestConfig) {
+        return PaymentsIntelligenceApiFp(this.configuration).v1SystemsPaymentValidatePost(v1SystemsPaymentValidatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Score a transaction for fraud risk by cross-checking the card BIN country against IP geolocation and billing country. Detects VPN, proxy, and TOR use.
+     * @summary Score Transaction Risk
+     * @param {V1SystemsTransactionRiskPostRequest} v1SystemsTransactionRiskPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest: V1SystemsTransactionRiskPostRequest, options?: RawAxiosRequestConfig) {
+        return PaymentsIntelligenceApiFp(this.configuration).v1SystemsTransactionRiskPost(v1SystemsTransactionRiskPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -7838,6 +10931,44 @@ export class PhoneValidationApi extends BaseAPI {
 export const PostalCodeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+         * @summary Batch Lookup Postal Codes
+         * @param {V1PlacesPostalBatchPostRequest} v1PlacesPostalBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesPostalBatchPost: async (v1PlacesPostalBatchPostRequest: V1PlacesPostalBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1PlacesPostalBatchPostRequest' is not null or undefined
+            assertParamExists('v1PlacesPostalBatchPost', 'v1PlacesPostalBatchPostRequest', v1PlacesPostalBatchPostRequest)
+            const localVarPath = `/v1/places/postal/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1PlacesPostalBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns city, state, country, and coordinates for the given postal code.
          * @summary Lookup Postal Code
          * @param {string} code The postal code to look up (e.g. 10001 for New York, SW1A 1AA for London)
@@ -7889,6 +11020,19 @@ export const PostalCodeApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = PostalCodeApiAxiosParamCreator(configuration)
     return {
         /**
+         * Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+         * @summary Batch Lookup Postal Codes
+         * @param {V1PlacesPostalBatchPostRequest} v1PlacesPostalBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest: V1PlacesPostalBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1PlacesPostalBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostalCodeApi.v1PlacesPostalBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns city, state, country, and coordinates for the given postal code.
          * @summary Lookup Postal Code
          * @param {string} code The postal code to look up (e.g. 10001 for New York, SW1A 1AA for London)
@@ -7912,6 +11056,16 @@ export const PostalCodeApiFactory = function (configuration?: Configuration, bas
     const localVarFp = PostalCodeApiFp(configuration)
     return {
         /**
+         * Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+         * @summary Batch Lookup Postal Codes
+         * @param {V1PlacesPostalBatchPostRequest} v1PlacesPostalBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest: V1PlacesPostalBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1PlacesPostalBatchPost200Response> {
+            return localVarFp.v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns city, state, country, and coordinates for the given postal code.
          * @summary Lookup Postal Code
          * @param {string} code The postal code to look up (e.g. 10001 for New York, SW1A 1AA for London)
@@ -7929,6 +11083,17 @@ export const PostalCodeApiFactory = function (configuration?: Configuration, bas
  * PostalCodeApi - object-oriented interface
  */
 export class PostalCodeApi extends BaseAPI {
+    /**
+     * Look up city, state, and coordinates for up to 50 postal codes in a single request. Results are returned in input order.
+     * @summary Batch Lookup Postal Codes
+     * @param {V1PlacesPostalBatchPostRequest} v1PlacesPostalBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest: V1PlacesPostalBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return PostalCodeApiFp(this.configuration).v1PlacesPostalBatchPost(v1PlacesPostalBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns city, state, country, and coordinates for the given postal code.
      * @summary Lookup Postal Code
@@ -7950,16 +11115,16 @@ export class PostalCodeApi extends BaseAPI {
 export const ProfanityApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Checks text for profanity, returning a censored version and the list of flagged words.
-         * @summary Check Profanity
-         * @param {V1TextProfanityPostRequest} v1TextProfanityPostRequest 
+         * Check up to 50 texts for profanity in a single request. Results are returned in input order.
+         * @summary Batch Check Profanity
+         * @param {V1ValidationProfanityBatchPostRequest} v1ValidationProfanityBatchPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1TextProfanityPost: async (v1TextProfanityPostRequest: V1TextProfanityPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'v1TextProfanityPostRequest' is not null or undefined
-            assertParamExists('v1TextProfanityPost', 'v1TextProfanityPostRequest', v1TextProfanityPostRequest)
-            const localVarPath = `/v1/text/profanity`;
+        v1ValidationProfanityBatchPost: async (v1ValidationProfanityBatchPostRequest: V1ValidationProfanityBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1ValidationProfanityBatchPostRequest' is not null or undefined
+            assertParamExists('v1ValidationProfanityBatchPost', 'v1ValidationProfanityBatchPostRequest', v1ValidationProfanityBatchPostRequest)
+            const localVarPath = `/v1/validation/profanity/batch`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7980,7 +11145,45 @@ export const ProfanityApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(v1TextProfanityPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(v1ValidationProfanityBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Checks text for profanity, returning a censored version and the list of flagged words.
+         * @summary Check Profanity
+         * @param {V1ValidationProfanityPostRequest} v1ValidationProfanityPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ValidationProfanityPost: async (v1ValidationProfanityPostRequest: V1ValidationProfanityPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1ValidationProfanityPostRequest' is not null or undefined
+            assertParamExists('v1ValidationProfanityPost', 'v1ValidationProfanityPostRequest', v1ValidationProfanityPostRequest)
+            const localVarPath = `/v1/validation/profanity`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1ValidationProfanityPostRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7997,16 +11200,29 @@ export const ProfanityApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ProfanityApiAxiosParamCreator(configuration)
     return {
         /**
-         * Checks text for profanity, returning a censored version and the list of flagged words.
-         * @summary Check Profanity
-         * @param {V1TextProfanityPostRequest} v1TextProfanityPostRequest 
+         * Check up to 50 texts for profanity in a single request. Results are returned in input order.
+         * @summary Batch Check Profanity
+         * @param {V1ValidationProfanityBatchPostRequest} v1ValidationProfanityBatchPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1TextProfanityPost(v1TextProfanityPostRequest: V1TextProfanityPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextProfanityPost200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextProfanityPost(v1TextProfanityPostRequest, options);
+        async v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest: V1ValidationProfanityBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ValidationProfanityBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ProfanityApi.v1TextProfanityPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ProfanityApi.v1ValidationProfanityBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Checks text for profanity, returning a censored version and the list of flagged words.
+         * @summary Check Profanity
+         * @param {V1ValidationProfanityPostRequest} v1ValidationProfanityPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1ValidationProfanityPost(v1ValidationProfanityPostRequest: V1ValidationProfanityPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1ValidationProfanityPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1ValidationProfanityPost(v1ValidationProfanityPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProfanityApi.v1ValidationProfanityPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -8019,14 +11235,24 @@ export const ProfanityApiFactory = function (configuration?: Configuration, base
     const localVarFp = ProfanityApiFp(configuration)
     return {
         /**
-         * Checks text for profanity, returning a censored version and the list of flagged words.
-         * @summary Check Profanity
-         * @param {V1TextProfanityPostRequest} v1TextProfanityPostRequest 
+         * Check up to 50 texts for profanity in a single request. Results are returned in input order.
+         * @summary Batch Check Profanity
+         * @param {V1ValidationProfanityBatchPostRequest} v1ValidationProfanityBatchPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1TextProfanityPost(v1TextProfanityPostRequest: V1TextProfanityPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TextProfanityPost200Response> {
-            return localVarFp.v1TextProfanityPost(v1TextProfanityPostRequest, options).then((request) => request(axios, basePath));
+        v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest: V1ValidationProfanityBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1ValidationProfanityBatchPost200Response> {
+            return localVarFp.v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Checks text for profanity, returning a censored version and the list of flagged words.
+         * @summary Check Profanity
+         * @param {V1ValidationProfanityPostRequest} v1ValidationProfanityPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1ValidationProfanityPost(v1ValidationProfanityPostRequest: V1ValidationProfanityPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1ValidationProfanityPost200Response> {
+            return localVarFp.v1ValidationProfanityPost(v1ValidationProfanityPostRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8036,14 +11262,25 @@ export const ProfanityApiFactory = function (configuration?: Configuration, base
  */
 export class ProfanityApi extends BaseAPI {
     /**
-     * Checks text for profanity, returning a censored version and the list of flagged words.
-     * @summary Check Profanity
-     * @param {V1TextProfanityPostRequest} v1TextProfanityPostRequest 
+     * Check up to 50 texts for profanity in a single request. Results are returned in input order.
+     * @summary Batch Check Profanity
+     * @param {V1ValidationProfanityBatchPostRequest} v1ValidationProfanityBatchPostRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public v1TextProfanityPost(v1TextProfanityPostRequest: V1TextProfanityPostRequest, options?: RawAxiosRequestConfig) {
-        return ProfanityApiFp(this.configuration).v1TextProfanityPost(v1TextProfanityPostRequest, options).then((request) => request(this.axios, this.basePath));
+    public v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest: V1ValidationProfanityBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return ProfanityApiFp(this.configuration).v1ValidationProfanityBatchPost(v1ValidationProfanityBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Checks text for profanity, returning a censored version and the list of flagged words.
+     * @summary Check Profanity
+     * @param {V1ValidationProfanityPostRequest} v1ValidationProfanityPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1ValidationProfanityPost(v1ValidationProfanityPostRequest: V1ValidationProfanityPostRequest, options?: RawAxiosRequestConfig) {
+        return ProfanityApiFp(this.configuration).v1ValidationProfanityPost(v1ValidationProfanityPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8054,6 +11291,44 @@ export class ProfanityApi extends BaseAPI {
  */
 export const QrCodeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+         * @summary Batch Generate QR Codes (Base64)
+         * @param {V1TechnologyQrBase64BatchPostRequest} v1TechnologyQrBase64BatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyQrBase64BatchPost: async (v1TechnologyQrBase64BatchPostRequest: V1TechnologyQrBase64BatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyQrBase64BatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyQrBase64BatchPost', 'v1TechnologyQrBase64BatchPostRequest', v1TechnologyQrBase64BatchPostRequest)
+            const localVarPath = `/v1/technology/qr/base64/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyQrBase64BatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns a JSON envelope containing the QR code as a base64-encoded PNG string, along with its dimensions.
          * @summary Generate QR Code (Base64 JSON)
@@ -8163,6 +11438,19 @@ export const QrCodeApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = QrCodeApiAxiosParamCreator(configuration)
     return {
         /**
+         * Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+         * @summary Batch Generate QR Codes (Base64)
+         * @param {V1TechnologyQrBase64BatchPostRequest} v1TechnologyQrBase64BatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest: V1TechnologyQrBase64BatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyQrBase64BatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QrCodeApi.v1TechnologyQrBase64BatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a JSON envelope containing the QR code as a base64-encoded PNG string, along with its dimensions.
          * @summary Generate QR Code (Base64 JSON)
          * @param {string} data The text or URL to encode in the QR code
@@ -8202,6 +11490,16 @@ export const QrCodeApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = QrCodeApiFp(configuration)
     return {
         /**
+         * Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+         * @summary Batch Generate QR Codes (Base64)
+         * @param {V1TechnologyQrBase64BatchPostRequest} v1TechnologyQrBase64BatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest: V1TechnologyQrBase64BatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyQrBase64BatchPost200Response> {
+            return localVarFp.v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a JSON envelope containing the QR code as a base64-encoded PNG string, along with its dimensions.
          * @summary Generate QR Code (Base64 JSON)
          * @param {string} data The text or URL to encode in the QR code
@@ -8232,6 +11530,17 @@ export const QrCodeApiFactory = function (configuration?: Configuration, basePat
  * QrCodeApi - object-oriented interface
  */
 export class QrCodeApi extends BaseAPI {
+    /**
+     * Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+     * @summary Batch Generate QR Codes (Base64)
+     * @param {V1TechnologyQrBase64BatchPostRequest} v1TechnologyQrBase64BatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest: V1TechnologyQrBase64BatchPostRequest, options?: RawAxiosRequestConfig) {
+        return QrCodeApiFp(this.configuration).v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns a JSON envelope containing the QR code as a base64-encoded PNG string, along with its dimensions.
      * @summary Generate QR Code (Base64 JSON)
@@ -8267,13 +11576,51 @@ export class QrCodeApi extends BaseAPI {
 export const QuotesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+         * @summary Get Random Quotes (Batch)
+         * @param {V1EntertainmentQuotesRandomBatchPostRequest} v1EntertainmentQuotesRandomBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentQuotesRandomBatchPost: async (v1EntertainmentQuotesRandomBatchPostRequest: V1EntertainmentQuotesRandomBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1EntertainmentQuotesRandomBatchPostRequest' is not null or undefined
+            assertParamExists('v1EntertainmentQuotesRandomBatchPost', 'v1EntertainmentQuotesRandomBatchPostRequest', v1EntertainmentQuotesRandomBatchPostRequest)
+            const localVarPath = `/v1/entertainment/quotes/random/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1EntertainmentQuotesRandomBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns a random inspirational quote with author attribution
          * @summary Get Random Quote
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1TextQuotesRandomGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/v1/text/quotes/random`;
+        v1EntertainmentQuotesRandomGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/entertainment/quotes/random`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -8309,15 +11656,28 @@ export const QuotesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = QuotesApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+         * @summary Get Random Quotes (Batch)
+         * @param {V1EntertainmentQuotesRandomBatchPostRequest} v1EntertainmentQuotesRandomBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest: V1EntertainmentQuotesRandomBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1EntertainmentQuotesRandomBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QuotesApi.v1EntertainmentQuotesRandomBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a random inspirational quote with author attribution
          * @summary Get Random Quote
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1TextQuotesRandomGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextQuotesRandomGet200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextQuotesRandomGet(options);
+        async v1EntertainmentQuotesRandomGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1EntertainmentQuotesRandomGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1EntertainmentQuotesRandomGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['QuotesApi.v1TextQuotesRandomGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['QuotesApi.v1EntertainmentQuotesRandomGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -8330,13 +11690,23 @@ export const QuotesApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = QuotesApiFp(configuration)
     return {
         /**
+         * Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+         * @summary Get Random Quotes (Batch)
+         * @param {V1EntertainmentQuotesRandomBatchPostRequest} v1EntertainmentQuotesRandomBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest: V1EntertainmentQuotesRandomBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1EntertainmentQuotesRandomBatchPost200Response> {
+            return localVarFp.v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a random inspirational quote with author attribution
          * @summary Get Random Quote
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1TextQuotesRandomGet(options?: RawAxiosRequestConfig): AxiosPromise<V1TextQuotesRandomGet200Response> {
-            return localVarFp.v1TextQuotesRandomGet(options).then((request) => request(axios, basePath));
+        v1EntertainmentQuotesRandomGet(options?: RawAxiosRequestConfig): AxiosPromise<V1EntertainmentQuotesRandomGet200Response> {
+            return localVarFp.v1EntertainmentQuotesRandomGet(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8346,13 +11716,24 @@ export const QuotesApiFactory = function (configuration?: Configuration, basePat
  */
 export class QuotesApi extends BaseAPI {
     /**
+     * Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+     * @summary Get Random Quotes (Batch)
+     * @param {V1EntertainmentQuotesRandomBatchPostRequest} v1EntertainmentQuotesRandomBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest: V1EntertainmentQuotesRandomBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return QuotesApiFp(this.configuration).v1EntertainmentQuotesRandomBatchPost(v1EntertainmentQuotesRandomBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Returns a random inspirational quote with author attribution
      * @summary Get Random Quote
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public v1TextQuotesRandomGet(options?: RawAxiosRequestConfig) {
-        return QuotesApiFp(this.configuration).v1TextQuotesRandomGet(options).then((request) => request(this.axios, this.basePath));
+    public v1EntertainmentQuotesRandomGet(options?: RawAxiosRequestConfig) {
+        return QuotesApiFp(this.configuration).v1EntertainmentQuotesRandomGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8363,6 +11744,44 @@ export class QuotesApi extends BaseAPI {
  */
 export const RandomUserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+         * @summary Batch Generate Users
+         * @param {V1TechnologyRandomUserBatchPostRequest} v1TechnologyRandomUserBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyRandomUserBatchPost: async (v1TechnologyRandomUserBatchPostRequest: V1TechnologyRandomUserBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyRandomUserBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyRandomUserBatchPost', 'v1TechnologyRandomUserBatchPostRequest', v1TechnologyRandomUserBatchPostRequest)
+            const localVarPath = `/v1/technology/random-user/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyRandomUserBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns a randomly generated fake user profile.
          * @summary Get Random User
@@ -8406,6 +11825,19 @@ export const RandomUserApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RandomUserApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+         * @summary Batch Generate Users
+         * @param {V1TechnologyRandomUserBatchPostRequest} v1TechnologyRandomUserBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest: V1TechnologyRandomUserBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyRandomUserBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RandomUserApi.v1TechnologyRandomUserBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a randomly generated fake user profile.
          * @summary Get Random User
          * @param {*} [options] Override http request option.
@@ -8427,6 +11859,16 @@ export const RandomUserApiFactory = function (configuration?: Configuration, bas
     const localVarFp = RandomUserApiFp(configuration)
     return {
         /**
+         * Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+         * @summary Batch Generate Users
+         * @param {V1TechnologyRandomUserBatchPostRequest} v1TechnologyRandomUserBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest: V1TechnologyRandomUserBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyRandomUserBatchPost200Response> {
+            return localVarFp.v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a randomly generated fake user profile.
          * @summary Get Random User
          * @param {*} [options] Override http request option.
@@ -8442,6 +11884,17 @@ export const RandomUserApiFactory = function (configuration?: Configuration, bas
  * RandomUserApi - object-oriented interface
  */
 export class RandomUserApi extends BaseAPI {
+    /**
+     * Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+     * @summary Batch Generate Users
+     * @param {V1TechnologyRandomUserBatchPostRequest} v1TechnologyRandomUserBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest: V1TechnologyRandomUserBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return RandomUserApiFp(this.configuration).v1TechnologyRandomUserBatchPost(v1TechnologyRandomUserBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns a randomly generated fake user profile.
      * @summary Get Random User
@@ -8460,6 +11913,44 @@ export class RandomUserApi extends BaseAPI {
  */
 export const RandomWordApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset. 
+         * @summary Batch Define Words
+         * @param {V1TextWordsBatchPostRequest} v1TextWordsBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextWordsBatchPost: async (v1TextWordsBatchPostRequest: V1TextWordsBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TextWordsBatchPostRequest' is not null or undefined
+            assertParamExists('v1TextWordsBatchPost', 'v1TextWordsBatchPostRequest', v1TextWordsBatchPostRequest)
+            const localVarPath = `/v1/text/words/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TextWordsBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns a random word with its definition and part of speech
          * @summary Get Random Word
@@ -8503,6 +11994,19 @@ export const RandomWordApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RandomWordApiAxiosParamCreator(configuration)
     return {
         /**
+         * Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset. 
+         * @summary Batch Define Words
+         * @param {V1TextWordsBatchPostRequest} v1TextWordsBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TextWordsBatchPost(v1TextWordsBatchPostRequest: V1TextWordsBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextWordsBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextWordsBatchPost(v1TextWordsBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RandomWordApi.v1TextWordsBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a random word with its definition and part of speech
          * @summary Get Random Word
          * @param {*} [options] Override http request option.
@@ -8524,6 +12028,16 @@ export const RandomWordApiFactory = function (configuration?: Configuration, bas
     const localVarFp = RandomWordApiFp(configuration)
     return {
         /**
+         * Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset. 
+         * @summary Batch Define Words
+         * @param {V1TextWordsBatchPostRequest} v1TextWordsBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextWordsBatchPost(v1TextWordsBatchPostRequest: V1TextWordsBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TextWordsBatchPost200Response> {
+            return localVarFp.v1TextWordsBatchPost(v1TextWordsBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a random word with its definition and part of speech
          * @summary Get Random Word
          * @param {*} [options] Override http request option.
@@ -8539,6 +12053,17 @@ export const RandomWordApiFactory = function (configuration?: Configuration, bas
  * RandomWordApi - object-oriented interface
  */
 export class RandomWordApi extends BaseAPI {
+    /**
+     * Resolve multiple words in a single request. Returns dictionary entries when found, or error information when a word is not in the dataset. 
+     * @summary Batch Define Words
+     * @param {V1TextWordsBatchPostRequest} v1TextWordsBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TextWordsBatchPost(v1TextWordsBatchPostRequest: V1TextWordsBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return RandomWordApiFp(this.configuration).v1TextWordsBatchPost(v1TextWordsBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns a random word with its definition and part of speech
      * @summary Get Random Word
@@ -8557,6 +12082,44 @@ export class RandomWordApi extends BaseAPI {
  */
 export const SentimentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Analyzes the sentiment of up to 50 texts in a single request. Results are returned in the same order as the input. Each text counts as one unit of usage.
+         * @summary Analyze Sentiment (Batch)
+         * @param {V1TextSentimentBatchPostRequest} v1TextSentimentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextSentimentBatchPost: async (v1TextSentimentBatchPostRequest: V1TextSentimentBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TextSentimentBatchPostRequest' is not null or undefined
+            assertParamExists('v1TextSentimentBatchPost', 'v1TextSentimentBatchPostRequest', v1TextSentimentBatchPostRequest)
+            const localVarPath = `/v1/text/sentiment/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TextSentimentBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Analyzes the sentiment of the provided text and returns a classification, confidence score, and a full breakdown across all three sentiment classes.
          * @summary Analyze Sentiment
@@ -8605,6 +12168,19 @@ export const SentimentApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SentimentApiAxiosParamCreator(configuration)
     return {
         /**
+         * Analyzes the sentiment of up to 50 texts in a single request. Results are returned in the same order as the input. Each text counts as one unit of usage.
+         * @summary Analyze Sentiment (Batch)
+         * @param {V1TextSentimentBatchPostRequest} v1TextSentimentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest: V1TextSentimentBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextSentimentBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SentimentApi.v1TextSentimentBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Analyzes the sentiment of the provided text and returns a classification, confidence score, and a full breakdown across all three sentiment classes.
          * @summary Analyze Sentiment
          * @param {V1TextSentimentPostRequest} v1TextSentimentPostRequest 
@@ -8627,6 +12203,16 @@ export const SentimentApiFactory = function (configuration?: Configuration, base
     const localVarFp = SentimentApiFp(configuration)
     return {
         /**
+         * Analyzes the sentiment of up to 50 texts in a single request. Results are returned in the same order as the input. Each text counts as one unit of usage.
+         * @summary Analyze Sentiment (Batch)
+         * @param {V1TextSentimentBatchPostRequest} v1TextSentimentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest: V1TextSentimentBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TextSentimentBatchPost200Response> {
+            return localVarFp.v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Analyzes the sentiment of the provided text and returns a classification, confidence score, and a full breakdown across all three sentiment classes.
          * @summary Analyze Sentiment
          * @param {V1TextSentimentPostRequest} v1TextSentimentPostRequest 
@@ -8643,6 +12229,17 @@ export const SentimentApiFactory = function (configuration?: Configuration, base
  * SentimentApi - object-oriented interface
  */
 export class SentimentApi extends BaseAPI {
+    /**
+     * Analyzes the sentiment of up to 50 texts in a single request. Results are returned in the same order as the input. Each text counts as one unit of usage.
+     * @summary Analyze Sentiment (Batch)
+     * @param {V1TextSentimentBatchPostRequest} v1TextSentimentBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest: V1TextSentimentBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return SentimentApiFp(this.configuration).v1TextSentimentBatchPost(v1TextSentimentBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Analyzes the sentiment of the provided text and returns a classification, confidence score, and a full breakdown across all three sentiment classes.
      * @summary Analyze Sentiment
@@ -8662,6 +12259,44 @@ export class SentimentApi extends BaseAPI {
  */
 export const SpellCheckApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+         * @summary Check Spelling (Batch)
+         * @param {V1TextSpellcheckBatchPostRequest} v1TextSpellcheckBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextSpellcheckBatchPost: async (v1TextSpellcheckBatchPostRequest: V1TextSpellcheckBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TextSpellcheckBatchPostRequest' is not null or undefined
+            assertParamExists('v1TextSpellcheckBatchPost', 'v1TextSpellcheckBatchPostRequest', v1TextSpellcheckBatchPostRequest)
+            const localVarPath = `/v1/text/spellcheck/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TextSpellcheckBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Checks the input text for spelling mistakes and returns a corrected version along with per-word corrections.
          * @summary Check Spelling
@@ -8710,6 +12345,19 @@ export const SpellCheckApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SpellCheckApiAxiosParamCreator(configuration)
     return {
         /**
+         * Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+         * @summary Check Spelling (Batch)
+         * @param {V1TextSpellcheckBatchPostRequest} v1TextSpellcheckBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest: V1TextSpellcheckBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TextSpellcheckBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SpellCheckApi.v1TextSpellcheckBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Checks the input text for spelling mistakes and returns a corrected version along with per-word corrections.
          * @summary Check Spelling
          * @param {V1TextSpellcheckPostRequest} v1TextSpellcheckPostRequest 
@@ -8732,6 +12380,16 @@ export const SpellCheckApiFactory = function (configuration?: Configuration, bas
     const localVarFp = SpellCheckApiFp(configuration)
     return {
         /**
+         * Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+         * @summary Check Spelling (Batch)
+         * @param {V1TextSpellcheckBatchPostRequest} v1TextSpellcheckBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest: V1TextSpellcheckBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TextSpellcheckBatchPost200Response> {
+            return localVarFp.v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Checks the input text for spelling mistakes and returns a corrected version along with per-word corrections.
          * @summary Check Spelling
          * @param {V1TextSpellcheckPostRequest} v1TextSpellcheckPostRequest 
@@ -8748,6 +12406,17 @@ export const SpellCheckApiFactory = function (configuration?: Configuration, bas
  * SpellCheckApi - object-oriented interface
  */
 export class SpellCheckApi extends BaseAPI {
+    /**
+     * Checks multiple texts for spelling mistakes in a single request. Returns a corrected version and per-word corrections for each input text. Results are returned in the same order as the input array.
+     * @summary Check Spelling (Batch)
+     * @param {V1TextSpellcheckBatchPostRequest} v1TextSpellcheckBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest: V1TextSpellcheckBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return SpellCheckApiFp(this.configuration).v1TextSpellcheckBatchPost(v1TextSpellcheckBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Checks the input text for spelling mistakes and returns a corrected version along with per-word corrections.
      * @summary Check Spelling
@@ -9362,6 +13031,44 @@ export class ThesaurusApi extends BaseAPI {
 export const TimezoneApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+         * @summary Batch Timezone Lookup
+         * @param {V1PlacesTimezoneBatchPostRequest} v1PlacesTimezoneBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesTimezoneBatchPost: async (v1PlacesTimezoneBatchPostRequest: V1PlacesTimezoneBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1PlacesTimezoneBatchPostRequest' is not null or undefined
+            assertParamExists('v1PlacesTimezoneBatchPost', 'v1PlacesTimezoneBatchPostRequest', v1PlacesTimezoneBatchPostRequest)
+            const localVarPath = `/v1/places/timezone/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1PlacesTimezoneBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`.
          * @summary Get Timezone
          * @param {string} [lat] Latitude of the location (-90 to 90). Required when using coordinate-based lookup.
@@ -9419,6 +13126,19 @@ export const TimezoneApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TimezoneApiAxiosParamCreator(configuration)
     return {
         /**
+         * Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+         * @summary Batch Timezone Lookup
+         * @param {V1PlacesTimezoneBatchPostRequest} v1PlacesTimezoneBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest: V1PlacesTimezoneBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1PlacesTimezoneBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TimezoneApi.v1PlacesTimezoneBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`.
          * @summary Get Timezone
          * @param {string} [lat] Latitude of the location (-90 to 90). Required when using coordinate-based lookup.
@@ -9443,6 +13163,16 @@ export const TimezoneApiFactory = function (configuration?: Configuration, baseP
     const localVarFp = TimezoneApiFp(configuration)
     return {
         /**
+         * Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+         * @summary Batch Timezone Lookup
+         * @param {V1PlacesTimezoneBatchPostRequest} v1PlacesTimezoneBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest: V1PlacesTimezoneBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1PlacesTimezoneBatchPost200Response> {
+            return localVarFp.v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`.
          * @summary Get Timezone
          * @param {string} [lat] Latitude of the location (-90 to 90). Required when using coordinate-based lookup.
@@ -9461,6 +13191,17 @@ export const TimezoneApiFactory = function (configuration?: Configuration, baseP
  * TimezoneApi - object-oriented interface
  */
 export class TimezoneApi extends BaseAPI {
+    /**
+     * Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name > city > coordinates. Results are returned in input order.
+     * @summary Batch Timezone Lookup
+     * @param {V1PlacesTimezoneBatchPostRequest} v1PlacesTimezoneBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest: V1PlacesTimezoneBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return TimezoneApiFp(this.configuration).v1PlacesTimezoneBatchPost(v1PlacesTimezoneBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns timezone information for the given coordinates or city name. Provide either `city` or both `lat` and `lon`.
      * @summary Get Timezone
@@ -9482,6 +13223,44 @@ export class TimezoneApi extends BaseAPI {
  */
 export const TriviaApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Returns up to 50 trivia questions in a single request.
+         * @summary Get Batch Trivia Questions
+         * @param {V1EntertainmentTriviaBatchPostRequest} v1EntertainmentTriviaBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentTriviaBatchPost: async (v1EntertainmentTriviaBatchPostRequest: V1EntertainmentTriviaBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1EntertainmentTriviaBatchPostRequest' is not null or undefined
+            assertParamExists('v1EntertainmentTriviaBatchPost', 'v1EntertainmentTriviaBatchPostRequest', v1EntertainmentTriviaBatchPostRequest)
+            const localVarPath = `/v1/entertainment/trivia/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1EntertainmentTriviaBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns a random trivia question with multiple-choice answers. Use the optional category and difficulty query parameters to filter the question pool.
          * @summary Get Trivia Question
@@ -9535,6 +13314,19 @@ export const TriviaApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TriviaApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns up to 50 trivia questions in a single request.
+         * @summary Get Batch Trivia Questions
+         * @param {V1EntertainmentTriviaBatchPostRequest} v1EntertainmentTriviaBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest: V1EntertainmentTriviaBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1EntertainmentTriviaBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TriviaApi.v1EntertainmentTriviaBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns a random trivia question with multiple-choice answers. Use the optional category and difficulty query parameters to filter the question pool.
          * @summary Get Trivia Question
          * @param {string} [category] Filter by category. One of: science, history, geography, sports, music, movies, literature, math, technology, nature.
@@ -9558,6 +13350,16 @@ export const TriviaApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = TriviaApiFp(configuration)
     return {
         /**
+         * Returns up to 50 trivia questions in a single request.
+         * @summary Get Batch Trivia Questions
+         * @param {V1EntertainmentTriviaBatchPostRequest} v1EntertainmentTriviaBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest: V1EntertainmentTriviaBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1EntertainmentTriviaBatchPost200Response> {
+            return localVarFp.v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns a random trivia question with multiple-choice answers. Use the optional category and difficulty query parameters to filter the question pool.
          * @summary Get Trivia Question
          * @param {string} [category] Filter by category. One of: science, history, geography, sports, music, movies, literature, math, technology, nature.
@@ -9575,6 +13377,17 @@ export const TriviaApiFactory = function (configuration?: Configuration, basePat
  * TriviaApi - object-oriented interface
  */
 export class TriviaApi extends BaseAPI {
+    /**
+     * Returns up to 50 trivia questions in a single request.
+     * @summary Get Batch Trivia Questions
+     * @param {V1EntertainmentTriviaBatchPostRequest} v1EntertainmentTriviaBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest: V1EntertainmentTriviaBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return TriviaApiFp(this.configuration).v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns a random trivia question with multiple-choice answers. Use the optional category and difficulty query parameters to filter the question pool.
      * @summary Get Trivia Question
@@ -9595,6 +13408,44 @@ export class TriviaApi extends BaseAPI {
  */
 export const UnitConversionApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * convert up to 50 unit conversion operations in a single request.
+         * @summary Batch Convert Units
+         * @param {V1TechnologyConvertBatchPostRequest} v1TechnologyConvertBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyConvertBatchPost: async (v1TechnologyConvertBatchPostRequest: V1TechnologyConvertBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyConvertBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyConvertBatchPost', 'v1TechnologyConvertBatchPostRequest', v1TechnologyConvertBatchPostRequest)
+            const localVarPath = `/v1/technology/convert/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyConvertBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Convert a value from one unit to another
          * @summary Convert Units
@@ -9692,6 +13543,19 @@ export const UnitConversionApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UnitConversionApiAxiosParamCreator(configuration)
     return {
         /**
+         * convert up to 50 unit conversion operations in a single request.
+         * @summary Batch Convert Units
+         * @param {V1TechnologyConvertBatchPostRequest} v1TechnologyConvertBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest: V1TechnologyConvertBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyConvertBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UnitConversionApi.v1TechnologyConvertBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Convert a value from one unit to another
          * @summary Convert Units
          * @param {string} from Source unit key (e.g. miles, kg, c)
@@ -9728,6 +13592,16 @@ export const UnitConversionApiFactory = function (configuration?: Configuration,
     const localVarFp = UnitConversionApiFp(configuration)
     return {
         /**
+         * convert up to 50 unit conversion operations in a single request.
+         * @summary Batch Convert Units
+         * @param {V1TechnologyConvertBatchPostRequest} v1TechnologyConvertBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest: V1TechnologyConvertBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyConvertBatchPost200Response> {
+            return localVarFp.v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Convert a value from one unit to another
          * @summary Convert Units
          * @param {string} from Source unit key (e.g. miles, kg, c)
@@ -9755,6 +13629,17 @@ export const UnitConversionApiFactory = function (configuration?: Configuration,
  * UnitConversionApi - object-oriented interface
  */
 export class UnitConversionApi extends BaseAPI {
+    /**
+     * convert up to 50 unit conversion operations in a single request.
+     * @summary Batch Convert Units
+     * @param {V1TechnologyConvertBatchPostRequest} v1TechnologyConvertBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest: V1TechnologyConvertBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return UnitConversionApiFp(this.configuration).v1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Convert a value from one unit to another
      * @summary Convert Units
@@ -9786,6 +13671,44 @@ export class UnitConversionApi extends BaseAPI {
  */
 export const UseragentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Parses up to 50 user agents in a single request.
+         * @summary Batch Parse User Agents
+         * @param {V1TechnologyUseragentBatchPostRequest} v1TechnologyUseragentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyUseragentBatchPost: async (v1TechnologyUseragentBatchPostRequest: V1TechnologyUseragentBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1TechnologyUseragentBatchPostRequest' is not null or undefined
+            assertParamExists('v1TechnologyUseragentBatchPost', 'v1TechnologyUseragentBatchPostRequest', v1TechnologyUseragentBatchPostRequest)
+            const localVarPath = `/v1/technology/useragent/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1TechnologyUseragentBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Parses a user agent string and returns structured information about the browser, OS, device, and bot status.
          * @summary Parse User Agent
@@ -9836,6 +13759,19 @@ export const UseragentApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UseragentApiAxiosParamCreator(configuration)
     return {
         /**
+         * Parses up to 50 user agents in a single request.
+         * @summary Batch Parse User Agents
+         * @param {V1TechnologyUseragentBatchPostRequest} v1TechnologyUseragentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest: V1TechnologyUseragentBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1TechnologyUseragentBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UseragentApi.v1TechnologyUseragentBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Parses a user agent string and returns structured information about the browser, OS, device, and bot status.
          * @summary Parse User Agent
          * @param {string} ua The user agent string to parse.
@@ -9858,6 +13794,16 @@ export const UseragentApiFactory = function (configuration?: Configuration, base
     const localVarFp = UseragentApiFp(configuration)
     return {
         /**
+         * Parses up to 50 user agents in a single request.
+         * @summary Batch Parse User Agents
+         * @param {V1TechnologyUseragentBatchPostRequest} v1TechnologyUseragentBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest: V1TechnologyUseragentBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1TechnologyUseragentBatchPost200Response> {
+            return localVarFp.v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Parses a user agent string and returns structured information about the browser, OS, device, and bot status.
          * @summary Parse User Agent
          * @param {string} ua The user agent string to parse.
@@ -9874,6 +13820,17 @@ export const UseragentApiFactory = function (configuration?: Configuration, base
  * UseragentApi - object-oriented interface
  */
 export class UseragentApi extends BaseAPI {
+    /**
+     * Parses up to 50 user agents in a single request.
+     * @summary Batch Parse User Agents
+     * @param {V1TechnologyUseragentBatchPostRequest} v1TechnologyUseragentBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest: V1TechnologyUseragentBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return UseragentApiFp(this.configuration).v1TechnologyUseragentBatchPost(v1TechnologyUseragentBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Parses a user agent string and returns structured information about the browser, OS, device, and bot status.
      * @summary Parse User Agent
@@ -9998,6 +13955,44 @@ export class VpnDetectionApi extends BaseAPI {
 export const WhoisApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+         * @summary Batch WHOIS Lookup
+         * @param {V1NetworkingWhoisBatchPostRequest} v1NetworkingWhoisBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingWhoisBatchPost: async (v1NetworkingWhoisBatchPostRequest: V1NetworkingWhoisBatchPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'v1NetworkingWhoisBatchPostRequest' is not null or undefined
+            assertParamExists('v1NetworkingWhoisBatchPost', 'v1NetworkingWhoisBatchPostRequest', v1NetworkingWhoisBatchPostRequest)
+            const localVarPath = `/v1/networking/whois/batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication requiems-api-key required
+            await setApiKeyToObject(localVarHeaderParameter, "requiems-api-key", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(v1NetworkingWhoisBatchPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns WHOIS registration information for a domain name.
          * @summary WHOIS Lookup
          * @param {string} domain The domain name to look up (e.g. example.com)
@@ -10044,6 +14039,19 @@ export const WhoisApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WhoisApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+         * @summary Batch WHOIS Lookup
+         * @param {V1NetworkingWhoisBatchPostRequest} v1NetworkingWhoisBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest: V1NetworkingWhoisBatchPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<V1NetworkingWhoisBatchPost200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WhoisApi.v1NetworkingWhoisBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Returns WHOIS registration information for a domain name.
          * @summary WHOIS Lookup
          * @param {string} domain The domain name to look up (e.g. example.com)
@@ -10066,6 +14074,16 @@ export const WhoisApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = WhoisApiFp(configuration)
     return {
         /**
+         * Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+         * @summary Batch WHOIS Lookup
+         * @param {V1NetworkingWhoisBatchPostRequest} v1NetworkingWhoisBatchPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest: V1NetworkingWhoisBatchPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<V1NetworkingWhoisBatchPost200Response> {
+            return localVarFp.v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Returns WHOIS registration information for a domain name.
          * @summary WHOIS Lookup
          * @param {string} domain The domain name to look up (e.g. example.com)
@@ -10082,6 +14100,17 @@ export const WhoisApiFactory = function (configuration?: Configuration, basePath
  * WhoisApi - object-oriented interface
  */
 export class WhoisApi extends BaseAPI {
+    /**
+     * Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+     * @summary Batch WHOIS Lookup
+     * @param {V1NetworkingWhoisBatchPostRequest} v1NetworkingWhoisBatchPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest: V1NetworkingWhoisBatchPostRequest, options?: RawAxiosRequestConfig) {
+        return WhoisApiFp(this.configuration).v1NetworkingWhoisBatchPost(v1NetworkingWhoisBatchPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Returns WHOIS registration information for a domain name.
      * @summary WHOIS Lookup

@@ -3,7 +3,6 @@
 # import apis into api package
 from openapi_client.api.advice_api import AdviceApi
 from openapi_client.api.barcode_api import BarcodeApi
-from openapi_client.api.base64_api import Base64Api
 from openapi_client.api.bin_lookup_api import BinLookupApi
 from openapi_client.api.chuck_norris_api import ChuckNorrisApi
 from openapi_client.api.cities_api import CitiesApi
@@ -13,7 +12,9 @@ from openapi_client.api.counter_api import CounterApi
 from openapi_client.api.crypto_api import CryptoApi
 from openapi_client.api.dad_jokes_api import DadJokesApi
 from openapi_client.api.data_format_conversion_api import DataFormatConversionApi
+from openapi_client.api.data_integrity_api import DataIntegrityApi
 from openapi_client.api.detect_language_api import DetectLanguageApi
+from openapi_client.api.developer_utilities_api import DeveloperUtilitiesApi
 from openapi_client.api.dictionary_api import DictionaryApi
 from openapi_client.api.disposable_email_api import DisposableEmailApi
 from openapi_client.api.domain_info_api import DomainInfoApi
@@ -24,9 +25,11 @@ from openapi_client.api.exchange_rate_api import ExchangeRateApi
 from openapi_client.api.facts_api import FactsApi
 from openapi_client.api.fitness_exercises_api import FitnessExercisesApi
 from openapi_client.api.geocode_api import GeocodeApi
+from openapi_client.api.global_data_api import GlobalDataApi
 from openapi_client.api.holidays_api import HolidaysApi
 from openapi_client.api.horoscope_api import HoroscopeApi
 from openapi_client.api.iban_api import IbanApi
+from openapi_client.api.identity_risk_api import IdentityRiskApi
 from openapi_client.api.inflation_api import InflationApi
 from openapi_client.api.ip_asn_api import IpAsnApi
 from openapi_client.api.ip_info_api import IpInfoApi
@@ -36,6 +39,7 @@ from openapi_client.api.mortgage_api import MortgageApi
 from openapi_client.api.mx_lookup_api import MxLookupApi
 from openapi_client.api.number_base_conversion_api import NumberBaseConversionApi
 from openapi_client.api.password_generator_api import PasswordGeneratorApi
+from openapi_client.api.payments_intelligence_api import PaymentsIntelligenceApi
 from openapi_client.api.phone_validation_api import PhoneValidationApi
 from openapi_client.api.postal_code_api import PostalCodeApi
 from openapi_client.api.profanity_api import ProfanityApi

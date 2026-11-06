@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,31 +19,31 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
-    # Check Profanity
-    # Checks text for profanity, returning a censored version and the list of flagged words.
-    # @param v1_text_profanity_post_request [V1TextProfanityPostRequest] 
+    # Batch Check Profanity
+    # Check up to 50 texts for profanity in a single request. Results are returned in input order.
+    # @param v1_validation_profanity_batch_post_request [V1ValidationProfanityBatchPostRequest] 
     # @param [Hash] opts the optional parameters
-    # @return [V1TextProfanityPost200Response]
-    def v1_text_profanity_post(v1_text_profanity_post_request, opts = {})
-      data, _status_code, _headers = v1_text_profanity_post_with_http_info(v1_text_profanity_post_request, opts)
+    # @return [V1ValidationProfanityBatchPost200Response]
+    def v1_validation_profanity_batch_post(v1_validation_profanity_batch_post_request, opts = {})
+      data, _status_code, _headers = v1_validation_profanity_batch_post_with_http_info(v1_validation_profanity_batch_post_request, opts)
       data
     end
 
-    # Check Profanity
-    # Checks text for profanity, returning a censored version and the list of flagged words.
-    # @param v1_text_profanity_post_request [V1TextProfanityPostRequest] 
+    # Batch Check Profanity
+    # Check up to 50 texts for profanity in a single request. Results are returned in input order.
+    # @param v1_validation_profanity_batch_post_request [V1ValidationProfanityBatchPostRequest] 
     # @param [Hash] opts the optional parameters
-    # @return [Array<(V1TextProfanityPost200Response, Integer, Hash)>] V1TextProfanityPost200Response data, response status code and response headers
-    def v1_text_profanity_post_with_http_info(v1_text_profanity_post_request, opts = {})
+    # @return [Array<(V1ValidationProfanityBatchPost200Response, Integer, Hash)>] V1ValidationProfanityBatchPost200Response data, response status code and response headers
+    def v1_validation_profanity_batch_post_with_http_info(v1_validation_profanity_batch_post_request, opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: ProfanityApi.v1_text_profanity_post ...'
+        @api_client.config.logger.debug 'Calling API: ProfanityApi.v1_validation_profanity_batch_post ...'
       end
-      # verify the required parameter 'v1_text_profanity_post_request' is set
-      if @api_client.config.client_side_validation && v1_text_profanity_post_request.nil?
-        fail ArgumentError, "Missing the required parameter 'v1_text_profanity_post_request' when calling ProfanityApi.v1_text_profanity_post"
+      # verify the required parameter 'v1_validation_profanity_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_validation_profanity_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_validation_profanity_batch_post_request' when calling ProfanityApi.v1_validation_profanity_batch_post"
       end
       # resource path
-      local_var_path = '/v1/text/profanity'
+      local_var_path = '/v1/validation/profanity/batch'
 
       # query parameters
       query_params = opts[:query_params] || {}
@@ -62,16 +62,16 @@ module OpenapiClient
       form_params = opts[:form_params] || {}
 
       # http body (model)
-      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_text_profanity_post_request)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_validation_profanity_batch_post_request)
 
       # return_type
-      return_type = opts[:debug_return_type] || 'V1TextProfanityPost200Response'
+      return_type = opts[:debug_return_type] || 'V1ValidationProfanityBatchPost200Response'
 
       # auth_names
       auth_names = opts[:debug_auth_names] || ['requiems-api-key']
 
       new_options = opts.merge(
-        :operation => :"ProfanityApi.v1_text_profanity_post",
+        :operation => :"ProfanityApi.v1_validation_profanity_batch_post",
         :header_params => header_params,
         :query_params => query_params,
         :form_params => form_params,
@@ -82,7 +82,75 @@ module OpenapiClient
 
       data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: ProfanityApi#v1_text_profanity_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: ProfanityApi#v1_validation_profanity_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Check Profanity
+    # Checks text for profanity, returning a censored version and the list of flagged words.
+    # @param v1_validation_profanity_post_request [V1ValidationProfanityPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [V1ValidationProfanityPost200Response]
+    def v1_validation_profanity_post(v1_validation_profanity_post_request, opts = {})
+      data, _status_code, _headers = v1_validation_profanity_post_with_http_info(v1_validation_profanity_post_request, opts)
+      data
+    end
+
+    # Check Profanity
+    # Checks text for profanity, returning a censored version and the list of flagged words.
+    # @param v1_validation_profanity_post_request [V1ValidationProfanityPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(V1ValidationProfanityPost200Response, Integer, Hash)>] V1ValidationProfanityPost200Response data, response status code and response headers
+    def v1_validation_profanity_post_with_http_info(v1_validation_profanity_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: ProfanityApi.v1_validation_profanity_post ...'
+      end
+      # verify the required parameter 'v1_validation_profanity_post_request' is set
+      if @api_client.config.client_side_validation && v1_validation_profanity_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_validation_profanity_post_request' when calling ProfanityApi.v1_validation_profanity_post"
+      end
+      # resource path
+      local_var_path = '/v1/validation/profanity'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_validation_profanity_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'V1ValidationProfanityPost200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"ProfanityApi.v1_validation_profanity_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: ProfanityApi#v1_validation_profanity_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

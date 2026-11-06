@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -32,6 +32,18 @@ describe 'GeocodeApi' do
     end
   end
 
+  # unit tests for v1_places_geocode_batch_post
+  # Batch Geocode Addresses
+  # Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+  # @param v1_places_geocode_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1PlacesGeocodeBatchPost200Response]
+  describe 'v1_places_geocode_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for v1_places_geocode_get
   # Geocode Address
   # Converts a free-text address into latitude and longitude coordinates.
@@ -39,6 +51,18 @@ describe 'GeocodeApi' do
   # @param [Hash] opts the optional parameters
   # @return [V1PlacesGeocodeGet200Response]
   describe 'v1_places_geocode_get test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for v1_places_reverse_geocode_batch_post
+  # Batch Reverse Geocode
+  # Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+  # @param v1_places_reverse_geocode_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1PlacesReverseGeocodeBatchPost200Response]
+  describe 'v1_places_reverse_geocode_batch_post test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

@@ -1,13 +1,14 @@
 # \FitnessExercisesAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**V1HealthBodyPartsGet**](FitnessExercisesAPI.md#V1HealthBodyPartsGet) | **Get** /v1/health/body-parts | List Body Parts
 [**V1HealthEquipmentGet**](FitnessExercisesAPI.md#V1HealthEquipmentGet) | **Get** /v1/health/equipment | List Equipment
+[**V1HealthExercisesBatchPost**](FitnessExercisesAPI.md#V1HealthExercisesBatchPost) | **Post** /v1/health/exercises/batch | Batch Get Exercises
 [**V1HealthExercisesGet**](FitnessExercisesAPI.md#V1HealthExercisesGet) | **Get** /v1/health/exercises | List Exercises
-[**V1HealthExercisesIdGet**](FitnessExercisesAPI.md#V1HealthExercisesIdGet) | **Get** /v1/health/exercises/{id} | Get Exercise by ID
+[**V1HealthExercisesIdGet**](FitnessExercisesAPI.md#V1HealthExercisesIdGet) | **Get** /v1/health/exercises/{id} | Exercise by ID
 [**V1HealthExercisesRandomGet**](FitnessExercisesAPI.md#V1HealthExercisesRandomGet) | **Get** /v1/health/exercises/random | Random Exercise
 [**V1HealthMusclesGet**](FitnessExercisesAPI.md#V1HealthMusclesGet) | **Get** /v1/health/muscles | List Muscles
 
@@ -135,6 +136,72 @@ Other parameters are passed through a pointer to a apiV1HealthEquipmentGetReques
 [[Back to README]](../README.md)
 
 
+## V1HealthExercisesBatchPost
+
+> V1HealthExercisesBatchPost200Response V1HealthExercisesBatchPost(ctx).V1HealthExercisesBatchPostRequest(v1HealthExercisesBatchPostRequest).Execute()
+
+Batch Get Exercises
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1HealthExercisesBatchPostRequest := *openapiclient.NewV1HealthExercisesBatchPostRequest([]interface{}{nil}) // V1HealthExercisesBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.FitnessExercisesAPI.V1HealthExercisesBatchPost(context.Background()).V1HealthExercisesBatchPostRequest(v1HealthExercisesBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `FitnessExercisesAPI.V1HealthExercisesBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1HealthExercisesBatchPost`: V1HealthExercisesBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `FitnessExercisesAPI.V1HealthExercisesBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1HealthExercisesBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1HealthExercisesBatchPostRequest** | [**V1HealthExercisesBatchPostRequest**](V1HealthExercisesBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1HealthExercisesBatchPost200Response**](V1HealthExercisesBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## V1HealthExercisesGet
 
 > V1HealthExercisesGet200Response V1HealthExercisesGet(ctx).BodyPart(bodyPart).Equipment(equipment).Muscle(muscle).Search(search).Page(page).PerPage(perPage).Execute()
@@ -215,7 +282,7 @@ Name | Type | Description  | Notes
 
 > V1HealthExercisesIdGet200Response V1HealthExercisesIdGet(ctx, id).Execute()
 
-Get Exercise by ID
+Exercise by ID
 
 
 

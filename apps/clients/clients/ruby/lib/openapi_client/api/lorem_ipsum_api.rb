@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,6 +19,74 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Generate Lorem Ipsum (Batch)
+    # Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+    # @param v1_text_lorem_batch_post_request [V1TextLoremBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [V1TextLoremBatchPost200Response]
+    def v1_text_lorem_batch_post(v1_text_lorem_batch_post_request, opts = {})
+      data, _status_code, _headers = v1_text_lorem_batch_post_with_http_info(v1_text_lorem_batch_post_request, opts)
+      data
+    end
+
+    # Generate Lorem Ipsum (Batch)
+    # Generate multiple Lorem Ipsum placeholder texts in a single request. Processes items in bulk and returns partial successes.
+    # @param v1_text_lorem_batch_post_request [V1TextLoremBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(V1TextLoremBatchPost200Response, Integer, Hash)>] V1TextLoremBatchPost200Response data, response status code and response headers
+    def v1_text_lorem_batch_post_with_http_info(v1_text_lorem_batch_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: LoremIpsumApi.v1_text_lorem_batch_post ...'
+      end
+      # verify the required parameter 'v1_text_lorem_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_text_lorem_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_text_lorem_batch_post_request' when calling LoremIpsumApi.v1_text_lorem_batch_post"
+      end
+      # resource path
+      local_var_path = '/v1/text/lorem/batch'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_text_lorem_batch_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'V1TextLoremBatchPost200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"LoremIpsumApi.v1_text_lorem_batch_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: LoremIpsumApi#v1_text_lorem_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Generate Lorem Ipsum
     # Generate Lorem Ipsum placeholder text with customizable length and format
     # @param [Hash] opts the optional parameters

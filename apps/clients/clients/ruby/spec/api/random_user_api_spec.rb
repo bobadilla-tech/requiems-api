@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -29,6 +29,18 @@ describe 'RandomUserApi' do
   describe 'test an instance of RandomUserApi' do
     it 'should create an instance of RandomUserApi' do
       expect(@api_instance).to be_instance_of(OpenapiClient::RandomUserApi)
+    end
+  end
+
+  # unit tests for v1_technology_random_user_batch_post
+  # Batch Generate Users
+  # Returns multiple randomly generated fake user profiles in a single request. Each call consumes count units of quota. Maximum 50 users per request.
+  # @param v1_technology_random_user_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1TechnologyRandomUserBatchPost200Response]
+  describe 'v1_technology_random_user_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end
   end
 

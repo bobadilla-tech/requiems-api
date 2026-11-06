@@ -1,6 +1,6 @@
 [project]
 name = "openapi_client"
-version = "..1"
+version = "1.0.1"
 description = "Requiems API"
 authors = [
   {name = "OpenAPI Generator Community",email = "team@openapitools.org"},
@@ -11,9 +11,9 @@ requires-python = ">=3.9"
 
 dependencies = [
   "urllib3 (>=2.1.0,<3.0.0)",
-  "python-dateutil (>=3.0.0)",
-  "pydantic (>=2.14.2)",
-  "typing-extensions (>=4.16.0)",
+  "python-dateutil (>=2.8.2)",
+  "pydantic (>=2.11)",
+  "typing-extensions (>=4.7.1)",
 ]
 
 [project.urls]
@@ -23,12 +23,12 @@ Repository = "https://github.com/GIT_USER_ID/GIT_REPO_ID"
 requires-poetry = ">=2.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = ">=9.2.0"
+pytest = ">= 7.2.1"
 pytest-cov = ">= 2.8.1"
 tox = ">= 3.9.0"
 flake8 = ">= 4.0.0"
 types-python-dateutil = ">= 2.8.19.14"
-mypy = ">=2.4.1"
+mypy = ">= 1.5"
 
 
 [build-system]

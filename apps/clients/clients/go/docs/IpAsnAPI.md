@@ -1,12 +1,79 @@
 # \IpAsnAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1NetworkingIpAsnBatchPost**](IpAsnAPI.md#V1NetworkingIpAsnBatchPost) | **Post** /v1/networking/ip/asn/batch | Batch ASN Lookup
 [**V1NetworkingIpAsnGet**](IpAsnAPI.md#V1NetworkingIpAsnGet) | **Get** /v1/networking/ip/asn | Lookup ASN (Caller IP)
 [**V1NetworkingIpAsnIpGet**](IpAsnAPI.md#V1NetworkingIpAsnIpGet) | **Get** /v1/networking/ip/asn/{ip} | Lookup ASN for IP
 
+
+
+## V1NetworkingIpAsnBatchPost
+
+> V1NetworkingIpAsnBatchPost200Response V1NetworkingIpAsnBatchPost(ctx).V1NetworkingIpAsnBatchPostRequest(v1NetworkingIpAsnBatchPostRequest).Execute()
+
+Batch ASN Lookup
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1NetworkingIpAsnBatchPostRequest := *openapiclient.NewV1NetworkingIpAsnBatchPostRequest("Ips_example") // V1NetworkingIpAsnBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.IpAsnAPI.V1NetworkingIpAsnBatchPost(context.Background()).V1NetworkingIpAsnBatchPostRequest(v1NetworkingIpAsnBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `IpAsnAPI.V1NetworkingIpAsnBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1NetworkingIpAsnBatchPost`: V1NetworkingIpAsnBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `IpAsnAPI.V1NetworkingIpAsnBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1NetworkingIpAsnBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1NetworkingIpAsnBatchPostRequest** | [**V1NetworkingIpAsnBatchPostRequest**](V1NetworkingIpAsnBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1NetworkingIpAsnBatchPost200Response**](V1NetworkingIpAsnBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1NetworkingIpAsnGet

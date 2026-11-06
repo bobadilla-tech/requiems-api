@@ -1,11 +1,78 @@
 # \TriviaAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1EntertainmentTriviaBatchPost**](TriviaAPI.md#V1EntertainmentTriviaBatchPost) | **Post** /v1/entertainment/trivia/batch | Get Batch Trivia Questions
 [**V1EntertainmentTriviaGet**](TriviaAPI.md#V1EntertainmentTriviaGet) | **Get** /v1/entertainment/trivia | Get Trivia Question
 
+
+
+## V1EntertainmentTriviaBatchPost
+
+> V1EntertainmentTriviaBatchPost200Response V1EntertainmentTriviaBatchPost(ctx).V1EntertainmentTriviaBatchPostRequest(v1EntertainmentTriviaBatchPostRequest).Execute()
+
+Get Batch Trivia Questions
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1EntertainmentTriviaBatchPostRequest := *openapiclient.NewV1EntertainmentTriviaBatchPostRequest([]interface{}{nil}) // V1EntertainmentTriviaBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.TriviaAPI.V1EntertainmentTriviaBatchPost(context.Background()).V1EntertainmentTriviaBatchPostRequest(v1EntertainmentTriviaBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TriviaAPI.V1EntertainmentTriviaBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1EntertainmentTriviaBatchPost`: V1EntertainmentTriviaBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `TriviaAPI.V1EntertainmentTriviaBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1EntertainmentTriviaBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1EntertainmentTriviaBatchPostRequest** | [**V1EntertainmentTriviaBatchPostRequest**](V1EntertainmentTriviaBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1EntertainmentTriviaBatchPost200Response**](V1EntertainmentTriviaBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1EntertainmentTriviaGet

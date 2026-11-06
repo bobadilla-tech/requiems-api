@@ -6,7 +6,7 @@
 | ---- | ---- | ----------- | ----- |
 | **word** | **String** | The normalized (lowercased) word that was looked up | [optional] |
 | **phonetic** | **String** | IPA phonetic transcription of the word (may be omitted if unavailable) | [optional] |
-| **definitions** | **String** | One or more definitions for the word, each with partOfSpeech, definition, and an optional example | [optional] |
+| **definitions** | **String** | One or more definitions for the word, each with part_of_speech, definition, and an optional example | [optional] |
 | **definitions_part_of_speech** | **String** | Grammatical category (e.g. noun, verb, adjective) | [optional] |
 | **definitions_definition** | **String** | Plain-text definition of the word | [optional] |
 | **definitions_example** | **String** | Example sentence using the word (may be omitted) | [optional] |

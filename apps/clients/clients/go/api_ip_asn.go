@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -22,6 +22,130 @@ import (
 
 // IpAsnAPIService IpAsnAPI service
 type IpAsnAPIService service
+
+type ApiV1NetworkingIpAsnBatchPostRequest struct {
+	ctx context.Context
+	ApiService *IpAsnAPIService
+	v1NetworkingIpAsnBatchPostRequest *V1NetworkingIpAsnBatchPostRequest
+}
+
+func (r ApiV1NetworkingIpAsnBatchPostRequest) V1NetworkingIpAsnBatchPostRequest(v1NetworkingIpAsnBatchPostRequest V1NetworkingIpAsnBatchPostRequest) ApiV1NetworkingIpAsnBatchPostRequest {
+	r.v1NetworkingIpAsnBatchPostRequest = &v1NetworkingIpAsnBatchPostRequest
+	return r
+}
+
+func (r ApiV1NetworkingIpAsnBatchPostRequest) Execute() (*V1NetworkingIpAsnBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1NetworkingIpAsnBatchPostExecute(r)
+}
+
+/*
+V1NetworkingIpAsnBatchPost Batch ASN Lookup
+
+Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1NetworkingIpAsnBatchPostRequest
+*/
+func (a *IpAsnAPIService) V1NetworkingIpAsnBatchPost(ctx context.Context) ApiV1NetworkingIpAsnBatchPostRequest {
+	return ApiV1NetworkingIpAsnBatchPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1NetworkingIpAsnBatchPost200Response
+func (a *IpAsnAPIService) V1NetworkingIpAsnBatchPostExecute(r ApiV1NetworkingIpAsnBatchPostRequest) (*V1NetworkingIpAsnBatchPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1NetworkingIpAsnBatchPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IpAsnAPIService.V1NetworkingIpAsnBatchPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/networking/ip/asn/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1NetworkingIpAsnBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1NetworkingIpAsnBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1NetworkingIpAsnBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiV1NetworkingIpAsnGetRequest struct {
 	ctx context.Context

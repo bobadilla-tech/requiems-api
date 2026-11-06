@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **text** | **string** | Generated Lorem Ipsum text | [optional] [default to undefined]
 **paragraphs** | **number** | Number of paragraphs generated | [optional] [default to undefined]
-**wordCount** | **number** | Total number of words in generated text | [optional] [default to undefined]
+**word_count** | **number** | Total number of words in generated text | [optional] [default to undefined]
 
 ## Example
 
@@ -17,7 +17,7 @@ import { V1TextLoremGet200ResponseData } from 'api-client';
 const instance: V1TextLoremGet200ResponseData = {
     text,
     paragraphs,
-    wordCount,
+    word_count,
 };
 ```
 

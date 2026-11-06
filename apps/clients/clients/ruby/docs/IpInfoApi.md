@@ -1,10 +1,11 @@
 # OpenapiClient::IpInfoApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
 | [**v1_networking_ip_get**](IpInfoApi.md#v1_networking_ip_get) | **GET** /v1/networking/ip | Get IP Info (Caller IP) |
+| [**v1_networking_ip_info_batch_post**](IpInfoApi.md#v1_networking_ip_info_batch_post) | **POST** /v1/networking/ip/info/batch | Batch IP Geolocation |
 | [**v1_networking_ip_ip_get**](IpInfoApi.md#v1_networking_ip_ip_get) | **GET** /v1/networking/ip/{ip} | Get IP Info for IP |
 
 
@@ -73,6 +74,77 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## v1_networking_ip_info_batch_post
+
+> <V1NetworkingIpInfoBatchPost200Response> v1_networking_ip_info_batch_post(v1_networking_ip_asn_batch_post_request)
+
+Batch IP Geolocation
+
+Look up geolocation data for up to 50 IP addresses in a single request. Results are returned in input order. Per-item errors are reported inline.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::IpInfoApi.new
+v1_networking_ip_asn_batch_post_request = OpenapiClient::V1NetworkingIpAsnBatchPostRequest.new({ips: 'ips_example'}) # V1NetworkingIpAsnBatchPostRequest | 
+
+begin
+  # Batch IP Geolocation
+  result = api_instance.v1_networking_ip_info_batch_post(v1_networking_ip_asn_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling IpInfoApi->v1_networking_ip_info_batch_post: #{e}"
+end
+```
+
+#### Using the v1_networking_ip_info_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1NetworkingIpInfoBatchPost200Response>, Integer, Hash)> v1_networking_ip_info_batch_post_with_http_info(v1_networking_ip_asn_batch_post_request)
+
+```ruby
+begin
+  # Batch IP Geolocation
+  data, status_code, headers = api_instance.v1_networking_ip_info_batch_post_with_http_info(v1_networking_ip_asn_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1NetworkingIpInfoBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling IpInfoApi->v1_networking_ip_info_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_networking_ip_asn_batch_post_request** | [**V1NetworkingIpAsnBatchPostRequest**](V1NetworkingIpAsnBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1NetworkingIpInfoBatchPost200Response**](V1NetworkingIpInfoBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 

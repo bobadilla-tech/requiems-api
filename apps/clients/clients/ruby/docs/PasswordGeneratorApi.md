@@ -1,10 +1,82 @@
 # OpenapiClient::PasswordGeneratorApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_technology_password_batch_post**](PasswordGeneratorApi.md#v1_technology_password_batch_post) | **POST** /v1/technology/password/batch | Batch Generate Passwords |
 | [**v1_technology_password_get**](PasswordGeneratorApi.md#v1_technology_password_get) | **GET** /v1/technology/password | Generate Password |
+
+
+## v1_technology_password_batch_post
+
+> <V1TechnologyPasswordBatchPost200Response> v1_technology_password_batch_post(v1_technology_password_batch_post_request)
+
+Batch Generate Passwords
+
+Generate up to 50 passwords in a single request. Each item can have its own length and character set options. Results are returned in input order.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::PasswordGeneratorApi.new
+v1_technology_password_batch_post_request = OpenapiClient::V1TechnologyPasswordBatchPostRequest.new({items: 'items_example'}) # V1TechnologyPasswordBatchPostRequest | 
+
+begin
+  # Batch Generate Passwords
+  result = api_instance.v1_technology_password_batch_post(v1_technology_password_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling PasswordGeneratorApi->v1_technology_password_batch_post: #{e}"
+end
+```
+
+#### Using the v1_technology_password_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1TechnologyPasswordBatchPost200Response>, Integer, Hash)> v1_technology_password_batch_post_with_http_info(v1_technology_password_batch_post_request)
+
+```ruby
+begin
+  # Batch Generate Passwords
+  data, status_code, headers = api_instance.v1_technology_password_batch_post_with_http_info(v1_technology_password_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1TechnologyPasswordBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling PasswordGeneratorApi->v1_technology_password_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_technology_password_batch_post_request** | [**V1TechnologyPasswordBatchPostRequest**](V1TechnologyPasswordBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1TechnologyPasswordBatchPost200Response**](V1TechnologyPasswordBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_technology_password_get

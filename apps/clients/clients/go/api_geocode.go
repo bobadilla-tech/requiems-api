@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -21,6 +21,130 @@ import (
 
 // GeocodeAPIService GeocodeAPI service
 type GeocodeAPIService service
+
+type ApiV1PlacesGeocodeBatchPostRequest struct {
+	ctx context.Context
+	ApiService *GeocodeAPIService
+	v1PlacesGeocodeBatchPostRequest *V1PlacesGeocodeBatchPostRequest
+}
+
+func (r ApiV1PlacesGeocodeBatchPostRequest) V1PlacesGeocodeBatchPostRequest(v1PlacesGeocodeBatchPostRequest V1PlacesGeocodeBatchPostRequest) ApiV1PlacesGeocodeBatchPostRequest {
+	r.v1PlacesGeocodeBatchPostRequest = &v1PlacesGeocodeBatchPostRequest
+	return r
+}
+
+func (r ApiV1PlacesGeocodeBatchPostRequest) Execute() (*V1PlacesGeocodeBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1PlacesGeocodeBatchPostExecute(r)
+}
+
+/*
+V1PlacesGeocodeBatchPost Batch Geocode Addresses
+
+Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1PlacesGeocodeBatchPostRequest
+*/
+func (a *GeocodeAPIService) V1PlacesGeocodeBatchPost(ctx context.Context) ApiV1PlacesGeocodeBatchPostRequest {
+	return ApiV1PlacesGeocodeBatchPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1PlacesGeocodeBatchPost200Response
+func (a *GeocodeAPIService) V1PlacesGeocodeBatchPostExecute(r ApiV1PlacesGeocodeBatchPostRequest) (*V1PlacesGeocodeBatchPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1PlacesGeocodeBatchPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GeocodeAPIService.V1PlacesGeocodeBatchPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/places/geocode/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1PlacesGeocodeBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1PlacesGeocodeBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1PlacesGeocodeBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiV1PlacesGeocodeGetRequest struct {
 	ctx context.Context
@@ -95,6 +219,130 @@ func (a *GeocodeAPIService) V1PlacesGeocodeGetExecute(r ApiV1PlacesGeocodeGetReq
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiV1PlacesReverseGeocodeBatchPostRequest struct {
+	ctx context.Context
+	ApiService *GeocodeAPIService
+	v1PlacesReverseGeocodeBatchPostRequest *V1PlacesReverseGeocodeBatchPostRequest
+}
+
+func (r ApiV1PlacesReverseGeocodeBatchPostRequest) V1PlacesReverseGeocodeBatchPostRequest(v1PlacesReverseGeocodeBatchPostRequest V1PlacesReverseGeocodeBatchPostRequest) ApiV1PlacesReverseGeocodeBatchPostRequest {
+	r.v1PlacesReverseGeocodeBatchPostRequest = &v1PlacesReverseGeocodeBatchPostRequest
+	return r
+}
+
+func (r ApiV1PlacesReverseGeocodeBatchPostRequest) Execute() (*V1PlacesReverseGeocodeBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1PlacesReverseGeocodeBatchPostExecute(r)
+}
+
+/*
+V1PlacesReverseGeocodeBatchPost Batch Reverse Geocode
+
+Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1PlacesReverseGeocodeBatchPostRequest
+*/
+func (a *GeocodeAPIService) V1PlacesReverseGeocodeBatchPost(ctx context.Context) ApiV1PlacesReverseGeocodeBatchPostRequest {
+	return ApiV1PlacesReverseGeocodeBatchPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1PlacesReverseGeocodeBatchPost200Response
+func (a *GeocodeAPIService) V1PlacesReverseGeocodeBatchPostExecute(r ApiV1PlacesReverseGeocodeBatchPostRequest) (*V1PlacesReverseGeocodeBatchPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1PlacesReverseGeocodeBatchPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GeocodeAPIService.V1PlacesReverseGeocodeBatchPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/places/reverse-geocode/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1PlacesReverseGeocodeBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1PlacesReverseGeocodeBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1PlacesReverseGeocodeBatchPostRequest
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

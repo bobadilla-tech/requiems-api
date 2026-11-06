@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Result** | Pointer to **string** | The Base64-encoded output | [optional] 
+**Result** | Pointer to **string** | The Base64-encoded output string | [optional] 
 
 ## Methods
 

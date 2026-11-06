@@ -1,11 +1,83 @@
 # OpenapiClient::QrCodeApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_technology_qr_base64_batch_post**](QrCodeApi.md#v1_technology_qr_base64_batch_post) | **POST** /v1/technology/qr/base64/batch | Batch Generate QR Codes (Base64) |
 | [**v1_technology_qr_base64_get**](QrCodeApi.md#v1_technology_qr_base64_get) | **GET** /v1/technology/qr/base64 | Generate QR Code (Base64 JSON) |
 | [**v1_technology_qr_get**](QrCodeApi.md#v1_technology_qr_get) | **GET** /v1/technology/qr | Generate QR Code (PNG) |
+
+
+## v1_technology_qr_base64_batch_post
+
+> <V1TechnologyQrBase64BatchPost200Response> v1_technology_qr_base64_batch_post(v1_technology_qr_base64_batch_post_request)
+
+Batch Generate QR Codes (Base64)
+
+Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::QrCodeApi.new
+v1_technology_qr_base64_batch_post_request = OpenapiClient::V1TechnologyQrBase64BatchPostRequest.new({items: 'items_example', items_data: 'items_data_example'}) # V1TechnologyQrBase64BatchPostRequest | 
+
+begin
+  # Batch Generate QR Codes (Base64)
+  result = api_instance.v1_technology_qr_base64_batch_post(v1_technology_qr_base64_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling QrCodeApi->v1_technology_qr_base64_batch_post: #{e}"
+end
+```
+
+#### Using the v1_technology_qr_base64_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1TechnologyQrBase64BatchPost200Response>, Integer, Hash)> v1_technology_qr_base64_batch_post_with_http_info(v1_technology_qr_base64_batch_post_request)
+
+```ruby
+begin
+  # Batch Generate QR Codes (Base64)
+  data, status_code, headers = api_instance.v1_technology_qr_base64_batch_post_with_http_info(v1_technology_qr_base64_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1TechnologyQrBase64BatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling QrCodeApi->v1_technology_qr_base64_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_technology_qr_base64_batch_post_request** | [**V1TechnologyQrBase64BatchPostRequest**](V1TechnologyQrBase64BatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1TechnologyQrBase64BatchPost200Response**](V1TechnologyQrBase64BatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_technology_qr_base64_get

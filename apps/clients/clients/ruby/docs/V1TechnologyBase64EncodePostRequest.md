@@ -5,7 +5,7 @@
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
 | **value** | **String** | The string to encode |  |
-| **variant** | **String** | Encoding variant: standard (default) or url (URL-safe base64url) | [optional] |
+| **variant** | **String** | Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5) | [optional] |
 
 ## Example
 

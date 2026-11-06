@@ -1,11 +1,114 @@
 # Org.OpenAPITools.Api.UnitConversionApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**V1TechnologyConvertBatchPost**](UnitConversionApi.md#v1technologyconvertbatchpost) | **POST** /v1/technology/convert/batch | Batch Convert Units |
 | [**V1TechnologyConvertGet**](UnitConversionApi.md#v1technologyconvertget) | **GET** /v1/technology/convert | Convert Units |
 | [**V1TechnologyConvertUnitsGet**](UnitConversionApi.md#v1technologyconvertunitsget) | **GET** /v1/technology/convert/units | List Available Units |
+
+<a id="v1technologyconvertbatchpost"></a>
+# **V1TechnologyConvertBatchPost**
+> V1TechnologyConvertBatchPost200Response V1TechnologyConvertBatchPost (V1TechnologyConvertBatchPostRequest v1TechnologyConvertBatchPostRequest)
+
+Batch Convert Units
+
+convert up to 50 unit conversion operations in a single request.
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class V1TechnologyConvertBatchPostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "https://requiems.xyz";
+            // Configure API key authorization: requiems-api-key
+            config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // config.AddApiKeyPrefix("requiems-api-key", "Bearer");
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new UnitConversionApi(httpClient, config, httpClientHandler);
+            var v1TechnologyConvertBatchPostRequest = new V1TechnologyConvertBatchPostRequest(); // V1TechnologyConvertBatchPostRequest | 
+
+            try
+            {
+                // Batch Convert Units
+                V1TechnologyConvertBatchPost200Response result = apiInstance.V1TechnologyConvertBatchPost(v1TechnologyConvertBatchPostRequest);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling UnitConversionApi.V1TechnologyConvertBatchPost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the V1TechnologyConvertBatchPostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Batch Convert Units
+    ApiResponse<V1TechnologyConvertBatchPost200Response> response = apiInstance.V1TechnologyConvertBatchPostWithHttpInfo(v1TechnologyConvertBatchPostRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling UnitConversionApi.V1TechnologyConvertBatchPostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **v1TechnologyConvertBatchPostRequest** | [**V1TechnologyConvertBatchPostRequest**](V1TechnologyConvertBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1TechnologyConvertBatchPost200Response**](V1TechnologyConvertBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Successful response |  -  |
+| **400** | Invalid JSON, malformed request body, or unexpected field types. |  -  |
+| **422** | The operations array is missing, empty, or contains more than 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a id="v1technologyconvertget"></a>
 # **V1TechnologyConvertGet**
@@ -31,7 +134,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -135,7 +238,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed

@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -15,10 +15,10 @@ require 'time'
 
 module OpenapiClient
   class V1TextSpellcheckPost200ResponseData < ApiModelBase
-    # The full input text with all misspelled words replaced by their suggested corrections
+    # The full input text with all misspelled words replaced by the top-ranked suggestion
     attr_accessor :corrected
 
-    # List of individual corrections. Each item contains: original (the misspelled word), suggested (the correction), and position (0-based character offset in the original text)
+    # List of individual corrections. Each item contains: original (the misspelled word), suggested (the top-ranked replacement applied to corrected), suggestions (up to 3 ranked alternatives returned by LanguageTool, from most to least likely), and position (0-based Unicode character offset in the original text)
     attr_accessor :corrections
 
     # Attribute mapping from ruby-style variable name to JSON key.
