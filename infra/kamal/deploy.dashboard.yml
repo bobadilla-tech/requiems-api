@@ -34,8 +34,6 @@ builder:
   context: apps/dashboard
   dockerfile: infra/docker/dashboard.Dockerfile
   arch: amd64
-  additional_contexts:
-    scripts: scripts
 
 secrets_path: infra/kamal/secrets
 
