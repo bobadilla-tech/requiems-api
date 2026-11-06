@@ -1,10 +1,67 @@
 # TriviaApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**v1EntertainmentTriviaBatchPost**](#v1entertainmenttriviabatchpost) | **POST** /v1/entertainment/trivia/batch | Get Batch Trivia Questions|
 |[**v1EntertainmentTriviaGet**](#v1entertainmenttriviaget) | **GET** /v1/entertainment/trivia | Get Trivia Question|
+
+# **v1EntertainmentTriviaBatchPost**
+> V1EntertainmentTriviaBatchPost200Response v1EntertainmentTriviaBatchPost(v1EntertainmentTriviaBatchPostRequest)
+
+Returns up to 50 trivia questions in a single request.
+
+### Example
+
+```typescript
+import {
+    TriviaApi,
+    Configuration,
+    V1EntertainmentTriviaBatchPostRequest
+} from 'api-client';
+
+const configuration = new Configuration();
+const apiInstance = new TriviaApi(configuration);
+
+let v1EntertainmentTriviaBatchPostRequest: V1EntertainmentTriviaBatchPostRequest; //
+
+const { status, data } = await apiInstance.v1EntertainmentTriviaBatchPost(
+    v1EntertainmentTriviaBatchPostRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **v1EntertainmentTriviaBatchPostRequest** | **V1EntertainmentTriviaBatchPostRequest**|  | |
+
+
+### Return type
+
+**V1EntertainmentTriviaBatchPost200Response**
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful response |  -  |
+|**400** | Invalid JSON, malformed request body, or unexpected field types. |  -  |
+|**401** | Missing API key. |  -  |
+|**403** | Invalid or revoked API key. |  -  |
+|**422** | The filters array is missing, empty, or contains more than 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **v1EntertainmentTriviaGet**
 > V1EntertainmentTriviaGet200Response v1EntertainmentTriviaGet()

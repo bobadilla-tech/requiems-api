@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -54,6 +54,18 @@ describe 'FitnessExercisesApi' do
     end
   end
 
+  # unit tests for v1_health_exercises_batch_post
+  # Batch Get Exercises
+  # Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+  # @param v1_health_exercises_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1HealthExercisesBatchPost200Response]
+  describe 'v1_health_exercises_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
   # unit tests for v1_health_exercises_get
   # List Exercises
   # Returns a paginated list of exercises. All filter parameters are optional and combinable.
@@ -72,7 +84,7 @@ describe 'FitnessExercisesApi' do
   end
 
   # unit tests for v1_health_exercises_id_get
-  # Get Exercise by ID
+  # Exercise by ID
   # Returns a single exercise by its numeric ID.
   # @param id Numeric exercise ID
   # @param [Hash] opts the optional parameters

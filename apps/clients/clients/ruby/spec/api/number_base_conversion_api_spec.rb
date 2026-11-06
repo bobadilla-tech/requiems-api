@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -29,6 +29,18 @@ describe 'NumberBaseConversionApi' do
   describe 'test an instance of NumberBaseConversionApi' do
     it 'should create an instance of NumberBaseConversionApi' do
       expect(@api_instance).to be_instance_of(OpenapiClient::NumberBaseConversionApi)
+    end
+  end
+
+  # unit tests for v1_technology_base_batch_post
+  # Batch Convert Base
+  # Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+  # @param v1_technology_base_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1TechnologyBaseBatchPost200Response]
+  describe 'v1_technology_base_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end
   end
 

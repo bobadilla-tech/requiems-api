@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -32,12 +32,24 @@ describe 'QuotesApi' do
     end
   end
 
-  # unit tests for v1_text_quotes_random_get
+  # unit tests for v1_entertainment_quotes_random_batch_post
+  # Get Random Quotes (Batch)
+  # Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+  # @param v1_entertainment_quotes_random_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1EntertainmentQuotesRandomBatchPost200Response]
+  describe 'v1_entertainment_quotes_random_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for v1_entertainment_quotes_random_get
   # Get Random Quote
   # Returns a random inspirational quote with author attribution
   # @param [Hash] opts the optional parameters
-  # @return [V1TextQuotesRandomGet200Response]
-  describe 'v1_text_quotes_random_get test' do
+  # @return [V1EntertainmentQuotesRandomGet200Response]
+  describe 'v1_entertainment_quotes_random_get test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

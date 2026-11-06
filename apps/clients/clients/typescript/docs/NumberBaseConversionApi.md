@@ -1,10 +1,65 @@
 # NumberBaseConversionApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**v1TechnologyBaseBatchPost**](#v1technologybasebatchpost) | **POST** /v1/technology/base/batch | Batch Convert Base|
 |[**v1TechnologyBaseGet**](#v1technologybaseget) | **GET** /v1/technology/base | Convert Base|
+
+# **v1TechnologyBaseBatchPost**
+> V1TechnologyBaseBatchPost200Response v1TechnologyBaseBatchPost(v1TechnologyBaseBatchPostRequest)
+
+Convert up to 50 numbers between bases in a single request. Results are returned in input order. Per-item errors are reported inline.
+
+### Example
+
+```typescript
+import {
+    NumberBaseConversionApi,
+    Configuration,
+    V1TechnologyBaseBatchPostRequest
+} from 'api-client';
+
+const configuration = new Configuration();
+const apiInstance = new NumberBaseConversionApi(configuration);
+
+let v1TechnologyBaseBatchPostRequest: V1TechnologyBaseBatchPostRequest; //
+
+const { status, data } = await apiInstance.v1TechnologyBaseBatchPost(
+    v1TechnologyBaseBatchPostRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **v1TechnologyBaseBatchPostRequest** | **V1TechnologyBaseBatchPostRequest**|  | |
+
+
+### Return type
+
+**V1TechnologyBaseBatchPost200Response**
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful response |  -  |
+|**400** | The request body is missing or malformed. |  -  |
+|**422** | The items array is missing, empty, or exceeds 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **v1TechnologyBaseGet**
 > V1TechnologyBaseGet200Response v1TechnologyBaseGet()

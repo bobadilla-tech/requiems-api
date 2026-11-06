@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,25 +19,93 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Get Random Quotes (Batch)
+    # Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+    # @param v1_entertainment_quotes_random_batch_post_request [V1EntertainmentQuotesRandomBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [V1EntertainmentQuotesRandomBatchPost200Response]
+    def v1_entertainment_quotes_random_batch_post(v1_entertainment_quotes_random_batch_post_request, opts = {})
+      data, _status_code, _headers = v1_entertainment_quotes_random_batch_post_with_http_info(v1_entertainment_quotes_random_batch_post_request, opts)
+      data
+    end
+
+    # Get Random Quotes (Batch)
+    # Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
+    # @param v1_entertainment_quotes_random_batch_post_request [V1EntertainmentQuotesRandomBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(V1EntertainmentQuotesRandomBatchPost200Response, Integer, Hash)>] V1EntertainmentQuotesRandomBatchPost200Response data, response status code and response headers
+    def v1_entertainment_quotes_random_batch_post_with_http_info(v1_entertainment_quotes_random_batch_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: QuotesApi.v1_entertainment_quotes_random_batch_post ...'
+      end
+      # verify the required parameter 'v1_entertainment_quotes_random_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_entertainment_quotes_random_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_entertainment_quotes_random_batch_post_request' when calling QuotesApi.v1_entertainment_quotes_random_batch_post"
+      end
+      # resource path
+      local_var_path = '/v1/entertainment/quotes/random/batch'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_entertainment_quotes_random_batch_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'V1EntertainmentQuotesRandomBatchPost200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"QuotesApi.v1_entertainment_quotes_random_batch_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: QuotesApi#v1_entertainment_quotes_random_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Get Random Quote
     # Returns a random inspirational quote with author attribution
     # @param [Hash] opts the optional parameters
-    # @return [V1TextQuotesRandomGet200Response]
-    def v1_text_quotes_random_get(opts = {})
-      data, _status_code, _headers = v1_text_quotes_random_get_with_http_info(opts)
+    # @return [V1EntertainmentQuotesRandomGet200Response]
+    def v1_entertainment_quotes_random_get(opts = {})
+      data, _status_code, _headers = v1_entertainment_quotes_random_get_with_http_info(opts)
       data
     end
 
     # Get Random Quote
     # Returns a random inspirational quote with author attribution
     # @param [Hash] opts the optional parameters
-    # @return [Array<(V1TextQuotesRandomGet200Response, Integer, Hash)>] V1TextQuotesRandomGet200Response data, response status code and response headers
-    def v1_text_quotes_random_get_with_http_info(opts = {})
+    # @return [Array<(V1EntertainmentQuotesRandomGet200Response, Integer, Hash)>] V1EntertainmentQuotesRandomGet200Response data, response status code and response headers
+    def v1_entertainment_quotes_random_get_with_http_info(opts = {})
       if @api_client.config.debugging
-        @api_client.config.logger.debug 'Calling API: QuotesApi.v1_text_quotes_random_get ...'
+        @api_client.config.logger.debug 'Calling API: QuotesApi.v1_entertainment_quotes_random_get ...'
       end
       # resource path
-      local_var_path = '/v1/text/quotes/random'
+      local_var_path = '/v1/entertainment/quotes/random'
 
       # query parameters
       query_params = opts[:query_params] || {}
@@ -54,13 +122,13 @@ module OpenapiClient
       post_body = opts[:debug_body]
 
       # return_type
-      return_type = opts[:debug_return_type] || 'V1TextQuotesRandomGet200Response'
+      return_type = opts[:debug_return_type] || 'V1EntertainmentQuotesRandomGet200Response'
 
       # auth_names
       auth_names = opts[:debug_auth_names] || ['requiems-api-key']
 
       new_options = opts.merge(
-        :operation => :"QuotesApi.v1_text_quotes_random_get",
+        :operation => :"QuotesApi.v1_entertainment_quotes_random_get",
         :header_params => header_params,
         :query_params => query_params,
         :form_params => form_params,
@@ -71,7 +139,7 @@ module OpenapiClient
 
       data, status_code, headers = @api_client.call_api(:GET, local_var_path, new_options)
       if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: QuotesApi#v1_text_quotes_random_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+        @api_client.config.logger.debug "API called: QuotesApi#v1_entertainment_quotes_random_get\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

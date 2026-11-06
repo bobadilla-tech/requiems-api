@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Requiems API
- * Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+ * Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -19,7 +19,7 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = "https://api.requiems.xyz".replace(/\/+$/, "");
+export const BASE_PATH = "https://requiems.xyz".replace(/\/+$/, "");
 
 export const COLLECTION_FORMATS = {
     csv: ",",

@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -21,7 +21,7 @@ module OpenapiClient
     # IPA phonetic transcription of the word (may be omitted if unavailable)
     attr_accessor :phonetic
 
-    # One or more definitions for the word, each with partOfSpeech, definition, and an optional example
+    # One or more definitions for the word, each with part_of_speech, definition, and an optional example
     attr_accessor :definitions
 
     # Grammatical category (e.g. noun, verb, adjective)
@@ -42,7 +42,7 @@ module OpenapiClient
         :'word' => :'word',
         :'phonetic' => :'phonetic',
         :'definitions' => :'definitions',
-        :'definitions_part_of_speech' => :'definitions[].partOfSpeech',
+        :'definitions_part_of_speech' => :'definitions[].part_of_speech',
         :'definitions_definition' => :'definitions[].definition',
         :'definitions_example' => :'definitions[].example',
         :'synonyms' => :'synonyms'

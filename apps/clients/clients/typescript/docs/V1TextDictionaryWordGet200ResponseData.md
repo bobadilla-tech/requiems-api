@@ -7,8 +7,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **word** | **string** | The normalized (lowercased) word that was looked up | [optional] [default to undefined]
 **phonetic** | **string** | IPA phonetic transcription of the word (may be omitted if unavailable) | [optional] [default to undefined]
-**definitions** | **string** | One or more definitions for the word, each with partOfSpeech, definition, and an optional example | [optional] [default to undefined]
-**definitions_partOfSpeech** | **string** | Grammatical category (e.g. noun, verb, adjective) | [optional] [default to undefined]
+**definitions** | **string** | One or more definitions for the word, each with part_of_speech, definition, and an optional example | [optional] [default to undefined]
+**definitions_part_of_speech** | **string** | Grammatical category (e.g. noun, verb, adjective) | [optional] [default to undefined]
 **definitions_definition** | **string** | Plain-text definition of the word | [optional] [default to undefined]
 **definitions_example** | **string** | Example sentence using the word (may be omitted) | [optional] [default to undefined]
 **synonyms** | **string** | List of words with similar meaning | [optional] [default to undefined]
@@ -22,7 +22,7 @@ const instance: V1TextDictionaryWordGet200ResponseData = {
     word,
     phonetic,
     definitions,
-    definitions_partOfSpeech,
+    definitions_part_of_speech,
     definitions_definition,
     definitions_example,
     synonyms,

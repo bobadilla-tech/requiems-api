@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **value** | **string** | The string to encode | [default to undefined]
-**variant** | **string** | Encoding variant: standard (default) or url (URL-safe base64url) | [optional] [default to undefined]
+**variant** | **string** | Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5) | [optional] [default to undefined]
 
 ## Example
 

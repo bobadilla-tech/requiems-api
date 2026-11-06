@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -22,6 +22,130 @@ import (
 
 // WhoisAPIService WhoisAPI service
 type WhoisAPIService service
+
+type ApiV1NetworkingWhoisBatchPostRequest struct {
+	ctx context.Context
+	ApiService *WhoisAPIService
+	v1NetworkingWhoisBatchPostRequest *V1NetworkingWhoisBatchPostRequest
+}
+
+func (r ApiV1NetworkingWhoisBatchPostRequest) V1NetworkingWhoisBatchPostRequest(v1NetworkingWhoisBatchPostRequest V1NetworkingWhoisBatchPostRequest) ApiV1NetworkingWhoisBatchPostRequest {
+	r.v1NetworkingWhoisBatchPostRequest = &v1NetworkingWhoisBatchPostRequest
+	return r
+}
+
+func (r ApiV1NetworkingWhoisBatchPostRequest) Execute() (*V1NetworkingWhoisBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1NetworkingWhoisBatchPostExecute(r)
+}
+
+/*
+V1NetworkingWhoisBatchPost Batch WHOIS Lookup
+
+Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1NetworkingWhoisBatchPostRequest
+*/
+func (a *WhoisAPIService) V1NetworkingWhoisBatchPost(ctx context.Context) ApiV1NetworkingWhoisBatchPostRequest {
+	return ApiV1NetworkingWhoisBatchPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1NetworkingWhoisBatchPost200Response
+func (a *WhoisAPIService) V1NetworkingWhoisBatchPostExecute(r ApiV1NetworkingWhoisBatchPostRequest) (*V1NetworkingWhoisBatchPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1NetworkingWhoisBatchPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WhoisAPIService.V1NetworkingWhoisBatchPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/networking/whois/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1NetworkingWhoisBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1NetworkingWhoisBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1NetworkingWhoisBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiV1NetworkingWhoisDomainGetRequest struct {
 	ctx context.Context

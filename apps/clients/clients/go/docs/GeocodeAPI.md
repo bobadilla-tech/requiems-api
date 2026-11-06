@@ -1,12 +1,80 @@
 # \GeocodeAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1PlacesGeocodeBatchPost**](GeocodeAPI.md#V1PlacesGeocodeBatchPost) | **Post** /v1/places/geocode/batch | Batch Geocode Addresses
 [**V1PlacesGeocodeGet**](GeocodeAPI.md#V1PlacesGeocodeGet) | **Get** /v1/places/geocode | Geocode Address
+[**V1PlacesReverseGeocodeBatchPost**](GeocodeAPI.md#V1PlacesReverseGeocodeBatchPost) | **Post** /v1/places/reverse-geocode/batch | Batch Reverse Geocode
 [**V1PlacesReverseGeocodeGet**](GeocodeAPI.md#V1PlacesReverseGeocodeGet) | **Get** /v1/places/reverse-geocode | Reverse Geocode
 
+
+
+## V1PlacesGeocodeBatchPost
+
+> V1PlacesGeocodeBatchPost200Response V1PlacesGeocodeBatchPost(ctx).V1PlacesGeocodeBatchPostRequest(v1PlacesGeocodeBatchPostRequest).Execute()
+
+Batch Geocode Addresses
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1PlacesGeocodeBatchPostRequest := *openapiclient.NewV1PlacesGeocodeBatchPostRequest("Addresses_example") // V1PlacesGeocodeBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.GeocodeAPI.V1PlacesGeocodeBatchPost(context.Background()).V1PlacesGeocodeBatchPostRequest(v1PlacesGeocodeBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `GeocodeAPI.V1PlacesGeocodeBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1PlacesGeocodeBatchPost`: V1PlacesGeocodeBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `GeocodeAPI.V1PlacesGeocodeBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1PlacesGeocodeBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1PlacesGeocodeBatchPostRequest** | [**V1PlacesGeocodeBatchPostRequest**](V1PlacesGeocodeBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1PlacesGeocodeBatchPost200Response**](V1PlacesGeocodeBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1PlacesGeocodeGet
@@ -68,6 +136,72 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## V1PlacesReverseGeocodeBatchPost
+
+> V1PlacesReverseGeocodeBatchPost200Response V1PlacesReverseGeocodeBatchPost(ctx).V1PlacesReverseGeocodeBatchPostRequest(v1PlacesReverseGeocodeBatchPostRequest).Execute()
+
+Batch Reverse Geocode
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1PlacesReverseGeocodeBatchPostRequest := *openapiclient.NewV1PlacesReverseGeocodeBatchPostRequest("Items_example", float32(123), float32(123)) // V1PlacesReverseGeocodeBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.GeocodeAPI.V1PlacesReverseGeocodeBatchPost(context.Background()).V1PlacesReverseGeocodeBatchPostRequest(v1PlacesReverseGeocodeBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `GeocodeAPI.V1PlacesReverseGeocodeBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1PlacesReverseGeocodeBatchPost`: V1PlacesReverseGeocodeBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `GeocodeAPI.V1PlacesReverseGeocodeBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1PlacesReverseGeocodeBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1PlacesReverseGeocodeBatchPostRequest** | [**V1PlacesReverseGeocodeBatchPostRequest**](V1PlacesReverseGeocodeBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1PlacesReverseGeocodeBatchPost200Response**](V1PlacesReverseGeocodeBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

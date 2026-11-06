@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -23,10 +23,10 @@ type V1TextDictionaryWordGet200ResponseData struct {
 	Word *string `json:"word,omitempty"`
 	// IPA phonetic transcription of the word (may be omitted if unavailable)
 	Phonetic *string `json:"phonetic,omitempty"`
-	// One or more definitions for the word, each with partOfSpeech, definition, and an optional example
+	// One or more definitions for the word, each with part_of_speech, definition, and an optional example
 	Definitions *string `json:"definitions,omitempty"`
 	// Grammatical category (e.g. noun, verb, adjective)
-	DefinitionsPartOfSpeech *string `json:"definitions[].partOfSpeech,omitempty"`
+	DefinitionsPartOfSpeech *string `json:"definitions[].part_of_speech,omitempty"`
 	// Plain-text definition of the word
 	DefinitionsDefinition *string `json:"definitions[].definition,omitempty"`
 	// Example sentence using the word (may be omitted)
@@ -296,7 +296,7 @@ func (o V1TextDictionaryWordGet200ResponseData) ToMap() (map[string]interface{},
 		toSerialize["definitions"] = o.Definitions
 	}
 	if !IsNil(o.DefinitionsPartOfSpeech) {
-		toSerialize["definitions[].partOfSpeech"] = o.DefinitionsPartOfSpeech
+		toSerialize["definitions[].part_of_speech"] = o.DefinitionsPartOfSpeech
 	}
 	if !IsNil(o.DefinitionsDefinition) {
 		toSerialize["definitions[].definition"] = o.DefinitionsDefinition

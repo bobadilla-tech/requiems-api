@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -22,58 +22,58 @@ import (
 // ProfanityAPIService ProfanityAPI service
 type ProfanityAPIService service
 
-type ApiV1TextProfanityPostRequest struct {
+type ApiV1ValidationProfanityBatchPostRequest struct {
 	ctx context.Context
 	ApiService *ProfanityAPIService
-	v1TextProfanityPostRequest *V1TextProfanityPostRequest
+	v1ValidationProfanityBatchPostRequest *V1ValidationProfanityBatchPostRequest
 }
 
-func (r ApiV1TextProfanityPostRequest) V1TextProfanityPostRequest(v1TextProfanityPostRequest V1TextProfanityPostRequest) ApiV1TextProfanityPostRequest {
-	r.v1TextProfanityPostRequest = &v1TextProfanityPostRequest
+func (r ApiV1ValidationProfanityBatchPostRequest) V1ValidationProfanityBatchPostRequest(v1ValidationProfanityBatchPostRequest V1ValidationProfanityBatchPostRequest) ApiV1ValidationProfanityBatchPostRequest {
+	r.v1ValidationProfanityBatchPostRequest = &v1ValidationProfanityBatchPostRequest
 	return r
 }
 
-func (r ApiV1TextProfanityPostRequest) Execute() (*V1TextProfanityPost200Response, *http.Response, error) {
-	return r.ApiService.V1TextProfanityPostExecute(r)
+func (r ApiV1ValidationProfanityBatchPostRequest) Execute() (*V1ValidationProfanityBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1ValidationProfanityBatchPostExecute(r)
 }
 
 /*
-V1TextProfanityPost Check Profanity
+V1ValidationProfanityBatchPost Batch Check Profanity
 
-Checks text for profanity, returning a censored version and the list of flagged words.
+Check up to 50 texts for profanity in a single request. Results are returned in input order.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiV1TextProfanityPostRequest
+ @return ApiV1ValidationProfanityBatchPostRequest
 */
-func (a *ProfanityAPIService) V1TextProfanityPost(ctx context.Context) ApiV1TextProfanityPostRequest {
-	return ApiV1TextProfanityPostRequest{
+func (a *ProfanityAPIService) V1ValidationProfanityBatchPost(ctx context.Context) ApiV1ValidationProfanityBatchPostRequest {
+	return ApiV1ValidationProfanityBatchPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return V1TextProfanityPost200Response
-func (a *ProfanityAPIService) V1TextProfanityPostExecute(r ApiV1TextProfanityPostRequest) (*V1TextProfanityPost200Response, *http.Response, error) {
+//  @return V1ValidationProfanityBatchPost200Response
+func (a *ProfanityAPIService) V1ValidationProfanityBatchPostExecute(r ApiV1ValidationProfanityBatchPostRequest) (*V1ValidationProfanityBatchPost200Response, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *V1TextProfanityPost200Response
+		localVarReturnValue  *V1ValidationProfanityBatchPost200Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProfanityAPIService.V1TextProfanityPost")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProfanityAPIService.V1ValidationProfanityBatchPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/text/profanity"
+	localVarPath := localBasePath + "/v1/validation/profanity/batch"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.v1TextProfanityPostRequest == nil {
-		return localVarReturnValue, nil, reportError("v1TextProfanityPostRequest is required and must be specified")
+	if r.v1ValidationProfanityBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1ValidationProfanityBatchPostRequest is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -94,7 +94,131 @@ func (a *ProfanityAPIService) V1TextProfanityPostExecute(r ApiV1TextProfanityPos
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.v1TextProfanityPostRequest
+	localVarPostBody = r.v1ValidationProfanityBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiV1ValidationProfanityPostRequest struct {
+	ctx context.Context
+	ApiService *ProfanityAPIService
+	v1ValidationProfanityPostRequest *V1ValidationProfanityPostRequest
+}
+
+func (r ApiV1ValidationProfanityPostRequest) V1ValidationProfanityPostRequest(v1ValidationProfanityPostRequest V1ValidationProfanityPostRequest) ApiV1ValidationProfanityPostRequest {
+	r.v1ValidationProfanityPostRequest = &v1ValidationProfanityPostRequest
+	return r
+}
+
+func (r ApiV1ValidationProfanityPostRequest) Execute() (*V1ValidationProfanityPost200Response, *http.Response, error) {
+	return r.ApiService.V1ValidationProfanityPostExecute(r)
+}
+
+/*
+V1ValidationProfanityPost Check Profanity
+
+Checks text for profanity, returning a censored version and the list of flagged words.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1ValidationProfanityPostRequest
+*/
+func (a *ProfanityAPIService) V1ValidationProfanityPost(ctx context.Context) ApiV1ValidationProfanityPostRequest {
+	return ApiV1ValidationProfanityPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1ValidationProfanityPost200Response
+func (a *ProfanityAPIService) V1ValidationProfanityPostExecute(r ApiV1ValidationProfanityPostRequest) (*V1ValidationProfanityPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1ValidationProfanityPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProfanityAPIService.V1ValidationProfanityPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/validation/profanity"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1ValidationProfanityPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1ValidationProfanityPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1ValidationProfanityPostRequest
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

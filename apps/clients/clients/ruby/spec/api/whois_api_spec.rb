@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -29,6 +29,18 @@ describe 'WhoisApi' do
   describe 'test an instance of WhoisApi' do
     it 'should create an instance of WhoisApi' do
       expect(@api_instance).to be_instance_of(OpenapiClient::WhoisApi)
+    end
+  end
+
+  # unit tests for v1_networking_whois_batch_post
+  # Batch WHOIS Lookup
+  # Returns WHOIS information for up to 50 domains in a single request. Results are returned in the same order as the input array. Domains without WHOIS data return found: false instead of failing the entire request.
+  # @param v1_networking_whois_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1NetworkingWhoisBatchPost200Response]
+  describe 'v1_networking_whois_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end
   end
 

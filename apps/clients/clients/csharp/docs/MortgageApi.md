@@ -1,10 +1,112 @@
 # Org.OpenAPITools.Api.MortgageApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**V1FinanceMortgageBatchPost**](MortgageApi.md#v1financemortgagebatchpost) | **POST** /v1/finance/mortgage/batch | Batch Calculate Mortgages |
 | [**V1FinanceMortgageGet**](MortgageApi.md#v1financemortgageget) | **GET** /v1/finance/mortgage | Calculate Mortgage |
+
+<a id="v1financemortgagebatchpost"></a>
+# **V1FinanceMortgageBatchPost**
+> V1FinanceMortgageBatchPost200Response V1FinanceMortgageBatchPost (V1FinanceMortgageBatchPostRequest v1FinanceMortgageBatchPostRequest)
+
+Batch Calculate Mortgages
+
+Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class V1FinanceMortgageBatchPostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "https://requiems.xyz";
+            // Configure API key authorization: requiems-api-key
+            config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // config.AddApiKeyPrefix("requiems-api-key", "Bearer");
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new MortgageApi(httpClient, config, httpClientHandler);
+            var v1FinanceMortgageBatchPostRequest = new V1FinanceMortgageBatchPostRequest(); // V1FinanceMortgageBatchPostRequest | 
+
+            try
+            {
+                // Batch Calculate Mortgages
+                V1FinanceMortgageBatchPost200Response result = apiInstance.V1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling MortgageApi.V1FinanceMortgageBatchPost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the V1FinanceMortgageBatchPostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Batch Calculate Mortgages
+    ApiResponse<V1FinanceMortgageBatchPost200Response> response = apiInstance.V1FinanceMortgageBatchPostWithHttpInfo(v1FinanceMortgageBatchPostRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling MortgageApi.V1FinanceMortgageBatchPostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **v1FinanceMortgageBatchPostRequest** | [**V1FinanceMortgageBatchPostRequest**](V1FinanceMortgageBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1FinanceMortgageBatchPost200Response**](V1FinanceMortgageBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Successful response |  -  |
+| **422** | The mortgages array is missing, empty, or contains more than 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a id="v1financemortgageget"></a>
 # **V1FinanceMortgageGet**
@@ -30,7 +132,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed

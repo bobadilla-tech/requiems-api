@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,6 +19,74 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Batch Calculate Mortgages
+    # Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+    # @param v1_finance_mortgage_batch_post_request [V1FinanceMortgageBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [V1FinanceMortgageBatchPost200Response]
+    def v1_finance_mortgage_batch_post(v1_finance_mortgage_batch_post_request, opts = {})
+      data, _status_code, _headers = v1_finance_mortgage_batch_post_with_http_info(v1_finance_mortgage_batch_post_request, opts)
+      data
+    end
+
+    # Batch Calculate Mortgages
+    # Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+    # @param v1_finance_mortgage_batch_post_request [V1FinanceMortgageBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(V1FinanceMortgageBatchPost200Response, Integer, Hash)>] V1FinanceMortgageBatchPost200Response data, response status code and response headers
+    def v1_finance_mortgage_batch_post_with_http_info(v1_finance_mortgage_batch_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MortgageApi.v1_finance_mortgage_batch_post ...'
+      end
+      # verify the required parameter 'v1_finance_mortgage_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_finance_mortgage_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_finance_mortgage_batch_post_request' when calling MortgageApi.v1_finance_mortgage_batch_post"
+      end
+      # resource path
+      local_var_path = '/v1/finance/mortgage/batch'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_finance_mortgage_batch_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'V1FinanceMortgageBatchPost200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"MortgageApi.v1_finance_mortgage_batch_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MortgageApi#v1_finance_mortgage_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Calculate Mortgage
     # Returns the monthly payment, total cost, and full amortization schedule for a fixed-rate mortgage.
     # @param principal [Float] Loan amount in your chosen currency (e.g. 300000 for $300,000)

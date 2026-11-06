@@ -1,11 +1,78 @@
 # \PostalCodeAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1PlacesPostalBatchPost**](PostalCodeAPI.md#V1PlacesPostalBatchPost) | **Post** /v1/places/postal/batch | Batch Lookup Postal Codes
 [**V1PlacesPostalCodeGet**](PostalCodeAPI.md#V1PlacesPostalCodeGet) | **Get** /v1/places/postal/{code} | Lookup Postal Code
 
+
+
+## V1PlacesPostalBatchPost
+
+> V1PlacesPostalBatchPost200Response V1PlacesPostalBatchPost(ctx).V1PlacesPostalBatchPostRequest(v1PlacesPostalBatchPostRequest).Execute()
+
+Batch Lookup Postal Codes
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1PlacesPostalBatchPostRequest := *openapiclient.NewV1PlacesPostalBatchPostRequest("Items_example", "ItemsCode_example") // V1PlacesPostalBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.PostalCodeAPI.V1PlacesPostalBatchPost(context.Background()).V1PlacesPostalBatchPostRequest(v1PlacesPostalBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `PostalCodeAPI.V1PlacesPostalBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1PlacesPostalBatchPost`: V1PlacesPostalBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `PostalCodeAPI.V1PlacesPostalBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1PlacesPostalBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1PlacesPostalBatchPostRequest** | [**V1PlacesPostalBatchPostRequest**](V1PlacesPostalBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1PlacesPostalBatchPost200Response**](V1PlacesPostalBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1PlacesPostalCodeGet

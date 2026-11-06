@@ -1,6 +1,6 @@
 # Org.OpenAPITools.Api.AdviceApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
@@ -30,7 +30,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed

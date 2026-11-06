@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -29,6 +29,18 @@ describe 'TimezoneApi' do
   describe 'test an instance of TimezoneApi' do
     it 'should create an instance of TimezoneApi' do
       expect(@api_instance).to be_instance_of(OpenapiClient::TimezoneApi)
+    end
+  end
+
+  # unit tests for v1_places_timezone_batch_post
+  # Batch Timezone Lookup
+  # Look up timezone information for up to 50 locations in a single request. Each item can specify a timezone name, city, or lat/lon coordinates. Priority is timezone name &gt; city &gt; coordinates. Results are returned in input order.
+  # @param v1_places_timezone_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1PlacesTimezoneBatchPost200Response]
+  describe 'v1_places_timezone_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end
   end
 

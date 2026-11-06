@@ -1,13 +1,14 @@
 # OpenapiClient::FitnessExercisesApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
 | [**v1_health_body_parts_get**](FitnessExercisesApi.md#v1_health_body_parts_get) | **GET** /v1/health/body-parts | List Body Parts |
 | [**v1_health_equipment_get**](FitnessExercisesApi.md#v1_health_equipment_get) | **GET** /v1/health/equipment | List Equipment |
+| [**v1_health_exercises_batch_post**](FitnessExercisesApi.md#v1_health_exercises_batch_post) | **POST** /v1/health/exercises/batch | Batch Get Exercises |
 | [**v1_health_exercises_get**](FitnessExercisesApi.md#v1_health_exercises_get) | **GET** /v1/health/exercises | List Exercises |
-| [**v1_health_exercises_id_get**](FitnessExercisesApi.md#v1_health_exercises_id_get) | **GET** /v1/health/exercises/{id} | Get Exercise by ID |
+| [**v1_health_exercises_id_get**](FitnessExercisesApi.md#v1_health_exercises_id_get) | **GET** /v1/health/exercises/{id} | Exercise by ID |
 | [**v1_health_exercises_random_get**](FitnessExercisesApi.md#v1_health_exercises_random_get) | **GET** /v1/health/exercises/random | Random Exercise |
 | [**v1_health_muscles_get**](FitnessExercisesApi.md#v1_health_muscles_get) | **GET** /v1/health/muscles | List Muscles |
 
@@ -148,6 +149,77 @@ This endpoint does not need any parameter.
 - **Accept**: application/json
 
 
+## v1_health_exercises_batch_post
+
+> <V1HealthExercisesBatchPost200Response> v1_health_exercises_batch_post(v1_health_exercises_batch_post_request)
+
+Batch Get Exercises
+
+Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::FitnessExercisesApi.new
+v1_health_exercises_batch_post_request = OpenapiClient::V1HealthExercisesBatchPostRequest.new({ids: [1,  7,  42]}) # V1HealthExercisesBatchPostRequest | 
+
+begin
+  # Batch Get Exercises
+  result = api_instance.v1_health_exercises_batch_post(v1_health_exercises_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling FitnessExercisesApi->v1_health_exercises_batch_post: #{e}"
+end
+```
+
+#### Using the v1_health_exercises_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1HealthExercisesBatchPost200Response>, Integer, Hash)> v1_health_exercises_batch_post_with_http_info(v1_health_exercises_batch_post_request)
+
+```ruby
+begin
+  # Batch Get Exercises
+  data, status_code, headers = api_instance.v1_health_exercises_batch_post_with_http_info(v1_health_exercises_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1HealthExercisesBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling FitnessExercisesApi->v1_health_exercises_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_health_exercises_batch_post_request** | [**V1HealthExercisesBatchPostRequest**](V1HealthExercisesBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1HealthExercisesBatchPost200Response**](V1HealthExercisesBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+
 ## v1_health_exercises_get
 
 > <V1HealthExercisesGet200Response> v1_health_exercises_get(opts)
@@ -235,7 +307,7 @@ end
 
 > <V1HealthExercisesIdGet200Response> v1_health_exercises_id_get(id)
 
-Get Exercise by ID
+Exercise by ID
 
 Returns a single exercise by its numeric ID.
 
@@ -256,7 +328,7 @@ api_instance = OpenapiClient::FitnessExercisesApi.new
 id = 1 # Integer | Numeric exercise ID
 
 begin
-  # Get Exercise by ID
+  # Exercise by ID
   result = api_instance.v1_health_exercises_id_get(id)
   p result
 rescue OpenapiClient::ApiError => e
@@ -272,7 +344,7 @@ This returns an Array which contains the response data, status code and headers.
 
 ```ruby
 begin
-  # Get Exercise by ID
+  # Exercise by ID
   data, status_code, headers = api_instance.v1_health_exercises_id_get_with_http_info(id)
   p status_code # => 2xx
   p headers # => { ... }

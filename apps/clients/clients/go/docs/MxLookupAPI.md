@@ -1,11 +1,76 @@
 # \MxLookupAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1NetworkingMxBatchPost**](MxLookupAPI.md#V1NetworkingMxBatchPost) | **Post** /v1/networking/mx/batch | Batch MX Lookup
 [**V1NetworkingMxDomainGet**](MxLookupAPI.md#V1NetworkingMxDomainGet) | **Get** /v1/networking/mx/{domain} | MX Lookup
 
+
+
+## V1NetworkingMxBatchPost
+
+> V1NetworkingMxBatchPost(ctx).V1NetworkingMxBatchPostRequest(v1NetworkingMxBatchPostRequest).Execute()
+
+Batch MX Lookup
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1NetworkingMxBatchPostRequest := *openapiclient.NewV1NetworkingMxBatchPostRequest([]interface{}{nil}) // V1NetworkingMxBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	r, err := apiClient.MxLookupAPI.V1NetworkingMxBatchPost(context.Background()).V1NetworkingMxBatchPostRequest(v1NetworkingMxBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MxLookupAPI.V1NetworkingMxBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1NetworkingMxBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1NetworkingMxBatchPostRequest** | [**V1NetworkingMxBatchPostRequest**](V1NetworkingMxBatchPostRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1NetworkingMxDomainGet
