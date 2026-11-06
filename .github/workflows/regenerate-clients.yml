@@ -7,7 +7,10 @@ on:
 
 jobs:
   regenerate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/clients
     steps:
       - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
@@ -64,22 +67,6 @@ jobs:
           
           echo "Running Ruby tests..."
           cd example-apps/ruby && gem install typhoeus && ruby main.rb && cd ../..
-      
-      - name: 🧪 Ejecutar E2E Smoke Tests
-        if: steps.process_clients.outputs.has_changes == 'true'
-        run: |
-          echo "Building and Running TypeScript tests..."
-          cd clients/typescript && npm install && npm run build && cd ../..
-          cd example-apps/typescript && npm install && npx ts-node index.ts && cd ../..
-          
-          echo "Running C# tests..."
-          cd example-apps/csharp && dotnet run && cd ../..
-          
-          echo "Running Python tests..."
-          cd example-apps/python && pip install urllib3 pydantic python-dateutil aiohttp && python main.py && cd ../..
-          
-          echo "Running Ruby tests..."
-          cd example-apps/ruby && gem install typhoeus && ruby main.rb && cd ../..
 
           echo "Running Go tests..."
           cd clients/go && rm -f go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
@@ -99,6 +86,7 @@ jobs:
             - Clientes regenerados para JS/TS, C#, Python, Ruby y Go.
             - **Version Bump** aplicado.
             - **Validación Exitosa:** Las aplicaciones de prueba E2E compilaron y ejecutaron correctamente contra el nuevo código.
+          add-paths: apps/clients
           branch: "chore/automated-client-regeneration"
           base: "main"
           delete-branch: true
