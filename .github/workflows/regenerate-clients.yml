@@ -68,25 +68,27 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: 🧪 Ejecutar E2E Smoke Tests
+      # Build/typecheck only: running the example apps would hit the live API.
+      - name: 🧪 Smoke tests (build only)
         if: steps.process_clients.outputs.has_changes == 'true'
         run: |
-          echo "Building and Running TypeScript tests..."
-          cd clients/typescript && npm install && npm run build && cd ../..
-          cd example-apps/typescript && npm install && npx ts-node index.ts && cd ../..
-          
-          echo "Running C# tests..."
-          cd example-apps/csharp && dotnet run && cd ../..
-          
-          echo "Running Python tests..."
-          cd example-apps/python && pip install urllib3 pydantic python-dateutil aiohttp && python main.py && cd ../..
-          
-          echo "Running Ruby tests..."
-          cd example-apps/ruby && gem install typhoeus && ruby main.rb && cd ../..
+          set -e
+          echo "TypeScript..."
+          (cd clients/typescript && npm install && npm run build)
+          (cd example-apps/typescript && npm install && npx tsc --noEmit)
 
-          echo "Running Go tests..."
-          cd clients/go && rm -f go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
-          cd example-apps/go && go mod tidy && go run main.go && cd ../..    
+          echo "C#..."
+          (cd example-apps/csharp && dotnet --info | head -5 && dotnet build -v n)
+
+          echo "Python..."
+          (cd example-apps/python && pip install urllib3 pydantic python-dateutil aiohttp && PYTHONPATH=../../clients/python python -c "import openapi_client; openapi_client.AdviceApi; print('ok')")
+
+          echo "Ruby..."
+          (cd example-apps/ruby && gem install typhoeus && ruby -I ../../clients/ruby/lib -e "require 'openapi_client'; OpenapiClient::AdviceApi; puts 'ok'")
+
+          echo "Go..."
+          (cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy)
+          (cd example-apps/go && go mod tidy && go build -o /dev/null .)
 
       - name: 🚀 Crear Pull Request
         if: steps.process_clients.outputs.has_changes == 'true'
