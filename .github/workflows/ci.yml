@@ -388,7 +388,7 @@ jobs:
           BETTER_AUTH_SECRET: ci-placeholder-secret-0123456789abcdef0123
 
   clients-smoke:
-    name: Clients Smoke Tests
+    name: Clients Smoke (${{ matrix.lang }})
     runs-on: ubuntu-24.04
     needs: detect-changes
     if: needs.detect-changes.outputs.clients == 'true'
@@ -396,44 +396,58 @@ jobs:
     defaults:
       run:
         working-directory: apps/clients
+    # One job per language so they run in parallel and a failure names the
+    # language. Build/typecheck only: example apps are not run because they
+    # would hit the live API (needs an API key).
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [typescript, csharp, python, ruby, go]
 
-    # Build/typecheck only: example apps are not run because they would hit the live API (needs an API key).
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - uses: actions/setup-node@v7
+        if: matrix.lang == 'typescript'
         with:
           node-version: "20"
 
       - uses: actions/setup-dotnet@v6
+        if: matrix.lang == 'csharp'
         with:
           dotnet-version: "8.0.x"
 
       - uses: actions/setup-python@v7
+        if: matrix.lang == 'python'
         with:
           python-version: "3.10"
 
       - uses: ruby/setup-ruby@v1
+        if: matrix.lang == 'ruby'
         with:
           ruby-version: "3.2"
 
       - uses: actions/setup-go@v7
+        if: matrix.lang == 'go'
         with:
           go-version: "1.22.x"
 
       - name: Test TypeScript client
+        if: matrix.lang == 'typescript'
         run: |
           cd clients/typescript && npm install && npm run build
           cd ../../example-apps/typescript && npm install
           npx tsc --noEmit
 
       - name: Test C# client
+        if: matrix.lang == 'csharp'
         run: |
           cd example-apps/csharp && dotnet build
 
       - name: Test Python client
+        if: matrix.lang == 'python'
         run: |
           cd example-apps/python
           python3 -m venv venv
@@ -442,12 +456,14 @@ jobs:
           python3 -c "import sys; sys.path.insert(0, '../../clients/python'); import openapi_client; openapi_client.AdviceApi; print('Python client imports OK')"
 
       - name: Test Ruby client
+        if: matrix.lang == 'ruby'
         run: |
           cd example-apps/ruby
           gem install typhoeus
           ruby -I ../../clients/ruby/lib -e "require 'openapi_client'; OpenapiClient::AdviceApi; puts 'Ruby client loads OK'"
 
       - name: Test Go client
+        if: matrix.lang == 'go'
         run: |
           cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
           cd example-apps/go && go mod tidy && go build -o /dev/null .
