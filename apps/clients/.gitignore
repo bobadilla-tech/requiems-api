@@ -1,0 +1,31 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Ruby
+.bundle/
+vendor/bundle/
+
+# Go
+vendor/
+
+# Generated / build artifacts
+repomix-output.xml
+
+# OS
+.DS_Store
+Thumbs.db

@@ -22,6 +22,12 @@ We're happy to review contributions including:
 
 We'll review PRs as quickly as possible and provide constructive feedback.
 
+## Adding Tutorials & Examples
+
+Example projects live in [`apps/tutorials`](./apps/tutorials). Read
+[apps/tutorials/contributing.md](./apps/tutorials/contributing.md) for naming,
+tooling and README requirements, then open a PR here.
+
 ## License Note
 
 By contributing, you agree that your contributions will be licensed under the

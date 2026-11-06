@@ -1,0 +1,11 @@
+{
+  "name": "example-ts-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "api-client": "file:../../clients/typescript"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
+}

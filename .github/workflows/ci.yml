@@ -29,6 +29,8 @@ jobs:
       api: ${{ steps.filter.outputs.api }}
       dashboard: ${{ steps.filter.outputs.dashboard }}
       mcp: ${{ steps.filter.outputs.mcp }}
+      tutorials: ${{ steps.filter.outputs.tutorials }}
+      clients: ${{ steps.filter.outputs.clients }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -47,6 +49,12 @@ jobs:
               - '.github/workflows/ci.yml'
             mcp:
               - 'apps/mcp/**'
+              - '.github/workflows/ci.yml'
+            tutorials:
+              - 'apps/tutorials/**'
+              - '.github/workflows/ci.yml'
+            clients:
+              - 'apps/clients/**'
               - '.github/workflows/ci.yml'
 
   go-test:
@@ -342,6 +350,104 @@ jobs:
       - name: Run tests
         run: bun test
 
+  tutorials-build:
+    name: Tutorials Build
+    runs-on: ubuntu-24.04
+    needs: detect-changes
+    if: needs.detect-changes.outputs.tutorials == 'true'
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/tutorials/nextjs-email-validation
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+          package_json_file: apps/tutorials/nextjs-email-validation/package.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: apps/tutorials/nextjs-email-validation/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+        env:
+          REQUIEMS_API: ci-placeholder
+          BETTER_AUTH_SECRET: ci-placeholder-secret-0123456789abcdef0123
+
+  clients-smoke:
+    name: Clients Smoke Tests
+    runs-on: ubuntu-24.04
+    needs: detect-changes
+    if: needs.detect-changes.outputs.clients == 'true'
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/clients
+
+    # Build/typecheck only: example apps are not run because they would hit the live API (needs an API key).
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.10"
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.22.x"
+
+      - name: Test TypeScript client
+        run: |
+          cd clients/typescript && npm install && npm run build
+          cd ../../example-apps/typescript && npm install
+          npx tsc --noEmit
+
+      - name: Test C# client
+        run: |
+          cd example-apps/csharp && dotnet build
+
+      - name: Test Python client
+        run: |
+          cd example-apps/python
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install urllib3 pydantic python-dateutil aiohttp
+          python3 -c "import sys; sys.path.insert(0, '../../clients/python'); import openapi_client; openapi_client.AdviceApi; print('Python client imports OK')"
+
+      - name: Test Ruby client
+        run: |
+          cd example-apps/ruby
+          gem install typhoeus
+          ruby -I ../../clients/ruby/lib -e "require 'openapi_client'; OpenapiClient::AdviceApi; puts 'Ruby client loads OK'"
+
+      - name: Test Go client
+        run: |
+          cd clients/go && rm -rf test go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
+          cd example-apps/go && go mod tidy && go build -o /dev/null .
+
   ci-success:
     name: CI Success
     runs-on: ubuntu-24.04
@@ -351,6 +457,8 @@ jobs:
       - rails-test
       - rails-checks
       - mcp-test
+      - tutorials-build
+      - clients-smoke
     if: always()
 
     steps:
@@ -373,6 +481,16 @@ jobs:
 
           if [[ "${{ needs.mcp-test.result }}" == "failure" ]]; then
             echo "❌ MCP tests failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.tutorials-build.result }}" == "failure" ]]; then
+            echo "❌ Tutorials build failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.clients-smoke.result }}" == "failure" ]]; then
+            echo "❌ Clients smoke tests failed"
             exit 1
           fi
 

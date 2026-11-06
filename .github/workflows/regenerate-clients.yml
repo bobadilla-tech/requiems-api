@@ -1,0 +1,92 @@
+name: Weekly Client Regeneration
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/clients
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: 🌐 Descargar la última especificación OpenAPI
+        run: curl -sL https://api.requiems.xyz/openapi.json -o openapi.json
+
+      - name: 🛠️ Generar clientes y aplicar Version Bump
+        id: process_clients
+        run: |
+          CURRENT_VERSION=$(cat VERSION 2>/dev/null | xargs || echo "1.0.0")
+          echo "Versión actual: $CURRENT_VERSION"
+          
+          generate_clients() {
+            local ver=$1
+            local props="npmName=api-client,packageVersion=$ver,npmVersion=$ver,gemVersion=$ver,targetFramework=net8.0,library=httpclient"
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g typescript-axios -o clients/typescript -p $props
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g csharp -o clients/csharp -p $props
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g python -o clients/python -p $props
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g ruby -o clients/ruby -p $props
+            npx @openapitools/openapi-generator-cli generate -i openapi.json -g go -o clients/go -p $props
+          }
+
+          generate_clients $CURRENT_VERSION
+
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Cambios detectados. Aplicando version bump..."
+            IFS='.' read -r major minor patch <<< "$CURRENT_VERSION"
+            NEW_VERSION="${major}.${minor}.$((patch+1))"
+            echo $NEW_VERSION > VERSION
+            generate_clients $NEW_VERSION
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🧪 Ejecutar E2E Smoke Tests
+        if: steps.process_clients.outputs.has_changes == 'true'
+        run: |
+          echo "Building and Running TypeScript tests..."
+          cd clients/typescript && npm install && npm run build && cd ../..
+          cd example-apps/typescript && npm install && npx ts-node index.ts && cd ../..
+          
+          echo "Running C# tests..."
+          cd example-apps/csharp && dotnet run && cd ../..
+          
+          echo "Running Python tests..."
+          cd example-apps/python && pip install urllib3 pydantic python-dateutil aiohttp && python main.py && cd ../..
+          
+          echo "Running Ruby tests..."
+          cd example-apps/ruby && gem install typhoeus && ruby main.rb && cd ../..
+
+          echo "Running Go tests..."
+          cd clients/go && rm -f go.mod go.sum && go mod init openapi && go mod tidy && cd ../..
+          cd example-apps/go && go mod tidy && go run main.go && cd ../..    
+
+      - name: 🚀 Crear Pull Request
+        if: steps.process_clients.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: regenerar clientes OpenAPI y ejecutar E2E tests"
+          title: "Automated: Weekly Client Regeneration"
+          body: |
+            Se ha detectado una actualización en la especificación de la API.
+            
+            Este PR automático incluye:
+            - Clientes regenerados para JS/TS, C#, Python, Ruby y Go.
+            - **Version Bump** aplicado.
+            - **Validación Exitosa:** Las aplicaciones de prueba E2E compilaron y ejecutaron correctamente contra el nuevo código.
+          add-paths: apps/clients
+          branch: "chore/automated-client-regeneration"
+          base: "main"
+          delete-branch: true

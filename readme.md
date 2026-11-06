@@ -88,7 +88,7 @@ parallel, then hands back one structured result.
   Claude, ChatGPT, and coding agents.
 - **Official client libraries** - JavaScript, TypeScript, Python, Go, Ruby, C#,
   and more:
-  [requiems-api-clients](https://github.com/bobadilla-tech/requiems-api-clients)
+  [apps/clients](./apps/clients)
 - **MCP server & Agent Skills** - connect via MCP or install skills straight
   into Claude and other coding agents:
   [requiemsapi.com/ai](https://requiemsapi.com/en/ai)
