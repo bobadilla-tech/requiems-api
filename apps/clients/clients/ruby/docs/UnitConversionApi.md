@@ -1,11 +1,84 @@
 # OpenapiClient::UnitConversionApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_technology_convert_batch_post**](UnitConversionApi.md#v1_technology_convert_batch_post) | **POST** /v1/technology/convert/batch | Batch Convert Units |
 | [**v1_technology_convert_get**](UnitConversionApi.md#v1_technology_convert_get) | **GET** /v1/technology/convert | Convert Units |
 | [**v1_technology_convert_units_get**](UnitConversionApi.md#v1_technology_convert_units_get) | **GET** /v1/technology/convert/units | List Available Units |
+
+
+## v1_technology_convert_batch_post
+
+> <V1TechnologyConvertBatchPost200Response> v1_technology_convert_batch_post(v1_technology_convert_batch_post_request)
+
+Batch Convert Units
+
+convert up to 50 unit conversion operations in a single request.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::UnitConversionApi.new
+v1_technology_convert_batch_post_request = OpenapiClient::V1TechnologyConvertBatchPostRequest.new({operations: [{"from":  "kg",  "to":  "lb",  "value":  10},  {"from":  "c",  "to":  "f",  "value":  5}]
+}) # V1TechnologyConvertBatchPostRequest | 
+
+begin
+  # Batch Convert Units
+  result = api_instance.v1_technology_convert_batch_post(v1_technology_convert_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling UnitConversionApi->v1_technology_convert_batch_post: #{e}"
+end
+```
+
+#### Using the v1_technology_convert_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1TechnologyConvertBatchPost200Response>, Integer, Hash)> v1_technology_convert_batch_post_with_http_info(v1_technology_convert_batch_post_request)
+
+```ruby
+begin
+  # Batch Convert Units
+  data, status_code, headers = api_instance.v1_technology_convert_batch_post_with_http_info(v1_technology_convert_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1TechnologyConvertBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling UnitConversionApi->v1_technology_convert_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_technology_convert_batch_post_request** | [**V1TechnologyConvertBatchPostRequest**](V1TechnologyConvertBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1TechnologyConvertBatchPost200Response**](V1TechnologyConvertBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_technology_convert_get

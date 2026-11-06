@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -23,7 +23,7 @@ var _ MappedNullable = &V1TechnologyBase64EncodePostRequest{}
 type V1TechnologyBase64EncodePostRequest struct {
 	// The string to encode
 	Value string `json:"value"`
-	// Encoding variant: standard (default) or url (URL-safe base64url)
+	// Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5)
 	Variant *string `json:"variant,omitempty"`
 }
 

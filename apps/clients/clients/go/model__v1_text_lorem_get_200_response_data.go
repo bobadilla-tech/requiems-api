@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -24,7 +24,7 @@ type V1TextLoremGet200ResponseData struct {
 	// Number of paragraphs generated
 	Paragraphs *int32 `json:"paragraphs,omitempty"`
 	// Total number of words in generated text
-	WordCount *int32 `json:"wordCount,omitempty"`
+	WordCount *int32 `json:"word_count,omitempty"`
 }
 
 // NewV1TextLoremGet200ResponseData instantiates a new V1TextLoremGet200ResponseData object
@@ -157,7 +157,7 @@ func (o V1TextLoremGet200ResponseData) ToMap() (map[string]interface{}, error) {
 		toSerialize["paragraphs"] = o.Paragraphs
 	}
 	if !IsNil(o.WordCount) {
-		toSerialize["wordCount"] = o.WordCount
+		toSerialize["word_count"] = o.WordCount
 	}
 	return toSerialize, nil
 }

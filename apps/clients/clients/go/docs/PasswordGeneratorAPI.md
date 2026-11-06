@@ -1,11 +1,78 @@
 # \PasswordGeneratorAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1TechnologyPasswordBatchPost**](PasswordGeneratorAPI.md#V1TechnologyPasswordBatchPost) | **Post** /v1/technology/password/batch | Batch Generate Passwords
 [**V1TechnologyPasswordGet**](PasswordGeneratorAPI.md#V1TechnologyPasswordGet) | **Get** /v1/technology/password | Generate Password
 
+
+
+## V1TechnologyPasswordBatchPost
+
+> V1TechnologyPasswordBatchPost200Response V1TechnologyPasswordBatchPost(ctx).V1TechnologyPasswordBatchPostRequest(v1TechnologyPasswordBatchPostRequest).Execute()
+
+Batch Generate Passwords
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1TechnologyPasswordBatchPostRequest := *openapiclient.NewV1TechnologyPasswordBatchPostRequest("Items_example") // V1TechnologyPasswordBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.PasswordGeneratorAPI.V1TechnologyPasswordBatchPost(context.Background()).V1TechnologyPasswordBatchPostRequest(v1TechnologyPasswordBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `PasswordGeneratorAPI.V1TechnologyPasswordBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1TechnologyPasswordBatchPost`: V1TechnologyPasswordBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `PasswordGeneratorAPI.V1TechnologyPasswordBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1TechnologyPasswordBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1TechnologyPasswordBatchPostRequest** | [**V1TechnologyPasswordBatchPostRequest**](V1TechnologyPasswordBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1TechnologyPasswordBatchPost200Response**](V1TechnologyPasswordBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1TechnologyPasswordGet

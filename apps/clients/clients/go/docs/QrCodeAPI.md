@@ -1,12 +1,79 @@
 # \QrCodeAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1TechnologyQrBase64BatchPost**](QrCodeAPI.md#V1TechnologyQrBase64BatchPost) | **Post** /v1/technology/qr/base64/batch | Batch Generate QR Codes (Base64)
 [**V1TechnologyQrBase64Get**](QrCodeAPI.md#V1TechnologyQrBase64Get) | **Get** /v1/technology/qr/base64 | Generate QR Code (Base64 JSON)
 [**V1TechnologyQrGet**](QrCodeAPI.md#V1TechnologyQrGet) | **Get** /v1/technology/qr | Generate QR Code (PNG)
 
+
+
+## V1TechnologyQrBase64BatchPost
+
+> V1TechnologyQrBase64BatchPost200Response V1TechnologyQrBase64BatchPost(ctx).V1TechnologyQrBase64BatchPostRequest(v1TechnologyQrBase64BatchPostRequest).Execute()
+
+Batch Generate QR Codes (Base64)
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1TechnologyQrBase64BatchPostRequest := *openapiclient.NewV1TechnologyQrBase64BatchPostRequest("Items_example", "ItemsData_example") // V1TechnologyQrBase64BatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.QrCodeAPI.V1TechnologyQrBase64BatchPost(context.Background()).V1TechnologyQrBase64BatchPostRequest(v1TechnologyQrBase64BatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `QrCodeAPI.V1TechnologyQrBase64BatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1TechnologyQrBase64BatchPost`: V1TechnologyQrBase64BatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `QrCodeAPI.V1TechnologyQrBase64BatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1TechnologyQrBase64BatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1TechnologyQrBase64BatchPostRequest** | [**V1TechnologyQrBase64BatchPostRequest**](V1TechnologyQrBase64BatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1TechnologyQrBase64BatchPost200Response**](V1TechnologyQrBase64BatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1TechnologyQrBase64Get

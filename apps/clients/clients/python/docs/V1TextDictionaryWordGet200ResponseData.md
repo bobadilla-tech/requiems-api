@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **word** | **str** | The normalized (lowercased) word that was looked up | [optional] 
 **phonetic** | **str** | IPA phonetic transcription of the word (may be omitted if unavailable) | [optional] 
-**definitions** | **str** | One or more definitions for the word, each with partOfSpeech, definition, and an optional example | [optional] 
+**definitions** | **str** | One or more definitions for the word, each with part_of_speech, definition, and an optional example | [optional] 
 **definitions_part_of_speech** | **str** | Grammatical category (e.g. noun, verb, adjective) | [optional] 
 **definitions_definition** | **str** | Plain-text definition of the word | [optional] 
 **definitions_example** | **str** | Example sentence using the word (may be omitted) | [optional] 

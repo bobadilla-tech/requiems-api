@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,6 +19,72 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Batch MX Lookup
+    # Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+    # @param v1_networking_mx_batch_post_request [V1NetworkingMxBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [nil]
+    def v1_networking_mx_batch_post(v1_networking_mx_batch_post_request, opts = {})
+      v1_networking_mx_batch_post_with_http_info(v1_networking_mx_batch_post_request, opts)
+      nil
+    end
+
+    # Batch MX Lookup
+    # Retrieve MX records for up to 50 domains in a single request. Results for each domain are sorted by priority ascending (lowest numeric value has the highest mail delivery priority per RFC 5321).
+    # @param v1_networking_mx_batch_post_request [V1NetworkingMxBatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(nil, Integer, Hash)>] nil, response status code and response headers
+    def v1_networking_mx_batch_post_with_http_info(v1_networking_mx_batch_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: MxLookupApi.v1_networking_mx_batch_post ...'
+      end
+      # verify the required parameter 'v1_networking_mx_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_networking_mx_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_networking_mx_batch_post_request' when calling MxLookupApi.v1_networking_mx_batch_post"
+      end
+      # resource path
+      local_var_path = '/v1/networking/mx/batch'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_networking_mx_batch_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type]
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"MxLookupApi.v1_networking_mx_batch_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: MxLookupApi#v1_networking_mx_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # MX Lookup
     # Retrieve all MX records for a domain. Results are sorted by priority ascending (lowest numeric value has highest mail delivery priority per RFC 5321).
     # @param domain [String] The domain name to look up MX records for (e.g. gmail.com)

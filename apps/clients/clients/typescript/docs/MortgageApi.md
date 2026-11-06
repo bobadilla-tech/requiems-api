@@ -1,10 +1,64 @@
 # MortgageApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**v1FinanceMortgageBatchPost**](#v1financemortgagebatchpost) | **POST** /v1/finance/mortgage/batch | Batch Calculate Mortgages|
 |[**v1FinanceMortgageGet**](#v1financemortgageget) | **GET** /v1/finance/mortgage | Calculate Mortgage|
+
+# **v1FinanceMortgageBatchPost**
+> V1FinanceMortgageBatchPost200Response v1FinanceMortgageBatchPost(v1FinanceMortgageBatchPostRequest)
+
+Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+
+### Example
+
+```typescript
+import {
+    MortgageApi,
+    Configuration,
+    V1FinanceMortgageBatchPostRequest
+} from 'api-client';
+
+const configuration = new Configuration();
+const apiInstance = new MortgageApi(configuration);
+
+let v1FinanceMortgageBatchPostRequest: V1FinanceMortgageBatchPostRequest; //
+
+const { status, data } = await apiInstance.v1FinanceMortgageBatchPost(
+    v1FinanceMortgageBatchPostRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **v1FinanceMortgageBatchPostRequest** | **V1FinanceMortgageBatchPostRequest**|  | |
+
+
+### Return type
+
+**V1FinanceMortgageBatchPost200Response**
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful response |  -  |
+|**422** | The mortgages array is missing, empty, or contains more than 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **v1FinanceMortgageGet**
 > V1FinanceMortgageGet200Response v1FinanceMortgageGet()

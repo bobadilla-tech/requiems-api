@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**result** | **string** | The Base64-encoded output | [optional] [default to undefined]
+**result** | **string** | The Base64-encoded output string | [optional] [default to undefined]
 
 ## Example
 

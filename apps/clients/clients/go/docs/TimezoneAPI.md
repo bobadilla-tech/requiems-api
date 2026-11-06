@@ -1,11 +1,78 @@
 # \TimezoneAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1PlacesTimezoneBatchPost**](TimezoneAPI.md#V1PlacesTimezoneBatchPost) | **Post** /v1/places/timezone/batch | Batch Timezone Lookup
 [**V1PlacesTimezoneGet**](TimezoneAPI.md#V1PlacesTimezoneGet) | **Get** /v1/places/timezone | Get Timezone
 
+
+
+## V1PlacesTimezoneBatchPost
+
+> V1PlacesTimezoneBatchPost200Response V1PlacesTimezoneBatchPost(ctx).V1PlacesTimezoneBatchPostRequest(v1PlacesTimezoneBatchPostRequest).Execute()
+
+Batch Timezone Lookup
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1PlacesTimezoneBatchPostRequest := *openapiclient.NewV1PlacesTimezoneBatchPostRequest("Items_example") // V1PlacesTimezoneBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.TimezoneAPI.V1PlacesTimezoneBatchPost(context.Background()).V1PlacesTimezoneBatchPostRequest(v1PlacesTimezoneBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TimezoneAPI.V1PlacesTimezoneBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1PlacesTimezoneBatchPost`: V1PlacesTimezoneBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `TimezoneAPI.V1PlacesTimezoneBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1PlacesTimezoneBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1PlacesTimezoneBatchPostRequest** | [**V1PlacesTimezoneBatchPostRequest**](V1PlacesTimezoneBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1PlacesTimezoneBatchPost200Response**](V1PlacesTimezoneBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1PlacesTimezoneGet

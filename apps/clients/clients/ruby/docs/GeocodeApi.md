@@ -1,11 +1,84 @@
 # OpenapiClient::GeocodeApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_places_geocode_batch_post**](GeocodeApi.md#v1_places_geocode_batch_post) | **POST** /v1/places/geocode/batch | Batch Geocode Addresses |
 | [**v1_places_geocode_get**](GeocodeApi.md#v1_places_geocode_get) | **GET** /v1/places/geocode | Geocode Address |
+| [**v1_places_reverse_geocode_batch_post**](GeocodeApi.md#v1_places_reverse_geocode_batch_post) | **POST** /v1/places/reverse-geocode/batch | Batch Reverse Geocode |
 | [**v1_places_reverse_geocode_get**](GeocodeApi.md#v1_places_reverse_geocode_get) | **GET** /v1/places/reverse-geocode | Reverse Geocode |
+
+
+## v1_places_geocode_batch_post
+
+> <V1PlacesGeocodeBatchPost200Response> v1_places_geocode_batch_post(v1_places_geocode_batch_post_request)
+
+Batch Geocode Addresses
+
+Convert up to 20 addresses to coordinates in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline. Cache hits avoid outbound network calls.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::GeocodeApi.new
+v1_places_geocode_batch_post_request = OpenapiClient::V1PlacesGeocodeBatchPostRequest.new({addresses: 'addresses_example'}) # V1PlacesGeocodeBatchPostRequest | 
+
+begin
+  # Batch Geocode Addresses
+  result = api_instance.v1_places_geocode_batch_post(v1_places_geocode_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling GeocodeApi->v1_places_geocode_batch_post: #{e}"
+end
+```
+
+#### Using the v1_places_geocode_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1PlacesGeocodeBatchPost200Response>, Integer, Hash)> v1_places_geocode_batch_post_with_http_info(v1_places_geocode_batch_post_request)
+
+```ruby
+begin
+  # Batch Geocode Addresses
+  data, status_code, headers = api_instance.v1_places_geocode_batch_post_with_http_info(v1_places_geocode_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1PlacesGeocodeBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling GeocodeApi->v1_places_geocode_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_places_geocode_batch_post_request** | [**V1PlacesGeocodeBatchPostRequest**](V1PlacesGeocodeBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1PlacesGeocodeBatchPost200Response**](V1PlacesGeocodeBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_places_geocode_get
@@ -76,6 +149,77 @@ end
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## v1_places_reverse_geocode_batch_post
+
+> <V1PlacesReverseGeocodeBatchPost200Response> v1_places_reverse_geocode_batch_post(v1_places_reverse_geocode_batch_post_request)
+
+Batch Reverse Geocode
+
+Convert up to 20 coordinate pairs to addresses in a single request. Processed concurrently; results are returned in input order. Per-item errors are reported inline.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::GeocodeApi.new
+v1_places_reverse_geocode_batch_post_request = OpenapiClient::V1PlacesReverseGeocodeBatchPostRequest.new({items: 'items_example', items_lat: 3.56, items_lon: 3.56}) # V1PlacesReverseGeocodeBatchPostRequest | 
+
+begin
+  # Batch Reverse Geocode
+  result = api_instance.v1_places_reverse_geocode_batch_post(v1_places_reverse_geocode_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling GeocodeApi->v1_places_reverse_geocode_batch_post: #{e}"
+end
+```
+
+#### Using the v1_places_reverse_geocode_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1PlacesReverseGeocodeBatchPost200Response>, Integer, Hash)> v1_places_reverse_geocode_batch_post_with_http_info(v1_places_reverse_geocode_batch_post_request)
+
+```ruby
+begin
+  # Batch Reverse Geocode
+  data, status_code, headers = api_instance.v1_places_reverse_geocode_batch_post_with_http_info(v1_places_reverse_geocode_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1PlacesReverseGeocodeBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling GeocodeApi->v1_places_reverse_geocode_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_places_reverse_geocode_batch_post_request** | [**V1PlacesReverseGeocodeBatchPostRequest**](V1PlacesReverseGeocodeBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1PlacesReverseGeocodeBatchPost200Response**](V1PlacesReverseGeocodeBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 

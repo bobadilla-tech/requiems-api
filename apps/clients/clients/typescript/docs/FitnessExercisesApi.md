@@ -1,13 +1,14 @@
 # FitnessExercisesApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**v1HealthBodyPartsGet**](#v1healthbodypartsget) | **GET** /v1/health/body-parts | List Body Parts|
 |[**v1HealthEquipmentGet**](#v1healthequipmentget) | **GET** /v1/health/equipment | List Equipment|
+|[**v1HealthExercisesBatchPost**](#v1healthexercisesbatchpost) | **POST** /v1/health/exercises/batch | Batch Get Exercises|
 |[**v1HealthExercisesGet**](#v1healthexercisesget) | **GET** /v1/health/exercises | List Exercises|
-|[**v1HealthExercisesIdGet**](#v1healthexercisesidget) | **GET** /v1/health/exercises/{id} | Get Exercise by ID|
+|[**v1HealthExercisesIdGet**](#v1healthexercisesidget) | **GET** /v1/health/exercises/{id} | Exercise by ID|
 |[**v1HealthExercisesRandomGet**](#v1healthexercisesrandomget) | **GET** /v1/health/exercises/random | Random Exercise|
 |[**v1HealthMusclesGet**](#v1healthmusclesget) | **GET** /v1/health/muscles | List Muscles|
 
@@ -98,6 +99,60 @@ This endpoint does not have any parameters.
 |-------------|-------------|------------------|
 |**200** | Successful response |  -  |
 |**500** | Unexpected server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **v1HealthExercisesBatchPost**
+> V1HealthExercisesBatchPost200Response v1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest)
+
+Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+
+### Example
+
+```typescript
+import {
+    FitnessExercisesApi,
+    Configuration,
+    V1HealthExercisesBatchPostRequest
+} from 'api-client';
+
+const configuration = new Configuration();
+const apiInstance = new FitnessExercisesApi(configuration);
+
+let v1HealthExercisesBatchPostRequest: V1HealthExercisesBatchPostRequest; //
+
+const { status, data } = await apiInstance.v1HealthExercisesBatchPost(
+    v1HealthExercisesBatchPostRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **v1HealthExercisesBatchPostRequest** | **V1HealthExercisesBatchPostRequest**|  | |
+
+
+### Return type
+
+**V1HealthExercisesBatchPost200Response**
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful response |  -  |
+|**400** | The request body is missing or not valid JSON. |  -  |
+|**422** | The ids array is empty, exceeds 50 items, or contains a non-positive integer. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

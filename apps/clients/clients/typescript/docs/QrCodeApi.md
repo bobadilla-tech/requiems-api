@@ -1,11 +1,66 @@
 # QrCodeApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**v1TechnologyQrBase64BatchPost**](#v1technologyqrbase64batchpost) | **POST** /v1/technology/qr/base64/batch | Batch Generate QR Codes (Base64)|
 |[**v1TechnologyQrBase64Get**](#v1technologyqrbase64get) | **GET** /v1/technology/qr/base64 | Generate QR Code (Base64 JSON)|
 |[**v1TechnologyQrGet**](#v1technologyqrget) | **GET** /v1/technology/qr | Generate QR Code (PNG)|
+
+# **v1TechnologyQrBase64BatchPost**
+> V1TechnologyQrBase64BatchPost200Response v1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest)
+
+Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+
+### Example
+
+```typescript
+import {
+    QrCodeApi,
+    Configuration,
+    V1TechnologyQrBase64BatchPostRequest
+} from 'api-client';
+
+const configuration = new Configuration();
+const apiInstance = new QrCodeApi(configuration);
+
+let v1TechnologyQrBase64BatchPostRequest: V1TechnologyQrBase64BatchPostRequest; //
+
+const { status, data } = await apiInstance.v1TechnologyQrBase64BatchPost(
+    v1TechnologyQrBase64BatchPostRequest
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **v1TechnologyQrBase64BatchPostRequest** | **V1TechnologyQrBase64BatchPostRequest**|  | |
+
+
+### Return type
+
+**V1TechnologyQrBase64BatchPost200Response**
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful response |  -  |
+|**400** | The request body is missing or malformed. |  -  |
+|**422** | The items array is missing, empty, or exceeds 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **v1TechnologyQrBase64Get**
 > V1TechnologyQrBase64Get200Response v1TechnologyQrBase64Get()

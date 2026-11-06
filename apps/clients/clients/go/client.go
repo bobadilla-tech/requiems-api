@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -53,8 +53,6 @@ type APIClient struct {
 
 	BarcodeAPI *BarcodeAPIService
 
-	Base64API *Base64APIService
-
 	BinLookupAPI *BinLookupAPIService
 
 	ChuckNorrisAPI *ChuckNorrisAPIService
@@ -73,7 +71,11 @@ type APIClient struct {
 
 	DataFormatConversionAPI *DataFormatConversionAPIService
 
+	DataIntegrityAPI *DataIntegrityAPIService
+
 	DetectLanguageAPI *DetectLanguageAPIService
+
+	DeveloperUtilitiesAPI *DeveloperUtilitiesAPIService
 
 	DictionaryAPI *DictionaryAPIService
 
@@ -95,11 +97,15 @@ type APIClient struct {
 
 	GeocodeAPI *GeocodeAPIService
 
+	GlobalDataAPI *GlobalDataAPIService
+
 	HolidaysAPI *HolidaysAPIService
 
 	HoroscopeAPI *HoroscopeAPIService
 
 	IbanAPI *IbanAPIService
+
+	IdentityRiskAPI *IdentityRiskAPIService
 
 	InflationAPI *InflationAPIService
 
@@ -118,6 +124,8 @@ type APIClient struct {
 	NumberBaseConversionAPI *NumberBaseConversionAPIService
 
 	PasswordGeneratorAPI *PasswordGeneratorAPIService
+
+	PaymentsIntelligenceAPI *PaymentsIntelligenceAPIService
 
 	PhoneValidationAPI *PhoneValidationAPIService
 
@@ -180,7 +188,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	// API Services
 	c.AdviceAPI = (*AdviceAPIService)(&c.common)
 	c.BarcodeAPI = (*BarcodeAPIService)(&c.common)
-	c.Base64API = (*Base64APIService)(&c.common)
 	c.BinLookupAPI = (*BinLookupAPIService)(&c.common)
 	c.ChuckNorrisAPI = (*ChuckNorrisAPIService)(&c.common)
 	c.CitiesAPI = (*CitiesAPIService)(&c.common)
@@ -190,7 +197,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.CryptoAPI = (*CryptoAPIService)(&c.common)
 	c.DadJokesAPI = (*DadJokesAPIService)(&c.common)
 	c.DataFormatConversionAPI = (*DataFormatConversionAPIService)(&c.common)
+	c.DataIntegrityAPI = (*DataIntegrityAPIService)(&c.common)
 	c.DetectLanguageAPI = (*DetectLanguageAPIService)(&c.common)
+	c.DeveloperUtilitiesAPI = (*DeveloperUtilitiesAPIService)(&c.common)
 	c.DictionaryAPI = (*DictionaryAPIService)(&c.common)
 	c.DisposableEmailAPI = (*DisposableEmailAPIService)(&c.common)
 	c.DomainInfoAPI = (*DomainInfoAPIService)(&c.common)
@@ -201,9 +210,11 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.FactsAPI = (*FactsAPIService)(&c.common)
 	c.FitnessExercisesAPI = (*FitnessExercisesAPIService)(&c.common)
 	c.GeocodeAPI = (*GeocodeAPIService)(&c.common)
+	c.GlobalDataAPI = (*GlobalDataAPIService)(&c.common)
 	c.HolidaysAPI = (*HolidaysAPIService)(&c.common)
 	c.HoroscopeAPI = (*HoroscopeAPIService)(&c.common)
 	c.IbanAPI = (*IbanAPIService)(&c.common)
+	c.IdentityRiskAPI = (*IdentityRiskAPIService)(&c.common)
 	c.InflationAPI = (*InflationAPIService)(&c.common)
 	c.IpAsnAPI = (*IpAsnAPIService)(&c.common)
 	c.IpInfoAPI = (*IpInfoAPIService)(&c.common)
@@ -213,6 +224,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.MxLookupAPI = (*MxLookupAPIService)(&c.common)
 	c.NumberBaseConversionAPI = (*NumberBaseConversionAPIService)(&c.common)
 	c.PasswordGeneratorAPI = (*PasswordGeneratorAPIService)(&c.common)
+	c.PaymentsIntelligenceAPI = (*PaymentsIntelligenceAPIService)(&c.common)
 	c.PhoneValidationAPI = (*PhoneValidationAPIService)(&c.common)
 	c.PostalCodeAPI = (*PostalCodeAPIService)(&c.common)
 	c.ProfanityAPI = (*ProfanityAPIService)(&c.common)

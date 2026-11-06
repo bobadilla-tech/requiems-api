@@ -1,11 +1,78 @@
 # \WhoisAPI
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**V1NetworkingWhoisBatchPost**](WhoisAPI.md#V1NetworkingWhoisBatchPost) | **Post** /v1/networking/whois/batch | Batch WHOIS Lookup
 [**V1NetworkingWhoisDomainGet**](WhoisAPI.md#V1NetworkingWhoisDomainGet) | **Get** /v1/networking/whois/{domain} | WHOIS Lookup
 
+
+
+## V1NetworkingWhoisBatchPost
+
+> V1NetworkingWhoisBatchPost200Response V1NetworkingWhoisBatchPost(ctx).V1NetworkingWhoisBatchPostRequest(v1NetworkingWhoisBatchPostRequest).Execute()
+
+Batch WHOIS Lookup
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	v1NetworkingWhoisBatchPostRequest := *openapiclient.NewV1NetworkingWhoisBatchPostRequest([]interface{}{nil}) // V1NetworkingWhoisBatchPostRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.WhoisAPI.V1NetworkingWhoisBatchPost(context.Background()).V1NetworkingWhoisBatchPostRequest(v1NetworkingWhoisBatchPostRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `WhoisAPI.V1NetworkingWhoisBatchPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `V1NetworkingWhoisBatchPost`: V1NetworkingWhoisBatchPost200Response
+	fmt.Fprintf(os.Stdout, "Response from `WhoisAPI.V1NetworkingWhoisBatchPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiV1NetworkingWhoisBatchPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **v1NetworkingWhoisBatchPostRequest** | [**V1NetworkingWhoisBatchPostRequest**](V1NetworkingWhoisBatchPostRequest.md) |  | 
+
+### Return type
+
+[**V1NetworkingWhoisBatchPost200Response**](V1NetworkingWhoisBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## V1NetworkingWhoisDomainGet

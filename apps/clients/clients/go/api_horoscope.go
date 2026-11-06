@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -22,6 +22,130 @@ import (
 
 // HoroscopeAPIService HoroscopeAPI service
 type HoroscopeAPIService service
+
+type ApiV1EntertainmentHoroscopeBatchPostRequest struct {
+	ctx context.Context
+	ApiService *HoroscopeAPIService
+	v1EntertainmentHoroscopeBatchPostRequest *V1EntertainmentHoroscopeBatchPostRequest
+}
+
+func (r ApiV1EntertainmentHoroscopeBatchPostRequest) V1EntertainmentHoroscopeBatchPostRequest(v1EntertainmentHoroscopeBatchPostRequest V1EntertainmentHoroscopeBatchPostRequest) ApiV1EntertainmentHoroscopeBatchPostRequest {
+	r.v1EntertainmentHoroscopeBatchPostRequest = &v1EntertainmentHoroscopeBatchPostRequest
+	return r
+}
+
+func (r ApiV1EntertainmentHoroscopeBatchPostRequest) Execute() (*V1EntertainmentHoroscopeBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1EntertainmentHoroscopeBatchPostExecute(r)
+}
+
+/*
+V1EntertainmentHoroscopeBatchPost Batch Daily Horoscopes
+
+Returns up to 12 daily horoscopes in a single request.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1EntertainmentHoroscopeBatchPostRequest
+*/
+func (a *HoroscopeAPIService) V1EntertainmentHoroscopeBatchPost(ctx context.Context) ApiV1EntertainmentHoroscopeBatchPostRequest {
+	return ApiV1EntertainmentHoroscopeBatchPostRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1EntertainmentHoroscopeBatchPost200Response
+func (a *HoroscopeAPIService) V1EntertainmentHoroscopeBatchPostExecute(r ApiV1EntertainmentHoroscopeBatchPostRequest) (*V1EntertainmentHoroscopeBatchPost200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1EntertainmentHoroscopeBatchPost200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HoroscopeAPIService.V1EntertainmentHoroscopeBatchPost")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/entertainment/horoscope/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1EntertainmentHoroscopeBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1EntertainmentHoroscopeBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1EntertainmentHoroscopeBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiV1EntertainmentHoroscopeSignGetRequest struct {
 	ctx context.Context

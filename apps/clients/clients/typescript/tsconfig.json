@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "ES2017",
+    "target": "ES5",
     "module": "commonjs",
     "noImplicitAny": true,
     "outDir": "dist",
     "rootDir": ".",
     "lib": [
-      "es2017",
+      "es6",
       "dom"
     ],
     "typeRoots": [

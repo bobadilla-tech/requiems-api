@@ -1,10 +1,82 @@
 # OpenapiClient::MortgageApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_finance_mortgage_batch_post**](MortgageApi.md#v1_finance_mortgage_batch_post) | **POST** /v1/finance/mortgage/batch | Batch Calculate Mortgages |
 | [**v1_finance_mortgage_get**](MortgageApi.md#v1_finance_mortgage_get) | **GET** /v1/finance/mortgage | Calculate Mortgage |
+
+
+## v1_finance_mortgage_batch_post
+
+> <V1FinanceMortgageBatchPost200Response> v1_finance_mortgage_batch_post(v1_finance_mortgage_batch_post_request)
+
+Batch Calculate Mortgages
+
+Calculate up to 50 mortgages in a single request. Results are returned in the same order as the input.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::MortgageApi.new
+v1_finance_mortgage_batch_post_request = OpenapiClient::V1FinanceMortgageBatchPostRequest.new({mortgages: [{"principal": 150000, "rate": 6.5, "years": 10}, {"principal": 250000, "rate": 5.2, "years": 30}]}) # V1FinanceMortgageBatchPostRequest | 
+
+begin
+  # Batch Calculate Mortgages
+  result = api_instance.v1_finance_mortgage_batch_post(v1_finance_mortgage_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling MortgageApi->v1_finance_mortgage_batch_post: #{e}"
+end
+```
+
+#### Using the v1_finance_mortgage_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1FinanceMortgageBatchPost200Response>, Integer, Hash)> v1_finance_mortgage_batch_post_with_http_info(v1_finance_mortgage_batch_post_request)
+
+```ruby
+begin
+  # Batch Calculate Mortgages
+  data, status_code, headers = api_instance.v1_finance_mortgage_batch_post_with_http_info(v1_finance_mortgage_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1FinanceMortgageBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling MortgageApi->v1_finance_mortgage_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_finance_mortgage_batch_post_request** | [**V1FinanceMortgageBatchPostRequest**](V1FinanceMortgageBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1FinanceMortgageBatchPost200Response**](V1FinanceMortgageBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_finance_mortgage_get

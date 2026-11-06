@@ -4,7 +4,7 @@
 
 | Name | Type | Description | Notes |
 | ---- | ---- | ----------- | ----- |
-| **result** | **String** | The Base64-encoded output | [optional] |
+| **result** | **String** | The Base64-encoded output string | [optional] |
 
 ## Example
 

@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Value** | **string** | The string to encode | 
-**Variant** | Pointer to **string** | Encoding variant: standard (default) or url (URL-safe base64url) | [optional] 
+**Variant** | Pointer to **string** | Encoding variant: standard (default) or url (URL-safe base64url, RFC 4648 §5) | [optional] 
 
 ## Methods
 

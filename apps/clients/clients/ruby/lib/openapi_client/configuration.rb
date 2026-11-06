@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -158,7 +158,7 @@ module OpenapiClient
 
     def initialize
       @scheme = 'https'
-      @host = 'api.requiems.xyz'
+      @host = 'requiems.xyz'
       @base_path = ''
       @server_index = nil
       @server_operation_index = {}
@@ -258,7 +258,7 @@ module OpenapiClient
     def server_settings
       [
         {
-          url: "https://api.requiems.xyz",
+          url: "https://requiems.xyz",
           description: "Production",
         }
       ]

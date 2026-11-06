@@ -1,13 +1,14 @@
 # Org.OpenAPITools.Api.FitnessExercisesApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
 | [**V1HealthBodyPartsGet**](FitnessExercisesApi.md#v1healthbodypartsget) | **GET** /v1/health/body-parts | List Body Parts |
 | [**V1HealthEquipmentGet**](FitnessExercisesApi.md#v1healthequipmentget) | **GET** /v1/health/equipment | List Equipment |
+| [**V1HealthExercisesBatchPost**](FitnessExercisesApi.md#v1healthexercisesbatchpost) | **POST** /v1/health/exercises/batch | Batch Get Exercises |
 | [**V1HealthExercisesGet**](FitnessExercisesApi.md#v1healthexercisesget) | **GET** /v1/health/exercises | List Exercises |
-| [**V1HealthExercisesIdGet**](FitnessExercisesApi.md#v1healthexercisesidget) | **GET** /v1/health/exercises/{id} | Get Exercise by ID |
+| [**V1HealthExercisesIdGet**](FitnessExercisesApi.md#v1healthexercisesidget) | **GET** /v1/health/exercises/{id} | Exercise by ID |
 | [**V1HealthExercisesRandomGet**](FitnessExercisesApi.md#v1healthexercisesrandomget) | **GET** /v1/health/exercises/random | Random Exercise |
 | [**V1HealthMusclesGet**](FitnessExercisesApi.md#v1healthmusclesget) | **GET** /v1/health/muscles | List Muscles |
 
@@ -35,7 +36,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -131,7 +132,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -203,6 +204,108 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+<a id="v1healthexercisesbatchpost"></a>
+# **V1HealthExercisesBatchPost**
+> V1HealthExercisesBatchPost200Response V1HealthExercisesBatchPost (V1HealthExercisesBatchPostRequest v1HealthExercisesBatchPostRequest)
+
+Batch Get Exercises
+
+Fetches up to 50 exercises by their numeric IDs in a single request. IDs that do not exist are silently skipped. Results are returned in the same order as the input array.
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class V1HealthExercisesBatchPostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "https://requiems.xyz";
+            // Configure API key authorization: requiems-api-key
+            config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // config.AddApiKeyPrefix("requiems-api-key", "Bearer");
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new FitnessExercisesApi(httpClient, config, httpClientHandler);
+            var v1HealthExercisesBatchPostRequest = new V1HealthExercisesBatchPostRequest(); // V1HealthExercisesBatchPostRequest | 
+
+            try
+            {
+                // Batch Get Exercises
+                V1HealthExercisesBatchPost200Response result = apiInstance.V1HealthExercisesBatchPost(v1HealthExercisesBatchPostRequest);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling FitnessExercisesApi.V1HealthExercisesBatchPost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the V1HealthExercisesBatchPostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Batch Get Exercises
+    ApiResponse<V1HealthExercisesBatchPost200Response> response = apiInstance.V1HealthExercisesBatchPostWithHttpInfo(v1HealthExercisesBatchPostRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling FitnessExercisesApi.V1HealthExercisesBatchPostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **v1HealthExercisesBatchPostRequest** | [**V1HealthExercisesBatchPostRequest**](V1HealthExercisesBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1HealthExercisesBatchPost200Response**](V1HealthExercisesBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Successful response |  -  |
+| **400** | The request body is missing or not valid JSON. |  -  |
+| **422** | The ids array is empty, exceeds 50 items, or contains a non-positive integer. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 <a id="v1healthexercisesget"></a>
 # **V1HealthExercisesGet**
 > V1HealthExercisesGet200Response V1HealthExercisesGet (string? bodyPart = null, string? equipment = null, string? muscle = null, string? search = null, int? page = null, int? perPage = null)
@@ -227,7 +330,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -319,7 +422,7 @@ catch (ApiException e)
 # **V1HealthExercisesIdGet**
 > V1HealthExercisesIdGet200Response V1HealthExercisesIdGet (int id)
 
-Get Exercise by ID
+Exercise by ID
 
 Returns a single exercise by its numeric ID.
 
@@ -339,7 +442,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -353,7 +456,7 @@ namespace Example
 
             try
             {
-                // Get Exercise by ID
+                // Exercise by ID
                 V1HealthExercisesIdGet200Response result = apiInstance.V1HealthExercisesIdGet(id);
                 Debug.WriteLine(result);
             }
@@ -374,7 +477,7 @@ This returns an ApiResponse object which contains the response data, status code
 ```csharp
 try
 {
-    // Get Exercise by ID
+    // Exercise by ID
     ApiResponse<V1HealthExercisesIdGet200Response> response = apiInstance.V1HealthExercisesIdGetWithHttpInfo(id);
     Debug.Write("Status Code: " + response.StatusCode);
     Debug.Write("Response Headers: " + response.Headers);
@@ -442,7 +545,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -550,7 +653,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed

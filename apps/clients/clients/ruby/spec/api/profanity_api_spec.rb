@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -32,13 +32,25 @@ describe 'ProfanityApi' do
     end
   end
 
-  # unit tests for v1_text_profanity_post
+  # unit tests for v1_validation_profanity_batch_post
+  # Batch Check Profanity
+  # Check up to 50 texts for profanity in a single request. Results are returned in input order.
+  # @param v1_validation_profanity_batch_post_request 
+  # @param [Hash] opts the optional parameters
+  # @return [V1ValidationProfanityBatchPost200Response]
+  describe 'v1_validation_profanity_batch_post test' do
+    it 'should work' do
+      # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
+    end
+  end
+
+  # unit tests for v1_validation_profanity_post
   # Check Profanity
   # Checks text for profanity, returning a censored version and the list of flagged words.
-  # @param v1_text_profanity_post_request 
+  # @param v1_validation_profanity_post_request 
   # @param [Hash] opts the optional parameters
-  # @return [V1TextProfanityPost200Response]
-  describe 'v1_text_profanity_post test' do
+  # @return [V1ValidationProfanityPost200Response]
+  describe 'v1_validation_profanity_post test' do
     it 'should work' do
       # assertion here. ref: https://rspec.info/features/3-12/rspec-expectations/built-in-matchers/
     end

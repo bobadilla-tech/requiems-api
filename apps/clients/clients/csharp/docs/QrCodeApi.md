@@ -1,11 +1,114 @@
 # Org.OpenAPITools.Api.QrCodeApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 |--------|--------------|-------------|
+| [**V1TechnologyQrBase64BatchPost**](QrCodeApi.md#v1technologyqrbase64batchpost) | **POST** /v1/technology/qr/base64/batch | Batch Generate QR Codes (Base64) |
 | [**V1TechnologyQrBase64Get**](QrCodeApi.md#v1technologyqrbase64get) | **GET** /v1/technology/qr/base64 | Generate QR Code (Base64 JSON) |
 | [**V1TechnologyQrGet**](QrCodeApi.md#v1technologyqrget) | **GET** /v1/technology/qr | Generate QR Code (PNG) |
+
+<a id="v1technologyqrbase64batchpost"></a>
+# **V1TechnologyQrBase64BatchPost**
+> V1TechnologyQrBase64BatchPost200Response V1TechnologyQrBase64BatchPost (V1TechnologyQrBase64BatchPostRequest v1TechnologyQrBase64BatchPostRequest)
+
+Batch Generate QR Codes (Base64)
+
+Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+
+### Example
+```csharp
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class V1TechnologyQrBase64BatchPostExample
+    {
+        public static void Main()
+        {
+            Configuration config = new Configuration();
+            config.BasePath = "https://requiems.xyz";
+            // Configure API key authorization: requiems-api-key
+            config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
+            // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+            // config.AddApiKeyPrefix("requiems-api-key", "Bearer");
+
+            // create instances of HttpClient, HttpClientHandler to be reused later with different Api classes
+            HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            var apiInstance = new QrCodeApi(httpClient, config, httpClientHandler);
+            var v1TechnologyQrBase64BatchPostRequest = new V1TechnologyQrBase64BatchPostRequest(); // V1TechnologyQrBase64BatchPostRequest | 
+
+            try
+            {
+                // Batch Generate QR Codes (Base64)
+                V1TechnologyQrBase64BatchPost200Response result = apiInstance.V1TechnologyQrBase64BatchPost(v1TechnologyQrBase64BatchPostRequest);
+                Debug.WriteLine(result);
+            }
+            catch (ApiException  e)
+            {
+                Debug.Print("Exception when calling QrCodeApi.V1TechnologyQrBase64BatchPost: " + e.Message);
+                Debug.Print("Status Code: " + e.ErrorCode);
+                Debug.Print(e.StackTrace);
+            }
+        }
+    }
+}
+```
+
+#### Using the V1TechnologyQrBase64BatchPostWithHttpInfo variant
+This returns an ApiResponse object which contains the response data, status code and headers.
+
+```csharp
+try
+{
+    // Batch Generate QR Codes (Base64)
+    ApiResponse<V1TechnologyQrBase64BatchPost200Response> response = apiInstance.V1TechnologyQrBase64BatchPostWithHttpInfo(v1TechnologyQrBase64BatchPostRequest);
+    Debug.Write("Status Code: " + response.StatusCode);
+    Debug.Write("Response Headers: " + response.Headers);
+    Debug.Write("Response Body: " + response.Data);
+}
+catch (ApiException e)
+{
+    Debug.Print("Exception when calling QrCodeApi.V1TechnologyQrBase64BatchPostWithHttpInfo: " + e.Message);
+    Debug.Print("Status Code: " + e.ErrorCode);
+    Debug.Print(e.StackTrace);
+}
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+|------|------|-------------|-------|
+| **v1TechnologyQrBase64BatchPostRequest** | [**V1TechnologyQrBase64BatchPostRequest**](V1TechnologyQrBase64BatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1TechnologyQrBase64BatchPost200Response**](V1TechnologyQrBase64BatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Successful response |  -  |
+| **400** | The request body is missing or malformed. |  -  |
+| **422** | The items array is missing, empty, or exceeds 50 items. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 <a id="v1technologyqrbase64get"></a>
 # **V1TechnologyQrBase64Get**
@@ -31,7 +134,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -137,7 +240,7 @@ namespace Example
         public static void Main()
         {
             Configuration config = new Configuration();
-            config.BasePath = "https://api.requiems.xyz";
+            config.BasePath = "https://requiems.xyz";
             // Configure API key authorization: requiems-api-key
             config.AddApiKey("requiems-api-key", "YOUR_API_KEY");
             // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed

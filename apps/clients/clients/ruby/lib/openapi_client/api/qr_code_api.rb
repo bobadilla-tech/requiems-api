@@ -1,7 +1,7 @@
 =begin
 #Requiems API
 
-#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+#Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 The version of the OpenAPI document: 1.0.0
 
@@ -19,6 +19,74 @@ module OpenapiClient
     def initialize(api_client = ApiClient.default)
       @api_client = api_client
     end
+    # Batch Generate QR Codes (Base64)
+    # Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+    # @param v1_technology_qr_base64_batch_post_request [V1TechnologyQrBase64BatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [V1TechnologyQrBase64BatchPost200Response]
+    def v1_technology_qr_base64_batch_post(v1_technology_qr_base64_batch_post_request, opts = {})
+      data, _status_code, _headers = v1_technology_qr_base64_batch_post_with_http_info(v1_technology_qr_base64_batch_post_request, opts)
+      data
+    end
+
+    # Batch Generate QR Codes (Base64)
+    # Generate up to 50 base64-encoded QR codes in a single request. Results are returned in input order. The PNG endpoint has no batch variant — use this endpoint for batch generation.
+    # @param v1_technology_qr_base64_batch_post_request [V1TechnologyQrBase64BatchPostRequest] 
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(V1TechnologyQrBase64BatchPost200Response, Integer, Hash)>] V1TechnologyQrBase64BatchPost200Response data, response status code and response headers
+    def v1_technology_qr_base64_batch_post_with_http_info(v1_technology_qr_base64_batch_post_request, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: QrCodeApi.v1_technology_qr_base64_batch_post ...'
+      end
+      # verify the required parameter 'v1_technology_qr_base64_batch_post_request' is set
+      if @api_client.config.client_side_validation && v1_technology_qr_base64_batch_post_request.nil?
+        fail ArgumentError, "Missing the required parameter 'v1_technology_qr_base64_batch_post_request' when calling QrCodeApi.v1_technology_qr_base64_batch_post"
+      end
+      # resource path
+      local_var_path = '/v1/technology/qr/base64/batch'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(v1_technology_qr_base64_batch_post_request)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'V1TechnologyQrBase64BatchPost200Response'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || ['requiems-api-key']
+
+      new_options = opts.merge(
+        :operation => :"QrCodeApi.v1_technology_qr_base64_batch_post",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: QrCodeApi#v1_technology_qr_base64_batch_post\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Generate QR Code (Base64 JSON)
     # Returns a JSON envelope containing the QR code as a base64-encoded PNG string, along with its dimensions.
     # @param data [String] The text or URL to encode in the QR code

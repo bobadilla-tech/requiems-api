@@ -1,7 +1,7 @@
 /*
 Requiems API
 
-Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header.
+Unified access to enterprise-grade APIs — email validation, text utilities, and more. Authenticate with the `requiems-api-key` header. Each call costs 1 credit unless an endpoint states otherwise. Client (4xx) and server (5xx) errors are not charged, and requests to unknown routes or with an unsupported method are not recorded.
 
 API version: 1.0.0
 */
@@ -22,46 +22,170 @@ import (
 // QuotesAPIService QuotesAPI service
 type QuotesAPIService service
 
-type ApiV1TextQuotesRandomGetRequest struct {
+type ApiV1EntertainmentQuotesRandomBatchPostRequest struct {
 	ctx context.Context
 	ApiService *QuotesAPIService
+	v1EntertainmentQuotesRandomBatchPostRequest *V1EntertainmentQuotesRandomBatchPostRequest
 }
 
-func (r ApiV1TextQuotesRandomGetRequest) Execute() (*V1TextQuotesRandomGet200Response, *http.Response, error) {
-	return r.ApiService.V1TextQuotesRandomGetExecute(r)
+func (r ApiV1EntertainmentQuotesRandomBatchPostRequest) V1EntertainmentQuotesRandomBatchPostRequest(v1EntertainmentQuotesRandomBatchPostRequest V1EntertainmentQuotesRandomBatchPostRequest) ApiV1EntertainmentQuotesRandomBatchPostRequest {
+	r.v1EntertainmentQuotesRandomBatchPostRequest = &v1EntertainmentQuotesRandomBatchPostRequest
+	return r
+}
+
+func (r ApiV1EntertainmentQuotesRandomBatchPostRequest) Execute() (*V1EntertainmentQuotesRandomBatchPost200Response, *http.Response, error) {
+	return r.ApiService.V1EntertainmentQuotesRandomBatchPostExecute(r)
 }
 
 /*
-V1TextQuotesRandomGet Get Random Quote
+V1EntertainmentQuotesRandomBatchPost Get Random Quotes (Batch)
 
-Returns a random inspirational quote with author attribution
+Returns up to 50 random quotes in a single request. Each quote counts as one unit of usage.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiV1TextQuotesRandomGetRequest
+ @return ApiV1EntertainmentQuotesRandomBatchPostRequest
 */
-func (a *QuotesAPIService) V1TextQuotesRandomGet(ctx context.Context) ApiV1TextQuotesRandomGetRequest {
-	return ApiV1TextQuotesRandomGetRequest{
+func (a *QuotesAPIService) V1EntertainmentQuotesRandomBatchPost(ctx context.Context) ApiV1EntertainmentQuotesRandomBatchPostRequest {
+	return ApiV1EntertainmentQuotesRandomBatchPostRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return V1TextQuotesRandomGet200Response
-func (a *QuotesAPIService) V1TextQuotesRandomGetExecute(r ApiV1TextQuotesRandomGetRequest) (*V1TextQuotesRandomGet200Response, *http.Response, error) {
+//  @return V1EntertainmentQuotesRandomBatchPost200Response
+func (a *QuotesAPIService) V1EntertainmentQuotesRandomBatchPostExecute(r ApiV1EntertainmentQuotesRandomBatchPostRequest) (*V1EntertainmentQuotesRandomBatchPost200Response, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
+		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *V1TextQuotesRandomGet200Response
+		localVarReturnValue  *V1EntertainmentQuotesRandomBatchPost200Response
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesAPIService.V1TextQuotesRandomGet")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesAPIService.V1EntertainmentQuotesRandomBatchPost")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/text/quotes/random"
+	localVarPath := localBasePath + "/v1/entertainment/quotes/random/batch"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v1EntertainmentQuotesRandomBatchPostRequest == nil {
+		return localVarReturnValue, nil, reportError("v1EntertainmentQuotesRandomBatchPostRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v1EntertainmentQuotesRandomBatchPostRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["requiems-api-key"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["requiems-api-key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiV1EntertainmentQuotesRandomGetRequest struct {
+	ctx context.Context
+	ApiService *QuotesAPIService
+}
+
+func (r ApiV1EntertainmentQuotesRandomGetRequest) Execute() (*V1EntertainmentQuotesRandomGet200Response, *http.Response, error) {
+	return r.ApiService.V1EntertainmentQuotesRandomGetExecute(r)
+}
+
+/*
+V1EntertainmentQuotesRandomGet Get Random Quote
+
+Returns a random inspirational quote with author attribution
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiV1EntertainmentQuotesRandomGetRequest
+*/
+func (a *QuotesAPIService) V1EntertainmentQuotesRandomGet(ctx context.Context) ApiV1EntertainmentQuotesRandomGetRequest {
+	return ApiV1EntertainmentQuotesRandomGetRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return V1EntertainmentQuotesRandomGet200Response
+func (a *QuotesAPIService) V1EntertainmentQuotesRandomGetExecute(r ApiV1EntertainmentQuotesRandomGetRequest) (*V1EntertainmentQuotesRandomGet200Response, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *V1EntertainmentQuotesRandomGet200Response
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesAPIService.V1EntertainmentQuotesRandomGet")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/entertainment/quotes/random"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

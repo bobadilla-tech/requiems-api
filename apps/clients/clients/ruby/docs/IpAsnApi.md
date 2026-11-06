@@ -1,11 +1,83 @@
 # OpenapiClient::IpAsnApi
 
-All URIs are relative to *https://api.requiems.xyz*
+All URIs are relative to *https://requiems.xyz*
 
 | Method | HTTP request | Description |
 | ------ | ------------ | ----------- |
+| [**v1_networking_ip_asn_batch_post**](IpAsnApi.md#v1_networking_ip_asn_batch_post) | **POST** /v1/networking/ip/asn/batch | Batch ASN Lookup |
 | [**v1_networking_ip_asn_get**](IpAsnApi.md#v1_networking_ip_asn_get) | **GET** /v1/networking/ip/asn | Lookup ASN (Caller IP) |
 | [**v1_networking_ip_asn_ip_get**](IpAsnApi.md#v1_networking_ip_asn_ip_get) | **GET** /v1/networking/ip/asn/{ip} | Lookup ASN for IP |
+
+
+## v1_networking_ip_asn_batch_post
+
+> <V1NetworkingIpAsnBatchPost200Response> v1_networking_ip_asn_batch_post(v1_networking_ip_asn_batch_post_request)
+
+Batch ASN Lookup
+
+Look up ASN data for up to 50 IP addresses in a single request. Results are returned in input order. Private and reserved IPs return an empty result with no error.
+
+### Examples
+
+```ruby
+require 'time'
+require 'openapi_client'
+# setup authorization
+OpenapiClient.configure do |config|
+  # Configure API key authorization: requiems-api-key
+  config.api_key['requiems-api-key'] = 'YOUR API KEY'
+  # Uncomment the following line to set a prefix for the API key, e.g. 'Bearer' (defaults to nil)
+  # config.api_key_prefix['requiems-api-key'] = 'Bearer'
+end
+
+api_instance = OpenapiClient::IpAsnApi.new
+v1_networking_ip_asn_batch_post_request = OpenapiClient::V1NetworkingIpAsnBatchPostRequest.new({ips: 'ips_example'}) # V1NetworkingIpAsnBatchPostRequest | 
+
+begin
+  # Batch ASN Lookup
+  result = api_instance.v1_networking_ip_asn_batch_post(v1_networking_ip_asn_batch_post_request)
+  p result
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling IpAsnApi->v1_networking_ip_asn_batch_post: #{e}"
+end
+```
+
+#### Using the v1_networking_ip_asn_batch_post_with_http_info variant
+
+This returns an Array which contains the response data, status code and headers.
+
+> <Array(<V1NetworkingIpAsnBatchPost200Response>, Integer, Hash)> v1_networking_ip_asn_batch_post_with_http_info(v1_networking_ip_asn_batch_post_request)
+
+```ruby
+begin
+  # Batch ASN Lookup
+  data, status_code, headers = api_instance.v1_networking_ip_asn_batch_post_with_http_info(v1_networking_ip_asn_batch_post_request)
+  p status_code # => 2xx
+  p headers # => { ... }
+  p data # => <V1NetworkingIpAsnBatchPost200Response>
+rescue OpenapiClient::ApiError => e
+  puts "Error when calling IpAsnApi->v1_networking_ip_asn_batch_post_with_http_info: #{e}"
+end
+```
+
+### Parameters
+
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |
+| **v1_networking_ip_asn_batch_post_request** | [**V1NetworkingIpAsnBatchPostRequest**](V1NetworkingIpAsnBatchPostRequest.md) |  |  |
+
+### Return type
+
+[**V1NetworkingIpAsnBatchPost200Response**](V1NetworkingIpAsnBatchPost200Response.md)
+
+### Authorization
+
+[requiems-api-key](../README.md#requiems-api-key)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## v1_networking_ip_asn_get
