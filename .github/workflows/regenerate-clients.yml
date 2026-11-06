@@ -78,7 +78,7 @@ jobs:
           (cd example-apps/typescript && npm install && npx tsc --noEmit)
 
           echo "C#..."
-          (cd example-apps/csharp && dotnet --info | head -5 && dotnet build -v n)
+          head -12 clients/csharp/src/Org.OpenAPITools/Org.OpenAPITools.csproj; (cd example-apps/csharp && dotnet build)
 
           echo "Python..."
           (cd example-apps/python && pip install urllib3 pydantic python-dateutil aiohttp && PYTHONPATH=../../clients/python python -c "import openapi_client; openapi_client.AdviceApi; print('ok')")
