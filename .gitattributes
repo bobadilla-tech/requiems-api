@@ -31,3 +31,11 @@ apps/dashboard/.kamal/hooks/post-proxy-reboot.sample linguist-vendored
 
 # Mark auto-generated files as generated
 **/generated/* linguist-generated
+
+# Generated SDKs and example apps (apps/clients) — keep out of language stats
+apps/clients/clients/** linguist-generated
+apps/clients/example-apps/** linguist-vendored
+apps/clients/clients/** -diff
+
+# Tutorials (apps/tutorials) — keep out of language stats
+apps/tutorials/** linguist-vendored
