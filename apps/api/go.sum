@@ -32,8 +32,8 @@ github.com/bobadilla-tech/sudoku-go v0.1.0 h1:bLCI5oGAmK6QFll49ffy7dhTpHNq41Oap/
 github.com/bobadilla-tech/sudoku-go v0.1.0/go.mod h1:Q3d0G6CdoNuF9eSd+dc/W6yIDSv2jTDKWFhIUniELxA=
 github.com/bobadilla-tech/thesaurus-go v1.0.0 h1:yXkQXIrZj/rWz4/N/qDbOz5SqWpkK+sWO8acB40dhFs=
 github.com/bobadilla-tech/thesaurus-go v1.0.0/go.mod h1:xgueJhpRBbsd0rrIMAVf0LWVfOv4FkzthLJy0tL2s4g=
-github.com/boombuler/barcode v1.1.0 h1:ChaYjBR63fr4LFyGn8E8nt7dBSt3MiU3zMOZqFvVkHo=
-github.com/boombuler/barcode v1.1.0/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
+github.com/boombuler/barcode v1.1.1 h1:L7a025eARYfC7mcb3RblJnqeyWsYBuOEMWP3CauuqkA=
+github.com/boombuler/barcode v1.1.1/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
 github.com/boyter/go-string v1.0.5 h1:/xcOlWdgelLYLVkUU0xBLfioGjZ9KIMUMI/RXG138YY=
 github.com/boyter/go-string v1.0.5/go.mod h1:Mww9cDld2S2cdJ0tQffBhsZFMQRA2OJdcjWYZXvZ4Ss=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=
